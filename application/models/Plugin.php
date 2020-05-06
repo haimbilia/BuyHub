@@ -15,6 +15,7 @@ class Plugin extends MyAppModel
     public const TYPE_SMS_NOTIFICATION = 6;    
     public const TYPE_FULL_TEXT_SEARCH = 7;
     public const TYPE_TAX_SERVICES  = 10;
+    public const TYPE_MARKETPLACE_CHANNELS  = 12;
 
     /* Define here :  if system can not activate multiple plugins for a same feature*/
     public const HAVING_KINGPIN = [
@@ -118,7 +119,8 @@ class Plugin extends MyAppModel
             static::TYPE_ADVERTISEMENT_FEED => Labels::getLabel('LBL_ADVERTISEMENT_FEED', $langId),
             static::TYPE_SMS_NOTIFICATION => Labels::getLabel('LBL_SMS_NOTIFICATION', $langId),
             static::TYPE_TAX_SERVICES => Labels::getLabel('LBL_Tax_Services', $langId),
-            static::TYPE_FULL_TEXT_SEARCH => Labels::getLabel('LBL_Full_TEXT_SEARCH', $langId)
+            static::TYPE_FULL_TEXT_SEARCH => Labels::getLabel('LBL_Full_TEXT_SEARCH', $langId),
+            static::TYPE_MARKETPLACE_CHANNELS => Labels::getLabel('LBL_MARKEPLACE_CHANNELS', $langId)
         ];
     }
 

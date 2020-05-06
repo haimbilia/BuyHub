@@ -7,8 +7,6 @@ class TwilioSms extends SmsNotificationBase
 {
     public const KEY_NAME = __CLASS__;
     
-    public $langId = 0;
-    
     public $requiredKeys = [
         'account_sid',
         'auth_token',

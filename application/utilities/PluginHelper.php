@@ -86,7 +86,7 @@ trait PluginHelper
             return false;
         }
         
-        $file = CONF_PLUGIN_DIR . '/' . $directory . '/' . strtolower($keyName) . '/' . $keyName . '.php';
+        $file = CONF_PLUGIN_DIR . $directory . '/' . strtolower($keyName) . '/' . $keyName . '.php';
 
         if (!file_exists($file)) {
             $error =  Labels::getLabel('MSG_UNABLE_TO_LOCATE_REQUIRED_FILE', $langId);
@@ -94,5 +94,37 @@ trait PluginHelper
         }
         
         require_once $file;
+    }
+
+    /**
+     * formatOutput
+     *
+     * @param  bool $status
+     * @param  string $msg
+     * @param  array $data
+     * @return array
+     */
+    public static function formatOutput(bool $status, string $msg, array $data = []): array
+    {
+        return [
+            'status' => $status,
+            'msg' => $msg,
+            'data' => $data
+        ];
+    }
+
+    /**
+     * dieWithResponse
+     *
+     * @param  array $data
+     * @return bool
+     */
+    public function dieWithResponse(array $data = []): bool
+    {
+        if (isset($data['status'])) {
+            $data['status'] = $data['status'] ? 1 : 0;
+        }
+        CommonHelper::jsonEncodeUnicode($data, true);
+        return true;
     }
 }
