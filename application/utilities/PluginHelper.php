@@ -114,12 +114,12 @@ trait PluginHelper
     }
 
     /**
-     * dieWithResponse
+     * dieWithJsonResponse
      *
      * @param  array $data
      * @return bool
      */
-    public function dieWithResponse(array $data = []): bool
+    public function dieWithJsonResponse(array $data = []): bool
     {
         if (isset($data['status'])) {
             $data['status'] = $data['status'] ? 1 : 0;

@@ -4,8 +4,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 {
     public const KEY_NAME = 'EasyEcom';
 
-    public $requiredKeys = ['easyecom_token'];
     private $authToken;
+    private $reqAuthToken = '';
 
     public function __construct($action)
     {
@@ -13,23 +13,52 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $error = '';
         if (false === PluginHelper::includePlugin(self::KEY_NAME, 'marketplace-channels', $this->siteLangId, $error)) {
             $resp = $this->formatOutput(false, $error);
-            $this->dieWithResponse($resp);
+            $this->dieWithJsonResponse($resp);
         }
+
+        $this->init($action);
+    }
+
+    /**
+     * inilialize
+     * 
+     * @param string $action 
+     * @return void
+     */
+    private function init(string $action)
+    {
+        if ('getAuthToken' == $action && isset($_SERVER['HTTP_EEC_TOKEN'])){
+            $this->reqAuthToken = $_SERVER['HTTP_EEC_TOKEN'];
+        } else if (isset($_SERVER['HTTP_AUTH_TOKEN'])) {
+            $this->reqAuthToken = $_SERVER['HTTP_AUTH_TOKEN'];
+        }
+
         $this->easyEcom = new EasyEcom($this->siteLangId);
-        if (false === $this->easyEcom) {
+        if (false == $this->easyEcom->init($action, $this->reqAuthToken)) {
             $resp = $this->formatOutput(false, $this->easyEcom->getError());
-            $this->dieWithResponse($resp);
+            $this->dieWithJsonResponse($resp);
         }
     }
 
+    /**
+     * getAuthToken
+     * 
+     * @return void
+     */
     public function getAuthToken()
     {
-        if (!isset($_SERVER['HTTP_EEC_TOKEN']) || empty($_SERVER['HTTP_EEC_TOKEN'])) {
-            $msg = Labels::getLabel("MSG_UNAUTHORIZED_ACCESS", $this->siteLangId);
-            $resp = $this->formatOutput(false, $msg);
-            $this->dieWithResponse($resp);
-        }
+        $resp = $this->easyEcom->getAuthToken();
+        $this->dieWithJsonResponse($resp);
+    }
 
-        $this->dieWithResponse($this->easyEcom->getAuthToken($_SERVER['HTTP_EEC_TOKEN']));
+    /**
+     * getProducts
+     * 
+     * @return void
+     */
+    public function getProducts()
+    {
+        $resp = $this->easyEcom->getProducts();
+        $this->dieWithJsonResponse($resp);
     }
 }
