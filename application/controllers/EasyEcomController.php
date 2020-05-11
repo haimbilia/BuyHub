@@ -61,4 +61,15 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $resp = $this->easyEcom->getProducts();
         $this->dieWithJsonResponse($resp);
     }
+
+    /**
+     * getOrders
+     * 
+     * @return void
+     */
+    public function getOrders()
+    {
+        $resp = $this->easyEcom->getOrders();
+        $this->dieWithJsonResponse($resp);
+    }
 }
