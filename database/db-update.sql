@@ -1,4 +1,5 @@
--- [Avalara Tax API-------- INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`,
+-- [Avalara Tax API-------- 
+INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`,
 `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'Avalara Tax',
 '10', 'AvalaraTax', '1', '9'); INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`,
 `pluginlang_lang_id`, `plugin_name`, `plugin_description`) VALUES (11, 1, 'Avalara Tax', '<a
@@ -82,4 +83,4 @@ our website<br>\r\n{error_message} -  Error Message received from TaxApi while c
 
 INSERT INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`,
 `plugin_active`, `plugin_display_order`) VALUES ('EasyEcom', '12', 'EasyEcom',
-'1', '1')
+'1', '1');
