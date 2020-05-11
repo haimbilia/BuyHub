@@ -89,7 +89,9 @@ trait ApiProducts
     {
         $this->db = FatApp::getDb();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        
         $pagesize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 50);
+        $pagesize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $pagesize);
 
         $srch = Product::getSearchObject($this->langId);
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'tp.product_id = sp.selprod_product_id', 'sp');

@@ -7,6 +7,7 @@ trait ApiOrders
         $this->db = FatApp::getDb();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pagesize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 50);
+        $pagesize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $pagesize);
 
         $srch = new OrderSearch();
         $srch->joinOrderBuyerUser();
@@ -31,7 +32,6 @@ trait ApiOrders
         ]);
 
         $rs = $srch->getResultSet();
-        echo $srch->getError();
         $ordersList = FatApp::getDb()->fetchAll($rs);
         $payementStatusArr = Orders::getOrderPaymentStatusArr($this->langId);
 
@@ -55,11 +55,14 @@ trait ApiOrders
 
 	        $opRs = $opSrch->getResultSet();
 	        $orderProducts = FatApp::getDb()->fetchAll($opRs);
-	        
+            $orderObj = new Orders($row['order_id']);
+            $charges = $orderObj->getOrderProductChargesByOrderId($row['order_id']);
 	        $cartTotal = 0;
 	        $shippingTotal = 0;
 	        $orderItems = [];
 	        foreach ($orderProducts as $index => $opRow) {
+                $opRow['charges'] = $charges[$opRow['op_id']];
+
 	        	$shippingCost = CommonHelper::orderProductAmount($opRow, 'SHIPPING');
                 $volumeDiscount = CommonHelper::orderProductAmount($opRow, 'VOLUME_DISCOUNT');
                 $total = CommonHelper::orderProductAmount($opRow, 'cart_total') + $shippingCost+$volumeDiscount;
@@ -72,10 +75,10 @@ trait ApiOrders
                 	'variant_id' => $opRow['op_selprod_id'],
                 	'variant_sku' => $opRow['op_selprod_sku'],
                 	'quantity' => $opRow['op_qty'],
-                	'total' => $cartTotal,
+                	'total' => $cartTotal
                 ];
 	        }
-            $orderObj = new Orders($row['order_id']);
+            
 	        $addresses = $orderObj->getOrderAddresses($row['order_id']);
 	        $billingAddress = $addresses[Orders::BILLING_ADDRESS_TYPE];
 	        $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : [];
@@ -90,7 +93,7 @@ trait ApiOrders
                $shippingAddress[$adKey] = $value;
                unset($shippingAddress[$index]);
             }
-            
+
 	        $customerName = explode(' ', $row['buyer_user_name']);
 	        $customerName = [
 	        	'first_name' => $customerName[0],
@@ -112,6 +115,7 @@ trait ApiOrders
 	        	'updated_date' => $row['updated_date'],
 	        	'payment_mode' => $paymentMode,
 	        	'cart_total' => $cartTotal,
+                'shipping_fee' => $shippingTotal,
 	        	'total' => $row['order_net_amount'],
 	        	'billing_address' => $billingAddress,
 	        	'shipping_address' => $shippingAddress,
