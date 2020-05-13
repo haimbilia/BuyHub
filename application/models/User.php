@@ -2899,4 +2899,23 @@ class User extends MyAppModel
         $record = FatApp::getDb()->fetchAllAssoc($rs);
         return array_keys($record);
     }
+
+    public static function deleteUserMeta(string $keyValue, &$error = '')
+    {
+        if (!FatApp::getDb()->deleteRecords(static::DB_TBL_META, array('smt' => 'usermeta_key = ?', 'vals' => array($keyValue)))) {
+            $error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
+    public static function getUserMetaDetail(string $col, string $value = '')
+    {
+        $srch = new SearchBase(static::DB_TBL_META, 't_um');
+        $srch->addCondition(static::DB_TBL_META_PREFIX . 'key', '=', $col);
+        if (!empty($value)) {
+            $srch->addCondition(static::DB_TBL_META_PREFIX . 'value', '=', $value);
+        }
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs);
+    }
 }

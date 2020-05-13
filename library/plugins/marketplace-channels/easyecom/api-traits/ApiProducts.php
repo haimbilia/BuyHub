@@ -16,12 +16,12 @@ trait ApiProducts
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields([
-            'selprod_id as variant_id',
-            'COALESCE(selprod_title, product_identifier) as title',
-            'selprod_price as price',
-            'selprod_sku as sku',
+            'selprod_id',
+            'COALESCE(selprod_title, product_identifier) as selprod_title',
+            'selprod_price',
+            'selprod_sku',
             'selprod_user_id',
-            'selprod_stock as stock'
+            'selprod_stock'
         ]);
         $srch->addCondition('selprod_deleted', '=', 0);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
@@ -49,7 +49,7 @@ trait ApiProducts
                 'COALESCE(optionvalue_name, optionvalue_identifier) as value',
                 'selprodoption_optionvalue_id as value_id'
             ]);
-            $srch->addCondition('selprodoption_selprod_id', '=', $row['variant_id']);
+            $srch->addCondition('selprodoption_selprod_id', '=', $row['selprod_id']);
             $rs = $srch->getResultSet();
             $row['options'] = $this->db->fetchAll($rs);
         }
@@ -85,13 +85,13 @@ trait ApiProducts
      * 
      * @return array
      */
-    public function getProducts(): array
+    public function getProducts(array $post): array
     {
         $this->db = FatApp::getDb();
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = !isset($post['page']) || 1 > $post['page'] ? 1 : $post['page'];
         
         $pagesize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 50);
-        $pagesize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $pagesize);
+        $pagesize = isset($post['pagesize']) ? $post['pagesize'] : $pagesize;
 
         $srch = Product::getSearchObject($this->langId);
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'tp.product_id = sp.selprod_product_id', 'sp');
@@ -101,14 +101,15 @@ trait ApiProducts
 
         $srch->addCondition('product_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('product_approved', '=', applicationConstants::YES);
+        $srch->addCondition('selprod_user_id', '=', $this->userId);
 
         $srch->addMultipleFields([
-            'product_id as id',
-            'COALESCE(product_name, product_identifier) as title',
-            'product_description as description',
-            'product_added_on as created_date',
-            'product_updated_on as updated_date',
-            'COALESCE(pc_l.prodcat_name, pc.prodcat_identifier) as category'
+            'product_id',
+            'COALESCE(product_name, product_identifier) as product_name',
+            'product_description',
+            'product_added_on',
+            'product_updated_on',
+            'COALESCE(pc_l.prodcat_name, pc.prodcat_identifier) as prodcat_name'
         ]);
 
         $srch->addOrder('product_added_on', 'DESC');
@@ -120,7 +121,7 @@ trait ApiProducts
         $products = $this->db->fetchAll($rs);
 
         foreach ($products as &$row) {
-            $productId = FatUtility::int($row['id']);
+            $productId = FatUtility::int($row['product_id']);
             $sellerProducts = $this->getSellerProducts($productId);
             $this->addOptionsArr($sellerProducts);
             $selprodRow['images'] = [];
@@ -135,7 +136,7 @@ trait ApiProducts
                 $selprodRow['images'] = $this->getImagesArr($selprodRow['options'], $productId, $count);
             }
 
-            $row['description'] = strip_tags($row['description']);
+            $row['product_description'] = strip_tags($row['product_description']);
             $row['variants'] = $sellerProducts;
         }
 

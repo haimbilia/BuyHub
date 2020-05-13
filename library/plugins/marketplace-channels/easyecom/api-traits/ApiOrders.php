@@ -2,20 +2,22 @@
 
 trait ApiOrders
 {
-	public function getOrders()
+	public function getOrders(array $post)
     {
         $this->db = FatApp::getDb();
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = !isset($post['page']) || 1 > $post['page'] ? 1 : $post['page'];
+        
         $pagesize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 50);
-        $pagesize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $pagesize);
+        $pagesize = isset($post['pagesize']) ? $post['pagesize'] : $pagesize;
 
         $srch = new OrderSearch();
         $srch->joinOrderBuyerUser();
         $srch->joinOrderPaymentMethod($this->langId);
-
+        $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS, 'LEFT OUTER JOIN', 'op.op_order_id = order_id', 'op');
         $srch->addOrder('order_date_added', 'DESC');
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
         $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PAID);
+        $srch->addCondition('op_selprod_user_id', '=', $this->userId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
@@ -28,7 +30,11 @@ trait ApiOrders
         	'order_is_paid',
         	'IFNULL(pmethod_name, pmethod_identifier) as pmethod_name',
         	'pmethod_code',
-        	'buyer.user_name as buyer_user_name'
+        	'buyer.user_name as buyer_user_name',
+            'order_tax_charged',
+            'order_discount_total',
+            'order_reward_point_value',
+            'order_volume_discount_total'
         ]);
 
         $rs = $srch->getResultSet();
@@ -60,22 +66,44 @@ trait ApiOrders
 	        $cartTotal = 0;
 	        $shippingTotal = 0;
 	        $orderItems = [];
+            $taxOptionsTotal = [];
 	        foreach ($orderProducts as $index => $opRow) {
                 $opRow['charges'] = $charges[$opRow['op_id']];
+                
+                $taxOptions = json_decode($opRow['op_product_tax_options'], true);
+                if (!empty($taxOptions)) {
+                    foreach ($taxOptions as $val) {
+                        $title = $val['name'];
+                        if (!isset($taxOptionsTotal[$key][$title])) {
+                            $taxOptionsTotal[$key][$title] = 0;
+                        }
+                        $taxOptionsTotal[$key][$title] += $val['value'];
+                    }
+                }
 
 	        	$shippingCost = CommonHelper::orderProductAmount($opRow, 'SHIPPING');
                 $volumeDiscount = CommonHelper::orderProductAmount($opRow, 'VOLUME_DISCOUNT');
                 $total = CommonHelper::orderProductAmount($opRow, 'cart_total') + $shippingCost+$volumeDiscount;
                 $cartTotal = $cartTotal + CommonHelper::orderProductAmount($opRow, 'cart_total');
                 $shippingTotal = $shippingTotal + CommonHelper::orderProductAmount($opRow, 'shipping');
-                $orderItems[$key][$index] =  [
-                	'order_item_id' => $opRow['op_id'],
-                	'product_id' => $opRow['selprod_product_id'],
-                	'sku' => $opRow['selprod_sku'],
-                	'variant_id' => $opRow['op_selprod_id'],
-                	'variant_sku' => $opRow['op_selprod_sku'],
-                	'quantity' => $opRow['op_qty'],
-                	'total' => $cartTotal
+                $orderItems[$key][$index] = [
+                	'op_id' => $opRow['op_id'],
+                    'op_invoice_number' => $opRow['op_invoice_number'],
+                	'selprod_product_id' => $opRow['selprod_product_id'],
+                	'selprod_sku' => $opRow['selprod_sku'],
+                    'op_selprod_title' => $opRow['op_selprod_title'],
+                    'op_selprod_options' => $opRow['op_selprod_options'],
+                	'op_selprod_id' => $opRow['op_selprod_id'],
+                	'op_selprod_sku' => $opRow['op_selprod_sku'],
+                	'op_qty' => $opRow['op_qty'],
+                    'op_shop_name' => $opRow['op_shop_name'],
+                    'op_shop_owner_name' => $opRow['op_shop_owner_name'],
+                    'op_shop_owner_email' => $opRow['op_shop_owner_email'],
+                    'op_shop_owner_phone' => $opRow['op_shop_owner_phone'],
+                    'op_shipping_duration_name' => $opRow['op_shipping_duration_name'],
+                    'orderstatus_name' => $opRow['orderstatus_name'],
+                    'op_other_charges' => $opRow['op_other_charges'],
+                	'cart_total' => $cartTotal
                 ];
 	        }
             
@@ -115,12 +143,22 @@ trait ApiOrders
 	        	'updated_date' => $row['updated_date'],
 	        	'payment_mode' => $paymentMode,
 	        	'cart_total' => $cartTotal,
+                'tax' => [
+                    'total' => $row['order_tax_charged']
+                ],
+                'order_discount_total' => $row['order_discount_total'],
+                'order_reward_point_value' => $row['order_reward_point_value'],
+                'order_volume_discount_total' => $row['order_volume_discount_total'],
                 'shipping_fee' => $shippingTotal,
 	        	'total' => $row['order_net_amount'],
 	        	'billing_address' => $billingAddress,
 	        	'shipping_address' => $shippingAddress,
 	        	'order_items' => $orderItems[$key]
 	        ];
+
+            if (!empty($taxOptionsTotal[$key])) {
+                $orders[$key]['tax'] = $taxOptionsTotal[$key];
+            }
         }
 
         $data = [

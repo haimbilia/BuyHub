@@ -47,7 +47,13 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function getAuthToken()
     {
-        $resp = $this->easyEcom->getAuthToken();
+        $authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
+        if (empty($authToken)) {
+            $msg = Labels::getLabel('MSG_MISSING_PARAMETERS', $this->siteLangId);
+            $resp = $this->formatOutput(false, $msg);
+            $this->dieWithJsonResponse($resp);
+        }
+        $resp = $this->easyEcom->getAuthToken($authToken);
         $this->dieWithJsonResponse($resp);
     }
 
@@ -58,7 +64,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function getProducts()
     {
-        $resp = $this->easyEcom->getProducts();
+        $post = FatApp::getPostedData();
+        $resp = $this->easyEcom->getProducts($post);
         $this->dieWithJsonResponse($resp);
     }
 
@@ -69,7 +76,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function getOrders()
     {
-        $resp = $this->easyEcom->getOrders();
+        $post = FatApp::getPostedData();
+        $resp = $this->easyEcom->getOrders($post);
         $this->dieWithJsonResponse($resp);
     }
 }

@@ -10,10 +10,10 @@ class EasyEcomSettingsController extends MarketplaceChannelsSettingsController
                 'required' => true,
                 'label' => "EasyEcom Token",
             ],
-            'auth_token' => [
+            'auth_token_age' => [
                 'type' => PluginSetting::TYPE_STRING,
-                'required' => false,
-                'label' => "Auth Token",
+                'required' => true,
+                'label' => "Auth Token Age In Days",
             ]
         ];
     }

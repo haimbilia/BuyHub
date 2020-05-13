@@ -5,15 +5,20 @@ class EasyEcom extends MarketplaceChannelsBase
 {
     public const KEY_NAME = __CLASS__;
     
-    public $requiredKeys = ['easyecom_token'];
-    private $authToken;
-    private $reqAuthToken;
-    private $easyEcomToken;
-    private $db;
+    public $requiredKeys = [
+        'easyecom_token',
+        'auth_token_age'
+    ];
 
     use ApiAuthToken;
     use ApiProducts;
     use ApiOrders;
+
+    private $authToken;
+    private $reqAuthToken;
+    private $easyEcomToken;
+    private $db;
+    private $userId;
 
     public function __construct(int $langId)
     {
@@ -85,8 +90,16 @@ class EasyEcom extends MarketplaceChannelsBase
      */
     private function validateAuthRequest(): bool
     {
-        if (empty($this->reqAuthToken) || $this->reqAuthToken != $this->settings['auth_token']) {
-            $this->error = Labels::getLabel("MSG_UNAUTHORIZED_ACCESS", $this->langId);
+        $data = $this->getAuthTokenDetail();
+        if (empty($data)) {
+            $this->error = Labels::getLabel('MSG_INVALID_USER', $this->langId);
+            return false;
+        }
+
+        $this->userId = $data['usermeta_user_id'];
+        $expirationTime = $data['usermeta_value'];
+        if (time() >= $expirationTime) {
+            $this->error = Labels::getLabel("MSG_AUTH_TOKEN_EXPIRED", $this->langId);
             return false;
         }
         return true;
