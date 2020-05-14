@@ -80,4 +80,19 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $resp = $this->easyEcom->getOrders($post);
         $this->dieWithJsonResponse($resp);
     }
+
+    /**
+     * updateStockQty
+     * 
+     * @return void
+     */
+    public function updateStockQty()
+    {
+        $selProdId = FatApp::getPostedData('selprod_id');
+        $balanceQty = FatApp::getPostedData('balance_qty');
+        $soldQty = FatApp::getPostedData('sold_qty');
+
+        $resp = $this->easyEcom->updateProductStockQty($selProdId, $balanceQty, $soldQty);
+        $this->dieWithJsonResponse($resp);
+    }
 }

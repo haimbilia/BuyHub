@@ -34,7 +34,8 @@ trait ApiOrders
             'order_tax_charged',
             'order_discount_total',
             'order_reward_point_value',
-            'order_volume_discount_total'
+            'order_volume_discount_total',
+            'order_language_id'
         ]);
 
         $rs = $srch->getResultSet();
@@ -138,6 +139,7 @@ trait ApiOrders
 
 	        $orders[$key] = [
 	        	'order_id' => $row['order_id'],
+                'order_language_id' => $row['order_language_id'],
 	        	'order_status' => $payementStatusArr[$row['order_status']],
 	        	'created_date' => $row['created_date'],
 	        	'updated_date' => $row['updated_date'],

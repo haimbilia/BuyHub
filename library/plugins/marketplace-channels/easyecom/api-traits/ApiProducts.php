@@ -154,4 +154,23 @@ trait ApiProducts
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
         return $this->formatOutput(true, $msg, $data);
     }
+
+    /**
+     * updateProductStockQty
+     * 
+     * @param int $selProdId 
+     * @param int $balanceQty 
+     * @param int $soldQty 
+     * @return bool
+     */
+    public function updateProductStockQty(int $selProdId, int $balanceQty, int $soldQty): bool
+    {
+        $db = FatApp::getDb();
+        $db->query("UPDATE tbl_seller_products 
+            SET selprod_stock = (selprod_stock - " . $balanceQty . "),
+            selprod_sold_count = (selprod_sold_count + " . $soldQty . ") 
+            WHERE selprod_id = '" . (int)$selProdId . "' 
+            AND selprod_subtract_stock = '1'");
+        return true;
+    }
 }
