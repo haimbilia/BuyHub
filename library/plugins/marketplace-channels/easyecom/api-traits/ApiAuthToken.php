@@ -20,9 +20,18 @@ trait ApiAuthToken
         return false;
     }
 
+    /**
+     * getAuthTokenDetail
+     * 
+     * @return array
+     */
     private function getAuthTokenDetail(): array
     {
-        return current(User::getUserMetaDetail($this->reqAuthToken));
+        $data = current(User::getUserMetaDetail($this->reqAuthToken));
+        if (empty($data)) {
+            return [];
+        }
+        return $data;
     }
 
     /**
