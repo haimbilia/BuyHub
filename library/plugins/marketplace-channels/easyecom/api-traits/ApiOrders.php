@@ -48,6 +48,7 @@ trait ApiOrders
 			$opSrch->joinShippingUsers();
 			$opSrch->joinSellerProducts();
             $opSrch->joinShippingCharges();
+            $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'ops_l.opshippinglang_op_id = op.op_id AND ops_l.opshippinglang_lang_id = ' . $this->langId, 'ops_l');
 	        $opSrch->addCountsOfOrderedProducts();
 	        $opSrch->addOrderProductCharges();
 	        $opSrch->doNotCalculateRecords();
@@ -58,7 +59,7 @@ trait ApiOrders
 	            array('op_id', 'op_invoice_number', 'op_selprod_id', 'selprod_product_id', 'selprod_sku', 'op_selprod_title', 'op_product_name',
 	            'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
 	            'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
-	            'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'op_status_id', 'optosu.optsu_user_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id')
+	            'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'op_status_id', 'optosu.optsu_user_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'op_shipping_duration_name', 'op_shipping_durations','opshipping_carrier')
 	        );
 
 	        $opRs = $opSrch->getResultSet();
@@ -104,10 +105,12 @@ trait ApiOrders
                     'op_shop_owner_name' => $opRow['op_shop_owner_name'],
                     'op_shop_owner_email' => $opRow['op_shop_owner_email'],
                     'op_shop_owner_phone' => $opRow['op_shop_owner_phone'],
-                    'op_shipping_duration_name' => $opRow['op_shipping_duration_name'],
                     'orderstatus_name' => $opRow['orderstatus_name'],
                     'op_other_charges' => $opRow['op_other_charges'],
                 	'cart_total' => $cartTotal,
+                    'op_shipping_duration_name' => $opRow['op_shipping_duration_name'],
+                    'op_shipping_durations' => $opRow['op_shipping_durations'],
+                    'opshipping_carrier' => $opRow['opshipping_carrier'],
                     'shipping_by' => CommonHelper::canAvailShippingChargesBySeller($opRow['op_selprod_user_id'], $opshipping_by_seller_user_id) ? Labels::getLabel('LBL_YOKART_SELLER', $this->langId) : Labels::getLabel('LBL_YOKART_ADMIN', $this->langId)
                 ];
 	        }
