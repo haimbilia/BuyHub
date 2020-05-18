@@ -2,7 +2,13 @@
 
 trait ApiOrders
 {
-	public function getOrders(array $post)
+    /**
+     * getOrders
+     * 
+     * @param array $post 
+     * @return array
+     */
+	public function getOrders(array $post): array
     {
         $this->db = FatApp::getDb();
         $page = !isset($post['page']) || 1 > $post['page'] ? 1 : $post['page'];
@@ -183,5 +189,41 @@ trait ApiOrders
 
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
         return $this->formatOutput(true, $msg, $data);
+    }
+
+    /**
+     * getShippedOrderCarrierDetail
+     * 
+     * @param string $orderId 
+     * @param int $opId 
+     * @return array
+     */
+    public function getShippedOrderCarrierDetail(int $opId): array
+    {
+        $opSrch = new OrderProductSearch($this->langId, false, true, true);
+     
+        $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'ops_l.opshippinglang_op_id = op.op_id AND ops_l.opshippinglang_lang_id = ' . $this->langId, 'ops_l');
+        $opSrch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'oph.oshistory_op_id = op.op_id', 'oph');
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opSrch->addCondition('op.op_id', '=', $opId);
+        $opSrch->addCondition('op_selprod_user_id', '=', $this->userId);
+        $opSrch->addCondition('oshistory_orderstatus_id', '=', OrderStatus::ORDER_SHIPPED);
+
+        $opSrch->addMultipleFields([
+            'op_invoice_number',
+            'op_shipping_duration_name',
+            'op_shipping_durations',
+            'opshipping_carrier',
+            'oshistory_tracking_number'
+        ]);
+        $opRs = $opSrch->getResultSet();
+        $carrierDetail = FatApp::getDb()->fetch($opRs);
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
+        if (empty($carrierDetail)) {
+            $carrierDetail = [];
+            $msg = Labels::getLabel("MSG_NO_RECORD_FOUND", $this->langId);
+        }
+        return $this->formatOutput(true, $msg, $carrierDetail);
     }
 }

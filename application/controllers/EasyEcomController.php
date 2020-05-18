@@ -49,7 +49,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
         if (empty($authToken)) {
-            $msg = Labels::getLabel('MSG_MISSING_PARAMETERS', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
             $resp = $this->formatOutput(false, $msg);
             $this->dieWithJsonResponse($resp);
         }
@@ -88,11 +88,34 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function updateStockQty()
     {
-        $selProdId = FatApp::getPostedData('selprod_id');
-        $balanceQty = FatApp::getPostedData('balance_qty');
-        $soldQty = FatApp::getPostedData('sold_qty');
+        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
+        $balanceQty = FatApp::getPostedData('balance_qty', FatUtility::VAR_INT, 0);
+        $soldQty = FatApp::getPostedData('sold_qty', FatUtility::VAR_INT, 0);
+
+        if (1 > $selProdId || 0 > $balanceQty || 1 > $soldQty) {
+            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
+            $resp = $this->formatOutput(false, $msg);
+            $this->dieWithJsonResponse($resp);
+        }
 
         $resp = $this->easyEcom->updateProductStockQty($selProdId, $balanceQty, $soldQty);
+        $this->dieWithJsonResponse($resp);
+    }
+
+    /**
+     * getShippedOrderCarrierDetail
+     * 
+     * @return void
+     */
+    public function getShippedOrderCarrierDetail()
+    {
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        if (1 > $opId) {
+            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
+            $resp = $this->formatOutput(false, $msg);
+            $this->dieWithJsonResponse($resp);
+        }
+        $resp = $this->easyEcom->getShippedOrderCarrierDetail($opId);
         $this->dieWithJsonResponse($resp);
     }
 }
