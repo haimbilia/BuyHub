@@ -161,16 +161,33 @@ trait ApiProducts
      * @param int $selProdId 
      * @param int $balanceQty 
      * @param int $soldQty 
-     * @return bool
+     * @return array
      */
-    public function updateProductStockQty(int $selProdId, int $balanceQty, int $soldQty): bool
+    public function updateProductStockQty(int $selProdId, int $balanceQty, int $soldQty): array
     {
+        $selProdId = FatUtility::int($selProdId);
+        $balanceQty = FatUtility::int($balanceQty);
+        $soldQty = FatUtility::int($soldQty);
+
+        if (1 > $selProdId || 0 > $balanceQty || 1 > $soldQty) {
+            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
+            return $this->formatOutput(false, $msg);
+        }
+
         $db = FatApp::getDb();
-        $db->query("UPDATE tbl_seller_products 
-            SET selprod_stock = (selprod_stock - " . $balanceQty . "),
-            selprod_sold_count = (selprod_sold_count + " . $soldQty . ") 
-            WHERE selprod_id = '" . (int)$selProdId . "' 
-            AND selprod_subtract_stock = '1'");
-        return true;
+        $db->query("UPDATE " . SellerProduct::DB_TBL . " 
+            SET selprod_sold_count = 
+                CASE 
+                    WHEN selprod_stock = " . $balanceQty . " 
+                    THEN selprod_sold_count
+                    ELSE (selprod_sold_count + " . $soldQty . ")
+                END,
+            selprod_stock = " . $balanceQty . ",
+            selprod_track_inventory = 1,
+            selprod_subtract_stock = 1 
+            WHERE selprod_id = '" . $selProdId . "'
+            AND selprod_user_id = " . $this->userId);
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
+        return $this->formatOutput(true, $msg);
     }
 }
