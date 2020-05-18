@@ -22,7 +22,6 @@ class Orders extends MyAppModel
     public const DB_TBL_ORDER_EXTRAS = 'tbl_order_extras';
     public const DB_TBL_ORDER_PAYMENTS = 'tbl_order_payments';
 
-
     public const DB_TBL_ORDER_PRODUCTS_SHIPPING = 'tbl_order_product_shipping';
     public const DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG = 'tbl_order_product_shipping_lang';
 
