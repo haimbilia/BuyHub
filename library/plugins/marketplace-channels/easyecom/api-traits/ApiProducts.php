@@ -159,17 +159,15 @@ trait ApiProducts
      * updateProductStockQty
      * 
      * @param int $selProdId 
-     * @param int $balanceQty 
-     * @param int $soldQty 
+     * @param int $balanceQty
      * @return array
      */
-    public function updateProductStockQty(int $selProdId, int $balanceQty, int $soldQty): array
+    public function updateProductStockQty(int $selProdId, int $balanceQty): array
     {
         $selProdId = FatUtility::int($selProdId);
         $balanceQty = FatUtility::int($balanceQty);
-        $soldQty = FatUtility::int($soldQty);
 
-        if (1 > $selProdId || 0 > $balanceQty || 1 > $soldQty) {
+        if (1 > $selProdId || 0 > $balanceQty) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
             return $this->formatOutput(false, $msg);
         }
@@ -180,7 +178,7 @@ trait ApiProducts
                 CASE 
                     WHEN selprod_stock = " . $balanceQty . " 
                     THEN selprod_sold_count
-                    ELSE (selprod_sold_count + " . $soldQty . ")
+                    ELSE (selprod_sold_count + (selprod_stock - " . $balanceQty . "))
                 END,
             selprod_stock = " . $balanceQty . ",
             selprod_track_inventory = 1,

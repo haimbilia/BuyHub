@@ -90,15 +90,14 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $balanceQty = FatApp::getPostedData('balance_qty', FatUtility::VAR_INT, 0);
-        $soldQty = FatApp::getPostedData('sold_qty', FatUtility::VAR_INT, 0);
 
-        if (1 > $selProdId || 0 > $balanceQty || 1 > $soldQty) {
+        if (1 > $selProdId || 0 > $balanceQty) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
             $resp = $this->formatOutput(false, $msg);
             $this->dieWithJsonResponse($resp);
         }
 
-        $resp = $this->easyEcom->updateProductStockQty($selProdId, $balanceQty, $soldQty);
+        $resp = $this->easyEcom->updateProductStockQty($selProdId, $balanceQty);
         $this->dieWithJsonResponse($resp);
     }
 
