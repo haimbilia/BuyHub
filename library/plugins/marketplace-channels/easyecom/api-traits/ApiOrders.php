@@ -22,7 +22,8 @@ trait ApiOrders
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS, 'LEFT OUTER JOIN', 'op.op_order_id = order_id', 'op');
         $srch->addOrder('order_date_added', 'DESC');
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PAID);
+        $cond = $srch->addCondition('op_status_id', '=', FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS"));
+        $cond->attachCondition('op_status_id', '=', FatApp::getConfig("CONF_COD_ORDER_STATUS"));
         $srch->addCondition('op_selprod_user_id', '=', $this->userId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
