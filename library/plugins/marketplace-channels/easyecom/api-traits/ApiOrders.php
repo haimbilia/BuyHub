@@ -196,7 +196,6 @@ trait ApiOrders
     /**
      * getShippedOrderCarrierDetail
      * 
-     * @param string $orderId 
      * @param int $opId 
      * @return array
      */
@@ -232,28 +231,60 @@ trait ApiOrders
     /**
      * getOrderStatus
      * 
-     * @param string $orderId 
      * @param int $opId 
      * @return array
      */
     public function getOrderStatus(int $opId): array
     {
         $opSrch = new OrderProductSearch($this->langId, false, true, true);
-        $opSrch->doNotCalculateRecords();
-        $opSrch->doNotLimitRecords();
         $opSrch->addCondition('op.op_id', '=', $opId);
         $opSrch->addCondition('op_selprod_user_id', '=', $this->userId);
 
         $opSrch->addMultipleFields([
             'op_status_id'
         ]);
+        $opSrch->setPageSize(1);
+
         $opRs = $opSrch->getResultSet();
         $orderStatus = FatApp::getDb()->fetch($opRs);
+
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
+        $status = true;
         if (empty($orderStatus)) {
             $orderStatus = [];
+            $status = false;
             $msg = Labels::getLabel("MSG_NO_RECORD_FOUND", $this->langId);
         }
-        return $this->formatOutput(true, $msg, $orderStatus);
+        return $this->formatOutput($status, $msg, $orderStatus);
+    }
+
+    /**
+     * markOrderAsShipped
+     * 
+     * @param array $post 
+     * @return array
+     */
+    public function markOrderAsShipped(array $post): array
+    {
+        $opId = FatUtility::int($post['op_id']);
+        $trackingNumber = $post['tracking_number'];
+
+        if (1 > $opId || empty($trackingNumber)) {
+            $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            return $this->formatOutput(false, $msg);
+        }
+
+        $resp = $this->getOrderStatus($opId);
+        if (false === $resp['status']) {
+            return $resp;
+        }
+
+        $comment = Labels::getLabel('MSG_MARKED_AS_SHIPPED_BY_EASY_ECOM', $this->langId);
+        $orderObj = new Orders();
+        if (false == $orderObj->addChildProductOrderHistory($opId, $this->langId, OrderStatus::ORDER_SHIPPED, $comment, true, $trackingNumber)) {
+            return $this->formatOutput(false, $orderObj->getError());
+        }
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
+        return $this->formatOutput(true, $msg);
     }
 }

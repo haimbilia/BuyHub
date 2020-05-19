@@ -142,13 +142,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function markOrderAsShipped()
     {
-        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
-        if (1 > $opId) {
-            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
-            $resp = $this->formatOutput(false, $msg);
-            $this->dieWithJsonResponse($resp);
-        }
-        $resp = $this->easyEcom->getOrderStatus($opId);
+        $resp = $this->easyEcom->markOrderAsShipped(FatApp::getPostedData());
         $this->dieWithJsonResponse($resp);
     }
 }
