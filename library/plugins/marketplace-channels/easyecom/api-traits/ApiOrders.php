@@ -111,6 +111,7 @@ trait ApiOrders
                     'op_shop_owner_name' => $opRow['op_shop_owner_name'],
                     'op_shop_owner_email' => $opRow['op_shop_owner_email'],
                     'op_shop_owner_phone' => $opRow['op_shop_owner_phone'],
+                    'op_status_id' => $opRow['op_status_id'],
                     'orderstatus_name' => $opRow['orderstatus_name'],
                     'op_other_charges' => $opRow['op_other_charges'],
                 	'cart_total' => $cartTotal,
@@ -225,5 +226,33 @@ trait ApiOrders
             $msg = Labels::getLabel("MSG_NO_RECORD_FOUND", $this->langId);
         }
         return $this->formatOutput(true, $msg, $carrierDetail);
+    }
+
+    /**
+     * getOrderStatus
+     * 
+     * @param string $orderId 
+     * @param int $opId 
+     * @return array
+     */
+    public function getOrderStatus(int $opId): array
+    {
+        $opSrch = new OrderProductSearch($this->langId, false, true, true);
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opSrch->addCondition('op.op_id', '=', $opId);
+        $opSrch->addCondition('op_selprod_user_id', '=', $this->userId);
+
+        $opSrch->addMultipleFields([
+            'op_status_id'
+        ]);
+        $opRs = $opSrch->getResultSet();
+        $orderStatus = FatApp::getDb()->fetch($opRs);
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
+        if (empty($orderStatus)) {
+            $orderStatus = [];
+            $msg = Labels::getLabel("MSG_NO_RECORD_FOUND", $this->langId);
+        }
+        return $this->formatOutput(true, $msg, $orderStatus);
     }
 }

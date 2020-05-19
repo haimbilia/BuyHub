@@ -117,4 +117,21 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $resp = $this->easyEcom->getShippedOrderCarrierDetail($opId);
         $this->dieWithJsonResponse($resp);
     }
+
+    /**
+     * getOrderStatus
+     * 
+     * @return void
+     */
+    public function getOrderStatus()
+    {
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        if (1 > $opId) {
+            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
+            $resp = $this->formatOutput(false, $msg);
+            $this->dieWithJsonResponse($resp);
+        }
+        $resp = $this->easyEcom->getOrderStatus($opId);
+        $this->dieWithJsonResponse($resp);
+    }
 }
