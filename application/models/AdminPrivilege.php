@@ -112,6 +112,9 @@ class AdminPrivilege
     public const SECTION_APP_THEME_SETTINGS = 107;
     public const SECTION_PATCH_UPDATE = 109;
     public const SECTION_SMS_TEMPLATE = 108;
+    public const SECTION_SHIPPING_PACKAGES = 109;
+    public const SECTION_SHIPPING_MANAGEMENT = 110;
+	public const SECTION_IMAGE_ATTRIBUTES = 111;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -214,7 +217,8 @@ class AdminPrivilege
         static::SECTION_FAQ_CATEGORY => Labels::getLabel('MSG_Faq_Category', CommonHelper::getLangId()),
         static::SECTION_FAQ => Labels::getLabel('MSG_Faq', CommonHelper::getLangId()),
         static::SECTION_URL_REWRITE => Labels::getLabel('MSG_Url_Rewriting', CommonHelper::getLangId()),
-
+		static::SECTION_IMAGE_ATTRIBUTES => Labels::getLabel('MSG_Image_Attributes', CommonHelper::getLangId()),
+		
         static::SECTION_BLOG_POST_CATEGORIES => Labels::getLabel('MSG_Blog_Categories', CommonHelper::getLangId()),
         static::SECTION_BLOG_POSTS => Labels::getLabel('MSG_Blog_Posts', CommonHelper::getLangId()),
         static::SECTION_BLOG_CONTRIBUTIONS => Labels::getLabel('MSG_Blog_Contributions', CommonHelper::getLangId()),
@@ -255,8 +259,8 @@ class AdminPrivilege
         static::SECTION_IMPORT_EXPORT => Labels::getLabel('MSG_IMPORT_EXPORT', CommonHelper::getLangId()),
         static::SECTION_SMS_TEMPLATE => Labels::getLabel('MSG_SMS_TEMPLATE', CommonHelper::getLangId()),
         
-        static::SECTION_ABUSIVE_WORDS => Labels::getLabel('MSG_Abusive_Words',CommonHelper::getLangId()),
-        static::SECTION_SUBSCRIPTION_ORDERS => Labels::getLabel('MSG_Subscription_Orders',CommonHelper::getLangId()),
+        static::SECTION_ABUSIVE_WORDS => Labels::getLabel('MSG_Abusive_Words', CommonHelper::getLangId()),
+        static::SECTION_SUBSCRIPTION_ORDERS => Labels::getLabel('MSG_Subscription_Orders', CommonHelper::getLangId()),
             
         /* static::SECTION_Languages => Labels::getLabel('MSG_Languages',CommonHelper::getLangId()),
         static::SECTION_Languages => Labels::getLabel('MSG_Order_Status',CommonHelper::getLangId()), */
@@ -264,7 +268,7 @@ class AdminPrivilege
         /*static::SECTION_SUCCESS_STORIES => Labels::getLabel('MSG_Success_stories',CommonHelper::getLangId()),
         static::SECTION_HOME_PAGE_ELEMENTS => Labels::getLabel('MSG_Home_Page_Elements',CommonHelper::getLangId()),
         static::SECTION_QUESTION_BANKS => Labels::getLabel('MSG_Question_Banks',CommonHelper::getLangId()),
-        
+
         static::SECTION_QUESTIONS => Labels::getLabel('MSG_Questions',CommonHelper::getLangId()),
         static::SECTION_QUESTIONNAIRES => Labels::getLabel('MSG_Questionnaires',CommonHelper::getLangId()), */
 
@@ -915,6 +919,16 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_URL_REWRITE, static::PRIVILEGE_WRITE, $returnResult);
     }
+	
+	public function canViewImageAttributes($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_IMAGE_ATTRIBUTES, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditImageAttributes($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_IMAGE_ATTRIBUTES, static::PRIVILEGE_WRITE, $returnResult);
+    }
 
     public function canViewTestimonial($adminId = 0, $returnResult = false)
     {
@@ -1467,6 +1481,7 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_PATCH_UPDATE, static::PRIVILEGE_WRITE, $returnResult);
     }
+    
     public function canEditSmsTemplate($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_SMS_TEMPLATE, static::PRIVILEGE_WRITE, $returnResult);
@@ -1476,4 +1491,25 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_SMS_TEMPLATE, static::PRIVILEGE_READ, $returnResult);
     }
+
+    public function canViewShippingPackages($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPING_PACKAGES, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditShippingPackages($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPING_PACKAGES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewShippingManagement($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPING_MANAGEMENT, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditShippingManagement($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPING_MANAGEMENT, static::PRIVILEGE_WRITE, $returnResult);
+    }
+    
 }

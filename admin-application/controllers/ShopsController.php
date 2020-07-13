@@ -202,7 +202,7 @@ class ShopsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $shop_id = $post['shop_id'];
+        $shop_id = FatUtility::int($post['shop_id']);
         unset($post['shop_id']);
 
         $shop = new Shop($shop_id);
@@ -298,7 +298,7 @@ class ShopsController extends AdminBaseController
         $this->objPrivilege->canEditShops();
         $post = FatApp::getPostedData();
 
-        $shop_id = $post['shop_id'];
+        $shop_id = FatUtility::int($post['shop_id']);
         $lang_id = $post['lang_id'];
 
         if ($shop_id == 0 || $lang_id == 0) {
@@ -567,8 +567,8 @@ class ShopsController extends AdminBaseController
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'shop_active', $activeInactiveArr, '', array(), '');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Free_Shipping_On', $this->adminLangId), 'shop_free_ship_upto');
-        $fld->requirements()->setInt();
+       /*  $fld = $frm->addTextBox(Labels::getLabel('LBL_Free_Shipping_On', $this->adminLangId), 'shop_free_ship_upto');
+        $fld->requirements()->setInt(); */
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId), 'shop_cod_min_wallet_balance');
         $fld->requirements()->setFloat();
         $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->adminLangId) . "</small>";
@@ -577,11 +577,12 @@ class ShopsController extends AdminBaseController
         $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_RETURN_AGE', $this->adminLangId), 'shop_return_age');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
-        
+
         $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_CANCELLATION_AGE', $this->adminLangId), 'shop_cancellation_age');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
-
+        $frm->addHiddenField('', 'shop_lat');
+        $frm->addHiddenField('', 'shop_lng');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
@@ -604,13 +605,13 @@ class ShopsController extends AdminBaseController
         /* $fld = $frm->addButton('Logo','shop_logo','Upload File',
         array('class'=>'shopFile-Js','id'=>'shop_logo','data-file_type'=>AttachedFile::FILETYPE_SHOP_LOGO));
         $fld->htmlAfterField='<span id="input-field'.AttachedFile::FILETYPE_SHOP_LOGO.'"></span>
-        <div class="uploaded--image"><img src="'.CommonHelper::generateUrl('Image','shopLogo',array($shop_id,$lang_id,'THUMB'),CONF_WEBROOT_FRONT_URL).'"></div>';
+        <div class="uploaded--image"><img src="'.UrlHelper::generateUrl('Image','shopLogo',array($shop_id,$lang_id,'THUMB'),CONF_WEBROOT_FRONT_URL).'"></div>';
 
         $fld1 = $frm->addButton('Banner','shop_banner','Upload File',
         array('class'=>'shopFile-Js','id'=>'shop_banner','data-file_type'=>AttachedFile::FILETYPE_SHOP_BANNER));
         $fld1->htmlAfterField='<span id="input-field'.AttachedFile::FILETYPE_SHOP_BANNER.'"></span>
         <span class="uploadimage--info">Preferred Dimension: Width = 1000px, Height = 250px </span>
-        <div class="uploaded--image"><img src="'.CommonHelper::generateUrl('Image','shopBanner',array($shop_id,$lang_id,'THUMB'),CONF_WEBROOT_FRONT_URL).'"></div>'; */
+        <div class="uploaded--image"><img src="'.UrlHelper::generateUrl('Image','shopBanner',array($shop_id,$lang_id,'THUMB'),CONF_WEBROOT_FRONT_URL).'"></div>'; */
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -743,7 +744,7 @@ class ShopsController extends AdminBaseController
 
 
 
-        $shop_id = $shopDetails['shop_id'];
+        $shop_id = FatUtility::int($shopDetails['shop_id']);
 
         $shopObj = new Shop($shop_id);
         $data = array('shop_ltemplate_id' => $ltemplate_id);
@@ -823,7 +824,7 @@ class ShopsController extends AdminBaseController
             $rs = $urlSrch->getResultSet();
             $urlRow = FatApp::getDb()->fetch($rs);
             if ($urlRow) {
-                $shopUrl = Shop::getShopUrl($shop_id, 'urlrewrite_custom');
+                $shopUrl = Shop::getRewriteCustomUrl($shop_id);
                 $shopcolDetails['urlrewrite_custom'] = str_replace('-' . $shopUrl, '', $urlRow['urlrewrite_custom']);
             }
             /* ] */
@@ -831,7 +832,7 @@ class ShopsController extends AdminBaseController
             $colectionForm->fill($shopcolDetails);
             $this->set('scollection_id', $scollection_id);
         }
-        $this->set('baseUrl', Shop::getShopUrl($shop_id, 'urlrewrite_custom'));
+        $this->set('baseUrl', Shop::getRewriteCustomUrl($shop_id));
         $this->set('languages', Language::getAllNames());
         $this->set('colectionForm', $colectionForm);
         $this->_template->render(false, false);
@@ -1071,7 +1072,7 @@ class ShopsController extends AdminBaseController
         } else {
             $row = ShopCollection::getAttributesByLangId($langId, $scollection_id);
         }
-        
+
         $data = [];
         $data['scollection_id'] = $scollection_id;
         $data['lang_id'] = $langId;
@@ -1095,7 +1096,7 @@ class ShopsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addRequiredField('Collection Name', 'name');
-        
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 

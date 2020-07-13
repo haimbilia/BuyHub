@@ -22,9 +22,9 @@
                     <?php
         if (count($products)) {
             foreach ($products as $product) {
-                $productUrl = !$isAppUser?CommonHelper::generateUrl('Products', 'View', array($product['selprod_id'])):'javascript:void(0)';
-                $shopUrl = !$isAppUser?CommonHelper::generateUrl('Shops', 'View', array($product['shop_id'])):'javascript:void(0)';
-                $imageUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                $productUrl = !$isAppUser?UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])):'javascript:void(0)';
+                $shopUrl = !$isAppUser?UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])):'javascript:void(0)';
+                $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                     <tr class="<?php echo (!$product['in_stock']) ? 'disabled' : '';
                 echo ($product['is_digital_product'])?'digital_product_tab-js':'physical_product_tab-js'; ?>">
                         <td>
@@ -45,11 +45,11 @@
                     }
                 } ?>
                                     | <?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?> <?php echo $product['quantity']; ?>
-                                    <?php if (($product['shop_eligible_for_free_shipping'] > 0 || ($product['shop_free_ship_upto'] > 0 && $product['shop_free_ship_upto'] > $product['totalPrice']))  && $product['psbs_user_id'] == 0 && $product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                                    <?php /* if (($product['shop_eligible_for_free_shipping'] > 0 || ($product['shop_free_ship_upto'] > 0 && $product['shop_free_ship_upto'] > $product['totalPrice']))  && $product['psbs_user_id'] == 0 && $product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                                     <div class="item-yk-head-specification note-messages">
                                         <?php echo Labels::getLabel('LBL_free_shipping_is_not_eligible_for_this_product', $siteLangId);    ?>
                                     </div>
-                                    <?php } ?>
+                                    <?php } */ ?>
                                 </div>
                             </div>
                         </td>

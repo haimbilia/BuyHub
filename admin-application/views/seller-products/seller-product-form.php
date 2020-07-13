@@ -31,7 +31,7 @@
                     $shopUserNameFld= $frmSellerProduct->getField('selprod_user_shop_name');
                     $shopUserNameFld->setfieldTagAttribute('readonly', 'readonly');
                     $urlFld= $frmSellerProduct->getField('selprod_url_keyword');
-                    $urlFld->htmlAfterField = "<small class='text--small'>" . CommonHelper::generateFullUrl('Products', 'View', array($selprod_id), CONF_WEBROOT_FRONT_URL).'</small>';
+                    $urlFld->htmlAfterField = "<small class='text--small'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), CONF_WEBROOT_FRONT_URL).'</small>';
                     $urlFld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value,$selprod_id,'post')");
                     $selprodCodEnabledFld = $frmSellerProduct->getField('selprod_cod_enabled');
                     $selprodCodEnabledFld->setWrapperAttribute('class', 'selprod_cod_enabled_fld');
@@ -198,7 +198,10 @@
                                              <th width="20%"><?php echo Labels::getLabel('LBL_Variant/Option', $adminLangId); ?></th>
                                             <?php } ?>
                                              <th width="20%"><?php echo Labels::getLabel('LBL_Cost_Price', $adminLangId); ?></th>
-                                             <th width="20%"><?php echo Labels::getLabel('LBL_Selling_Price', $adminLangId); ?> <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $adminLangId).' '.Labels::getLabel('LBL_Min_Selling_price', $adminLangId).' '. CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true); ?>"></i></th>
+                                             <?php $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_This_price_is_including_the_tax_rates.', $adminLangId) : Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $adminLangId);
+                                             $selPriceTitle .= ' '.Labels::getLabel('LBL_Min_Selling_price', $adminLangId).' '. CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
+                                             ?>
+                                             <th width="20%"><?php echo Labels::getLabel('LBL_Selling_Price', $adminLangId); ?> <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php echo $selPriceTitle; ?>"></i></th>
                                              <th width="20%"><?php echo Labels::getLabel('LBL_Quantity', $adminLangId); ?></th>
                                              <th width="20%"><?php echo Labels::getLabel('LBL_SKU', $adminLangId); ?> <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $adminLangId) ?>"></i></th>
                                          </tr>

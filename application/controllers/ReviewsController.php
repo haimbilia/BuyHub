@@ -42,7 +42,8 @@ class ReviewsController extends MyAppController
 
         $canSubmitFeedback = true;
         $orderProduct = SelProdReview::getProductOrderId($product['product_id'], $loggedUserId);
-        if (!Orders::canSubmitFeedback($loggedUserId, $orderProduct['op_order_id'], $selprod_id)) {
+        $op_order_id = (!empty($orderProduct) && array_key_exists('op_order_id', $orderProduct)) ? $orderProduct['op_order_id'] : 0;
+        if (!Orders::canSubmitFeedback($loggedUserId, $op_order_id, $selprod_id)) {
             $canSubmitFeedback = false;
         }
         $this->set('canSubmitFeedback', $canSubmitFeedback);
@@ -79,7 +80,7 @@ class ReviewsController extends MyAppController
         $srch->setPageSize($pageSize);
 
         switch ($orderBy) {
-            case 'most_helpful' :
+            case 'most_helpful':
                 $srch->addOrder('helpful', 'desc');
                 break;
             default:
@@ -114,7 +115,7 @@ class ReviewsController extends MyAppController
         $shop_id = FatUtility::int($shop_id);
 
         if ($shop_id <= 0) {
-            FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'Shop'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Shop'));
         }
 
         $db = FatApp::getDb();
@@ -139,7 +140,7 @@ class ReviewsController extends MyAppController
 
         if (!$shop) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl('Home'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
         $selProdRatingSrch = SelProdRating::getSearchObj();
@@ -210,7 +211,7 @@ class ReviewsController extends MyAppController
         $srch->setPageSize($pageSize);
 
         switch ($orderBy) {
-            case 'most_helpful' :
+            case 'most_helpful':
                 $srch->addOrder('helpful', 'desc');
                 break;
             default:
@@ -340,7 +341,7 @@ class ReviewsController extends MyAppController
 
         if (!$shop) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl('Home'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
 
@@ -449,7 +450,7 @@ class ReviewsController extends MyAppController
             CommonHelper::redirectUserReferer();
         }
         $opId = $orderProduct['op_id'];
-        FatApp::redirectUser(CommonHelper::generateUrl('Buyer', 'orderFeedback', array($opId)));
+        FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderFeedback', array($opId)));
     }
 
     public function reviewAbuse($reviewId)

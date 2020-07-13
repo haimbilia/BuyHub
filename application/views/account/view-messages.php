@@ -8,7 +8,7 @@
             <div class="cards">
                 <div class="cards-header">
                     <h5 class="cards-title"><?php echo Labels::getLabel('LBL_Messages', $siteLangId);?></h5>
-                    <div class="btn-group"><a href="<?php echo CommonHelper::generateUrl('Account', 'messages');?>" class="btn btn-outline-primary btn--sm"><?php echo Labels::getLabel('LBL_Back_to_messages', $siteLangId);?></a></div>
+                    <div class="btn-group"><a href="<?php echo UrlHelper::generateUrl('Account', 'messages');?>" class="btn btn-outline-primary btn--sm"><?php echo Labels::getLabel('LBL_Back_to_messages', $siteLangId);?></a></div>
                 </div>
                 <div class="cards-content ">
                     <table class="table">
@@ -81,7 +81,7 @@
                                     $userImgUpdatedOn = User::getAttributesById($loggedUserId, 'user_updated_on');
                                     $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                     ?>
-                                        <img src="<?php echo FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'user', array($loggedUserId,'thumb',true)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');?>" alt="<?php echo $loggedUserName; ?>">
+                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($loggedUserId,'thumb',true)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');?>" alt="<?php echo $loggedUserName; ?>">
                                     </div>
                                     <div class="msg__desc">
                                         <span class="msg__title"><?php echo $loggedUserName;?></span> <?php

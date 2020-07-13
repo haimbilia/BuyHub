@@ -24,24 +24,24 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 <div class="slider-for" dir="<?php echo CommonHelper::getLayoutDirection();?>" id="slider-for">
                                     <?php if ($productImagesArr) { ?>
                                         <?php foreach ($productImagesArr as $afile_id => $image) {
-                                            $originalImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
-                                            $mainImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
-                                            $thumbImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                                            $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
+                                            $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
+                                            $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                                             <img class="xzoom active" id="xzoom-default" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
                                             <?php break;
                                         } ?>
                                     <?php } else {
-                                        $mainImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array(0, 'MEDIUM', 0 )), CONF_IMG_CACHE_TIME, '.jpg');
-                                        $originalImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array(0, 'ORIGINAL', 0 )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                                        $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'MEDIUM', 0 )), CONF_IMG_CACHE_TIME, '.jpg');
+                                        $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'ORIGINAL', 0 )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                                     <img class="xzoom" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
                                     <?php } ?>
                                 </div>
                                 <?php if ($productImagesArr) { ?>
                                 <div class="slider-nav xzoom-thumbs" dir="<?php echo CommonHelper::getLayoutDirection();?>" id="slider-nav">
                                     <?php foreach ($productImagesArr as $afile_id => $image) {
-                                        $originalImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
-                                        $mainImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
-                                        /* $thumbImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id']) ), CONF_IMG_CACHE_TIME, '.jpg'); */ ?>
+                                        $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
+                                        $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
+                                        /* $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id']) ), CONF_IMG_CACHE_TIME, '.jpg'); */ ?>
                                     <div class="thumb"><a href="<?php echo $originalImgUrl; ?>"><img class="xzoom-gallery" width="80" src="<?php echo $mainImgUrl; ?>"></a></div>
                                     <?php } ?>
                                 </div>
@@ -68,7 +68,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                         <div class="dropdown-menu dropdown-menu-anim">
                                                             <ul class="social-sharing">
                                                                 <li class="social-facebook">
-                                                                    <a class="st-custom-button" data-network="facebook" data-url="<?php echo CommonHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
+                                                                    <a class="st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
                                                                         <i class="icn"><svg class="svg">
                                                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"></use>
                                                                             </svg></i>
@@ -129,17 +129,17 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                         <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                                         <?php } ?>
                                     </div>
-
-                                    <!--<div class="detail-grouping">
-                                        <div class="products__category"><a href="<?php echo CommonHelper::generateUrl('Category', 'View', array($product['prodcat_id']));?>"><?php echo $product['prodcat_name'];?> </a></div>
-                                    </div>-->
-
+                                    <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
+                                    <div class="detail-grouping">
+                                        <div class="products__category"><?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId);?></div>
+                                    </div>
+                                    <?php } ?>
                                     <?php /* include(CONF_THEME_PATH.'_partial/product-listing-head-section.php'); */ ?>
 
-                                    <?php  if ($shop['shop_free_ship_upto'] > 0 && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
+                                    <?php /*  if ($shop['shop_free_ship_upto'] > 0 && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
                                         <?php $freeShipAmt = CommonHelper::displayMoneyFormat($shop['shop_free_ship_upto']); ?>
                                         <div class="note-messages"><?php echo str_replace('{amount}', $freeShipAmt, Labels::getLabel('LBL_Free_shipping_up_to_{amount}_purchase', $siteLangId));?></div>
-                                    <?php }?>
+                                    <?php } */?>
                                     <div class="divider"></div>
                                     <?php if (!empty($optionRows)) { ?>
                                     <div class="gap"> </div>
@@ -167,7 +167,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                         <?php foreach ($option['values'] as $opVal) {
                                                             $isAvailable = true;
                                                             if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
-                                                                $optionUrl = CommonHelper::generateUrl('Products', 'view', array($product['selprod_id']));
+                                                                $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
                                                             } else {
                                                                 $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
                                                                 $optionUrlArr = explode("::", $optionUrl);
@@ -210,7 +210,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                 <?php foreach ($option['values'] as $opVal) {
                                                 $isAvailable = true;
                                                 if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
-                                                    $optionUrl = CommonHelper::generateUrl('Products', 'view', array($product['selprod_id']));
+                                                    $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
                                                 } else {
                                                     $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
                                                     $optionUrlArr = explode("::", $optionUrl);
@@ -370,13 +370,13 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                 } ?>
                                             <tr>
                                                 <td class="<?php echo $cancelClass; ?>">
-                                                    <figure class="item__pic"><a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo CommonHelper::generateUrl('products', 'view', array($usproduct['selprod_id']))?>"><img
-                                                                src="<?php echo FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($usproduct['product_id'], 'MINI', $usproduct['selprod_id'] )), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                                    <figure class="item__pic"><a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id']))?>"><img
+                                                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], 'MINI', $usproduct['selprod_id'] )), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
                                                                 alt="<?php echo $usproduct['product_identifier']; ?>"> </a></figure>
                                                 </td>
                                                 <td class="<?php echo $cancelClass; ?>">
                                                     <div class="item__description">
-                                                        <div class="item__title"><a href="<?php echo CommonHelper::generateUrl('products', 'view', array($usproduct['selprod_id']))?>"><?php echo $usproduct['selprod_title']?></a></div>
+                                                        <div class="item__title"><a href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id']))?>"><?php echo $usproduct['selprod_title']?></a></div>
                                                     </div>
                                                     <?php if ($usproduct['selprod_stock'] <= 0) { ?>
                                                     <div class="addon--tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId);?></div>
@@ -411,7 +411,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     <div class="col-xl-6 col-lg-6 col-md-5">
                                         <div class="h6 m-0 -color-light"><?php echo Labels::getLabel('LBL_Seller', $siteLangId);?></div>
                                         <h6 class="m-0">
-                                            <a href="<?php echo CommonHelper::generateUrl('shops', 'View', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name'];?></a>
+                                            <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name'];?></a>
                                             <div class="products__rating -display-inline m-0">
                                                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                                                 - <i class="icn">
@@ -438,11 +438,11 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     </div>
                                     <div class="col-auto">
                                         <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())) && (UserAuthentication::getLoggedUserId()!=$shop['shop_user_id']))) { ?>
-                                        <a href="<?php echo CommonHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'],$product['selprod_id'])); ?>"
+                                        <a href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'],$product['selprod_id'])); ?>"
                                             class="btn btn--primary btn--secondary btn-outline-primary  btn--sm"><?php echo Labels::getLabel('LBL_Ask_Question', $siteLangId); ?></a>
                                         <?php }?>
                                         <?php if (count($product['moreSellersArr'])>0) { ?>
-                                        <a href="<?php echo CommonHelper::generateUrl('products', 'sellers', array($product['selprod_id']));?>" class="btn btn--primary btn--sm "><?php echo Labels::getLabel('LBL_All_Sellers', $siteLangId);?></a>
+                                        <a href="<?php echo UrlHelper::generateUrl('products', 'sellers', array($product['selprod_id']));?>" class="btn btn--primary btn--sm "><?php echo Labels::getLabel('LBL_All_Sellers', $siteLangId);?></a>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -453,7 +453,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                 </div>
             </div>
             <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php');?>
-            <?php $youtube_embed_code = CommonHelper::parseYoutubeUrl($product["product_youtube_video"]); ?>
+            <?php $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); ?>
         </div>
         <!-- Don't remove scrollUpTo-js span -->
         <span id="scrollUpTo-js"></span>
@@ -585,19 +585,19 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                         foreach ($slideArr as $slideScreen) {
                             switch ($slideScreen['afile_screen']) {
                                 case applicationConstants::SCREEN_MOBILE:
-                                    $mobile_url = CommonHelper::generateUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE)).",";
+                                    $mobile_url = UrlHelper::generateUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE)).",";
                                     break;
                                 case applicationConstants::SCREEN_IPAD:
-                                    $tablet_url = CommonHelper::generateUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)).",";
+                                    $tablet_url = UrlHelper::generateUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)).",";
                                     break;
                                 case applicationConstants::SCREEN_DESKTOP:
-                                    $desktop_url = CommonHelper::generateUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)).",";
+                                    $desktop_url = UrlHelper::generateUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)).",";
                                     break;
                             }
                         }
                     } ?>
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <div class="banner-ppc"><a href="<?php echo CommonHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>"
+                    <div class="banner-ppc"><a href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>"
                             class="advertise__block">
                             <picture>
                                 <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
@@ -720,5 +720,31 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 
     });
 </script>
+<!-- Product Schema Code -->
+<?php if (FatApp::getConfig("CONF_DEFAULT_SCHEMA_CODES_SCRIPT", FatUtility::VAR_STRING, '')) { 
+	$image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
+	<script type="application/ld+json">
+	{
+		"@context": "http://schema.org",
+		"@type": "Product",
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "<?php echo round(FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT), 1); ?>",
+			"reviewCount": "<?php echo FatUtility::int($reviews['totReviews']); ?>"
+		},
+		"description": "<?php echo CommonHelper::renderHtml($product['product_description']);?>",
+		"name": "<?php echo $product['selprod_title'];?>",
+		"image": "<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');?>",
+		"offers": {
+			"@type": "Offer",
+			"availability": "http://schema.org/InStock",
+			"price": "<?php echo $product['theprice']; ?>",
+			"priceCurrency": "<?php echo CommonHelper::getCurrencyCode();?>"
+		}
+	}
+	</script>
+<?php } ?>
+<!-- End Product Schema Code -->
+
 <!--Here is the facebook OG for this product  -->
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>

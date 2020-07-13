@@ -28,6 +28,8 @@ class UserPrivilege
     public const SECTION_PROMOTIONS = 26;
     public const SECTION_PROMOTION_CHARGES = 27;
     public const SECTION_SUBSCRIPTION = 28;
+    public const SECTION_SHIPPING_PROFILE = 28;
+
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -419,10 +421,10 @@ class UserPrivilege
 
         if (1 > $parentId) {
             $subusers = User::getSubUsers($userId, array('user_id'));
-            $allowedUsers = array_merge ($allowedUsers, array_column($subusers, 'user_id'));            
+            $allowedUsers = array_merge($allowedUsers, array_column($subusers, 'user_id'));
         }
         
-        if (in_array($data['brand_seller_id'], $allowedUsers))  {
+        if (in_array($data['brand_seller_id'], $allowedUsers)) {
             return true;
         }
         
@@ -481,11 +483,17 @@ class UserPrivilege
     }
 
     /* Subscription privildges */
-
-    public static function canSellerUpgradeOrDowngradePlan($userId, $spPlanId = 0, $langId = 0)
+    
+    /**
+     * canSellerUpgradeOrDowngradePlan
+     *
+     * @param  int $userId
+     * @param  int $spPlanId
+     * @param  int $langId
+     * @return bool
+     */
+    public static function canSellerUpgradeOrDowngradePlan(int $userId, int $spPlanId = 0, int $langId = 0): bool
     {
-        $userId = FatUtility::int($userId);
-        $spPlanId = FatUtility::int($spPlanId);
         if (1 > $userId || $spPlanId < 1) {
             return false;
         }
@@ -508,19 +516,6 @@ class UserPrivilege
                 Message::addErrorMessage(sprintf(Labels::getLabel('M_YOU_ARE_DOWNGRADING_YOUR_PACKAGE', $langId), $allowedLimit['spackage_inventory_allowed'], $totalActiveInventories));
                 return false;
             }
-
-            /* if Downgrading package then give message to reduce products */
-            /*$planDetails = SellerPackagePlans::getSubscriptionPlanDataByPlanId($spPlanId, $langId);
-            $products = new Product();
-            $totalProducts  =  $products->getTotalProductsAddedByUser($userId);
-            if ($totalProducts > $planDetails[SellerPackages::DB_TBL_PREFIX.'products_allowed']) {
-                Message::addErrorMessage(sprintf(Labels::getLabel('M_YOU_ARE_DOWNGRADING_YOUR_PACKAGE', $langId), $planDetails[SellerPackages::DB_TBL_PREFIX.'products_allowed'], $totalProducts));
-                return false;
-            }*/
-
-            /* ] */
-            /* $totalProductsAdded  =
-            $totalImagesAdded  = */
         }
         return true;
     }
@@ -679,6 +674,22 @@ class UserPrivilege
     public function canEditTaxCategory($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_TAX_CATEGORY, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewShippingProfiles($sellerId = 0, $returnResult = false)
+    {
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) == applicationConstants::YES) {
+            return $this->returnFalseOrDie($returnResult);
+        }
+        return $this->checkPermission($sellerId, static::SECTION_SHIPPING_PROFILE, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditShippingProfiles($sellerId = 0, $returnResult = false)
+    {
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) == applicationConstants::YES) {
+            return $this->returnFalseOrDie($returnResult);
+        }
+        return $this->checkPermission($sellerId, static::SECTION_SHIPPING_PROFILE, static::PRIVILEGE_WRITE, $returnResult);
     }
 
     public function canViewProductOptions($sellerId = 0, $returnResult = false)

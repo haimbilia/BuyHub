@@ -9,8 +9,7 @@
                         <?php if (!empty($post_images)) { ?>
                         <div class="post__pic">
                             <?php foreach ($post_images as $post_image) { ?>
-                            <div class="item">
-							<div class="media-wrapper"><img data-ratio="16:9" src="<?php echo FatUtility::generateUrl('image', 'blogPostFront', array($post_image['afile_record_id'], $post_image['afile_lang_id'], "LAYOUT1", 0, $post_image['afile_id']), CONF_WEBROOT_FRONT_URL); ?>" alt="<?php echo $post_image['afile_name']; ?>"></div></div>
+                            <div class="item"><div class="media-wrapper"><img data-ratio="16:9" src="<?php echo FatUtility::generateUrl('image', 'blogPostFront', array($post_image['afile_record_id'], $post_image['afile_lang_id'], "LAYOUT1", 0, $post_image['afile_id']), CONF_WEBROOT_FRONT_URL); ?>" alt="<?php echo $post_image['afile_attribute_alt']; ?>" title="<?php echo $post_image['afile_attribute_title']; ?>"></div></div>
                             <?php } ?>
                         </div>
                         <?php } ?>
@@ -27,10 +26,10 @@
                                         echo Labels::getLabel('Lbl_in', $siteLangId);
                                         foreach ($categories as $id => $name) {
                                             if ($name == end($categories)) { ?>
-                                    <a href="<?php echo CommonHelper::generateUrl('Blog', 'category', array($id)); ?>" class="text--dark"><?php echo $name; ?></a>
+                                    <a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>" class="text--dark"><?php echo $name; ?></a>
                                     <?php break;
                                             } ?>
-                                    <a href="<?php echo CommonHelper::generateUrl('Blog', 'category', array($id)); ?>" class="text--dark"><?php echo $name; ?></a>,
+                                    <a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>" class="text--dark"><?php echo $name; ?></a>,
                                     <?php }
                                     } ?></span>
 
@@ -44,7 +43,7 @@
                                     <div class="dropdown-menu dropdown-menu-anim">
                                         <ul class="social-sharing">
                                             <li class="social-facebook">
-                                                <a class="social-link st-custom-button" data-network="facebook" data-url="<?php echo CommonHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])); ?>/">
+                                                <a class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])); ?>/">
                                                     <i class="icn"><svg class="svg">
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"></use>
                                                         </svg></i>
@@ -74,7 +73,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <?php /*<ul class="likes-count">
                                 <!--<li><i class="icn-like"><img src="<?php echo CONF_WEBROOT_URL; ?>images/eye.svg"></i>500 Views</li>-->

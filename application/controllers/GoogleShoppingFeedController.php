@@ -1,6 +1,6 @@
 <?php
 
-include_once CONF_INSTALLATION_PATH . 'library/GoogleAPI/vendor/autoload.php';
+require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
 
 class GoogleShoppingFeedController extends AdvertisementFeedBaseController
 {
@@ -20,7 +20,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     {
         parent::__construct($action);
         $error = '';
-        if (false === PluginHelper::includePlugin(self::KEY_NAME, 'advertisement-feed', $this->siteLangId, $error)) {
+        if (false === PluginHelper::includePlugin(self::KEY_NAME, 'advertisement-feed', $error, $this->siteLangId)) {
             Message::addErrorMessage($error);
             $this->redirectBack();
         }
@@ -46,7 +46,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $this->client->setScopes(self::SCOPE);
         $this->client->setClientId($this->settings['client_id']);
         $this->client->setClientSecret($this->settings['client_secret']);
-        $this->client->setRedirectUri(CommonHelper::generateFullUrl(static::KEY_NAME, 'getAccessToken', [], '', false));
+        $this->client->setRedirectUri(UrlHelper::generateFullUrl(static::KEY_NAME, 'getAccessToken', [], '', false));
         $this->client->setDeveloperKey($this->settings['developer_key']);
         $this->client->setAccessType('offline');
         $this->client->setApprovalPrompt('force');

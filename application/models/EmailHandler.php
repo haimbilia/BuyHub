@@ -319,13 +319,12 @@ class EmailHandler extends FatModel
     public function sendChangeEmailRequestNotification($langId, $d)
     {
         $tpl = 'user_change_email_request_notification';
-
         $vars = array(
         '{user_full_name}' => $d['user_name'],
         '{new_email}' => $d['user_new_email'],
         );
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        if (!self::sendMailTpl($d['user_new_email'], $tpl, $langId, $vars)) {
             return false;
         }
         $this->sendSms($tpl, $d['user_phone'], $vars, $langId);
@@ -729,7 +728,8 @@ class EmailHandler extends FatModel
             }
 
             foreach ($orderProducts as $opID => $val) {
-                $taxOptions = json_decode($val['op_product_tax_options'], true);
+                $opChargesLog = new OrderProductChargeLog($opID);
+                $taxOptions = $opChargesLog->getData($langId);
                 $orderProducts[$opID]['taxOptions'] = $taxOptions;
             }
 
@@ -808,7 +808,8 @@ class EmailHandler extends FatModel
         $OrderInfo = $orderObj->getOrderById($orderId, $langId);
         $childOrderInfo = $orderObj->getOrderProductsByOpId($opId, $langId);
 
-        $taxOptions = json_decode($childOrderInfo['op_product_tax_options'], true);
+        $opChargesLog = new OrderProductChargeLog($opId);
+        $taxOptions = $opChargesLog->getData($langId);
         $childOrderInfo['taxOptions'] = $taxOptions;
 
         if ($childOrderInfo) {
@@ -910,6 +911,39 @@ class EmailHandler extends FatModel
         return true;
     }
 
+    public function bankTranferOrderUpdateBuyerAdmin($orderId, $langId = 0)
+    {
+        $langId = FatApp::getConfig('conf_default_site_lang');
+        $langId = FatUtility::int($langId);
+        $orderObj = new Orders();
+        $orderDetail = $orderObj->getOrderById($orderId);
+
+        if (1 > $langId) {
+            $langId = $orderDetail['order_language_id'];
+        }
+
+        $userObj = new User($orderDetail["order_user_id"]);
+        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'));
+
+        $payementStatusArr = Orders::getOrderPaymentStatusArr($langId);
+
+        if ($orderDetail) {
+            $arrReplacements = array(
+            '{user_full_name}' => trim($userInfo['user_name']),
+            '{invoice_number}' => $orderDetail['order_id'],
+            '{order_payment_method}' => Labels::getLabel('LBL_Cash_on_delivery', $langId),
+            );
+
+            $this->sendMailToAdminAndAdditionalEmails("primary_order_bank_transfer_payment_status_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
+            $this->sendSms("primary_order_bank_transfer_payment_status_admin", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+
+            self::sendMailTpl($userInfo["credential_email"], "primary_order_bank_transfer_payment_status_buyer", $orderDetail['order_language_id'], $arrReplacements);
+            $phone = !empty($userInfo['user_phone']) ? $userInfo['user_dial_code'] . $userInfo['user_phone'] : '';
+            $this->sendSms("primary_order_bank_transfer_payment_status_buyer", $phone, $arrReplacements, $orderDetail['order_language_id']);
+        }
+        return true;
+    }
+
     public function sendProductStockAlert($selprod_id, $langId = 0)
     {
         $langId = FatUtility::int($langId);
@@ -940,7 +974,7 @@ class EmailHandler extends FatModel
         }
 
         $frontEndUrl = (CONF_WEBROOT_FRONT_URL) ? CONF_WEBROOT_FRONT_URL : CONF_WEBROOT_URL;
-        $url = CommonHelper::generateFullUrl('seller', 'products', array(), $frontEndUrl);
+        $url = UrlHelper::generateFullUrl('seller', 'products', array(), $frontEndUrl);
         $productAnchor = "<a href='" . $url . "'>" . Labels::getLabel('LBL_click_here', $langId) . "</a>";
 
         $arrReplacements = array(
@@ -962,7 +996,7 @@ class EmailHandler extends FatModel
         return true;
     }
 
-    public function newOrderVendor($orderId, $langId = 0, $codOrder = 0)
+    public function newOrderVendor($orderId, $langId = 0, $paymentType = 0)
     {
         $langId = FatApp::getConfig('conf_default_site_lang');
         $orderObj = new Orders();
@@ -988,7 +1022,8 @@ class EmailHandler extends FatModel
             foreach ($orderVendors as $key => $val) :
                 $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($val['op_selprod_user_id'], $val['opshipping_by_seller_user_id']);
 
-                $taxOptions = json_decode($val['op_product_tax_options'], true);
+                $opChargesLog = new OrderProductChargeLog($val['op_id']);
+                $taxOptions = $opChargesLog->getData($langId);
                 $val['taxOptions'] = $taxOptions;
 
                 $tpl = new FatTemplate('', '');
@@ -1010,8 +1045,10 @@ class EmailHandler extends FatModel
                             '{order_id}' => $orderId,
                             );
 
-                if ($codOrder == 1) {
+                if ($paymentType == PaymentSettings::PAYMENT_TYPE_COD) {
                     $tpl = "vendor_cod_order_email";
+                } else if ($paymentType = PaymentSettings::PAYMENT_TYPE_BANK_TRANSFER) {
+                    $tpl = "vendor_bank_transfer_order_email";
                 } else {
                     if ($val['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                         $tpl = "vendor_digital_order_email";
@@ -1024,13 +1061,14 @@ class EmailHandler extends FatModel
                 $bccEmails = $receipentsInfo['email'];
                 self::sendMailTpl($val["op_shop_owner_email"], $tpl, $langId, $arrReplacements, '', 0, array(), $bccEmails);
 
-                $phoneNumbers = $receipentsInfo['phone'];
-                $userPhone = !empty($userInfo['user_phone']) ? $userInfo['user_dial_code'] . $userInfo['user_phone'] : '';
-                $phoneNumbers[] = $userPhone;
-                foreach ($phoneNumbers as $phone) {
-                    $this->sendSms($tpl, $phone, $arrReplacements, $langId);
+                if (!in_array($paymentType, [PaymentSettings::PAYMENT_TYPE_COD, PaymentSettings::PAYMENT_TYPE_BANK_TRANSFER])) {
+                    $phoneNumbers = $receipentsInfo['phone'];
+                    $userPhone = !empty($userInfo['user_phone']) ? $userInfo['user_dial_code'] . $userInfo['user_phone'] : '';
+                    $phoneNumbers[] = $userPhone;
+                    foreach ($phoneNumbers as $phone) {
+                        $this->sendSms($tpl, $phone, $arrReplacements, $langId);
+                    }
                 }
-
                 $notiArrReplacements = array(
                         '{PRODUCT}' => $val["op_product_name"],
                         '{ORDERID}' => $orderDetail['order_id']
@@ -1076,7 +1114,8 @@ class EmailHandler extends FatModel
             $charges = $orderObj->getOrderProductChargesArr($orderComment['op_id']);
             $orderComment['charges'] = $charges;
 
-            $taxOptions = json_decode($orderComment['op_product_tax_options'], true);
+            $opChargesLog = new OrderProductChargeLog($orderComment['op_id']);
+            $taxOptions = $opChargesLog->getData($langId);
             $orderComment['taxOptions'] = $taxOptions;
 
             $tpl = new FatTemplate('', '');
@@ -1150,7 +1189,8 @@ class EmailHandler extends FatModel
             $charges = $orderObj->getOrderProductChargesArr($orderComment['op_id']);
             $orderComment['charges'] = $charges;
 
-            $taxOptions = json_decode($orderComment['op_product_tax_options'], true);
+            $opChargesLog = new OrderProductChargeLog($orderComment['op_id']);
+            $taxOptions = $opChargesLog->getData($langId);
             $orderComment['taxOptions'] = $taxOptions;
 
             $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderComment['op_selprod_user_id'], $orderComment['opshipping_by_seller_user_id']);
@@ -1260,7 +1300,7 @@ class EmailHandler extends FatModel
         }
 
         $formattedRequestValue = "#" . str_pad($requestId, 6, '0', STR_PAD_LEFT);
-        $url = CommonHelper::generateFullUrl('account', 'messages', array(), CONF_WEBROOT_URL);
+        $url = UrlHelper::generateFullUrl('account', 'messages', array(), CONF_WEBROOT_URL);
         $url = '<a href="' . $url . '">' . Labels::getLabel('Msg_click_here', $langId) . '</a>';
 
         $statusArr = Transactions::getWithdrawlStatusArr($langId);
@@ -1343,7 +1383,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $url = CommonHelper::generateFullUrl('account', 'viewMessages', array($message['thread_id'], $messageId), CONF_WEBROOT_FRONT_URL);
+        $url = UrlHelper::generateFullUrl('account', 'viewMessages', array($message['thread_id'], $messageId), CONF_WEBROOT_FRONT_URL);
 
         $url = '<a href="' . $url . '">' . Labels::getLabel('LBL_click_here', $langId) . '</a>';
 
@@ -1394,7 +1434,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $sellerOrderDetailUrl = CommonHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]));
+        $sellerOrderDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]));
         $sellerOrderAnchor = "<a href='" . $sellerOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
 
         $arrReplacements = array(
@@ -1415,7 +1455,7 @@ class EmailHandler extends FatModel
             $this->sendSms($tpl, $phone, $arrReplacements, $langId);
         }
 
-        $adminOrderDetailUrl = CommonHelper::generateFullUrl('SellerOrders', 'View', array($ocRequestRow["op_id"]), CONF_WEBROOT_BACKEND);
+        $adminOrderDetailUrl = UrlHelper::generateFullUrl('SellerOrders', 'View', array($ocRequestRow["op_id"]), CONF_WEBROOT_BACKEND);
         $adminOrderAnchor = "<a href='" . $adminOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
         $arrReplacements['{invoice_number}'] = $adminOrderAnchor;
 
@@ -1476,9 +1516,9 @@ class EmailHandler extends FatModel
         }
 
         if ($msgDetail['op_is_batch']) {
-            $productUrl = CommonHelper::generateFullUrl('Products', 'batch', array($msgDetail['op_selprod_id']));
+            $productUrl = UrlHelper::generateFullUrl('Products', 'batch', array($msgDetail['op_selprod_id']));
         } else {
-            $productUrl = CommonHelper::generateFullUrl('Products', 'view', array($msgDetail['op_selprod_id']));
+            $productUrl = UrlHelper::generateFullUrl('Products', 'view', array($msgDetail['op_selprod_id']));
         }
 
         $productTitle = ($msgDetail['op_selprod_title'] != '') ? $msgDetail['op_selprod_title'] . ' (' . $msgDetail['op_product_name'] . ')' : $msgDetail['op_product_name'];
@@ -1603,7 +1643,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $requestDetailUrl = CommonHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
+        $requestDetailUrl = UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
         $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
 
         /* Buyer Notification [ */
@@ -1637,7 +1677,7 @@ class EmailHandler extends FatModel
             if ($msgDetail['orrmsg_from_admin_id']) {
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
-            $requestDetailUrl = CommonHelper::generateFullUrl('Seller', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
+            $requestDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
             $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
             $arrReplacements['{click_here}'] = $requestDetailUrl;
             /* if ($return_request['refmsg_from_type']=="U"){
@@ -1776,7 +1816,7 @@ class EmailHandler extends FatModel
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
-        $requestDetailUrl = CommonHelper::generateFullUrl('Seller', 'requestedCatalog', array(), CONF_WEBROOT_FRONT_URL);
+        $requestDetailUrl = UrlHelper::generateFullUrl('Seller', 'requestedCatalog', array(), CONF_WEBROOT_FRONT_URL);
         $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
 
         /* Buyer Notification [ */
@@ -2071,7 +2111,8 @@ class EmailHandler extends FatModel
         $orderObj = new Orders();
         $orderProduct = $orderObj->getOrderProductsByOpId($opId, $langId);
 
-        $taxOptions = json_decode($orderProduct['op_product_tax_options'], true);
+        $opChargesLog = new OrderProductChargeLog($opId);
+        $taxOptions = $opChargesLog->getData($langId);
         $orderProduct['taxOptions'] = $taxOptions;
 
         if ($orderProduct) {
@@ -2090,7 +2131,7 @@ class EmailHandler extends FatModel
             '{new_order_status}' => $statuesArr[$orderProduct["op_status_id"]],
             '{invoice_number}' => $orderProduct["op_invoice_number"],
             '{order_items_table_format}' => $orderItemsTableFormatHtml,
-            '{review_page_url}' => CommonHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_FRONT_URL),
+            '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_FRONT_URL),
             );
             self::sendMailTpl($userInfo["credential_email"], "buyer_notification_review_order_product", $langId, $arrReplacements);
             $phone = !empty($userInfo['user_phone']) ? $userInfo['user_dial_code'] . $userInfo['user_phone'] : '';
@@ -2129,7 +2170,7 @@ class EmailHandler extends FatModel
         $reviewStatusArr = SelProdReview::getReviewStatusArr($langId);
         $newStatus = $reviewStatusArr[$spreviewData['spreview_status']];
 
-        $productUrl = CommonHelper::generateFullUrl('Products', 'View', array($spreviewData["spreview_selprod_id"]));
+        $productUrl = UrlHelper::generateFullUrl('Products', 'View', array($spreviewData["spreview_selprod_id"]));
         $prodTitleAnchor = "<a href='" . $productUrl . "'>" . $spreviewData['selprod_title'] . "</a>";
 
         $arrReplacements = array(
@@ -2467,9 +2508,9 @@ class EmailHandler extends FatModel
 
             if (!empty($img)) {
                 $uploadedTime = AttachedFile::setTimeParam($img['afile_updated_at']);
-                $imgSrc = FatCache::getCachedUrl(CommonHelper::generateFullUrl('Image', 'SocialPlatform', array($row['splatform_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'SocialPlatform', array($row['splatform_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             } elseif ($row['splatform_icon_class'] != '') {
-                $imgSrc = CommonHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'images/' . $row['splatform_icon_class'] . '.png';
+                $imgSrc = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'images/' . $row['splatform_icon_class'] . '.png';
             }
             $social_media_icons .= '<a style="display:inline-block;vertical-align:top; width:26px;height:26px; margin:0 0 0 5px; background:rgba(255,255,255,0.2); border-radius:100%;padding:4px;" href="' . $url . '" ' . $target_blank . ' title="' . $title . '" ><img alt="' . $title . '" width="24" style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/></a>';
         }
@@ -2480,11 +2521,11 @@ class EmailHandler extends FatModel
 
         return array(
         '{website_name}' => FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId),
-        '{website_url}' => CommonHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL),
-        '{Company_Logo}' => '<img style="max-width:100%" src="' . FatCache::getCachedUrl(CommonHelper::generateFullUrl('Image', 'emailLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" />',
+        '{website_url}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL),
+        '{Company_Logo}' => '<img style="max-width:100%" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'emailLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" />',
         '{current_date}' => date('M d, Y'),
         '{social_media_icons}' => $social_media_icons,
-        '{contact_us_url}' => CommonHelper::generateFullUrl('custom', 'contactUs', array(), CONF_WEBROOT_FRONT_URL),
+        '{contact_us_url}' => UrlHelper::generateFullUrl('custom', 'contactUs', array(), CONF_WEBROOT_FRONT_URL),
         );
     }
 
@@ -2798,11 +2839,11 @@ class EmailHandler extends FatModel
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
     }
-	
+
 	public function sendEmailToUser($langId, $data)
     {
         $tpl = 'user_send_email';
-		
+
 		$replacements = array(
             '{full_name}' => $data['user_name'],
             '{admin_subject}' => $data['mail_subject'],
@@ -2812,13 +2853,13 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($data['credential_email'], $tpl, $langId, $replacements)) {
             return false;
         }
-		
+
 		if (!empty($data['user_phone'])) {
 			$this->sendSms($tpl, $data['user_phone'], $replacements, $langId);
 		}
         return true;
     }
-	
+
     public static function getEmailTemplatePermissionsArr()
     {
         return array(

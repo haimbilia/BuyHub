@@ -39,7 +39,7 @@ class HomeController extends MyAppController
                             }
                         }
                         $orderProducts['pendingForReviews'][$key]['optionsTitle'] = rtrim($optionTitle, ', ');
-                        $orderProducts['pendingForReviews'][$key]['product_image_url'] = CommonHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], "THUMB", $orderProduct['op_selprod_id'], 0, $this->siteLangId));
+                        $orderProducts['pendingForReviews'][$key]['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], "THUMB", $orderProduct['op_selprod_id'], 0, $this->siteLangId));
                     }
                 }
             }
@@ -184,12 +184,77 @@ class HomeController extends MyAppController
         $this->_template->render();
     }
 
-    public function setLanguage($langId = 0)
+    public function setLanguage($langId = 0, $pathname = '')
     {
         if (!FatUtility::isAjaxCall()) {
             die('Invalid Action.');
         }
 
+        $pathname = FatApp::getPostedData('pathname', FatUtility::VAR_STRING, '');
+        $redirectUrl = '';
+        if (empty($pathname)) {
+            $redirectUrl = UrlHelper::generateFullUrl();
+        }
+
+        $isDefaultLangId = false;
+        if ($langId == FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) {
+            $isDefaultLangId = true;
+        }
+       
+        if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1) {
+            $langCodeArr = LANG_CODES_ARR;
+            if (count($langCodeArr) > 1) {
+                $langIds = array_flip($langCodeArr);
+    
+                if (!empty($pathname)) {
+                    $existingUrlLangCode = strtoupper(substr(ltrim($pathname, '/'), 0, 2));
+                } else {
+                    $existingUrlLangCode = $langCodeArr[CommonHelper::getLangId()];
+                }
+                    
+                if (in_array($existingUrlLangCode, LANG_CODES_ARR)) {
+                    // $existingUrlLangId = $langIds[$existingUrlLangCode];
+                    $pathname = ltrim(substr(ltrim($pathname, '/'), 2), '/');
+                } else {
+                    // $existingUrlLangId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+                    $pathname = ltrim($pathname, '/');
+                }
+               
+                $srch = UrlRewrite::getSearchObject();
+                $srch->joinTable(UrlRewrite::DB_TBL, 'LEFT OUTER JOIN', 'temp.urlrewrite_original = ur.urlrewrite_original and temp.urlrewrite_lang_id = ' . $langId, 'temp');
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
+                $srch->addMultipleFields(array('ifnull(temp.urlrewrite_custom, ur.urlrewrite_custom) customurl'));
+                $srch->addCondition('ur.' . UrlRewrite::DB_TBL_PREFIX . 'custom', '=', $pathname);
+                // $srch->addCondition('ur.' . UrlRewrite::DB_TBL_PREFIX . 'lang_id', '=', $existingUrlLangId);
+               
+                $rs = $srch->getResultSet();
+                $row = FatApp::getDb()->fetch($rs);
+                    
+                if (!empty($row)) {
+                    $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false) ;
+
+                    if (false == $isDefaultLangId) {
+                        $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/' ;
+                    }
+                    $redirectUrl .=  $row['customurl'];
+                }
+            }
+            
+            if (empty($redirectUrl)) {
+                $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false) ;
+                if (false == $isDefaultLangId) {
+                    $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
+                }
+                $redirectUrl .=  ltrim($pathname, '/');
+            }
+        } else {
+            if (empty($redirectUrl)) {
+                $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false) . ltrim($pathname, '/');
+            }
+        }
+      
+       
         $langId = FatUtility::int($langId);
         if (0 < $langId) {
             $languages = Language::getAllNames();
@@ -197,6 +262,8 @@ class HomeController extends MyAppController
                 setcookie('defaultSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_URL);
             }
         }
+        $this->set('redirectUrl', $redirectUrl);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function currencies()
@@ -248,7 +315,7 @@ class HomeController extends MyAppController
 
         $data = array(
            'languageCode' => $langCode,
-           'downloadUrl' => CommonHelper::generateFullUrl('Home', 'languageLabels', array(1, $langId)),
+           'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $langId)),
            'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
         );
 
@@ -303,7 +370,7 @@ class HomeController extends MyAppController
             $cookieValue = serialize($cookieValue);
             CommonHelper::setCookie('affiliate_referrer_code_signup', $cookieValue, time() + 3600 * 24 * $cookieExpiryDays);
         }
-        FatApp::redirectUser(CommonHelper::generateUrl());
+        FatApp::redirectUser(UrlHelper::generateUrl());
     }
 
     public function referral($userReferralCode)
@@ -325,7 +392,7 @@ class HomeController extends MyAppController
             CommonHelper::setCookie('referrer_code_signup', $cookieValue, time() + 3600 * 24 * $cookieExpiryDays);
             CommonHelper::setCookie('referrer_code_checkout', $row['user_referral_code'], time() + 3600 * 24 * $cookieExpiryDays);
         }
-        FatApp::redirectUser(CommonHelper::generateUrl());
+        FatApp::redirectUser(UrlHelper::generateUrl());
     }
 
     private function getCollections($productSrchObj)
@@ -372,7 +439,7 @@ class HomeController extends MyAppController
                 $imgUpdatedOn = Collections::getAttributesById($collection_id, 'collection_img_updated_on');
                 $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
 
-                $collection['collection_image'] = FatCache::getCachedUrl(CommonHelper::generateFullUrl('image', 'collectionReal', array( $collection_id, $langId,  'ORIGINAL', AttachedFile::FILETYPE_COLLECTION_IMAGE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $collection['collection_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'collectionReal', array( $collection_id, $langId,  'ORIGINAL', AttachedFile::FILETYPE_COLLECTION_IMAGE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 $collections[] = $collection;
                 $i++;
                 continue;
@@ -646,7 +713,7 @@ class HomeController extends MyAppController
                     /* ] */
                     if (true === MOBILE_APP_API_CALL) {
                         array_walk($blogPostsDetail, function (&$value, &$key) {
-                            $value['post_image'] = CommonHelper::generateFullUrl('Image', 'blogPostFront', array($value['post_id'], $this->siteLangId, ''));
+                            $value['post_image'] = UrlHelper::generateFullUrl('Image', 'blogPostFront', array($value['post_id'], $this->siteLangId, ''));
                         });
                         $collections[$i] = $collection;
                         $collections[$i]['totBlogs'] = $blogSearchTempObj->recordCount();
@@ -791,8 +858,8 @@ class HomeController extends MyAppController
                 $sponsoredShops[$i]['shopData'] = $shops;
                 $sponsoredShops[$i]['shopData']['promotion_id'] = $shops['promotion_id'];
                 $sponsoredShops[$i]['shopData']['rating'] = $rating;
-                $sponsoredShops[$i]['shopData']['shop_logo'] = CommonHelper::generateFullUrl('image', 'shopLogo', array($shops['shop_id'], $langId));
-                $sponsoredShops[$i]['shopData']['shop_banner'] = CommonHelper::generateFullUrl('image', 'shopBanner', array($shops['shop_id'], $langId));
+                $sponsoredShops[$i]['shopData']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($shops['shop_id'], $langId));
+                $sponsoredShops[$i]['shopData']['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($shops['shop_id'], $langId));
                 $sponsoredShops[$i]['products'] = $db->fetchAll($Prs);
             } else {
                 $sponsoredShops['shops'][$shops['shop_id']]['shopData'] = $shops;
@@ -905,7 +972,7 @@ class HomeController extends MyAppController
                     $message = Labels::getLabel('MSG_Product_id_&_Seller_product_id_is_mandatory.', $this->siteLangId);
                     FatUtility::dieJsonError($message);
                 }
-                $image_url = CommonHelper::generateFullUrl('image', 'product', array($product_id, "MEDIUM", $seller_product_id, 0, $this->siteLangId));
+                $image_url = UrlHelper::generateFullUrl('image', 'product', array($product_id, "MEDIUM", $seller_product_id, 0, $this->siteLangId));
                 break;
             case 'SLIDE':
                 $slide_id = FatApp::getPostedData('slide_id', null, 0);
@@ -913,7 +980,7 @@ class HomeController extends MyAppController
                     $message = Labels::getLabel('MSG_Slide_id_is_mandatory.', $this->siteLangId);
                     FatUtility::dieJsonError($message);
                 }
-                $image_url = CommonHelper::generateFullUrl('Image', 'slide', array($slide_id, 0, $this->siteLangId));
+                $image_url = UrlHelper::generateFullUrl('Image', 'slide', array($slide_id, 0, $this->siteLangId));
                 break;
             case 'BANNER':
                 $banner_id = FatApp::getPostedData('banner_id', null, 0);
@@ -921,7 +988,7 @@ class HomeController extends MyAppController
                     $message = Labels::getLabel('MSG_Banner_id_is_mandatory.', $this->siteLangId);
                     FatUtility::dieJsonError($message);
                 }
-                $image_url = CommonHelper::generateFullUrl('Banner', 'HomePageAfterFirstLayout', array($banner_id, $this->siteLangId));
+                $image_url = UrlHelper::generateFullUrl('Banner', 'HomePageAfterFirstLayout', array($banner_id, $this->siteLangId));
                 break;
         }
         $this->set('image_url', $image_url);
@@ -960,10 +1027,14 @@ class HomeController extends MyAppController
     {
         $langCode = Language::getAttributesById($this->siteLangId, 'language_code', false);
 
+        $data = [
+            'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)
+        ];
+
         $data['languageLabels'] = [
            'language_code' => $langCode,
            'language_layout_direction' => Language::getLayoutDirection($this->siteLangId),
-           'downloadUrl' => CommonHelper::generateFullUrl('Home', 'languageLabels', array(1, $this->siteLangId)),
+           'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $this->siteLangId)),
            'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
         ];
 
@@ -977,6 +1048,7 @@ class HomeController extends MyAppController
         $data['isWishlistEnable'] = FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1);
         $data['canSendSms'] = SmsArchive::canSendSms() ? 1 : 0;
         $data['canAddReview'] = FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 1);
+      
         $this->set('data', $data);
         $this->_template->render();
     }
@@ -990,6 +1062,19 @@ class HomeController extends MyAppController
         $detail = CommonHelper::getUrlTypeData($url);
         $this->set('data', ['urlSegmentsDetail' => $detail]);
         $this->_template->render();
+    }
+
+    public function getGeoAddress()
+    {
+        $address = new Address();
+        $lat = FatApp::getPostedData('lat', FatUtility::VAR_STRING, '');
+        $lng = FatApp::getPostedData('lng', FatUtility::VAR_STRING, '');
+        
+        $response = $address->getGeoData($lat, $lng);
+        if (false === $response['status']) {
+            FatUtility::dieJsonError($response['msg']);
+        }
+        FatUtility::dieJsonSuccess($response);
     }
         
     public function pwaManifest()
@@ -1027,7 +1112,7 @@ class HomeController extends MyAppController
             );
             
             foreach ($iconsArr as $key => $val) {
-                $iconUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'appleTouchIcon', array($this->siteLangId, $val . '-' . $val)), CONF_IMG_CACHE_TIME, '.png');
+                $iconUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'appleTouchIcon', array($this->siteLangId, $val . '-' . $val)), CONF_IMG_CACHE_TIME, '.png');
                 $icons = [
                     'src' => $iconUrl,
                     'sizes' => $val . 'x' . $val,

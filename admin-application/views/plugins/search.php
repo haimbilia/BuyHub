@@ -3,15 +3,16 @@ $arr_flds = [
     'dragdrop' => '',
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => '#',
+    'plugin_icon' => Labels::getLabel('PLUGIN_ICON', $adminLangId),
     'plugin_identifier' => Labels::getLabel('LBL_PLUGIN', $adminLangId),
     'plugin_active' => Labels::getLabel('LBL_Status', $adminLangId),
     'action' => '',
 ];
 $allPlugins = $arr_listing;
-$pluginType = (array_shift($allPlugins))['plugin_type'];
+$pluginType = (!empty($allPlugins)) ? (array_shift($allPlugins))['plugin_type'] : '';
 if (!$canEdit || 2 > count($arr_listing) || in_array($pluginType, Plugin::HAVING_KINGPIN)) {
     unset($arr_flds['dragdrop']);
-    if (!$canEdit || in_array($pluginType, Plugin::HAVING_KINGPIN)) {
+    if (!$canEdit || in_array($pluginType, Plugin::HAVING_KINGPIN) || 1 > count($arr_listing)) {
         unset($arr_flds['select_all']);
     }
 }
@@ -24,8 +25,9 @@ foreach ($arr_flds as $key => $val) {
         $e = $th->appendElement('th', array(), $val);
     }
 }
-
+$aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
 $sr_no = 0;
+$msg = '';
 foreach ($arr_listing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr', array( 'id' => $row['plugin_id'], 'class' => '' ));
@@ -43,6 +45,19 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
+                break;
+            case 'plugin_icon':
+                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $row['plugin_id']);
+                $uploadedTime = '';
+                $aspectRatio = '';
+                if (!empty($fileData)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
+                }
+
+                $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($row['plugin_id'], 'ICON'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imgHtm = '<img src="' . $imageUrl . '" data-ratio="' . $aspectRatio . '">';
+                $td->appendElement('plaintext', array(), $imgHtm, true);
                 break;
             case 'plugin_identifier':
                 $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $row['plugin_type'], FatUtility::VAR_INT, 0);
@@ -63,7 +78,17 @@ foreach ($arr_listing as $sn => $row) {
                 if (!$row['plugin_active']) {
                     $active = '';
                 }
-                $statucAct = ($canEdit === true) ? 'toggleStatus(this)' : '';
+
+                $function = 'toggleStatus(this, ' . ($row['plugin_active'] > 0 ? 0 : 1) . ')';
+                if (!empty($otherPluginTypes)) {
+                    if (empty($msg)) {
+                        $msg = Labels::getLabel("MSG_TURNING_ON_{PLUGIN-TYPE}_WILL_TURN_OFF_{OTHER-PLUGIN-TYPE}_PLUGINS._DO_YOU_WANT_TO_CONTINUE_?", $adminLangId);
+                        $msg = CommonHelper::replaceStringData($msg, ['{PLUGIN-TYPE}' => $pluginTypes[$row['plugin_type']], '{OTHER-PLUGIN-TYPE}' => $otherPluginTypes]);
+                    }
+                    $function = "changeStatusEitherPluginTypes(this, " . ($row['plugin_active'] > 0 ? 0 : 1) . ", '" . $msg . "')";
+                }
+
+                $statucAct = ($canEdit === true) ? $function : '';
                 $str = '<label id="' . $row['plugin_id'] . '" class="statustab ' . $active . '" onclick="' . $statucAct . '">
                 <span data-off="' . Labels::getLabel('LBL_Active', $adminLangId) . '" data-on="' . Labels::getLabel('LBL_Inactive', $adminLangId) . '" class="switch-labels"></span>
                 <span class="switch-handles"></span>
@@ -87,10 +112,12 @@ if (count($arr_listing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
 
+$function = !empty($otherPluginTypes) ? 'changeBulkStatusByType' : 'toggleBulkStatuses';
+
 $frm = new Form('frmPluginListing', array('id' => 'frmPluginListing'));
 $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
-$frm->setFormTagAttribute('action', CommonHelper::generateUrl('plugins', 'toggleBulkStatuses'));
+$frm->setFormTagAttribute('action', UrlHelper::generateUrl('plugins', $function));
 $frm->addHiddenField('', 'status');
 $frm->addHiddenField('', 'plugin_type', $pluginType);?>
 <section class="section">
@@ -100,7 +127,8 @@ $frm->addHiddenField('', 'plugin_type', $pluginType);?>
         if ($canEdit && !in_array($pluginType, Plugin::HAVING_KINGPIN)) {
             $data = [
                 'adminLangId' => $adminLangId,
-                'deleteButton' => false
+                'deleteButton' => false,
+                'msg' => $msg
             ];
 
             $this->includeTemplate('_partial/action-buttons.php', $data, false);

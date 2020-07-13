@@ -19,6 +19,8 @@ class ProductSearch extends SearchBase
     private $shopsJoined = false;
     private $commonLangId;
     private $sellerSubscriptionOrderJoined = false;
+    private $joinProductShippedBy = false;
+    private $geoAddress = [];
 
     public function __construct($langId = 0, $otherTbl = null, $prodIdColumName = null, $isProductActive = true, $isProductApproved = true, $isProductDeleted = true)
     {
@@ -57,6 +59,44 @@ class ProductSearch extends SearchBase
         }
     }
 
+    public function setGeoAddress($address = [])
+    {
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+            return;
+        }
+       
+        if (!empty($address)) {
+            $this->geoAddress = $address;
+        } else {
+            if (false === MOBILE_APP_API_CALL) {
+                $this->geoAddress = [
+                    'ykGeoLat' => isset($_COOKIE['_ykGeoLat']) ? $_COOKIE['_ykGeoLat'] : '',
+                    'ykGeoLng' => isset($_COOKIE['_ykGeoLng']) ? $_COOKIE['_ykGeoLng'] : '',
+                    'ykGeoZip' => isset($_COOKIE['_ykGeoZip']) ? $_COOKIE['_ykGeoZip'] : '',
+                    'ykGeoStateCode' => isset($_COOKIE['_ykGeoStateCode']) ? $_COOKIE['_ykGeoStateCode'] : '',
+                    'ykGeoCountryCode' => isset($_COOKIE['_ykGeoCountryCode']) ? $_COOKIE['_ykGeoCountryCode'] : '',
+                    'ykGeoAddress' => isset($_COOKIE['_ykGeoAddress']) ? $_COOKIE['_ykGeoAddress'] : '',
+               ];
+            }
+                       
+            if (true === MOBILE_APP_API_CALL) {
+                $this->geoAddress = [
+                    'ykGeoLat' => isset($_SERVER['HTTP_X_YK_LAT']) ? $_SERVER['HTTP_X_YK_LAT'] : '',
+                    'ykGeoLng' => isset($_SERVER['HTTP_X_YK_LNG']) ? $_SERVER['HTTP_X_YK_LNG'] : '',
+                    'ykGeoZip' => isset($_SERVER['HTTP_X_YK_ZIP']) ? $_SERVER['HTTP_X_YK_ZIP'] : '',
+                    'ykGeoStateCode' => isset($_SERVER['HTTP_X_YK_STATE_CODE']) ? $_SERVER['HTTP_X_YK_STATE_CODE'] : '',
+                    'ykGeoCountryCode' => isset($_SERVER['HTTP_X_YK_COUNTRY_CODE']) ? $_SERVER['HTTP_X_YK_COUNTRY_CODE'] : '',
+                    'ykGeoAddress' => isset($_SERVER['HTTP_X_YK_ADDRESS']) ? $_SERVER['HTTP_X_YK_ADDRESS'] : '',
+               ];
+            }
+        }
+
+        if (!empty($this->geoAddress)) {
+            $this->geoAddress['ykGeoCountryId'] = Countries::getCountryByCode($this->geoAddress['ykGeoCountryCode'], 'country_id');
+            $this->geoAddress['ykGeoStateId'] = States::getByCode($this->geoAddress['ykGeoStateCode'], 'state_id');
+        }
+    }
+
     public function joinProductsLang($langId)
     {
         $this->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'productlang_product_id = p.product_id AND productlang_lang_id = ' . $langId, 'tp_l');
@@ -85,6 +125,7 @@ class ProductSearch extends SearchBase
         $this->joinShopCountry();
         $this->joinShopState();
         $this->joinBrands();
+        $this->joinShippingPackages();
     }
 
     public function setBatchProductsCriteria($splPriceForDate = '')
@@ -364,16 +405,29 @@ class ProductSearch extends SearchBase
     public function joinProductShippedBySeller($sellerId = 0)
     {
         $sellerId = FatUtility::int($sellerId);
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $sellerId = 0;
+        }
         $this->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT OUTER JOIN', 'psbs.psbs_product_id = p.product_id and psbs.psbs_user_id = ' . $sellerId, 'psbs');
     }
 
     public function joinProductShippedBy()
     {
-        $this->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT OUTER JOIN', 'psbs.psbs_product_id = p.product_id and psbs.psbs_user_id = selprod_user_id', 'psbs');
+        $this->joinProductShippedBy = true;
+        $cond = 'and psbs.psbs_user_id = selprod_user_id';
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $cond = 'and psbs.psbs_user_id = 0';
+        }
+        $this->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT OUTER JOIN', 'psbs.psbs_product_id = p.product_id ' . $cond, 'psbs');
     }
+    
     public function joinProductFreeShipping()
     {
-        $this->joinTable(Product::DB_TBL_PRODUCT_SHIPPING, 'LEFT OUTER JOIN', 'ps.ps_product_id = p.product_id and ps.ps_user_id = selprod_user_id', 'ps');
+        $cond = 'and ps.ps_user_id = selprod_user_id';
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $cond = 'and ps.ps_user_id = 0';
+        }
+        $this->joinTable(Product::DB_TBL_PRODUCT_SHIPPING, 'LEFT OUTER JOIN', 'ps.ps_product_id = p.product_id ' . $cond, 'ps');
     }
 
     public function joinShops($langId = 0, $isActive = true, $isDisplayStatus = true, $shopId = 0)
@@ -381,6 +435,7 @@ class ProductSearch extends SearchBase
         if (!$this->sellerUserJoined) {
             trigger_error(Labels::getLabel('ERR_joinShops_cannot_be_joined,_unless_joinSellers_is_not_applied.', $this->commonLangId), E_USER_ERROR);
         }
+        
         $langId = FatUtility::int($langId);
         if ($this->langId && 1 > $langId) {
             $langId = $this->langId;
@@ -402,15 +457,61 @@ class ProductSearch extends SearchBase
             $shopCondition .= ' and shop.shop_id = ' . $shopId;
         }
 
-        $this->joinTable(Shop::DB_TBL, 'INNER JOIN', 'seller_user.user_id = shop.shop_user_id ' . $shopCondition, 'shop');
+        $joinShopWithSubQuery = false;
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+            $prodGeoCondition = FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0);
+            switch ($prodGeoCondition) {
+                case applicationConstants::BASED_ON_RADIUS:
+                    if (array_key_exists('ykGeoLat', $this->geoAddress) && $this->geoAddress['ykGeoLat'] != '' && array_key_exists('ykGeoLng', $this->geoAddress) && $this->geoAddress['ykGeoLng'] != '') {
+                        $shopSearch = new SearchBase(Shop::DB_TBL, 'shop');
+                        $shopSearch->doNotCalculateRecords();
+                        $shopSearch->doNotLimitRecords();
+                        $shopSearch->addCondition('shop.shop_supplier_display_status', '=', applicationConstants::ON);
+                        $shopSearch->addCondition(Shop::tblFld('active'), '=', applicationConstants::ACTIVE);
+                        $shopSearch->addFld('*');
+                        $shopSearch->addFld('( 6371 * acos( cos( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * cos( radians( `shop_lat` ) ) * cos( radians( `shop_lng` ) - radians(' . $this->geoAddress['ykGeoLng'] . ') ) + sin( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * sin( radians( `shop_lat` ) ) ) ) AS distance');
+                        $shopSearch->addHaving('distance', '<=', Product::DISTANCE_IN_MILES);
+                        $joinShopWithSubQuery = true;
+                    }
+                    break;
+                case applicationConstants::BASED_ON_BUYER_LOCATION:
+                    $level = FatApp::getConfig('CONF_LOCATION_LEVEL', FatUtility::VAR_INT, 0);
+                    $countryBased = $stateBased = $zipBased = false;
+                    if (applicationConstants::LOCATION_COUNTRY == $level) {
+                        $countryBased = true;
+                    } elseif (applicationConstants::LOCATION_STATE == $level) {
+                        $countryBased = $stateBased = true;
+                    } elseif (applicationConstants::LOCATION_ZIP == $level) {
+                        $countryBased = $stateBased = $zipBased = true;
+                    }
+
+                    if ($countryBased && array_key_exists('ykGeoCountryId', $this->geoAddress) && $this->geoAddress['ykGeoCountryId'] > 0) {
+                        $shopCondition .= ' and shop.shop_country_id = ' . $this->geoAddress['ykGeoCountryId'];
+                    }
+
+                    if ($stateBased && array_key_exists('ykGeoStateId', $this->geoAddress) && $this->geoAddress['ykGeoStateId'] > 0) {
+                        $shopCondition .= ' and shop.shop_state_id = ' . $this->geoAddress['ykGeoStateId'];
+                    }
+                    
+                    if ($zipBased && array_key_exists('ykGeoZip', $this->geoAddress) && $this->geoAddress['ykGeoZip'] > 0) {
+                        $shopCondition .= ' and shop.shop_postalcode = ' . $this->geoAddress['ykGeoZip'];
+                    }
+                    break;
+            }
+        }
+      
+        if ($joinShopWithSubQuery) {
+            $this->joinTable('(' . $shopSearch->getQuery() . ')', 'INNER JOIN', 'seller_user.user_id = shop.shop_user_id  ' . $shopCondition, 'shop');
+        } else {
+            $this->joinTable(Shop::DB_TBL, 'INNER JOIN', 'seller_user.user_id = shop.shop_user_id ' . $shopCondition, 'shop');
+        }
+        
         $this->shopsJoined = true;
 
         if ($langId) {
             $this->joinShopsLang($langId);
         }
     }
-
-
 
     public function joinShopSpecifics()
     {
@@ -957,5 +1058,111 @@ class ProductSearch extends SearchBase
     public function joinProductSpecifics()
     {
         $this->joinTable(ProductSpecifics::DB_TBL, 'LEFT JOIN', 'ps.ps_product_id = p.product_id', 'ps');
+    }
+
+    public function joinShippingPackages($langId = 0)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId && 1 > $langId) {
+            $langId = $this->langId;
+        }
+
+        $this->joinTable(ShippingPackage::DB_TBL, 'LEFT OUTER JOIN', 'shipkg.shippack_id = p.product_ship_package', 'shipkg');
+    }
+
+    public function joinShippingProfileProducts()
+    {
+        if (!$this->joinProductShippedBy) {
+            trigger_error(Labels::getLabel('ERR_joinProductShippedBy_function_not_joined.', $this->commonLangId), E_USER_ERROR);
+        }
+
+        $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_product_id = selprod_product_id and if(product_seller_id = 0, (if(psbs.psbs_user_id > 0, spprod.shippro_user_id = psbs.psbs_user_id, spprod.shippro_user_id = 0)), (spprod.shippro_user_id = selprod_user_id))', 'spprod');
+    }
+
+    public function joinShippingProfile()
+    {
+        $this->joinTable(ShippingProfile::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
+    }
+
+    public function joinShippingProfileZones()
+    {
+        $this->joinTable(ShippingProfileZone::DB_TBL, 'LEFT OUTER JOIN', 'shippz.shipprozone_shipprofile_id = spprof.shipprofile_id', 'shippz');
+    }
+
+    public function joinShippingZones()
+    {
+        $this->joinTable(ShippingZone::DB_TBL, 'LEFT OUTER JOIN', 'shipz.shipzone_id = shippz.shipprozone_shipzone_id and shipz.shipzone_active = ' . applicationConstants::YES, 'shipz');
+    }
+
+    public function joinShippingRates($langId = 0)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId && 1 > $langId) {
+            $langId = $this->langId;
+        }
+
+        $this->joinTable(ShippingRate::DB_TBL, 'LEFT OUTER JOIN', 'shipr.shiprate_shipprozone_id = shippz.shipprozone_id', 'shipr');
+        if (0 < $langId) {
+            $this->joinTable(ShippingRate::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shipr_l.shipratelang_shiprate_id = shipr.shiprate_id and shipr_l.shipratelang_lang_id = '. $langId, 'shipr_l');
+        }
+    }
+
+    public function joinShippingLocations($countryId, $stateId, $langId = 0, $innerJoin = true)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId && 1 > $langId) {
+            $langId = $this->langId;
+        }
+
+        $srch = ShippingZone::getZoneLocationSearchObject($langId);
+        $srch->addDirectCondition("(shiploc_country_id = '-1' or (shiploc_country_id = '" . $countryId. "' and (shiploc_state_id = '-1' or shiploc_state_id = '" . $stateId . "')) )");
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        
+        $joinCondition = (true == $innerJoin) ? 'INNER JOIN' : 'LEFT OUTER JOIN' ;
+
+        $this->joinTable('(' . $srch->getQuery() . ')', $joinCondition, 'shiploc.shiploc_shipzone_id = shippz.shipprozone_shipzone_id', 'shiploc');
+    }
+
+    public function joinDeliveryLocations($langId = 0)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId && 1 > $langId) {
+            $langId = $this->langId;
+        }
+       
+        if (empty($this->geoAddress)) {
+            trigger_error(Labels::getLabel('ERR_setGoeAddress_function_not_joined.', $langId), E_USER_ERROR);
+        }
+
+        $countryId = 0 ;
+        $stateId = 0;
+        if (array_key_exists('ykGeoCountryId', $this->geoAddress) && $this->geoAddress['ykGeoCountryId'] > 0) {
+            $countryId = $this->geoAddress['ykGeoCountryId'];
+        }
+
+        if (array_key_exists('ykGeoStateId', $this->geoAddress) && $this->geoAddress['ykGeoStateId'] > 0) {
+            $stateId = $this->geoAddress['ykGeoStateId'];
+        }
+
+        $srch = ShippingProfileProduct::getUserSearchObject(0, true);
+        $srch->joinTable(ShippingProfile::DB_TBL, 'INNER JOIN', 'sppro.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
+        $srch->joinTable(ShippingProfileZone::DB_TBL, 'INNER JOIN', 'shippz.shipprozone_shipprofile_id = spprof.shipprofile_id', 'shippz');
+        $srch->joinTable(ShippingZone::DB_TBL, 'INNER JOIN', 'shipz.shipzone_id = shippz.shipprozone_shipzone_id and shipz.shipzone_active = ' . applicationConstants::YES, 'shipz');
+
+        $tempSrch = ShippingZone::getZoneLocationSearchObject();
+        $tempSrch->addDirectCondition("(shiploc_country_id = '-1' or (shiploc_country_id = '" . $countryId. "' and (shiploc_state_id = '-1' or shiploc_state_id = '" . $stateId . "')) )");
+        $tempSrch->doNotCalculateRecords();
+        $tempSrch->doNotLimitRecords();
+       
+        $srch->joinTable('(' . $tempSrch->getQuery() . ')', 'INNER JOIN', 'shiploc.shiploc_shipzone_id = shippz.shipprozone_shipzone_id', 'shiploc');
+       
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'shipprofile.shippro_product_id = p.product_id', 'shipprofile');
+        $this->addFld('if(p.product_type = ' . Product::PRODUCT_TYPE_PHYSICAL . ', shipprofile.shippro_product_id, -1) as shippingProfile');
+        $this->addHaving('shippingProfile', 'IS NOT', 'mysql_func_null', 'and', true);
+        
+        // $this->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', '(if(p.product_type = ' . Product::PRODUCT_TYPE_PHYSICAL . ', shipprofile.shippro_product_id = p.product_id, p.product_id =  p.product_id))', 'shipprofile');
+        /* $this->addFld('if(p.product_type = ' . Product::PRODUCT_TYPE_PHYSICAL . ', shipprofile.shippro_product_id, -1) as shippingProfile');
+        $this->addHaving('shippingProfile', '!=', 'null'); */
     }
 }

@@ -37,33 +37,33 @@ class ProductsController extends MyAppController
         $frm = $this->getProductSearchForm($includeKeywordRelevancy);
 
         $get['join_price'] = 1;
-        
+
         $arr = array();
 
         switch ($method) {
             case 'index':
                 $arr = array(
                     'pageTitle' => Labels::getLabel('LBL_All_PRODUCTS', $this->siteLangId),
-                    'canonicalUrl' => CommonHelper::generateFullUrl('Products', 'index'),
+                    'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'index'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT_INDEX,
-                    'bannerListigUrl' => CommonHelper::generateFullUrl('Banner', 'allProducts'),
+                    'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'allProducts'),
                 );
                 break;
             case 'search':
                 $arr = array(
                     'pageTitle' => Labels::getLabel('LBL_Search_results_for', $this->siteLangId),
-                    'canonicalUrl' => CommonHelper::generateFullUrl('Products', 'search'),
+                    'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'search'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT,
-                    'bannerListigUrl' => CommonHelper::generateFullUrl('Banner', 'searchListing'),
+                    'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'searchListing'),
                     'keyword' => $keyword,
                 );
                 break;
             case 'featured':
                 $arr = array(
                     'pageTitle' => Labels::getLabel('LBL_FEATURED_PRODUCTS', $this->siteLangId),
-                    'canonicalUrl' => CommonHelper::generateFullUrl('Products', 'featured'),
+                    'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'featured'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_FEATURED_PRODUCT,
-                    'bannerListigUrl' => CommonHelper::generateFullUrl('Banner', 'searchListing'),
+                    'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'searchListing'),
                 );
                 $get['featured'] = 1;
                 break;
@@ -71,8 +71,13 @@ class ProductsController extends MyAppController
 
         $frm->fill($get);
         $data = $this->getListingData($get);
-        
-        
+
+		if (array_key_exists('keyword', $get) && count($data['products'])) {
+			$searchItemObj = new SearchItem();
+			$searchData = array('keyword'=>$get['keyword']);
+			$searchItemObj->addSearchResult($searchData);
+		}
+
         $common = array(
             'frmProductSearch' => $frm,
             'recordId' => 0,
@@ -147,7 +152,7 @@ class ProductsController extends MyAppController
     {
         $db = FatApp::getDb();
         $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
-        
+
         $categoryId = 0;
         if (array_key_exists('category', $headerFormParamsAssocArr)) {
             $categoryId = FatUtility::int($headerFormParamsAssocArr['category']);
@@ -159,7 +164,7 @@ class ProductsController extends MyAppController
             $keyword = $headerFormParamsAssocArr['keyword'];
             $langIdForKeywordSeach = $this->siteLangId;
         }
-        
+
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $headerFormParamsAssocArr);
 
         $headerFormParamsAssocArr['doNotJoinSpecialPrice'] = true;
@@ -222,7 +227,7 @@ class ProductsController extends MyAppController
             $priceArr['minPrice'] = $filterDefaultMinValue;
             $priceArr['maxPrice'] = $filterDefaultMaxValue;
         }
-        
+
         if (array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
             $priceArr['minPrice'] = $headerFormParamsAssocArr['price-min-range'];
             $priceArr['maxPrice'] = $headerFormParamsAssocArr['price-max-range'];
@@ -233,7 +238,7 @@ class ProductsController extends MyAppController
             $priceArr['minPrice'] = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-min-range'], $this->siteCurrencyId, false);
             $priceArr['maxPrice'] = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-max-range'], $this->siteCurrencyId, false);
         }
-        
+
         /* ] */
 
         /* Availability Filters[ */
@@ -623,7 +628,7 @@ class ProductsController extends MyAppController
         $srch->setDefinedCriteria($this->siteLangId);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
-            array( 'shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_description', 'shop_payment_policy', 'shop_delivery_policy', 'shop_refund_policy',  'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'shop_city', 'shop_free_ship_upto' )
+            array( 'shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_description', 'shop_payment_policy', 'shop_delivery_policy', 'shop_refund_policy',  'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'shop_city'/* , 'shop_free_ship_upto' */ )
         );
         $srch->addCondition('shop_id', '=', $product['shop_id']);
         $shopRs = $srch->getResultSet();
@@ -881,12 +886,12 @@ class ProductsController extends MyAppController
         }
 
         $product_description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($product["product_description"], true)), 500));
-        $product_description .= ' - ' . Labels::getLabel('LBL_See_more_at', $this->siteLangId) . ": " . CommonHelper::getCurrUrl();
+        $product_description .= ' - ' . Labels::getLabel('LBL_See_more_at', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
         $productImageUrl = '';
-        /* $productImageUrl = CommonHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
+        /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
         if (0 < $afile_id) {
-            $productImageUrl = CommonHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'FB_RECOMMEND', 0, $afile_id ));
+            $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'FB_RECOMMEND', 0, $afile_id ));
         }
         $socialShareContent = array(
         'type' => 'Product',
@@ -1080,7 +1085,7 @@ class ProductsController extends MyAppController
                                 $code = FatUtility::int($code);
                                 if (isset($prodCategories[$code]['prodcat_name'])) {
                                     $prodCategories[$code]['prodcat_name'];
-                                    $nodes[] = array('title' => $prodCategories[$code]['prodcat_name'], 'href' => CommonHelper::generateUrl('category', 'view', array($code)));
+                                    $nodes[] = array('title' => $prodCategories[$code]['prodcat_name'], 'href' => UrlHelper::generateUrl('category', 'view', array($code)));
                                 }
                             }
                             $nodes[] = array('title' => ($row['selprod_title']) ? $row['selprod_title'] : $row['product_name']);
@@ -1164,7 +1169,7 @@ class ProductsController extends MyAppController
         $bannerId = FatUtility::int($productId);
         if (1 > $productId) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl(''));
+            FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
@@ -1218,7 +1223,7 @@ class ProductsController extends MyAppController
         $rs = $productSrchObj->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
-        $url = CommonHelper::generateFullUrl('products', 'view', array($productId));
+        $url = UrlHelper::generateFullUrl('products', 'view', array($productId));
         if ($row == false) {
             if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
                 FatApp::redirectUser($url);
@@ -1265,7 +1270,7 @@ class ProductsController extends MyAppController
             FatApp::redirectUser($url);
         }
 
-        FatApp::redirectUser(CommonHelper::generateUrl(''));
+        FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
     public function setUrlString()
@@ -1524,13 +1529,13 @@ class ProductsController extends MyAppController
             }
 
             $product_description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($product["product_description"], true)), 500));
-            $product_description .= ' - ' . Labels::getLabel('LBL_See_more_at', $this->siteLangId) . ": " . CommonHelper::getCurrUrl();
+            $product_description .= ' - ' . Labels::getLabel('LBL_See_more_at', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
             $productImageUrl = '';
-            /* $productImageUrl = CommonHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
+            /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
             if ($productImagesArr) {
                 $afile_id = array_keys($productImagesArr)[0];
-                $productImageUrl = CommonHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $afile_id ));
+                $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $afile_id ));
             }
         }
         $this->set('product', $product);
@@ -1556,7 +1561,7 @@ class ProductsController extends MyAppController
     private function getListingData($get)
     {
         $db = FatApp::getDb();
-        
+
         $userId = 0;
         if (UserAuthentication::isUserLogged()) {
             $userId = UserAuthentication::getLoggedUserId();
@@ -1586,7 +1591,7 @@ class ProductsController extends MyAppController
 			$srch->setFields(array('brand', 'categories', 'general'));
             $records = $srch->fetch();
 			$products = [];
-            
+
             if (isset($records['hits']) && count($records['hits']) > 0) {
                 foreach ($records['hits'] as $record) {
                     if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
@@ -1758,22 +1763,22 @@ class ProductsController extends MyAppController
         $this->set('options', $optionRows);
         $this->_template->render();
     }
-    
+
     public function autoCompleteTaxCategories()
     {
         $pagesize = 10;
-        $post = FatApp::getPostedData();       
+        $post = FatApp::getPostedData();
         $srch = Tax::getSearchObject($this->siteLangId,true);
         $srch->addCondition('taxcat_deleted', '=', 0);
         $activatedTaxServiceId = Tax::getActivatedServiceId();
-        
-        $srch->addFld('taxcat_id'); 
+
+        $srch->addFld('taxcat_id');
         if ($activatedTaxServiceId) {
             $srch->addFld('concat(IFNULL(taxcat_name,taxcat_identifier), " (",taxcat_code,")")as taxcat_name');
         }else{
-            $srch->addFld('IFNULL(taxcat_name,taxcat_identifier)as taxcat_name'); 
+            $srch->addFld('IFNULL(taxcat_name,taxcat_identifier)as taxcat_name');
         }
-        $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);       
+        $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
 
         if (!empty($post['keyword'])) {
             $srch->addCondition('taxcat_name', 'LIKE', '%' . $post['keyword'] . '%')
@@ -1791,6 +1796,6 @@ class ProductsController extends MyAppController
                 'name' => strip_tags(html_entity_decode($taxCategory['taxcat_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
-        die(json_encode($json));     
+        die(json_encode($json));
     }
 }

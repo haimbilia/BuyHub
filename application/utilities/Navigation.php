@@ -93,10 +93,14 @@ class Navigation
         } elseif (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])) {
             $activeTab = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'];
         }
+
+        $shop = new Shop(0, $userId);
+        $isShopActive = $shop->isActive();
+
         $template->set('userPrivilege', UserPrivilege::getInstance());
         $template->set('activeTab', $activeTab);
         $template->set('shop_id', $shop_id);
-        $template->set('isShopActive', Shop::isShopActive($userId));
+        $template->set('isShopActive', $isShopActive);
         $template->set('todayUnreadMessageCount', $todayUnreadMessageCount);
     }
 
@@ -132,10 +136,14 @@ class Navigation
         if (!false == $shopDetails) {
             $shop_id = $shopDetails['shop_id'];
         }
+
+        $shop = new Shop(0, $userId);
+        $isShopActive = $shop->isActive();
+
         $template->set('userParentId', $userId);
         $template->set('userPrivilege', UserPrivilege::getInstance());
         $template->set('shop_id', $shop_id);
-        $template->set('isShopActive', Shop::isShopActive($userId));
+        $template->set('isShopActive', $isShopActive);
         $template->set('siteLangId', $siteLangId);
         $template->set('controller', $controller);
         $template->set('action', $action);
@@ -183,7 +191,7 @@ class Navigation
     public static function customPageLeft($template)
     {
         $siteLangId = CommonHelper::getLangId();
-        $contentBlockUrlArr = array(Extrapage::CONTACT_US_CONTENT_BLOCK => CommonHelper::generateUrl('Custom', 'ContactUs'));
+        $contentBlockUrlArr = array(Extrapage::CONTACT_US_CONTENT_BLOCK => UrlHelper::generateUrl('Custom', 'ContactUs'));
 
         $srch = Extrapage::getSearchObject($siteLangId);
         $srch->addCondition('epage_default', '=', 1);
@@ -248,7 +256,7 @@ class Navigation
 
         $catWithProductConditoon = '';
         if ($categoriesMainRootArr) {
-            $catWithProductConditoon = " and nlink_category_id in(" . implode($categoriesMainRootArr, ",") . ")";
+            $catWithProductConditoon = " and nlink_category_id in(" . implode(",", $categoriesMainRootArr) . ")";
         }
 
         /* ] */

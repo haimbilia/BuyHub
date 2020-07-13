@@ -78,7 +78,7 @@ class Common
             $userId = UserAuthentication::getLoggedUserId();
             $userImgUpdatedOn = User::getAttributesById($userId, 'user_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-            $profileImage = FatCache::getCachedUrl(CommonHelper::generateUrl('Account', 'userProfileImage', array($userId, 'croped', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Account', 'userProfileImage', array($userId, 'croped', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $template->set('userName', ucfirst(CommonHelper::getUserFirstName(UserAuthentication::getLoggedUserAttribute('user_name'))));
             $template->set('userEmail', UserAuthentication::getLoggedUserAttribute('user_email'));
             $template->set('profilePicUrl', $profileImage);
@@ -314,7 +314,7 @@ class Common
     {
         $siteLangId = CommonHelper::getLangId();
         $blogSrchFrm = static::getBlogSearchForm();
-        $blogSrchFrm->setFormTagAttribute('action', CommonHelper::generateUrl('Blog'));
+        $blogSrchFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Blog'));
 
         /* to fill the posted data into form[ */
         $postedData = FatApp::getPostedData();

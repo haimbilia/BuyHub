@@ -21,15 +21,15 @@ trait PluginHelper
      * getSettings
      *
      * @param  string $column
-     * @param  int $langId
      * @return array
      */
-    public function getSettings(string $column = '', int $langId = 0)
+    public function getSettings(string $column = '')
     {
-        $langId = FatUtility::int($langId);
-        if (1 > $langId) {
-            $langId = CommonHelper::getLangId();
+        if (!empty($this->settings)) {
+            return $this->settings;
         }
+
+        $this->langId = 0 < $this->langId ? $this->langId : CommonHelper::getLangId();
 
         try {
             $this->keyName = get_called_class()::KEY_NAME;
@@ -38,22 +38,28 @@ trait PluginHelper
             return false;
         }
         $pluginSetting = new PluginSetting(0, $this->keyName);
-        return $pluginSetting->get($langId, $column);
+        return $this->settings = $pluginSetting->get($this->langId, $column);
     }
     
     /**
      * validateSettings - To validate plugin required keys are updated in db or not.
      *
-     * @param  mixed $langId
+     * @param  int $langId
      * @return bool
      */
-    protected function validateSettings(int $langId)
+    public function validateSettings(int $langId = 0): bool
     {
+        $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
         $this->settings = $this->getSettings();
+        if (Plugin::INACTIVE == $this->settings['plugin_active']) {
+            $this->error = $this->keyName . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
+            return false;
+        }
+
         if (isset($this->requiredKeys) && !empty($this->requiredKeys) && is_array($this->requiredKeys)) {
             foreach ($this->requiredKeys as $key) {
-                if (!array_key_exists($key, $this->settings)) {
-                    $this->error = $this->keyName . ' ' . Labels::getLabel('MSG_SETTINGS_NOT_CONFIGURED', $langId);
+                if (!array_key_exists($key, $this->settings) || '' == $this->settings[$key]) {
+                    $this->error = $this->keyName . ' : ' . ' "' . $key . '" ' . Labels::getLabel('MSG_SETTINGS_NOT_CONFIGURED', $langId);
                     return false;
                 }
             }
@@ -66,11 +72,12 @@ trait PluginHelper
      *
      * @param  string $keyName
      * @param  string $directory
-     * @param  int $langId
      * @param  string $error
+     * @param  int $langId
+     * @param bool $checkActive
      * @return mixed
      */
-    public static function includePlugin(string $keyName, string $directory, int $langId = 0, &$error = '')
+    public static function includePlugin(string $keyName, string $directory, &$error = '', int $langId = 0, bool $checkActive = true)
     {
         if (1 > $langId) {
             $langId = CommonHelper::getLangId();
@@ -81,7 +88,7 @@ trait PluginHelper
             return false;
         }
 
-        if (1 > Plugin::isActive($keyName)) {
+        if (true === $checkActive && 1 > Plugin::isActive($keyName)) {
             $error =  Labels::getLabel('MSG_PLUGIN_IS_NOT_ACTIVE', $langId);
             return false;
         }
@@ -89,11 +96,55 @@ trait PluginHelper
         $file = CONF_PLUGIN_DIR . $directory . '/' . strtolower($keyName) . '/' . $keyName . '.php';
 
         if (!file_exists($file)) {
-            $error =  Labels::getLabel('MSG_UNABLE_TO_LOCATE_REQUIRED_FILE', $langId);
+            $error =  Labels::getLabel('MSG_UNABLE_TO_LOCATE_REQUIRED_FILE', $langId) . '-' . $keyName;
             return false;
         }
         
-        require_once $file;
+        try {
+            require_once $file;
+        } catch (\Error $e) {
+            $error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
+     * callPlugin - Used to call plugin file without including plugin. This function is used for files exists in library\plugins.
+     *
+     * @param string $keyname - ClassName
+     * @param string $args - Constructor Arguments
+     * @param string $error
+     * @param int $langId
+     * @param bool $checkActive
+     * @return mixed
+     */
+    public static function callPlugin(string $keyName, array $args = [], &$error = '', int $langId = 0, bool $checkActive = true)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getLangId();
+        }
+        
+        if (empty($keyName)) {
+            $error =  Labels::getLabel('MSG_INVALID_KEY_NAME', $langId);
+            return false;
+        }
+
+        $pluginType = Plugin::getAttributesByCode($keyName, 'plugin_type');
+
+        $directory = Plugin::getDirectory($pluginType);
+
+        if (false == $directory) {
+            $error =  Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', $langId);
+            return false;
+        }
+        
+        $error = '';
+        if (false === PluginHelper::includePlugin($keyName, $directory, $error, $langId, $checkActive)) {
+            return false;
+        }
+
+        $reflect  = new ReflectionClass($keyName);
+        return $reflect->newInstanceArgs($args);
     }
 
     /**

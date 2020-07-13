@@ -62,6 +62,8 @@ class Product extends MyAppModel
     public const PRODUCT_REVIEWS_ORGINAL_URL = 'reviews/product/';
     public const PRODUCT_MORE_SELLERS_ORGINAL_URL = 'products/sellers/';
 
+    public const DISTANCE_IN_MILES = 10;
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -100,25 +102,25 @@ class Product extends MyAppModel
     public static function requiredFields($prodType = PRODUCT::PRODUCT_TYPE_PHYSICAL)
     {
         $arr = array(
-        ImportexportCommon::VALIDATE_POSITIVE_INT => array(
-        'product_id',
-        'category_Id',
-        'tax_category_id',
-        'product_min_selling_price',
-        ),
-        ImportexportCommon::VALIDATE_NOT_NULL => array(
-        'product_name',
-        'product_identifier',
-        'credential_username',
-        'category_indentifier',
-        'product_type_identifier',
-        'tax_category_identifier'
-        ),
-        ImportexportCommon::VALIDATE_INT => array(
-        'product_seller_id',
-        'product_type',
-        'product_ship_free',
-        ),
+            ImportexportCommon::VALIDATE_POSITIVE_INT => array(
+                'product_id',
+                'category_Id',
+                'tax_category_id',
+                'product_min_selling_price',
+            ),
+            ImportexportCommon::VALIDATE_NOT_NULL => array(
+                'product_name',
+                'product_identifier',
+                'credential_username',
+                'category_indentifier',
+                'product_type_identifier',
+                'tax_category_identifier'
+            ),
+            ImportexportCommon::VALIDATE_INT => array(
+                'product_seller_id',
+                'product_type',
+                'product_ship_free',
+            ),
         );
 
         if (FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, 1)) {
@@ -134,7 +136,7 @@ class Product extends MyAppModel
                 'product_width',
                 'product_height',
                 'product_weight',
-                );
+            );
             $arr[ImportexportCommon::VALIDATE_NOT_NULL] = array_merge($arr[ImportexportCommon::VALIDATE_NOT_NULL], $physical);
         }
 
@@ -157,14 +159,14 @@ class Product extends MyAppModel
     public static function requiredMediaFields()
     {
         return array(
-        ImportexportCommon::VALIDATE_POSITIVE_INT => array(
-        'product_id',
-        ),
-        ImportexportCommon::VALIDATE_NOT_NULL => array(
-        'product_identifier',
-        'afile_physical_path',
-        'afile_name',
-        ),
+            ImportexportCommon::VALIDATE_POSITIVE_INT => array(
+                'product_id',
+            ),
+            ImportexportCommon::VALIDATE_NOT_NULL => array(
+                'product_identifier',
+                'afile_physical_path',
+                'afile_name',
+            ),
         );
     }
 
@@ -177,20 +179,20 @@ class Product extends MyAppModel
     public static function requiredShippingFields()
     {
         return array(
-        ImportexportCommon::VALIDATE_POSITIVE_INT => array(
-        'product_id',
-        'country_id',
-        'scompany_id',
-        'sduration_id',
-        'pship_charges',
-        ),
-        ImportexportCommon::VALIDATE_NOT_NULL => array(
-        'product_identifier',
-        'credential_username',
-        'scompany_identifier',
-        'sduration_identifier',
-        'user_id',
-        ),
+            ImportexportCommon::VALIDATE_POSITIVE_INT => array(
+                'product_id',
+                'country_id',
+                'scompany_id',
+                'sduration_id',
+                'pship_charges',
+            ),
+            ImportexportCommon::VALIDATE_NOT_NULL => array(
+                'product_identifier',
+                'credential_username',
+                'scompany_identifier',
+                'sduration_identifier',
+                'user_id',
+            ),
         );
     }
 
@@ -796,7 +798,7 @@ class Product extends MyAppModel
             if ($returnId) {
                 return $product['selprod_id'];
             }
-            return CommonHelper::generateUrl('Products', 'view', array($product['selprod_id']));
+            return UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
         } else {
             $prodSrch2 = new ProductSearch(CommonHelper::getLangId());
             $prodSrch2->doNotCalculateRecords();
@@ -814,7 +816,7 @@ class Product extends MyAppModel
                 if ($returnId) {
                     return $product['selprod_id'];
                 }
-                return CommonHelper::generateUrl('Products', 'view', array($product['selprod_id'])) . "::";
+                return UrlHelper::generateUrl('Products', 'view', array($product['selprod_id'])) . "::";
             } else {
                 return false;
             }
@@ -1237,7 +1239,7 @@ class Product extends MyAppModel
             return false;
         }
        
-        if (!$this->updateModifiedTime()) {           
+        if (!$this->updateModifiedTime()) {
             return false;
         }
         return true;
@@ -1309,7 +1311,18 @@ class Product extends MyAppModel
         $srch->joinForPrice('', $criteria, true);
         $srch->unsetDefaultLangForJoins();
         $srch->joinSellers();
+        $srch->setGeoAddress();
         $srch->joinShops($langId, true, true, $shop_id);
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+            $prodGeoCondition = FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0);
+            switch ($prodGeoCondition) {
+                case applicationConstants::BASED_ON_DELIVERY_LOCATION:
+                    $srch->joinDeliveryLocations();
+                    /* $srch->addFld('if(p.product_type = ' . Product::PRODUCT_TYPE_PHYSICAL . ', shipprofile.shippro_product_id, -1) as shippingProfile');
+                    $srch->addHaving('shippingProfile', 'IS NOT', 'mysql_func_null', 'and', true); */
+                    break;
+            }
+        }
         $srch->joinShopCountry();
         $srch->joinShopState();
         $srch->joinBrands($langId);
@@ -1334,6 +1347,7 @@ class Product extends MyAppModel
             'selprod_sold_count', 'selprod_return_policy', /* 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */'selprod_min_order_qty'
             )
         );
+       
 
         $includeRating = false;
 
@@ -1465,7 +1479,7 @@ END,   special_price_found ) as special_price_found'
 
         if (!empty($maxPriceRange)) {
             $currCurrencyId = isset($criteria['currency_id']) ? $criteria['currency_id'] : FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-            $max_price_range_default_currency = CommonHelper::convertExistingToOtherCurrency( $currCurrencyId, $maxPriceRange, FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1), false);
+            $max_price_range_default_currency = CommonHelper::convertExistingToOtherCurrency($currCurrencyId, $maxPriceRange, FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1), false);
             //$max_price_range_default_currency =  CommonHelper::getDefaultCurrencyValue($maxPriceRange, false, false);
             $srch->addHaving('theprice', '<=', $max_price_range_default_currency);
         }
@@ -1860,6 +1874,23 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition(ProductSpecifics::DB_TBL_PREFIX . 'product_id', '=', $productId);
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
+    }
+
+    public static function isShipFromConfigured($productId, $userId = 0)
+    {
+        $productId = FatUtility::int($productId);
+        $userId = FatUtility::int($userId);
+       
+        $srch = new SearchBase(static::DB_TBL_PRODUCT_SHIPPING, 'ps');
+        $srch->addCondition('ps_product_id', '=', $productId);
+        $srch->addCondition('ps_user_id', '=', $userId);
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+        $res = FatApp::getDb()->fetch($srch->getResultSet());
+        if (!empty($res)) {
+            return true;
+        }
+        return false;
     }
 
     public function updateUpdatedOn()

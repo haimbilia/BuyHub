@@ -74,6 +74,7 @@ class CategoryController extends MyAppController
         }
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
+        
         $srch->setPageNumber($page);
         if ($pageSize) {
             $srch->setPageSize($pageSize);
@@ -94,10 +95,10 @@ class CategoryController extends MyAppController
             'postedData' => $get,
             'recordCount' => $srch->recordCount(),
             'pageTitle' => $category['prodcat_name'],
-            'canonicalUrl' => CommonHelper::generateFullUrl('Category', 'view', array($categoryId)),
+            'canonicalUrl' => UrlHelper::generateFullUrl('Category', 'view', array($categoryId)),
             'productSearchPageType' => SavedSearchProduct::PAGE_CATEGORY,
             'recordId' => $categoryId,
-            'bannerListigUrl' => CommonHelper::generateFullUrl('Banner', 'categories'),
+            'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
             'siteLangId' => $this->siteLangId,
             'showBreadcrumb' => true,
         );
@@ -121,11 +122,19 @@ class CategoryController extends MyAppController
         $this->_template->render();
     }
 
-    public function image($catId, $langId = 0, $sizeType = '')
+    public function image($catId, $langId = 0, $sizeType = '', $afileId = 0)
     {
         $catId = FatUtility::int($catId);
         $langId = FatUtility::int($langId);
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_IMAGE, $catId, 0, $langId);
+        if ($afile_id > 0) {
+            $res = AttachedFile::getAttributesById($afile_id);
+            if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_CATEGORY_IMAGE) {
+                $file_row = $res;
+            }
+        } else {
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_IMAGE, $catId, 0, $langId);
+        }
+        
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
 
         switch (strtoupper($sizeType)) {
@@ -195,13 +204,22 @@ class CategoryController extends MyAppController
         }
     }
 
-    public function banner($prodCatId, $langId = 0, $sizeType = '', $screen = 0, $displayUniversalImage = true)
+    public function banner($prodCatId, $langId = 0, $sizeType = '', $screen = 0, $displayUniversalImage = true, $afileId = 0)
     {
         $default_image = 'product_default_image.jpg';
         $prodCatId = FatUtility::int($prodCatId);
         $langId = FatUtility::int($langId);
-
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodCatId, 0, $langId, $displayUniversalImage, $screen);
+        
+        if ($afile_id > 0) {
+            $res = AttachedFile::getAttributesById($afile_id);
+            if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_CATEGORY_BANNER) {
+                $file_row = $res;
+            }
+        } else {
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodCatId, 0, $langId, $displayUniversalImage, $screen);
+        }
+        
+        
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
 
         switch (strtoupper($sizeType)) {
@@ -278,8 +296,8 @@ class CategoryController extends MyAppController
             $result[$key] = $val;
             $isLastChildCategory = ProductCategory::isLastChildCategory($val['prodcat_id']);
             $result[$key]['isLastChildCategory'] = $isLastChildCategory ? 1 : 0;
-            $result[$key]['icon'] = CommonHelper::generateFullUrl('Category', 'icon', array($val['prodcat_id'], $langId, 'COLLECTION_PAGE'));
-            $result[$key]['image'] = CommonHelper::generateFullUrl('Category', 'banner', array($val['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE));
+            $result[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($val['prodcat_id'], $langId, 'COLLECTION_PAGE'));
+            $result[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($val['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE));
             $childernArr = array();
             if (!empty($val['children'])) {
                 $array = array_values($val['children']);
@@ -305,8 +323,8 @@ class CategoryController extends MyAppController
         
         /*  if (true ===  MOBILE_APP_API_CALL && 0 == $parentId) {
              foreach ($categoriesDataArr as $key => $value) {
-                 $categoriesDataArr[$key]['icon'] = CommonHelper::generateFullUrl('Category', 'icon', array($value['prodcat_id'], $this->siteLangId, 'COLLECTION_PAGE'));
-                 $categoriesDataArr[$key]['image'] = CommonHelper::generateFullUrl('Category', 'banner', array($value['prodcat_id'] , $this->siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE));
+                 $categoriesDataArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($value['prodcat_id'], $this->siteLangId, 'COLLECTION_PAGE'));
+                 $categoriesDataArr[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($value['prodcat_id'] , $this->siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE));
              }
          } else {
              if (false ===  MOBILE_APP_API_CALL) {

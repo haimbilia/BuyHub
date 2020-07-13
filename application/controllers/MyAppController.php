@@ -15,13 +15,13 @@ class MyAppController extends FatController
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_Site_under_maintenance', CommonHelper::getLangId()));
             }
-            FatApp::redirectUser(CommonHelper::generateUrl('maintenance'));
+            FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
         }
 
         CommonHelper::initCommonVariables();
         $this->initCommonVariables();
         $this->tempTokenLogin();
-        $this->_template->addCss('css/main-' . CommonHelper::getLayoutDirection() . '.css');		
+        $this->_template->addCss('css/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 
     public function initCommonVariables()
@@ -69,7 +69,7 @@ class MyAppController extends FatController
         }
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
-        
+
         $jsVariablesCache = FatCache::get('jsVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$jsVariablesCache) {
             $jsVariables = array(
@@ -82,7 +82,7 @@ class MyAppController extends FatController
             'setMainProduct' => Labels::getLabel('LBL_Set_as_main_product', $this->siteLangId),
             'layoutDirection' => CommonHelper::getLayoutDirection(),
             'selectPlan' => Labels::getLabel('LBL_Please_Select_any_Plan_From_The_Above_Plans', $this->siteLangId),
-            'alreadyHaveThisPlan' => str_replace("{clickhere}", '<a href="' . CommonHelper::generateUrl('seller', 'subscriptions') . '">' . Labels::getLabel('LBL_Click_Here', $this->siteLangId) . '</a>', Labels::getLabel('LBL_You_have_already_Bought_this_plan._Please_choose_some_other_Plan_or_renew_it_from_{clickhere}', $this->siteLangId)),
+            'alreadyHaveThisPlan' => str_replace("{clickhere}", '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions') . '">' . Labels::getLabel('LBL_Click_Here', $this->siteLangId) . '</a>', Labels::getLabel('LBL_You_have_already_Bought_this_plan._Please_choose_some_other_Plan_or_renew_it_from_{clickhere}', $this->siteLangId)),
             'processing' => Labels::getLabel('LBL_Processing...', $this->siteLangId),
             'requestProcessing' => Labels::getLabel('LBL_Request_Processing...', $this->siteLangId),
             'selectLocation' => Labels::getLabel('LBL_Select_Location_to_view_Wireframe', $this->siteLangId),
@@ -139,7 +139,15 @@ class MyAppController extends FatController
             'fileSizeExceeded' => Labels::getLabel("MSG_FILE_SIZE_SHOULD_BE_LESSER_THAN_{SIZE-LIMIT}", $this->siteLangId),
             'copyToClipboard' => Labels::getLabel('LBL_Copy_to_clipboard', $this->siteLangId),
             'copied' => Labels::getLabel('LBL_Copied', $this->siteLangId),
-            'invalidGRecaptchaKeys' => Labels::getLabel('LBL_YOU_MIGHT_HAVE_INVALID_GOOGLE_RECAPTCHA_V3_KEYS._PLEASE_VERIFY.', $this->siteLangId),
+            'invalidGRecaptchaKeys' => Labels::getLabel(
+                'LBL_YOU_MIGHT_HAVE_INVALID_GOOGLE_RECAPTCHA_V3_KEYS._PLEASE_VERIFY.',
+                $this->siteLangId
+            ),
+            'saveProfileFirst' => Labels::getLabel('LBL_Save_Profile_First', $this->siteLangId),
+            'minimumOneLocationRequired' => Labels::getLabel('LBL_Minimum_one_location_is_required', $this->siteLangId),
+            'processing_counter' => Labels::getLabel('LBL_{counter}_OUT_OF_{count}_RECORD_BATCHES.', $this->siteLangId),
+            'loadingCaptcha' => Labels::getLabel('LBL_Loading_Captcha...', $this->siteLangId),
+            'confirmPayment' => Labels::getLabel('LBL_CONFIRM_PAYMENT', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
@@ -147,18 +155,18 @@ class MyAppController extends FatController
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
             }
             FatCache::set('jsVariablesCache' . $this->siteLangId, serialize($jsVariables), '.txt');
-        } else{
+        } else {
             $jsVariables =  unserialize($jsVariablesCache);
-        }        
+        }
 
         $themeId = FatApp::getConfig('CONF_FRONT_THEME', FatUtility::VAR_INT, 1);
 
         if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
             $themeId = $_SESSION['preview_theme'];
         }
-       
+
         $this->themeDetail = ThemeColor::getById($themeId, $this->siteLangId, false, true);
-        
+
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
 
@@ -253,13 +261,12 @@ class MyAppController extends FatController
         return isset($this->app_user["user_id"]) ? $this->app_user["user_id"] : 0;
     }
 
-    public function getStates($countryId, $stateId = 0, $return = false)
+    public function getStates($countryId, $stateId = 0, $return = false, $idCol = 'state_id')
     {
         $countryId = FatUtility::int($countryId);
-        $stateId = FatUtility::int($stateId);
 
         $stateObj = new States();
-        $statesArr = $stateObj->getStatesByCountryId($countryId, $this->siteLangId);
+        $statesArr = $stateObj->getStatesByCountryId($countryId, $this->siteLangId, true, $idCol);
 
         if (true === $return) {
             return $statesArr;
@@ -268,6 +275,12 @@ class MyAppController extends FatController
         $this->set('statesArr', $statesArr);
         $this->set('stateId', $stateId);
         $this->_template->render(false, false, '_partial/states-list.php');
+    }
+
+    public function getStatesByCountryCode($countryCode, $stateCode = '')
+    {
+        $countryId = Countries::getCountryByCode($countryCode, 'country_id');
+        $this->getStates($countryId, $stateCode, false, 'state_code');
     }
 
     public function getBreadcrumbNodes($action)
@@ -282,7 +295,7 @@ class MyAppController extends FatController
         if ($action == 'index') {
             $nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($className), $this->siteLangId));
         } else {
-            $nodes[] = array('title' => ucwords($className), 'href' => CommonHelper::generateUrl($urlController));
+            $nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($action), $this->siteLangId));
         }
         return $nodes;
@@ -591,7 +604,7 @@ class MyAppController extends FatController
             $verificationCode = $userObj->prepareUserVerificationCode($data['user_email']);
         }
 
-        $link = CommonHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode));
+        $link = UrlHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode));
 
         $email = new EmailHandler();
         $dataArr = array(
@@ -609,7 +622,7 @@ class MyAppController extends FatController
             'user_new_email' => $data['user_new_email'],
             'user_email' => $data['user_email'],
             );
-            if (!$email->sendChangeEmailRequestNotification($this->siteLangId, array('user_name' => $dataArr['user_name'], 'user_email' => $dataArr['user_email'], 'user_new_email' => $dataArr['user_new_email'], 'user_phone' => $data['user_phone']))) {
+            if (!$email->sendChangeEmailRequestNotification($this->siteLangId, $dataArr)) {
                 return false;
             }
         }
@@ -780,5 +793,18 @@ class MyAppController extends FatController
 
             $this->_template->render();
         }
+    }
+
+    public function accessLocation()
+    {
+        $this->set('frm', $this->getGoogleAutocompleteAddressForm());
+        $this->_template->render(false, false, '_partial/access-location.php');
+    }
+
+    protected function getGoogleAutocompleteAddressForm()
+    {
+        $frm = new Form('googleAutocomplete');
+        $frm->addTextBox('', 'location');
+        return $frm;
     }
 }

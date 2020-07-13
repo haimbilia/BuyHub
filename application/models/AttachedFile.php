@@ -1,4 +1,6 @@
 <?php
+use Aws\S3\S3Client;  
+use Aws\Exception\AwsException;
 
 class AttachedFile extends MyAppModel
 {
@@ -11,7 +13,9 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_SELLER_APPROVAL_FILE = 3;
     public const FILETYPE_SHOP_LOGO = 4;
     public const FILETYPE_SHOP_BANNER = 5;
+    
     public const FILETYPE_PAYMENT_METHOD = 6;
+
     public const FILETYPE_USER_IMAGE = 7;
     public const FILETYPE_BRAND_LOGO = 8;
     public const FILETYPE_USER_PROFILE_IMAGE = 9; /*User profile original image*/
@@ -132,6 +136,19 @@ class AttachedFile extends MyAppModel
         static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Category_Image', $langId),
         static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
         static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_Category_Banner_Seller', $langId),
+        );
+        return $arr;
+    }
+	
+	public static function getImgAttrTypeArray($langId)
+    {
+        return $arr = array(
+        static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_Products', $langId),
+        static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_Brand_Logo', $langId),
+        static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_Brand_Banner', $langId),
+        /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Categories', $langId), */
+        static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
+        static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_Blogs', $langId),
         );
         return $arr;
     }
@@ -450,7 +467,7 @@ class AttachedFile extends MyAppModel
             $imagePath = $no_image;
         }
 
-        $fileMimeType = mime_content_type($imagePath);
+        // $fileMimeType = mime_content_type($imagePath);
         if (strpos($_SERVER['REQUEST_URI'], '?t=') === false) {
             $filemtime = filemtime($imagePath);
             $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
@@ -466,7 +483,7 @@ class AttachedFile extends MyAppModel
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_get_clean();
             ob_start();
-            static::setContentType($fileMimeType);
+            static::setContentType($imagePath);
             $fileContent = FatCache::get($_SERVER['REQUEST_URI'], null, '.jpg');
             if ($fileContent) {
                 static::loadImage($fileContent, $imagePath);
@@ -475,12 +492,26 @@ class AttachedFile extends MyAppModel
 
         try {
             static::setLastModified($imagePath);
-            static::setContentType($fileMimeType);
+            static::setContentType($imagePath);
             $img = new ImageResize($imagePath);
         } catch (Exception $e) {
             try {
-                $img = static::getDefaultImage($imagePath, $w, $h);
-                $img->setExtraSpaceColor(204, 204, 204);
+                /*In S3 bucket for some large files PHP functions like getImageSize gives some error. So handled the same accordingly */
+                if (CONF_USE_FAT_CACHE && strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
+                    static::setLastModified($imagePath);
+                    static::setContentType($imagePath);
+                    $readFileFromCache = FatCache::get($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+                    if (!$readFileFromCache) {
+                        $fileContent = file_get_contents($imagePath);
+                        FatCache::set($imagePath, $fileContent, '.jpg');
+                    }
+                    
+                    $tempPath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+                    $img = new ImageResize($tempPath);
+                } else {
+                    $img = static::getDefaultImage($imagePath, $w, $h);
+                    $img->setExtraSpaceColor(204, 204, 204);
+                }
             } catch (Exception $e) {
                 $img = static::getDefaultImage($imagePath, $w, $h);
                 $img->setExtraSpaceColor(204, 204, 204);
@@ -514,7 +545,7 @@ class AttachedFile extends MyAppModel
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_end_clean();
             ob_start();
-            static::setContentType($fileMimeType);
+            static::setContentType($imagePath, $fileMimeType);
             if ($imageCompression) {
                 $img->displayImage(80, false);
             } else {
@@ -525,7 +556,7 @@ class AttachedFile extends MyAppModel
             static::loadImage($imgData, $imagePath);
         }
 
-        static::setContentType($fileMimeType);
+        static::setContentType($imagePath);
 
         if ($imageCompression) {
             $img->displayImage(80, false);
@@ -549,13 +580,26 @@ class AttachedFile extends MyAppModel
         header("Expires: " . date('r', strtotime("+30 days")));
     }
 
-    public static function setContentType($fileMimeType)
+    public static function setContentType($imagePath, $fileMimeType = '')
     {
-        if ($fileMimeType != '') {
-            header("content-type: " . $fileMimeType);
-        } else {
-            header("content-type: image/jpeg");
+        if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
+            if (empty($fileMimeType)) {
+                $fileMimeType = mime_content_type($imagePath); 
+            }
+            
+            if ($fileMimeType != '') {
+                header("content-type: " . $fileMimeType);
+            } else {
+                header("content-type: image/jpeg");
+            }
+            return;
         }
+
+        if (substr($imagePath, strlen($imagePath) - 3, strlen($imagePath)) == "svg") {
+            header("Content-type: image/svg+xml");
+        }else {
+            header("content-type: image/jpeg");
+        }   
     }
 
     public static function setLastModified($image_name)
@@ -607,13 +651,12 @@ class AttachedFile extends MyAppModel
         if (empty($image_name) || !file_exists($uploadedFilePath . $image_name)) {
             $imagePath = $no_image;
         }
-
-        $fileMimeType = mime_content_type($imagePath);
+        
         if (strpos($_SERVER['REQUEST_URI'], '?t=') === false) {
             $filemtime = filemtime($imagePath);
             $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
         }
-
+       
         static::setHeaders();
 
         static::checkModifiedHeader($imagePath);
@@ -621,7 +664,7 @@ class AttachedFile extends MyAppModel
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_get_clean();
             ob_start();
-            static::setContentType($fileMimeType);
+            static::setContentType($imagePath);
             $fileContent = FatCache::get($_SERVER['REQUEST_URI'], null, '.jpg');
             if ($fileContent) {
                 static::loadImage($fileContent, $imagePath);
@@ -630,7 +673,7 @@ class AttachedFile extends MyAppModel
 
         try {
             static::setLastModified($imagePath);
-            static::setContentType($fileMimeType);
+            static::setContentType($imagePath);
             $fileContent = file_get_contents($imagePath);
             if (CONF_USE_FAT_CACHE && $cache) {
                 FatCache::set($_SERVER['REQUEST_URI'], $fileContent, '.jpg');
@@ -638,7 +681,7 @@ class AttachedFile extends MyAppModel
             }
         } catch (Exception $e) {
             static::setLastModified($imagePath);
-            static::setContentType($fileMimeType);
+            static::setContentType($imagePath);
             $fileContent = file_get_contents($imagePath);
         }
 
@@ -891,6 +934,24 @@ class AttachedFile extends MyAppModel
             return false;
         }
     }
+
+    public static function registerS3ClientStream()
+     {
+       if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
+           return;
+       }
+
+       if (!defined('S3_KEY')) {
+           trigger_error('S3 Settings not found.', E_USER_ERROR);
+       }
+       
+       $client = S3Client::factory([
+                   'credentials' => ['key' => S3_KEY, 'secret' => S3_SECRET],
+                   'region' => S3_REGION,
+                   'version' => 'latest'
+       ]);
+        $client->registerStreamWrapper();
+     }
 
     public static function setTimeParam($dateTime)
     {

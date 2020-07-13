@@ -54,13 +54,13 @@ class Cronjob extends FatModel
                     $onDuplicateKeyTagProdUpdate = array_merge($tagProd, array('tpr_weightage' => 'mysql_func_tpr_weightage + ' . $recommendedProd['weightage']));
                     FatApp::getDb()->insertFromArray('tbl_tag_product_recommendation', $tagProd, true, array(), $onDuplicateKeyTagProdUpdate);
 
-                    $tagProd = array(
-                    'tpr_tag_id' => $relatedTagProdArr[$prodId]['tag_id'],
-                    'tpr_product_id' => $val['rab_record_id'],
-                    'tpr_weightage' => $recommendedProd['weightage'],
-                    );
-                    $onDuplicateKeyTagProdUpdate = array_merge($tagProd, array('tpr_weightage' => 'mysql_func_tpr_weightage + ' . $recommendedProd['weightage']));
-                    FatApp::getDb()->insertFromArray('tbl_tag_product_recommendation', $tagProd, true, array(), $onDuplicateKeyTagProdUpdate);
+                    // $tagProd = array(
+                    // 'tpr_tag_id' => $relatedTagProdArr[$prodId]['tag_id'],
+                    // 'tpr_product_id' => $val['rab_record_id'],
+                    // 'tpr_weightage' => $recommendedProd['weightage'],
+                    // );
+                    // $onDuplicateKeyTagProdUpdate = array_merge($tagProd, array('tpr_weightage' => 'mysql_func_tpr_weightage + ' . $recommendedProd['weightage']));
+                    // FatApp::getDb()->insertFromArray('tbl_tag_product_recommendation', $tagProd, true, array(), $onDuplicateKeyTagProdUpdate);
                 //echo FatApp::getDb()->getError();
                 } else {
                     /*User Product Recommendation*/
@@ -305,7 +305,7 @@ class Cronjob extends FatModel
         $srch->joinPaymentMethod();
         $srch->addCondition('o.order_id', '=', $orderId);
         $cnd = $srch->addCondition('o.order_is_paid', '=', Orders::ORDER_IS_PAID);
-        $cnd->attachCondition('pmethod_code', '=', 'cashondelivery');
+        $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $srch->addCondition('op.op_status_id', 'not in', unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -320,7 +320,7 @@ class Cronjob extends FatModel
         $srch->joinOrderBuyerUser();
         $srch->joinOrderPaymentMethod();
         $cnd = $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PAID);
-        $cnd->attachCondition('pmethod_code', '=', 'cashondelivery');
+        $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $srch->addCondition('order_id', '=', $orderId);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -777,7 +777,7 @@ class Cronjob extends FatModel
                 continue;
             }
             $phone = !empty($val['user_phone']) ? $val['user_dial_code'] . $val['user_phone'] : '';
-            $data = array("user_id" => $val['usercart_user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => CommonHelper::generateFullUrl('Checkout'), 'user_phone' => $phone);
+            $data = array("user_id" => $val['usercart_user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Checkout'), 'user_phone' => $phone);
 
             $email = new EmailHandler();
             if (!$email->remindBuyerForCartItems(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $data)) {
@@ -823,7 +823,7 @@ class Cronjob extends FatModel
 
         foreach ($row as $val) {
             $phone = !empty($row['user_phone']) ? $row['user_dial_code'] . $row['user_phone'] : '';
-            $data = array("user_id" => $val['user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => CommonHelper::generateFullUrl('Account', 'wishlist'), 'user_phone' => $phone);
+            $data = array("user_id" => $val['user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Account', 'wishlist'), 'user_phone' => $phone);
 
             $email = new EmailHandler();
             if (!$email->remindBuyerForWishlistItems(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $data)) {

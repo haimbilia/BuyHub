@@ -6,8 +6,8 @@ $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 ?>
 <div class="">
-    <p><strong><?php echo sprintf(Labels::getLabel('LBL_Pay_using_Payment_Method', $siteLangId), $paymentMethod["pmethod_name"])?>:</strong></p><br />
-    <p><?php echo $paymentMethod["pmethod_description"]?></p><br />
+    <p><strong><?php echo sprintf(Labels::getLabel('LBL_Pay_using_Payment_Method', $siteLangId), $paymentMethod["plugin_name"])?>:</strong></p><br />
+    <p><?php echo $paymentMethod["plugin_description"]?></p><br />
     <?php
     if (!isset($error)) {
         echo $frm->getFormHtml();
@@ -32,7 +32,7 @@ $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 <?php 
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
-if (!empty($siteKey) && !empty($secretKey) && 'cashondelivery' == strtolower($paymentMethod['pmethod_code'])) {?>
+if (!empty($siteKey) && !empty($secretKey) && 'cashondelivery' == strtolower($paymentMethod['plugin_code'])) {?>
     <script src='https://www.google.com/recaptcha/api.js?render=<?php echo $siteKey; ?>'></script>
     <script>
         googleCaptcha();

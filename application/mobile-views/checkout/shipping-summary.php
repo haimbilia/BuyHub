@@ -9,7 +9,7 @@ usort($products, function ($a, $b) {
 });
 
 foreach ($products as $index => $product) {
-    $products[$index]['product_image_url'] = CommonHelper::generateFullUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId));
+    $products[$index]['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId));
     $products[$index]['total'] = !empty($product['total']) ? CommonHelper::displayMoneyFormat($product['total']) : 0;
     $products[$index]['totalPrice'] = !empty($product['totalPrice']) ? CommonHelper::displayMoneyFormat($product['totalPrice'], false, false, false) : 0;
     $products[$index]['netTotal'] = !empty($product['netTotal']) ? CommonHelper::displayMoneyFormat($product['netTotal']) : 0;
@@ -26,11 +26,12 @@ foreach ($products as $index => $product) {
         foreach ($product["shipping_rates"] as $skey => $sval) {
             $country_code = empty($sval["country_code"]) ? "" : " (" . $sval["country_code"] . ")";
             $product["shipping_free_availbilty"];
-            if ($product['shop_eligible_for_free_shipping'] > 0 && $product['psbs_user_id'] > 0) {
+            /* if ($product['shop_eligible_for_free_shipping'] > 0 && $product['psbs_user_id'] > 0) {
                 $shipping_charges = Labels::getLabel('LBL_Free_Shipping', $siteLangId);
             } else {
                 $shipping_charges = $product["shipping_free_availbilty"] == 0 ? "+" . CommonHelper::displayMoneyFormat($sval['pship_charges']) : 0;
-            }
+            } */
+            $shipping_charges = CommonHelper::displayMoneyFormat($sval['pship_charges']);
             $shippingDurationTitle = ShippingDurations::getShippingDurationTitle($sval, $siteLangId);
             $shipping_options[$i]['title'] =  $sval["scompany_name"] ." - " . $shippingDurationTitle . $country_code . " (" . $shipping_charges . ")";
             $shipping_options[$i]['value'] =  $sval['pship_id'];
@@ -66,7 +67,7 @@ foreach ($products as $index => $product) {
             case ShippingMethods::MANUAL_SHIPPING:
                 $shippinhMethodArr['rates'] = $shipping_options;
                 break;
-            case ShippingMethods::SHIPSTATION_SHIPPING:
+            case ShippingMethods::SHIPPING_SERVICES:
                 $shippinhMethodArr['rates'] = $shipStation;
                 break;
         }

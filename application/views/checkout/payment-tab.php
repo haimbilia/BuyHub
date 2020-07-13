@@ -2,10 +2,15 @@
 <?php $frm->setFormTagAttribute('class', 'form form--normal');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
-$frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);'); ?>
+$frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);'); 
+
+$pmethodName = $paymentMethod["plugin_name"];
+$pmethodDescription = $paymentMethod["plugin_description"];
+$pmethodCode = $paymentMethod["plugin_code"];
+?>
 <div class="">
-    <p><strong><?php echo sprintf(Labels::getLabel('LBL_Pay_using_Payment_Method', $siteLangId), $paymentMethod["pmethod_name"])?>:</strong></p><br />
-    <p><?php echo $paymentMethod["pmethod_description"]?></p><br />
+    <p><strong><?php echo sprintf(Labels::getLabel('LBL_Pay_using_Payment_Method', $siteLangId), $pmethodName)?>:</strong></p><br />
+    <p><?php echo $pmethodDescription; ?></p><br />
     <?php if (!isset($error)) {
         echo $frm->getFormHtml();
     }
@@ -26,12 +31,3 @@ $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);'); ?>
         });
     }
 </script>
-<?php 
-$siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
-$secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
-if (!empty($siteKey) && !empty($secretKey) && 'cashondelivery' == strtolower($paymentMethod['pmethod_code'])) {?>
-    <script src='https://www.google.com/recaptcha/api.js?render=<?php echo $siteKey; ?>'></script>
-    <script>
-        googleCaptcha();
-    </script>
-<?php } ?>

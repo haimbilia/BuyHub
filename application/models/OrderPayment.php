@@ -74,8 +74,11 @@ class OrderPayment extends Orders
         "customer_phone" => $userInfo["user_phone"],
         "order_currency_code" => $orderCurrencyCode,
         "order_type" => $orderInfo['order_type'],
+        "order_tax_charged" => $orderInfo["order_tax_charged"],
         "order_is_paid" => $orderInfo["order_is_paid"],
         "order_language" => $orderInfo["order_language_code"],
+        "order_language_id" => $orderInfo["order_language_id"],
+        "order_site_commission" => $orderInfo["order_site_commission"],
         "site_system_name" => FatApp::getConfig("CONF_WEBSITE_NAME_" . $orderInfo["order_language_id"]),
         "site_system_admin_email" => FatApp::getConfig("CONF_SITE_OWNER_EMAIL", FatUtility::VAR_STRING, ''),
         "order_wallet_amount_charge" => $orderInfo['order_wallet_amount_charge'],
@@ -293,12 +296,12 @@ class OrderPayment extends Orders
         return true;
     }
 
-    public function addOrderPaymentComments($comments)
+    public function addOrderPaymentComments($comments, $notify = false)
     {
         $paymentOrderId = $this->paymentOrderId;
         $orderInfo = $this->attributes;
         if (!empty($orderInfo)) {
-            $this->addOrderPaymentHistory($paymentOrderId, Orders::ORDER_IS_PENDING, $comments, false);
+            $this->addOrderPaymentHistory($paymentOrderId, Orders::ORDER_IS_PENDING, $comments, $notify);
         } else {
             $this->error = Labels::getLabel('MSG_Invalid_Order', $this->commonLangId);
             return false;

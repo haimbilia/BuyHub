@@ -2,36 +2,36 @@
 
 foreach ($upsellProducts as $index => $btProduct) {
     $uploadedTime = AttachedFile::setTimeParam($btProduct['product_updated_on']);
-    $upsellProducts[$index]['product_image_url'] = FatCache::getCachedUrl(CommonHelper::generateFullUrl('image', 'product', array($btProduct['product_id'], "THUMB", $btProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], "THUMB", $btProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price'], false, false, false);
     $upsellProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($btProduct['theprice'], false, false, false);
 }
 
 foreach ($relatedProductsRs as $index => $rProduct) {
     $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']);
-    $relatedProductsRs[$index]['product_image_url'] = FatCache::getCachedUrl(CommonHelper::generateFullUrl('image', 'product', array($rProduct['product_id'], "THUMB", $rProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], "THUMB", $rProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price'], false, false, false);
     $relatedProductsRs[$index]['theprice'] = CommonHelper::displayMoneyFormat($rProduct['theprice'], false, false, false);
 }
 
 foreach ($recommendedProducts as $index => $recProduct) {
     $uploadedTime = AttachedFile::setTimeParam($recProduct['product_updated_on']);
-    $recommendedProducts[$index]['product_image_url'] = FatCache::getCachedUrl(CommonHelper::generateFullUrl('image', 'product', array($recProduct['product_id'], "THUMB", $recProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], "THUMB", $recProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price'], false, false, false);
     $recommendedProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($recProduct['theprice'], false, false, false);
 }
 
 foreach ($recentlyViewed as $index => $recViewed) {
     $uploadedTime = AttachedFile::setTimeParam($recViewed['product_updated_on']);
-    $recentlyViewed[$index]['product_image_url'] = FatCache::getCachedUrl(CommonHelper::generateFullUrl('image', 'product', array($recViewed['product_id'], "THUMB", $recViewed['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], "THUMB", $recViewed['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price'], false, false, false);
     $recentlyViewed[$index]['theprice'] = CommonHelper::displayMoneyFormat($recViewed['theprice'], false, false, false);
 }
 
 foreach ($productImagesArr as $afile_id => $image) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-    $originalImgUrl = FatCache::getCachedUrl(CommonHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'] )).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $mainImgUrl = FatCache::getCachedUrl(CommonHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'] )).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $productImagesArr[$afile_id]['product_image_url'] = $mainImgUrl;
 }
 
@@ -128,10 +128,10 @@ if (!empty($product)) {
     $product['youtubeUrlThumbnail'] = '';
     if (!empty($product['product_youtube_video'])) {
         $youtubeVideoUrl = $product['product_youtube_video'];
-        $videoCode = CommonHelper::parseYouTubeurl($youtubeVideoUrl);
+        $videoCode = UrlHelper::parseYouTubeurl($youtubeVideoUrl);
         $product['youtubeUrlThumbnail'] = 'https://img.youtube.com/vi/'.$videoCode.'/hqdefault.jpg';
     }
-    $product['productUrl'] = CommonHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
+    $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
 }
 
 $product['selprod_return_policies'] = !empty($product['selprod_return_policies']) ? $product['selprod_return_policies'] : (object)array();
@@ -146,6 +146,37 @@ if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr']))
     }
 }
 
+$productDetailPageBanner = [];
+if (isset($banners['Product_Detail_Page_Banner']) && $banners['Product_Detail_Page_Banner']['blocation_active'] && count($banners['Product_Detail_Page_Banner']['banners'])) {
+    foreach ($banners['Product_Detail_Page_Banner']['banners'] as &$val) {
+        $bannerImageUrl = '';
+        if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId)) {
+            continue;
+        } else {
+            $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId);
+            foreach ($slideArr as $slideScreen) {
+                switch ($slideScreen['afile_screen']) {
+                    case applicationConstants::SCREEN_MOBILE:
+                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE));
+                        break;
+                    case applicationConstants::SCREEN_IPAD:
+                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD));
+                        break;
+                    case applicationConstants::SCREEN_DESKTOP:
+                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP));
+                        break;
+                }
+            }
+            $val['banner_image_url'] = $bannerImageUrl;
+            $bannerUrl = UrlHelper::generateFullUrl('Banner', 'url', array($val['banner_id']));
+            $urlTypeData = CommonHelper::getUrlTypeData($bannerUrl);
+
+            $val['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $bannerUrl : $urlTypeData['recordId']);
+            $val['banner_url_type'] = $urlTypeData['urlType'];
+        }
+    }
+    $productDetailPageBanner = $banners['Product_Detail_Page_Banner']['banners'];
+}
 
 $data = array(
     'reviews' => empty($reviews) ? (object)array() : $reviews,
@@ -157,7 +188,7 @@ $data = array(
         'title' => Labels::getLabel('LBL_Specifications', $siteLangId),
         'data' => $productSpecifications,
     ),
-    'banners' => $banners,
+    'banners' => $productDetailPageBanner,
     'product' => array(
         'title' => Labels::getLabel('LBL_Detail', $siteLangId),
         'data' => empty($product) ? (object)array() : $product,

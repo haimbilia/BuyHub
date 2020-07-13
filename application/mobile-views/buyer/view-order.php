@@ -37,7 +37,7 @@ foreach ($childArr as $index => $childOrder) {
     $rating = isset($childArr[$index]['prod_rating']) ? $childArr[$index]['prod_rating'] : 0;
     $childArr[$index]['prod_rating'] =  (1 == $defaultOrderStatus || (isset($childArr[$index]['spreview_status']) && $childArr[$index]['spreview_status'] == 1 )) ? $rating : 0;
     $childArr[$index]['reviewsAllowed'] =  $reviewAllowed;
-    $childArr[$index]['product_image_url'] = CommonHelper::generateFullUrl('image', 'product', array($childOrder['selprod_product_id'], "THUMB", $childOrder['op_selprod_id'], 0, $siteLangId));
+    $childArr[$index]['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($childOrder['selprod_product_id'], "THUMB", $childOrder['op_selprod_id'], 0, $siteLangId));
 
     if ($childOrder['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
         $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true))) ? 1 : 0;
@@ -117,17 +117,17 @@ foreach ($childArr as $index => $childOrder) {
         'value' => CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder)),
     );
 
-    $paymentMethodName = $childOrder['pmethod_name']?:$childOrder['pmethod_identifier'];
+    $paymentMethodName = $childOrder['plugin_name']?:$childOrder['plugin_identifier'];
     if (0 < $childOrder['order_pmethod_id'] && 0 < $childOrder['order_is_wallet_selected']) {
         $paymentMethodName .= ' + ';
     }
     if (0 < $childOrder['order_is_wallet_selected']) {
         $paymentMethodName .= Labels::getLabel("LBL_Wallet", $siteLangId);
     }
-    $childArr[$index]['pmethod_name'] = $paymentMethodName;
+    $childArr[$index]['plugin_name'] = $paymentMethodName;
 
     $orderObj = new Orders($childOrder['order_id']);
-    if ($childOrder['pmethod_code'] == 'CashOnDelivery') {
+    if ($childOrder['plugin_code'] == 'CashOnDelivery') {
         $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
     } else {
         $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $childOrder['op_product_type']);

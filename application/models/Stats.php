@@ -12,7 +12,7 @@ class Stats extends MyAppModel
     {
         $srch = new SearchBase(Orders::DB_TBL_ORDER_PRODUCTS, $alias);
         $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', $alias . '.op_order_id = ' . $alias . 'temp.order_id', $alias . 'temp');
-        $srch->joinTable(PaymentMethods::DB_TBL, 'LEFT OUTER JOIN', $alias . 'temp.order_pmethod_id = ' . $alias . 'pm.pmethod_id', $alias . 'pm');
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', $alias . 'temp.order_pmethod_id = ' . $alias . 'pm.plugin_id', $alias . 'pm');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
@@ -45,7 +45,7 @@ class Stats extends MyAppModel
         }
 
         $cnd = $srch->addCondition($alias . 'temp.order_is_paid', '=', Orders::ORDER_IS_PAID);
-        $cnd->attachCondition($alias . 'pm.pmethod_code', '=', 'cashondelivery');
+        $cnd->attachCondition($alias . 'pm.plugin_code', '=', 'CashOnDelivery');
 
         return     $srch;
     }

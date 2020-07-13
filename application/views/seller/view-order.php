@@ -21,7 +21,7 @@ if (!$print) {
                 <div class="btn-group">
                     <ul class="actions">
                         <li>
-                            <a href="<?php echo CommonHelper::generateUrl('seller', 'cancelOrder', array($orderDetail['op_id']));?>" class="icn-highlighted" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId);?>"><i
+                            <a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($orderDetail['op_id']));?>" class="icn-highlighted" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId);?>"><i
                                     class="fas fa-times"></i></a>
                         </li>
                     </ul>
@@ -38,7 +38,7 @@ if (!$print) {
                     <div class="">
                         <iframe src="<?php echo Fatutility::generateUrl('seller', 'viewOrder', $urlParts) . '/print'; ?>" name="frame" style="display:none"></iframe>
                         <a href="javascript:void(0)" onclick="frames['frame'].print()" class="btn btn--primary btn--sm no-print"><?php echo Labels::getLabel('LBL_Print', $siteLangId); ?></a>
-                        <a href="<?php echo CommonHelper::generateUrl('Seller', 'sales');?>" class="btn btn-outline-primary  btn--sm no-print"><?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId);?></a>
+                        <a href="<?php echo UrlHelper::generateUrl('Seller', 'sales');?>" class="btn btn-outline-primary  btn--sm no-print"><?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId);?></a>
                     </div>
                     <?php } ?>
                 </div>
@@ -50,7 +50,7 @@ if (!$print) {
                                 <?php
                                 $selected_method = '';
                                 if ($orderDetail['order_pmethod_id'] > 0) {
-                                    $selected_method.= CommonHelper::displayNotApplicable($siteLangId, $orderDetail["pmethod_name"]);
+                                    $selected_method.= CommonHelper::displayNotApplicable($siteLangId, $orderDetail["plugin_name"]);
                                 }
                                 if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     $selected_method.= ($selected_method!='') ? ' + '.Labels::getLabel("LBL_Wallet", $siteLangId) : Labels::getLabel("LBL_Wallet", $siteLangId);
@@ -61,8 +61,8 @@ if (!$print) {
                                 <p><strong><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId);?>: </strong><?php echo $selected_method;?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Status', $siteLangId);?>: </strong>
                                 <?php echo Orders::getOrderPaymentStatusArr($siteLangId)[$orderDetail['order_is_paid']];
-                                if ('' != $orderDetail['pmethod_name'] && 'CashOnDelivery' == $orderDetail['pmethod_code']) {
-                                    echo ' ('.$orderDetail['pmethod_name'].' )';
+                                if ('' != $orderDetail['plugin_name'] && 'CashOnDelivery' == $orderDetail['plugin_code']) {
+                                    echo ' ('.$orderDetail['plugin_name'].' )';
                                 } ?>
                                 </p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Cart_Total', $siteLangId);?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL'), true, false, true, false, true);?></p>
@@ -132,13 +132,13 @@ if (!$print) {
                                     <?php
                                     $prodOrBatchUrl = 'javascript:void(0)';
                                     if ($orderDetail['op_is_batch']) {
-                                        $prodOrBatchUrl = CommonHelper::generateUrl('Products', 'batch', array($orderDetail['op_selprod_id']));
-                                        $prodOrBatchImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('image', 'BatchProduct', array($orderDetail['op_selprod_id'],$siteLangId, "SMALL"), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($orderDetail['op_selprod_id']));
+                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($orderDetail['op_selprod_id'],$siteLangId, "SMALL"), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
                                     } else {
                                         if (Product::verifyProductIsValid($orderDetail['op_selprod_id']) == true) {
-                                            $prodOrBatchUrl = CommonHelper::generateUrl('Products', 'view', array($orderDetail['op_selprod_id']));
+                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($orderDetail['op_selprod_id']));
                                         }
-                                        $prodOrBatchImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('image', 'product', array($orderDetail['selprod_product_id'], "SMALL", $orderDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($orderDetail['selprod_product_id'], "SMALL", $orderDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
                                     }  ?>
                                         <figure class="item__pic"><a href="<?php echo $prodOrBatchUrl;?>"><img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $orderDetail['op_product_name'];?>"
                                                     alt="<?php echo $orderDetail['op_product_name']; ?>"></a></figure>
@@ -335,8 +335,8 @@ if (!$print) {
                                         $lang_name = $languages[$row['afile_lang_id']];
                                     }
 
-                                    $fileName = '<a href="'.CommonHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'">'.$row['afile_name'].'</a>';
-                                    $downloads = '<li><a href="'.CommonHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'"><i class="fa fa-download"></i></a></li>';
+                                    $fileName = '<a href="'.UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'">'.$row['afile_name'].'</a>';
+                                    $downloads = '<li><a href="'.UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'"><i class="fa fa-download"></i></a></li>';
 
                                     $expiry = Labels::getLabel('LBL_N/A', $siteLangId) ;
                                     if ($row['expiry_date']!='') {
@@ -378,8 +378,8 @@ if (!$print) {
                                 </tr>
                                 <?php $sr_no = 1;
                                 foreach ($digitalDownloadLinks as $key => $row) {
-                                    /* $fileName = '<a href="'.CommonHelper::generateUrl('Seller','downloadDigitalFile',array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'">'.$row['afile_name'].'</a>'; */
-                                    /* $downloads = '<li><a href="'.CommonHelper::generateUrl('Seller','downloadDigitalFile',array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'"><i class="fa fa-download"></i></a></li>'; */
+                                    /* $fileName = '<a href="'.UrlHelper::generateUrl('Seller','downloadDigitalFile',array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'">'.$row['afile_name'].'</a>'; */
+                                    /* $downloads = '<li><a href="'.UrlHelper::generateUrl('Seller','downloadDigitalFile',array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'"><i class="fa fa-download"></i></a></li>'; */
 
                                     $expiry = Labels::getLabel('LBL_N/A', $siteLangId) ;
                                     if ($row['expiry_date']!='') {

@@ -7,7 +7,7 @@ if (isset($signUpWithPhone) && 0 < $signUpWithPhone) {
     $onSubmitFunctionName = 'return registerWithPhone';
 }
 
-$registerFrm->setFormTagAttribute('action', CommonHelper::generateUrl('GuestUser', 'register'));
+$registerFrm->setFormTagAttribute('action', UrlHelper::generateUrl('GuestUser', 'register'));
 
 if ($onSubmitFunctionName) {
     $registerFrm->setValidatorJsObjectName('SignUpValObj');
@@ -93,7 +93,7 @@ echo $registerFrm->getFormTag();
                     <?php echo sprintf(
                         Labels::getLabel('LBL_I_agree_to_the_terms_conditions', $siteLangId),
                         "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . '</a>'
-                    ) ?>
+                    ); ?>
                     </label>
                     <?php if ($registerFrm->getField('user_newsletter_signup')) { ?>
                     <span class="gap"></span>

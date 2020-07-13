@@ -8,7 +8,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         parent::__construct($action);
         if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl());
+            FatApp::redirectUser(UrlHelper::generateUrl());
         }
         $user_id = 0;
         if (!UserAuthentication::isUserLogged() || !User::canViewSupplierTab()) {
@@ -17,7 +17,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             if (FatUtility::isAjaxCall()) {
                 FatUtility::dieWithError(Message::getHtml());
             }
-            FatApp::redirectUser(CommonHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
         }
         $user_id = $this->userParentId;
         $this->scartObj = new SubscriptionCart($user_id, $this->siteLangId);
@@ -54,12 +54,12 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         if (!$this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true)) {
             Message::addErrorMessage(Labels::getLabel('MSG_YOU_DO_NOT_HAVE_A_SUFFICIENT_PERMISSION_TO_CHANGE_PLAN', $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl('seller', 'packages'));
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', 'packages'));
         }
 
         $criteria = array('hasSubscription' => true);
         if (!$this->isEligibleForNextStep($criteria)) {
-            FatApp::redirectUser(CommonHelper::generateUrl('seller', 'packages'));
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', 'packages'));
         }
         $obj = new Extrapage();
         $headerData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_HEADER_BLOCK, $this->siteLangId);
@@ -85,7 +85,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
-            $termsAndConditionsLinkHref = CommonHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+            $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
         } else {
             $termsAndConditionsLinkHref = 'javascript:void(0)';
         }
@@ -181,7 +181,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
         $pmSrch->doNotCalculateRecords();
         $pmSrch->doNotLimitRecords();
-        $pmSrch->addMultipleFields(array('pmethod_id', 'IFNULL(pmethod_name, pmethod_identifier) as pmethod_name', 'pmethod_code', 'pmethod_description'));
+        $pmSrch->addMultipleFields(Plugin::ATTRS);
         $pmRs = $pmSrch->getResultSet();
         $paymentMethods = FatApp::getDb()->fetchAll($pmRs);
 
@@ -359,21 +359,21 @@ class SubscriptionCheckoutController extends LoggedUserController
         /* $orderInfo = $orderObj->getOrderById( $order_id, $this->siteLangId, array('payment_status' => 0) ); */
         if (!$orderInfo) {
             $this->scartObj->clear();
-            FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'viewOrder', array($order_id)));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrder', array($order_id)));
         }
         $WalletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
         $confirmPaymentFrm = $this->getConfirmPaymentForm($this->siteLangId);
         $userWalletBalance = User::getUserBalance($userId);
 
         if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary['cartWalletSelected']) {
-            $WalletPaymentForm->addFormTagAttribute('action', CommonHelper::generateUrl('WalletPay', 'Charge', array($order_id)));
+            $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id)));
             $WalletPaymentForm->fill(array('order_id' => $order_id));
             $WalletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
         }
 
         if ($cartSummary['orderNetAmount'] == 0 || $cartSummary['orderNetAmount'] == 0) {
-            $confirmPaymentFrm->addFormTagAttribute('action', CommonHelper::generateUrl('ConfirmPay', 'Charge', array($order_id)));
+            $confirmPaymentFrm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id)));
             $confirmPaymentFrm->fill(array('order_id' => $order_id));
             $confirmPaymentFrm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $confirmPaymentFrm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm', $this->siteLangId));
@@ -402,11 +402,11 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->set('cartSummary', $cartSummary);
         $this->_template->render(false, false);
     }
-    public function paymentTab($order_id, $pmethod_id)
+    public function paymentTab($order_id, $plugin_id)
     {
         $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
-        $pmethod_id = FatUtility::int($pmethod_id);
-        if (!$pmethod_id) {
+        $plugin_id = FatUtility::int($plugin_id);
+        if (!$plugin_id) {
             FatUtility::dieWithError(Labels::getLabel("MSG_Invalid_Request!", $this->siteLangId));
         }
 
@@ -435,21 +435,21 @@ class SubscriptionCheckoutController extends LoggedUserController
         $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
         $pmSrch->doNotCalculateRecords();
         $pmSrch->doNotLimitRecords();
-        $pmSrch->addMultipleFields(array('pmethod_id', 'IFNULL(pmethod_name, pmethod_identifier) as pmethod_name', 'pmethod_code', 'pmethod_description'));
-        $pmSrch->addCondition('pmethod_id', '=', $pmethod_id);
+        $pmSrch->addMultipleFields(Plugin::ATTRS);
+        $pmSrch->addCondition('plugin_id', '=', $plugin_id);
         $pmRs = $pmSrch->getResultSet();
         $paymentMethod = FatApp::getDb()->fetch($pmRs);
         if (!$paymentMethod) {
             FatUtility::dieWithError(Labels::getLabel("MSG_Selected_Payment_method_not_found!", $this->siteLangId));
         }
 
-        $frm = $this->getPaymentTabForm($this->siteLangId, $paymentMethod['pmethod_code']);
-        $controller = $paymentMethod['pmethod_code'] . 'Pay';
-        $frm->setFormTagAttribute('action', CommonHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'])));
+        $frm = $this->getPaymentTabForm($this->siteLangId, $paymentMethod['plugin_code']);
+        $controller = $paymentMethod['plugin_code'] . 'Pay';
+        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'])));
         $frm->fill(
             array(
             'order_id' => $order_id,
-            'pmethod_id' => $pmethod_id
+            'plugin_id' => $plugin_id
             )
         );
 
@@ -549,10 +549,10 @@ class SubscriptionCheckoutController extends LoggedUserController
         $userWalletBalance = User::getUserBalance($user_id);
 
         $post = FatApp::getPostedData();
-        $pmethod_id = FatApp::getPostedData('pmethod_id', FatUtility::VAR_INT, 0);
+        $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
 
 
-        if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary['cartWalletSelected'] && !$pmethod_id) {
+        if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary['cartWalletSelected'] && !$plugin_id) {
             $frm = $this->getWalletPaymentForm($this->siteLangId);
         } else {
             $frm = $this->getPaymentTabForm($this->siteLangId);
@@ -581,12 +581,12 @@ class SubscriptionCheckoutController extends LoggedUserController
         }
 
 
-        if ($cartSummary['orderPaymentGatewayCharges'] == 0 && $pmethod_id) {
+        if ($cartSummary['orderPaymentGatewayCharges'] == 0 && $plugin_id) {
             Message::addErrorMessage(Labels::getLabel('MSG_Amount_for_payment_gateway_must_be_greater_than_zero.', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        if ($cartSummary['cartWalletSelected'] && $userWalletBalance >= $cartSummary['orderNetAmount'] && !$pmethod_id) {
+        if ($cartSummary['cartWalletSelected'] && $userWalletBalance >= $cartSummary['orderNetAmount'] && !$plugin_id) {
             $this->_template->render(false, false, 'json-success.php');
             exit;
         }
@@ -595,9 +595,9 @@ class SubscriptionCheckoutController extends LoggedUserController
             exit;
         }
 
-        $paymentMethodRow = PaymentMethods::getAttributesById($pmethod_id);
+        $paymentMethodRow = Plugin::getAttributesById($plugin_id);
 
-        if (!$paymentMethodRow || $paymentMethodRow['pmethod_active'] != applicationConstants::ACTIVE && $cartSummary['orderPaymentGatewayCharges'] > 0) {
+        if (!$paymentMethodRow || $paymentMethodRow['plugin_active'] != Plugin::ACTIVE && $cartSummary['orderPaymentGatewayCharges'] > 0) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Payment_method,_Please_contact_Webadmin.", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -610,9 +610,9 @@ class SubscriptionCheckoutController extends LoggedUserController
 
 
 
-        if ($pmethod_id) {
+        if ($plugin_id) {
             $_SESSION['order_type'] = Orders::ORDER_SUBSCRIPTION;
-            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $pmethod_id));
+            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
             $this->scartObj->clear();
             $this->scartObj->updateUserSubscriptionCart();
         }
@@ -635,7 +635,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm_Payment', $langId));
         $frm->addHiddenField('', 'order_id');
-        $frm->addHiddenField('', 'pmethod_id');
+        $frm->addHiddenField('', 'plugin_id');
         return $frm;
     }
 
@@ -849,7 +849,7 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         if (!$this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true)) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'subscriptions'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
         }
         $statusArr = Orders::getActiveSubscriptionStatusArr();
         $endDate = date("Y-m-d");
@@ -873,17 +873,17 @@ class SubscriptionCheckoutController extends LoggedUserController
 
         if (empty($activeSub) && count($activeSub) == 0) {
             Message::addErrorMessage(Labels::getLabel("MSG_Subscription_is_not_active", $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'subscriptions'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
         }
 
         $userId = $activeSub['order_user_id'];
         $userBalance = User::getUserBalance($userId);
 
         if ($userBalance < $activeSub['ossubs_price']) {
-            $low_bal_msg = str_replace("{clickhere}", '<a href="' . CommonHelper::generateUrl('account', 'credits') . '">' . Labels::getLabel('LBL_Click_Here', $this->siteLangId) . '</a>', Labels::getLabel('MSG_Please_Maintain_your_wallet_balance_to_renew_subscription_{clickhere}', $this->siteLangId));
+            $low_bal_msg = str_replace("{clickhere}", '<a href="' . UrlHelper::generateUrl('account', 'credits') . '">' . Labels::getLabel('LBL_Click_Here', $this->siteLangId) . '</a>', Labels::getLabel('MSG_Please_Maintain_your_wallet_balance_to_renew_subscription_{clickhere}', $this->siteLangId));
 
             Message::addErrorMessage($low_bal_msg);
-            FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'subscriptions'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
         }
 
         $orderData = array();
@@ -1030,11 +1030,11 @@ class SubscriptionCheckoutController extends LoggedUserController
             $orderPaymentObj = new OrderPayment($order_id);
             if ($orderPaymentObj->chargeUserWallet($activeSub['ossubs_price'])) {
                 Message::addMessage(Labels::getLabel("MSG_Subscription_Successfully_renewed", $this->siteLangId));
-                FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'subscriptions'));
+                FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
             }
         }
         Message::addErrorMessage($orderObj->getError());
-        FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'subscriptions'));
+        FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
 
         /* ] */
         /* ] */

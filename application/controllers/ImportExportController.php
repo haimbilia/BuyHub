@@ -5,12 +5,14 @@ class ImportExportController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        if (!Shop::isShopActive($this->userParentId, 0, true)) {
-            FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'shop'));
+        $shop = new Shop(0, $this->userParentId);
+        if (!$shop->isActive()) {
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
+        
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl('Seller', 'Packages'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
         $this->userPrivilege->canViewImportExport();
     }
@@ -467,6 +469,12 @@ class ImportExportController extends SellerBaseController
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $langId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_duration_id_instead_of_shipping_duration_identifier_in_worksheets", $langId) . '</small>';
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_profile_id_instead_of_shipping_profile_identifier", $langId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
+        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_profile_id_instead_of_shipping_profile_identifier_in_worksheets", $langId) . '</small>';
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_package_id_instead_of_shipping_package_identifier", $langId), 'CONF_USE_SHIPPING_PACKAGE_ID', 1, array(), false, 0);
+        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_package_id_instead_of_shipping_package_identifier_in_worksheets", $langId) . '</small>';
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $langId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_1_for_yes_0_for_no_for_status_type_data", $langId) . '</small>';

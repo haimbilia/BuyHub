@@ -9,7 +9,7 @@ $arr_flds = array(
     'order_is_paid'=>Labels::getLabel('LBL_Payment_Status', $adminLangId),
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
 );
-if($deletedOrders){
+if ($deletedOrders) {
     unset($arr_flds['order_is_paid']);
 }
 $tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table table--hovered table-responsive'));
@@ -17,7 +17,7 @@ $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
-$sr_no = $page==1?0:$pageSize*($page-1);
+$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($ordersList as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
@@ -27,21 +27,21 @@ foreach ($ordersList as $sn => $row) {
         switch ($key) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
-            break;
+                break;
             case 'order_id':
-                $td->appendElement('a', array('target' => '_blank', 'href' => CommonHelper::generateUrl('Orders', 'view', array($row[$key]))), $row[$key], true);
-            break;
+                $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('Orders', 'view', array($row[$key]))), $row[$key], true);
+                break;
             case 'buyer_user_name':
                 if ($canViewUsers) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("'.CommonHelper::generateUrl('Users').'", '.$row['user_id'].')'), $row[$key], true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("'.UrlHelper::generateUrl('Users').'", '.$row['user_id'].')'), $row[$key], true);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
                 $td->appendElement('plaintext', array(), '<br/>'.$row['buyer_email'], true);
-            break;
+                break;
             case 'order_net_amount':
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row['order_net_amount'], true, true));
-            break;
+                break;
             case 'order_date_added':
                 $td->appendElement('plaintext', array(), FatDate::format(
                     $row[$key],
@@ -49,28 +49,28 @@ foreach ($ordersList as $sn => $row) {
                     true,
                     FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())
                 ));
-            break;
+                break;
             case 'order_is_paid':
                 $cls = 'label-info';
                 switch ($row[$key]) {
                     case Orders::ORDER_IS_PENDING:
                         $cls = 'label-info';
-                    break;
+                        break;
                     case Orders::ORDER_IS_PAID:
                         $cls = 'label-success';
-                    break;
+                        break;
                     case Orders::ORDER_IS_CANCELLED:
                         $cls = 'label-danger';
-                    break;
+                        break;
                 }
 
                 $value = Orders::getOrderPaymentStatusArr($adminLangId)[$row[$key]];
-                if ('' != $row['pmethod_name'] && 'CashOnDelivery' == $row['pmethod_code']) {
-                    $value.= ' ('.$row['pmethod_name'].' )';
+                if ('' != $row['plugin_name'] && 'CashOnDelivery' == $row['plugin_code']) {
+                    $value.= ' ('.$row['plugin_name'].' )';
                 }
 
                 $td->appendElement('span', array('class'=>'label '.$cls), $value);
-            break;
+                break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class"=>"actions actions--centered"));
 
@@ -80,12 +80,12 @@ foreach ($ordersList as $sn => $row) {
                 $innerUl=$innerDiv->appendElement('ul', array('class'=>'linksvertical'));
 
                 $innerLi=$innerUl->appendElement('li');
-                $innerLi->appendElement('a', array('href'=>CommonHelper::generateUrl('Orders', 'view', array($row['order_id'])),'class'=>'button small green redirect--js','title'=>Labels::getLabel('LBL_View_Order_Detail', $adminLangId)), Labels::getLabel('LBL_View_Order_Detail', $adminLangId), true);
+                $innerLi->appendElement('a', array('href'=>UrlHelper::generateUrl('Orders', 'view', array($row['order_id'])),'class'=>'button small green redirect--js','title'=>Labels::getLabel('LBL_View_Order_Detail', $adminLangId)), Labels::getLabel('LBL_View_Order_Detail', $adminLangId), true);
 
 
                 if (!$row['order_deleted'] && $canViewSellerOrders) {
                     $innerLi=$innerUl->appendElement('li');
-                    $innerLi->appendElement('a', array('href'=>CommonHelper::generateUrl('SellerOrders', 'index', array($row['order_id'])),'class'=>'button small green redirect--js','title'=>Labels::getLabel('LBL_View_seller_Order', $adminLangId),'target'=>'_new'), Labels::getLabel('LBL_View_seller_Order', $adminLangId), true);
+                    $innerLi->appendElement('a', array('href'=>UrlHelper::generateUrl('SellerOrders', 'index', array($row['order_id'])),'class'=>'button small green redirect--js','title'=>Labels::getLabel('LBL_View_seller_Order', $adminLangId),'target'=>'_new'), Labels::getLabel('LBL_View_seller_Order', $adminLangId), true);
                 }
                 if (!$row['order_deleted'] && $canEdit) {
                     if ($row['order_is_paid'] == Orders::ORDER_IS_PAID) {
@@ -98,10 +98,10 @@ foreach ($ordersList as $sn => $row) {
                         $innerLi->appendElement('a', array('href'=>'javascript:void(0)','onclick' => "deleteOrder('".$row['order_id']."')",'class'=>'button small green','title'=>Labels::getLabel('LBL_Delete_Order', $adminLangId),'target'=>'_new'), Labels::getLabel('LBL_Delete_Order', $adminLangId), true);
                     }
                 }
-            break;
+                break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
-            break;
+                break;
         }
     }
 }
@@ -115,4 +115,3 @@ echo FatUtility::createHiddenFormFromData($postedData, array(
 ));
 $pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'pageSize'=>$pageSize,'recordCount'=>$recordCount,'adminLangId'=>$adminLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-?>

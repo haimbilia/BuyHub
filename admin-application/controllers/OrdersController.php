@@ -65,7 +65,7 @@ class OrdersController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
-        $srch->addMultipleFields(array('order_id', 'order_date_added', 'order_is_paid', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(pmethod_name, pmethod_identifier) as pmethod_name', 'pmethod_code', 'order_is_wallet_selected', 'order_deleted'));
+        $srch->addMultipleFields(array('order_id', 'order_date_added', 'order_is_paid', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted'));
 
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
@@ -138,7 +138,7 @@ class OrdersController extends AdminBaseController
         $srch->joinOrderBuyerUser();
         $srch->addMultipleFields(
             array('order_id', 'order_user_id', 'order_date_added', 'order_is_paid', 'order_tax_charged', 'order_site_commission',
-            'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(pmethod_name,pmethod_identifier)as pmethod_name', 'order_discount_total', 'pmethod_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted')
+            'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(plugin_name,plugin_identifier)as plugin_name', 'order_discount_total', 'plugin_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted')
         );
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
@@ -146,7 +146,7 @@ class OrdersController extends AdminBaseController
         $order = FatApp::getDb()->fetch($rs);
         if (!$order) {
             Message::addErrorMessage(Labels::getLabel('MSG_Order_Data_Not_Found', $this->adminLangId));
-            FatApp::redirectUser(CommonHelper::generateUrl("Orders"));
+            FatApp::redirectUser(UrlHelper::generateUrl("Orders"));
         }
 
 
@@ -173,7 +173,8 @@ class OrdersController extends AdminBaseController
 
         foreach ($order['products'] as $opId => $opVal) {
             $order['products'][$opId]['charges'] = $charges[$opId];
-            $taxOptions = json_decode($opVal['op_product_tax_options'], true);
+            $opChargesLog = new OrderProductChargeLog($opId);
+            $taxOptions = $opChargesLog->getData($this->adminLangId);
             $order['products'][$opId]['taxOptions'] = $taxOptions;
         }
 
@@ -183,8 +184,9 @@ class OrdersController extends AdminBaseController
 
         $order['comments'] = $orderObj->getOrderComments($this->adminLangId, array("order_id" => $order['order_id']));
         $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
-       
+
         $frm = $this->getPaymentForm($this->adminLangId, $order['order_id']);
+
         $this->set('frm', $frm);
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
         $this->set('order', $order);
@@ -223,12 +225,12 @@ class OrdersController extends AdminBaseController
 
         $srch = new OrderSearch($this->adminLangId);
         $srch->joinOrderPaymentMethod();
-        $srch->addMultipleFields(array('pmethod_code'));
+        $srch->addMultipleFields(array('plugin_code'));
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
-        if (!empty($order) && array_key_exists('pmethod_code', $order) && 'CashOnDelivery' == $order['pmethod_code']) {
+        if (!empty($order) && array_key_exists('plugin_code', $order) && 'CashOnDelivery' == $order['plugin_code']) {
             Message::addErrorMessage(Labels::getLabel('LBL_COD_orders_are_not_eligible_for_payment_status_update', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -254,7 +256,7 @@ class OrdersController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel('LBL_Error:_Please_perform_this_action_on_valid_record.', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-		
+
 		$allowedCancellationArr =  Orders::getBuyerAllowedOrderCancellationStatuses();
 		$srch = new OrderProductSearch(0, true);
         $srch->addMultipleFields(array('op.op_status_id', 'o.order_id'));
@@ -265,7 +267,7 @@ class OrdersController extends AdminBaseController
 			Message::addErrorMessage(Labels::getLabel('LBL_Error:_Orders_that_are_completed_cannot_be_Cancelled.', $this->adminLangId));
 			FatUtility::dieJsonError(Message::getHtml());
 		}
-		
+
         if ($order["order_is_paid"]) {
             if (!$orderObj->addOrderPaymentHistory($order_id, Orders::ORDER_IS_CANCELLED, Labels::getLabel('MSG_Order_Cancelled', $order['order_language_id']), 1)) {
                 Message::addErrorMessage($orderObj->getError());

@@ -4,8 +4,8 @@
         <?php if ($productImagesArr) { ?>
         <div class="js-product-gallery product-gallery" dir="<?php echo CommonHelper::getLayoutDirection();?>">
             <?php foreach ($productImagesArr as $afile_id => $image) {
-                $mainImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
-                $thumbImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg');
+                $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'] )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
             <div class=""><?php if (isset($imageGallery) && $imageGallery) { ?>
                 <a href="<?php echo $mainImgUrl; ?>" class="gallery" rel="gallery">
                     <?php } ?>
@@ -16,7 +16,7 @@
             <?php }?>
         </div>
         <?php } else {
-                    $mainImgUrl = FatCache::getCachedUrl(CommonHelper::generateUrl('Image', 'product', array(0, 'MEDIUM', 0 )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'MEDIUM', 0 )), CONF_IMG_CACHE_TIME, '.jpg'); ?>
         <div class="item__main"><img src="<?php echo $mainImgUrl; ?>"></div>
         <?php
                 } ?>
@@ -26,7 +26,7 @@
         <div class="product-detail product-description product-detail-quickview">
             <div>
                 <div class="product-description-inner">
-                    <div class="products__title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? CommonHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : CommonHelper::generateUrl('Products', 'track', array($product['promotion_record_id']))?>"><?php echo $product['selprod_title'];?></a>
+                    <div class="products__title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id']))?>"><?php echo $product['selprod_title'];?></a>
                     </div>
                     <div class="gap"></div>
                     <div class="products__price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
@@ -34,6 +34,11 @@
                         <span class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></span> <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                     <?php } ?>
                     </div>
+                    <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
+                    <div class="detail-grouping">
+                        <div class="products__category"><?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId);?></div>
+                    </div>
+                    <?php } ?>
                     <div class="divider"></div>
                     <div class="gap"></div>
                 </div>
@@ -62,7 +67,7 @@
 									<?php foreach ($option['values'] as $opVal) {
 										$isAvailable = true;
 										if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
-											$optionUrl = CommonHelper::generateUrl('Products', 'view', array($product['selprod_id']));
+											$optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
 											$selprodId = $product['selprod_id'];
 										} else {
 											$optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);

@@ -20,7 +20,7 @@
                         $innerDiv=$li->appendElement('div', array('class'=>'dropwrap'));
                         $innerUl=$innerDiv->appendElement('ul', array('class'=>'linksvertical'));
                         $innerLi=$innerUl->appendElement('li');
-                        $innerLi->appendElement('a', array('href'=>CommonHelper::generateUrl('SellerOrders'),'class'=>'button small green redirect--js','title'=>Labels::getLabel('LBL_Back_to_Orders', $adminLangId)), Labels::getLabel('LBL_Back_to_Orders', $adminLangId), true);
+                        $innerLi->appendElement('a', array('href'=>UrlHelper::generateUrl('SellerOrders'),'class'=>'button small green redirect--js','title'=>Labels::getLabel('LBL_Back_to_Orders', $adminLangId)), Labels::getLabel('LBL_Back_to_Orders', $adminLangId), true);
                         echo $ul->getHtml(); ?>
                     </div>
                     <div class="sectionbody">
@@ -45,7 +45,7 @@
                             </tr>
                             <tr>
                                 <td><?php echo $order["buyer_user_name"].' ('.$order['buyer_username'].')'; ?></td>
-                                <td><?php echo CommonHelper::displayNotApplicable($adminLangId, $order["pmethod_name"])?></td>
+                                <td><?php echo CommonHelper::displayNotApplicable($adminLangId, $order["plugin_name"])?></td>
                                 <td><?php echo CommonHelper::displayMoneyFormat($order['op_commission_charged'], true, true); ?></td>
                                 <td></td>
                             </tr>

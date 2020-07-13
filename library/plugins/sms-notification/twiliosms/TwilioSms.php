@@ -19,13 +19,17 @@ class TwilioSms extends SmsNotificationBase
         if (1 > $this->langId) {
             $this->langId = CommonHelper::getLangId();
         }
-        if (false == $this->validateSettings($langId)) {
-            return false;
-        }
     }
     
     public function send($to, $body)
     {
+        if (false == $this->validateSettings($this->langId)) {
+            return [
+                'status' => false,
+                'msg' => $this->error
+            ];
+        }
+        
         if (empty($to) || empty($body)) {
             return [
                 'status' => false,
@@ -40,7 +44,7 @@ class TwilioSms extends SmsNotificationBase
                 [
                     "body" => $body,
                     "from" => $this->settings['sender_id'],
-                    "statusCallback" => CommonHelper::generateFullUrl('SmsNotification', 'callback', [static::KEY_NAME], '', false)
+                    "statusCallback" => UrlHelper::generateFullUrl('SmsNotification', 'callback', [static::KEY_NAME], '', false)
                 ]
             );
         } catch (Exception $e) {

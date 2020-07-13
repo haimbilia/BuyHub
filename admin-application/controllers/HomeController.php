@@ -10,7 +10,6 @@ class HomeController extends AdminBaseController
         $this->canEdit = $this->objPrivilege->canEditAdminDashboard($this->admin_id, true);
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
-        include_once CONF_INSTALLATION_PATH . 'library/phpfastcache.php';
     }
 
     public function index()
@@ -22,19 +21,15 @@ class HomeController extends AdminBaseController
         $analyticArr = array(
         'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
         'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY", FatUtility::VAR_STRING, ''),
-        'redirectUri' => CommonHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
+        'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
         'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID", FatUtility::VAR_STRING, '')
         );
 
 
-        // simple Caching with:
-        phpFastCache::setup("storage", "files");
-        phpFastCache::setup("path", CONF_UPLOADS_PATH . "caching");
-        $cache = phpFastCache();
-        $dashboardInfo = $cache->get("dashboardInfo" . $this->adminLangId);
-
-        $dashboardInfo = array();
-        if ($dashboardInfo == null) {
+        // simple Caching with:        
+        $dashboardInfoCache = FatCache::get('dashboardInfoCache'.$this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        //$dashboardInfo = array();
+        if (!$dashboardInfoCache) {
             include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
             try {
                 $analytics = new Ykart_analytics($analyticArr);
@@ -158,8 +153,10 @@ class HomeController extends AdminBaseController
             $dashboardInfo['socialVisits'] = isset($socialVisits) ? $socialVisits : '';
             $dashboardInfo['conversionChatData'] = $conversionChatData;
             $dashboardInfo['conversionStats'] = $conversionStats;
-
-            $cache->set("dashboardInfo" . $this->adminLangId, $dashboardInfo, 24 * 60 * 60);
+            FatCache::set('dashboardInfoCache' . $this->adminLangId, serialize($dashboardInfo), '.txt');
+            //$cache->set("dashboardInfo" . $this->adminLangId, $dashboardInfo, 24 * 60 * 60);
+        } else {
+            $dashboardInfo =  unserialize($dashboardInfoCache);
         }
 
         //$saleStats = Stats::getTotalSalesStats();
@@ -306,15 +303,13 @@ class HomeController extends AdminBaseController
         $analyticArr = array(
         'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
         'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
-        'redirectUri' => CommonHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
+        'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
         'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
         );
-        phpFastCache::setup("storage", "files");
-        phpFastCache::setup("path", CONF_UPLOADS_PATH . "caching");
-        $cache = phpFastCache();
-
-        $result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId);
-        if ($result == null) {
+       
+        $dashboardInfoCache = FatCache::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        //$result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId);
+        if (!$dashboardInfoCache) {
             if (strtoupper($type) == 'TOP_PRODUCTS') {
                 $statsObj = new Statistics();
                 $result = $statsObj->getTopProducts($interval, $this->adminLangId, 10);
@@ -354,8 +349,10 @@ class HomeController extends AdminBaseController
                     echo $e->getMessage();
                 }
             }
-
-            $cache->set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, $result, 6 * 60 * 60);
+            FatCache::set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, serialize($result), '.txt');
+           // $cache->set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, $result, 6 * 60 * 60);
+        } else {
+            $result = unserialize($dashboardInfoCache);
         }
         $this->set('stats_type', strtoupper($type));
         $this->set('stats_info', $result);
@@ -379,7 +376,7 @@ class HomeController extends AdminBaseController
             }
         }
         Product::updateMinPrices();
-        //FatApp::redirectUser(CommonHelper::generateUrl("home"));
+        //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }
     public function setLanguage($langId = 0)
     {

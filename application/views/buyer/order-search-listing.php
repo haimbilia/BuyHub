@@ -19,7 +19,7 @@ $canReturnRefund = true;
 foreach ($orders as $sn => $order) {
     $sr_no++;
     $tr = $tbl->appendElement('tr', array( 'class' => '' ));
-    $orderDetailUrl = CommonHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'],$order['op_id']));
+    $orderDetailUrl = UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'],$order['op_id']));
 
     if ($order['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
         $canCancelOrder = (in_array($order["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true)));
@@ -63,7 +63,7 @@ foreach ($orders as $sn => $order) {
                 }
                 $txt .='</div>';
                 if ($order['totOrders'] > 1) {
-                    $txt .= '<div class="item__specification">' . Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . CommonHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_id'] . '</div>';
+                    $txt .= '<div class="item__specification">' . Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_id'] . '</div>';
                 }
                 $txt .= '</div>';
                 $td->appendElement('plaintext', array(), $txt, true);
@@ -82,8 +82,9 @@ foreach ($orders as $sn => $order) {
                 break;
             case 'status':
                 $pMethod ='';
-                if ($order['order_pmethod_id'] == PaymentSettings::CASH_ON_DELIVERY && $order['order_status'] == FatApp::getConfig('CONF_DEFAULT_ORDER_STATUS')) {
-                    $pMethod = " - " . $order['pmethod_name'] ;
+                $paymentMethodCode = Plugin::getAttributesById($order['order_pmethod_id'], 'plugin_code');
+                if (strtolower($paymentMethodCode) == 'cashondelivery' && $order['order_status'] == FatApp::getConfig('CONF_DEFAULT_ORDER_STATUS')) {
+                    $pMethod = " - " . $order['plugin_name'] ;
                 }
                 $txt = $order['orderstatus_name'] . $pMethod;
                 $td->appendElement('plaintext', array(), $txt, true);
@@ -93,7 +94,7 @@ foreach ($orders as $sn => $order) {
             case 'action':
                 $ul = $td->appendElement("ul", array("class"=>"actions"), '', true);
 
-                $opCancelUrl = CommonHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));
+                $opCancelUrl = UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));
                 $now = time(); // or your date as well
                 $orderDate = strtotime($order['order_date_added']);
                 $datediff = $now - $orderDate;
@@ -121,7 +122,7 @@ foreach ($orders as $sn => $order) {
                 }
                 $canSubmitFeedback = Orders::canSubmitFeedback($order['order_user_id'], $order['order_id'], $order['op_selprod_id']);
                 if ($canSubmitFeedback && $isValidForReview) {
-                    $opFeedBackUrl = CommonHelper::generateUrl('Buyer', 'orderFeedback', array($order['op_id']));
+                    $opFeedBackUrl = UrlHelper::generateUrl('Buyer', 'orderFeedback', array($order['op_id']));
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
@@ -133,7 +134,7 @@ foreach ($orders as $sn => $order) {
                 }
 
                 if ($canReturnRefund && ($order['return_request'] == 0 && $order['cancel_request'] == 0) && $returnAge >= $daysSpent) {
-                    $opRefundRequestUrl = CommonHelper::generateUrl('Buyer', 'orderReturnRequest', array($order['op_id']));
+                    $opRefundRequestUrl = UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($order['op_id']));
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
@@ -144,7 +145,7 @@ foreach ($orders as $sn => $order) {
                     );
                 }
 
-                $cartUrl = CommonHelper::generateUrl('cart');
+                $cartUrl = UrlHelper::generateUrl('cart');
                 $li = $ul->appendElement("li");
                 $li->appendElement(
                     'a',

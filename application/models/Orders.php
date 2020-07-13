@@ -369,6 +369,8 @@ class Orders extends MyAppModel
                 $db->deleteRecords(OrderProduct::DB_TBL_CHARGES, array('smt' => OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id = ?', 'vals' => array( $opId ) ));
                 $db->deleteRecords(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, array('smt' => 'opshipping_op_id = ?', 'vals' => array( $opId ) ));
                 $db->deleteRecords(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, array('smt' => 'opshippinglang_op_id = ?', 'vals' => array( $opId ) ));
+                $db->deleteRecords(OrderProductChargeLog::DB_TBL, array('smt' => 'opchargelog_op_id = ?', 'vals' => array( $opId ) ));
+                $db->deleteRecords(OrderProductChargeLog::DB_TBL_LANG, array('smt' => 'opchargeloglang_op_id = ?', 'vals' => array( $opId ) ));
                 $db->deleteRecords(OrderProductSpecifics::DB_TBL, array('smt' => 'ops_op_id = ?', 'vals' => array( $opId )));
             }
         }
@@ -380,6 +382,7 @@ class Orders extends MyAppModel
             $opLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_LANG);
             $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
             $opShippingLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG);
+            $opChargeLogLangObj = new TableRecord(OrderProductChargeLog::DB_TBL_LANG);
 
             $counter = 1;
             foreach ($products as $selprodId => $product) {
@@ -487,6 +490,33 @@ class Orders extends MyAppModel
                             $db->rollbackTransaction();
                             $this->error = $opShippingLangRecordObj->getError();
                             return false;
+                        }
+                    }
+                }
+                /*]*/
+
+                /* saving of products Charges log & log lang data[ */
+                $opChargeLog = new OrderProductChargeLog($op_id);
+                $prodChargeslogData = $product['productChargesLogData'];
+                if (!empty($prodChargeslogData)) {
+                    foreach ($prodChargeslogData as $id => $prodChargeslog) {
+                        $prodChargeslog['opchargelog_op_id'] = $op_id;
+                        $opChargeLog->assignValues($prodChargeslog);
+                        if (!$opChargeLog->save()) {
+                            $db->rollbackTransaction();
+                            $this->error = $opChargeLog->getError();
+                            return false;
+                        }
+                        $opChargeLogId = $opChargeLog->getMainTableRecordId();
+                        foreach ($prodChargeslog['langData'] as $langId => $langData) {
+                            $langData['opchargeloglang_opchargelog_id'] = $opChargeLogId;
+                            $langData['opchargeloglang_op_id'] = $op_id;
+                            $opChargeLogLangObj->assignValues($langData);
+                            if (!$opChargeLogLangObj->addNew()) {
+                                $db->rollbackTransaction();
+                                $this->error = $opChargeLogLangObj->getError();
+                                return false;
+                            }
                         }
                     }
                 }
@@ -954,9 +984,10 @@ class Orders extends MyAppModel
 
         $srch->joinTable(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'LEFT OUTER JOIN', 'optosu.optsu_op_id = torp.op_id', 'optosu');
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = torp.op_id', 'ops');
-        $srch->joinTable(ShippingCompanies::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_company_id = opsc.scompany_id', 'opsc');
-        $srch->joinTable(ShippingCompanies::DB_TBL_LANG, 'LEFT OUTER JOIN', 'opscl.scompanylang_scompany_id = opsc.scompany_id', 'opscl');
-        $srch->addMultipleFields(array('opshipping_by_seller_user_id,opshipping_company_id', 'IFNULL(scompany_name, scompany_identifier) as scompany_name'));
+        $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'ops_l.opshipping_op_id = ops_l.opshippinglang_op_id ops_l.opshippinglang_lang_id = ' . $langId, 'ops_l');
+       // $srch->joinTable(ShippingCompanies::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_company_id = opsc.scompany_id', 'opsc');
+        //$srch->joinTable(ShippingCompanies::DB_TBL_LANG, 'LEFT OUTER JOIN', 'opscl.scompanylang_scompany_id = opsc.scompany_id', 'opscl');
+        $srch->addMultipleFields(array('opshipping_by_seller_user_id', 'IFNULL(opshipping_carrier, opshipping_label) as scompany_name'));
 
         if (isset($criteria['seller_id'])) {
             $srch->joinTable('tbl_users', 'LEFT OUTER JOIN', 's.user_id = torp.op_selprod_user_id', 's');
@@ -1186,11 +1217,15 @@ class Orders extends MyAppModel
         $emailObj = new EmailHandler();
 
         // If order Payment status is 0 then becomes greater than 0 send main html email
+        $paymentMethodCode = Plugin::getAttributesById($orderInfo['order_pmethod_id'], 'plugin_code');
         if (!$orderInfo['order_is_paid'] && $orderPaymentStatus) {
             $emailNotify = $emailObj->orderPaymentUpdateBuyerAdmin($orderId);
-        } elseif ($orderInfo['order_pmethod_id'] == PaymentSettings::CASH_ON_DELIVERY) {
+        } elseif (strtolower($paymentMethodCode) == 'cashondelivery') {
             $emailNotify = $emailObj->cashOnDeliveryOrderUpdateBuyerAdmin($orderId);
-            $emailObj->newOrderVendor($orderId, 0, 1);
+            $emailObj->newOrderVendor($orderId, 0, PaymentSettings::PAYMENT_TYPE_COD);
+        } elseif ($orderInfo['order_pmethod_id'] == PaymentSettings::BANK_TRANSFER) {
+            $emailNotify = $emailObj->bankTranferOrderUpdateBuyerAdmin($orderId);
+            $emailObj->newOrderVendor($orderId, 0, PaymentSettings::PAYMENT_TYPE_BANK_TRANSFER);
         }
 
         // If order Payment status is 0 then becomes greater than 0 mail to Vendors and Update Child Order Status to Paid & Give Referral Reward Points
@@ -1209,10 +1244,10 @@ class Orders extends MyAppModel
             $isReferrerRewarded = false;
             $isReferralRewarded = false;
 
-            $paymentMethodRow = PaymentMethods::getAttributesById($orderInfo['order_pmethod_id']);
+            $paymentMethodRow = Plugin::getAttributesById($orderInfo['order_pmethod_id']);
 
             /* Use Reward Point [ */
-            if (strtolower($paymentMethodRow['pmethod_code']) != 'cashondelivery' && $orderInfo['order_reward_point_used'] > 0) {
+            if (strtolower($paymentMethodRow['plugin_code']) != 'cashondelivery' && $orderInfo['order_reward_point_used'] > 0) {
                 UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_language_id']);
             }
             /*]*/
@@ -1296,19 +1331,24 @@ class Orders extends MyAppModel
             }
         }
     }
-
-
+    
     public function addChildProductOrderHistory($op_id, $langId, $opStatusId, $comment = '', $notify = false, $trackingNumber = '', $releasePayments = 0, $moveRefundToWallet = true)
     {
         $op_id = FatUtility::int($op_id);
         $langId = FatUtility::int($langId);
         $opStatusId = FatUtility::int($opStatusId);
 
+        $this->langId = $langId;
+
         $childOrderInfo = $this->getOrderProductsByOpId($op_id, $langId);
         if (empty($childOrderInfo)) {
             $this->error = Labels::getLabel("MSG_Invalid_Access", $langId);
             return false;
         }
+
+        $this->orderId = $childOrderInfo['op_order_id'];
+        $this->opId = $op_id;
+
         $db = FatApp::getDb();
         $emailNotificationObj = new EmailHandler();
 
@@ -1326,14 +1366,14 @@ class Orders extends MyAppModel
             return false;
         }
         $commentId = $db->getInsertId();
-        
+
         // If order status is in buyer order statuses then send update email
         if (in_array($opStatusId, unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))) && $notify) {
             $emailNotificationObj->orderStatusUpdateBuyer($commentId, $childOrderInfo['order_language_id'], $childOrderInfo['order_user_id']);
         }
 
         // If current order status is not paid up but new status is paid then commence updating the product's weightage
-        if (!in_array($childOrderInfo['op_status_id'], (array)FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")) && in_array($opStatusId, (array)FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")) && strtolower($childOrderInfo['pmethod_code']) != "cashondelivery") {
+        if (!in_array($childOrderInfo['op_status_id'], (array)FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")) && in_array($opStatusId, (array)FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")) && strtolower($childOrderInfo['plugin_code']) != "cashondelivery") {
             if ($childOrderInfo['op_is_batch']) {
                 $opSelprodCodeArr = explode('|', $childOrderInfo['op_selprod_code']);
             } else {
@@ -1404,8 +1444,8 @@ class Orders extends MyAppModel
                 /* CommonHelper::printArray($childOrderInfo); die; */
                 $formattedRequestValue = "#" . $childOrderInfo["op_invoice_number"];
                 $retReqObj = new OrderCancelRequest();
-                $returnRequestDetail = $retReqObj->getCancelRequestById($childOrderInfo['op_id']);
-                if (!empty($returnRequestDetail)) {
+                $cancelRequestDetail = $retReqObj->getCancelRequestById($childOrderInfo['op_id']);
+                if (!empty($cancelRequestDetail)) {
                     $comments = sprintf(Labels::getLabel('LBL_Cancel_Request_Approved', $langId), $formattedRequestValue);
                 } else {
                     $comments = sprintf(Labels::getLabel('LBL_Order_has_been_Cancelled', $langId), $formattedRequestValue);
@@ -1430,6 +1470,7 @@ class Orders extends MyAppModel
                     }
                 }
                 /*]*/
+
                 /*Deduct Shipping Amount[*/
                 if (0 < $childOrderInfo["op_free_ship_upto"] && array_key_exists(OrderProduct::CHARGE_TYPE_SHIPPING, $childOrderInfo['charges']) && $childOrderInfo["op_actual_shipping_charges"] != $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) {
                     $sellerProdTotalPrice = 0;
@@ -1489,13 +1530,12 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not return request approved but new status is return request approved then commence the order operation [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array)FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS")) && in_array($opStatusId, (array)FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS")) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID || strtolower($childOrderInfo['pmethod_code']) == "cashondelivery")) {
+        if (!in_array($childOrderInfo['op_status_id'], (array)FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS")) && in_array($opStatusId, (array)FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS")) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID || strtolower($childOrderInfo['plugin_code']) == "cashondelivery")) {
             if ($moveRefundToWallet) {
                 $formattedRequestValue = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = sprintf(Labels::getLabel('LBL_Return_Request_Approved', $langId), $formattedRequestValue);
                 $txnAmount = $childOrderInfo['op_refund_amount'];
 
-                $txnAmount = $txnAmount;
                 /*Refund to Buyer[*/
                 if ($txnAmount > 0) {
                     $txnArray["utxn_user_id"] = $childOrderInfo['order_user_id'];
@@ -1584,12 +1624,11 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not delivered but new Status is delivered and the order is of COD, then, check if delivered by seller then debiting transaction entry from seller wallet [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array)FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array)FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && strtolower($childOrderInfo['pmethod_code']) == "cashondelivery") {
+        if (!in_array($childOrderInfo['op_status_id'], (array)FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array)FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && strtolower($childOrderInfo['plugin_code']) == "cashondelivery") {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('Msg_Cash_collected_for_COD_order', $langId) . ' ' . $formattedInvoiceNumber;
                 $amt = CommonHelper::orderProductAmount($childOrderInfo);
-                $txnObj = new Transactions();
 
                 $txnDataArr = array(
                 'utxn_user_id' => $childOrderInfo['op_selprod_user_id'],
@@ -1608,27 +1647,20 @@ class Orders extends MyAppModel
         /*]*/
 
         // If COD order and shipping user not set then assign shipping company  user seller/admin shiping company.
-        if (strtolower($childOrderInfo['pmethod_code']) == "cashondelivery" && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
+        if (strtolower($childOrderInfo['plugin_code']) == "cashondelivery" && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $shippingUserdata = array('optsu_op_id' => $childOrderInfo['op_id'], 'optsu_user_id' => $childOrderInfo['op_selprod_user_id']);
                 $db->insertFromArray(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, $shippingUserdata, false, array('IGNORE'));
             }
         }
-        /* if( !in_array( $childOrderInfo['op_status_id'], (array)FatApp::getConfig("CONF_COD_ORDER_STATUS")) && in_array($opStatusId, (array)FatApp::getConfig("CONF_COD_ORDER_STATUS") ) && strtolower($childOrderInfo['pmethod_code']) == "cashondelivery" ){
-        if(CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'],$childOrderInfo['opshipping_by_seller_user_id'])){
-        $shippingUserdata = array('optsu_op_id' => $childOrderInfo['op_id'], 'optsu_user_id' => $childOrderInfo['op_selprod_user_id']);
-        $db->insertFromArray(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS,$shippingUserdata,false,array('IGNORE'));
-        }
-        } */
 
         // If current order status is not completed but new status is completed then commence completing the order
-        if (!in_array($childOrderInfo['op_status_id'], (array)$this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array)$this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID || strtolower($childOrderInfo['pmethod_code']) == "cashondelivery")) {
+        if (!in_array($childOrderInfo['op_status_id'], (array)$this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array)$this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID || strtolower($childOrderInfo['plugin_code']) == "cashondelivery")) {
             /* If shipped by admin credit to shipping user as COD order payment deposited by them[*/
-            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && strtolower($childOrderInfo['pmethod_code']) == "cashondelivery") {
+            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && strtolower($childOrderInfo['plugin_code']) == "cashondelivery") {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('Msg_Cash_Deposited_for_COD_order', $langId) . ' ' . $formattedInvoiceNumber;
                 $amt = CommonHelper::orderProductAmount($childOrderInfo);
-                $txnObj = new Transactions();
 
                 $txnDataArr = array(
                 'utxn_user_id' => $childOrderInfo['optsu_user_id'],
@@ -1678,7 +1710,21 @@ class Orders extends MyAppModel
                 $txnAmount = $txnAmount + ($unitTaxCharges * $availQty);
             }
 
-            if ($txnAmount > 0) {
+            $alreadyPaid = false;
+            $orderObj = new Orders();
+            $payment = current($orderObj->getOrderPayments(["order_id" => $childOrderInfo['op_order_id']]));
+            if (!empty($payment['opayment_gateway_txn_id'])) {
+                $orderRow = $orderObj->getOrderById($this->orderId, $this->langId);
+                $paymentMethodId = $orderRow['order_pmethod_id'];
+				$pluginKey = Plugin::getAttributesById($paymentMethodId, 'plugin_code');
+				switch ($pluginKey) {
+					case 'StripeConnect':
+						$alreadyPaid = true;
+						break;
+				}
+            }
+
+            if (false === $alreadyPaid && $txnAmount > 0) {
                 $txnArray["utxn_user_id"] = $childOrderInfo['op_selprod_user_id'];
                 $txnArray["utxn_credit"] = $txnAmount;
                 $txnArray["utxn_debit"] = 0;
@@ -1693,11 +1739,10 @@ class Orders extends MyAppModel
             }
             /* ] */
 
-
             /* Charge Commission/fees to Vendor [*/
             $commissionFees = $childOrderInfo['op_commission_charged'] - $childOrderInfo['op_refund_commission'];
 
-            if ($commissionFees > 0) {
+            if ($commissionFees > 0 && false === $alreadyPaid) {
                 $comments = sprintf(Labels::getLabel('Msg_Charged_Commission_for_order', $langId), $formattedInvoiceNumber);
                 $txnArray["utxn_user_id"] = $childOrderInfo['op_selprod_user_id'];
                 $txnArray["utxn_debit"] = $commissionFees;
@@ -1754,7 +1799,7 @@ class Orders extends MyAppModel
             Cronjob::firstTimeBuyerDiscount($childOrderInfo['order_user_id'], $childOrderInfo['op_order_id']);
         }
 
-        
+
         return true;
     }
 
@@ -1893,7 +1938,7 @@ class Orders extends MyAppModel
         $srch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'opc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id = op.op_id', 'opc');
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
 
-        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_id', 'o.order_is_paid', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'pmethod_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id'));
+        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_id', 'o.order_is_paid', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id'));
         $srch->addCondition('op_id', '=', $op_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -2288,14 +2333,14 @@ class Orders extends MyAppModel
             if (!FatApp::getDb()->updateFromArray(
                 Orders::DB_TBL_ORDER_USER_ADDRESS,
                 [
-                    'oua_address1' => static::REPLACE_ORDER_USER_ADDRESS, 
-                    'oua_address2' => static::REPLACE_ORDER_USER_ADDRESS, 
-                    'oua_city' => static::REPLACE_ORDER_USER_ADDRESS, 
-                    'oua_state' => static::REPLACE_ORDER_USER_ADDRESS, 
-                    'oua_country' => static::REPLACE_ORDER_USER_ADDRESS, 
+                    'oua_address1' => static::REPLACE_ORDER_USER_ADDRESS,
+                    'oua_address2' => static::REPLACE_ORDER_USER_ADDRESS,
+                    'oua_city' => static::REPLACE_ORDER_USER_ADDRESS,
+                    'oua_state' => static::REPLACE_ORDER_USER_ADDRESS,
+                    'oua_country' => static::REPLACE_ORDER_USER_ADDRESS,
                     'oua_country_code' => static::REPLACE_ORDER_USER_ADDRESS,
-                    'oua_state_code' => static::REPLACE_ORDER_USER_ADDRESS, 
-                    'oua_phone' => static::REPLACE_ORDER_USER_ADDRESS, 
+                    'oua_state_code' => static::REPLACE_ORDER_USER_ADDRESS,
+                    'oua_phone' => static::REPLACE_ORDER_USER_ADDRESS,
                     'oua_zip' => static::REPLACE_ORDER_USER_ADDRESS],
                 ['smt' => 'oua_order_id = ? ', 'vals' => [$order['order_id']]]
             )
@@ -2359,5 +2404,74 @@ class Orders extends MyAppModel
             $this->addChildProductOrderHistory($data['op_id'], $data["order_language_id"], $completedOrderStatus, $comment, 1);
         }
         return true;
+    }
+
+    public function getOrder($orderId, $langId, $opId = 0)
+    {
+        $opId = FatUtility::int($opId);
+        
+        $srch = new OrderSearch($langId);
+        $srch->joinOrderPaymentMethod();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->joinOrderBuyerUser();
+        $srch->addMultipleFields(
+            array('order_id', 'order_user_id', 'order_date_added', 'order_is_paid', 'order_tax_charged', 'order_site_commission',
+            'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(plugin_name,plugin_identifier)as plugin_name', 'order_discount_total', 'plugin_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted')
+        );
+        $srch->addCondition('order_id', '=', $orderId);
+        $srch->addCondition('order_type', '=', self::ORDER_PRODUCT);
+        $rs = $srch->getResultSet();
+        $order = FatApp::getDb()->fetch($rs);
+        if (!$order) {
+            $this->error = Labels::getLabel('MSG_Order_Data_Not_Found', $langId);
+            return false;
+        }
+
+        $attr = array('op_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
+        'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
+        'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
+        'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options');
+        
+        $opSrch = new OrderProductSearch($langId, false, true, true);
+        $opSrch->addCountsOfOrderedProducts();
+        $opSrch->addOrderProductCharges();
+        
+        if (0 < $opId) {
+            $opSrch->joinSellerProducts();
+            $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+            $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'opsl.opshippinglang_op_id = op.op_id AND opsl.opshippinglang_lang_id = ' . $langId, 'opsl');
+            $opSrch->joinTable(ShippingCompanies::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_company_id = opsc.scompany_id', 'opsc');
+            $opSrch->joinTable(ShippingCompanies::DB_TBL_LANG, 'LEFT OUTER JOIN', 'opscl.scompanylang_scompany_id = opsc.scompany_id AND opscl.scompanylang_lang_id = ' . $langId, 'opscl');
+            $opSrch->addCondition('op.op_id', '=', $opId);
+            $extraAttr = [
+                'selprod_product_id', 'op_selprod_id', 'opshipping_method_id', 'opshipping_company_id', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_product_weight', 'op_product_weight_unit', 'opshipping_carrier', 'IFNULL(scompany_name, scompany_identifier) as carrier_code'
+            ];
+            $attr = array_merge($attr, $extraAttr);
+        }
+        $opSrch->addCondition('op.op_order_id', '=', $order['order_id']);
+        $opSrch->addMultipleFields($attr);
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opRs = $opSrch->getResultSet();
+        $order['products'] = FatApp::getDb()->fetchAll($opRs, 'op_id');
+
+        $orderObj = new Orders($order['order_id']);
+
+        $charges = $orderObj->getOrderProductChargesByOrderId($order['order_id']);
+
+        foreach ($order['products'] as $opId => $opVal) {
+            $order['products'][$opId]['charges'] = $charges[$opId];
+            $taxOptions = json_decode($opVal['op_product_tax_options'], true);
+            $order['products'][$opId]['taxOptions'] = $taxOptions;
+        }
+
+        $addresses = $orderObj->getOrderAddresses($order['order_id']);
+        $order['billingAddress'] = $addresses[self::BILLING_ADDRESS_TYPE];
+        $order['shippingAddress'] = (!empty($addresses[self::SHIPPING_ADDRESS_TYPE])) ? $addresses[self::SHIPPING_ADDRESS_TYPE] : array();
+
+        $order['comments'] = $orderObj->getOrderComments($langId, array("order_id" => $order['order_id']));
+        $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
+        return $order;
     }
 }

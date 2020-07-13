@@ -9,7 +9,7 @@ $arr_flds = array(
     'product_active' => Labels::getLabel('LBL_Status', $siteLangId),
     'product_approved' => Labels::getLabel('LBL_Admin_Approval', $siteLangId)
 );
-if ($canEdit) {
+if ($canEdit && $canEditShipProfile) {
     $arr_flds['product_shipped_by'] = Labels::getLabel('LBL_Shipped_by_me', $siteLangId);
 }
 $arr_flds['action'] = '';
@@ -79,13 +79,13 @@ foreach ($arr_listing as $sn => $row) {
 
                     if (0 != $row['product_seller_id']) {
                         $li = $ul->appendElement("li");
-                        $li->appendElement('a', array( 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => CommonHelper::generateUrl('seller', 'customProductForm', array($row['product_id']))), '<i class="fa fa-edit"></i>', true);
+                        $li->appendElement('a', array( 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('seller', 'customProductForm', array($row['product_id']))), '<i class="fa fa-edit"></i>', true);
 
                         $li = $ul->appendElement("li");
                         $li->appendElement("a", array('title' => Labels::getLabel('LBL_Product_Images', $siteLangId), 'onclick' => 'customProductImages(' . $row['product_id'] . ')', 'href' => 'javascript:void(0)'), '<i class="fas fa-images"></i>', true);
                     }
 
-                    if ($row['product_added_by_admin_id'] && $row['psbs_user_id'] && $row['product_type'] == PRODUCT::PRODUCT_TYPE_PHYSICAL) {
+                    if ($canEditShipProfile && $row['product_added_by_admin_id'] && $row['psbs_user_id'] && $row['product_type'] == PRODUCT::PRODUCT_TYPE_PHYSICAL) {
                         $li = $ul->appendElement("li");
                         $li->appendElement("a", array('title' => Labels::getLabel('LBL_Edit_Shipping', $siteLangId), 'onclick' => 'sellerShippingForm(' . $row['product_id'] . ')', 'href' => 'javascript:void(0)'), '<i class="fa fa-truck"></i>', true);
                     }
@@ -124,7 +124,7 @@ if (count($arr_listing) == 0) {
     if (User::canAddCustomProductAvailableToAllSellers()) {
         $linkArr = array(
         0 => array(
-            'href' => CommonHelper::generateUrl('Seller', 'CustomCatalogProductForm'),
+            'href' => UrlHelper::generateUrl('Seller', 'CustomCatalogProductForm'),
             'label' => Labels::getLabel('LBL_Request_New_Product', $siteLangId),
             )
         );
