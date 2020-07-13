@@ -11,7 +11,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         parent::__construct($action);
         $error = '';
-        if (false === PluginHelper::includePlugin(self::KEY_NAME, 'marketplace-channels', $this->siteLangId, $error)) {
+        if (false === PluginHelper::includePlugin(self::KEY_NAME, 'marketplace-channels', $error, $this->siteLangId)) {
             $resp = $this->formatOutput(false, $error);
             $this->dieWithJsonResponse($resp);
         }
