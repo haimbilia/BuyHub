@@ -1,6 +1,8 @@
 <?php
 $controller = strtolower($controller);
 $action = strtolower($action);
+$plugin = new Plugin();
+
 ?> <sidebar class="sidebar no-print">
     <div class="logo-wrapper"> <?php
     if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
@@ -151,17 +153,17 @@ $action = strtolower($action);
                         <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Promotions', $siteLangId);?></span></div>
                     </li>
                     <?php if ($userPrivilege->canViewSpecialPrice(UserAuthentication::getLoggedUserId(), true)) { ?>
-                    <li class="menu__item <?php echo ($controller == 'seller' && $action == 'specialprice') ? 'is-active' : ''; ?>">
-                        <div class="menu__item__inner">
-                            <a title="<?php echo Labels::getLabel('LBL_Special_Price', $siteLangId);?>" href="<?php echo UrlHelper::generateUrl('Seller', 'specialPrice'); ?>">
-                                <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#special-price" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#special-price"></use>
-                                    </svg>
-                                </i>
-                                <span class="menu-item__title"><?php echo Labels::getLabel('LBL_Special_Price', $siteLangId);?></span>
-                            </a>
-                        </div>
-                    </li>
+                        <li class="menu__item <?php echo ($controller == 'seller' && $action == 'specialprice') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo Labels::getLabel('LBL_Special_Price', $siteLangId);?>" href="<?php echo UrlHelper::generateUrl('Seller', 'specialPrice'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#special-price" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#special-price"></use>
+                                        </svg>
+                                    </i>
+                                    <span class="menu-item__title"><?php echo Labels::getLabel('LBL_Special_Price', $siteLangId);?></span>
+                                </a>
+                            </div>
+                        </li>
                     <?php }?>
                     <?php if ($userPrivilege->canViewVolumeDiscount(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'volumediscount') ? 'is-active' : ''; ?>">
@@ -190,23 +192,54 @@ $action = strtolower($action);
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Related_Products', $siteLangId);?></span></a></div>
                         </li>
                     <?php } ?>
-                    <?php $obj = new Plugin();
-                    $pluginData = $obj->getDefaultPluginData(Plugin::TYPE_ADVERTISEMENT_FEED, null, $siteLangId);
+                    <?php
+                    $pluginData = $plugin->getDefaultPluginData(Plugin::TYPE_ADVERTISEMENT_FEED, null, $siteLangId);
                     if (false !== $pluginData && 0 < $pluginData['plugin_active'] && $userPrivilege->canViewPromotions(UserAuthentication::getLoggedUserId(), true)) { ?>
-                    <li class="menu__item <?php echo ($controller == strtolower($pluginData['plugin_code'])) ? 'is-active' : ''; ?>">
-                        <div class="menu__item__inner">
-                            <a title="<?php echo $pluginData['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($pluginData['plugin_code']); ?>">
-                                <i class="icn shop">
-                                    <svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-promotions" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-promotions"></use>
-                                    </svg>
-                                </i>
-                                <span class="menu-item__title"><?php echo $pluginData['plugin_name'];?></span>
-                            </a>
-                        </div>
-                    </li>
+                        <li class="menu__item <?php echo ($controller == strtolower($pluginData['plugin_code'])) ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo $pluginData['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($pluginData['plugin_code']); ?>">
+                                    <i class="icn shop">
+                                        <svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-promotions" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-promotions"></use>
+                                        </svg>
+                                    </i>
+                                    <span class="menu-item__title"><?php echo $pluginData['plugin_name'];?></span>
+                                </a>
+                            </div>
+                        </li>
                     <?php } ?>
                 <li class="divider"></li>
+                <?php } ?>
+                <?php if (
+                    $userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true)
+                    ) { ?>
+                    <li class="menu__item">
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_OMNI_CHANNEL_MANAGEMENT', $siteLangId);?></span></div>
+                    </li>
+                    <?php
+                    $marketPlaceChannels = Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
+                    foreach ($marketPlaceChannels as $channel) { 
+                        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $channel['plugin_id']);
+                        $uploadedTime = '';
+                        $aspectRatio = '';
+                        if (!empty($fileData)) {
+                            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                            $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
+                        }
+                        $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($channel['plugin_id'], 'ICON'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        ?>
+                        <li class="menu__item <?php echo ($controller == strtolower($channel['plugin_code'])) ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo $channel['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
+                                    <i class="icn shop">
+                                        <img src="<?php echo $imageUrl; ?>" data-ratio="<?php echo $aspectRatio; ?>">
+                                    </i>
+                                    <span class="menu-item__title"><?php echo $channel['plugin_name'];?></span>
+                                </a>
+                            </div>
+                        </li>
+                    <?php  } ?>
+                    <li class="divider"></li>
                 <?php } ?>
                 <?php if (
                         $userPrivilege->canViewMetaTags(UserAuthentication::getLoggedUserId(), true) ||

@@ -27,8 +27,8 @@ class Plugin extends MyAppModel
     public const TYPE_SHIPPING_SERVICES = 8;
     public const TYPE_TAX_SERVICES  = 10;
     public const TYPE_SPLIT_PAYMENT_METHOD  = 11;
-    public const TYPE_MARKETPLACE_CHANNELS  = 12;
     public const TYPE_REGULAR_PAYMENT_METHOD  = 13;
+    public const TYPE_MARKETPLACE_CHANNELS  = 12;
 
     /* Define here :  if system can activate only one plugin from any group.*/
     public const EITHER_GROUP_TYPE = [
@@ -86,9 +86,9 @@ class Plugin extends MyAppModel
             self::TYPE_TAX_SERVICES => Labels::getLabel('LBL_Tax_Services', $langId),
             self::TYPE_FULL_TEXT_SEARCH => Labels::getLabel('LBL_FULL_TEXT_SEARCH', $langId),
             self::TYPE_SPLIT_PAYMENT_METHOD => Labels::getLabel('LBL_SPLIT_PAYMENT_METHODS', $langId),
-            self::TYPE_MARKETPLACE_CHANNELS => Labels::getLabel('LBL_MARKEPLACE_CHANNELS', $langId),
             self::TYPE_REGULAR_PAYMENT_METHOD => Labels::getLabel('LBL_REGULAR_PAYMENT_METHODS', $langId),
             self::TYPE_SHIPPING_SERVICES => Labels::getLabel('LBL_SHIPPING_SERVICES', $langId),
+            self::TYPE_MARKETPLACE_CHANNELS => Labels::getLabel('LBL_MARKEPLACE_CHANNELS', $langId),
         ];
     }
     
@@ -273,13 +273,13 @@ class Plugin extends MyAppModel
      * @param  int $langId
      * @param  bool $assoc
      * @param  bool $active
-     * @return mixed
+     * @return array
      */
-    public static function getDataByType(int $typeId, int $langId = 0, bool $assoc = false, bool $active = true)
+    public static function getDataByType(int $typeId, int $langId = 0, bool $assoc = false, bool $active = true): array
     {
         $typeId = FatUtility::int($typeId);
         if (1 > $typeId) {
-            return false;
+            return [];
         }
 
         if (in_array($typeId, self::HAVING_KINGPIN) && empty((new self())->getDefaultPluginKeyName($typeId))) {

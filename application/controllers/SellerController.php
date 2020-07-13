@@ -1603,7 +1603,7 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-
+        
         $shop_id = 0;
         $stateId = 0;
 

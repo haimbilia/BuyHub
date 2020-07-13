@@ -40,13 +40,25 @@ class EasyEcom extends MarketplaceChannelsBase
         if (false === $this->validateSettings($this->langId)) {
             return false;
         }
-        $this->reqAuthToken = $reqAuthToken;
-        if (false === $this->validateRequest($action)) {
-            return false;
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->reqAuthToken = $reqAuthToken;
+            if (false === $this->validateRequest($action)) {
+                return false;
+            }
         }
         return true;
     }
-
+    
+    /**
+     * getKeys
+     *
+     * @return mixed
+     */
+    public function getKeys(string $column)
+    {
+        return isset($this->settings[$column]) ? $this->settings[$column] : $this->settings;
+    }
 
     /**
      * validateRequest - To validate token request.

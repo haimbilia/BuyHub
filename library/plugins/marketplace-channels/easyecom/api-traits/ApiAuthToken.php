@@ -1,22 +1,29 @@
 <?php
 
 trait ApiAuthToken
-{
-	/**
+{    
+    /**
      * createAuthToken
-     * 
+     *
+     * @param  int $userId
      * @return bool
      */
-    private function createAuthToken(): bool
+    public function createAuthToken(int $userId): bool
     {
         $authTokenAge = $this->settings['auth_token_age'];
 
+        $userData = User::getUserMeta($userId);
+        if (!empty($userData['seller_auth_token']) && isset($userData[$userData['seller_auth_token']]) && time() < $userData[$userData['seller_auth_token']]) {
+            return true;
+        }
+
         $this->reqAuthToken = bin2hex(openssl_random_pseudo_bytes(20));
-        $userObj = new User($this->userId);
+        $userObj = new User($userId);
         if (false !== $userObj->updateUserMeta('seller_auth_token', $this->reqAuthToken)) {
             $userObj->updateUserMeta($this->reqAuthToken, strtotime("+" . $authTokenAge . " day"));
             return true;
         }
+        $this->error = $userObj->getError();
         return false;
     }
 
@@ -50,12 +57,13 @@ trait ApiAuthToken
         }
         $this->userId = $data['usermeta_user_id'];
         $expirationTime = $data['usermeta_value'];
-
+        
         if (time() >= $expirationTime) {
             if (!User::deleteUserMeta($this->reqAuthToken, $this->error)) {
                 return $this->formatOutput(false, $this->error);
             }
-            if (false === $this->createAuthToken()) {
+            
+            if (false === $this->createAuthToken($this->userId)) {
                 return $this->formatOutput(false, $this->error);
             }
         }

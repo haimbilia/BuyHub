@@ -28,7 +28,8 @@ class UserPrivilege
     public const SECTION_PROMOTIONS = 26;
     public const SECTION_PROMOTION_CHARGES = 27;
     public const SECTION_SUBSCRIPTION = 28;
-    public const SECTION_SHIPPING_PROFILE = 28;
+    public const SECTION_SHIPPING_PROFILE = 29;
+    public const SECTION_MARKETPLACE_CHANNEL = 30;
 
 
     public const MODULE_SHOP = 1;
@@ -805,5 +806,15 @@ class UserPrivilege
     public function canUploadBulkImages($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_UPLOAD_BULK_IMAGES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+    
+    public function canViewMarketplaceChannel($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditMarketplaceChannel($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

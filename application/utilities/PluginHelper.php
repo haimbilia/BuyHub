@@ -38,6 +38,7 @@ trait PluginHelper
             return false;
         }
         $pluginSetting = new PluginSetting(0, $this->keyName);
+        
         return $this->settings = $pluginSetting->get($this->langId, $column);
     }
     
@@ -168,14 +169,19 @@ trait PluginHelper
      * dieWithJsonResponse
      *
      * @param  array $data
-     * @return bool
+     * @return void
      */
-    public function dieWithJsonResponse(array $data = []): bool
+    public function dieWithJsonResponse(array $data = [])
     {
         if (isset($data['status'])) {
             $data['status'] = $data['status'] ? 1 : 0;
         }
-        CommonHelper::jsonEncodeUnicode($data, true);
-        return true;
+        if (true === MOBILE_APP_API_CALL) {
+            CommonHelper::jsonEncodeUnicode($data, true);
+        }
+        $msg = isset($data['status']) && 0 < $data['status'] ? Labels::getLabel("MSG_SUCCESS", $this->langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $this->langId);
+        $msg = isset($data['msg']) ? $data['msg'] : $msg; 
+        Message::addErrorMessage($msg);
+        CommonHelper::redirectUserReferer();
     }
 }
