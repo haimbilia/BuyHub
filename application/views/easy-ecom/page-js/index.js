@@ -19,11 +19,4 @@ $(document).ready(function() {
             $(dv).html(res);
         });
     }
-
-    setupUser = function (frm){
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(keyName, 'setupUser'), data, function(res) {
-        });
-    }
 })();

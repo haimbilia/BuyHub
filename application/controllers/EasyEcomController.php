@@ -1,8 +1,11 @@
 <?php
 
+use Curl\Curl;
+
 class EasyEcomController extends MarketplaceChannelsBaseController
 {
     public const KEY_NAME = 'EasyEcom';
+    public const PRODUCTION_URL = 'https://api.easyecom.io/';
 
     private $reqAuthToken = '';
 
@@ -60,33 +63,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $this->_template->render(false, false);
     }
-       
-    /**
-     * getRegisterForm
-     *
-     * @param  int $langId
-     * @return object
-     */
-    private function getRegisterForm(int $langId): object
-    {
-        $frm = new Form('frmRegister');
-        $frm->addRequiredField(Labels::getLabel('LBL_FULL_NAME', $langId), 'company_name', '', array('placeholder' => Labels::getLabel('LBL_FULL_NAME', $langId)));
-        $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $langId), 'phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER_INCLUDING_COUNTRY_CODE', $langId)));
-
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $langId), 'user_password', '', array('placeholder' => Labels::getLabel('LBL_PASSWORD', $langId)));
-        $fld->requirements()->setRequired();
-        $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
-        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $langId));
-
-        $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $langId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $langId)));
-        $fld1->requirements()->setRequired();
-        $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $langId));
-
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_REGISTER', $langId));
-        $fld_cancel = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_CANCEL', $langId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
     
     /**
      * register
@@ -96,30 +72,10 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     public function register()
     {
         $userData = $this->getLoggedUserInfo();
-        $dataToFill = [
-            'company_name' => $userData['user_name'],
-            'phone' =>  $userData['shop_phone'],
-        ];
-        $frm = $this->getRegisterForm($this->siteLangId);
-        $frm->fill($dataToFill);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-    
-    /**
-     * setupUser
-     * 
-     * @return void
-     */
-    public function setupUser()
-    {
-        $frm = $this->getRegisterForm($this->siteLangId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        $userData = $this->getLoggedUserInfo();
         if (false === $this->easyEcom->createAuthToken($this->getUserId())) {
             FatUtility::dieJsonError($this->easyEcom->getError());
         }
-        
+
         $shopAddress = [
             'address_line_1' => $userData['shop_name'],
             'address_line_2' => $userData['shop_city'],
@@ -129,11 +85,11 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         ];
 
         $dataToUpdate = [
-            "phone" => $post['phone'],
-            "company_name" => $post['company_name'],
+            "phone" => $userData['shop_phone'],
+            "company_name" => $userData['user_name'],
             "email" => $userData['credential_email'],
             "client_id" => $this->easyEcom->getKeys('easyecom_token'),
-            "password" =>  $post['user_password'],
+            "password" =>  mt_rand(),
             "shipping1_address" => $shopAddress,
             "billing_address" => $shopAddress,
             "credentials" => [
@@ -143,6 +99,16 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 		    ]
 
         ];
+
+        CommonHelper::printArray($dataToUpdate, true);
+        $curl = new Curl();
+        $curl->post(self::PRODUCTION_URL . 'Company/Create', json_encode($dataToUpdate));
+        $curl->setHeader('Content-Type', 'application/json');
+        if ($curl->error) {
+            LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
+        }
+
+        CommonHelper::printArray($curl->response);
         CommonHelper::printArray($dataToUpdate);
     }
 
