@@ -8,6 +8,7 @@ class ShippingServicesController extends AdminBaseController
     private $trackingNumber = '';
     private $shipmentResponse = '';
     private $error = '';
+    private $opId = 0;
     
     /**
      * __construct
@@ -98,12 +99,11 @@ class ShippingServicesController extends AdminBaseController
     /**
      * loadLabelData
      *
-     * @param  int $opId
      * @return void
      */
-    private function loadLabelData(int $opId): bool
+    private function loadLabelData(): bool
     {
-        $orderProductShipmentDetail = OrderProductShipment::getAttributesById($opId);
+        $orderProductShipmentDetail = OrderProductShipment::getAttributesById($this->opId);
         if (empty($orderProductShipmentDetail)) {
             $this->error = Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->adminLangId);
             return false;
@@ -111,7 +111,7 @@ class ShippingServicesController extends AdminBaseController
 
         $this->shipmentResponse = json_decode($orderProductShipmentDetail['opship_response'], true);
         $this->trackingNumber = $orderProductShipmentDetail['opship_tracking_number'];
-        $this->filename = "label-" . $this->trackingNumber . ".pdf";
+        $this->filename = "label-" . $this->trackingNumber;
         $this->labelData = $this->shipmentResponse['labelData'];
         return true;
     }
@@ -124,7 +124,8 @@ class ShippingServicesController extends AdminBaseController
      */
     public function downloadLabel(int $opId)
     {
-        if (false === $this->loadLabelData($opId)) {
+        $this->opId = $opId;
+        if (false === $this->loadLabelData()) {
             LibHelper::dieJsonError($this->error);
         }
         $this->shippingService->downloadLabel($this->labelData, $this->filename);
@@ -138,7 +139,8 @@ class ShippingServicesController extends AdminBaseController
      */
     public function previewLabel(int $opId)
     {
-        if (false === $this->loadLabelData($opId)) {
+        $this->opId = $opId;
+        if (false === $this->loadLabelData()) {
             LibHelper::dieJsonError($this->error);
         }
         $this->shippingService->downloadLabel($this->labelData, $this->filename, true);

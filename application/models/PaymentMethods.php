@@ -112,7 +112,6 @@ class PaymentMethods
      */
     public function initiateRefund(string $opId, int $refundType = self::REFUND_TYPE_RETURN): bool
     {
-        $db = FatApp::getDb();
         if (false == $this->canRefundToCard) {
             $msg = Labels::getLabel('MSG_THIS_{PAYMENT-METHOD}_PAYMENT_METHOD_IS_NOT_ABLE_TO_REFUND_IN_CARD', $this->langId);
             $this->error = CommonHelper::replaceStringData($msg, ['{PAYMENT-METHOD}' => $this->keyname]);
@@ -149,10 +148,10 @@ class PaymentMethods
             }
         });
 
-        $checkShipping = false;
+        /* $checkShipping = false;
         if (0 < $childOrderInfo["op_free_ship_upto"] && array_key_exists(OrderProduct::CHARGE_TYPE_SHIPPING, $childOrderInfo['charges']) && $childOrderInfo["op_actual_shipping_charges"] != $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) {
             $checkShipping = true;
-        }
+        } */
 
         switch ($refundType) {
             case self::REFUND_TYPE_RETURN:

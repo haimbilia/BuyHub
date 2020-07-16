@@ -16,7 +16,13 @@ $(document).ready(function() {
     register = function (){
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(keyName, 'register'), '', function(res) {
-            $(dv).html(res);
+            res = $.parseJSON(res);
+            if (1 > res.status) {
+                $.systemMessage(res.msg,'alert--danger', false);
+            } else {
+                $.systemMessage(res.msg,'alert--success', false);
+            }
+            landingPage();
         });
     }
 })();

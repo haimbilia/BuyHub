@@ -156,7 +156,7 @@ trait PluginHelper
      * @param  array $data
      * @return array
      */
-    public static function formatOutput(bool $status, string $msg, array $data = []): array
+    public function formatOutput(bool $status, string $msg, array $data = []): array
     {
         return [
             'status' => $status,

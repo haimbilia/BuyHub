@@ -276,7 +276,7 @@ class StripeConnectPayController extends PaymentController
         $orderProducts = $orderObj->getChildOrders(array('order_id' => $orderInfo['id']), $orderInfo['order_type'], $orderInfo['order_language_id']);
 
         foreach ($orderProducts as $op) {
-            $productSoldAmount = CommonHelper::orderProductAmount($op, 'NETAMOUNT');
+            // $productSoldAmount = CommonHelper::orderProductAmount($op, 'NETAMOUNT');
             $amountToBePaidToSeller = CommonHelper::orderProductAmount($op, 'NETAMOUNT', false, User::USER_TYPE_SELLER);
             $amountToBePaidToSeller = ($amountToBePaidToSeller - $op['op_commission_charged']);
 

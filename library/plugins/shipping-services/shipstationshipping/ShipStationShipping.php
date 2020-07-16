@@ -193,8 +193,8 @@ class ShipStationShipping extends ShippingServicesBase
      * @param  string $filename
      * @return void
      */
-    public function downloadLabel(string $labelData, string $filename = "label.pdf", bool $preview = false)
-    {       
+    public function downloadLabel(string $labelData, string $filename = "label", bool $preview = false)
+    {
         $disposition = (true === $preview ? 'inline' : 'attachment');
         header("Pragma: public");
         header("Expires: 0");
@@ -202,7 +202,7 @@ class ShipStationShipping extends ShippingServicesBase
         header("Cache-Control: public");
         header("Content-Description: File Transfer");
         header("Content-Type: application/pdf");
-        header("Content-Disposition: " . $disposition . "; filename=" . $filename);
+        header("Content-Disposition: " . $disposition . "; filename=" . $filename . '.pdf');
         header("Content-Transfer-Encoding: binary");
         
         echo base64_decode($labelData);

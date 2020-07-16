@@ -5,10 +5,6 @@ class SellerBaseController extends LoggedUserController
     public function __construct($action)
     {
         parent::__construct($action);
-        /* if( !User::isSeller() ){
-        Message::addErrorMessage( Labels::getLabel('MSG_Invalid_Access',$this->siteLangId) );
-        FatApp::redirectUser(UrlHelper::generateUrl('account'));
-        } */
 
         if (UserAuthentication::isGuestUserLogged()) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));

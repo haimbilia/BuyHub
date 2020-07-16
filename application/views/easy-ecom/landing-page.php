@@ -14,15 +14,12 @@
             <div class="cards">
                 <div class="cards-content">
                     <?php if (!empty($easyEcomSellerToken)) { ?>
-                        <a class="btn btn--primary btn--sm" target="_blank" href="javascript:void(0)">
+                        <a class="btn btn-outline-primary btn--sm" target="_blank" href="javascript:void(0)">
                             <?php echo Labels::getLabel('LBL_GO_TO_DASHBOARD', $siteLangId); ?>
                         </a>
                     <?php } else { ?>
                         <a class="btn btn--primary btn--sm" href="javascript:void(0)" onClick="register(this)" href="javascript:void(0)">
-                            <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
-                        </a>
-                        <a class="btn btn-outline-primary btn--sm" target="_blank" href="javascript:void(0)" >
-                            <?php echo Labels::getLabel('Lbl_SIGN_IN', $siteLangId); ?>
+                            <?php echo Labels::getLabel('LBL_CONNECT', $siteLangId); ?>
                         </a>
                     <?php } ?>
                 </div>

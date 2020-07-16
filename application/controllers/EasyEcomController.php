@@ -5,11 +5,17 @@ use Curl\Curl;
 class EasyEcomController extends MarketplaceChannelsBaseController
 {
     public const KEY_NAME = 'EasyEcom';
-    public const PRODUCTION_URL = 'https://api.easyecom.io/';
+    public const PRODUCTION_URL = 'https://app.easyecom.io/';
 
     private $reqAuthToken = '';
-
-    public function __construct($action)
+    
+    /**
+     * __construct
+     *
+     * @param  string $action
+     * @return void
+     */
+    public function __construct(string $action)
     {
         parent::__construct($action);
         $error = '';
@@ -18,26 +24,25 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             $this->dieWithJsonResponse($resp);
         }
 
-        $this->init($action);
+        $this->init();
     }
 
     /**
      * inilialize
      * 
-     * @param string $action 
      * @return void
      */
-    private function init(string $action)
+    private function init()
     {
-        if ('getAuthToken' == $action && isset($_SERVER['HTTP_EEC_TOKEN'])){
-            $this->reqAuthToken = $_SERVER['HTTP_EEC_TOKEN'];
-        } else if (isset($_SERVER['HTTP_AUTH_TOKEN'])) {
-            $this->reqAuthToken = $_SERVER['HTTP_AUTH_TOKEN'];
+        $this->easyEcom = new EasyEcom($this->siteLangId);
+        if (false == $this->easyEcom->validateSettings($this->siteLangId)) {
+            $resp = $this->formatOutput(false, $this->easyEcom->getError());
+            $this->dieWithJsonResponse($resp);
         }
         
-        $this->easyEcom = new EasyEcom($this->siteLangId);
-        if (false == $this->easyEcom->init($action, $this->reqAuthToken)) {
-            $resp = $this->formatOutput(false, $this->easyEcom->getError());
+        if (true === MOBILE_APP_API_CALL && false == UserAuthentication::doAppLogin(CommonHelper::getAppToken())) {
+            $msg = Labels::getLabel("MSG_INVALID_USER", $this->siteLangId);
+            $resp = $this->formatOutput(false, $msg);
             $this->dieWithJsonResponse($resp);
         }
     }
@@ -49,7 +54,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function index()
     {
-        $this->set('easyEcomSellerToken', '');
         $this->set('pluginName', self::KEY_NAME);
         $this->_template->render();
     }
@@ -61,6 +65,9 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function landingPage()
     {
+        $userId = UserAuthentication::getLoggedUserId();
+        $easyEcomSellerToken = User::getUserMeta($userId, 'easyEcomSellerToken');
+        $this->set('easyEcomSellerToken', $easyEcomSellerToken);
         $this->_template->render(false, false);
     }
     
@@ -72,8 +79,9 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     public function register()
     {
         $userData = $this->getLoggedUserInfo();
-        if (false === $this->easyEcom->createAuthToken($this->getUserId())) {
-            FatUtility::dieJsonError($this->easyEcom->getError());
+        $uObj = new User($this->getUserId());
+        if (!$authToken = $uObj->setMobileAppToken($this->easyEcom->getKeys('auth_token_age'))) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         $shopAddress = [
@@ -84,23 +92,25 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             'country' => strtoupper($userData['country_code']),
         ];
 
+        $password = mt_rand();
         $dataToUpdate = [
             "phone" => $userData['shop_phone'],
             "company_name" => $userData['user_name'],
             "email" => $userData['credential_email'],
             "client_id" => $this->easyEcom->getKeys('easyecom_token'),
-            "password" =>  mt_rand(),
-            "shipping1_address" => $shopAddress,
+            "password" =>  $password,
+            "shipping_address" => $shopAddress,
             "billing_address" => $shopAddress,
             "credentials" => [
-                "m_id" => 219, // This need to be placed statically. It points to YoKart at EasyEcom(ID of YoKart).
-                "username" => $userData['credential_email'],
-                "password" => User::getUserMeta($this->getUserId(), 'seller_auth_token')
+                [
+                    "m_id" => 219, // This need to be placed statically. It points to YoKart at EasyEcom(ID of YoKart).
+                    "username" => $userData['credential_email'],
+                    "password" => $authToken
+                ]
 		    ]
 
         ];
 
-        CommonHelper::printArray($dataToUpdate, true);
         $curl = new Curl();
         $curl->post(self::PRODUCTION_URL . 'Company/Create', json_encode($dataToUpdate));
         $curl->setHeader('Content-Type', 'application/json');
@@ -108,25 +118,15 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
         }
 
-        CommonHelper::printArray($curl->response);
-        CommonHelper::printArray($dataToUpdate);
-    }
-
-    /**
-     * getAuthToken
-     * 
-     * @return void
-     */
-    public function getAuthToken()
-    {
-        $authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
-        if (empty($authToken)) {
-            $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
-            $resp = $this->formatOutput(false, $msg);
-            $this->dieWithJsonResponse($resp);
+        $resp = json_decode($curl->response, true);
+        if (200 != $resp['code']) {
+            LibHelper::exitWithError($resp['message'], true);
         }
-        $resp = $this->easyEcom->getAuthToken($authToken);
-        $this->dieWithJsonResponse($resp);
+
+        $easyEcomSellerToken = $resp['data']['token'];
+        $this->updateUserMeta('easyEcomSellerToken', $easyEcomSellerToken);
+        $this->updateUserMeta('seller_auth_token', $authToken);
+        FatUtility::dieJsonSuccess($resp['message']);
     }
 
     /**

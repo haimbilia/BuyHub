@@ -2175,7 +2175,7 @@ class User extends MyAppModel
         return false;
     }
 
-    public function setMobileAppToken()
+    public function setMobileAppToken(int $expirationAge = 7)
     {
         if (($this->mainTableRecordId < 1)) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
@@ -2184,7 +2184,7 @@ class User extends MyAppModel
 
         $generatedToken = substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
 
-        $expiry = strtotime("+7 DAYS");
+        $expiry = strtotime("+" . $expirationAge . " DAYS");
         $values = array(
             'uauth_user_id' => $this->mainTableRecordId,
             'uauth_token' => $generatedToken,
@@ -2913,6 +2913,7 @@ class User extends MyAppModel
         }
         return true;
     }
+
     public static function getUserMetaDetail(string $col, string $value = '')
     {
         $srch = new SearchBase(static::DB_TBL_META, 't_um');

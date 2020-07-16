@@ -22,6 +22,8 @@ class UserAuthentication extends FatModel
     public const AFFILIATE_REG_STEP3 = 3;
     public const AFFILIATE_REG_STEP4 = 4;
 
+    public const TOKEN_AGE_IN_DAYS = 7;
+
     public function __construct()
     {
         $this->commonLangId = CommonHelper::getLangId();
@@ -107,7 +109,7 @@ class UserAuthentication extends FatModel
             self::clearLoggedUserLoginCookie();
             return false;
         }
-
+        
         $browser = CommonHelper::userAgent();
         if (strtotime($authRow['uauth_expiry']) < strtotime('now')) {
             self::clearLoggedUserLoginCookie();
@@ -118,7 +120,6 @@ class UserAuthentication extends FatModel
         if ($row = $ths->loginByAppToken($authRow)) {
             return true;
         }
-
         return false;
     }
 
@@ -910,9 +911,34 @@ class UserAuthentication extends FatModel
         $affiliateSessionElementName = UserAuthentication::AFFILIATE_SESSION_ELEMENT_NAME;
         return isset($_SESSION[$affiliateSessionElementName][$key]) ? $_SESSION[$affiliateSessionElementName][$key] : false;
     }
-
+    
+    /**
+     * validateUserPhone
+     *
+     * @param  int $userId
+     * @param  string $phoneNumber
+     * @return bool
+     */
     public static function validateUserPhone(int $userId, string $phoneNumber): bool
     {
         return ($phoneNumber == User::getAttributesById($userId, 'user_phone'));
+    }
+    
+    /**
+     * validateMarketplaceAuthToken
+     *
+     * @param  string $authToken
+     * @return bool
+     */
+    public function validateMarketplaceAuthToken(string $authToken): bool
+    {
+        $srchPluginSettings = new PluginSettingSearch();
+        $srchPluginSettings->joinPlugin();
+        $srchPluginSettings->addCondition('pluginsetting_value', '=', $authToken);
+        $srchPluginSettings->addMultipleFields(['plugin_code']);
+        $srchPluginSettings->setPageSize(1);
+        $rs = $srchPluginSettings->getResultSet();
+        $plugin =  FatApp::getDb()->fetch($rs);
+        return empty($plugin) ? false : true;
     }
 }

@@ -35,8 +35,8 @@ trait ApiOrders
         	'order_date_updated as updated_date',
         	'order_net_amount',
         	'order_is_paid',
-        	'IFNULL(pmethod_name, pmethod_identifier) as pmethod_name',
-        	'pmethod_code',
+        	'IFNULL(plugin_name, plugin_identifier) as plugin_name',
+        	'plugin_code',
         	'buyer.user_name as buyer_user_name',
             'order_tax_charged',
             'order_discount_total',
@@ -55,7 +55,6 @@ trait ApiOrders
 			$opSrch->joinShippingUsers();
 			$opSrch->joinSellerProducts();
             $opSrch->joinShippingCharges();
-            $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'ops_l.opshippinglang_op_id = op.op_id AND ops_l.opshippinglang_lang_id = ' . $this->langId, 'ops_l');
 	        $opSrch->addCountsOfOrderedProducts();
 	        $opSrch->addOrderProductCharges();
 	        $opSrch->doNotCalculateRecords();
@@ -66,7 +65,7 @@ trait ApiOrders
 	            array('op_id', 'op_invoice_number', 'op_selprod_id', 'selprod_product_id', 'selprod_sku', 'op_selprod_title', 'op_product_name',
 	            'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
 	            'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
-	            'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'op_status_id', 'optosu.optsu_user_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'op_shipping_duration_name', 'op_shipping_durations','opshipping_carrier')
+	            'totCombinedOrders as totOrders', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'op_status_id', 'optosu.optsu_user_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'opshipping_label','opshipping_carrier_code', 'opshipping_service_code')
 	        );
 
 	        $opRs = $opSrch->getResultSet();
@@ -116,9 +115,9 @@ trait ApiOrders
                     'orderstatus_name' => $opRow['orderstatus_name'],
                     'op_other_charges' => $opRow['op_other_charges'],
                 	'cart_total' => $cartTotal,
-                    'op_shipping_duration_name' => $opRow['op_shipping_duration_name'],
-                    'op_shipping_durations' => $opRow['op_shipping_durations'],
-                    'opshipping_carrier' => $opRow['opshipping_carrier'],
+                    'opshipping_label' => $opRow['opshipping_label'],
+                    'opshipping_carrier_code' => $opRow['opshipping_carrier_code'],
+                    'opshipping_service_code' => $opRow['opshipping_service_code'],
                     'shipping_by' => CommonHelper::canAvailShippingChargesBySeller($opRow['op_selprod_user_id'], $opshipping_by_seller_user_id) ? Labels::getLabel('LBL_YOKART_SELLER', $this->langId) : Labels::getLabel('LBL_YOKART_ADMIN', $this->langId)
                 ];
 	        }
@@ -148,7 +147,7 @@ trait ApiOrders
 	        $shippingAddress = array_merge($customerName, $shippingAddress);
 
             $paymentMode = 'PREPAID';
-	        if (!empty($row['pmethod_name']) && 'CashOnDelivery' == $row['pmethod_code']) {
+	        if (!empty($row['plugin_name']) && 'cashondelivery' == strtolower($row['plugin_code'])) {
 	        	$paymentMode = 'COD';	
 	        }
 
@@ -203,8 +202,9 @@ trait ApiOrders
     {
         $opSrch = new OrderProductSearch($this->langId, false, true, true);
      
-        $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'ops_l.opshippinglang_op_id = op.op_id AND ops_l.opshippinglang_lang_id = ' . $this->langId, 'ops_l');
         $opSrch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'oph.oshistory_op_id = op.op_id', 'oph');
+        $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+        $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT OUTER JOIN', 'opship.opship_op_id = op.op_id', 'opship');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
         $opSrch->addCondition('op.op_id', '=', $opId);
@@ -213,10 +213,10 @@ trait ApiOrders
 
         $opSrch->addMultipleFields([
             'op_invoice_number',
-            'op_shipping_duration_name',
-            'op_shipping_durations',
-            'opshipping_carrier',
-            'oshistory_tracking_number'
+            'opship_tracking_number',
+            'opshipping_label',
+            'opshipping_carrier_code',
+            'opshipping_service_code'
         ]);
         $opRs = $opSrch->getResultSet();
         $carrierDetail = FatApp::getDb()->fetch($opRs);
@@ -225,6 +225,8 @@ trait ApiOrders
             $carrierDetail = [];
             $msg = Labels::getLabel("MSG_NO_RECORD_FOUND", $this->langId);
         }
+        $excryptedOpId = LibHelper::encrypt($opId);
+        $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId]);
         return $this->formatOutput(true, $msg, $carrierDetail);
     }
 

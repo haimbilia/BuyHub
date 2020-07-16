@@ -5016,6 +5016,7 @@ class SellerController extends SellerBaseController
         $this->set('msg', Labels::getLabel('LBL_Product_Data_Translated_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+
     public function compareWithInventoryMinPurchase()
     {
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
