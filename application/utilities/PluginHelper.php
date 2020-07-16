@@ -151,12 +151,12 @@ trait PluginHelper
     /**
      * formatOutput
      *
-     * @param  bool $status
+     * @param  int $status
      * @param  string $msg
      * @param  array $data
      * @return array
      */
-    public function formatOutput(bool $status, string $msg, array $data = []): array
+    public function formatOutput(int $status, string $msg, array $data = []): array
     {
         return [
             'status' => $status,
@@ -173,9 +173,6 @@ trait PluginHelper
      */
     public function dieWithJsonResponse(array $data = [])
     {
-        if (isset($data['status'])) {
-            $data['status'] = $data['status'] ? 1 : 0;
-        }
         if (true === MOBILE_APP_API_CALL) {
             CommonHelper::jsonEncodeUnicode($data, true);
         }

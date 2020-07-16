@@ -1135,12 +1135,12 @@ class GuestUserController extends MyAppController
     /**
      * formatOutput
      *
-     * @param  bool $status
+     * @param  int $status
      * @param  string $msg
      * @param  array $data
      * @return array
      */
-    public function formatOutput(bool $status, string $msg, array $data = []): array
+    public function formatOutput(int $status, string $msg, array $data = []): array
     {
         return [
             'status' => $status,
@@ -1204,7 +1204,7 @@ class GuestUserController extends MyAppController
         }
 
         $msg = Labels::getLabel("MSG_SUCCESS", $this->siteLangId);
-        $resp = $this->formatOutput(true, $msg, ['authToken' => $newAuthToken]);
-        FatUtility::dieJsonSuccess($resp);
+        $resp = $this->formatOutput(Plugin::RETURN_TRUE, $msg, ['authToken' => $newAuthToken]);
+        CommonHelper::jsonEncodeUnicode($resp, true);
     }
 }

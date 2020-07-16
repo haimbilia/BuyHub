@@ -224,9 +224,10 @@ trait ApiOrders
         if (empty($carrierDetail)) {
             $carrierDetail = [];
             $msg = Labels::getLabel("MSG_NO_RECORD_FOUND", $this->langId);
+        } else if (!empty($carrierDetail['opship_tracking_number'])) {
+            $excryptedOpId = LibHelper::encrypt($opId);
+            $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId]);    
         }
-        $excryptedOpId = LibHelper::encrypt($opId);
-        $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId]);
         return $this->formatOutput(true, $msg, $carrierDetail);
     }
 

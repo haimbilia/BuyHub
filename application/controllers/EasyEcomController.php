@@ -20,7 +20,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         parent::__construct($action);
         $error = '';
         if (false === PluginHelper::includePlugin(self::KEY_NAME, 'marketplace-channels', $error, $this->siteLangId)) {
-            $resp = $this->formatOutput(false, $error);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $error);
             $this->dieWithJsonResponse($resp);
         }
 
@@ -36,13 +36,13 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $this->easyEcom = new EasyEcom($this->siteLangId);
         if (false == $this->easyEcom->validateSettings($this->siteLangId)) {
-            $resp = $this->formatOutput(false, $this->easyEcom->getError());
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $this->easyEcom->getError());
             $this->dieWithJsonResponse($resp);
         }
         
         if (true === MOBILE_APP_API_CALL && false == UserAuthentication::doAppLogin(CommonHelper::getAppToken())) {
             $msg = Labels::getLabel("MSG_INVALID_USER", $this->siteLangId);
-            $resp = $this->formatOutput(false, $msg);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
             $this->dieWithJsonResponse($resp);
         }
     }
@@ -165,7 +165,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 
         if (1 > $selProdId || 0 > $balanceQty) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
-            $resp = $this->formatOutput(false, $msg);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
             $this->dieWithJsonResponse($resp);
         }
 
@@ -183,7 +183,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
-            $resp = $this->formatOutput(false, $msg);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
             $this->dieWithJsonResponse($resp);
         }
         $resp = $this->easyEcom->getShippedOrderCarrierDetail($opId);
@@ -200,7 +200,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
-            $resp = $this->formatOutput(false, $msg);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
             $this->dieWithJsonResponse($resp);
         }
         $resp = $this->easyEcom->getOrderStatus($opId);
