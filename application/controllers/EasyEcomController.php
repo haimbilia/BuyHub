@@ -67,6 +67,12 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $userId = UserAuthentication::getLoggedUserId();
         $easyEcomSellerToken = User::getUserMeta($userId, 'easyEcomSellerToken');
+        $userTempToken = substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
+        $uObj = new User($userId);
+        if (!$uObj->createUserTempToken($userTempToken)) {
+            FatUtility::dieJsonError($uObj->getError());
+        }
+        $this->set('userTempToken', $userTempToken);
         $this->set('easyEcomSellerToken', $easyEcomSellerToken);
         $this->_template->render(false, false);
     }
@@ -110,7 +116,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 		    ]
 
         ];
-
+        
         $curl = new Curl();
         $curl->post(self::PRODUCTION_URL . 'Company/Create', json_encode($dataToUpdate));
         $curl->setHeader('Content-Type', 'application/json');

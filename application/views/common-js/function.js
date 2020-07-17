@@ -673,8 +673,7 @@ function getGeoAddress(lat, lng) {
     });
 }
 
-var canSetCookie = false;
-function setCookie(cname, cvalue, exdays = 365) {
+function setCookie(cname, cvalue, canSetCookie = true, exdays = 365) {
 	if (false == canSetCookie) {
 		return false;
 	}
@@ -707,7 +706,6 @@ function displayGeoAddress(address)
 }
 
 function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'formatted_address', saveCookie = true, callback = 'googleSelectedAddress') {
-	canSetCookie = saveCookie;
     if (1 > $("#" + elementId).length) {
         var msg = (langLbl.fieldNotFound).replace('{field}', elementId + ' Field');
         $.systemMessage(msg, 'alert--danger');

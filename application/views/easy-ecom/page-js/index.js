@@ -25,4 +25,9 @@ $(document).ready(function() {
             landingPage();
         });
     }
+
+    login = function (userTempToken){
+        setCookie('_ykEasyLogin', userTempToken);
+        setTimeout(function(){ window.open('http://yokartv9.4qcteam.com', '_blank'); }, 1000);
+    }
 })();
