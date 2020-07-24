@@ -475,3 +475,6 @@ ALTER TABLE `tbl_time_slots`
 
 -- pickup location end
 
+
+DELETE FROM `tbl_language_labels` WHERE `label_key` LIKE 'LBL_Affiliate_Registeration';
+

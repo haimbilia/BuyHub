@@ -8,8 +8,12 @@ if (null != $fld) {
     $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
 
+$btnSubmit = $productFrm->getField('btn_submit');
+$btnSubmit->setFieldTagAttribute('class', "btn btn-primary");
+
 $btnDiscardFld = $productFrm->getField('btn_discard');
 $btnDiscardFld->setFieldTagAttribute('onClick', 'goToCatalog()');
+$btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-primary");
 ?>
 <div class="row justify-content-center">
     <div class="col-md-12">
@@ -317,11 +321,12 @@ $btnDiscardFld->setFieldTagAttribute('onClick', 'goToCatalog()');
                     <div class="field-wraper">
                         <div class="field_cover">
                             <?php
-                        echo $productFrm->getFieldHtml('product_id');
-                        echo $productFrm->getFieldHtml('product_brand_id');
-                        echo $productFrm->getFieldHtml('ptc_prodcat_id');
-                        echo $productFrm->getFieldHtml('ptt_taxcat_id');
-                        echo $productFrm->getFieldHtml('btn_submit'); ?>
+                                echo $productFrm->getFieldHtml('product_id');
+                                echo $productFrm->getFieldHtml('product_brand_id');
+                                echo $productFrm->getFieldHtml('ptc_prodcat_id');
+                                echo $productFrm->getFieldHtml('ptt_taxcat_id');
+                                echo $productFrm->getFieldHtml('btn_submit');
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -334,6 +339,7 @@ $btnDiscardFld->setFieldTagAttribute('onClick', 'goToCatalog()');
 <script type="text/javascript">
     $(document).ready(function() {
         $('input[name=\'brand_name\']').autocomplete({
+             minLength : 0, 
             'classes': {
                 "ui-autocomplete": "custom-ui-autocomplete"
             },
@@ -342,7 +348,8 @@ $btnDiscardFld->setFieldTagAttribute('onClick', 'goToCatalog()');
                     url: fcom.makeUrl('brands', 'autoComplete'),
                     data: {
                         keyword: request['term'],
-                        fIsAjax: 1
+                        fIsAjax: 1,
+                        'fetchAllRecords' : 1
                     },
                     dataType: 'json',
                     type: 'post',
@@ -360,6 +367,8 @@ $btnDiscardFld->setFieldTagAttribute('onClick', 'goToCatalog()');
             'select': function(event, ui) {
                 $("input[name='product_brand_id']").val(ui.item.id);
             }
+        }).focus(function() {
+            $('input[name=\'brand_name\']').autocomplete('search');
         });
 
         $('input[name=\'brand_name\']').change(function() {

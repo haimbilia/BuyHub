@@ -77,10 +77,12 @@ class SellerProduct extends MyAppModel
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprod_id',
                 'selprod_product_id',
-                'selprod_price',
                 'selprod_stock',
                 'selprod_min_order_qty',
                 'selprod_condition'
+            ),
+            ImportexportCommon::VALIDATE_FLOAT => array(
+                'selprod_price',
             ),
             ImportexportCommon::VALIDATE_NOT_NULL => array(
                 'product_identifier',
@@ -1150,5 +1152,21 @@ class SellerProduct extends MyAppModel
             }
         }
         return true;
+    }
+    
+    public static function getCatelogFromProductId($productId)
+    {
+        $productId = FatUtility::int($productId);
+        $srch = SellerProduct::getSearchObject();
+        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
+        $srch->addCondition('selprod_deleted', '=', 0);
+        $srch->addCondition('selprod_product_id', '=', $productId);
+        $srch->addFld('selprod_id');
+        $rs = $srch->getResultSet();
+		$record = FatApp::getDb()->fetch($rs);
+        if (!empty($record)) {
+            return $record;
+        }
+        return [];
     }
 }

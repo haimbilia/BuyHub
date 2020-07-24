@@ -43,7 +43,7 @@ $submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary');
 $submitBtnFld->developerTags['col'] = 12;
 
 $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary');
+$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary js-cancel-inventory');
 
 ?>
 <div class="row">
