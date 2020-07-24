@@ -6,8 +6,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 {
     public const KEY_NAME = 'EasyEcom';
     public const PRODUCTION_URL = 'https://app.easyecom.io/';
-
-    private $reqAuthToken = '';
     
     /**
      * __construct
@@ -86,7 +84,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $userData = $this->getLoggedUserInfo();
         $uObj = new User($this->getUserId());
-        if (!$authToken = $uObj->setMobileAppToken($this->easyEcom->getKeys('auth_token_age'))) {
+        if (!$authToken = $uObj->setMobileAppToken(UserAuthentication::TOKEN_AGE_IN_DAYS)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
@@ -103,7 +101,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             "phone" => $userData['shop_phone'],
             "company_name" => $userData['user_name'],
             "email" => $userData['credential_email'],
-            "client_id" => $this->easyEcom->getKeys('easyecom_token'),
+            "client_id" => $this->easyEcom->getKey('easyecom_token'),
             "password" =>  $password,
             "shipping_address" => $shopAddress,
             "billing_address" => $shopAddress,
