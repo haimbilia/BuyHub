@@ -19,7 +19,7 @@
                         </a>
                         <iframe id="easyEcomLogin" class='d-none' frameborder="5" width="500" height="300"></iframe>
                     <?php } else { ?>
-                        <a class="btn btn--primary btn--sm" href="javascript:void(0)" onClick="register(this)">
+                        <a class="btn btn-primary btn--sm" href="javascript:void(0)" onClick="register(this)">
                             <?php echo Labels::getLabel('LBL_CONNECT', $siteLangId); ?>
                         </a>
                     <?php } ?>
