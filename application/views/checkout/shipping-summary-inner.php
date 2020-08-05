@@ -56,7 +56,7 @@
                                         echo '<option value="' . $key . '">' . $shippingRate['title'] .' ( ' . $shippingRate['cost'] . ' ) </option>';
                                     }
                                     echo '</select>';
-                                } elseif ($product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+                                } else {
                                     echo Labels::getLabel('MSG_Product_is_not_available_for_shipping', $siteLangId);
                                 }
                             }
@@ -69,6 +69,29 @@
                     $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
                     $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
                     $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                <?php if (count($levelItems['products']) == 1 && count($levelItems['rates']) > 0 && $level != Shipping::LEVEL_PRODUCT) { ?>
+                    <li class="list-group-item shipping-select">
+                        <div class="shop-name"><?php echo $product['shop_name']; ?></div>
+                        <div class="shipping-method">
+                        <?php $priceListCount = count($levelItems['rates']);
+                            if ($priceListCount == 1 && current($levelItems['rates'])['cost'] == 0) {
+                                echo Labels::getLabel('LBL_Free_Shipping', $siteLangId) ;
+                            } else {
+                                if (count($levelItems['rates']) > 0) {
+                                    $name = current($levelItems['rates'])['code'];
+                                    echo '<select class="form-control custom-select" name="shipping_services[' . $name . ']">';
+                                    foreach ($levelItems['rates'] as $key => $shippingRate) {
+                                        echo '<option value="' . $key . '">' . $shippingRate['title'] .' ( ' . $shippingRate['cost'] . ' ) </option>';
+                                    }
+                                    echo '</select>';
+                                } elseif ($product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+                                    echo Labels::getLabel('MSG_Product_is_not_available_for_shipping', $siteLangId);
+                                }
+                            } ?>
+                        </div>
+                    </li> 
+                <?php }?>    
+
                 <?php if ($level == Shipping::LEVEL_PRODUCT && isset($levelItems['rates'][$product['selprod_id']])) {  ?>
                 <li class="list-group-item shipping-select">
                     <div class="shop-name"><?php echo $product['shop_name']; ?></div>
@@ -137,24 +160,22 @@
                         </ul>
                     </div>
                 </li>
-                <?php if ($level == Shipping::LEVEL_PRODUCT) { ?>              
-                </ul>
-                <ul class="list-group list-cart list-shippings">
+                <?php if (count($levelItems['products']) == 1) { ?> </ul> <?php }?> 
                 <?php }?> 
-                <?php }?>                              
-            </ul>
-            <?php }?>
+
+                <?php if (count($levelItems['products']) > 1) { ?>
+                    </ul>
+                <?php }?>                                                             
+                
+            <?php }?>            
         </div>
         <div class="step__footer">
-            <a class="btn btn-link" href="javascript:void(0)" onclick="showAddressList();">
-                <i class="arrow">
-                    <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#arrow-left"
-                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#arrow-left">
-                        </use>
-                    </svg></i>
-                <span class=""><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></span></a>
-            <a class="btn btn-primary btn-wide " onClick="setUpShippingMethod();" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
+            <a class="btn btn-outline-primary btn-wide" href="javascript:void(0)" onclick="showAddressList();">
+                <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
+            </a>
+            <a class="btn btn-primary btn-wide " onClick="setUpShippingMethod();" href="javascript:void(0)">
+                <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+            </a>
         </div>
     </div>
 </main>

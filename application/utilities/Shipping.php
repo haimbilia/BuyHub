@@ -20,6 +20,10 @@ class Shipping
     private $shippingApiObj = [];
     private $selProdShipRates = [];
         
+    public const FULFILMENT_ALL = -1;
+    public const FULFILMENT_PICKUP = 1;
+    public const FULFILMENT_SHIP = 2;
+
     /**
      * __construct
      *
@@ -43,6 +47,36 @@ class Shipping
             self::BY_ADMIN => Labels::getLabel('LBL_ADMIN_SHIPPING', $langId),
             self::BY_SHOP => Labels::getLabel('LBL_SHOP_SHIPPING', $langId)
         ];
+    }
+
+    /**
+     * getFulFillmentArr
+     *
+     * @param  int $langId
+     * @param  int $fulFillmentType
+     * @return array
+     */
+    public static function getFulFillmentArr(int $langId, int $fulFillmentType = -1): array
+    {
+        switch ($fulFillmentType) {
+            case self::FULFILMENT_SHIP:
+                return [
+                    self::FULFILMENT_SHIP => Labels::getLabel('LBL_SHIPPED_ONLY', $langId)
+                ];
+            break;
+            case self::FULFILMENT_PICKUP:
+                return [
+                    self::FULFILMENT_PICKUP => Labels::getLabel('LBL_PICKUP_ONLY', $langId)
+                ];
+            break;
+           default:
+                return [
+                    self::FULFILMENT_ALL => Labels::getLabel('LBL_SHIPPED_AND_PICKUP', $langId),
+                    self::FULFILMENT_PICKUP => Labels::getLabel('LBL_PICKUP_ONLY', $langId),
+                    self::FULFILMENT_SHIP => Labels::getLabel('LBL_SHIPPED_ONLY', $langId)
+                ];
+            break;
+        }
     }
 
     /**
@@ -142,6 +176,10 @@ class Shipping
 
     public function getSellerProductShippingRates(array $selProdIdArr, int $countryId, int $stateId): array
     {
+        if (empty($selProdIdArr)) {
+            return [];
+        }
+        
         $countryId = FatUtility::int($countryId);
         $stateId = FatUtility::int($stateId);
 
@@ -321,6 +359,7 @@ class Shipping
                     $this->shippedByArr[$shippingLevel]['rates'][$rates['shiprate_id']] = $shippingCost;
                     break;
             }
+            $this->shippedByArr[$shippingLevel]['pickup_options'] = [];
         }
 
         $this->setCombinedCharges();

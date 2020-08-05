@@ -27,7 +27,7 @@ class LibHelper extends FatUtility
         if (true === $json) {
             FatUtility::dieJsonError($message);
         }
-        
+
         if (FatUtility::isAjaxCall() || $redirect === false) {
             FatUtility::dieWithError($message);
         }
@@ -95,7 +95,13 @@ class LibHelper extends FatUtility
         }
         return (int) $iValue;
     }
-
+    
+    /**
+     * bytesToSize
+     *
+     * @param  mixed $bytes
+     * @return void
+     */
     public static function bytesToSize($bytes)
     {
         if ($bytes >= 1073741824) {
@@ -171,5 +177,17 @@ class LibHelper extends FatUtility
             return null;
         }
         return openssl_decrypt(mb_substr($data, 64, null, '8bit'), 'aes-256-ctr', $key, OPENSSL_RAW_DATA, $iv);
+    }
+        
+    /**
+     * isJson
+     *
+     * @param  string $string
+     * @return bool
+     */
+    public static function isJson($string): bool
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
     }
 }

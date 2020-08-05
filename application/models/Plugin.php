@@ -47,7 +47,6 @@ class Plugin extends MyAppModel
         self::TYPE_TAX_SERVICES ,
         self::TYPE_FULL_TEXT_SEARCH,
         self::TYPE_SPLIT_PAYMENT_METHOD,
-        // self::TYPE_REGULAR_PAYMENT_METHOD,
         self::TYPE_SHIPPING_SERVICES,
     ];
 
@@ -62,7 +61,6 @@ class Plugin extends MyAppModel
     public function __construct(int $id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
         $this->objMainTableRecord->setSensitiveFields(
             array('plugin_code')
         );
@@ -172,7 +170,6 @@ class Plugin extends MyAppModel
      */
     public static function getSearchObject(int $langId = 0, bool $isActive = true, bool $joinSettings = false): object
     {
-        $langId = FatUtility::int($langId);
         $srch = new SearchBase(static::DB_TBL, 'plg');
         if ($isActive == true) {
             $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
@@ -194,7 +191,6 @@ class Plugin extends MyAppModel
                 'plgs'
             );
         }
-        $srch->addOrder('plg.' . static::DB_TBL_PREFIX . 'display_order', 'ASC');
         return $srch;
     }
     
@@ -303,7 +299,7 @@ class Plugin extends MyAppModel
         if (true == $assoc) {
             return $db->fetchAllAssoc($rs);
         }
-
+        
         return $db->fetchAll($rs, static::DB_TBL_PREFIX . 'id');
     }
     
@@ -451,6 +447,16 @@ class Plugin extends MyAppModel
     public static function updateStatus(int $typeId, int $status, int $id = null, &$error = ''): bool
     {
         $db = FatApp::getDb();
+        $langId = CommonHelper::getLangId();
+        $pluginTypesArr = static::getTypeArr($langId);
+        $plugins = static::getDataByType($typeId, $langId);
+        $activationLimit = static::getActivatationLimit($typeId);
+        if (0 < $activationLimit && $activationLimit <= count($plugins) && self::ACTIVE == $status) {
+            $msg = Labels::getLabel("MSG_MAXIMUM_OF_{LIMIT}_{PLUGIN-TYPE}_CAN_BE_ACTIVATED_SIMULTANEOUSLY", $langId);
+            $error = CommonHelper::replaceStringData($msg, ['{LIMIT}' => $activationLimit, '{PLUGIN-TYPE}' => $pluginTypesArr[$typeId]]);
+            return false;
+        }
+        
         $max = in_array($typeId, self::HAVING_KINGPIN) && applicationConstants::ACTIVE == $status ? 2 : 1;
 
         for ($i = 0; $i < $max; $i++) {
@@ -475,5 +481,23 @@ class Plugin extends MyAppModel
             }
         }
         return true;
+    }
+    
+    /**
+     * getActivatationLimit
+     *
+     * @param  int $typeId
+     * @return void
+     */
+    public static function getActivatationLimit(int $typeId): int
+    {
+        if (false === static::getDirectory($typeId)) {
+            return -1;
+        }
+
+        $pluginTypeArr = [
+            self::TYPE_REGULAR_PAYMENT_METHOD => 3,
+        ];
+        return array_key_exists($typeId, $pluginTypeArr) ? $pluginTypeArr[$typeId] : 0;
     }
 }

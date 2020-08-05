@@ -47,6 +47,7 @@
                     <?php
                     if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) {?>
                     <li><a href="<?php echo UrlHelper::generateUrl('ProductCategories');?>"><?php echo Labels::getLabel('LBL_Categories', $adminLangId);?></a></li>
+                    <li><a href="<?php echo UrlHelper::generateUrl('ProductCategories', 'requests');?>"><?php echo Labels::getLabel('LBL_Categories_Requests', $adminLangId);?><?php if ($categoryReqCount) { ?><span class='badge'>(<?php echo $categoryReqCount; ?>)</span><?php } ?></a></li>
                     <?php } ?>
                     <?php
                     if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) {?>
@@ -488,7 +489,8 @@
                 /* $objPrivilege->canViewShippingDurationLabels(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewManualShippingApi(AdminAuthentication::getLoggedAdminId(), true) || */
                 $objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)
             ) { ?>
             <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shipping_Api', $adminLangId);?></a>
                 <ul>
@@ -519,6 +521,10 @@
                     <?php /* if($objPrivilege->canViewManualShippingApi(AdminAuthentication::getLoggedAdminId(), true)){?>
                         <li><a href="<?php echo UrlHelper::generateUrl('ManualShippingApi'); ?>"><?php echo Labels::getLabel('LBL_Manual_Shipping_Api',$adminLangId);?></a></li>
                     <?php } */ ?>
+                    
+                    <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li><a href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>"><?php echo Labels::getLabel('LBL_Pickup_Addresses', $adminLangId);?></a></li>
+                    <?php }?>
                 </ul>
             </li>
             <?php } ?>
