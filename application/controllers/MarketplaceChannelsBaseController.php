@@ -2,7 +2,7 @@
 
 class MarketplaceChannelsBaseController extends SellerPluginBaseController
 {
-    protected $userId = 0;
+    public $userId = 0;
     
     /**
      * __construct
