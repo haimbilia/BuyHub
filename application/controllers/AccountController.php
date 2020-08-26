@@ -3733,7 +3733,7 @@ class AccountController extends LoggedUserController
         }
 
         $customer = $paymentCard->getResponse();
-        $json['customerId'] = $customer->id;
+        $json['data'] = ['customerId' => $customer->id];
         $json['msg'] = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
         FatUtility::dieJsonSuccess($json);
     }
