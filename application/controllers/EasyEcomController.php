@@ -16,10 +16,9 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     public function __construct(string $action)
     {
         parent::__construct($action);
-        $error = '';
-        if (false === PluginHelper::includePlugin(self::KEY_NAME, 'marketplace-channels', $error, $this->siteLangId)) {
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $error);
-            $this->dieWithJsonResponse($resp);
+        $this->easyEcom = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        if (false === $this->easyEcom) {
+            $this->dieWithJsonResponse($error);
         }
 
         $this->init();
@@ -32,12 +31,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     private function init()
     {
-        $this->easyEcom = new EasyEcom($this->siteLangId);
-        if (false == $this->easyEcom->validateSettings($this->siteLangId)) {
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $this->easyEcom->getError());
-            $this->dieWithJsonResponse($resp);
-        }
-        
+        $this->settings = $this->easyEcom->getSettings();
         if (true === MOBILE_APP_API_CALL && false == UserAuthentication::doAppLogin(CommonHelper::getAppToken())) {
             $msg = Labels::getLabel("MSG_INVALID_USER", $this->siteLangId);
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
@@ -52,7 +46,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function index()
     {
-        $this->set('pluginName', self::KEY_NAME);
+        $this->set('pluginName', $this->settings['plugin_name']);
         $this->_template->render();
     }
 
@@ -71,6 +65,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             FatUtility::dieJsonError($uObj->getError());
         }
         $this->set('userTempToken', $userTempToken);
+        $this->set('pluginDescription', $this->settings['plugin_description']);
         $this->set('easyEcomSellerToken', $easyEcomSellerToken);
         $this->_template->render(false, false);
     }
