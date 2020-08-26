@@ -17,8 +17,8 @@
                 <span class="order-summary-toggle__text">
                     <span>Order Summary <i class="arrow">
                             <svg class="svg">
-                                <use xlink:href="../images/retina/sprite.svg#arrow-right"
-                                    href="../images/retina/sprite.svg#arrow-right"></use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-right"
+                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-right"></use> 
                             </svg>
 
                         </i></span>
@@ -30,7 +30,6 @@
         </div>
     </button>
 </aside>
-</section>
 <div class="content" data-content="">
     <div class="container">
         <div class="main checkout-content-js">
@@ -45,7 +44,9 @@
             </div>    
         </aside>   
     </div>
-</div>    
+</div>  
+</section>
+  
 <input id="hasAddress" class="d-none" value = "<?php echo (empty($addresses) || count($addresses) == 0) ? 0 : 1?>">
 <script type="text/javascript">
     <?php if (isset($defaultAddress)) { ?>

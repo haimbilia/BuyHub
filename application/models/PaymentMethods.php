@@ -9,22 +9,32 @@ class PaymentMethods
     public const REFUND_TYPE_RETURN = 1;
     public const REFUND_TYPE_CANCEL = 2;
 
-    private $paymentPlugin = '';
+    private $paymentPlugin;
     private $keyname = '';
     private $langId = '';
     private $canRefundToCard = false;
     private $resp = [];
-    private $db;
     private $sellerId = '';
     private $opId = '';
-    private $transferAmount = '';
     private $transferId = '';
     private $invoiceNumber = '';
     private $remoteTxnId = '';
     private $sellerTxnAmount = '';
     private $error = '';
 
-    public static function getSearchObject($langId = 0, $isActive = true)
+    public function __construct()
+    {
+        $this->paymentPlugin = (object)[];
+    }
+    
+    /**
+     * getSearchObject
+     *
+     * @param  int $langId
+     * @param  bool $isActive
+     * @return object
+     */
+    public static function getSearchObject(int $langId = 0, bool $isActive = true): object
     {
         $srch = Plugin::getSearchObject($langId, $isActive);
         $cond = $srch->addCondition('plugin_type', '=', Plugin::TYPE_REGULAR_PAYMENT_METHOD);
@@ -107,17 +117,31 @@ class PaymentMethods
     /**
      * initiateRefund
      *
-     * @param $opId
+     * @param array $requestRow
      * @return mixed
      */
-    public function initiateRefund(string $opId, int $refundType = self::REFUND_TYPE_RETURN): bool
+    public function initiateRefund(array $requestRow, int $refundType = self::REFUND_TYPE_RETURN): bool
     {
         if (false == $this->canRefundToCard) {
             $msg = Labels::getLabel('MSG_THIS_{PAYMENT-METHOD}_PAYMENT_METHOD_IS_NOT_ABLE_TO_REFUND_IN_CARD', $this->langId);
             $this->error = CommonHelper::replaceStringData($msg, ['{PAYMENT-METHOD}' => $this->keyname]);
             return false;
         }
-        $this->opId = $opId;
+
+        switch ($refundType) {
+            case self::REFUND_TYPE_RETURN:
+                $this->opId = $requestRow['orrequest_op_id'];
+                break;
+            
+            case self::REFUND_TYPE_CANCEL:
+                $this->opId = $requestRow['op_id'];
+                break;
+            
+            default:
+                $this->error = Labels::getLabel('MSG_INVALID_REFUND_TYPE', $this->langId);
+                return false;
+                break;
+        }
 
         $orderObj = new Orders();
         $childOrderInfo = $orderObj->getOrderProductsByOpId($this->opId, $this->langId);
@@ -125,20 +149,6 @@ class PaymentMethods
 
         $this->sellerId = $childOrderInfo['op_selprod_user_id'];
         $this->invoiceNumber = $childOrderInfo['op_invoice_number'];
-
-        $txnData = $this->getTransferTxnData();
-
-        if (!empty($txnData)) {
-            foreach ($txnData as $txn) {
-                if (!empty($txn['utxn_gateway_txn_id'])) {
-                    $this->transferId = $txn['utxn_gateway_txn_id'];
-
-                    /* Used for cancel order. REFUND_TYPE_CANCEL */
-                    $this->sellerTxnAmount = $txn['utxn_debit'];
-                    break;
-                }
-            }
-        }
 
         $txnId = "";
         array_walk($payments, function ($value, $key) use (&$txnId) {
@@ -148,28 +158,19 @@ class PaymentMethods
             }
         });
 
-        /* $checkShipping = false;
-        if (0 < $childOrderInfo["op_free_ship_upto"] && array_key_exists(OrderProduct::CHARGE_TYPE_SHIPPING, $childOrderInfo['charges']) && $childOrderInfo["op_actual_shipping_charges"] != $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) {
-            $checkShipping = true;
-        } */
-
+        $this->txnAmount = CommonHelper::orderProductAmount($childOrderInfo, 'NETAMOUNT');
         switch ($refundType) {
             case self::REFUND_TYPE_RETURN:
-                $txnAmount = $childOrderInfo['op_refund_amount'];
-                $this->sellerTxnAmount = $txnAmount;
-                break;
-            
-            case self::REFUND_TYPE_CANCEL:
-                $txnAmount = CommonHelper::orderProductAmount($childOrderInfo, 'NETAMOUNT');
-                break;
-            
-            default:
-                $this->error = Labels::getLabel('MSG_INVALID_REFUND_TYPE', $this->langId);
-                return false;
+                if ($childOrderInfo['op_qty'] != $requestRow['orrequest_qty']) {
+                    $this->txnAmount = ($this->txnAmount / $childOrderInfo['op_qty']) * $requestRow['orrequest_qty'];
+                }
+               
+                $amountToBePaidToSeller = CommonHelper::orderProductAmount($childOrderInfo, 'NETAMOUNT', false, User::USER_TYPE_SELLER);
+
+                $deductableSellerAmount = (($amountToBePaidToSeller - $childOrderInfo['op_commission_charged']) / $childOrderInfo['op_qty']) * $requestRow['orrequest_qty'];
+
                 break;
         }
-
-        $this->txnAmount = $txnAmount;
 
         switch ($this->keyname) {
             case 'StripeConnect':
@@ -191,37 +192,61 @@ class PaymentMethods
                     return false;
                 }
                 
-                // Debit from wallet until not getting debited from user remote account.
-                $this->refundFromWallet();
-
-                if (!empty($this->transferId)) {
-                    $comments = Labels::getLabel('MSG_REFUND_INITIATE_REGARDING_#{invoice-no}', $this->langId);
-                    $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $this->invoiceNumber]);
-                    $requestParam = [
-                        'transferId' => $this->transferId,
-                        'data' => [
-                            'amount' => $this->convertInPaisa($this->sellerTxnAmount), // In Paisa
-                            'description' => $comments,
-                            'metadata' => [
-                                'op_id' => $this->opId
-                            ],
-                        ],
-                    ];
-                    $respStatus = $this->paymentPlugin->revertTransfer($requestParam);
-                    if (false == $respStatus) {
-                        $this->error = $this->paymentPlugin->getError();
-                        return false;
-                    }
-
-                    //To get response object
-                    $this->resp = $this->paymentPlugin->getResponse();
-                    if (!empty($this->resp->id)) {
-                        $this->remoteTxnId = $this->resp->id;
-                        // Credit to wallet if successfully refund from remote account
-                        return $this->returnRefundAmount();
+                $txnData = $this->getTransferTxnData();
+                $transferAmtArr = [ ];
+                if (!empty($txnData)) {
+                    foreach ($txnData as $txn) {
+                        if (empty($txn['utxn_gateway_txn_id'])) {
+                            continue;
+                        }
+                        
+                        $transferAmtArr[$txn['utxn_gateway_txn_id']] = $txn['utxn_debit'];
+                        if (self::REFUND_TYPE_RETURN == $refundType) {
+                            if ($txn['utxn_debit'] >= $deductableSellerAmount) {
+                                $transferAmtArr[$txn['utxn_gateway_txn_id']] = $deductableSellerAmount;
+                                $deductableSellerAmount = 0;
+                            } else {
+                                $deductableSellerAmount = $deductableSellerAmount - $transferAmtArr[$txn]['utxn_gateway_txn_id'];
+                            }
+                        }
                     }
                 }
-                break;
+
+                if (!empty($transferAmtArr)) {
+                    foreach ($transferAmtArr as $transferId => $txnAmt) {
+                        $this->transferId = $transferId;
+                        $this->sellerTxnAmount = $txnAmt;
+
+                        $this->refundFromWallet();
+
+                        $comments = Labels::getLabel('MSG_REFUND_INITIATE_-', $this->langId) .  $txnData[$transferId]['utxn_comments'];
+                        $requestParam = [
+                            'transferId' => $this->transferId,
+                            'data' => [
+                                'amount' => $this->convertInPaisa($this->sellerTxnAmount), // In Paisa
+                                'description' => $comments,
+                                'metadata' => [
+                                    'op_id' => $this->opId
+                                ],
+                            ],
+                        ];
+                        $respStatus = $this->paymentPlugin->revertTransfer($requestParam);
+                        if (false == $respStatus) {
+                            $this->error = $this->paymentPlugin->getError();
+                            return false;
+                        }
+
+                        //To get response object
+                        $this->resp = $this->paymentPlugin->getResponse();
+                        if (!empty($this->resp->id)) {
+                            $this->remoteTxnId = $this->resp->id;
+                            // Credit to wallet if successfully refund from remote account
+                            $this->returnRefundAmount($comments);
+                        }
+                    }
+                }
+
+            break;
         }
         return true;
     }
@@ -260,9 +285,9 @@ class PaymentMethods
         $srch = Transactions::getUserTransactionsObj($sellerId);
         $srch->addCondition('utxn.utxn_type', '=', Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT);
         $srch->addCondition('utxn.utxn_op_id', '=', $opId);
-        $srch->addOrder('utxn_gateway_txn_id', 'DESC');
+        $srch->addOrder('utxn_debit', 'DESC');
         $rs = $srch->getResultSet();
-        $records = $db->fetchAll($rs);
+        $records = $db->fetchAll($rs, 'utxn_gateway_txn_id');
         if (!$records) {
             $this->error = $db->getError();
             return false;
@@ -286,18 +311,16 @@ class PaymentMethods
     /**
      * returnRefundAmount - Return Refund amount if debited from seller remote account.
      *
+     * @param  strig $comments
      * @return bool
      */
-    private function returnRefundAmount()
+    private function returnRefundAmount(string $comments): bool
     {
         if (empty($this->remoteTxnId)) {
             $this->error = Labels::getLabel('MSG_NO_REMOTE_TXN_ID_FOUND', $this->langId);
             return false;
         }
-
-        $accountId = User::getUserMeta($this->sellerId, 'stripe_account_id');
-        $comments = Labels::getLabel('MSG_REFUND_INITIATE_FROM_ACCOUNT_{account-id}', $this->langId);
-        $comments = CommonHelper::replaceStringData($comments, ['{account-id}' => $accountId]);
+        
         Transactions::creditWallet($this->sellerId, Transactions::TYPE_ORDER_REFUND, $this->sellerTxnAmount, $this->langId, $comments, $this->opId, $this->remoteTxnId);
         return true;
     }

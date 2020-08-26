@@ -1,18 +1,114 @@
 <?php
-
-use Stripe\PaymentMethod;
-
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLoggedUserId());
 ?>
 <main class="main__content">
     <div class="step active" role="step:4">
+        
+        <ul class="list-group review-block">
+            <li class="list-group-item">
+                <div class="review-block__label">
+                    <?php 
+                    if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $cartHasPhysicalProduct == false) { 
+                        echo Labels::getLabel('LBL_Billing_to:', $siteLangId);
+                        $address = $billingAddressArr;
+                    }else{
+                        echo Labels::getLabel('LBL_Shipping_to:', $siteLangId);
+                        $address = $shippingAddressArr;
+                    }
+                    ?>
+                </div>
+                <div class="review-block__content" role="cell">  
+                    <div class="delivery-address">             
+                        <p><?php echo ( mb_strlen($address['addr_address1'] ) > 0 ) ? $address['addr_address1'] : '';?>
+                        <?php echo ( mb_strlen($address['addr_address2'] ) > 0 ) ? $address['addr_address2'] . '<br>' : '';?>
+                        <?php echo ( mb_strlen($address['addr_city']) > 0 ) ? $address['addr_city'] . ',' : '';?>
+                        <?php echo ( mb_strlen($address['state_name']) > 0 ) ? $address['state_name'] . '<br>' : '';?>
+                        <?php echo ( mb_strlen($address['country_name']) > 0 ) ? $address['country_name'] . ',' : '';?>
+                        <?php echo ( mb_strlen($address['addr_zip']) > 0 ) ?  $address['addr_zip'] . '<br>' : '';?></p>
+                        <p class="phone-txt"><?php echo ( mb_strlen($address['addr_phone']) > 0 ) ? $address['addr_phone'] . '' : '';?></p>
+                    </div>
+                </div>
+                <div class="review-block__link" role="cell">
+                    <?php 
+                    if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $cartHasPhysicalProduct == false) {
+                        $onclick = 'loadAddressDiv('.Address::Address_TYPE_BILLING.');';
+                    }else{ 
+                        $onclick = 'loadAddressDiv();';
+                    } 
+                    ?>
+                    <a class="link" href="javascript:void(0);" onClick="<?php echo $onclick; ?>"><span><?php echo Labels::getLabel('LBL_Change_Address', $siteLangId); ?></span></a>
+                </div>
+            </li>
+            
+            <?php if ($fulfillmentType == Shipping::FULFILMENT_PICKUP && !empty($pickUpAddrData)) { ?>
+            <li class="list-group-item">
+                <div class="review-block__label">
+                <?php echo Labels::getLabel('LBL_Pickup_Address:', $siteLangId); ?>
+                </div>
+                <div class="review-block__content" role="cell">  
+                    <div class="delivery-address"> 
+                        <?php foreach($pickUpAddrData as $address) { ?>
+                            <p><strong><?php echo $address['shop_name']; ?></strong></p>
+                            <p><?php echo ( mb_strlen($address['addr_address1'] ) > 0 ) ? $address['addr_address1'] : '';?>
+                            <?php echo ( mb_strlen($address['addr_address2'] ) > 0 ) ? $address['addr_address2'] . '<br>' : '';?>
+                            <?php echo ( mb_strlen($address['addr_city']) > 0 ) ? $address['addr_city'] . ',' : '';?>
+                            <?php echo ( mb_strlen($address['state_name']) > 0 ) ? $address['state_name'] . '<br>' : '';?>
+                            <?php echo ( mb_strlen($address['country_name']) > 0 ) ? $address['country_name'] . ',' : '';?>
+                            <?php echo ( mb_strlen($address['addr_zip']) > 0 ) ?  $address['addr_zip'] . '<br>' : '';?></p>
+                            <p class="phone-txt"><?php echo ( mb_strlen($address['addr_phone']) > 0 ) ? $address['addr_phone'] . '' : '';?></p>
+                            <?php 
+                            $fromTime = date('H:i', strtotime($address["time_slot_from"]));
+                            $toTime = date('H:i', strtotime($address["time_slot_to"]));
+                            ?>
+                            <p><?php echo "<strong>".FatDate::format($address["time_slot_date"]).' '.$fromTime.' - '.$toTime.'</strong>'; ?></p>
+                            <?php if (count($pickUpAddrData) > 1) { ?>
+                            <a class="plus-more" href="javascript:void(0);" onClick="displaySelectedPickUpAddresses()"><?php echo '+'.(count($pickUpAddrData) - 1).' '.Labels::getLabel('LBL_More_', $siteLangId); ?></a>
+                            <?php break; } ?>
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="review-block__link" role="cell">
+                    <a class="link" href="javascript:void(0);" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Change_Address', $siteLangId); ?></span></a>
+                </div>
+            </li>
+            <?php } ?>
+        </ul> 
+        
         <div class="step__section">
             <div class="step__section__head">
                 <h5 class="step__section__head__title"><?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?></h5>
             </div>
-            <label class="checkbox"><input type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1"><?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?> <i class="input-helper"></i>
-            </label>
+            <?php 
+            if ($fulfillmentType == Shipping::FULFILMENT_SHIP) {
+                if ($shippingAddressId == $billingAddressId) { 
+            ?>
+                <label class="checkbox"><input onClick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1"><?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?> <i class="input-helper"></i>
+                </label>
+            <?php }else{ ?>
+                <ul class="list-group review-block">
+                    <li class="list-group-item">
+                        <div class="review-block__label">
+                            <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
+                        </div>
+                        <div class="review-block__content" role="cell">
+                            <?php echo $billingAddressArr['addr_title']; ?>
+                            <?php echo $billingAddressArr['addr_name']; ?>
+                            <?php echo $billingAddressArr['addr_address1'] . '<br>';?>
+                            <?php echo $billingAddressArr['addr_city'];?>,
+                            <?php echo $billingAddressArr['state_name'];?>,
+                            <?php echo (strlen($billingAddressArr['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . ' ' . $billingAddressArr['addr_zip'] . ', ' : '';?>
+                            <?php echo (strlen($billingAddressArr['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . ' ' . $billingAddressArr['addr_phone'] . '<br>' : '';?>
+                        </div>
+                        <div class="review-block__link" role="cell">
+                            <a class="link" href="javascript:void(0);" onClick="loadAddressDiv(<?php echo Address::ADDRESS_TYPE_BILLING; ?>)"><span><?php echo Labels::getLabel('LBL_Change_Address', $siteLangId); ?></span></a>
+                        </div>
+                    </li>
+                </ul> 
+            <?php } 
+            }
+            ?>
+            
             <?php if (empty($cartSummary['cartRewardPoints'])) { ?>
                 <?php if ($rewardPoints > 0) { ?>
                     <div class="rewards">
@@ -39,26 +135,17 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                             </span>
                         </div>
                         <?php
-                        $redeemRewardFrm->setFormTagAttribute('class', 'form form-floating');
+                        $redeemRewardFrm->setFormTagAttribute('class', 'form form-inline');
                         $redeemRewardFrm->setFormTagAttribute('onsubmit', 'useRewardPoints(this); return false;');
                         $redeemRewardFrm->setJsErrorDisplay('afterfield');
                         $fld = $redeemRewardFrm->getField('redeem_rewards');
-                        $fld->setFieldTagAttribute('class', 'form-control form-floating__field');
+                        $fld->setFieldTagAttribute('class', 'form-control');
+                        $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Use_Reward_Point', $siteLangId));
                         $fld = $redeemRewardFrm->getField('btn_submit');
-                        $fld->setFieldTagAttribute('class', 'btn btn-primary btn-wide');
+                        $fld->setFieldTagAttribute('class', 'btn btn-submit');
                         echo $redeemRewardFrm->getFormTag();  ?>
-                        <div class="row form-row">
-                            <div class="col">
-                                <div class="form-group form-floating__group">
-                                    <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
-                                    <label class="form-floating__label"><?php echo Labels::getLabel('LBL_Use_Reward_Point', $siteLangId); ?></label>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <!-- Button -->
-                                <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
-                            </div>
-                        </div>
+                            <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
+                            <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
                         </form>
                         <?php echo  $redeemRewardFrm->getExternalJs(); ?>
                     </div>
@@ -82,126 +169,158 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 </div>
             <?php } ?>
         </div>
-    </div>
+    </div> 
 </main>
-<div class="box box--white box--radius p-4">
-    <section id="payment" class="section-checkout">
-        <div class="align-items-center mb-4">
-            <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0) { ?>
-                <div>
-                    <div id="wallet" class="wallet">
-                        <?php if ($cartSummary["cartWalletSelected"]) { ?>
-                            <div class="listing--grids">
-                                <ul>
-                                    <li>
-                                        <div class="boxwhite">
-                                            <p><?php echo Labels::getLabel('LBL_Payment_to_be_made', $siteLangId); ?>
-                                            </p>
-                                            <h5><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, true); ?>
-                                            </h5>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="boxwhite">
-                                            <p><?php echo Labels::getLabel('LBL_Amount_in_your_wallet', $siteLangId); ?>
-                                            </p>
-                                            <h5><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?>
-                                            </h5>
-                                        </div>
-                                        <p class="note">
-                                            <i>
-                                                <?php
-                                                $remainingWalletBalance = ($userWalletBalance - $cartSummary['orderNetAmount']);
-                                                $remainingWalletBalance = ($remainingWalletBalance < 0) ? 0 : $remainingWalletBalance;
-                                                echo Labels::getLabel('LBL_Remaining_wallet_balance', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($remainingWalletBalance, true, false, true, false, true); ?>
-                                            </i>
-                                        </p>
-                                    </li>
-                                    <?php /* if( $userWalletBalance < $cartSummary['orderNetAmount'] ){ ?> <li>
-                                        <div class="boxwhite">
-                                            <p>Select an Option to pay balance</p>
-                                            <h5><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderPaymentGatewayCharges']); ?></h5>
-                                        </div>
-                                    </li> <?php } */ ?>
-                                    <?php if ($userWalletBalance >= $cartSummary['orderNetAmount']) { ?>
+<?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
+    <div class="wallet-balance">
+         <label class="checkbox wallet">
+            <input onChange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
+            <i class="input-helper"></i>
+            <span class="wallet__txt">           
+                <svg class="svg">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#wallet" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#wallet">
+                    </use>
+                </svg>
+                <div class="">
+                    <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?></p>
+                    <span class="currency-value" dir="ltr"><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></span>
+                </div>
+            </span>
+        </label>
+        <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) { 
+            $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
+            $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-primary btn-wide');
+            $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
+            $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
+            $WalletPaymentForm->developerTags['fld_default_col'] = 12;
+            echo $WalletPaymentForm->getFormHtml(); ?>
+            <script type="text/javascript">
+                function confirmOrder(frm) {
+                    var data = fcom.frmData(frm);
+                    var action = $(frm).attr('action');
+                    fcom.updateWithAjax(fcom.makeUrl('Checkout', 'ConfirmOrder'), data, function(ans) {
+                        $(location).attr("href", action);
+                    });
+                }
+            </script>            
+        <?php }?>
+        <div class="wallet-balance_info">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</div>
+
+        <!-- <button class="btn btn-primary btn-wide" type="button">Pay $ 587.00</button> -->
+    </div> 
+<?php }?>
+        <section id="payment" class="section-checkout">
+            <div class="align-items-center mb-4">
+                <?php /* if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0) { ?>
+                    <div>
+                        <div id="wallet" class="wallet">
+                            <?php if ($cartSummary["cartWalletSelected"]) { ?>
+                                <div class="listing--grids">
+                                    <ul>
                                         <li>
-                                            <?php $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
-                                            $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-outline-primary');
-
-                                            $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
-                                            $WalletPaymentForm->developerTags['fld_default_col'] = 12;
-                                            echo $WalletPaymentForm->getFormHtml(); ?>
-                                        </li>
-                                        <script type="text/javascript">
-                                            function confirmOrder(frm) {
-                                                var data = fcom.frmData(frm);
-                                                var action = $(frm).attr('action');
-                                                fcom.updateWithAjax(fcom.makeUrl('Checkout', 'ConfirmOrder'), data, function(ans) {
-                                                    $(location).attr("href", action);
-                                                });
-                                            }
-                                        </script>
-                                    <?php } ?>
-                                </ul>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            <?php } ?>
-            <?php if ($cartSummary['orderNetAmount'] <= 0) { ?>
-                <div class="gap"></div>
-                <div id="wallet">
-                    <h6><?php echo Labels::getLabel('LBL_Payment_to_be_made', $siteLangId); ?>
-                        <strong><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, true); ?></strong>
-                    </h6> <?php
-                            $btnSubmitFld = $confirmForm->getField('btn_submit');
-                            $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-primary btn-sm');
-
-                            $confirmForm->developerTags['colClassPrefix'] = 'col-md-';
-                            $confirmForm->developerTags['fld_default_col'] = 12;
-                            echo $confirmForm->getFormHtml(); ?>
-                    <div class="gap"></div>
-                </div>
-            <?php } ?>
-        </div>
-        <?php
-        if ($cartSummary['orderPaymentGatewayCharges']) { ?>
-            
-                    <div class="payment-area" <?php echo ($cartSummary['orderPaymentGatewayCharges'] <= 0) ? 'is--disabled' : ''; ?>>
-                        <?php if ($cartSummary['orderPaymentGatewayCharges'] && 0 < count($paymentMethods)) { ?>
-                            <ul class="nav nav-payments" role="tablist" id="payment_methods_tab">
-                                <?php foreach ($paymentMethods as $key => $val) {
-                                    $pmethodCode = $val['plugin_code'];
-                                    $pmethodId = $val['plugin_id'];
-                                    $pmethodName = $val['plugin_name'];
-
-                                    if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
-                                        continue;
-                                    }?>
-                                    <li class="nav-item">
-                                        <a class="nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
-                                            <div class="payment-box">
-                                                <span><?php echo $pmethodName; ?></span>
+                                            <div class="boxwhite">
+                                                <p><?php echo Labels::getLabel('LBL_Payment_to_be_made', $siteLangId); ?>
+                                                </p>
+                                                <h5><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, true); ?>
+                                                </h5>
                                             </div>
-                                        </a>
-                                    </li>
-                                <?php
-                                } ?>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" role="tabpanel" >
-                                    <div id="tabs-container"></div>
+                                        </li>
+                                        <li>
+                                            <div class="boxwhite">
+                                                <p><?php echo Labels::getLabel('LBL_Amount_in_your_wallet', $siteLangId); ?>
+                                                </p>
+                                                <h5><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?>
+                                                </h5>
+                                            </div>
+                                            <p class="note">
+                                                <i>
+                                                    <?php
+                                                    $remainingWalletBalance = ($userWalletBalance - $cartSummary['orderNetAmount']);
+                                                    $remainingWalletBalance = ($remainingWalletBalance < 0) ? 0 : $remainingWalletBalance;
+                                                    echo Labels::getLabel('LBL_Remaining_wallet_balance', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($remainingWalletBalance, true, false, true, false, true); ?>
+                                                </i>
+                                            </p>
+                                        </li>
+                                       
+                                        <?php if ($userWalletBalance >= $cartSummary['orderNetAmount']) { ?>
+                                            <li>
+                                                <?php $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
+                                                $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-outline-primary');
+
+                                                $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
+                                                $WalletPaymentForm->developerTags['fld_default_col'] = 12;
+                                                echo $WalletPaymentForm->getFormHtml(); ?>
+                                            </li>
+                                            <script type="text/javascript">
+                                                function confirmOrder(frm) {
+                                                    var data = fcom.frmData(frm);
+                                                    var action = $(frm).attr('action');
+                                                    fcom.updateWithAjax(fcom.makeUrl('Checkout', 'ConfirmOrder'), data, function(ans) {
+                                                        $(location).attr("href", action);
+                                                    });
+                                                }
+                                            </script>
+                                        <?php } ?>
+                                    </ul>
                                 </div>
-                            </div>
-                        <?php } else {
-                            echo $cartSummary['orderPaymentGatewayCharges']  . ' < ' . count($paymentMethods);
-                            echo Labels::getLabel("LBL_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.", $siteLangId);
-                        } ?>
+                            <?php } ?>
+                        </div>
                     </div>
-               
-        <?php } ?>
-    </section>
-</div>
+                <?php } */ ?>
+                <?php if ($cartSummary['orderNetAmount'] <= 0) { ?>
+                    <div class="gap"></div>
+                    <div id="wallet">
+                        <h6><?php echo Labels::getLabel('LBL_Payment_to_be_made', $siteLangId); ?>
+                            <strong><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, true); ?></strong>
+                        </h6> <?php
+                                $btnSubmitFld = $confirmForm->getField('btn_submit');
+                                $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-primary btn-sm');
+
+                                $confirmForm->developerTags['colClassPrefix'] = 'col-md-';
+                                $confirmForm->developerTags['fld_default_col'] = 12;
+                                echo $confirmForm->getFormHtml(); ?>
+                        <div class="gap"></div>
+                    </div>
+                <?php } ?>
+            </div>
+            <?php
+            if ($cartSummary['orderPaymentGatewayCharges']) { ?>
+                
+                        <div class="payment-area" <?php echo ($cartSummary['orderPaymentGatewayCharges'] <= 0) ? 'is--disabled' : ''; ?>>
+                            <?php if ($cartSummary['orderPaymentGatewayCharges'] && 0 < count($paymentMethods)) { ?>
+                                <ul class="nav nav-payments <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" role="tablist" id="payment_methods_tab">
+                                    <?php foreach ($paymentMethods as $key => $val) {
+                                        $pmethodCode = $val['plugin_code'];
+                                        $pmethodId = $val['plugin_id'];
+                                        $pmethodName = $val['plugin_name'];
+
+                                        if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
+                                            continue;
+                                        }?>
+                                        <li class="nav-item">
+                                            <a class="nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
+                                                <div class="payment-box">
+                                                    <span><?php echo $pmethodName; ?></span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    <?php
+                                    } ?>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" role="tabpanel" >
+                                        <div id="tabs-container"></div>
+                                    </div>
+                                </div>
+                            <?php } else {
+                                echo $cartSummary['orderPaymentGatewayCharges']  . ' < ' . count($paymentMethods);
+                                echo Labels::getLabel("LBL_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.", $siteLangId);
+                            } ?>
+                        </div>
+                
+            <?php } ?>
+        </section>
+    
 <script>
     var enableGcaptcha = false;
 </script>
@@ -242,22 +361,26 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
             if (!tabObj || !tabObj.length) {
                 return;
             }
-            $('#tabs-container').html(fcom.getLoader());
+
             fcom.ajax(tabObj.attr('href'), '', function(response) {
                 $('#tabs-container').html(response);
                 var paymentMethod = tabObj.data('paymentmethod');
-                if ('cashondelivery' == paymentMethod.toLowerCase() && true == enableGcaptcha) {
-                    googleCaptcha();
-                }
-
-                var form = '#tabs-container form';
-                if (0 < $(form).length) {
-                    if (0 < $(form + " input[type='submit']").length) {
-                        $(form + " input[type='submit']").val(langLbl.requestProcessing);
+                if ('cashondelivery' == paymentMethod.toLowerCase()) {
+                    if (true == enableGcaptcha) {
+                        googleCaptcha();
                     }
-                    setTimeout(function() {
-                        $(form).submit()
-                    }, 100);
+                    $.mbsmessage.close();
+                } else {
+                    var form = '#tabs-container form';
+                    if (0 < $(form).length) {
+                        $('#tabs-container').append(fcom.getLoader());
+                        if (0 < $(form + " input[type='submit']").length) {
+                            $(form + " input[type='submit']").val(langLbl.requestProcessing);
+                        }
+                        setTimeout(function() {
+                            $(form).submit()
+                        }, 100);
+                    }
                 }
             });
         }

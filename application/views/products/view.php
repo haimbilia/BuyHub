@@ -123,16 +123,16 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     <?php if(!empty($product['brand_name'])) { ?>
                                     <div class="brand-data"><span class="txt-gray-light"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span> <?php echo $product['brand_name'];?></div>
                                     <?php } ?>
-                                    <div class="col products__price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
+                                    <div class="products__price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
                                         <?php if ($product['special_price_found']) { ?>
                                         <span class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></span>
                                         <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                                         <?php } ?>
                                     </div>
                                     <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
-                                    <div class="detail-grouping">
-                                        <div class="products__category"><?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId);?></div>
-                                    </div>
+                                    
+                                        <p class="tax-inclusive"><?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId);?></p>
+                                   
                                     <?php } ?>
                                     <?php /* include(CONF_THEME_PATH.'_partial/product-listing-head-section.php'); */ ?>
 
@@ -281,11 +281,11 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                 <label class="h6"><?php echo $qtyFieldName; ?></label>
                                                 <div class="qty-wrapper">
                                                     <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                                        <span class="decrease decrease-js not-allowed">-</span>
+                                                        <span class="decrease decrease-js not-allowed"><i class="fas fa-minus"></i></span>
                                                         <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                                             <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                                                         </div>
-                                                        <span class="increase increase-js">+</span>
+                                                        <span class="increase increase-js"><i class="fas fa-plus"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -349,7 +349,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             1023: 2,
                                             767:2,
                                             480: 2
-                                        }));
+                                        }, false));
                                     });
                                 </script>
                                 <?php } /* ] */ ?>
@@ -385,12 +385,12 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 
                                                 <td class="<?php echo $cancelClass; ?>">
                                                     <div class="qty-wrapper">
-                                                        <div class="quantity" data-stock="<?php echo $usproduct['selprod_stock']; ?>"><span class="decrease decrease-js">-</span>
+                                                        <div class="quantity" data-stock="<?php echo $usproduct['selprod_stock']; ?>"><span class="decrease decrease-js"><i class="fas fa-minus"></i></span>
                                                             <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
                                                                 <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" lang="addons[<?php echo $usproduct['selprod_id']?>]"
                                                                     name="addons[<?php echo $usproduct['selprod_id']?>]">
                                                             </div>
-                                                            <span class="increase increase-js">+</span>
+                                                            <span class="increase increase-js"><i class="fas fa-plus"></i></span>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -571,10 +571,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             </div>
         </section>
         <section class="">
-            <?php if (isset($banners['Product_Detail_Page_Banner']) && $banners['Product_Detail_Page_Banner']['blocation_active'] && count($banners['Product_Detail_Page_Banner']['banners'])) { ?>
+            <?php if (isset($banners) && $banners['blocation_active'] && count($banners['banners'])) { ?>
             <div class="gap"></div>
             <div class="row">
-                <?php foreach ($banners['Product_Detail_Page_Banner']['banners'] as $val) {
+                <?php foreach ($banners['banners'] as $val) {
                         $desktop_url = '';
                         $tablet_url = '';
                         $mobile_url = '';

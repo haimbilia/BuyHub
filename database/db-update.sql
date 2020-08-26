@@ -504,12 +504,148 @@ INSERT INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `p
 
 ALTER TABLE `tbl_product_categories` ADD `prodcat_seller_id` INT NOT NULL AFTER `prodcat_parent`;
 ALTER TABLE `tbl_product_categories` ADD `prodcat_status` TINYINT NOT NULL COMMENT 'Defined in productCategory Model' AFTER `prodcat_active`;
+UPDATE `tbl_product_categories` SET `prodcat_status`= 1 WHERE 1;
 
 INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
 ('seller_category_request_admin_email', 1, 'Seller - Category request', 'New Product Category Requested at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Product Category Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            New Product Category has been requested by Seller {user_full_name}- {prodcat_name}</td>\r\n                                    </tr>\r\n                                    \r\n                                       \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{prodcat_name} Product Category Name <br>\r\n\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
 
 ALTER TABLE `tbl_time_slots` ADD PRIMARY KEY( `tslot_id`);
 ALTER TABLE `tbl_time_slots` CHANGE `tslot_id` `tslot_id` INT(11) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `tbl_order_user_address` ADD `oua_op_id` INT(11) NOT NULL AFTER `oua_order_id`;
 ALTER TABLE `tbl_order_user_address` DROP PRIMARY KEY;
 ALTER TABLE `tbl_order_user_address` ADD PRIMARY KEY( `oua_order_id`, `oua_op_id`, `oua_type`);
+
+
+
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_type` INT(11) NOT NULL DEFAULT '1' COMMENT 'Defined in model' AFTER `opshipping_op_id`;
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_date` DATE NOT NULL AFTER `opshipping_service_code`, ADD `opshipping_time_slot_from` TIME NOT NULL AFTER `opshipping_date`, ADD `opshipping_time_slot_to` TIME NOT NULL AFTER `opshipping_time_slot_from`;
+
+update `tbl_seller_products` set selprod_fulfillment_type = 2;
+
+-- ShipStation --
+ALTER TABLE `tbl_order_product_shipment` CHANGE `opship_order_id` `opship_orderid` VARCHAR(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'From third party';
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_order_number` VARCHAR(150) NOT NULL COMMENT 'From third party' AFTER `opship_orderid`;
+-- ShipStation --
+
+-- AfterShip --
+INSERT INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('AfterShip Shipment', '14', 'AfterShipShipment', '0', '1');
+ALTER TABLE `tbl_orders_status_history` ADD `oshistory_courier` VARCHAR(255) NOT NULL AFTER `oshistory_tracking_number`;
+
+CREATE TABLE `tbl_tracking_courier_code_relation` (
+  `tccr_shipapi_plugin_id` int(11) NOT NULL,
+  `tccr_shipapi_courier_code` varchar(255) NOT NULL,
+  `tccr_tracking_plugin_id` int(11) NOT NULL,
+  `tccr_tracking_courier_code` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `tbl_tracking_courier_code_relation`
+  ADD UNIQUE KEY `UNIQUE` (`tccr_shipapi_plugin_id`,`tccr_shipapi_courier_code`,`tccr_tracking_plugin_id`);
+-- AfterShip --
+
+-- Payment Success Page --
+DELETE FROM `tbl_language_labels` WHERE `label_key` LIKE 'MSG_CUSTOMER_SUCCESS_ORDER_{ACCOUNT}_{HISTORY}_{CONTACTUS}';
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+("MSG_CUSTOMER_SUCCESS_ORDER_{BUYER-EMAIL}", 1, "We sent an email to {BUYER-EMAIL} with your order confirmation and receipt. If the email hasn't arrived within two minutes, please check your spam folder to see if the email was routed there.", 1),
+("MSG_CUSTOMER_SUCCESS_ORDER_{BUYER-EMAIL}", 2, "لقد أرسلنا بريدًا إلكترونيًا إلى {BUYER-EMAIL} مع تأكيد الطلب والإيصال. إذا لم يصل البريد الإلكتروني في غضون دقيقتين ، فيرجى التحقق من مجلد الرسائل غير المرغوب فيها لمعرفة ما إذا كان البريد الإلكتروني قد تم توجيهه هناك.", 1);
+-- Payment Success Page --
+
+-- Manual Shipping --
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_url` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `opship_tracking_number`;
+-- Manual Shipping --
+
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_pickup_addr_id` INT(11) NOT NULL AFTER `opshipping_service_code`;
+
+DELETE FROM `tbl_language_labels` WHERE `label_key` LIKE 'LBL_Seller_Products';
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+("LBL_Seller_Products", 1, "My Products", 1),
+("LBL_Seller_Products", 2, "My Products", 1);
+
+
+DELETE FROM `tbl_language_labels` WHERE `label_key` LIKE 'MSG_SUCCESS_SELLER_SIGNUP_VERIFIED';
+DELETE FROM `tbl_language_labels` WHERE `label_key` LIKE 'MSG_SUCCESS_SELLER_SIGNUP';
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_IFSC_/_MICR', 1, 'IFSC / MICR', 1) 
+ON DUPLICATE KEY UPDATE `label_caption` = 'IFSC / MICR';
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_OTP_VERIFICATION', 1, 'OTP Verification', 1) 
+ON DUPLICATE KEY UPDATE `label_caption` = 'OTP Verification';
+
+-- COD Process --
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES ('COD_OTP_VERIFICATION', '1', 'COD OTP Verification', 'Hello {USER_NAME},\r\n{OTP} is the OTP for cash on delivery order verification.\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Name\", \"variable\":\"{USER_NAME}\"},{\"title\":\"OTP\", \"variable\":\"{OTP}\"},{\"title\":\"Site Name\", \"variable\":\"{SITE_NAME}\"}]', '1');
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('COD_OTP_VERIFICATION', '1', 'COD OTP Verification', 'COD OTP Verification', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4\r\n                                style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">\r\n                            </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">COD OTP Verification</h2>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <strong style=\"font-size:18px;color:#333;\">Dear\r\n                                                {user_name}\r\n                                            </strong><br />\r\n                                            {OTP} is the OTP for cash on delivery order verification.<br />\r\n                                            <a href=\"{website_url}\">{website_name}</a>\r\n                                        </td>\r\n                                    </tr>\r\n                                </tbody>\r\n                            </table>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br>\r\n{OTP} - One Time Password<br>\r\n{website_name} - Name of the website.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', '1');
+-- COD Process --
+-- ----------------- TV-9.1.3.20200820 -----------------------
+
+
+-- Collections Management --
+
+CREATE TABLE `tbl_collection_to_records` (
+  `ctr_collection_id` int(11) NOT NULL,
+  `ctr_record_id` int(11) NOT NULL,
+  `ctr_display_order` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `tbl_collection_to_records`
+  ADD PRIMARY KEY (`ctr_collection_id`,`ctr_record_id`);
+
+INSERT INTO tbl_collection_to_records ( ctr_collection_id, ctr_record_id , ctr_display_order ) SELECT ctb_collection_id, ctb_post_id, ctb_display_order FROM tbl_collection_to_blogs ORDER BY ctb_collection_id ASC;
+
+INSERT INTO tbl_collection_to_records ( ctr_collection_id, ctr_record_id , ctr_display_order ) SELECT ctpb_collection_id, ctpb_brand_id, ctpb_display_order FROM tbl_collection_to_brands ORDER BY ctpb_collection_id ASC;
+
+INSERT INTO tbl_collection_to_records ( ctr_collection_id, ctr_record_id , ctr_display_order ) SELECT ctpc_collection_id, ctpc_prodcat_id, ctpc_display_order FROM tbl_collection_to_product_categories ORDER BY ctpc_collection_id ASC;
+
+INSERT INTO tbl_collection_to_records ( ctr_collection_id, ctr_record_id , ctr_display_order ) SELECT ctsp_collection_id, ctsp_selprod_id, ctsp_display_order FROM tbl_collection_to_seller_products ORDER BY ctsp_collection_id ASC;
+
+INSERT INTO tbl_collection_to_records ( ctr_collection_id, ctr_record_id , ctr_display_order ) SELECT ctps_collection_id, ctps_shop_id, ctps_display_order FROM tbl_collection_to_shops ORDER BY ctps_collection_id ASC;
+
+DROP TABLE `tbl_collection_to_brands`;
+DROP TABLE `tbl_collection_to_product_categories`;
+DROP TABLE `tbl_collection_to_seller_products`;
+DROP TABLE `tbl_collection_to_shops`;
+DROP TABLE `tbl_collection_to_blogs`;
+
+
+DROP TABLE `tbl_banner_locations`;
+DROP TABLE `tbl_banner_location_dimensions`;
+
+CREATE TABLE `tbl_banner_locations` (
+  `blocation_id` int(11) NOT NULL,
+  `blocation_identifier` varchar(255) NOT NULL,
+  `blocation_collection_id` int(11) NOT NULL,
+  `blocation_banner_count` int(11) NOT NULL,
+  `blocation_promotion_cost` decimal(10,4) NOT NULL,
+  `blocation_active` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `tbl_banner_locations` (`blocation_id`, `blocation_identifier`, `blocation_collection_id`, `blocation_banner_count`, `blocation_promotion_cost`, `blocation_active`) VALUES
+(1, 'Product Detail page banner', 0, 2, '3.0000', 1);
+ALTER TABLE `tbl_banner_locations`
+  ADD PRIMARY KEY (`blocation_id`);
+ALTER TABLE `tbl_banner_locations`
+  MODIFY `blocation_id` int(11) NOT NULL AUTO_INCREMENT;
+  
+CREATE TABLE `tbl_banner_location_dimensions` (
+  `bldimension_blocation_id` int(11) NOT NULL,
+  `bldimension_device_type` int(11) NOT NULL,
+  `blocation_banner_width` decimal(10,0) NOT NULL,
+  `blocation_banner_height` decimal(10,0) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `tbl_banner_location_dimensions` (`bldimension_blocation_id`, `bldimension_device_type`, `blocation_banner_width`, `blocation_banner_height`) VALUES
+(1, 1, '660', '198'),
+(1, 2, '660', '198'),
+(1, 3, '640', '360');
+ALTER TABLE `tbl_banner_location_dimensions`
+  ADD PRIMARY KEY (`bldimension_blocation_id`,`bldimension_device_type`);
+
+TRUNCATE `tbl_banners`;
+TRUNCATE `tbl_banners_lang`;
+DELETE FROM `tbl_attached_files` WHERE `afile_type` = 18;
+
+ALTER TABLE `tbl_banners` CHANGE `banner_img_updated_on` `banner_updated_on` DATETIME NOT NULL;
+
+
+DELETE FROM `tbl_language_labels` WHERE `label_key` LIKE 'LBL_Shipping_Api';

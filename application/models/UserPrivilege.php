@@ -29,7 +29,8 @@ class UserPrivilege
     public const SECTION_PROMOTION_CHARGES = 27;
     public const SECTION_SUBSCRIPTION = 28;
     public const SECTION_SHIPPING_PROFILE = 29;
-    public const SECTION_MARKETPLACE_CHANNEL = 30;
+    public const SECTION_SHIPPING_PACKAGES = 30;
+    public const SECTION_MARKETPLACE_CHANNEL = 31;
 
 
     public const MODULE_SHOP = 1;
@@ -718,7 +719,23 @@ class UserPrivilege
         }
         return $this->checkPermission($sellerId, static::SECTION_SHIPPING_PROFILE, static::PRIVILEGE_WRITE, $returnResult);
     }
+    
+    public function canViewShippingPackages($sellerId = 0, $returnResult = false)
+    {
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) == applicationConstants::YES) {
+            return $this->returnFalseOrDie($returnResult);
+        }
+        return $this->checkPermission($sellerId, static::SECTION_SHIPPING_PACKAGES, static::PRIVILEGE_READ, $returnResult);
+    }
 
+    public function canEditShippingPackages($sellerId = 0, $returnResult = false)
+    {
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) == applicationConstants::YES) {
+            return $this->returnFalseOrDie($returnResult);
+        }
+        return $this->checkPermission($sellerId, static::SECTION_SHIPPING_PACKAGES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+    
     public function canViewProductOptions($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_PRODUCT_OPTIONS, static::PRIVILEGE_READ, $returnResult);

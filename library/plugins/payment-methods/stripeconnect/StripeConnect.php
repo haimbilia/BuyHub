@@ -19,6 +19,7 @@ class StripeConnect extends PaymentMethodBase
     private $customerId = '';
     private $loginUrl = '';
     private $connectedAccounts = [];
+    private $customerInfo = [];
 
     public $requiredKeys = [
         'env',
@@ -136,9 +137,9 @@ class StripeConnect extends PaymentMethodBase
     /**
      * getResponse
      *
-     * @return object
+     * @return mixed
      */
-    public function getResponse(): object
+    public function getResponse()
     {
         return empty($this->resp) ? (object) array() : $this->resp;
     }
@@ -776,19 +777,18 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
-     * createCustomerObject
+     * bindCustomer
      *
      * @param array $requestParam
      * @return bool
      */
-    public function createCustomerObject(array $requestParam): bool
+    public function bindCustomer(array $requestParam): bool
     {
         if (empty($requestParam)) {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
             return false;
         }
 
-        $requestParam = $this->formatCustomerDataFromOrder($requestParam);
         if (!empty($this->getCustomerId())) {
             $this->resp = $this->updateCustomerInfo($requestParam);
         } else {
@@ -811,7 +811,12 @@ class StripeConnect extends PaymentMethodBase
      */
     public function loadCustomer(): bool
     {
-        $this->resp = $this->doRequest(self::REQUEST_RETRIEVE_CUSTOMER);
+        if (!empty($this->customerInfo)) {
+            $this->resp = $this->customerInfo;
+            return true;
+        }
+
+        $this->resp = $this->customerInfo = $this->doRequest(self::REQUEST_RETRIEVE_CUSTOMER);
         return (false === $this->resp) ? false : true;
     }
 
@@ -1100,6 +1105,36 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
+     * fetchCards
+     *
+     * @return bool
+     */
+    public function fetchCards(): bool
+    {
+        if (false === $this->loadCustomer()) {
+            return false;
+        }
+        $customerInfo = $this->getResponse()->toArray();
+        $this->resp = $customerInfo['sources']['data'];
+        return true;
+    }
+
+    /**
+     * getDefaultCard
+     *
+     * @return bool
+     */
+    public function getDefaultCard(): bool
+    {
+        if (false === $this->loadCustomer()) {
+            return false;
+        }
+        $customerInfo = $this->getResponse()->toArray();
+        $this->resp = $customerInfo['default_source'];
+        return true;
+    }
+
+    /**
      * doRequest
      *
      * @param  mixed $requestType
@@ -1193,23 +1228,23 @@ class StripeConnect extends PaymentMethodBase
             }
         } catch (\Stripe\Exception\CardException $e) {
             // Since it's a decline, \Stripe\Exception\CardException will be caught
-            $this->error = $e->getError()->param . ' - ' . $e->getMessage();
+            $this->error = $e->getMessage();
         } catch (\Stripe\Exception\RateLimitException $e) {
             // Too many requests made to the API too quickly
-            $this->error = $e->getError()->param . ' - ' . $e->getMessage();
+            $this->error = $e->getMessage();
         } catch (\Stripe\Exception\InvalidRequestException $e) {
             // Invalid parameters were supplied to Stripe's API
-            $this->error = $e->getError()->param . ' - ' . $e->getMessage();
+            $this->error = $e->getMessage();
         } catch (\Stripe\Exception\AuthenticationException $e) {
             // Authentication with Stripe's API failed
-            $this->error = $e->getError()->param . ' - ' . $e->getMessage();
+            $this->error = $e->getMessage();
             // (maybe you changed API keys recently)
         } catch (\Stripe\Exception\ApiConnectionException $e) {
             // Network communication with Stripe failed
-            $this->error = $e->getError()->param . ' - ' . $e->getMessage();
+            $this->error = $e->getMessage();
         } catch (\Stripe\Exception\ApiErrorException $e) {
             // Display a very generic error to the user, and maybe send
-            $this->error = $e->getError()->param . ' - ' . $e->getMessage();
+            $this->error = $e->getMessage();
             // yourself an email
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             // Display a very generic error to the user, and maybe send

@@ -68,8 +68,12 @@ if (true == $primaryOrder) {
                     <div class="action">
                         <div class="">
                             <iframe src="<?php echo Fatutility::generateUrl('buyer', 'viewOrder', $urlParts) . '/print'; ?>" name="frame" style="display:none"></iframe>
-                            <a href="javascript:void(0)" onclick="frames['frame'].print()" class="btn btn-primary btn-sm no-print"><?php echo Labels::getLabel('LBL_Print', $siteLangId); ?></a>
-                            <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orders'); ?>" class="btn btn-outline-primary btn-sm no-print"><?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId); ?></a>
+                            <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orders'); ?>" class="btn btn-outline-primary  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId); ?>">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+                            <a href="javascript:void(0)" onclick="frames['frame'].print()" class="btn btn-outline-primary btn-sm no-print" title="<?php echo Labels::getLabel('LBL_Print', $siteLangId); ?>">
+                                <i class="fas fa-print"></i>
+                            </a>
                         </div>
                     </div> <?php
                     } ?>
@@ -94,7 +98,9 @@ if (true == $primaryOrder) {
                                 } ?>
                                 <?php /*echo $orderStatuses[$childOrderDetail['op_status_id']];*/ ?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Cart_Total', $siteLangId); ?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'CART_TOTAL'), true, false, true, false, true); ?></p>
+                                <?php if(CommonHelper::orderProductAmount($childOrderDetail, 'SHIPPING') > 0){ ?>
                                 <p><strong><?php echo Labels::getLabel('LBL_Delivery', $siteLangId); ?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'SHIPPING'), true, false, true, false, true); ?></p>
+                                <?php } ?>
                                 <?php if (empty($childOrderDetail['taxOptions'])) { ?>
                                 <p><strong><?php echo Labels::getLabel('LBL_Tax', $siteLangId); ?>:</strong> <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'TAX'), true, false, true, false, true); ?></p>
                                 <?php } else { ?>
@@ -116,6 +122,15 @@ if (true == $primaryOrder) {
                             <div class="info--order">
                                 <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #: </strong><?php echo $childOrderDetail['op_invoice_number']; ?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </strong><?php echo FatDate::format($childOrderDetail['order_date_added']); ?></p>
+                                <?php if($childOrderDetail["opshipping_type"] == OrderProduct::TYPE_PICKUP){ ?>
+                                <p><strong><?php echo Labels::getLabel('LBL_Pickup_Date', $siteLangId); ?>: </strong>
+                                    <?php 
+                                        $fromTime = date('H:i', strtotime($childOrderDetail["opshipping_time_slot_from"]));
+                                        $toTime = date('H:i', strtotime($childOrderDetail["opshipping_time_slot_to"]));
+                                        echo FatDate::format($childOrderDetail["opshipping_date"]).' '.$fromTime.' - '.$toTime; 
+                                    ?>
+                                </p>
+                                <?php } ?>
                             </div>
                         </div>
                     </div> <?php
@@ -139,7 +154,9 @@ if (true == $primaryOrder) {
                                 <?php } ?>
                                 <th><?php echo Labels::getLabel('LBL_Qty', $siteLangId);?></th>
                                 <th><?php echo Labels::getLabel('LBL_Price', $siteLangId);?></th>
+                                <?php if(CommonHelper::orderProductAmount($childOrderDetail, 'SHIPPING') > 0){ ?>
                                 <th><?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);?></th>
+                                <?php } ?>
                                 <th><?php echo Labels::getLabel('LBL_Volume/Loyalty_Discount', $siteLangId);?></th>
                                 <th> <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId);?></th>
                                 <th> <?php echo Labels::getLabel('LBL_Reward_Point_Discount', $siteLangId);?></th>
@@ -202,7 +219,9 @@ if (true == $primaryOrder) {
                                     <!--<td style="width:20%;" ><?php echo $childOrder['op_shipping_durations'] . '-' . $childOrder['op_shipping_duration_name']; ?></td>-->
                                     <td><?php echo $childOrder['op_qty']; ?></td>
                                     <td><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
+                                    <?php if(CommonHelper::orderProductAmount($childOrder, 'shipping') > 0) { ?>
                                     <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?></td>
+                                    <?php } ?>
                                     <td><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
                                     <td>
                                         <?php
@@ -305,7 +324,7 @@ if (true == $primaryOrder) {
                                 <p><?php echo $billingAddress;?></p>
                             </div>
                         </div>
-                        <?php if (!empty($orderDetail['shippingAddress']) && $productType != Product::PRODUCT_TYPE_DIGITAL) {?>
+                        <?php  if (!empty($orderDetail['shippingAddress']) && $productType != Product::PRODUCT_TYPE_DIGITAL) {?>
                             <div class="col-lg-6 col-md-6 mb-4">
                                 <h5><?php echo Labels::getLabel('LBL_Shipping_Details', $siteLangId); ?></h5> <?php $shippingAddress = $orderDetail['shippingAddress']['oua_name'] . '<br>';
                                 if ($orderDetail['shippingAddress']['oua_address1'] != '') {
@@ -335,6 +354,40 @@ if (true == $primaryOrder) {
                                 </div>
                             </div>
                         <?php } ?>
+                        
+                        <?php  if (!empty($orderDetail['pickupAddress'])) {?>
+                            <div class="col-lg-6 col-md-6 mb-4">
+                                <h5><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?></h5> 
+                                <?php $pickUpAddress = $orderDetail['pickupAddress']['oua_name'] . '<br>';
+                                if ($orderDetail['pickupAddress']['oua_address1'] != '') {
+                                    $pickUpAddress .= $orderDetail['pickupAddress']['oua_address1'] . '<br>';
+                                }
+
+                                if ($orderDetail['pickupAddress']['oua_address2'] != '') {
+                                    $pickUpAddress .= $orderDetail['pickupAddress']['oua_address2'] . '<br>';
+                                }
+
+                                if ($orderDetail['pickupAddress']['oua_city'] != '') {
+                                    $pickUpAddress .= $orderDetail['pickupAddress']['oua_city'] . ',';
+                                }
+
+                                if ($orderDetail['pickupAddress']['oua_zip'] != '') {
+                                    $pickUpAddress .= $orderDetail['pickupAddress']['oua_state'];
+                                }
+
+                                if ($orderDetail['pickupAddress']['oua_zip'] != '') {
+                                    $pickUpAddress .= '-' . $orderDetail['pickupAddress']['oua_zip'];
+                                }
+
+                                if ($orderDetail['pickupAddress']['oua_phone'] != '') {
+                                    $pickUpAddress .= '<br>' . $orderDetail['pickupAddress']['oua_phone'];
+                                } ?> 
+                                <div class="info--order">
+                                    <p><?php echo $pickUpAddress; ?></p>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        
                     </div> <?php if (!empty($orderDetail['comments'])) {
                                     ?> <div class="gap">
                     </div>
@@ -351,8 +404,27 @@ if (true == $primaryOrder) {
                                         ?> <tr>
                                     <td><?php echo FatDate::format($row['oshistory_date_added']); ?></td>
                                     <td><?php echo $yesNoArr[$row['oshistory_customer_notified']]; ?></td>
-                                    <td><?php echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
-                                        echo ($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $siteLangId) . ' ' . $row['oshistory_tracking_number'] . " VIA <em>" . $row['op_shipping_duration_name'] . "</em>" :'' ?></td>
+                                    <td>
+                                        <?php echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
+                                        if(empty($row['oshistory_courier'])){
+                                            $str = !empty($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $siteLangId) . ' ' . $row['oshistory_tracking_number'] :'' ;
+                                            if (empty($childOrderDetail['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
+                                                $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
+                                            } elseif (!empty($childOrderDetail['opship_tracking_url'])) {
+                                                $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $childOrderDetail['opship_tracking_url'] . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
+                                            }
+                                            echo $str;
+                                        } else {
+                                            echo ($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $siteLangId) : '';
+                                            $trackingNumber = $row['oshistory_tracking_number'];
+                                            $carrier = $row['oshistory_courier'];
+                                            ?>
+                                            <a href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onClick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $childOrderDetail['op_invoice_number']; ?>')">
+                                                <?php echo $trackingNumber; ?>
+                                            </a>
+                                            <?php echo Labels::getLabel('LBL_VIA', $siteLangId); ?> <em><?php echo CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]); ?></em>
+                                        <?php } ?>
+                                        </td>
                                     <td><?php echo !empty(trim(($row['oshistory_comments']))) ? nl2br($row['oshistory_comments']) : Labels::getLabel('LBL_N/A', $siteLangId) ; ?></td>
                                 </tr> <?php
                                     } ?>
@@ -502,4 +574,12 @@ if (true == $primaryOrder) {
             return true;
         });
     }
+    
+    trackOrder = function(trackingNumber, courier, orderNumber){
+        $.facebox(function() {
+            fcom.ajax(fcom.makeUrl('Buyer','orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res){
+                $.facebox( res,'medium-fb-width');
+            });
+        });
+    };
 </script>

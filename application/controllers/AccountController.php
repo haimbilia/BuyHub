@@ -126,6 +126,7 @@ class AccountController extends LoggedUserController
         $data = array('id' => $supplierRequest['usuprequest_id']);
         $approvalFrm = $this->getSupplierForm();
         $approvalFrm->fill($data);
+        $approvalFrm->addSecurityToken();
 
         $this->set('approvalFrm', $approvalFrm);
         $this->_template->render();
@@ -156,12 +157,13 @@ class AccountController extends LoggedUserController
         /* ] */
 
         $frm = $this->getSupplierForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
 
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
+		$frm->expireSecurityToken(FatApp::getPostedData());
 
         $supplier_form_fields = $userObj->getSupplierFormFields($this->siteLangId);
 
@@ -2758,7 +2760,15 @@ class AccountController extends LoggedUserController
         $ifsc->requirements()->setRegularExpressionToValidate(ValidateElement::USERNAME_REGEX);
 
         $frm->addTextArea(Labels::getLabel('M_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
-        $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', '<span class="text--small">' . Labels::getLabel('Lbl_Your_Bank/Card_info_is_safe_with_us', $this->siteLangId) . '</span>');
+        $htm = '<div class="info p-3">
+                    <span>
+                        <svg class="svg">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
+                            </use>
+                        </svg>' . Labels::getLabel('Lbl_Your_Bank/Card_info_is_safe_with_us', $this->siteLangId) . '
+                    </span>
+                </div>';
+        $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
@@ -3650,4 +3660,130 @@ class AccountController extends LoggedUserController
         $this->set('total_records', $srch->recordCount());
         $this->_template->render();
     }
+
+    /* Cards Management */
+    private function setErrorAndRedirect(string $msg, bool $json = false, $redirect = true)
+    {
+        $json = FatUtility::isAjaxCall() ? true : $json;
+        LibHelper::exitWithError($msg, $json, $redirect);
+        CommonHelper::redirectUserReferer();
+    }
+
+    public function cards()
+    {
+        $userId = UserAuthentication::getLoggedUserId();
+        $paymentCard = new PaymentCard($this->siteLangId, $userId);
+        if (false === $paymentCard->fetchAll()) {
+            $this->setErrorAndRedirect($paymentCard->getError());
+        }
+        $this->set('savedCards', $paymentCard->getResponse());
+
+        if (false === $paymentCard->getDefault()) {
+            $this->setErrorAndRedirect($paymentCard->getError());
+        }
+        $this->set('defaultSource', $paymentCard->getResponse());
+        $this->_template->render();
+    }
+    
+    /**
+     * removeCard
+     *
+     * @param  string $cardId
+     * @return void
+     */
+    public function removeCard(string $cardId)
+    {
+        if (empty($cardId)) {
+            $this->setErrorAndRedirect(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+        $userId = UserAuthentication::getLoggedUserId();
+        $paymentCard = new PaymentCard($this->siteLangId, $userId);
+        if (false === $paymentCard->delete($cardId)) {
+            $this->setErrorAndRedirect($paymentCard->getError());
+        }
+
+        $msg = Labels::getLabel("MSG_REMOVED_SUCCESSFULLY", $this->siteLangId);
+        FatUtility::dieJsonSuccess($msg);
+    }
+
+    /**
+     * addCardForm
+     *
+     * @return void
+     */
+    public function addCardForm()
+    {
+        $frm = PaymentCard::getCardForm($this->siteLangId);
+        $this->set('frm', $frm);
+        $this->_template->render(false, false);
+    }
+
+
+    /**
+     * bindCustomer
+     *
+     * @return void
+     */
+    public function bindCustomer()
+    {
+        $userId = UserAuthentication::getLoggedUserId();
+        $paymentCard = new PaymentCard($this->siteLangId, $userId);
+        if (false === $paymentCard->bindCustomer()) {
+            $this->setErrorAndRedirect($paymentCard->getError());
+        }
+
+        $customer = $paymentCard->getResponse();
+        $json['customerId'] = $customer->id;
+        $json['msg'] = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
+        FatUtility::dieJsonSuccess($json);
+    }
+
+    /**
+     * setupNewCard
+     *
+     * @return void
+     */
+    public function setupNewCard()
+    {
+        $cardFrm = PaymentCard::getCardForm($this->siteLangId);
+        $cardData = $cardFrm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $cardData) {
+            $this->setErrorAndRedirect(current($cardFrm->getValidationErrors()));
+        }
+        unset($cardData['btn_submit']);
+        
+        $userId = UserAuthentication::getLoggedUserId();
+        $paymentCard = new PaymentCard($this->siteLangId, $userId);
+        if (false === $paymentCard->create($cardData)) {
+            $this->setErrorAndRedirect($paymentCard->getError());
+        }
+
+        $cardTokenResponse = $paymentCard->getResponse();
+        $json['cardId'] = $cardTokenResponse->id;
+        $json['msg'] = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
+        FatUtility::dieJsonSuccess($json);
+    }
+    
+    /**
+     * markAsDefault
+     *
+     * @param  string $cardId
+     * @return void
+     */
+    public function markAsDefault(string $cardId)
+    {        
+        if (empty($cardId)) {
+            $this->setErrorAndRedirect(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $userId = UserAuthentication::getLoggedUserId();
+        $paymentCard = new PaymentCard($this->siteLangId, $userId);
+        if (false === $paymentCard->markAsDefault($cardId)) {
+            $this->setErrorAndRedirect($paymentCard->getError());
+        }
+        
+        $json['msg'] = Labels::getLabel('MSG_SUCESS', $this->siteLangId);
+        FatUtility::dieJsonSuccess($json);
+    }
+    /* Cards Management */
 }

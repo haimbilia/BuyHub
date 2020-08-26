@@ -43,14 +43,28 @@
 		<?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
 			$this->includeTemplate('restore-system/top-header.php');
 		} ?>
-        <div class="top-bar">
+        <div class="top-bar no-print">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-6 col-xs-6 d-none d-xl-block d-lg-block hide--mobile">
-                        <div class="slogan"><?php echo Labels::getLabel('LBL_Multi-vendor_Ecommerce_Marketplace_Solution', $siteLangId); ?>
-                        </div>
+                    <div class="col">
+                    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {?>                        
+                            <a href="javascript:void(0)" onClick="accessLocation(true)" class="" title="<?php echo Labels::getLabel("LBL_Location", $siteLangId); ?>">
+                            <i class="icn">
+                                <svg class="svg" width="15px" height="15px">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps">
+                                    </use> 
+                                </svg> 
+                            </i>
+                            <span id="js-curent-zip-code">
+                                <?php
+                                    echo isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : Labels::getLabel("LBL_Location", $siteLangId);
+                                ?>
+                            </span>                      
+                            </a>
+                        
+                        <?php }?>
                     </div>
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-auto">
                         <div class="short-links">
                             <ul>
                                 <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?>
@@ -62,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="main-bar">
+        <div class="main-bar no-print">
             <div class="container">
                 <div class="logo-bar">
                     <a class="navs_toggle" href="javascript:void(0)"><span></span></a>

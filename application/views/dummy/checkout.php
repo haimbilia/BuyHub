@@ -1,19 +1,21 @@
 <section class="checkout">
     <header class="header-checkout" data-header="" role="header">
-        <a class="logo-checkout-main" href="index.php"><img src="../images/logo.png" alt=""></a>
-        <div class="checkout-progress">
-            <div class="progress-track"></div>
-            <div id="step1" class="progress-step is-complete">
-                Step One
-            </div>
-            <div id="step2" class="progress-step is-active">
-                Step Two
-            </div>
-            <div id="step3" class="progress-step">
-                Step Three
-            </div>
-            <div id="step4" class="progress-step">
-                Complete
+        <div class="container header-checkout_inner">
+            <a class="logo-checkout-main" href="index.php"><img src="<?php echo CONF_WEBROOT_URL;?>images/logo.png" alt=""></a>
+            <div class="checkout-progress">
+                <div class="progress-track"></div>
+                <div id="step1" class="progress-step is-complete">
+                    Step One
+                </div>
+                <div id="step2" class="progress-step is-active">
+                    Step Two
+                </div>
+                <div id="step3" class="progress-step">
+                    Step Three
+                </div>
+                <div id="step4" class="progress-step">
+                    Complete
+                </div>
             </div>
         </div>
     </header>
@@ -30,10 +32,10 @@
                         </svg>
                     </span>
                     <span class="order-summary-toggle__text">
-                        <span>Order Summary <i class="arrow">
+                        <span>Order Summary <i class="arrow-right">
                                 <svg class="svg">
-                                    <use xlink:href="../images/retina/sprite.svg#arrow-right"
-                                        href="../images/retina/sprite.svg#arrow-right"></use>
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#arrow-right"
+                                        href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#arrow-right"></use>
                                 </svg>
 
                             </i></span>
@@ -48,9 +50,8 @@
     <div class="content" data-content="">
         <div class="container">
             <div class="main">
-
                 <main class="main__content">
-
+                    <div class="steps-wrapper ">
                     <!-- begin::Step -->
                     <div class="step active" role="step:1">
                         <div class="step__section">
@@ -116,16 +117,16 @@
                                                 <button type="button" class="btn btn-social btn-facebook">
                                                     <i class="icn">
                                                         <svg class="svg">
-                                                            <use xlink:href="../images/retina/sprite.svg#facebook"
-                                                                href="../images/retina/sprite.svg#facebook">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#facebook"
+                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#facebook">
                                                             </use>
                                                         </svg></i></button>
 
                                                 <button type="button" class="btn btn-social btn-twitter">
                                                     <i class="icn">
                                                         <svg class="svg">
-                                                            <use xlink:href="../images/retina/sprite.svg#twitter"
-                                                                href="../images/retina/sprite.svg#twitter">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#twitter"
+                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#twitter">
                                                             </use>
                                                         </svg></i></button>
 
@@ -133,8 +134,8 @@
                                                 <button type="button" class="btn btn-social btn-google">
                                                     <i class="icn">
                                                         <svg class="svg">
-                                                            <use xlink:href="../images/retina/sprite.svg#google"
-                                                                href="../images/retina/sprite.svg#google">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#google"
+                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#google">
                                                             </use>
                                                         </svg></i></button>
 
@@ -150,245 +151,357 @@
                     <!-- end::Step -->
                     <!-- begin::Step -->
                     <div class="step active" role="step:2">
-
-                        <form class="form form form-floating">
-                            <div class="step__section">
-                                <div class="step__head">
-                                    <h5 class="step-title">Delivery detail</h5>
-                                </div>
-                                <ul class="list-group list-addresses list-addresses-view">
-                                    <li class="list-group-item">
-                                        <div class="tags">
-                                            <div class="tags__inner">
-                                                <span class="tag address_lable">Home</span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-auto"><label class="checkbox"><input title=""
-                                                        type="checkbox" value="1"><i class="input-helper"></i>
-                                                </label></div>
-
-                                            <div class="col">
-                                                <address class="">Plot 268, First Floor, <br>Sector 82, JLPL
-                                                    Industrial Area, Punjab 140308</address>
-                                            </div>
-
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="tags">
-                                            <div class="tags__inner">
-                                                <span class="tag address_lable">Office</span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-auto"><label class="checkbox"><input title=""
-                                                        type="checkbox" value="1" checked=""><i
-                                                        class="input-helper"></i>
-                                                </label></div>
-
-                                            <div class="col">
-                                                <address class="">Plot 268, First Floor, <br>Sector 82, JLPL
-                                                    Industrial Area, Punjab 140308</address>
-                                                <ul class="list-actions">
-                                                    <li>
-                                                        <a href="#"><svg class="svg">
-                                                                <use xlink:href="../images/retina/sprite.svg#edit"
-                                                                    href="../images/retina/sprite.svg#edit">
-                                                                </use>
-                                                            </svg>
-                                                        </a></li>
-                                                    <li>
-                                                        <a href="#"><svg class="svg">
-                                                                <use xlink:href="../images/retina/sprite.svg#remove"
-                                                                    href="../images/retina/sprite.svg#remove">
-                                                                </use>
-                                                            </svg>
-                                                        </a></li>
-                                                </ul>
-                                            </div>
-
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="my-3 text-right">
-                                    <a class="link-text" href="">
-                                        <i class="icn"> <svg class="svg">
-                                                <use xlink:href="../images/retina/sprite.svg#add"
-                                                    href="../images/retina/sprite.svg#add">
-                                                </use>
-                                            </svg> </i> Add a new address</a>
-
-                                </div>
-
-
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group form-floating__group">
-                                            <input type="email" class="form-control form-floating__field">
-                                            <label class="form-floating__label">Email</label>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group form-floating__group">
-                                            <input type="text" class="form-control form-floating__field" placeholder="">
-                                            <label class="form-floating__label">First name</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-floating__group">
-                                            <input type="text" class="form-control form-floating__field" placeholder="">
-                                            <label class="form-floating__label">Last name</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group form-floating__group">
-                                            <input type="text" class="form-control form-floating__field" placeholder="">
-                                            <label class="form-floating__label">Address</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group form-floating__group">
-                                            <input type="text" class="form-control form-floating__field" placeholder="">
-                                            <label class="form-floating__label">Apartment, suite, etc.l</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group form-floating__group">
-                                            <input type="text" class="form-control form-floating__field" placeholder="">
-                                            <label class="form-floating__label">City</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-floating__group">
-                                            <input type="text" class="form-control form-floating__field" placeholder="">
-                                            <label class="form-floating__label">Phone</label>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-floating__group">
-                                            <select class="form-control form-floating__field" autocomplete="">
-                                                <option data-code="IL" value="Israel">Israel</option>
-                                                <option disabled="disabled" value="---">---</option>
-                                                <option data-code="AF" value="Afghanistan">Afghanistan</option>
-                                                <option data-code="AX" value="Aland Islands">Åland Islands</option>
-
-                                            </select>
-                                            <label class="form-floating__label">shipping country</label>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-floating__group">
-                                            <select class="form-control form-floating__field" placeholder="">
-                                                <option disabled="">State</option>
-                                                <option data-alternate-values="[&quot;Andaman and Nicobar&quot;]"
-                                                    value="AN">Andaman and Nicobar</option>
-
-                                            </select>
-                                            <label class="form-floating__label">State</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-floating__group">
-                                            <input type="text" class="form-control form-floating__field" placeholder="">
-                                            <label class="form-floating__label">PIN code</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="step__footer">
-                                <a class="btn btn-link" href="#">
-                                    <i class="arrow">
-                                        <svg class="svg">
-                                            <use xlink:href="../images/retina/sprite.svg#arrow-left"
-                                                href="../images/retina/sprite.svg#arrow-left">
+                        <div class="step__section">
+                            <div class="step__section__head">
+                                <h5 class="step__section__head__title">Delivery detail</h5>
+                                <a class="link-text" href="">
+                                    <i class="icn"> <svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#add"
+                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#add">
                                             </use>
-                                        </svg></i>
-                                    <span class="">Back </span></a>
-
-                                <button name="button" type="button" class="btn btn-primary btn-wide"><span
-                                        class="">Continue</span></button>
-
+                                        </svg> </i> Add a new address</a>
                             </div>
-                        </form>
+                            <ul class="list-group list-addresses list-addresses-view">
+                                <li class="list-group-item ">
+                                    <div class="row">
+                                        <div class="col-auto"><label class="checkbox"><input title="" type="checkbox"
+                                                    value="1"><i class="input-helper"></i>
+                                            </label></div>
+
+                                        <div class="col">
+                                            <div class="delivery-address">
+                                                <h5>Pawan <span class="tag">Home</span></h5>
+                                                <p>Plot 268, First Floor, <br>Sector 82, JLPL
+                                                    Industrial Area, Punjab 140308</p>
+
+                                                <p class="phone-txt">9888881405</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-auto"><label class="checkbox"><input title="" type="checkbox"
+                                                    value="1"><i class="input-helper"></i>
+                                            </label></div>
+
+                                        <div class="col">
+                                            <div class="delivery-address">
+                                                <h5>Pawan <span class="tag">Factory</span></h5>
+                                                <p>Plot 268, First Floor, <br>Sector 82, JLPL
+                                                    Industrial Area, Punjab 140308</p>
+
+                                                <p class="phone-txt">9888881405</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </li>
+                                <li class="list-group-item selected">
+                                    <div class="row">
+                                        <div class="col-auto"><label class="checkbox"><input title="" type="checkbox"
+                                                    value="1" checked><i class="input-helper"></i>
+                                            </label></div>
+
+                                        <div class="col">
+                                            <div class="delivery-address">
+                                                <h5>Anup <span class="tag">Office</span></h5>
+                                                <p>Plot 268, First Floor, <br>Sector 82, JLPL
+                                                    Industrial Area, Punjab 140308</p>
+
+                                                <p class="phone-txt">9888881405</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <ul class="list-actions">
+                                                <li>
+                                                    <a href="#"><svg class="svg">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#edit"
+                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#edit">
+                                                            </use>
+                                                        </svg>
+                                                    </a></li>
+                                                <li>
+                                                    <a href="#"><svg class="svg">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                            </use>
+                                                        </svg>
+                                                    </a></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                  
+
                     </div>
                     <!-- end::Step -->
-
-
                     <!-- begin::Step -->
                     <div class="step active" role="step:3">
                         <div class="step__section">
-                            <div class="step__head">
-                                <h5 class="step-title">Shipping</h5>
+                            <div class="step__section__head">
+                                <h5 class="step__section__head__title">Shipping</h5>
                             </div>
-                            <div class="shipping-section">
-                                <div class="shipping-option">
-                                    <ul class="media-more media-more-sm show">
-                                        <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
-                                                data-original-title="product name"><img
-                                                    src="../images//products/product-thumb.jpg" alt=""></span></li>
-                                        <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
-                                                data-original-title="product name"><img
-                                                    src="../images//products/product-thumb.jpg" alt=""></span></li>
-                                        <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
-                                                data-original-title="product name"><img
-                                                    src="../images//products/product-thumb.jpg" alt=""></span></li>
-                                        <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
-                                                data-original-title="product name"><img
-                                                    src="../images//products/product-thumb.jpg" alt=""></span></li>
+                            <ul class="list-group list-cart list-shippings">
+                                <li class="list-group-item shipping-select">
+                                    <div class="shop-name">Kanwar's Shop</div>
 
-                                        <li> <span class="circle plus-more">+5</span></li>
-                                    </ul>
+                                    <div class="shipping-method"><select class=" form-control custom-select" name=""
+                                            id="">
+                                            <option value="0">Select Shipping Method</option>
+                                            <option value="1">Flat Shipping By Seller</option>
+                                            <option value="2">ShipStation Api</option>
+                                        </select></div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid" data-ratio="3:4"
+                                                    src="<?php echo CONF_WEBROOT_URL;?>images/products/product-thumb.jpg" alt="...">
+                                            </a></div>
+                                        <div class="product-profile__data">
+                                            <div class="title"><a class="" href="product.html">Cotton
+                                                    floral print</a></div>
+                                            <div class="options">
+                                                <p class="">Medium | red</p>
+                                            </div>
+                                            <div class="quantity quantity-2">
+                                                <span class="decrease"><i class="fas fa-minus"></i></span>
+                                                <input class="qty-input no-focus" data-page="product-view"
+                                                    title="Available Quantity" type="text" name="quantity" value="22">
+                                                <span class="increase"><i class="fas fa-plus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                    <select class=" form-control custom-select YK-selectedShipping" name="" id="">
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="shipping-section">
-                                <div class="shipping-option">
-                                    <ul class="media-more media-more-sm show">
-                                        <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
-                                                data-original-title="product name"><img
-                                                    src="../images//products/product-thumb.jpg" alt=""></span></li>
+                                    <div class="product-price">$40.00 <del>$50.00</del></div>
+                                    <div class="product-action">
+                                        <ul class="list-actions">
+                                            <li>
+                                                <a href="#"><svg class="svg" width="24px" height="24px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                        </use>
+                                                    </svg>
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
 
-                                    </ul>
-                                    <select class=" form-control custom-select YK-selectedShipping" name="" id="">
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                        <option value="">Option</option>
-                                    </select>
-                                </div>
-                            </div>
+                                <li class="list-group-item">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid" data-ratio="3:4"
+                                                    src="<?php echo CONF_WEBROOT_URL;?>images/products/product-thumb.jpg" alt="...">
+                                            </a></div>
+                                        <div class="product-profile__data">
+                                            <div class="title"><a class="" href="product.html">Cotton
+                                                    floral print</a></div>
+                                            <div class="options">
+                                                <p class="">Medium | red</p>
+                                            </div>
+                                            <div class="quantity quantity-2">
+                                                <span class="decrease"><i class="fas fa-minus"></i></span>
+                                                <input class="qty-input no-focus" data-page="product-view"
+                                                    title="Available Quantity" type="text" name="quantity" value="22">
+                                                <span class="increase"><i class="fas fa-plus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="product-price">$40.00 <del>$50.00</del></div>
+                                    <div class="product-action">
+                                        <ul class="list-actions">
+                                            <li>
+                                                <a href="#"><svg class="svg" width="24px" height="24px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                        </use>
+                                                    </svg>
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid" data-ratio="3:4"
+                                                    src="<?php echo CONF_WEBROOT_URL;?>images/products/product-thumb.jpg" alt="...">
+                                            </a></div>
+                                        <div class="product-profile__data">
+                                            <div class="title"><a class="" href="product.html">Cotton
+                                                    floral print</a></div>
+                                            <div class="options">
+                                                <p class="">Medium | red</p>
+                                            </div>
+                                            <div class="quantity quantity-2">
+                                                <span class="decrease"><i class="fas fa-minus"></i></span>
+                                                <input class="qty-input no-focus" data-page="product-view"
+                                                    title="Available Quantity" type="text" name="quantity" value="22">
+                                                <span class="increase"><i class="fas fa-plus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="product-price">$40.00 <del>$50.00</del></div>
+                                    <div class="product-action">
+                                        <ul class="list-actions">
+                                            <li>
+                                                <a href="#"><svg class="svg" width="24px" height="24px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                        </use>
+                                                    </svg>
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+
+
+                            </ul>
+                            <ul class="list-group list-cart list-shippings">
+                                <li class="list-group-item shipping-select">
+                                    <div class="shop-name">Kanwar's Shop</div>
+                                    <div class="shipping-method">
+                                        <div class="shipping-method_messages">
+                                            <p><i class="fas fa-info-circle"></i> Shipping messages</p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid" data-ratio="3:4"
+                                                    src="<?php echo CONF_WEBROOT_URL;?>images/products/product-thumb.jpg" alt="...">
+                                            </a></div>
+                                        <div class="product-profile__data">
+                                            <div class="title"><a class="" href="product.html">Cotton
+                                                    floral print</a></div>
+                                            <div class="options">
+                                                <p class="">Medium | red</p>
+                                            </div>
+                                            <div class="quantity quantity-2">
+                                                <span class="decrease"><i class="fas fa-minus"></i></span>
+                                                <input class="qty-input no-focus" data-page="product-view"
+                                                    title="Available Quantity" type="text" name="quantity" value="22">
+                                                <span class="increase"><i class="fas fa-plus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="product-price">$40.00 <del>$50.00</del></div>
+                                    <div class="product-action">
+                                        <ul class="list-actions">
+                                            <li>
+                                                <a href="#"><svg class="svg" width="24px" height="24px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                        </use>
+                                                    </svg>
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid" data-ratio="3:4"
+                                                    src="<?php echo CONF_WEBROOT_URL;?>images/products/product-thumb.jpg" alt="...">
+                                            </a></div>
+                                        <div class="product-profile__data">
+                                            <div class="title"><a class="" href="product.html">Cotton
+                                                    floral print</a></div>
+                                            <div class="options">
+                                                <p class="">Medium | red</p>
+                                            </div>
+                                            <div class="quantity quantity-2">
+                                                <span class="decrease"><i class="fas fa-minus"></i></span>
+                                                <input class="qty-input no-focus" data-page="product-view"
+                                                    title="Available Quantity" type="text" name="quantity" value="22">
+                                                <span class="increase"><i class="fas fa-plus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="product-price">$40.00 <del>$50.00</del></div>
+                                    <div class="product-action">
+                                        <ul class="list-actions">
+                                            <li>
+                                                <a href="#"><svg class="svg" width="24px" height="24px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                        </use>
+                                                    </svg>
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="list-group list-cart list-shippings">
+                                <li class="list-group-item shipping-select">
+                                    <div class="shop-name">Kanwar's Shop</div>
+
+                                    <div class="shipping-method"><select class=" form-control custom-select" name=""
+                                            id="">
+                                            <option value="0">Select Shipping Method</option>
+                                            <option value="1">Flat Shipping By Seller</option>
+                                            <option value="2">ShipStation Api</option>
+                                        </select></div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid" data-ratio="3:4"
+                                                    src="<?php echo CONF_WEBROOT_URL;?>images/products/product-thumb.jpg" alt="...">
+                                            </a></div>
+                                        <div class="product-profile__data">
+                                            <div class="title"><a class="" href="product.html">Cotton
+                                                    floral print</a></div>
+                                            <div class="options">
+                                                <p class="">Medium | red</p>
+                                            </div>
+                                            <div class="quantity quantity-2">
+                                                <span class="decrease"><i class="fas fa-minus"></i></span>
+                                                <input class="qty-input no-focus" data-page="product-view"
+                                                    title="Available Quantity" type="text" name="quantity" value="22">
+                                                <span class="increase"><i class="fas fa-plus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="product-price">$40.00 <del>$50.00</del></div>
+                                    <div class="product-action">
+                                        <ul class="list-actions">
+                                            <li>
+                                                <a href="#"><svg class="svg" width="24px" height="24px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                        </use>
+                                                    </svg>
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <!-- end::Step -->
                     <div class="step active" role="step:3">
                         <div class="step__section">
-                            <div class="step__head">
-                                <h5 class="step-title">Pick Up</h5>
+                            <div class="step__section__head">
+                                <h5 class="step__section__head__title">Pick Up</h5>
                             </div>
                             <div class="pick-section">
                                 <div class="pickup-option">
@@ -416,7 +529,7 @@
                                     </ul>
 
                                     <div class="pickup-time">
-                                        <div class="calendar"><img src="../images/calendar.jpg" alt=""></div>
+                                        <div class="calendar"><img src="<?php echo CONF_WEBROOT_URL;?>images/calendar.jpg" alt=""></div>
                                         <ul class="time-slot">
                                             <li class=""> <input type="checkbox" class="control-input" name=""
                                                     id="time-1" value=""><label class="control-label" for="time-1"><span
@@ -456,18 +569,18 @@
                                 <ul class="media-more media-more-sm show">
                                     <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
                                             data-original-title="product name"><img
-                                                src="../images//products/product-thumb.jpg" alt=""></span></li>
+                                                src="<?php echo CONF_WEBROOT_URL;?>images//products/product-thumb.jpg" alt=""></span></li>
                                     <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
                                             data-original-title="product name"><img
-                                                src="../images//products/product-thumb.jpg" alt=""></span></li>
+                                                src="<?php echo CONF_WEBROOT_URL;?>images//products/product-thumb.jpg" alt=""></span></li>
                                     <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
                                             data-original-title="product name"><img
-                                                src="../images//products/product-thumb.jpg" alt=""></span></li>
+                                                src="<?php echo CONF_WEBROOT_URL;?>images//products/product-thumb.jpg" alt=""></span></li>
                                     <li><span class="circle" data-toggle="tooltip" data-placement="top" title=""
                                             data-original-title="product name"><img
-                                                src="../images//products/product-thumb.jpg" alt=""></span></li>
+                                                src="<?php echo CONF_WEBROOT_URL;?>images//products/product-thumb.jpg" alt=""></span></li>
 
-                                    <li> <span class="circle plus-more">+5 more</span></li>
+                                    <li> <span class="circle plus-more">+5</span></li>
                                 </ul>
                             </div>
                             <div class="review-block__link" role="cell">
@@ -489,8 +602,8 @@
                     <!-- begin::Step -->
                     <div class="step active" role="step:4">
                         <div class="step__section">
-                            <div class="step__head">
-                                <h5 class="step-title">Payment & Billing </h5>
+                            <div class="step__section__head">
+                                <h5 class="step__section__head__title">Payment & Billing </h5>
                             </div>
                             <label class="checkbox"><input title="" type="checkbox" value="1">My billing address is the
                                 same as my delivery address <i class="input-helper"></i>
@@ -511,8 +624,8 @@
                                 </div>
                                 <div class="info">
                                     <span> <svg class="svg">
-                                            <use xlink:href="../images/retina/sprite.svg#info"
-                                                href="../images/retina/sprite.svg#info">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#info"
+                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#info">
                                             </use>
                                         </svg> Minimum 100 reward points redeem at a time</span></div>
 
@@ -553,13 +666,9 @@
                                             role="tab" aria-controls="paycash" aria-selected="false">Paycash</a>
                                     </li>
                                 </ul>
-
-
-
                                 <div class="tab-content" id="">
                                     <div class="tab-pane fade show active" id="credit" role="tabpanel"
                                         aria-labelledby="credit-tab">
-
                                         <ul class="list-group payment-card payment-card-view">
                                             <li class="list-group-item">
                                                 <div class="row">
@@ -569,20 +678,14 @@
                                                         </label></div>
                                                     <div class="col">
                                                         <div class="payment-card__photo">
-                                                            <svg class="svg payment-list__item" viewBox="0 0 38 24"
-                                                                xmlns="http://www.w3.org/2000/svg" role="img" width="38"
-                                                                height="24" aria-labelledby="pi-visa">
-                                                                <title id="pi-visa">Visa</title>
-                                                                <path opacity=".07"
-                                                                    d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z">
-                                                                </path>
-                                                                <path fill="#fff"
-                                                                    d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32">
-                                                                </path>
-                                                                <path
-                                                                    d="M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.4.9-.8 1.7-.8 1.2 0 2.5 0 3.1.2h.1c-.1.6-.2 1.1-.4 1.7-.5-.2-1-.4-1.5-.4-.3 0-.6 0-.9.1-.2 0-.3.1-.4.2-.2.2-.2.5 0 .7l.5.4c.4.2.8.4 1.1.6.5.3 1 .8 1.1 1.4.2.9-.1 1.7-.9 2.3-.5.4-.7.6-1.4.6-1.4 0-2.5.1-3.4-.2-.1.2-.1.2-.2.1zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2M5 8.2c0-.1.2-.2.3-.2h3.4c.5 0 .9.3 1 .8l.9 4.4c0 .1 0 .1.1.2 0-.1.1-.1.1-.1l2.1-5.1c-.1-.1 0-.2.1-.2h2.1c0 .1 0 .1-.1.2l-3.1 7.3c-.1.2-.1.3-.2.4-.1.1-.3 0-.5 0H9.7c-.1 0-.2 0-.2-.2L7.9 9.5c-.2-.2-.5-.5-.9-.6-.6-.3-1.7-.5-1.9-.5L5 8.2z"
-                                                                    fill="#142688"></path>
+                                                            <svg class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#visa"
+                                                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#visa">
+                                                                </use>
                                                             </svg>
+
+
+
                                                         </div>
                                                     </div>
                                                     <div class="col">
@@ -602,8 +705,8 @@
                                                                 <li>
                                                                     <a href="#"><svg class="svg" width="24px"
                                                                             height="24px">
-                                                                            <use xlink:href="../images/retina/sprite.svg#remove"
-                                                                                href="../images/retina/sprite.svg#remove">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -619,20 +722,12 @@
                                                         </label></div>
                                                     <div class="col">
                                                         <div class="payment-card__photo">
-                                                            <svg class="svg payment-list__item" viewBox="0 0 38 24"
-                                                                xmlns="http://www.w3.org/2000/svg" role="img" width="38"
-                                                                height="24" aria-labelledby="pi-visa">
-                                                                <title id="pi-visa">Visa</title>
-                                                                <path opacity=".07"
-                                                                    d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z">
-                                                                </path>
-                                                                <path fill="#fff"
-                                                                    d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32">
-                                                                </path>
-                                                                <path
-                                                                    d="M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.4.9-.8 1.7-.8 1.2 0 2.5 0 3.1.2h.1c-.1.6-.2 1.1-.4 1.7-.5-.2-1-.4-1.5-.4-.3 0-.6 0-.9.1-.2 0-.3.1-.4.2-.2.2-.2.5 0 .7l.5.4c.4.2.8.4 1.1.6.5.3 1 .8 1.1 1.4.2.9-.1 1.7-.9 2.3-.5.4-.7.6-1.4.6-1.4 0-2.5.1-3.4-.2-.1.2-.1.2-.2.1zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2M5 8.2c0-.1.2-.2.3-.2h3.4c.5 0 .9.3 1 .8l.9 4.4c0 .1 0 .1.1.2 0-.1.1-.1.1-.1l2.1-5.1c-.1-.1 0-.2.1-.2h2.1c0 .1 0 .1-.1.2l-3.1 7.3c-.1.2-.1.3-.2.4-.1.1-.3 0-.5 0H9.7c-.1 0-.2 0-.2-.2L7.9 9.5c-.2-.2-.5-.5-.9-.6-.6-.3-1.7-.5-1.9-.5L5 8.2z"
-                                                                    fill="#142688"></path>
+                                                            <svg class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#dinersclub"
+                                                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#dinersclub">
+                                                                </use>
                                                             </svg>
+
                                                         </div>
                                                     </div>
                                                     <div class="col">
@@ -648,12 +743,96 @@
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="payment-card__actions ">
-                                                        <ul class="list-actions">
+                                                            <ul class="list-actions">
                                                                 <li>
                                                                     <a href="#"><svg class="svg" width="24px"
                                                                             height="24px">
-                                                                            <use xlink:href="../images/retina/sprite.svg#remove"
-                                                                                href="../images/retina/sprite.svg#remove">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-auto"><label class="checkbox"><input title=""
+                                                                type="checkbox" value="1"><i class="input-helper"></i>
+                                                        </label></div>
+                                                    <div class="col">
+                                                        <div class="payment-card__photo">
+                                                            <svg class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#mastercard"
+                                                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#mastercard">
+                                                                </use>
+                                                            </svg>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="payment-card__number">Ending in
+                                                            <strong>4506</strong></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="payment-card__name">Pawan kumar</div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="payment-card__expiry">Expiry
+                                                            <strong>02/2023</strong></div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="payment-card__actions ">
+                                                            <ul class="list-actions">
+                                                                <li>
+                                                                    <a href="#"><svg class="svg" width="24px"
+                                                                            height="24px">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-auto"><label class="checkbox"><input title=""
+                                                                type="checkbox" value="1"><i class="input-helper"></i>
+                                                        </label></div>
+                                                    <div class="col">
+                                                        <div class="payment-card__photo">
+                                                            <svg class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#americanexpress"
+                                                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#americanexpress">
+                                                                </use>
+                                                            </svg>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="payment-card__number">Ending in
+                                                            <strong>4506</strong></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="payment-card__name">Pawan kumar</div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="payment-card__expiry">Expiry
+                                                            <strong>02/2023</strong></div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="payment-card__actions ">
+                                                            <ul class="list-actions">
+                                                                <li>
+                                                                    <a href="#"><svg class="svg" width="24px"
+                                                                            height="24px">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                                                href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -667,14 +846,11 @@
                                         <div class="my-3 text-right">
                                             <a class="link-text" href="">
                                                 <i class="icn"> <svg class="svg">
-                                                        <use xlink:href="../images/retina/sprite.svg#add"
-                                                            href="../images/retina/sprite.svg#add">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#add"
+                                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#add">
                                                         </use>
                                                     </svg> </i> Add a new card</a>
-
                                         </div>
-
-
                                         <div class="bg-gray p-4">
                                             <form class="form form form-floating" action="">
                                                 <div class="row">
@@ -685,7 +861,6 @@
                                                             <label class="form-floating__label">Card number</label>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -723,7 +898,7 @@
                                     <div class="tab-pane fade" id="paypal" role="tabpanel" aria-labelledby="paypal-tab">
 
                                         <div class="paypal-data">
-                                            <img src="../images//paypal.png" alt="">
+                                            <img src="<?php echo CONF_WEBROOT_URL;?>images//paypal.png" alt="">
                                             <p>You'll return to yokart.com to review and place your order.</p>
                                         </div>
                                     </div>
@@ -745,24 +920,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <label class="checkbox"><input title="" type="checkbox" value="1">Send me electronic or mail
-                                offers from Nordstrom. You may opt out at any time.<i class="input-helper"></i>
-                            </label>
-
 
                         </div>
-
+                    </div>
+                    <!-- end::Step -->
                     </div>
 
+                    <div class="checkout-actions">
+                            <a class="btn btn-outline-gray btn-arrow " href="#">
+                                <svg class="svg">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#arrow-left"
+                                        href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#arrow-left">
+                                    </use>
+                                </svg>
+                                <span class="">Back </span></a>
+                                
+                            <button name="button" type="button" class="btn btn-primary btn-wide">Continue</button>
 
-                    <!-- end::Step -->
-
-
-
-
-
-
-
+                        </div>
                 </main>
             </div>
             <aside class="sidebar" role="complementary">
@@ -775,59 +950,35 @@
                                 <div class="cart-total my-3">
                                     <div class="">
                                         <ul class="list-group list-group-flush list-group-flush-x">
-                                            <li class="list-group-item border-0">
+                                            <li class="list-group-item">
                                                 <span class="label">Subtotal</span> <span class="ml-auto">$89.00</span>
                                             </li>
                                             <li class="list-group-item ">
                                                 <span class="label">Estimated Tax</span> <span
                                                     class="ml-auto">$00.00</span>
                                             </li>
-                                            <li class="list-group-item hightlighted border-0">
+                                            <li class="list-group-item hightlighted">
                                                 <span class="label">Total</span> <span class="ml-auto">$89.00</span>
                                             </li>
                                         </ul>
-                                        <p class="earn-points"><svg class="svg" width="20px" height="20px">
-                                                <use xlink:href="../images/retina/sprite.svg#rewards"
-                                                    href="../images/retina/sprite.svg#rewards">
-                                                </use>
-                                            </svg> You will earn 575 points </p>
+
 
                                     </div>
                                 </div>
                             </div>
                             <div class="order-summary__section order-summary__section--product-list">
-                                <div class="order-summary__section__content scroll">
+                                <div class="order-summary__section__content scroll" data-simplebar>
                                     <!-- List group -->
 
                                     <ul class="list-group list-cart list-cart-checkout">
-                                        <li class="list-group-item">
-                                            <div class="product-profile">
-                                                <div class="product-profile__thumbnail">
-                                                    <a href="#">
-                                                        <img class="img-fluid" data-ratio="3:4"
-                                                            src="../images//products/product-thumb.jpg" alt="...">
-                                                    </a>
-                                                    <span class="product-qty">2</span>
-                                                </div>
-                                                <div class="product-profile__data">
-                                                    <div class="title"><a class="" href="product.html">Cotton
-                                                            floral print</a></div>
-                                                    <div class="options">
-                                                        <p class="">Medium | red</p>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <div class="product-price">$40.00 <del>$50.00</del></div>
-
-                                        </li>
 
                                         <li class="list-group-item">
                                             <div class="product-profile">
                                                 <div class="product-profile__thumbnail">
                                                     <a href="#">
                                                         <img class="img-fluid" data-ratio="3:4"
-                                                            src="../images//products/product-thumb.jpg" alt="...">
+                                                            src="<?php echo CONF_WEBROOT_URL;?>images//products/product-thumb.jpg" alt="...">
                                                     </a>
                                                     <span class="product-qty">2</span>
                                                 </div>
@@ -848,7 +999,7 @@
                                                 <div class="product-profile__thumbnail">
                                                     <a href="#">
                                                         <img class="img-fluid" data-ratio="3:4"
-                                                            src="../images//products/product-thumb.jpg" alt="...">
+                                                            src="<?php echo CONF_WEBROOT_URL;?>images//products/product-thumb.jpg" alt="...">
                                                     </a>
                                                     <span class="product-qty">2</span>
                                                 </div>
@@ -869,7 +1020,7 @@
                                                 <div class="product-profile__thumbnail">
                                                     <a href="#">
                                                         <img class="img-fluid" data-ratio="3:4"
-                                                            src="../images//products/product-thumb.jpg" alt="...">
+                                                            src="<?php echo CONF_WEBROOT_URL;?>images//products/product-thumb.jpg" alt="...">
                                                     </a>
                                                     <span class="product-qty">2</span>
                                                 </div>
@@ -881,25 +1032,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="product-price">$40.00 <del>$50.00</del></div>
-
                                         </li>
-
-
                                     </ul>
-
-
-
-
                                 </div>
                             </div>
-                            <div class="place-order">
-                                <p>By placing an order, you agree to Yokart.com's <a href=""> Terms & Conditions</a> and
-                                    <a href=""> Privacy Policy </a></p>
-                                <button class="btn btn-primary btn-lg btn-block"></span>Place Order</button>
-                            </div>
-
                         </div>
                     </div>
                 </div>

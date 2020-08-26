@@ -318,7 +318,11 @@ class ProductsController extends MyAppController
             $this->_template->render();
         }
 
-        echo $this->_template->render(false, false, 'products/filters.php', true);
+        $templateName = 'filters.php';
+        if(FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) != FilterHelper::LAYOUT_TOP) {
+            $templateName = 'filters-top.php';
+        }
+        echo $this->_template->render(false, false, 'products/' . $templateName, true);
         exit;
     }
 
@@ -640,7 +644,7 @@ class ProductsController extends MyAppController
         }
 
         /*   [ Promotional Banner   */
-        $banners = BannerLocation::getPromotionalBanners(BannerLocation::PRODUCT_DETAIL_PAGE_BANNER, $this->siteLangId);
+        $banners = BannerLocation::getPromotionalBanners(0, $this->siteLangId);
         /* End of Prmotional Banner  ]*/
 
         /* Get Product Specifications */
@@ -1126,7 +1130,7 @@ class ProductsController extends MyAppController
         // $frm->addSubmitButton(null, 'btnProductBuy', Labels::getLabel('LBL_Buy_Now', $formLangId ), array( 'id' => 'btnProductBuy' ) );
         //$frm->addSubmitButton(null, 'btnAddToCart', Labels::getLabel('LBL_Add_to_Cart', $formLangId), array( 'id' => 'btnAddToCart' ));
        // $frm->addHTML(null, 'btnProductBuy', '<button name="btnProductBuy" type="submit" id="btnProductBuy" class="btn btn-primary block-on-mobile add-to-cart--js btnBuyNow"> ' . Labels::getLabel('LBL_Buy_Now', $formLangId) . '</button>');
-        $frm->addHTML(null, 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-outline-primary block-on-mobile add-to-cart--js btn-primary-border"> ' . Labels::getLabel('LBL_Add_to_Cart', $formLangId) . '</button>');
+        $frm->addHTML(null, 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-primary btn-block add-to-cart--js "> ' . Labels::getLabel('LBL_Add_to_Cart', $formLangId) . '</button>');
         $frm->addHiddenField('', 'selprod_id');
         return $frm;
     }

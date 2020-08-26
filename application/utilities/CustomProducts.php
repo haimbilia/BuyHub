@@ -1271,9 +1271,6 @@ trait CustomProducts
             $post['prodcat_status'] = ProductCategory::REQUEST_APPROVED;
         }
 
-        $post['prodcat_status'] = ProductCategory::REQUEST_PENDING;
-        $post['prodcat_active'] = applicationConstants::INACTIVE;
-
         $post['prodcat_seller_id'] = UserAuthentication::getLoggedUserId();
         $productCategory = new ProductCategory($categoryReqId);
         if (!$productCategory->saveCategoryData($post)) {
@@ -1882,6 +1879,12 @@ trait CustomProducts
         }
 
         $productType = Product::getAttributesById($prodId, 'product_type');
+        $refererUrl =  CommonHelper::redirectUserReferer(true);
+        $arr = array_values(array_filter(explode('/', $refererUrl)));
+        array_shift($arr);
+        array_shift($arr);
+        
+        $this->set('previousAction', $arr[1]);
         $this->set('productId', $prodId);
         $this->set('productType', $productType);
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));

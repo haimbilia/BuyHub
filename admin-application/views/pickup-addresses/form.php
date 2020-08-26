@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'web_form  layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 6;
+//$frm->developerTags['colClassPrefix'] = 'col-md-';
+//$frm->developerTags['fld_default_col'] = 6;
 
 $langFld = $frm->getField('lang_id');
-$langFld->setfieldTagAttribute('onChange', "addAddressForm(" . $addressId . ", this.value);");
+$langFld->setFieldTagAttribute('onChange', "addAddressForm(" . $addressId . ", this.value);");
 
 $addrLabelFld = $frm->getField('addr_title');
 $addrLabelFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $langId));
@@ -235,7 +235,8 @@ $toAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
                         
                         <div class="js-slot-individual">
                         <?php 
-                        for($i = 1; $i <= 7; $i++){
+                        $daysArr = TimeSlot::getDaysArr($langId);
+                        for($i = 0; $i< count($daysArr); $i++){
                             $dayFld = $frm->getField('tslot_day['.$i.']');
                             $dayFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
                             $dayFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
@@ -245,7 +246,7 @@ $toAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
                             $addRowFld->setFieldTagAttribute('onClick', 'addTimeSlotRow('.$i.')');
                             $addRowFld->setFieldTagAttribute('class', 'js-slot-add-'.$i);
        
-                            if(!empty($slotData) && !empty($slotData['tslot_day'][$i])){   
+                            if(!empty($slotData) && isset($slotData['tslot_day'][$i])){   
                                 $dayFld->setFieldTagAttribute('checked', 'true');
                                 foreach($slotData['tslot_from_time'][$i] as $key=>$time){   
                                     $fromTime = date('H:i', strtotime($time));

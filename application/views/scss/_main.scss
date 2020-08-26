@@ -67,6 +67,14 @@
 @import 'components/media-more';
 @import 'components/bg';
 @import 'components/location-permission';
+@import 'components/quick-view';
+@import 'components/quantity-input';
+@import 'components/filters';
+@import 'components/filters-left';
+@import 'components/filters-top';
+@import 'components/saved-cards';
+@import 'components/no-data';
+@import 'components/timeline';
 @import 'vendors/animate';
 @import 'vendors/fontawesome';
 @import 'vendors/chartist';
@@ -94,6 +102,7 @@
 @import 'pages/login';
 @import 'pages/packages';
 @import 'pages/payment';
+@import 'pages/order-completed';
 //@import 'pages/responsive';
 @import 'pages/seller';
 @import 'pages/shop';

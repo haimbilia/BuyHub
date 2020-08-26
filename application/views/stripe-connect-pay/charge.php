@@ -39,8 +39,11 @@ $paymentIntendId = isset($paymentIntendId) ? $paymentIntendId : '';
                                         </div>
                                         <div class="col">
                                             <div class="payment-card__photo">
+                                                <?php 
+                                                    $cardBrand = strtolower(str_replace(" ", "", $cardDetail['brand']));
+                                                ?>
                                                 <svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo strtolower($cardDetail['brand']); ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $cardBrand; ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $cardBrand; ?>">
                                                     </use>
                                                 </svg>
                                             </div>
@@ -164,7 +167,7 @@ $paymentIntendId = isset($paymentIntendId) ? $paymentIntendId : '';
         doPayment = function(frm, orderId) {
             if (!$(frm).validate()) return;
             var data = fcom.frmData(frm);
-            fcom.updateWithAjax(fcom.makeUrl(controller, 'charge', [orderId]), data, function(t) {
+            fcom.ajax(fcom.makeUrl(controller, 'charge', [orderId]), data, function(t) {
                 if ('undefined' != typeof t.redirectUrl) {
                     window.location = t.redirectUrl;
                 } else {

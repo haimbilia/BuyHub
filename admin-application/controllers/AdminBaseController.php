@@ -148,6 +148,9 @@ class AdminBaseController extends FatController
         'fileSizeExceeded' => Labels::getLabel("MSG_FILE_SIZE_SHOULD_BE_LESSER_THAN_{SIZE-LIMIT}", $this->adminLangId),
         'currentPrice' => Labels::getLabel('LBL_Current_Price', $this->adminLangId),
         'discountPercentage' => Labels::getLabel('LBL_Discount_Percentage', $this->adminLangId),
+        'shippingUser' => Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId),
+        'saveProfileFirst' => Labels::getLabel('LBL_Save_Profile_First', $this->adminLangId),
+        'minimumOneLocationRequired' => Labels::getLabel('LBL_Minimum_one_location_is_required', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);
@@ -216,22 +219,28 @@ class AdminBaseController extends FatController
         }
         return $nodes;
     }
-
-    public function getStates($countryId, $stateId = 0, $langId= 0)
+    
+    public function getStates($countryId, $stateId = 0, $langId = 0, $idCol = 'state_id')
     {
         $countryId = FatUtility::int($countryId);
-        $stateId = FatUtility::int($stateId);
         $langId = FatUtility::int($langId);
+        
         if($langId == 0){
             $langId = $this->adminLangId;
         }
-            
+        
         $stateObj = new States();
-        $statesArr = $stateObj->getStatesByCountryId($countryId, $langId);
+        $statesArr = $stateObj->getStatesByCountryId($countryId, $this->adminLangId, true, $idCol);
 
         $this->set('statesArr', $statesArr);
         $this->set('stateId', $stateId);
         $this->_template->render(false, false, '_partial/states-list.php');
+    }
+    
+    public function getStatesByCountryCode($countryCode, $stateCode = '', $idCol = 'state_id')
+    {
+        $countryId = Countries::getCountryByCode($countryCode, 'country_id');
+        $this->getStates($countryId, $stateCode, $this->adminLangId, $idCol);
     }
 
     protected function getUserSearchForm()

@@ -29,6 +29,7 @@ class Plugin extends MyAppModel
     public const TYPE_SPLIT_PAYMENT_METHOD  = 11;
     public const TYPE_REGULAR_PAYMENT_METHOD  = 13;
     public const TYPE_MARKETPLACE_CHANNELS  = 12;
+    public const TYPE_SHIPMENT_TRACKING = 14;
 
     /* Define here :  if system can activate only one plugin from any group.*/
     public const EITHER_GROUP_TYPE = [
@@ -48,6 +49,7 @@ class Plugin extends MyAppModel
         self::TYPE_FULL_TEXT_SEARCH,
         self::TYPE_SPLIT_PAYMENT_METHOD,
         self::TYPE_SHIPPING_SERVICES,
+        self::TYPE_SHIPMENT_TRACKING,
     ];
 
     public const ATTRS = [
@@ -87,6 +89,7 @@ class Plugin extends MyAppModel
             self::TYPE_REGULAR_PAYMENT_METHOD => Labels::getLabel('LBL_REGULAR_PAYMENT_METHODS', $langId),
             self::TYPE_SHIPPING_SERVICES => Labels::getLabel('LBL_SHIPPING_SERVICES', $langId),
             self::TYPE_MARKETPLACE_CHANNELS => Labels::getLabel('LBL_MARKEPLACE_CHANNELS', $langId),
+            self::TYPE_SHIPMENT_TRACKING => Labels::getLabel('LBL_SHIPMENT_TRACKING', $langId),
         ];
     }
     
@@ -110,6 +113,7 @@ class Plugin extends MyAppModel
             self::TYPE_MARKETPLACE_CHANNELS => "marketplace-channels",
             self::TYPE_REGULAR_PAYMENT_METHOD => "payment-methods",
             self::TYPE_SHIPPING_SERVICES => "shipping-services",
+            self::TYPE_SHIPMENT_TRACKING => "shipment-tracking",
         ];
 
         if (array_key_exists($pluginType, $pluginDir)) {

@@ -30,6 +30,7 @@ class Orders extends MyAppModel
 
     public const BILLING_ADDRESS_TYPE = 1;
     public const SHIPPING_ADDRESS_TYPE = 2;
+    public const PICKUP_ADDRESS_TYPE = 3;
 
     public const ORDER_IS_CANCELLED = -1;
     public const ORDER_IS_PENDING = 0;
@@ -372,6 +373,7 @@ class Orders extends MyAppModel
                 $db->deleteRecords(OrderProductChargeLog::DB_TBL, array('smt' => 'opchargelog_op_id = ?', 'vals' => array($opId)));
                 $db->deleteRecords(OrderProductChargeLog::DB_TBL_LANG, array('smt' => 'opchargeloglang_op_id = ?', 'vals' => array($opId)));
                 $db->deleteRecords(OrderProductSpecifics::DB_TBL, array('smt' => 'ops_op_id = ?', 'vals' => array($opId)));
+                $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_op_id = ?', 'vals' => array($opId )));
             }
         }
         $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS, array('smt' => 'op_order_id = ?', 'vals' => array($this->getOrderId())));
@@ -479,6 +481,36 @@ class Orders extends MyAppModel
                     }
                 }
                 /*]*/
+                
+                /* saving of products Pickup data[ */
+                $productPickUpData = $product['productPickUpData'];
+                if (!empty($productPickUpData)) {
+                    $productPickUpData['opshipping_op_id'] = $op_id;
+
+                    $opShippingRecordObj->assignValues($productPickUpData);
+                    if (!$opShippingRecordObj->addNew()) {
+                        $db->rollbackTransaction();
+                        $this->error = $opShippingRecordObj->getError();
+                        return false;
+                    }
+                }
+                /*]*/
+                
+                /* saving of products Pickup address[ */
+                $productPickupAddress = $product['productPickupAddress'];
+                if (!empty($productPickupAddress)) {
+                    $productPickupAddress['oua_order_id'] = $this->getOrderId();
+                    $productPickupAddress['oua_op_id'] = $op_id;
+                    
+                    $ouaRecordObj = new TableRecord(static::DB_TBL_ORDER_USER_ADDRESS);
+                    $ouaRecordObj->assignValues($productPickupAddress);
+                    if (!$ouaRecordObj->addNew()) {
+                        $db->rollbackTransaction();
+                        $this->error = $ouaRecordObj->getError();
+                        return false;
+                    }
+                }
+                /*]*/
 
                 /* saving of products Shipping lang data[ */
                 $productsShippingLangData = $product['productShippingLangData'];
@@ -570,7 +602,8 @@ class Orders extends MyAppModel
             }
         }
         /* CommonHelper::printArray($addresses);die; */
-        $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_order_id = ?', 'vals' => array($this->getOrderId())));
+       // $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_order_id = ?', 'vals' => array($this->getOrderId())));
+        $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_order_id = ? and oua_op_id = ?', 'vals' => array($this->getOrderId(), 0 )));
         if (!empty($addresses)) {
             $ouaRecordObj = new TableRecord(static::DB_TBL_ORDER_USER_ADDRESS);
             foreach ($addresses as $address) {
@@ -836,10 +869,14 @@ class Orders extends MyAppModel
         return $row;
     }
 
-    public function getOrderAddresses($order_id)
+    public function getOrderAddresses($order_id, $opId = 0)
     {
+        $opId = FatUtility::int($opId);
         $srch = new SearchBase(static::DB_TBL_ORDER_USER_ADDRESS);
         $srch->addCondition('oua_order_id', '=', $order_id);
+        if($opId > 0){
+            $srch->addCondition('oua_op_id', '=', $opId);
+        }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
@@ -897,7 +934,7 @@ class Orders extends MyAppModel
         return true;
     }
 
-    public function getChildOrders($criterias, $orderType = Orders::ORDER_PRODUCT, $langId = 0)
+    public function getChildOrders($criterias, $orderType = Orders::ORDER_PRODUCT, $langId = 0, $joinSellerProducts = false)
     {
         $langId = FatUtility::int($langId);
 
@@ -921,6 +958,14 @@ class Orders extends MyAppModel
             $srch->joinTable(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'LEFT OUTER JOIN', 'optosu.optsu_op_id = op.op_id', 'optosu');
             $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
             $srch->joinTable(OrderProduct::DB_TBL_SETTINGS, 'LEFT OUTER JOIN', 'op.op_id = opst.opsetting_op_id', 'opst');
+
+            if (true === $joinSellerProducts) {
+                $srch->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_id = op.op_selprod_id and op.op_is_batch = 0', 'sp');
+                if ($langId) {
+                    $srch->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sp_l.selprodlang_selprod_id = sp.selprod_id AND sp_l.selprodlang_lang_id = ' . $langId, 'sp_l');
+                }
+            }
+
             $srch->addOrder("op_id", "desc");
             $rs = $srch->getResultSet();
 
@@ -989,10 +1034,10 @@ class Orders extends MyAppModel
 
         $srch->joinTable(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'LEFT OUTER JOIN', 'optosu.optsu_op_id = torp.op_id', 'optosu');
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = torp.op_id', 'ops');
-        $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'ops_l.opshipping_op_id = ops_l.opshippinglang_op_id ops_l.opshippinglang_lang_id = ' . $langId, 'ops_l');
+        $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = ops_l.opshippinglang_op_id and ops_l.opshippinglang_lang_id = ' . $langId, 'ops_l');
         // $srch->joinTable(ShippingCompanies::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_company_id = opsc.scompany_id', 'opsc');
         //$srch->joinTable(ShippingCompanies::DB_TBL_LANG, 'LEFT OUTER JOIN', 'opscl.scompanylang_scompany_id = opsc.scompany_id', 'opscl');
-        $srch->addMultipleFields(array('opshipping_by_seller_user_id', 'IFNULL(opshipping_carrier, opshipping_label) as scompany_name'));
+        $srch->addMultipleFields(array('opshipping_by_seller_user_id', 'IFNULL(opshipping_carrier_code, opshipping_label) as scompany_name'));
 
         if (isset($criteria['seller_id'])) {
             $srch->joinTable('tbl_users', 'LEFT OUTER JOIN', 's.user_id = torp.op_selprod_user_id', 's');
@@ -1337,7 +1382,7 @@ class Orders extends MyAppModel
         }
     }
 
-    public function addChildProductOrderHistory($op_id, $langId, $opStatusId, $comment = '', $notify = false, $trackingNumber = '', $releasePayments = 0, $moveRefundToWallet = true)
+    public function addChildProductOrderHistory($op_id, $langId, $opStatusId, $comment = '', $notify = false, $trackingNumber = '', $releasePayments = 0, $moveRefundToWallet = true, $trackingCourier = '')
     {
         $op_id = FatUtility::int($op_id);
         $langId = FatUtility::int($langId);
@@ -1366,7 +1411,7 @@ class Orders extends MyAppModel
             return false;
         }
 
-        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $op_id, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => $comment, 'oshistory_tracking_number' => $trackingNumber), true)) {
+        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $op_id, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => $comment, 'oshistory_tracking_number' => $trackingNumber, 'oshistory_courier' => $trackingCourier), true)) {
             $this->error = $db->getError();
             return false;
         }
@@ -2455,7 +2500,7 @@ class Orders extends MyAppModel
             $opSrch->joinTable(ShippingCompanies::DB_TBL_LANG, 'LEFT OUTER JOIN', 'opscl.scompanylang_scompany_id = opsc.scompany_id AND opscl.scompanylang_lang_id = ' . $langId, 'opscl');
             $opSrch->addCondition('op.op_id', '=', $opId);
             $extraAttr = [
-                'selprod_product_id', 'op_selprod_id', 'opshipping_method_id', 'opshipping_company_id', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_product_weight', 'op_product_weight_unit', 'opshipping_carrier', 'IFNULL(scompany_name, scompany_identifier) as carrier_code'
+                'selprod_product_id', 'op_selprod_id', 'opshipping_method_id', 'opshipping_company_id', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_product_weight', 'op_product_weight_unit', 'opshipping_carrier_code', 'IFNULL(scompany_name, scompany_identifier) as carrier_code'
             ];
             $attr = array_merge($attr, $extraAttr);
         }

@@ -279,10 +279,10 @@ class MyAppController extends FatController
         $this->_template->render(false, false, '_partial/states-list.php');
     }
 
-    public function getStatesByCountryCode($countryCode, $stateCode = '')
+    public function getStatesByCountryCode($countryCode, $stateCode = '', $idCol = 'state_id')
     {
         $countryId = Countries::getCountryByCode($countryCode, 'country_id');
-        $this->getStates($countryId, $stateCode, false, 'state_code');
+        $this->getStates($countryId, $stateCode, false, $idCol);
     }
 
     public function getBreadcrumbNodes($action)
@@ -442,11 +442,12 @@ class MyAppController extends FatController
         return $frm;
     }
 
-    protected function getUserAddressForm($siteLangId)
+    protected function getUserAddressForm($siteLangId, $btnOrderFlip = false)
     {
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmAddress');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $siteLangId), 'addr_title');
+        $fld->requirement->setRequired(true);
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $siteLangId));
         $frm->addRequiredField(Labels::getLabel('LBL_Name', $siteLangId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $siteLangId), 'addr_address1');
@@ -470,6 +471,11 @@ class MyAppController extends FatController
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addHiddenField('', 'addr_id');
+		if ($btnOrderFlip) {
+			$fldCancel = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $siteLangId));
+			$fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $siteLangId));
+			return $frm;
+		}
         $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $siteLangId));
         $fldCancel = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $siteLangId));
         //$fldCancel->attachField($fldSubmit);
@@ -589,12 +595,12 @@ class MyAppController extends FatController
         if (true === MOBILE_APP_API_CALL) {
             $frm->addRequiredField('', 'upv_otp');
         } else {
-            $attr = ['maxlength' => 1, 'size' => 1];
+            $attr = ['maxlength' => 1, 'size' => 1, 'placeholder' => '*'];
             for ($i = 0; $i < User::OTP_LENGTH; $i++) {
                 $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_VALIDATE', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_VERIFY', $this->siteLangId));
         return $frm;
     }
 
@@ -734,7 +740,7 @@ class MyAppController extends FatController
         $otpFrm = $this->getOtpForm();
         $post = $otpFrm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            LibHelper::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::dieJsonError(current($otpFrm->getValidationErrors()));
         }
         if (true === MOBILE_APP_API_CALL) {
             if (User::OTP_LENGTH != strlen($post['upv_otp'])) {

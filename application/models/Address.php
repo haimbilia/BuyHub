@@ -9,7 +9,10 @@ class Address extends MyAppModel
     public const TYPE_SHOP_PICKUP = 2;
     public const TYPE_SHOP_REUTRN = 3;
     public const TYPE_ADMIN_PICKUP = 4;
-
+    
+    public const ADDRESS_TYPE_BILLING = 1;
+    public const ADDRESS_TYPE_SHIPPING = 2;
+    
     private const GOOGLE_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
     private $langId;
     
@@ -85,8 +88,11 @@ class Address extends MyAppModel
         if (0 > $isDefault) {
             $srch->addCondition(self::tblFld('is_default'), '=', $isDefault);
         }
-        $srch->addOrder(static::tblFld('is_default'), 'DESC');
-
+        if($recordId == 0){
+             $srch->addOrder(static::tblFld('id'), 'DESC');
+        }else{
+             $srch->addOrder(static::tblFld('is_default'), 'DESC');
+        }
         if (0 < $this->mainTableRecordId) {
             $srch->addCondition(self::tblFld('id'), '=', $this->mainTableRecordId);
 
@@ -230,5 +236,6 @@ class Address extends MyAppModel
             'data' => $data
         ];
     }
+
 
 }

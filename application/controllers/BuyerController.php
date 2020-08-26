@@ -151,7 +151,6 @@ class BuyerController extends BuyerBaseController
         $primaryOrderDisplay = false;
 
         $orderObj = new Orders();
-        $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
         $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
         $userId = UserAuthentication::getLoggedUserId();
 
@@ -168,11 +167,13 @@ class BuyerController extends BuyerBaseController
         $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
 
         $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch->joinOrderProductShipment();
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
         $srch->joinOrderUser();
         //$srch->joinShippingUsers();
         $srch->addOrderProductCharges();
+        $srch->joinShippingCharges();
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '=', $orderId);
 
@@ -231,6 +232,10 @@ class BuyerController extends BuyerBaseController
         $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
         $orderDetail['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE])) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : array();
+        
+        $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
+        $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
+        
         if ($opId > 0) {
             $orderDetail['comments'] = $orderObj->getOrderComments($this->siteLangId, array("op_id" => $childOrderDetail['op_id']));
         } else {
@@ -2539,4 +2544,29 @@ class BuyerController extends BuyerBaseController
         $this->set('msg', Labels::getLabel('MSG_Email_Sent', $this->siteLangId));
         $this->_template->render();
     }
+    
+    public function orderTrackingInfo($trackingNumber, $courier, $orderNumber)
+	{
+		if (empty($trackingNumber) || empty($courier)) {
+			Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request',$this->siteLangId));
+			FatUtility::dieWithError( Message::getHtml() );
+        }
+
+		$shipmentTracking = new ShipmentTracking();
+		if (false === $shipmentTracking->init($this->siteLangId)) {
+			Message::addErrorMessage($shipmentTracking->getError());
+            FatUtility::dieWithError(Message::getHtml());
+		}
+		
+        $shipmentTracking->createTracking($trackingNumber, $courier, $orderNumber);
+        
+		if (false === $shipmentTracking->getTrackingInfo($trackingNumber, $courier)) {
+			Message::addErrorMessage($shipmentTracking->getError());
+            FatUtility::dieWithError(Message::getHtml());
+		}
+		$trackingInfo = $shipmentTracking->getResponse();
+		
+		$this->set('trackingInfo', $trackingInfo);
+		$this->_template->render(false, false);
+	}
 }

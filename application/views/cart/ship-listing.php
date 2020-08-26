@@ -1,32 +1,28 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="row">
-    <div class="col-md-8">
-        <div class="shiporpickup">
-            <ul>
-                <li onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP;?>)"><input class="control-input" type="radio" id="shipping" name="fulfillment_type" <?php echo ($fulfilmentType == Shipping::FULFILMENT_SHIP) ? 'checked':'';?> value="<?php echo Shipping::FULFILMENT_SHIP;?>">
-                    <label class="control-label" for="shipping">
-                        <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#shipping" href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#shipping">
-                            </use>
-                        </svg> <?php echo Labels::getLabel('LBL_SHIP_MY_ORDER', $siteLangId);?>
-                    </label>
-
-                </li>
-                <li onclick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP;?>)"><input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP;?>" <?php echo ($fulfilmentType == Shipping::FULFILMENT_PICKUP) ? 'checked':'';?>>
-                    <label class="control-label" for="pickup">
-                        <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#pickup" href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#pickup">
-                            </use>
-                        </svg> <?php echo Labels::getLabel('LBL_PICKUP_IN_STORE', $siteLangId);?> </label>
-
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-<div class="row">
     <div class="col-md-8"> 
+        <div class="shiporpickup">
+                <ul>
+                    <li onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP;?>)"><input class="control-input" type="radio" id="shipping" name="fulfillment_type" <?php echo ($fulfilmentType == Shipping::FULFILMENT_SHIP) ? 'checked':'';?> value="<?php echo Shipping::FULFILMENT_SHIP;?>">
+                        <label class="control-label" for="shipping">
+                            <svg class="svg">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#shipping" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#shipping">
+                                </use>
+                            </svg> <?php echo Labels::getLabel('LBL_SHIP_MY_ORDER', $siteLangId);?>
+                        </label>
+
+                    </li>
+                    <li onclick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP;?>)"><input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP;?>" <?php echo ($fulfilmentType == Shipping::FULFILMENT_PICKUP) ? 'checked':'';?>>
+                        <label class="control-label" for="pickup">
+                            <svg class="svg">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#pickup" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#pickup">
+                                </use>
+                            </svg> <?php echo Labels::getLabel('LBL_PICKUP_IN_STORE', $siteLangId);?> </label>
+
+                    </li>
+                </ul>
+            </div>
         <div class="cart-blocks">            
             <?php 
             $productsCount = count($products);  
@@ -36,23 +32,26 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                 });
             ?>
             <ul class="list-group list-cart">
-                <?php if (count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) != $productsCount) { ?>
+                <?php 
+                //if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { 
+                if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { 
+                ?>
                 <li class="list-group-item">
                     <div class="info">
                         <span> <svg class="svg">
-                                <use xlink:href="../images/retina/sprite.svg#info"
-                                    href="../images/retina/sprite.svg#info">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#info"
+                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#info">
                                 </use>
                             </svg><?php echo Labels::getLabel('MSG_SOME_ITEMS_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?>
                             <?php if (count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) == $productsCount) {?>
-                            <a href="javascript:void(0);" onClick="setCheckoutType(<?php echo Shipping::FULFILMENT_PICKUP; ?>);" class="link"><?php echo Labels::getLabel('LBL_Pickup_Entire_Order', $siteLangId); ?></a>
+                            <a href="javascript:void(0);" onClick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP; ?>);" class="link"><?php echo Labels::getLabel('LBL_Pickup_Entire_Order', $siteLangId); ?></a>
                             <?php } ?>
                             </span>
                         <ul class="list-actions">
                             <li>
                                 <a href="javascript:void(0);" onClick="removePickupOnlyProducts();"><svg class="svg" width="24px" height="24px">
-                                        <use xlink:href="../images/retina/sprite.svg#remove"
-                                            href="../images/retina/sprite.svg#remove">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                            href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
                                         </use>
                                     </svg>
                                 </a></li>
@@ -170,7 +169,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                         <ul class="list-actions">
                             <li>
                                 <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')"><svg class="svg" width="24px" height="24px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#remove">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
                                         </use>
                                     </svg>
                                 </a></li>
@@ -186,7 +185,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
             <ul class="list-group list-cart">
                 <?php foreach ($saveForLaterProducts as $product) {
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
-                    $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB",$product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');               
+                    $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB",$product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                     $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
                 ?>
                 <li class="list-group-item <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
@@ -216,7 +215,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                         <ul class="list-actions">
                             <li>
                                 <a href="javascript:void(0)" onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg class="svg" width="24px" height="24px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL;?>/retina/sprite.svg#remove">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
                                         </use>
                                     </svg>
                                 </a></li>

@@ -728,7 +728,7 @@ class EmailHandler extends FatModel
         if ($orderInfo) {
             $order_discount_coupon = $orderInfo['order_discount_coupon_code'] != "" ? $orderInfo['order_discount_coupon_code'] : Labels::getLabel("LBL_-NA-", $langId);
 
-            $orderProducts = $orderObj->getChildOrders(array('order_id' => $orderInfo['order_id']), $orderInfo['order_type'], $orderInfo['order_language_id']);
+            $orderProducts = $orderObj->getChildOrders(array('order_id' => $orderInfo['order_id']), $orderInfo['order_type'], $orderInfo['order_language_id'], true);
 
             $addresses = $orderObj->getOrderAddresses($orderInfo["order_id"]);
 
@@ -743,19 +743,29 @@ class EmailHandler extends FatModel
             $shippingArr = array();
             if (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) {
                 $shippingArr = $addresses[Orders::SHIPPING_ADDRESS_TYPE];
-            } else {
-                $shippingArr = $billingArr;
-            }
-
+            } 
+            
             foreach ($orderProducts as $opID => $val) {
                 $opChargesLog = new OrderProductChargeLog($opID);
                 $taxOptions = $opChargesLog->getData($langId);
                 $orderProducts[$opID]['taxOptions'] = $taxOptions;
             }
+            
+            $orderProductsData = [];
+            foreach ($orderProducts as $opID => $val) {
+                $orderProductsData[$val["opshipping_pickup_addr_id"]][] = $val;
+                $pickUpAddress = $orderObj->getOrderAddresses($orderInfo['order_id'], $opID);
+                if(!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])){
+                    $orderProductsData[$val["opshipping_pickup_addr_id"]]['pickupAddress'] = $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE];
+                }else{
+                    $orderProductsData[$val["opshipping_pickup_addr_id"]]['pickupAddress'] = array();
+                }
+            }
 
             $tpl = new FatTemplate('', '');
             $tpl->set('orderInfo', $orderInfo);
-            $tpl->set('orderProducts', $orderProducts);
+           // $tpl->set('orderProducts', $orderProducts);
+            $tpl->set('orderProductsData', $orderProductsData);
             $tpl->set('siteLangId', $langId);
             $tpl->set('billingAddress', $billingArr);
             $tpl->set('shippingAddress', $shippingArr);
@@ -1035,9 +1045,9 @@ class EmailHandler extends FatModel
             $shippingArr = array();
             if (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) {
                 $shippingArr = $addresses[Orders::SHIPPING_ADDRESS_TYPE];
-            } else {
+            } /*else {
                 $shippingArr = $billingArr;
-            }
+            }*/
             $orderVendors = $orderObj->getChildOrders(array("order" => $orderId), $orderDetail['order_type'], $orderDetail['order_language_id']);
             foreach ($orderVendors as $key => $val) :
                 $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($val['op_selprod_user_id'], $val['opshipping_by_seller_user_id']);
@@ -1045,6 +1055,13 @@ class EmailHandler extends FatModel
                 $opChargesLog = new OrderProductChargeLog($val['op_id']);
                 $taxOptions = $opChargesLog->getData($langId);
                 $val['taxOptions'] = $taxOptions;
+                
+                $pickUpAddress = $orderObj->getOrderAddresses($orderId, $val['op_id']);
+                if(!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])){
+                    $val['pickupAddress'] = $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE];
+                }else{
+                    $val['pickupAddress'] = array();
+                }
 
                 $tpl = new FatTemplate('', '');
                 //$tpl->set('orderInfo', $orderDetail);
@@ -2920,5 +2937,19 @@ class EmailHandler extends FatModel
             $fileName = current(debug_backtrace())['file'];
         }
         return CONF_VIEW_DIR_PATH . $directory . '/' . basename($fileName);
+    }
+
+    public function sendCodOtpVerification($langId, $d)
+    {
+        $tpl = 'COD_OTP_VERIFICATION';
+        $vars = array(
+            '{USER_NAME}' => $d['user_name'],
+            '{OTP}' => $d['otp'],
+        );
+
+        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars)) {
+            return false;
+        }
+        return true;
     }
 }
