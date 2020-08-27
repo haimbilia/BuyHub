@@ -14,7 +14,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                     <a class="btn btn-outline-primary btn-sm" href="javascript:void(0);" onclick="addNewCardForm()">
                         <i class="icn">
                             <svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add"
+                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add">
                                 </use>
                             </svg>
                         </i>
@@ -31,14 +32,16 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                             <?php if (empty($savedCards)) { ?>
                                 <div class="no-data-found">
                                     <div class="img">
-                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-saved-cards.svg" width="150px" height="150px">
+                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-saved-cards.svg"
+                                            width="150px" height="150px">
                                     </div>
                                     <div class="data">
                                         <h2><?php echo Labels::getLabel("LBL_NO_SAVED_CARDS", $siteLangId); ?></h2>
                                         <p><?php echo Labels::getLabel("LBL_ADD_CARDS_TO_CHECKOUT_FASTER", $siteLangId); ?>
                                         </p>
                                         <div class="action">
-                                            <a class="btn btn-primary btn-wide" href="javascript:void(0);" onclick="addNewCardForm()">
+                                            <a class="btn btn-primary btn-wide" href="javascript:void(0);"
+                                                onclick="addNewCardForm()">
                                                 <?php echo Labels::getLabel("LBL_ADD_NEW_CARD", $siteLangId); ?>
                                             </a>
                                         </div>
@@ -47,37 +50,45 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                             <?php } else { ?>
                                 <ul class="saved-cards savedCards-js">
                                     <?php foreach ($savedCards as $cardDetail) { ?>
-                                        <li class="card-js <?php echo $defaultSource == $cardDetail['id'] ? "selected" : ""; ?>" title="<?php echo Labels::getLabel('LBL_MARK_AS_DEFAULT', $siteLangId); ?>">
+                                        <li class="card-js <?php echo $defaultSource == $cardDetail['id'] ? "selected" : ""; ?>"
+                                            title="<?php echo Labels::getLabel('LBL_MARK_AS_DEFAULT', $siteLangId); ?>">
                                             <label class="radio">
                                                 <ul class="list-actions listActions-js">
                                                     <li>
-                                                        <input name="card_id" type="radio" value="<?php echo $cardDetail['id']; ?>" <?php echo $defaultSource == $cardDetail['id'] ? "checked='checked'" : ""; ?> onclick="markAsDefault('<?php echo $cardDetail['id']; ?>')">
+                                                        <input name="card_id" type="radio"
+                                                            value="<?php echo $cardDetail['id']; ?>"
+                                                            <?php echo $defaultSource == $cardDetail['id'] ? "checked='checked'" : ""; ?>
+                                                            onclick="markAsDefault('<?php echo $cardDetail['id']; ?>')">
                                                         <i class="input-helper"></i>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript::void(0);" onclick="removeCard('<?php echo $cardDetail['id']; ?>')" title="<?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>">
+                                                        <a href="javascript::void(0);"
+                                                            onclick="removeCard('<?php echo $cardDetail['id']; ?>')"
+                                                            title="<?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>">
                                                             <svg class="svg">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin"
+                                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
                                                                 </use>
                                                             </svg>
                                                         </a>
                                                     </li>
                                                 </ul>
                                                 <div class="payment-card__photo">
-                                                    <?php
-                                                    $cardBrand = strtolower(str_replace(" ", "", $cardDetail['brand']));
+                                                    <?php 
+                                                        $cardBrand = strtolower(str_replace(" ", "", $cardDetail['brand']));
                                                     ?>
                                                     <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $cardBrand; ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $cardBrand; ?>">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $cardBrand; ?>"
+                                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $cardBrand; ?>">
                                                         </use>
                                                     </svg>
                                                 </div>
                                                 <div class="cards-detail my-4">
                                                     <h6><?php echo Labels::getLabel('LBL_CARD_NUMBER', $siteLangId); ?></h6>
                                                     <p>
-                                                        <?php
-                                                        $msg = Labels::getLabel('LBL_****_****_****_{LAST4}', $siteLangId);
-                                                        echo CommonHelper::replaceStringData($msg, ['{LAST4}' => $cardDetail['last4']]);
+                                                        <?php 
+                                                            $msg = Labels::getLabel('LBL_****_****_****_{LAST4}', $siteLangId); 
+                                                            echo CommonHelper::replaceStringData($msg, ['{LAST4}' => $cardDetail['last4']]);
                                                         ?>
                                                     </p>
                                                 </div>
