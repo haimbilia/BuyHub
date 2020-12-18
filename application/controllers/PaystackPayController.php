@@ -99,7 +99,7 @@ class PaystackPayController extends PaymentController
 
         $this->set('cancelBtnUrl', $cancelBtnUrl);
         if (FatUtility::isAjaxCall()) {
-            $json['html'] = $this->_template->render(false, false, 'pay-stack-pay/charge-ajax.php', true, false);
+            $json['html'] = $this->_template->render(false, false, 'paystack-pay/charge-ajax.php', true, false);
             FatUtility::dieJsonSuccess($json);
         }
         $this->_template->render(true, false);
