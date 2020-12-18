@@ -176,7 +176,7 @@ trait PluginHelper
         $reflect  = new ReflectionClass($keyName);
         return $reflect->newInstanceArgs($args);
     }
-    
+
     /**
      * updateSettings
      *
@@ -187,8 +187,8 @@ trait PluginHelper
      */
     public function updateSettings(int $pluginId, array $data, &$error = ""): bool
     {
-        $pluginSetting = new PluginSetting($this->settings["plugin_id"]);
-        if (!$pluginSetting->save($data)) {
+        $pluginSetting = new PluginSetting($pluginId);
+        if (!$pluginSetting->updateSetting($data)) {
             $error = $pluginSetting->getError();
             return false;
         }

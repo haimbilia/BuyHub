@@ -43,8 +43,7 @@ class PayfastPayController extends PaymentController
      */
     private function init(): void
     {
-        $this->userId = UserAuthentication::getLoggedUserId(true);
-        if (false === $this->plugin->init($this->userId)) {
+        if (false === $this->plugin->init()) {
             $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
         }
         $this->passphrase = $this->plugin->getPassphrase();
@@ -96,31 +95,10 @@ class PayfastPayController extends PaymentController
 
         $this->set('cancelBtnUrl', $cancelBtnUrl);
         if (FatUtility::isAjaxCall()) {
-            $json['html'] = $this->_template->render(false, false, 'pay-stack-pay/charge-ajax.php', true, false);
+            $json['html'] = $this->_template->render(false, false, 'payfast-pay/charge-ajax.php', true, false);
             FatUtility::dieJsonSuccess($json);
         }
         $this->_template->render(true, false);
-    }
-
-    /**
-     * callback
-     *
-     * @param  string $orderId
-     * @return void
-     */
-    public function callback(string $orderId)
-    {
-        die();
-        $orderPaymentObj = new OrderPayment($orderId);
-
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $referenceId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $response)) {
-            $msg = $orderPaymentObj->getError();
-            $this->logFailure($orderId, $msg);
-        }
-
-        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }
 
     /**
@@ -168,5 +146,114 @@ class PayfastPayController extends PaymentController
             }
         }
         return $frm;
+    }
+
+    /**
+     * callback
+     *
+     * @param  string $orderId
+     * @return void
+     */
+    public function callback(string $orderId)
+    {
+        $post = FatApp::getPostedData();
+        $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
+            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
+        }
+
+        if ($this->plugin->validateResponseSignature($post) === false) {
+            $msg = empty($this->plugin->getError()) ? Labels::getLabel('MSG_INVALID_SIGNATURE', $this->siteLangId) : $this->plugin->getError();
+            $this->logFailure($orderId, $msg);
+            return false;
+        }
+
+        if ($this->validateIP() === false) {
+            $msg = Labels::getLabel('MSG_INVALID_IP', $this->siteLangId);
+            $this->logFailure($orderId, $msg);
+            return false;
+        }
+
+        if ($this->validPaymentData($paymentAmount, $post['amount_gross']) === false) {
+            $msg = Labels::getLabel('MSG_INVALID_PAYMENT', $this->siteLangId);
+            $this->logFailure($orderId, $msg);
+            return false;
+        }
+
+        $paramString = $this->generateParamString($post);
+
+        if ($this->validServerConfirmation($paramString, $this->paymentHost) === false) {
+            $msg = Labels::getLabel('MSG_INVALID_SERVER_CONFIRMATION', $this->siteLangId);
+            $this->logFailure($orderId, $msg);
+            return false;
+        }
+
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['pf_payment_id'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
+            $msg = $orderPaymentObj->getError();
+            $this->logFailure($orderId, $msg);
+        }
+
+        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+    }
+
+    /**
+     * validateIP
+     *
+     * @return boolean
+     */
+    private function validateIP()
+    {
+        $validHosts = array(
+            'www.payfast.co.za',
+            'sandbox.payfast.co.za',
+            'w1w.payfast.co.za',
+            'w2w.payfast.co.za',
+        );
+
+        $validIps = [];
+
+        foreach ($validHosts as $pfHostname) {
+            $ips = gethostbynamel($pfHostname);
+
+            if ($ips !== false) {
+                $validIps = array_merge($validIps, $ips);
+            }
+        }
+
+        $validIps = array_unique($validIps);
+        $referrerIp = gethostbyname(parse_url($_SERVER['HTTP_REFERER'])['host']);
+        if (in_array($referrerIp, $validIps, true)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * validPaymentData
+     * 
+     * @param string $initialPaymentAmount actual cart amount
+     * @param string $pgDebited actual deducted amount at pafast gateway
+     * @return boolean
+     */
+    private function validPaymentData($initialPaymentAmount, $pgDebited)
+    {
+        return !(abs((float)$initialPaymentAmount - (float)$pgDebited) > 0.01);
+    }
+
+    /**
+     * generateParamString
+     * 
+     * @param array $post returned data from Payfast
+     * @return string
+     */
+    private function generateParamString($post)
+    {
+        unset($post['signature']);
+        return http_build_query($post);
     }
 }

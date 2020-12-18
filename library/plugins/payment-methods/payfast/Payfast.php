@@ -7,8 +7,11 @@
 class Payfast extends PaymentMethodBase
 {
     public const KEY_NAME = __CLASS__;
-    public const PRODUCTION_URL = 'https://payfast.co.za/eng/process';
-    public const SANDBOX_URL = 'https://sandbox.payfast.co.za/eng/process';
+    public const PRODUCTION_HOST = 'https://payfast.co.za';
+    public const PRODUCTION_URL = self::PRODUCTION_HOST . '/eng/process';
+    
+    public const SANDBOX_HOST = 'https://sandbox.payfast.co.za';
+    public const SANDBOX_URL = self::SANDBOX_HOST . '/eng/process';
 
     public $requiredKeys = [
         'passphrase',
@@ -23,6 +26,7 @@ class Payfast extends PaymentMethodBase
     private $merchantKey = '';
     private $actionUrl = '';
     private $requestBody = [];
+    private $paymentHost = '';
 
     /**
      * __construct
@@ -56,10 +60,9 @@ class Payfast extends PaymentMethodBase
     /**
      * init
      *
-     * @param  int $userId
      * @return bool
      */
-    public function init(int $userId): bool
+    public function init(): bool
     {
         if (false == $this->validateSettings()) {
             return false;
@@ -69,20 +72,12 @@ class Payfast extends PaymentMethodBase
             return false;
         }
 
-        if (0 < $userId) {
-            if (false === $this->loadLoggedUserInfo($userId)) {
-                return false;
-            }
-        }
-
-        if (false === $this->loadSignature()) {
-            return false;
-        }
-
         $this->passphrase = $this->settings['passphrase'];
         $this->merchantId = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_merchant_id'] : $this->settings['merchant_id'];
         $this->merchantKey = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_merchant_key'] : $this->settings['merchant_key'];
         $this->actionUrl = Plugin::ENV_PRODUCTION == $this->settings['env'] ? self::PRODUCTION_URL : self::SANDBOX_URL;
+        $this->paymentHost = Plugin::ENV_PRODUCTION == $this->settings['env'] ? self::PRODUCTION_HOST : self::SANDBOX_HOST;
+
         return true;
     }
 
@@ -143,19 +138,12 @@ class Payfast extends PaymentMethodBase
      */
     private function loadSignature(): bool
     {
-        if (empty($this->settings['signature'])) {
+        if (!empty($this->settings['signature'])) {
             $this->signature = $this->settings['signature'];
             return true;
         }
 
-        $signatureData = [
-            'merchant-id' => $this->getmerchantId(),
-            'passphrase' => $this->getPassphrase(),
-            'timestamp' => time(),
-            'version' => preg_replace('/[^a-zA-Z0-9]+/', '_', CONF_WEB_APP_VERSION)
-        ];
-        ksort($signatureData);
-        $signature = md5(http_build_query($signatureData));
+        $signature = md5(http_build_query($this->getRequestBody()));
 
         if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
             return false;
@@ -175,22 +163,51 @@ class Payfast extends PaymentMethodBase
         $orderPaymentObj = new OrderPayment($orderId, $this->langId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if (false === $this->loadLoggedUserInfo($orderInfo['customer_id'])) {
+            return false;
+        }
+
         $customerEmail = !isset($orderInfo['customer_email']) || empty($orderInfo['customer_email']) ? $this->userData['credential_email'] : $orderInfo['customer_email'];
 
         $this->requestBody = array(
+            // Merchant details
             'merchant_id' => $this->getmerchantId(),
             'merchant_key' => $this->getMerchantKey(),
-            'signature' => $this->getSignature(),
-            'return_url' => CommonHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'paymentSuccess', [$orderId]),
+            'return_url' => CommonHelper::generateFullUrl('Custom', 'paymentSuccess', [$orderId]),
             'cancel_url' => CommonHelper::generateFullUrl('Custom', 'paymentFailed', [$orderId]),
             'notify_url' => CommonHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'callback', [$orderId]),
+            // Buyer details
             'name_first' => $this->userData['user_name'],
             'email_address' => $customerEmail,
+            // Transaction details
             'm_payment_id' => $orderId,
             'amount' => number_format(sprintf('%.2f', $paymentAmount), 2, '.', ''),
-            'item_name' => "Order #" . $orderId
+            'item_name' => "Order #" . $orderId,
+            'passphrase' => $this->getPassphrase()
         );
+
+        if (false === $this->loadSignature()) {
+            return false;
+        }
+        $this->requestBody['signature'] = $this->getSignature();
         return true;
+    }
+    
+    /**
+     * validateResponseSignature
+     *
+     * @param  array $response
+     * @return bool
+     */
+    public function validateResponseSignature(array $response): bool
+    {
+        $responseSignature = $response['signature'];
+        unset($response['signature']);
+        $this->requestBody = $response;
+        if (false === $this->loadSignature()) {
+            return false;
+        }
+        return ($responseSignature === $this->getSignature());
     }
 
     /**
@@ -201,5 +218,40 @@ class Payfast extends PaymentMethodBase
     public function getRequestBody(): array
     {
         return $this->requestBody;
+    }
+
+    /**
+     * validServerConfirmation
+     * @param string $paramString parameters used to create signature
+     * @param string $paymentHost sandbox or live
+     * @param string $proxy proxy on or not
+     * @return boolean
+     */
+    private function validServerConfirmation($paramString, $paymentHost = 'sandbox.payfast.co.za', $proxy = null)
+    {
+        if (in_array('curl', get_loaded_extensions(), true)) {
+            $validateUrl = 'https://' . $paymentHost . '/eng/query/validate';
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_USERAGENT, NULL);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+
+            curl_setopt($ch, CURLOPT_URL, $validateUrl);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $paramString);
+            if (!empty($pfProxy)) {
+                curl_setopt($ch, CURLOPT_PROXY, $proxy);
+            }
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+            if ($response === 'VALID') {
+                return true;
+            }
+        }
+        return false;
     }
 }
