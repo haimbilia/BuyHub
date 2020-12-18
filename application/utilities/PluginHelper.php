@@ -176,4 +176,22 @@ trait PluginHelper
         $reflect  = new ReflectionClass($keyName);
         return $reflect->newInstanceArgs($args);
     }
+    
+    /**
+     * updateSettings
+     *
+     * @param  int $pluginId
+     * @param  array $data
+     * @param  string $error - Reference Variable
+     * @return bool
+     */
+    public function updateSettings(int $pluginId, array $data, &$error = ""): bool
+    {
+        $pluginSetting = new PluginSetting($this->settings["plugin_id"]);
+        if (!$pluginSetting->save($data)) {
+            $error = $pluginSetting->getError();
+            return false;
+        }
+        return true;
+    }
 }

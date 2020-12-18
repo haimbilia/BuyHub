@@ -1639,3 +1639,11 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 -- --- Paystack Payment Gateway--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Paystack', '13', 'Paystack', '0', '23');
 -- --- Paystack Payment Gateway--- --
+
+-- --- Payfast Payment Gateway--- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Payfast', '13', 'Payfast', '0', '24');
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_PAYFAST_PASSPHRASE_DESCRIPTION', 1, 'The passphrase is considered a secret between the merchant and PayFast and should never be sent or given out.<br>The merchant may set their own passphrase by:<br> 1. Login to PayFast using their merchant credentials.<br> 2. Clicking on "Settings", and then "Edit" under the Security Pass Phrase section.<br> 3. Inputting the desired passphrase and click "Update"', 1),
+('LBL_PAYFAST_SIGNATURE_DESCRIPTION', 1, 'System generated MD5 signature. It will generate automatically while checkout using "Payfast".', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- --- Payfast Payment Gateway--- --
