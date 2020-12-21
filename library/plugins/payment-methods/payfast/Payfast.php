@@ -223,17 +223,16 @@ class Payfast extends PaymentMethodBase
     /**
      * validServerConfirmation
      * @param string $paramString parameters used to create signature
-     * @param string $paymentHost sandbox or live
      * @param string $proxy proxy on or not
      * @return boolean
      */
-    private function validServerConfirmation($paramString, $paymentHost = 'sandbox.payfast.co.za', $proxy = null)
+    public function validServerConfirmation($paramString, $proxy = null)
     {
         if (in_array('curl', get_loaded_extensions(), true)) {
-            $validateUrl = 'https://' . $paymentHost . '/eng/query/validate';
+            $validateUrl = $this->paymentHost . '/eng/query/validate';
 
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_USERAGENT, NULL);
+            curl_setopt($ch, CURLOPT_USERAGENT, null);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
@@ -242,7 +241,7 @@ class Payfast extends PaymentMethodBase
             curl_setopt($ch, CURLOPT_URL, $validateUrl);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $paramString);
-            if (!empty($pfProxy)) {
+            if (!empty($proxy)) {
                 curl_setopt($ch, CURLOPT_PROXY, $proxy);
             }
 

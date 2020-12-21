@@ -149,7 +149,7 @@ class PayfastPayController extends PaymentController
     }
 
     /**
-     * callback
+     * callback - Used for webhook
      *
      * @param  string $orderId
      * @return void
@@ -177,7 +177,7 @@ class PayfastPayController extends PaymentController
             return false;
         }
 
-        if ($this->validPaymentData($paymentAmount, $post['amount_gross']) === false) {
+        if ($this->validPaymentAmount($paymentAmount, $post['amount_gross']) === false) {
             $msg = Labels::getLabel('MSG_INVALID_PAYMENT', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
@@ -185,7 +185,7 @@ class PayfastPayController extends PaymentController
 
         $paramString = $this->generateParamString($post);
 
-        if ($this->validServerConfirmation($paramString, $this->paymentHost) === false) {
+        if ($this->plugin->validServerConfirmation($paramString) === false) {
             $msg = Labels::getLabel('MSG_INVALID_SERVER_CONFIRMATION', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
@@ -196,9 +196,9 @@ class PayfastPayController extends PaymentController
         if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['pf_payment_id'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
+            return false;
         }
-
-        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+        return true;
     }
 
     /**
@@ -234,20 +234,20 @@ class PayfastPayController extends PaymentController
     }
 
     /**
-     * validPaymentData
-     * 
+     * validPaymentAmount
+     *
      * @param string $initialPaymentAmount actual cart amount
      * @param string $pgDebited actual deducted amount at pafast gateway
      * @return boolean
      */
-    private function validPaymentData($initialPaymentAmount, $pgDebited)
+    private function validPaymentAmount(float $initialPaymentAmount, float $pgDebited)
     {
-        return !(abs((float)$initialPaymentAmount - (float)$pgDebited) > 0.01);
+        return !(abs($initialPaymentAmount - $pgDebited) > 0.01);
     }
 
     /**
      * generateParamString
-     * 
+     *
      * @param array $post returned data from Payfast
      * @return string
      */
