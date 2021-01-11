@@ -1,5 +1,5 @@
 <?php
-class MarketplaceChannelsBase extends pluginBase
+class MarketplaceChannelsBase extends PluginBase
 {   
 
 }
