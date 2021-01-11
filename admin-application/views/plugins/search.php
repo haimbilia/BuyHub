@@ -3,7 +3,7 @@ $arr_flds = [
     'dragdrop' => '',
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => '#',
-    'plugin_icon' => Labels::getLabel('PLUGIN_ICON', $adminLangId),
+    'plugin_icon' => Labels::getLabel('LBL_PLUGIN_ICON', $adminLangId),
     'plugin_identifier' => Labels::getLabel('LBL_PLUGIN', $adminLangId),
     'plugin_active' => Labels::getLabel('LBL_Status', $adminLangId),
     'action' => '',
@@ -16,7 +16,7 @@ if (!$canEdit || 2 > count($arr_listing) || in_array($pluginType, Plugin::HAVING
         unset($arr_flds['select_all']);
     }
 }
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive','id' => 'plugin'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive', 'id' => 'plugin'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ('select_all' == $key) {
@@ -30,7 +30,7 @@ $sr_no = 0;
 $msg = '';
 foreach ($arr_listing as $sn => $row) {
     $sr_no++;
-    $tr = $tbl->appendElement('tr', array( 'id' => $row['plugin_id'], 'class' => '' ));
+    $tr = $tbl->appendElement('tr', array('id' => $row['plugin_id'], 'class' => ''));
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
@@ -65,6 +65,10 @@ foreach ($arr_listing as $sn => $row) {
                 if (!empty($defaultCurrConvAPI) && $row['plugin_id'] == $defaultCurrConvAPI) {
                     $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">'  . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
                 }
+
+                if (in_array($row['plugin_code'], Plugin::PAY_LATER)) {
+                    $htm .= ' <span class="badge badge--unified-warning badge--inline badge--pill">'  . Labels::getLabel('LBL_PAY_LATER', $adminLangId) . '</span>';
+                }
                 if ($row['plugin_name'] != '') {
                     $td->appendElement('plaintext', array(), $row['plugin_name'] . $htm, true);
                     $td->appendElement('br', array());
@@ -98,8 +102,8 @@ foreach ($arr_listing as $sn => $row) {
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions actions--centered"));
                 if ($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)','class' => 'btn btn-clean btn-sm btn-icon','title' => Labels::getLabel('LBL_Edit', $adminLangId),"onclick" => "editPluginForm(" . $type . ", " . $row['plugin_id'] . ")"), '<i class="far fa-edit icon"></i>', true);
-                    $td->appendElement('a', array('href' => 'javascript:void(0)','class' => 'btn btn-clean btn-sm btn-icon','title' => Labels::getLabel('LBL_Settings', $adminLangId),"onclick" => "editSettingForm('" . $row['plugin_code'] . "')"), '<i class="fas fa-cog icon"></i>', true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "editPluginForm(" . $type . ", " . $row['plugin_id'] . ")"), '<i class="far fa-edit icon"></i>', true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Settings', $adminLangId), "onclick" => "editSettingForm('" . $row['plugin_code'] . "')"), '<i class="fas fa-cog icon"></i>', true);
                 }
                 break;
             default:
@@ -119,18 +123,35 @@ $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('plugins', $function));
 $frm->addHiddenField('', 'status');
-$frm->addHiddenField('', 'plugin_type', $pluginType);?>
-<section class="section">
+$frm->addHiddenField('', 'plugin_type', $pluginType); ?>
+<section class="section mt-0">
     <div class="sectionhead">
         <h4><?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGINNAME}_PLUGINS', $adminLangId), ['{PLUGINNAME}' =>  $pluginTypes[$type]]); ?> </h4>
         <?php
+        $data = [];
         if ($canEdit && !in_array($pluginType, Plugin::HAVING_KINGPIN)) {
             $data = [
                 'adminLangId' => $adminLangId,
                 'deleteButton' => false,
                 'msg' => $msg
             ];
+        } else if (in_array($pluginType, Plugin::HAVING_KINGPIN) && $pluginType == Plugin::TYPE_TAX_SERVICES && true === $activeTaxPluginFound) {
+            $data = [
+                'adminLangId' => $adminLangId,
+                'otherButtons' => [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'syncCategories()',
+                            'title' => Labels::getLabel('LBL_SYNC_CATEGORIES', $adminLangId)
+                        ],
+                        'label' => '<i class="fas fa-sync-alt"></i>'
+                    ],
+                ],
+            ];
+        }
 
+        if (!empty($data)) {
             $this->includeTemplate('_partial/action-buttons.php', $data, false);
         }
         ?>

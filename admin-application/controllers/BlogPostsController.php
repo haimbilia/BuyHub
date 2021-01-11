@@ -235,7 +235,6 @@ class BlogPostsController extends AdminBaseController
         'postlang_post_id' => $post_id,
         'post_title' => $post['post_title'],
         'post_author_name' => $post['post_author_name'],
-        'post_short_description' => $post['post_short_description'],
         'post_description' => $post['post_description'],
         );
 
@@ -310,7 +309,7 @@ class BlogPostsController extends AdminBaseController
                 }
             }
         } else {
-            $postId = $record->getMainTableRecordId();
+            $postId = $prodObj->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
@@ -542,9 +541,9 @@ class BlogPostsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->adminLangId), 'post_title');
         $frm->addRequiredField(Labels::getLabel('LBL_Post_Author_Name', $this->adminLangId), 'post_author_name');
-        $fld = $frm->addTextarea(Labels::getLabel('LBL_Short_Description', $this->adminLangId), 'post_short_description');
+        /* $fld = $frm->addTextarea(Labels::getLabel('LBL_Short_Description', $this->adminLangId), 'post_short_description');
         $fld->requirements()->setRequired(true);
-        $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_only_250_characters_will_be_shown_on_frontend", $this->adminLangId) . '</small>';
+        $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_only_250_characters_will_be_shown_on_frontend", $this->adminLangId) . '</small>'; */
         $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $this->adminLangId), 'post_description')->requirements()->setRequired(true);
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -607,6 +606,12 @@ class BlogPostsController extends AdminBaseController
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('post_title', 'LIKE', '%' . $post['keyword'] . '%');
             $cond->attachCondition('post_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
+        $alreadyAdded = Collections::getRecords($collectionId);
+        if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
+            $srch->addCondition('post_id', 'NOT IN', array_keys($alreadyAdded));
         }
 
         $srch->setPageSize($pagesize);

@@ -3,31 +3,41 @@ $pmethodName = $paymentMethod["plugin_name"];
 $pmethodDescription = $paymentMethod["plugin_description"];
 $pmethodCode = $paymentMethod["plugin_code"];
 
+$isCodOrPayAtStore = in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']);
+
 $frm->setFormTagAttribute('class', 'form');
-if ('cashondelivery' != strtolower($pmethodCode)) {
+
+$otpVerification = (isset($paymentMethod["otp_verification"]) && 0 < $paymentMethod["otp_verification"]);
+$btn = $frm->getField('btn_submit');
+$btn->developerTags['noCaptionTag'] = true;
+
+if ($isCodOrPayAtStore && true === $otpVerification) {
+    $btn->value = Labels::getLabel('LBL_GET_OTP', $siteLangId);
+} else {
     $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
     $frm->developerTags['fld_default_col'] = 12;
     $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 }
 
 $submitFld = $frm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', "btn btn-primary btn-wide");
+$submitFld->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
-if ('cashondelivery' == strtolower($pmethodCode)) { ?>
+if ($isCodOrPayAtStore && true === $otpVerification) { ?>
     <div class="otp-block otpBlock-js">
         <div class="otp-block__head">
-            <h5><?php echo Labels::getLabel('LBL_OTP_VERIFICATION', $siteLangId); ?></h5>
+            <h6><?php echo Labels::getLabel('LBL_PLEASE_ENTER_THE_VERIFICATION_CODE_TO_CONFIRM_YOUR_ORDER', $siteLangId); ?></h6>
             <p>
                 <?php
+                $msg = Labels::getLabel('LBL_VERIFICATION_CODE_SENT_TO_{EMAIL}', $siteLangId);
                 if (true == $canSendSms) {
                     $userDialCode = $userData['user_dial_code'];
                     $phone = $userData['user_phone'];
-                    $msg = Labels::getLabel('LBL_ENTER_OTP_SENT_TO_{PHONE}', $siteLangId);
-                    echo CommonHelper::replaceStringData($msg, ['{PHONE}' => '<strong>' . $userDialCode . $phone . '</strong>']);
-                } else {
-                    $msg = Labels::getLabel('LBL_ENTER_OTP_SENT_TO_{EMAIL}', $siteLangId);
-                    echo CommonHelper::replaceStringData($msg, ['{EMAIL}' => '<strong>' . $userData['credential_email'] . '</strong>']);
+                    $msg = Labels::getLabel('LBL_VERIFICATION_CODE_SENT_TO_{PHONE}_AND_{EMAIL}', $siteLangId);
+                    $maskedPhoneNumber = LibHelper::phoneNumberMasking($phone);
+                    $msg =  CommonHelper::replaceStringData($msg, ['{PHONE}' => '<br><strong>' . $userDialCode . ' - ' . $maskedPhoneNumber . '</strong>']);
                 }
+                $maskedEmail = Libhelper::emailAddressMasking($userData['credential_email']);
+                echo CommonHelper::replaceStringData($msg, ['{EMAIL}' => '<strong>' . $maskedEmail . '</strong>']);
                 ?>
             </p>
         </div>
@@ -35,8 +45,8 @@ if ('cashondelivery' == strtolower($pmethodCode)) { ?>
             <div class="otp-enter">
                 <div class="otp-inputs">
                     <?php
-                    $frm->setFormTagAttribute('class', 'form');
-                    $frm->setFormTagAttribute('onsubmit', 'validateOtp(this); return(false);');
+                    $frm->setFormTagAttribute('class', 'form otpForm-js');
+                    $frm->setFormTagAttribute('onsubmit', 'sendOtp(this); return(false);');
 
                     for ($i = 0; $i < User::OTP_LENGTH; $i++) {
                         $fld = $frm->getField('upv_otp[' . $i . ']');
@@ -75,12 +85,15 @@ if ('cashondelivery' == strtolower($pmethodCode)) { ?>
     <div class="otp-block successOtp-js d-none">
         <div class="otp-success">
             <img class="img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/otp-complete.svg" alt="">
-            <h5><?php echo Labels::getLabel('LBL_SUCCESS', $siteLangId); ?></h5>
-            <p>Lorem ipsum dolor sit amet consectetur </p>
+            <h5><?php echo Labels::getLabel('LBL_VERIFIED_SUCCESSFULLY', $siteLangId); ?></h5>
+            <!--p>Lorem ipsum dolor sit amet consectetur </p-->
         </div>
     </div>
 <?php } else { ?>
-    <div class="text-center paymentForm-js d-none">
+    <div class="text-center paymentForm-js <?php echo (false == $isCodOrPayAtStore) ? 'd-none' : ''; ?>">
+        <?php if ($isCodOrPayAtStore) { ?>
+            <h6><?php echo Labels::getLabel('LBL_PLEASE_CONFIRM_YOUR_ORDER', $siteLangId); ?></h6>
+        <?php } ?>
         <?php if (!isset($error)) {
             echo $frm->getFormHtml();
         }
@@ -92,8 +105,10 @@ if ('cashondelivery' == strtolower($pmethodCode)) { ?>
         <?php if (isset($error)) { ?>
             $.mbsmessage(<?php echo $error; ?>, true, 'alert--danger');
         <?php } ?>
-        <?php if ('cashondelivery' == strtolower($pmethodCode)) { ?>
-            startOtpInterval('', "showElements");
+        <?php if ($isCodOrPayAtStore) { ?>
+            $(".intervalTimer-js").parent().parent().hide();
+            $(".otpForm-js").removeAttr('action');
+            $(".otpVal-js").attr('disabled', 'disabled');
         <?php } ?>
     });
 
@@ -102,7 +117,18 @@ if ('cashondelivery' == strtolower($pmethodCode)) { ?>
         var action = $(frm).attr('action')
         var getExternalLibraryUrl = $(frm).data('external');
         $.mbsmessage(langLbl.processing, false, 'alert--process alert');
-        fcom.ajax(fcom.makeUrl('Checkout', 'ConfirmOrder'), data, function(res) {
+        fcom.ajax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(res) {
+            try {
+                var ans = $.parseJSON(res);
+                if (1 > ans.status) {
+                    $.mbsmessage(ans.msg, true, 'alert--danger');
+                    return false;
+                }
+
+            } catch (e) {
+                // console.log(e);
+            }
+            
             if ('undefined' != typeof getExternalLibraryUrl) {
                 fcom.ajax(getExternalLibraryUrl, '', function(t) {
                     var json = $.parseJSON(t);
@@ -138,6 +164,9 @@ if ('cashondelivery' == strtolower($pmethodCode)) { ?>
                     location.href = ans.redirect;
                 } else {
                     $('#tabs-container').html(ans.html);
+                    <?php if ('stripeconnect' == strtolower($pmethodCode)) { ?>
+                        $('#tabs-container').addClass('p-0');
+                    <?php } ?>
                 }
             } catch (e) {
                 // console.log(e);
@@ -145,8 +174,12 @@ if ('cashondelivery' == strtolower($pmethodCode)) { ?>
         });
     }
 
+    function sendOtp(frm) {
+        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+        resendOtp(frm);
+    }
+
     function showElements() {
         $(".resendOtpDiv-js").removeClass("d-none");
-        // $(".intervalTimer-js").parent().parent().show();
     }
 </script>

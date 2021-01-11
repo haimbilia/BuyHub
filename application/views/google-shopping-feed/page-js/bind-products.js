@@ -36,7 +36,11 @@ $(document).on('keyup', "input[name='google_product_category']", function(){
     var parentForm = currObj.closest('form').attr('id');
     if('' != currObj.val()){
         currObj.siblings('ul.dropdown-menu').remove();
-        currObj.autocomplete({'source': function(request, response) {
+        currObj.autocomplete({
+			'classes': {
+				"ui-autocomplete": "custom-ui-autocomplete"
+			},
+			'source': function(request, response) {
         		$.ajax({
         			url: fcom.makeUrl(keyName, 'getProductCategory'),
         			data: {fIsAjax:1,keyword:currObj.val()},
@@ -109,6 +113,7 @@ $(document).on('keyup', "input[name='google_product_category']", function(){
         var agree = confirm(langLbl.confirmDelete);
 		if( !agree ){ return false; }
         var data = fcom.frmData(document.getElementById('frmBatchSelprodListing'));
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
         fcom.ajax(fcom.makeUrl(keyName, 'unlinkProducts', [adsBatchId]), data, function(t) {
             var ans = $.parseJSON(t);
 			if( ans.status == 1 ){

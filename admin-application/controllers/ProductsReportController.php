@@ -40,8 +40,9 @@ class ProductsReportController extends AdminBaseController
         $opSrch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $cnd = $opSrch->addCondition('o.order_is_paid', '=', Orders::ORDER_IS_PAID);
+        $cnd = $opSrch->addCondition('o.order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
+        $cnd->attachCondition('plugin_code', '=', 'payatstore');
         $opSrch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $opSrch->addMultipleFields(
             array('op_selprod_id', 'COUNT(op_order_id) as totOrders', 'SUM(op_qty - op_refund_qty) as totSoldQty',

@@ -1,6 +1,7 @@
 <?php
 
 require_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
+
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class AffiliateController extends AffiliateBaseController
@@ -37,8 +38,8 @@ class AffiliateController extends AffiliateBaseController
         $appSecret = FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, '');
         if (!empty($appId) && !empty($appSecret)) {
             $config = array(
-            'app_id' => $appId,
-            'app_secret' => $appSecret,
+                'app_id' => $appId,
+                'app_secret' => $appSecret,
             );
             $fb = new Fbapi($config);
 
@@ -79,6 +80,7 @@ class AffiliateController extends AffiliateBaseController
         $this->set('user_listing', $user_listing);
         $this->set('transactions', $transactions);
         $this->set('txnStatusArr', Transactions::getStatusArr($this->siteLangId));
+        $this->set('txnStatusClassArr', Transactions::getStatusClassArr());
         $this->set('affiliateTrackingUrl', $affiliateTrackingUrl);
         $this->set('userBalance', User::getUserBalance($loggedUserId));
         $this->set('userRevenue', User::getAffiliateUserRevenue($loggedUserId));
@@ -104,10 +106,11 @@ class AffiliateController extends AffiliateBaseController
         $userExtraData = User::getUserExtraData(
             $loggedUserId,
             array(
-            'uextra_tax_id',
-            'uextra_payment_method',
-            'uextra_cheque_payee_name',
-            'uextra_paypal_email_id')
+                'uextra_tax_id',
+                'uextra_payment_method',
+                'uextra_cheque_payee_name',
+                'uextra_paypal_email_id'
+            )
         );
         if ($userExtraData['uextra_payment_method'] == 0) {
             $userExtraData['uextra_payment_method'] = User::AFFILIATE_PAYMENT_METHOD_CHEQUE;
@@ -141,11 +144,11 @@ class AffiliateController extends AffiliateBaseController
 
         /* saving user extras[ */
         $dataToSave = array(
-        'uextra_user_id' => $loggedUserId,
-        'uextra_tax_id' => $post['uextra_tax_id'],
-        'uextra_payment_method' => $post['uextra_payment_method'],
-        'uextra_cheque_payee_name' => $post['uextra_cheque_payee_name'],
-        'uextra_paypal_email_id' => $post['uextra_paypal_email_id'],
+            'uextra_user_id' => $loggedUserId,
+            'uextra_tax_id' => $post['uextra_tax_id'],
+            'uextra_payment_method' => $post['uextra_payment_method'],
+            'uextra_cheque_payee_name' => $post['uextra_cheque_payee_name'],
+            'uextra_paypal_email_id' => $post['uextra_paypal_email_id'],
         );
         $dataToUpdateOnDuplicate = $dataToSave;
         unset($dataToUpdateOnDuplicate['uextra_user_id']);
@@ -160,11 +163,11 @@ class AffiliateController extends AffiliateBaseController
 
         /* saving user bank details[ */
         $bankInfoData = array(
-        'ub_bank_name' => $post['ub_bank_name'],
-        'ub_account_holder_name' => $post['ub_account_holder_name'],
-        'ub_account_number' => $post['ub_account_number'],
-        'ub_ifsc_swift_code' => $post['ub_ifsc_swift_code'],
-        'ub_bank_address' => $post['ub_bank_address'],
+            'ub_bank_name' => $post['ub_bank_name'],
+            'ub_account_holder_name' => $post['ub_account_holder_name'],
+            'ub_account_number' => $post['ub_account_number'],
+            'ub_ifsc_swift_code' => $post['ub_ifsc_swift_code'],
+            'ub_bank_address' => $post['ub_bank_address'],
         );
         if (!$userObj->updateBankInfo($bankInfoData)) {
             Message::addErrorMessage($userObj->getError());
@@ -192,8 +195,8 @@ class AffiliateController extends AffiliateBaseController
         include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
 
         $config = array(
-        'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
-        'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
+            'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
+            'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
         );
         $fb = new Fbapi($config);
         $fbObj = $fb->getInstance();
@@ -213,7 +216,7 @@ class AffiliateController extends AffiliateBaseController
         if (!isset($accessToken)) {
             if ($helper->getError()) {
                 Message::addErrorMessage($helper->getErrorDescription());
-            //Message::addErrorMessage($helper->getErrorReason());
+                //Message::addErrorMessage($helper->getErrorReason());
             } else {
                 Message::addErrorMessage(Labels::getLabel('Msg_Bad_Request', $this->siteLangId));
             }
@@ -225,7 +228,7 @@ class AffiliateController extends AffiliateBaseController
                 try {
                     $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
                 } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                    Message::addErrorMessage($helper->getMessage());
+                    Message::addErrorMessage($e->getMessage());
                     FatApp::redirectUser($redirectUrl);
                 }
             }
@@ -299,8 +302,7 @@ class AffiliateController extends AffiliateBaseController
                                 $error = $e->getMessage();
                             }
                         }
-                    } catch (exception $e) {
-                        ;
+                    } catch (exception $e) {;
                         $error = $e->getMessage();
                     }
                 }
@@ -326,8 +328,8 @@ class AffiliateController extends AffiliateBaseController
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $userInfo = User::getAttributesById($loggedUserId, array('user_fb_access_token', 'user_referral_code'));
         $config = array(
-        'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
-        'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
+            'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
+            'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
         );
         $fb = new Fbapi($config);
 
@@ -355,7 +357,7 @@ class AffiliateController extends AffiliateBaseController
         $post = $sharingFrm->getFormDataFromArray(FatApp::getPostedData());
 
         if ($post == false) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
+            Message::addErrorMessage(current($sharingFrm->getValidationErrors()));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -419,7 +421,7 @@ class AffiliateController extends AffiliateBaseController
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmPaymentInfoForm');
 
-        $frm->addRadioButtons(Labels::getLabel('LBL_Payment_Method', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links--inline'));
+        $frm->addRadioButtons(Labels::getLabel('LBL_Payment_Method', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links--inline justify-content-start'));
         $frm->addTextBox(Labels::getLabel('LBL_Tax_Id', $siteLangId), 'uextra_tax_id');
         $frm->addTextBox(Labels::getLabel('LBL_Cheque_Payee_Name', $siteLangId), 'uextra_cheque_payee_name');
 
@@ -565,10 +567,10 @@ class AffiliateController extends AffiliateBaseController
         $json = array();
         foreach ($users as $key => $user) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($user['user_name'], ENT_QUOTES, 'UTF-8')),
-            'username' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')),
-            'credential_email' => strip_tags(html_entity_decode($user['credential_email'], ENT_QUOTES, 'UTF-8')),
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($user['user_name'], ENT_QUOTES, 'UTF-8')),
+                'username' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')),
+                'credential_email' => strip_tags(html_entity_decode($user['credential_email'], ENT_QUOTES, 'UTF-8')),
             );
         }
 

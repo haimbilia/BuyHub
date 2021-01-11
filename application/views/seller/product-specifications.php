@@ -3,7 +3,7 @@ $layout = Language::getLayoutDirection($langId);
 if (count($productSpecifications) > 0){ ?>
 <div class="row" dir="<?php echo $layout; ?>">
     <div class="col-md-12">
-        <div class="tablewrap">
+        <div class="js-scrollable table-wrap">
         <?php 
             $arr_flds = array(
                 'prodspec_name' => Labels::getLabel('LBL_Specification_Name', $siteLangId),
@@ -12,7 +12,7 @@ if (count($productSpecifications) > 0){ ?>
                 'action' => ''
             );
            
-            $tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table'));
+            $tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table table-justified'));
             $th = $tbl->appendElement('thead')->appendElement('tr');
             foreach ($arr_flds as $key=>$val) {
                 if($key == 'prodspec_name' || $key == 'prodspec_value' || $key == 'prodspec_group'){

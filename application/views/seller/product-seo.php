@@ -11,11 +11,11 @@ $keywordFld->developerTags['col'] = 4;
 $keywordFld->developerTags['noCaptionTag'] = true;
 
 $submitFld = $frmSearch->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', 'btn btn-primary btn-block');
+$submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 
 $clearFld = $frmSearch->getField('btn_clear');
 $clearFld->setFieldTagAttribute('onclick', 'clearSearch()');
-$clearFld->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
+$clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 ?>
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main" role="main">
@@ -27,36 +27,40 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
             </div>
         </div>
         <div class="content-body">
+			<div class="row mb-4">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<div>
+								<?php echo $frmSearch->getFormTag(); ?>
+									<div class="row">
+										<div class="col-12 col-md-6">
+											<div class="field-set"><?php echo $frmSearch->getFieldHTML('keyword');?></div>
+										</div>
+										<div class="col-6 col-md-3">
+											<div class="field-set"><?php echo $frmSearch->getFieldHTML('btn_submit'); ?></div>
+										</div>
+										<div class="col-6 col-md-3">
+											<div class="field-set"><?php echo $frmSearch->getFieldHTML('btn_clear');?></div>
+										</div>
+									</div>
+									<div class='dvFocus-js'></div>
+								</form>
+								<?php echo $frmSearch->getExternalJS(); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
             <div class="row">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <div class="cards">
-                        <div class="cards-content">
-                            <div>
-                                <?php echo $frmSearch->getFormTag(); ?>
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <div class="field-set"><?php echo $frmSearch->getFieldHTML('keyword');?></div>
-                                        </div>
-                                        <div class="col-6 col-md-3">
-                                            <div class="field-set"><?php echo $frmSearch->getFieldHTML('btn_submit'); ?></div>
-                                        </div>
-                                        <div class="col-6 col-md-3">
-                                            <div class="field-set"><?php echo $frmSearch->getFieldHTML('btn_clear');?></div>
-                                        </div>
-                                    </div>
-                                    <div class='dvFocus-js'></div>
-                                </form>
-                                <?php echo $frmSearch->getExternalJS(); ?>
-                            </div>
-                            <div id="listing">
-                                <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
-                            </div>
-                        </div>
+                    <div class="card" id="listing">
+						<?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="cards">
-                        <div class="cards-content h-100">
+                    <div class="card">
+                        <div class="card-body h-100">
                             <div id="dvForm"></div>
                             <div class="alert-aligned" id="dvAlert">
                                 <div class="cards-message" role="alert">

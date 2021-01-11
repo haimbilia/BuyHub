@@ -336,8 +336,15 @@ class GuestUserController extends MyAppController
         $showNewsLetterCheckBox = 0 < $signUpWithPhone ? false : true;
 
         $frm = $this->getRegistrationForm($showNewsLetterCheckBox, $signUpWithPhone);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $userName = FatApp::getPostedData('user_username', FatUtility::VAR_STRING, '');
+        if (empty($userName) || false === ValidateElement::fatbitUsername($userName)) {
+            $message = Labels::getLabel("MSG_INVALID_FATBIT_USERNAME", $this->siteLangId);
+            LibHelper::exitWithError($message, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)));
+        }
 
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if ($post == false) {
             $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
@@ -380,7 +387,7 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)));
         }
 
-        if (false === $userObj->updateUserMeta('user_country_iso', $countryIso)) {
+        if (!empty($countryIso) && false === $userObj->updateUserMeta('user_country_iso', $countryIso)) {
             LibHelper::exitWithError($userObj->getError(), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
         }
@@ -864,7 +871,7 @@ class GuestUserController extends MyAppController
 
         $userAuthObj = new UserAuthentication();
 
-        if (!$userAuthObj->checkResetLink($userId, trim($token), 'form')) {
+        if (!$userAuthObj->checkResetLink($userId, trim($token))) {
             Message::addErrorMessage($userAuthObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
         }
@@ -901,7 +908,7 @@ class GuestUserController extends MyAppController
 
         $userAuthObj = new UserAuthentication();
 
-        if (!$userAuthObj->checkResetLink($userId, trim($token), 'submit')) {
+        if (!$userAuthObj->checkResetLink($userId, trim($token))) {
             FatUtility::dieJsonError($userAuthObj->getError());
         }
 
@@ -965,9 +972,18 @@ class GuestUserController extends MyAppController
 
     public function configureEmail()
     {
-        $phoneNumber = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_phone');
+        if (!UserAuthentication::isUserLogged()) {
+            Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_LOGIN_TO_CONFIGURE_EMAIL/_PHONE', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+        }
+        $userId = UserAuthentication::getLoggedUserId();
+        $userObj = new User($userId);
+        $userInfo = $userObj->getUserInfo(array(), true, false);
+        $phoneNumber = isset($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
         $canSendSms = (!empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::LOGIN));
+        $this->set('userInfo', $userInfo);
         $this->set('canSendSms', $canSendSms);
+        $this->set('verificationPending', isset($userInfo['credential_verified']) && applicationConstants::NO == $userInfo['credential_verified']);
         $this->_template->render();
     }
 
@@ -1006,6 +1022,19 @@ class GuestUserController extends MyAppController
 
         if ($post['new_email'] != $post['conf_new_email']) {
             $message = Labels::getLabel('MSG_New_email_confirm_email_does_not_match', $this->siteLangId);
+            LibHelper::dieJsonError($message);
+        }
+
+        $usr = new User();
+        $srch = $usr->getUserSearchObj(array('uc.credential_email'));
+        $srch->addCondition('uc.credential_email', '=', $post['new_email']);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+
+        $rs = $srch->getResultSet();
+        $record = FatApp::getDb()->fetch($rs);
+        if ($record) {
+            $message = Labels::getLabel("ERR_DUPLICATE_EMAIL", $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
 
@@ -1080,7 +1109,7 @@ class GuestUserController extends MyAppController
         }
 
         CommonHelper::addCaptchaField($frm);
-        $label = (1 > $withPhone) ? Labels::getLabel('LBL_SUBMIT', $this->siteLangId) : Labels::getLabel('LBL_GET_OTP', $this->siteLangId);
+        $label = (1 > $withPhone) ? Labels::getLabel('LBL_SUBMIT_FORGOT_PASSWORD', $this->siteLangId) : Labels::getLabel('LBL_GET_OTP', $this->siteLangId);
         $frm->addSubmitButton('', 'btn_submit', $label);
         return $frm;
     }

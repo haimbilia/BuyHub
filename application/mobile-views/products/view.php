@@ -2,36 +2,36 @@
 
 foreach ($upsellProducts as $index => $btProduct) {
     $uploadedTime = AttachedFile::setTimeParam($btProduct['product_updated_on']);
-    $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], "THUMB", $btProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], "MEDIUM", $btProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price'], false, false, false);
     $upsellProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($btProduct['theprice'], false, false, false);
 }
 
 foreach ($relatedProductsRs as $index => $rProduct) {
     $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']);
-    $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], "THUMB", $rProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], "MEDIUM", $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price'], false, false, false);
     $relatedProductsRs[$index]['theprice'] = CommonHelper::displayMoneyFormat($rProduct['theprice'], false, false, false);
 }
 
 foreach ($recommendedProducts as $index => $recProduct) {
     $uploadedTime = AttachedFile::setTimeParam($recProduct['product_updated_on']);
-    $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], "THUMB", $recProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], "MEDIUM", $recProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price'], false, false, false);
     $recommendedProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($recProduct['theprice'], false, false, false);
 }
 
 foreach ($recentlyViewed as $index => $recViewed) {
     $uploadedTime = AttachedFile::setTimeParam($recViewed['product_updated_on']);
-    $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], "THUMB", $recViewed['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], "MEDIUM", $recViewed['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price'], false, false, false);
     $recentlyViewed[$index]['theprice'] = CommonHelper::displayMoneyFormat($recViewed['theprice'], false, false, false);
 }
 
 foreach ($productImagesArr as $afile_id => $image) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-    $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'] )).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'] )).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $productImagesArr[$afile_id]['product_image_url'] = $mainImgUrl;
 }
 
@@ -79,6 +79,7 @@ foreach ($shippingRates as $sn => $row) {
 if (!empty($product)) {
     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
+    $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
     if (!empty($product['selprod_return_age'])) {
         $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
         $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
@@ -86,6 +87,7 @@ if (!empty($product)) {
         $returnAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]);
         $product['productPolicies'][] = array(
             'title' => $returnAge,
+            'isSvg' => Plugin::RETURN_FALSE,
             'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
         );
     }
@@ -96,6 +98,7 @@ if (!empty($product)) {
         $cancellationAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]);
         $product['productPolicies'][] = array(
             'title' => $cancellationAge,
+            'isSvg' => Plugin::RETURN_FALSE,
             'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
         );
     }
@@ -104,17 +107,20 @@ if (!empty($product)) {
         $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]);
         $product['productPolicies'][] = array(
             'title' => $warranty,
+            'isSvg' => Plugin::RETURN_FALSE,
             'icon' => CONF_WEBROOT_URL . 'images/yearswarranty.png'
         );
     }
     if (isset($shippingDetails['ps_free']) && $shippingDetails['ps_free'] == applicationConstants::YES) {
         $product['productPolicies'][] = array(
             'title' => Labels::getLabel('LBL_Free_Shipping_on_this_Order', $siteLangId),
+            'isSvg' => Plugin::RETURN_FALSE,
             'icon' => CONF_WEBROOT_URL . 'images/freeshipping.png'
         );
     } elseif (count($shippingRates) > 0) {
         $product['productPolicies'][] = array(
             'title' => Labels::getLabel('LBL_Shipping_Rates', $siteLangId),
+            'isSvg' => Plugin::RETURN_FALSE,
             'icon' => CONF_WEBROOT_URL . 'images/shipping-policies.png',
             'shippingRatesDetail' => $shippingRatesDetail,
         );
@@ -122,20 +128,48 @@ if (!empty($product)) {
     if (0 < $codEnabled) {
         $product['productPolicies'][] = array(
             'title' => Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId),
-            'icon' => CONF_WEBROOT_URL.'images/safepayments.png'
+            'isSvg' => Plugin::RETURN_FALSE,
+            'icon' => CONF_WEBROOT_URL . 'images/safepayments.png'
         );
     }
     $product['youtubeUrlThumbnail'] = '';
     if (!empty($product['product_youtube_video'])) {
         $youtubeVideoUrl = $product['product_youtube_video'];
         $videoCode = UrlHelper::parseYouTubeurl($youtubeVideoUrl);
-        $product['youtubeUrlThumbnail'] = 'https://img.youtube.com/vi/'.$videoCode.'/hqdefault.jpg';
+        $product['youtubeUrlThumbnail'] = 'https://img.youtube.com/vi/' . $videoCode . '/hqdefault.jpg';
     }
     $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
 }
 
-$product['selprod_return_policies'] = !empty($product['selprod_return_policies']) ? $product['selprod_return_policies'] : (object)array();
-$product['selprod_warranty_policies'] = !empty($product['selprod_warranty_policies']) ? $product['selprod_warranty_policies'] : (object)array();
+$product['selprod_return_policies'] = !empty($product['selprod_return_policies']) ? $product['selprod_return_policies'] : (object) array();
+$product['selprod_warranty_policies'] = !empty($product['selprod_warranty_policies']) ? $product['selprod_warranty_policies'] : (object) array();
+
+$fulfillmentLabel = Labels::getLabel('LBL_INVALID_FULFILLMENT', $siteLangId);
+$icon = CONF_WEBROOT_URL . 'images/';
+switch ($fulfillmentType) {
+    case Shipping::FULFILMENT_SHIP:
+        $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
+        $icon .= 'shipping_30x30.png';
+        break;
+    case Shipping::FULFILMENT_PICKUP:
+        $fulfillmentLabel = Labels::getLabel('LBL_PICKUP_ONLY', $siteLangId);
+        $icon .= 'item_pickup_30x30.png';
+        break;
+    case Shipping::FULFILMENT_ALL:
+        $fulfillmentLabel = Labels::getLabel('LBL_SHIPPMENT_AND_PICKUP', $siteLangId);
+        $icon .= 'shipping_30x30.png';
+        break;
+    default:
+        $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
+        $icon .= 'shipping_30x30.png';
+        break;
+}
+
+$product['productPolicies'][] = array(
+    'title' => $fulfillmentLabel,
+    'isSvg' => Plugin::RETURN_TRUE,
+    'icon' => $icon
+);
 
 $product['product_description'] = strip_tags(html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8'), applicationConstants::ALLOWED_HTML_TAGS_FOR_APP);
 
@@ -147,8 +181,8 @@ if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr']))
 }
 
 $productDetailPageBanner = [];
-if (isset($banners['Product_Detail_Page_Banner']) && $banners['Product_Detail_Page_Banner']['blocation_active'] && count($banners['Product_Detail_Page_Banner']['banners'])) {
-    foreach ($banners['Product_Detail_Page_Banner']['banners'] as &$val) {
+if (!empty($banners) && $banners['blocation_active'] && count($banners['banners'])) {
+    foreach ($banners['banners'] as &$val) {
         $bannerImageUrl = '';
         if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId)) {
             continue;
@@ -175,14 +209,14 @@ if (isset($banners['Product_Detail_Page_Banner']) && $banners['Product_Detail_Pa
             $val['banner_url_type'] = $urlTypeData['urlType'];
         }
     }
-    $productDetailPageBanner = $banners['Product_Detail_Page_Banner']['banners'];
+    $productDetailPageBanner = $banners['banners'];
 }
 
 $data = array(
-    'reviews' => empty($reviews) ? (object)array() : $reviews,
+    'reviews' => empty($reviews) ? (object) array() : $reviews,
     'codEnabled' => (true === $codEnabled ? 1 : 0),
     // 'shippingRates' => $shippingRates,
-    'shippingDetails' => empty($shippingDetails) ? (object)array() : $shippingDetails,
+    'shippingDetails' => empty($shippingDetails) ? (object) array() : $shippingDetails,
     'optionRows' => $optionRows,
     'productSpecifications' => array(
         'title' => Labels::getLabel('LBL_Specifications', $siteLangId),
@@ -191,14 +225,14 @@ $data = array(
     'banners' => $productDetailPageBanner,
     'product' => array(
         'title' => Labels::getLabel('LBL_Detail', $siteLangId),
-        'data' => empty($product) ? (object)array() : $product,
+        'data' => empty($product) ? (object) array() : $product,
     ),
-    'shop_rating' => $shop_rating,
-    'shop' => empty($shop) ? (object)array() : $shop,
+    'shop_rating' => round($shop_rating, 1),
+    'shop' => empty($shop) ? (object) array() : $shop,
     'shopTotalReviews' => $shopTotalReviews,
     'productImagesArr' => array_values($productImagesArr),
     'volumeDiscountRows' => $volumeDiscountRows,
-    'socialShareContent' => empty($socialShareContent) ? (object)array() : $socialShareContent,
+    'socialShareContent' => empty($socialShareContent) ? (object) array() : $socialShareContent,
     'buyTogether' => array(
         'title' => Labels::getLabel('LBL_Product_Add-ons', $siteLangId),
         'data' => $upsellProducts,
@@ -218,6 +252,6 @@ $data = array(
 );
 
 
-if (empty((array)$product)) {
+if (empty((array) $product)) {
     $status = applicationConstants::OFF;
 }

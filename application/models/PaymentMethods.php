@@ -49,7 +49,7 @@ class PaymentMethods
      */
     public function cashOnDeliveryIsActive(): bool
     {
-        return Plugin::isActive('CashOnDelivery');
+        return (Plugin::isActive('CashOnDelivery') || Plugin::isActive('PayAtStore'));
     }
 
     /**
@@ -96,9 +96,9 @@ class PaymentMethods
         }
 
         return [
-            self::MOVE_TO_ADMIN_WALLET => Labels::getLabel('LBL_MOVE_TO_ADMIN_WALLET', $langId),
-            self::MOVE_TO_CUSTOMER_WALLET => Labels::getLabel('LBL_MOVE_TO_CUSTOMER_WALLET', $langId),
-            self::MOVE_TO_CUSTOMER_CARD => Labels::getLabel('LBL_MOVE_TO_CUSTOMER_CARD', $langId),
+            self::MOVE_TO_ADMIN_WALLET => Labels::getLabel('LBL_DO_NOT_TRANSFER', $langId),
+            self::MOVE_TO_CUSTOMER_WALLET => Labels::getLabel('LBL_TRANSFER_TO_CUSTOMER_WALLET', $langId),
+            self::MOVE_TO_CUSTOMER_CARD => Labels::getLabel('LBL_TRANSFER_TO_PAYMENT_SOURCE', $langId),
         ];
     }
     

@@ -9,7 +9,15 @@ class CategoryController extends MyAppController
 
     public function index()
     {
-        $categoriesArr = ProductCategory::getTreeArr($this->siteLangId, 0, true, false, true);
+        /* $categoriesArr = ProductCategory::getTreeArr($this->siteLangId, 0, true, false, true); */
+		$productCategory = ProductCategory::getSearchObject(false, $this->siteLangId, true);
+                $productCategory->addOrder('m.prodcat_active', 'DESC');
+		$productCategory->addCondition('prodcat_parent', '=', 0);
+		$productCategory->addCondition('prodcat_deleted', '=', 0);
+		$productCategory->addOrder('prodcat_ordercode');
+		$productCategory->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name'));
+		$rs = $productCategory->getResultSet();
+		$categoriesArr = FatApp::getDb()->fetchAll($rs);
         $this->set('categoriesArr', $categoriesArr);
         $this->_template->render();
     }
@@ -27,7 +35,7 @@ class CategoryController extends MyAppController
         } else {
             $get = Product::convertArrToSrchFiltersAssocArr(FatApp::getParameters());
         }
-        
+
         $get['category'] = $categoryId;
         $get['join_price'] = 1;
         $frm->fill($get);
@@ -49,7 +57,7 @@ class CategoryController extends MyAppController
             FatUtility::exitWithErrorCode(404);
         }
         $bannerDetail = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $categoryId);
-        $category['banner'] = empty($bannerDetail) ? (object)array() : $bannerDetail;
+        $category['banner'] = empty($bannerDetail) ? (object) array() : $bannerDetail;
         /* ] */
 
         $userId = 0;
@@ -74,12 +82,12 @@ class CategoryController extends MyAppController
         }
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
-        
+
         $srch->setPageNumber($page);
         if ($pageSize) {
             $srch->setPageSize($pageSize);
         }
-
+        
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
@@ -102,7 +110,7 @@ class CategoryController extends MyAppController
             'siteLangId' => $this->siteLangId,
             'showBreadcrumb' => true,
         );
-                
+
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $products);
             $this->set('page', $page);
@@ -113,7 +121,7 @@ class CategoryController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-        
+
         $this->set('data', $data);
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
@@ -134,7 +142,7 @@ class CategoryController extends MyAppController
         } else {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_IMAGE, $catId, 0, $langId);
         }
-        
+
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
 
         switch (strtoupper($sizeType)) {
@@ -209,7 +217,7 @@ class CategoryController extends MyAppController
         $default_image = 'product_default_image.jpg';
         $prodCatId = FatUtility::int($prodCatId);
         $langId = FatUtility::int($langId);
-        
+
         if ($afile_id > 0) {
             $res = AttachedFile::getAttributesById($afile_id);
             if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_CATEGORY_BANNER) {
@@ -218,8 +226,8 @@ class CategoryController extends MyAppController
         } else {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodCatId, 0, $langId, $displayUniversalImage, $screen);
         }
-        
-        
+
+
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
 
         switch (strtoupper($sizeType)) {
@@ -269,7 +277,7 @@ class CategoryController extends MyAppController
                         $category_structure = array_reverse($category_structure);
                         foreach ($category_structure as $catKey => $catVal) {
                             if ($cntInc < count($category_structure)) {
-                                $nodes[] = array('title' => $catVal["prodcat_name"], 'href' => Commonhelper::generateUrl('category', 'view', array($catVal['prodcat_id'])));
+                                $nodes[] = array('title' => $catVal["prodcat_name"], 'href' => Urlhelper::generateUrl('category', 'view', array($catVal['prodcat_id'])));
                             } else {
                                 $nodes[] = array('title' => $catVal["prodcat_name"]);
                             }
@@ -321,18 +329,8 @@ class CategoryController extends MyAppController
 
         $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, $includeChild, false, false, $prodSrchObj, true);
         
-        /*  if (true ===  MOBILE_APP_API_CALL && 0 == $parentId) {
-             foreach ($categoriesDataArr as $key => $value) {
-                 $categoriesDataArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($value['prodcat_id'], $this->siteLangId, 'COLLECTION_PAGE'));
-                 $categoriesDataArr[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($value['prodcat_id'] , $this->siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE));
-             }
-         } else {
-             if (false ===  MOBILE_APP_API_CALL) {
-                 $categoriesDataArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array( 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name','substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block','prodcat_active','prodcat_parent','GETCATCODE(prodcat_id) as prodcat_code'));
-             }
-         } */
         if (false === MOBILE_APP_API_CALL) {
-            $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array( 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code'));
+            $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array('prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code'));
         }
 
         $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId);
@@ -344,7 +342,7 @@ class CategoryController extends MyAppController
         $this->set('categoriesData', $categoriesArr);
         $this->_template->render();
     }
-    
+
     public function checkUniqueCategoryName()
     {
         $post = FatApp::getPostedData();
@@ -360,6 +358,7 @@ class CategoryController extends MyAppController
             trigger_error(Labels::getLabel('LBL_Brand_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = productCategory::getSearchObject($langId);
+        $srch->addOrder('m.prodcat_active', 'DESC');
         $srch->addCondition('prodcat_name', '=', $categoryName);
         if ($categoryId) {
             $srch->addCondition('prodcat_id', '!=', $categoryId);

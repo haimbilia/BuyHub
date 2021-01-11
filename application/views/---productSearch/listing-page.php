@@ -82,13 +82,13 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
     <div class="container">
         <div class="section-head section--white--head section--head--center mb-0">
             <div class="section__heading">
-                <h2 class="mb-0">
+                <h1 class="mb-0">
                     <?php $keywordStr = '';
                 if (isset($keyword) && !empty($keyword)) {
                     $short_keyword = (mb_strlen($keyword) > 20) ? mb_substr($keyword, 0, 20)."..." : $keyword;
                     $keywordStr = '<span title="'.$keyword.'" class="search-results">"'.$short_keyword.'"</span>';
                 }
-                echo $pageTitle; ?> <?php echo $keywordStr; ?></h2>
+                echo $pageTitle; ?> <?php echo $keywordStr; ?></h1>
                 <?php if (isset($showBreadcrumb) && $showBreadcrumb) { ?>
                 <div class="breadcrumbs breadcrumbs--white breadcrumbs--center">
                     <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
@@ -105,7 +105,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
         <div class="row">
             <sidebar class="col flex-grow-0 collection-sidebar" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
                 <?php if (isset($shop)) { ?>
-                <div class="bg-gray rounded shop-information p-4">
+                <div class="shop-information">
                     <div class="shop-logo"><img data-ratio="1:1 (150x150)" src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, 'SMALL')); ?>" alt="<?php echo $shop['shop_name']; ?>"></div>
                     <div class="shop-info">
                         <div class="shop-name">
@@ -114,16 +114,17 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 <span class="blk-txt"><?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong> <?php $date = new DateTime($shop['user_regdate']);
                                 echo $date->format('M d, Y'); ?> </strong></span>
                             </h5>
+                            <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+                                <div class="products__rating"> <i class="icn"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                                        </svg></i> <span class="rate"><?php echo round($shopRating, 1),' ',Labels::getLabel('Lbl_Out_of', $siteLangId),' ', '5';
+                                        if ($shopTotalReviews) { ?>
+                                        - <a href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>
+                                        <?php } ?> </span>
+                                </div>
+                            <?php } ?>
                         </div>
-                        <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-                        <div class="products__rating"> <i class="icn"><svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-                                </svg></i> <span class="rate"><?php echo round($shopRating, 1),' ',Labels::getLabel('Lbl_Out_of', $siteLangId),' ', '5';
-                                if ($shopTotalReviews) { ?>
-                                - <a href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>
-                                <?php } ?> </span>
-                        </div>
-                        <?php } ?>
+                        
                         <div class="shop-btn-group">
                             <div class="share-button">
                                 <a href="javascript:void(0)" class="social-toggle" title="<?php echo Labels::getLabel('Lbl_Share', $siteLangId); ?>"><i class="icn">
@@ -171,7 +172,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             ?>
                             <?php if ($showAddToFavorite) { ?>
                             <a href="javascript:void(0)" title="<?php echo ($shop['is_favorite']) ? Labels::getLabel('Lbl_Unfavorite_Shop', $siteLangId) : Labels::getLabel('Lbl_Favorite_Shop', $siteLangId); ?>"
-                                onclick="toggleShopFavorite(<?php echo $shop['shop_id']; ?>);" class="btn btn-primary btn-sm <?php echo ($shop['is_favorite']) ? 'is-active' : ''; ?>" id="shop_<?php echo $shop['shop_id']; ?>"><i class="icn"><svg
+                                onclick="toggleShopFavorite(<?php echo $shop['shop_id']; ?>);" class="btn btn-brand btn-sm <?php echo ($shop['is_favorite']) ? 'is-active' : ''; ?>" id="shop_<?php echo $shop['shop_id']; ?>"><i class="icn"><svg
                                         class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart"></use>
                                     </svg></i></a>
@@ -180,12 +181,12 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 $showMoreButtons = false;
                             } ?>
                             <?php if ($showMoreButtons) { ?>
-                            <a href="<?php echo UrlHelper::generateUrl('Shops', 'ReportSpam', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Report_Spam', $siteLangId); ?>" class="btn btn-primary btn-sm"><i
+                            <a href="<?php echo UrlHelper::generateUrl('Shops', 'ReportSpam', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Report_Spam', $siteLangId); ?>" class="btn btn-brand btn-sm"><i
                                     class="icn"><svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#report"></use>
                                     </svg></i></a>
                             <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller() )))) { ?>
-                            <a href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Send_Message', $siteLangId); ?>" class="btn btn-primary btn-sm"><i
+                            <a href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Send_Message', $siteLangId); ?>" class="btn btn-brand btn-sm"><i
                                     class="icn"><svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send-msg" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send-msg"></use>
                                     </svg></i></a>
@@ -193,7 +194,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <?php } ?>
                         </div>
                         <?php if ($socialPlatforms) { ?>
-                        <div class="social-profiles mt-3">
+                        <div class="social-profiles">
                             <p><strong><?php echo Labels::getLabel('LBL_Follow_Us', $siteLangId); ?></strong> </p>
                             <ul class="social-icons">
                                 <?php foreach ($socialPlatforms as $row) { ?>
@@ -205,7 +206,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                         <?php } ?>
                     </div>
                 </div>
-                <div class="gap"></div>
+                
                 <?php } ?>
                 <?php if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     ?> <div class="brands-block-wrapper">
@@ -237,9 +238,10 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 <li class="list__item">                              
 										
                                     <?php if (!(UserAuthentication::isUserLogged()) || (UserAuthentication::isUserLogged() && (User::isBuyer()))) { ?>
-                                    <a href="javascript:void(0)" onclick="saveProductSearch()" class="btn btn-primary btn-sm btn--filters-control"><i class="icn">
-                                          
-                                        </i><span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></a>
+                                    <a href="javascript:void(0)" onclick="saveProductSearch()" class="btn btn-brand btn-sm btn--filters-control">
+                                   
+                                    <i class="icn fas fa-file-download d-md-none"></i>                                          
+                                    <span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></a>
                                     <?php } ?>
                                 </li>
                                 <li>
@@ -260,7 +262,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     </div>
                 </div>
                 <div class="listing-products -listing-products ">
-                    <div id="productsList" role="main-listing" class="row product-listing">
+                    <div id="productsList" role="main-listing" class="product-listing" data-view="4"> 
                         <?php
                         $productsData = array(
                                         'products'=> $products,

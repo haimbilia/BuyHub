@@ -31,17 +31,17 @@ $cancelBtnFld->developerTags['col'] = 2;
 			</div>
 		</div>
 		<div class="content-body">
-			<div class="cards">
-				<div class="cards-header">
-					<h5 class="cards-title"><?php echo Labels::getLabel('LBL_My_Products_list',$siteLangId); ?></h5>
+			<div class="card">
+				<div class="card-header">
+					<h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Products_list',$siteLangId); ?></h5>
 					<div class="action">
 						<div class="">
-							<a href="javascript:void(0)" onclick="addCatalogPopup()" class = "btn btn-primary btn-sm"><?php echo Labels::getLabel( 'LBL_Add_New_Product', $siteLangId);?></a>
-                            <a href="<?php echo UrlHelper::generateUrl('seller','catalog' );?>" class="btn btn-outline-primary btn-sm"><?php echo Labels::getLabel('LBL_Products_List', $siteLangId);?></a>
+							<a href="javascript:void(0)" onclick="addCatalogPopup()" class = "btn btn-brand btn-sm"><?php echo Labels::getLabel( 'LBL_Add_New_Product', $siteLangId);?></a>
+                            <a href="<?php echo UrlHelper::generateUrl('seller','catalog' );?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Products_List', $siteLangId);?></a>
 						</div>
 					</div>
 				</div>
-				<div class="cards-content ">
+				<div class="card-body ">
 					<div class="replaced">
 						<?php echo $frmSearchCustomProduct->getFormHtml(); ?>
 					</div>

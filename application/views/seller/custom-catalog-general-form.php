@@ -4,16 +4,18 @@ $productFrm->setFormTagAttribute('class', 'form form--horizontal');
 $productFrm->setFormTagAttribute('onsubmit', 'setupcustomCatalogProduct(this); return(false);');
 
 $autoUpdateFld = $productFrm->getField('auto_update_other_langs_data');
-$autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+if (null != $autoUpdateFld) {
+    $autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+}
 
 $btnSubmit = $productFrm->getField('btn_submit');
-$btnSubmit->setFieldTagAttribute('class', "btn btn-primary");
+$btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 
 $btnDiscardFld = $productFrm->getField('btn_discard');
 $btnDiscardFld->addFieldTagAttribute('onClick', 'goToCatalogRequest();');
 $btnDiscardFld->value = Labels::getLabel('LBL_Discard', $siteLangId);
-$btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-primary");
+$btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
 ?>
 <div class="row justify-content-center">
     <div class="col-md-12">
@@ -69,7 +71,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-primary");
                             <span class="spn_must_field">*</span>
                             <?php } ?>
                         </label>
-                        <small><a class="form-text text-muted" href="javascript:void(0)" onClick="addBrandReqForm(0);"><?php echo Labels::getLabel('LBL_Request_For_Brand', $siteLangId) ; ?></a></small>
+                        <small><a class="form-text text-muted" href="javascript:void(0)" onClick="addBrandReqForm(0);"><?php echo (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_For_Brand', $siteLangId) : Labels::getLabel('LBL_Add_Brand', $siteLangId) ?></a></small>
                     </div>
                     <div class="field-wraper">
                         <div class="field_cover">
@@ -89,7 +91,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-primary");
                             <span class="spn_must_field">*</span>
                         </label>
                         <small><a class="form-text text-muted" href="javascript:void(0)"
-                                onClick="addCategoryReqForm(0);"><?php echo Labels::getLabel('LBL_Request_For_Category', $siteLangId) ; ?></a></small>
+                                onClick="addCategoryReqForm(0);"><?php echo (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_For_Category', $siteLangId) : Labels::getLabel('LBL_Add_Category', $siteLangId) ?></a></small>
                     </div>
                     <div class="field-wraper">
                         <div class="field_cover">
@@ -103,14 +105,15 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-primary");
         <div class="row">
             <div class="col-md-6">
                 <div class="field-set">
-                    <div class="caption-wraper">
+					<div class="caption-wraper d-flex justify-content-between">
                         <label class="field_label">
                             <?php
                             $fld = $productFrm->getField('taxcat_name');
                             echo $fld->getCaption();
                             ?>
+                            <span class="spn_must_field">*</span>
                         </label>
-                        <span class="spn_must_field">*</span>
+                        <small><a class="form-text text-muted" target="_blank" href="<?php echo UrlHelper::generateUrl('seller', 'taxCategories'); ?>"><?php echo Labels::getLabel('LBL_Tax_Categories', $siteLangId) ; ?></a></small>
                     </div>
                     <div class="field-wraper">
                         <div class="field_cover">

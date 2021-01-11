@@ -1,21 +1,21 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="cards">
-    <div class="cards-header">
-        <h5 class="cards-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
-        <div class="">
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
+        <div class="btn-group">
             <?php if ($canEdit) { ?>
-                <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(1)" class="btn btn-outline-primary btn-sm formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Activate', $siteLangId);?></a>
-                <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(0)" class="btn btn-outline-primary btn-sm  formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Deactivate', $siteLangId);?></a>
-                <a href="javascript:void(0)" onClick="deleteSelectedCollection()" class="btn btn-outline-primary btn-sm formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Delete', $siteLangId);?></a>
+                <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(1)" class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Activate', $siteLangId);?></a>
+                <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(0)" class="btn btn-outline-brand btn-sm  formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Deactivate', $siteLangId);?></a>
+                <a href="javascript:void(0)" onClick="deleteSelectedCollection()" class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Delete', $siteLangId);?></a>
                 <?php if (count($arr_listing) > 0) { ?>
-                <a href="javascript:void(0)" onClick="getShopCollectionGeneralForm(0)" class="btn btn-outline-primary btn-sm  btn-sm"><?php echo Labels::getLabel('LBL_Add_Collection', $siteLangId);?></a>
+                <a href="javascript:void(0)" onClick="getShopCollectionGeneralForm(0)" class="btn btn-outline-brand btn-sm  btn-sm"><?php echo Labels::getLabel('LBL_Add_Collection', $siteLangId);?></a>
                 <?php }?>
             <?php }?>
         </div>
     </div>
-    <div class="cards-content">
+    <div class="card-body">
         <div class="row">
-            <div class="col-lg-12 col-md-12">
+            <div class="col-lg-12 col-md-12 js-scrollable table-wrap">
                 <?php
                 $arr_flds = array(
                     'listserial'=>'#',
@@ -29,9 +29,13 @@
                         $arr_flds
                     );
                 }
+				$tableClass = '';
+				if (0 < count($arr_listing) && $canEdit) {
+					$tableClass = "table-justified";
+				}
                 $tbl = new HtmlElement(
                     'table',
-                    array('width'=>'100%', 'class'=>'table','id'=>'options')
+                    array('width'=>'100%', 'class'=>'table '.$tableClass, 'id'=>'options')
                 );
 
                 $th = $tbl->appendElement('thead')->appendElement('tr');

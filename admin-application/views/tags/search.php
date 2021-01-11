@@ -1,6 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+if (count($arr_listing) == 0) {
+    $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
+} else {
 $arr_flds = array(
-    'listserial' => '#',
+    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'product_identifier' => Labels::getLabel('LBL_Product', $adminLangId),
     'tags' => Labels::getLabel('LBL_Tags', $adminLangId)
 );
@@ -17,10 +20,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 $productsArr = array();
-$sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
+$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arr_listing as $sn => $row) {
     $productsArr[] = $row['product_id'];
-    $sr_no++;
     $tr = $tbl->appendElement('tr', array('class' => ''));
 
     foreach ($arr_flds as $key => $val) {
@@ -44,7 +46,7 @@ foreach ($arr_listing as $sn => $row) {
                     $tagData[$key]['id'] = $data['tag_id'];
                     $tagData[$key]['value'] = $data['tag_identifier'];
                 }
-                $encodedData = json_encode($tagData);
+                $encodedData = htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8');
                 $td->appendElement('plaintext', array(), "<div class='product-tag' id='product" . $row['product_id'] . "'><input class='tag_name' type='text' name='tag_name" . $row['product_id'] . "' value='" . $encodedData . "' data-product_id='" . $row['product_id'] . "'></div>", true);
                 break;
             default:
@@ -52,6 +54,7 @@ foreach ($arr_listing as $sn => $row) {
                 break;
         }
     }
+    $sr_no--;
 }
 if (count($arr_listing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
@@ -77,11 +80,12 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 
 <?php if (count($arr_listing) > 0) { ?>
     <script>
-        var productsArr = [ <?php echo '"' . implode('","', $productsArr) . '"' ?> ];
+        var productsArr = [ <?php echo '"' . implode('","', $productsArr) . '"' ?> ];      
         $("document").ready(function() {
-            getTagsAutoComplete = function() {
+            getTagsAutoComplete = function(e) {
+                var keyword = e.detail.value;
                 var list = [];
-                fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), '', function(t) {
+                fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), {keyword:keyword}, function(t) {
                     var ans = $.parseJSON(t);
                     for (i = 0; i < ans.length; i++) {
                         list.push({
@@ -89,18 +93,19 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
                             "value": ans[i].tag_identifier,
                         });
                     }
+                    e.detail.tagify.settings.whitelist = list;
                 });
-                return list;
-            }
-            var whitelist = getTagsAutoComplete();
+                
+            }            
             $.each(productsArr, function(index, value) {
                 tagify = new Tagify(document.querySelector('input[name=tag_name' + value + ']'), {
-                    whitelist: whitelist,
+                    whitelist: [],
                     delimiters: "#",
                     editTags: false,
-                }).on('add', addTagData).on('remove', removeTagData);
+                }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
             });
 
         });
     </script>
 <?php }
+}

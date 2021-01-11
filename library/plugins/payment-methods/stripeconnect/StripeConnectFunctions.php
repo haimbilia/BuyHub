@@ -12,6 +12,9 @@ trait StripeConnectFunctions
         "executive",
         "owner",
         "representative",
+        "directors_provided",
+        "executives_provided",
+        "owners_provided",
     ];
 
     /**
@@ -126,9 +129,6 @@ trait StripeConnectFunctions
     private function updatePerson(array $requestParam): object
     {
         $this->convertToBool($requestParam);
-        /* var_dump($requestParam);
-        CommonHelper::printArray($requestParam);
-        die; */
         return $this->stripe->accounts->updatePerson(
             $this->getAccountId(),
             $this->getRelationshipPersonId(),
@@ -431,5 +431,22 @@ trait StripeConnectFunctions
             'type' => 'card',
             'card' => $requestParam
         ]);
+    }
+
+    /**
+     * capturePayment
+     *
+     * @param array $requestParam : [
+     *      'paymentIntentId' => 'pi_JRXXXXXXXXXXXXX',
+     *      'amount_to_capture' => 750,
+     *      'statement_descriptor' => 'TEXT' // Description that appears on your customers’ statements. Length at least one letter, maximum 22 characters.
+     *   ]
+     * @return object
+     */
+    private function capturePayment(array $requestParam): object
+    {
+        $paymentIntentId = $requestParam['paymentIntentId'];
+        unset($requestParam['paymentIntentId']);
+        return $this->retrievePaymentIntent([$paymentIntentId])->capture($requestParam);
     }
 }

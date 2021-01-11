@@ -3,7 +3,7 @@
 $arr_flds = array(
         'dragdrop' => '',
         'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-        'listserial' =>  Labels::getLabel('LBL_Sr._No', $adminLangId) ,
+        'listserial' =>  Labels::getLabel('LBL_#', $adminLangId) ,
         'currency_code' =>  Labels::getLabel('LBL_Currency', $adminLangId) ,
         'currency_symbol_left' =>  Labels::getLabel('LBL_Symbol_Left', $adminLangId),
         'currency_symbol_right' =>  Labels::getLabel('LBL_Symbol_Right', $adminLangId),
@@ -65,7 +65,7 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case 'currency_code':
                 if ($row['currency_name'] != '') {
-                    $default = ($row['currency_id'] == $defaultCurrencyId) ? '<span class="badge badge-success">Default</span>' : '';
+                    $default = ($row['currency_id'] == $defaultCurrencyId) ? '<span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>' : '';
                     $td->appendElement('plaintext', array(), $row['currency_name'], true);
                     $td->appendElement('br', array());
                     $td->appendElement('plaintext', array(), '(' . $row[$key] . ') ' . $default, true);

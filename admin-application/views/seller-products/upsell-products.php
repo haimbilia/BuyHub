@@ -23,15 +23,14 @@
                         $relProdFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Add_Buy_Together_Products', $adminLangId));
 
                         $submitBtnFld = $relProdFrm->getField('btn_submit');
-                        $submitBtnFld->setFieldTagAttribute('class', 'btn-block btn btn-primary'); ?>
+                        $submitBtnFld->setFieldTagAttribute('class', 'btn-block btn btn-brand'); ?>
                         <?php echo $relProdFrm->getFormTag(); ?>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="field-set">
                                     <div class="field-wraper">
                                         <div class="field_cover">
-                                            <?php echo $relProdFrm->getFieldHTML('product_name');?>
-                                            <div class='dvFocus-js form-control focused-div'></div>
+                                            <?php echo $relProdFrm->getFieldHTML('product_name');?>                                    
                                         </div>
                                     </div>
                                 </div>

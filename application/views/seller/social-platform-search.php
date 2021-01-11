@@ -1,15 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="cards cards-js">
-    <div class="cards-header">
-        <h5 class="cards-title"><?php echo Labels::getLabel('LBL_Social_Platforms', $siteLangId); ?></h5>
+<div class="card cards-js">
+    <div class="card-header">
+        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Social_Platforms', $siteLangId); ?></h5>
         <div class="">
             <?php if ($canEdit) { ?>
-                <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" onclick="addForm(0)"><?php echo Labels::getLabel('LBL_Add_Social_Platform', $siteLangId);?></a>
+                <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm" onclick="addForm(0)"><?php echo Labels::getLabel('LBL_Add_Social_Platform', $siteLangId);?></a>
             <?php }?>
         </div>
     </div>
-    <div class="cards-content">
-        <div class="col-lg-12 col-md-12">
+    <div class="card-body">
+        <div class="js-scrollable table-wrap">
             <?php $arr_flds = array(
                 'listserial'=>'#',
                 'splatform_identifier'=>Labels::getLabel('LBL_Title', $siteLangId),
@@ -19,7 +19,11 @@
             if ($canEdit) {
                 $arr_flds['action'] = '';
             }
-            $tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table'));
+			$tableClass = '';
+			if (0 < count($arr_listing)) {
+				$tableClass = "table-justified";
+			}
+            $tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table '.$tableClass));
             $th = $tbl->appendElement('thead')->appendElement('tr');
             foreach ($arr_flds as $key => $val) {
                 if ($key == 'listserial') {

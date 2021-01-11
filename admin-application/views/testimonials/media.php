@@ -4,14 +4,14 @@ $testimonialMediaFrm->setFormTagAttribute('class', 'web_form form_horizontal');
 $testimonialMediaFrm->developerTags['colClassPrefix'] = 'col-md-';
 $testimonialMediaFrm->developerTags['fld_default_col'] = 12;
 $fld2 = $testimonialMediaFrm->getField('testimonial_image');
-$fld2->addFieldTagAttribute('class', 'btn btn-primary btn-sm');
+$fld2->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $fld2->addFieldTagAttribute('onChange', 'popupImage(this)');
 $preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $adminLangId), '80*80').'</small>';
 $htmlAfterField = $preferredDimensionsStr;
 if (!empty($testimonialImages)) {
     $htmlAfterField .= '<ul class="image-listing grids--onethird">';
     foreach ($testimonialImages as $testimonialImg) {
-        $htmlAfterField .= '<li><div class="uploaded--image"><img src="'.UrlHelper::generateFullUrl('Image', 'testimonial', array($testimonialImg['afile_record_id'],$testimonialImg['afile_lang_id'],'THUMB'), CONF_WEBROOT_FRONT_URL).'"> <a href="javascript:void(0);" onClick="removeTestimonialImage('.$testimonialImg['afile_record_id'].','.$testimonialImg['afile_lang_id'].')" class="remove--img"><i class="ion-close-round"></i></a></div>';
+        $htmlAfterField .= '<li><div class="uploaded--image"><img src="'.UrlHelper::generateFullUrl('Image', 'testimonial', array($testimonialImg['afile_record_id'],$testimonialImg['afile_lang_id'],'THUMB'), CONF_WEBROOT_FRONT_URL).'?t='.time().'"> <a href="javascript:void(0);" onClick="removeTestimonialImage('.$testimonialImg['afile_record_id'].','.$testimonialImg['afile_lang_id'].')" class="remove--img"><i class="ion-close-round"></i></a></div>';
     }
     $htmlAfterField.='</li></ul>';
 }

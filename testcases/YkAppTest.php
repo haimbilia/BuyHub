@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +14,7 @@ class YkAppTest extends TestCase
     private $returnType = self::TYPE_BOOL;
     private $result = '';
     private $error = '';
-    public $reflectionClassInstance = '';
+    protected $classObj;
 
     public $langId = CONF_LANG_ID;
 
@@ -31,44 +31,44 @@ class YkAppTest extends TestCase
     {
         //Target our class
         $reflectionClass = new ReflectionClass($class);
-
         //Get the parameters of a constructor
         $reflectionClassParam = $reflectionClass->getConstructor()->getParameters();
         $reflectMethod = $reflectionClass->getMethod($method);
-        
+
         if (!$reflectMethod->isStatic()) {
             $invalidParam = $this->validateParamType($reflectionClassParam, $constructorArgs);
 
             if (true === $invalidParam) {
+                $this->error = $this->getError();
                 return false;
             }
         }
-        
+
         //Get the parameters of a method
         $reflectionParam = $reflectMethod->getParameters();
         
         $invalidParam = $this->validateParamType($reflectionParam, $args);
 
         if (true === $invalidParam) {
-            return false;
-        }
-       
-        
-       
-        if (method_exists($this, 'init') && false === $this->init()) {
+            $this->error = $this->getError();
             return false;
         }
 
         if (!$reflectMethod->isStatic()) {
             $reflectionClass = $reflectionClass->newInstanceArgs($constructorArgs);
+            $this->classObj = $reflectionClass;
+            if (method_exists($this, 'init') && false === $this->init()) {
+                $this->error = $reflectionClass->getError();
+                return false;
+            }
         }
-        
+
         $reflectionMethod = new ReflectionMethod($class, $method);
         $this->result = $reflectionMethod->invokeArgs($reflectionClass, $args);
-        
+
         return $this->returnResponse();
     }
-    
+
     /**
      * validateParamType
      *
@@ -76,12 +76,12 @@ class YkAppTest extends TestCase
      * @param  array $args
      * @return bool
      */
-    private function validateParamType(array $reflectionParam, array $args) :bool
+    private function validateParamType(array $reflectionParam, array $args): bool
     {
         $invalidParam = false;
         foreach ($reflectionParam as $index => $param) {
             $paramValue = (array_key_exists($index, $args)) ? $args[$index] : null;
-            
+
             if ($param->isOptional() && null == $paramValue) {
                 continue;
             }
@@ -92,10 +92,10 @@ class YkAppTest extends TestCase
                 $reflectionType = $param->getType();
                 $paramType = $reflectionType->getName();
             }
-            
+
             switch ($paramType) {
                 case 'int':
-                    $invalidParam = (false === is_int($paramValue)) ;
+                    $invalidParam = (false === is_int($paramValue));
                     break;
                 case 'string':
                     $invalidParam = (false === is_string($paramValue));
@@ -121,7 +121,7 @@ class YkAppTest extends TestCase
 
         return $invalidParam;
     }
-    
+
     /**
      * returnResponse
      *
@@ -138,7 +138,7 @@ class YkAppTest extends TestCase
                 break;
         }
     }
-    
+
     /**
      * expectedReturnType
      *
@@ -149,7 +149,7 @@ class YkAppTest extends TestCase
     {
         $this->returnType = $returnType;
     }
-        
+
     /**
      * getResult
      *
@@ -168,5 +168,21 @@ class YkAppTest extends TestCase
     public function getError(): string
     {
         return $this->error;
+    }
+
+    /**
+     * InsertDbData
+     *
+     * @param  string $table
+     * @param  array $data
+     * @return void
+     */
+    protected function InsertDbData(string $table, array $arr)
+    {
+        if (!empty($table) && !empty($arr)) {
+            foreach ($arr as $data) {
+                FatApp::getDb()->insertFromArray($table, $data, false, array(), $data);
+            }
+        }
     }
 }

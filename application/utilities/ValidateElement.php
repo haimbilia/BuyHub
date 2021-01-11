@@ -4,12 +4,13 @@ class ValidateElement extends FatUtility
 {
     // public const PHONE_REGEX = '^(\+\d{1,2}\s)?\(?\d{3}\)?[\s#-]\d{3}[\s#-]\d{4}$';
     public const PHONE_NO_FORMAT = '';
-    public const PHONE_NO_LENGTH = 14;
-    public const PHONE_REGEX = '^(?!0+$)[0-9]{1,14}$';
+    public const PHONE_NO_LENGTH = 15;
+    public const PHONE_REGEX = '^(?!0+$)[0-9]{1,15}$';
     public const ZIP_REGEX = '^[a-zA-Z0-9]+$';
     public const CITY_NAME_REGEX = '^([^0-9]*)$';
     public const PASSWORD_REGEX = '^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%-_]{8,15}$';
     public const USERNAME_REGEX = '^[a-zA-Z0-9]{3,30}$';
+    public const FATBIT_USERNAME_REGEX = '^[a-z][a-z_\.0-9]{3,19}$';
     public const VISA_REGEX = '^4';
     public const MASTER_REGEX = '^5[1-5]';
     public const AMEX_REGEX = '^3[47]';
@@ -17,6 +18,7 @@ class ValidateElement extends FatUtility
     public const DISCOVER_REGEX = '^6(?:011|5)';
     public const JCB_REGEX = '^(?:2131|1800|35\d{3})';
     public const TIME_REGEX = '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$';
+    public const URL_REGEX = '^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$';
     /*public const PHONE_FORMATS = [
         '123-456-7890',
         '(123) 456-7890',
@@ -73,6 +75,17 @@ class ValidateElement extends FatUtility
             return false;
         }
         if (!preg_match('/' . static::USERNAME_REGEX . '/', $string)) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function fatbitUsername($string = '')
+    {
+        if (strlen($string) < 3) {
+            return false;
+        }
+        if (!preg_match('/' . static::FATBIT_USERNAME_REGEX . '/', $string)) {
             return false;
         }
         return true;

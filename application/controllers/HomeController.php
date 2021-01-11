@@ -4,19 +4,18 @@ class HomeController extends MyAppController
 {
     public function index()
     {
-        $db = FatApp::getDb();
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
         $sponsoredShopsInCollection = $sponsoredProdsInCollection = [];
         $collections = $this->getCollections($productSrchObj, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
-      
+
         $sponShopLayoutCount = count($sponsoredShopsInCollection);
         $sponProdLayoutCount = count($sponsoredProdsInCollection);
         if (0 < $sponProdLayoutCount) {
             foreach ($sponsoredProdsInCollection as $indexId => $collectionId) {
                 $sponsoredProds = $this->getSponsoredProducts($productSrchObj);
-                
+
                 if (empty($sponsoredProds)) {
                     if (true === MOBILE_APP_API_CALL) {
                         unset($collections[$indexId]);
@@ -25,7 +24,7 @@ class HomeController extends MyAppController
                     }
                     continue;
                 }
-                
+
                 if (true === MOBILE_APP_API_CALL) {
                     $collections[$indexId]['products'] = $sponsoredProds;
                     $collections[$indexId]['totProducts'] = count($sponsoredProds);
@@ -39,7 +38,7 @@ class HomeController extends MyAppController
         if (0 < $sponShopLayoutCount) {
             foreach ($sponsoredShopsInCollection as $indexId => $collectionId) {
                 $sponsoredShops = $this->getSponsoredShops($productSrchObj);
-                
+
                 if (empty($sponsoredShops)) {
                     if (true === MOBILE_APP_API_CALL) {
                         unset($collections[$indexId]);
@@ -48,7 +47,7 @@ class HomeController extends MyAppController
                     }
                     continue;
                 }
-                
+
                 if (true === MOBILE_APP_API_CALL) {
                     $collections[$indexId]['shops'] = $sponsoredShops;
                     $collections[$indexId]['totShops'] = count($sponsoredShops);
@@ -58,172 +57,199 @@ class HomeController extends MyAppController
                 }
             }
         }
-        
+
         /*  $this->set('sponsoredProds', $sponsoredProds);
          $this->set('sponsoredShops', $sponsoredShops); */
         /* $this->set('banners', $banners); */
-        
+
         $slides = $this->getSlides();
         $this->set('slides', $slides);
         $this->set('collections', $collections);
         $this->set('isWishlistEnable', FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1));
 
-        if (true === MOBILE_APP_API_CALL) {
-            $orderProducts['pendingForReviews'] = array();
-            if (0 < $loggedUserId && (FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0))) {
-                $orderProducts['pendingForReviews'] = OrderProduct::pendingForReviews($loggedUserId, $this->siteLangId);
-                if (count($orderProducts['pendingForReviews'])) {
-                    foreach ($orderProducts['pendingForReviews'] as $key => $orderProduct) {
-                        $canSubmitFeedback = Orders::canSubmitFeedback($orderProduct['order_user_id'], $orderProduct['order_id'], $orderProduct['op_selprod_id']);
-                        if (false === $canSubmitFeedback) {
-                            continue;
-                        }
-                        $options = SellerProduct::getSellerProductOptions($orderProduct['op_selprod_id'], true, $this->siteLangId);
-                        $optionTitle = '';
-                        if (is_array($options) && count($options)) {
-                            foreach ($options as $op) {
-                                $optionTitle .= $op['option_name'] . ': ' . $op['optionvalue_name'] . ', ';
-                            }
-                        }
-                        $orderProducts['pendingForReviews'][$key]['optionsTitle'] = rtrim($optionTitle, ', ');
-                        $orderProducts['pendingForReviews'][$key]['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], "THUMB", $orderProduct['op_selprod_id'], 0, $this->siteLangId));
-                    }
-                }
-            }
-            $this->set('layoutType', Collections::getLayoutTypeArr($this->siteLangId));
-            $this->set('orderProducts', $orderProducts);
-        } else {
-            $this->_template->addJs('js/slick.min.js');
-            $cacheKey = $this->siteLangId . '-' . $this->siteCurrencyId;
-            $collectionTemplates = array();
-            foreach ($collections as $collection) {
-                switch ($collection['collection_layout_type']) {
-                    case Collections::TYPE_SPONSORED_PRODUCT_LAYOUT:
-                        $tpl = new FatTemplate('', '');
-                        $tpl->set('siteLangId', $this->siteLangId);
-                        $tpl->set('collection', $collection);
-                        $sponsoredProdsLayout = $tpl->render(false, false, '_partial/collection/sponsored-products.php', true, true);
-                        $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredProdsLayout;
-                    break;
-                    case Collections::TYPE_SPONSORED_SHOP_LAYOUT:
-                        $tpl = new FatTemplate('', '');
-                        $tpl->set('siteLangId', $this->siteLangId);
-                        $tpl->set('collection', $collection);
-                        $sponsoredShopsLayout = $tpl->render(false, false, '_partial/collection/sponsored-shops.php', true, true);
-                        $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredShopsLayout;
-                    break;
-                    case Collections::TYPE_BANNER_LAYOUT1:
-                        if (isset($collection['banners'])) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('bannerLayout1', $collection['banners']);
-                            $bannerFirstLayout = $tpl->render(false, false, '_partial/banners/home-banner-first-layout.php', true, true);
-                            $collectionTemplates[$collection['collection_id']]['html'] = $bannerFirstLayout;
-                        }
-                    break;
-                    case Collections::TYPE_BANNER_LAYOUT2:
-                        if (isset($collection['banners'])) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('bannerLayout1', $collection['banners']);
-                            $bannersecondLayout = $tpl->render(false, false, '_partial/banners/home-banner-second-layout.php', true, true);
-                            $collectionTemplates[$collection['collection_id']]['html'] = $bannersecondLayout;
-                        }
-                    break;
-                    case Collections::TYPE_PRODUCT_LAYOUT1:
-                        $homePageProdLayout1 = FatCache::get('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageProdLayout1) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageProdLayout1 = $tpl->render(false, false, '_partial/collection/product-layout-1.php', true, true);
-                        }
-                        FatCache::set('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, $homePageProdLayout1, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout1;
-                    break;
-                    case Collections::TYPE_PRODUCT_LAYOUT2:
-                        $homePageProdLayout2 = FatCache::get('homePageProdLayout2' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageProdLayout2) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageProdLayout2 = $tpl->render(false, false, '_partial/collection/product-layout-2.php', true, true);
-                        }
-                        FatCache::set('homePageProdLayout2' . $collection['collection_id'] . $cacheKey, $homePageProdLayout2, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout2;
-                    break;
-                    case Collections::TYPE_PRODUCT_LAYOUT3:
-                        $homePageProdLayout3 = FatCache::get('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageProdLayout3) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageProdLayout3 = $tpl->render(false, false, '_partial/collection/product-layout-3.php', true, true);
-                        }
-                        FatCache::set('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, $homePageProdLayout3, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout3;
-                    break;
-                    case Collections::TYPE_CATEGORY_LAYOUT1:
-                        $homePageCatLayout1 = FatCache::get('homePageCatLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageCatLayout1) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageCatLayout1 = $tpl->render(false, false, '_partial/collection/category-layout-1.php', true, true);
-                        }
-                        FatCache::set('homePageCatLayout1' . $collection['collection_id'] . $cacheKey, $homePageCatLayout1, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout1;
-                    break;
-                    case Collections::TYPE_CATEGORY_LAYOUT2:
-                        $homePageCatLayout2 = FatCache::get('homePageCatLayout2' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageCatLayout2) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageCatLayout2 = $tpl->render(false, false, '_partial/collection/category-layout-2.php', true, true);
-                        }
-                        FatCache::set('homePageCatLayout2' . $collection['collection_id'] . $cacheKey, $homePageCatLayout2, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout2;
-                    break;
-                    case Collections::TYPE_SHOP_LAYOUT1:
-                        $homePageShopLayout1 = FatCache::get('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageShopLayout1) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageShopLayout1 = $tpl->render(false, false, '_partial/collection/shop-layout-1.php', true, true);
-                            FatCache::set('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, $homePageShopLayout1, '.txt');
-                        }
-                        FatCache::set('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, $homePageShopLayout1, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageShopLayout1;
-                    break;
-                    case Collections::TYPE_BRAND_LAYOUT1:
-                        $homePageBrandLayout1 = FatCache::get('homePageBrandLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageBrandLayout1) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageBrandLayout1 = $tpl->render(false, false, '_partial/collection/brand-layout-1.php', true, true);
-                        }
-                        FatCache::set('homePageBrandLayout1' . $collection['collection_id'] . $cacheKey, $homePageBrandLayout1, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageBrandLayout1;
-                    break;
-                    case Collections::TYPE_BLOG_LAYOUT1:
-                        $homePageBlogLayout1 = FatCache::get('homePageBlogLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                        if (!$homePageBlogLayout1) {
-                            $tpl = new FatTemplate('', '');
-                            $tpl->set('siteLangId', $this->siteLangId);
-                            $tpl->set('collection', $collection);
-                            $homePageBlogLayout1 = $tpl->render(false, false, '_partial/collection/blog-layout-1.php', true, true);
-                        }
-                        FatCache::set('homePageBlogLayout1' . $collection['collection_id'] . $cacheKey, $homePageBlogLayout1, '.txt');
-                        $collectionTemplates[$collection['collection_id']]['html'] = $homePageBlogLayout1;
-                    break;
-                }
-            }
-            $this->set('collectionTemplates', $collectionTemplates);
+        $displayProductNotAvailableLable = false;
+        //availableInLocation
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+            $displayProductNotAvailableLable = true;
         }
-        
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+            die;
+        }
+
+        $this->_template->addJs('js/slick.min.js');
+        $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
+        $geoAddress = Address::getYkGeoData();
+        $cacheKey = $this->siteLangId . '-' . $this->siteCurrencyId . '-' . $apiCall . '-' . serialize($geoAddress);
+
+        $collectionTemplates = array();
+        foreach ($collections as $collection) {
+            switch ($collection['collection_layout_type']) {
+                case Collections::TYPE_SPONSORED_PRODUCT_LAYOUT:
+                    $tpl = new FatTemplate('', '');
+                    $tpl->set('siteLangId', $this->siteLangId);
+                    $tpl->set('collection', $collection);
+                    $tpl->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
+                    $sponsoredProdsLayout = $tpl->render(false, false, '_partial/collection/sponsored-products.php', true, true);
+                    $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredProdsLayout;
+                    break;
+                case Collections::TYPE_SPONSORED_SHOP_LAYOUT:
+                    $tpl = new FatTemplate('', '');
+                    $tpl->set('siteLangId', $this->siteLangId);
+                    $tpl->set('collection', $collection);
+                    $sponsoredShopsLayout = $tpl->render(false, false, '_partial/collection/sponsored-shops.php', true, true);
+                    $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredShopsLayout;
+                    break;
+                case Collections::TYPE_BANNER_LAYOUT1:
+                    if (isset($collection['banners'])) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('bannerLayout1', $collection['banners']);
+                        $bannerFirstLayout = $tpl->render(false, false, '_partial/banners/home-banner-first-layout.php', true, true);
+                        $collectionTemplates[$collection['collection_id']]['html'] = $bannerFirstLayout;
+                    }
+                    break;
+                case Collections::TYPE_BANNER_LAYOUT2:
+                    if (isset($collection['banners'])) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('bannerLayout1', $collection['banners']);
+                        $bannersecondLayout = $tpl->render(false, false, '_partial/banners/home-banner-second-layout.php', true, true);
+                        $collectionTemplates[$collection['collection_id']]['html'] = $bannersecondLayout;
+                    }
+                    break;
+                case Collections::TYPE_PRODUCT_LAYOUT1:
+                    $homePageProdLayout1 = FatCache::get('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageProdLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
+                        $homePageProdLayout1 = $tpl->render(false, false, '_partial/collection/product-layout-1.php', true, true);
+                    }
+                    FatCache::set('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, $homePageProdLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout1;
+                    break;
+                case Collections::TYPE_PRODUCT_LAYOUT2:
+                    $homePageProdLayout2 = FatCache::get('homePageProdLayout2' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageProdLayout2) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
+                        $homePageProdLayout2 = $tpl->render(false, false, '_partial/collection/product-layout-2.php', true, true);
+                    }
+                    FatCache::set('homePageProdLayout2' . $collection['collection_id'] . $cacheKey, $homePageProdLayout2, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout2;
+                    break;
+                case Collections::TYPE_PRODUCT_LAYOUT3:
+                    $homePageProdLayout3 = FatCache::get('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageProdLayout3) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
+                        $homePageProdLayout3 = $tpl->render(false, false, '_partial/collection/product-layout-3.php', true, true);
+                    }
+                    FatCache::set('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, $homePageProdLayout3, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout3;
+                    break;
+                case Collections::TYPE_CATEGORY_LAYOUT1:
+                    $homePageCatLayout1 = FatCache::get('homePageCatLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageCatLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
+                        $homePageCatLayout1 = $tpl->render(false, false, '_partial/collection/category-layout-1.php', true, true);
+                    }
+                    FatCache::set('homePageCatLayout1' . $collection['collection_id'] . $cacheKey, $homePageCatLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout1;
+                    break;
+                case Collections::TYPE_CATEGORY_LAYOUT2:
+                    $homePageCatLayout2 = FatCache::get('homePageCatLayout2' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageCatLayout2) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('`displayProductNotAvailableLable`', $displayProductNotAvailableLable);
+                        $homePageCatLayout2 = $tpl->render(false, false, '_partial/collection/category-layout-2.php', true, true);
+                    }
+                    FatCache::set('homePageCatLayout2' . $collection['collection_id'] . $cacheKey, $homePageCatLayout2, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout2;
+                    break;
+                case Collections::TYPE_SHOP_LAYOUT1:
+                    $homePageShopLayout1 = FatCache::get('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageShopLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageShopLayout1 = $tpl->render(false, false, '_partial/collection/shop-layout-1.php', true, true);
+                        FatCache::set('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, $homePageShopLayout1, '.txt');
+                    }
+                    FatCache::set('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, $homePageShopLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageShopLayout1;
+                    break;
+                case Collections::TYPE_BRAND_LAYOUT1:
+                    $homePageBrandLayout1 = FatCache::get('homePageBrandLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageBrandLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageBrandLayout1 = $tpl->render(false, false, '_partial/collection/brand-layout-1.php', true, true);
+                    }
+                    FatCache::set('homePageBrandLayout1' . $collection['collection_id'] . $cacheKey, $homePageBrandLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageBrandLayout1;
+                    break;
+                case Collections::TYPE_BLOG_LAYOUT1:
+                    $homePageBlogLayout1 = FatCache::get('homePageBlogLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageBlogLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageBlogLayout1 = $tpl->render(false, false, '_partial/collection/blog-layout-1.php', true, true);
+                    }
+                    FatCache::set('homePageBlogLayout1' . $collection['collection_id'] . $cacheKey, $homePageBlogLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageBlogLayout1;
+                    break;
+                case Collections::TYPE_FAQ_LAYOUT1:
+                    $homePageFaqLayout1 = FatCache::get('homePageFaqLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageFaqLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageFaqLayout1 = $tpl->render(false, false, '_partial/collection/faq-layout-1.php', true, true);
+                    }
+                    FatCache::set('homePageFaqLayout1' . $collection['collection_id'] . $cacheKey, $homePageFaqLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageFaqLayout1;
+                    break;
+                case Collections::TYPE_TESTIMONIAL_LAYOUT1:
+                    $homePageTestimonialLayout1 = FatCache::get('homePageTestimonialLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageTestimonialLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageTestimonialLayout1 = $tpl->render(false, false, '_partial/collection/testimonial-layout-1.php', true, true);
+                    }
+                    FatCache::set('homePageTestimonialLayout1' . $collection['collection_id'] . $cacheKey, $homePageTestimonialLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageTestimonialLayout1;
+                    break;
+                case Collections::TYPE_CONTENT_BLOCK_LAYOUT1:
+                    $homePageContentBlockLayout1 = FatCache::get('homePageContentBlockLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageContentBlockLayout1) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageContentBlockLayout1 = $tpl->render(false, false, '_partial/collection/content-block-layout-1.php', true, true);
+                    }
+                    FatCache::set('homePageContentBlockLayout1' . $collection['collection_id'] . $cacheKey, $homePageContentBlockLayout1, '.txt');
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageContentBlockLayout1;
+                    break;
+            }
+        }
+        $this->set('collectionTemplates', $collectionTemplates);
+
         $this->_template->render();
     }
 
@@ -232,6 +258,7 @@ class HomeController extends MyAppController
         $loggedUserId = FatUtility::int($loggedUserId);
 
         $productSrchObj = new ProductSearch($this->siteLangId);
+        $productSrchObj->setLocationBasedInnerJoin(false);
         $productSrchObj->setGeoAddress();
         $productSrchObj->joinProductToCategory();
         /* $productSrchObj->doNotCalculateRecords();
@@ -239,7 +266,7 @@ class HomeController extends MyAppController
         $productSrchObj->setDefinedCriteria();
         $productSrchObj->joinSellerSubscription($this->siteLangId, true);
         $productSrchObj->addSubscriptionValidCondition();
-        $productSrchObj->validateAndJoinDeliveryLocation();
+        $productSrchObj->validateAndJoinDeliveryLocation(false);
         // $productSrchObj->joinProductRating();
 
         if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
@@ -251,7 +278,7 @@ class HomeController extends MyAppController
         }
 
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $productSrchObj->addMultipleFields(array('product_id','selprod_id','IFNULL(product_name, product_identifier) as product_name','IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title','product_updated_on','special_price_found', 'splprice_display_list_price','splprice_display_dis_val','splprice_display_dis_type','theprice','selprod_price','selprod_stock','selprod_condition','prodcat_id','IFNULL(prodcat_name, prodcat_identifier) as prodcat_name','selprod_sold_count','IF(selprod_stock > 0, 1, 0) AS in_stock'));
+        $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock'));
         return $productSrchObj;
     }
 
@@ -286,18 +313,18 @@ class HomeController extends MyAppController
         if ($langId == FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) {
             $isDefaultLangId = true;
         }
-       
+
         if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1) {
             $langCodeArr = LANG_CODES_ARR;
             if (count($langCodeArr) > 1) {
                 $langIds = array_flip($langCodeArr);
-    
+
                 if (!empty($pathname)) {
                     $existingUrlLangCode = strtoupper(substr(ltrim($pathname, '/'), 0, 2));
                 } else {
                     $existingUrlLangCode = $langCodeArr[CommonHelper::getLangId()];
                 }
-                    
+
                 if (in_array($existingUrlLangCode, LANG_CODES_ARR)) {
                     // $existingUrlLangId = $langIds[$existingUrlLangCode];
                     $pathname = ltrim(substr(ltrim($pathname, '/'), 2), '/');
@@ -305,7 +332,7 @@ class HomeController extends MyAppController
                     // $existingUrlLangId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
                     $pathname = ltrim($pathname, '/');
                 }
-               
+
                 $srch = UrlRewrite::getSearchObject();
                 $srch->joinTable(UrlRewrite::DB_TBL, 'LEFT OUTER JOIN', 'temp.urlrewrite_original = ur.urlrewrite_original and temp.urlrewrite_lang_id = ' . $langId, 'temp');
                 $srch->doNotCalculateRecords();
@@ -313,22 +340,22 @@ class HomeController extends MyAppController
                 $srch->addMultipleFields(array('ifnull(temp.urlrewrite_custom, ur.urlrewrite_custom) customurl'));
                 $srch->addCondition('ur.' . UrlRewrite::DB_TBL_PREFIX . 'custom', '=', $pathname);
                 // $srch->addCondition('ur.' . UrlRewrite::DB_TBL_PREFIX . 'lang_id', '=', $existingUrlLangId);
-               
+
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
-                    
+
                 if (!empty($row)) {
-                    $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false) ;
+                    $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false);
 
                     if (false == $isDefaultLangId) {
-                        $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/' ;
+                        $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
                     }
                     $redirectUrl .=  $row['customurl'];
                 }
             }
-            
+
             if (empty($redirectUrl)) {
-                $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false) ;
+                $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false);
                 if (false == $isDefaultLangId) {
                     $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
                 }
@@ -339,8 +366,8 @@ class HomeController extends MyAppController
                 $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false) . ltrim($pathname, '/');
             }
         }
-      
-       
+
+
         $langId = FatUtility::int($langId);
         if (0 < $langId) {
             $languages = Language::getAllNames();
@@ -357,7 +384,7 @@ class HomeController extends MyAppController
         $cObj = Currency::getSearchObject($this->siteLangId, true);
         $cObj->addMultipleFields(
             array(
-            'currency_id', 'currency_code', 'IFNULL(curr_l.currency_name,curr.currency_code) as currency_name'
+                'currency_id', 'currency_code', 'IFNULL(curr_l.currency_name,curr.currency_code) as currency_name'
             )
         );
         $rs = $cObj->getResultSet();
@@ -392,16 +419,16 @@ class HomeController extends MyAppController
                 FatUtility::dieJsonError(Labels::getLabel('MSG_Unable_to_update_file', $langId));
             }
             $fileName = $langCode . '.json';
-            $filePath = Labels::JSON_FILE_DIR_NAME . '/' . Labels::TYPE_APP . '/' . $fileName;
+            $filePath = Labels::JSON_FILE_DIR_NAME . '/' . Labels::TYPE_APP . '/AP/' . $fileName;
 
             AttachedFile::downloadAttachment($filePath, $fileName);
             exit;
         }
 
         $data = array(
-           'languageCode' => $langCode,
-           'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $langId)),
-           'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
+            'languageCode' => $langCode,
+            'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $langId)),
+            'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
         );
 
         $this->set('data', $data);
@@ -444,7 +471,7 @@ class HomeController extends MyAppController
         $userSrchObj->doNotCalculateRecords();
         $userSrchObj->doNotLimitRecords();
         $userSrchObj->addCondition('user_referral_code', '=', $referralCode);
-        $userSrchObj->addMultipleFields(array('user_id', 'user_referral_code' ));
+        $userSrchObj->addMultipleFields(array('user_id', 'user_referral_code'));
         $rs = $userSrchObj->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -464,7 +491,7 @@ class HomeController extends MyAppController
         $userSrchObj->doNotCalculateRecords();
         $userSrchObj->doNotLimitRecords();
         $userSrchObj->addCondition('user_referral_code', '=', $userReferralCode);
-        $userSrchObj->addMultipleFields(array('user_id', 'user_referral_code' ));
+        $userSrchObj->addMultipleFields(array('user_id', 'user_referral_code'));
         $rs = $userSrchObj->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -486,7 +513,7 @@ class HomeController extends MyAppController
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $langId . '_' . $this->siteCurrencyId . '_' . $apiCall . '_' . serialize($geoAddress);
-                
+
         $collectionCache = FatCache::get('collectionCache_' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
 
         if ($collectionCache) {
@@ -512,54 +539,54 @@ class HomeController extends MyAppController
         $collections = array();
 
         $productCatSrchObj = ProductCategory::getSearchObject(false, $langId);
-        $productCatSrchObj->doNotCalculateRecords();
+        $productCatSrchObj->addOrder('m.prodcat_active', 'DESC');
         $productCatSrchObj->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description'));
 
         $collectionObj = new CollectionSearch();
         $collectionObj->joinCollectionRecords();
-        $collectionObj->addMultipleFields(array( 'ctr_record_id' ));
+        $collectionObj->addMultipleFields(array('ctr_record_id', 'ctr_display_order'));
         $collectionObj->addCondition('ctr_record_id', '!=', 'NULL');
         $i = 0;
         /* $sponsoredShops = $this->getSponsoredShops($productSrchObj);
         $sponsoredProds = $this->getSponsoredProducts($productSrchObj); */
-        
+
         foreach ($collectionsArr as $collection_id => $collection) {
             if (true === MOBILE_APP_API_CALL && 0 < $collection['collection_display_media_only'] && !in_array($collection['collection_type'], Collections::COLLECTION_WITHOUT_MEDIA)) {
                 $imgUpdatedOn = Collections::getAttributesById($collection_id, 'collection_img_updated_on');
                 $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
 
-                $collection['collection_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'collectionReal', array( $collection_id, $langId,  'ORIGINAL', AttachedFile::FILETYPE_COLLECTION_IMAGE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $collection['collection_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'collectionReal', array($collection_id, $langId,  'ORIGINAL', AttachedFile::FILETYPE_COLLECTION_IMAGE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 $collections[] = $collection;
                 $i++;
                 continue;
             }
-        
+
             switch ($collection['collection_type']) {
                 case Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS:
-                        if (true === MOBILE_APP_API_CALL) {
-                            $collections[$i] = $collection;
-                            $sponsoredProdsInCollection[$i] = $collection['collection_id'];
-                        } else {
-                            $collections[$collection['collection_id']] = $collection;
-                            $sponsoredProdsInCollection[$collection['collection_id']] = $collection['collection_id'];
-                        }
+                    if (true === MOBILE_APP_API_CALL) {
+                        $collections[$i] = $collection;
+                        $sponsoredProdsInCollection[$i] = $collection['collection_id'];
+                    } else {
+                        $collections[$collection['collection_id']] = $collection;
+                        $sponsoredProdsInCollection[$collection['collection_id']] = $collection['collection_id'];
+                    }
                     break;
                 case Collections::COLLECTION_TYPE_SPONSORED_SHOPS:
-                        if (true === MOBILE_APP_API_CALL) {
-                            $collections[$i] = $collection;
-                            $sponsoredShopsInCollection[$i] = $collection['collection_id'];
-                        } else {
-                            $collections[$collection['collection_id']] = $collection;
-                            $sponsoredShopsInCollection[$collection['collection_id']] = $collection['collection_id'];
-                        }
-                    
+                    if (true === MOBILE_APP_API_CALL) {
+                        $collections[$i] = $collection;
+                        $sponsoredShopsInCollection[$i] = $collection['collection_id'];
+                    } else {
+                        $collections[$collection['collection_id']] = $collection;
+                        $sponsoredShopsInCollection[$collection['collection_id']] = $collection['collection_id'];
+                    }
+
                     break;
                 case Collections::COLLECTION_TYPE_BANNER:
                     /* $banners = $this->getBanners($collection_id); */
                     $banners = BannerLocation::getPromotionalBanners($collection_id, $langId);
                     if (true === MOBILE_APP_API_CALL) {
                         $collections[$i] = $collection;
-                        $collections[$i]['banners'] = $banners;
+                        $collections[$i]['banners'] = is_array($banners) && 0 < count($banners) ? $banners : (object) [];
                     } else {
                         $collections[$collection['collection_id']] = $collection;
                         $collections[$collection['collection_id']]['banners'] = $banners;
@@ -568,39 +595,45 @@ class HomeController extends MyAppController
                 case Collections::COLLECTION_TYPE_PRODUCT:
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
-                    $rs = $tempObj->getResultSet();
-                    if (!$productIds = $db->fetchAll($rs, 'ctr_record_id')) {
-                        continue 2;
-                    }
-
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
+                    //$rs = $tempObj->getResultSet();
+                    // if (!$productIds = $db->fetchAll($rs, 'ctr_record_id')) {
+                    //     continue 2;
+                    // }
                     /* fetch Products data[ */
-                    $orderBy = 'ASC';
-                    if ($collection['collection_criteria'] == Collections::COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW) {
-                        $orderBy = 'DESC';
-                    }
-
+                    //$orderBy = 'ASC';
+                    // if ($collection['collection_criteria'] == Collections::COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW) {
+                    //     $orderBy = 'DESC';
+                    // }
                     $productSrchTempObj = clone $productSrchObj;
+                    $productSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'selprod_id = ctr.ctr_record_id', 'ctr');
                     if (true === MOBILE_APP_API_CALL) {
                         $productSrchTempObj->joinProductRating();
                         $productSrchTempObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
                     }
-                    $productSrchTempObj->addCondition('selprod_id', 'IN', array_keys($productIds));
+                    //$productSrchTempObj->addCondition('selprod_id', 'IN', array_keys($productIds));
                     $productSrchTempObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
-                    $productSrchTempObj->addOrder('theprice', $orderBy);
+                    //$productSrchTempObj->addOrder('theprice', $orderBy);
                     $productSrchTempObj->joinSellers();
                     $productSrchTempObj->joinSellerSubscription($langId);
                     $productSrchTempObj->addGroupBy('selprod_id');
+                    $productSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $productSrchTempObj->setPageSize($collection['collection_primary_records']);
                     $rs = $productSrchTempObj->getResultSet();
 
+                    $recordCount = $productSrchTempObj->recordCount();
+                    if (empty($recordCount)) {
+                        continue 2;
+                    }
                     if (true === MOBILE_APP_API_CALL) {
                         $collections[$i] = $collection;
                         $collections[$i]['products'] = $db->fetchAll($rs);
-                        $collections[$i]['totProducts'] = $productSrchTempObj->recordCount();
+                        $collections[$i]['totProducts'] = $recordCount;
                     } else {
                         $collections[$collection['collection_id']] = $collection;
                         $collections[$collection['collection_id']]['products'] = $db->fetchAll($rs, 'selprod_id');
-                        $collections[$collection['collection_id']]['totProducts'] = $productSrchTempObj->recordCount();
+                        $collections[$collection['collection_id']]['totProducts'] = $recordCount;
                     }
                     /* ] */
                     unset($tempObj);
@@ -613,18 +646,25 @@ class HomeController extends MyAppController
                     }
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
-                    $tempObj->setPageSize($collection['collection_primary_records']);
-
-                    $rs = $tempObj->getResultSet();
-                    if (!$categoryIds = $db->fetchAll($rs, 'ctr_record_id')) {
-                        continue 2;
-                    }
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
+                    // $tempObj->setPageSize($collection['collection_primary_records']);
+                    // $rs = $tempObj->getResultSet();
+                    // if (!$categoryIds = $db->fetchAll($rs, 'ctr_record_id')) {
+                    //     continue 2;
+                    // }
 
                     /* fetch Categories data[ */
                     $productCatSrchTempObj = clone $productCatSrchObj;
-                    $productCatSrchTempObj->addCondition('prodcat_id', 'IN', array_keys($categoryIds));
+                    $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
+                    //$productCatSrchTempObj->addCondition('prodcat_id', 'IN', array_keys($categoryIds));
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+                    $productCatSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $rs = $productCatSrchTempObj->getResultSet();
+                    $recordCount = $productCatSrchTempObj->recordCount();
+                    if (empty($recordCount)) {
+                        continue 2;
+                    }
                     /* ] */
                     if (true === MOBILE_APP_API_CALL) {
                         $collections[$i] = $collection;
@@ -636,13 +676,18 @@ class HomeController extends MyAppController
                         while ($catData = $db->fetch($rs)) {
                             /* fetch Sub-Categories[ */
                             $subCategorySrch = clone $productCatSrchObj;
+                            $subCategorySrch->doNotCalculateRecords();
+                            //$subCategorySrch->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
+                            //$subCategorySrch->addCondition('prodcat_id', '=', $catData['prodcat_id']);
                             $subCategorySrch->addCondition('prodcat_parent', '=', $catData['prodcat_id']);
                             $subCategorySrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+                            //$subCategorySrch->addOrder('ctr.ctr_record_id', 'ASC');
+                            $subCategorySrch->setPageSize(5);
                             $Catrs = $subCategorySrch->getResultSet();
 
                             if (true === MOBILE_APP_API_CALL) {
                                 $collections[$i]['categories'][$counter] = $catData;
-                            // $collections[$i]['categories'][$counter]['subCategories'] = $db->fetchAll($Catrs);
+                                // $collections[$i]['categories'][$counter]['subCategories'] = $db->fetchAll($Catrs);
                             } else {
                                 $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']] = $catData;
                                 $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']]['subCategories'] = $db->fetchAll($Catrs);
@@ -654,8 +699,10 @@ class HomeController extends MyAppController
                         while ($catData = $db->fetch($rs)) {
                             /* fetch Product data[ */
                             $productShopSrchTempObj = clone $productSrchObj;
+                            $productShopSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
                             $productShopSrchTempObj->addCondition('prodcat_id', '=', $catData['prodcat_id']);
-                            $productShopSrchTempObj->addOrder('in_stock', 'DESC');
+                            $productShopSrchTempObj->addOrder('ctr.ctr_record_id', 'ASC');
+                            //$productShopSrchTempObj->addOrder('in_stock', 'DESC');
                             $productShopSrchTempObj->addGroupBy('selprod_product_id');
                             $productShopSrchTempObj->setPageSize(7);
                             $Prs = $productShopSrchTempObj->getResultSet();
@@ -664,7 +711,7 @@ class HomeController extends MyAppController
                             }
                             if (true === MOBILE_APP_API_CALL) {
                                 $collections[$i]['categories'][$counter] = $catData;
-                            // $collections[$i]['categories'][$counter]['products'] = $db->fetchAll($Prs);
+                                // $collections[$i]['categories'][$counter]['products'] = $db->fetchAll($Prs);
                             } else {
                                 $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']]['catData'] = $catData;
                                 $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']]['products'] = $db->fetchAll($Prs);
@@ -683,31 +730,38 @@ class HomeController extends MyAppController
                 case Collections::COLLECTION_TYPE_SHOP:
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
                     // $tempObj->setPageSize( $collection['collection_primary_records'] );
-                    $rs = $tempObj->getResultSet();
-
-                    if (!$shopIds = $db->fetchAll($rs, 'ctr_record_id')) {
-                        continue 2;
-                    }
-
+                    // $rs = $tempObj->getResultSet();
+                    // if (!$shopIds = $db->fetchAll($rs, 'ctr_record_id')) {
+                    //     continue 2;
+                    // }
                     $shopObj = new ShopSearch($langId);
                     $shopObj->setDefinedCriteria($langId);
                     $shopObj->joinSellerSubscription();
-                    $shopObj->addCondition('shop_id', 'IN', array_keys($shopIds));
+                    //$shopObj->addCondition('shop_id', 'IN', array_keys($shopIds));
+                    $shopObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'shop_id = ctr.ctr_record_id', 'ctr');
+
                     if (false === MOBILE_APP_API_CALL) {
                         $shopObj->setPageSize($collection['collection_primary_records']);
                     }
-                    $shopObj->addMultipleFields(array( 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
-                    $rs = $shopObj->getResultSet();
+                    $shopObj->addMultipleFields(array('ctr.ctr_display_order', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
+                    $shopObj->addOrder('ctr.ctr_display_order', 'ASC');
 
+                    $rs = $shopObj->getResultSet();
+                    $recordCount = $shopObj->recordCount();
+                    if (empty($recordCount)) {
+                        continue 2;
+                    }
                     if (true === MOBILE_APP_API_CALL) {
                         $collections[$i] = $collection;
-                        $collections[$i]['totShops'] = $shopObj->recordCount();
+                        $collections[$i]['totShops'] = $recordCount;
                     } else {
                         $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['totShops'] = $shopObj->recordCount();
+                        $collections[$collection['collection_id']]['totShops'] = $recordCount;
                     }
-
+                    //CommonHelper::printArray($shopsData, true);
                     $counter = 0;
                     while ($shopsData = $db->fetch($rs)) {
                         /* fetch Shop data[ */
@@ -743,44 +797,55 @@ class HomeController extends MyAppController
                 case Collections::COLLECTION_TYPE_BRAND:
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
-                    $rs = $tempObj->getResultSet();
-                    $brandIds = $db->fetchAll($rs, 'ctr_record_id');
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
+                    //$tempObj->addOrder('ctr_display_order', 'ASC');
+                    // $rs = $tempObj->getResultSet();
+                    // $brandIds = $db->fetchAll($rs, 'ctr_record_id');
 
-                    if (empty($brandIds)) {
-                        continue 2;
-                    }
+                    // if (empty($brandIds)) {
+                    //     continue 2;
+                    // }
 
                     /* fetch Brand data[ */
                     $brandSearchObj = Brand::getSearchObject($langId, true, true);
                     $brandSearchTempObj = clone $brandSearchObj;
+                    $brandSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'brand_id = ctr.ctr_record_id', 'ctr');
                     $brandSearchTempObj->addMultipleFields(array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'));
-                    $brandSearchTempObj->addCondition('brand_id', 'IN', array_keys($brandIds));
+                    //$brandSearchTempObj->addCondition('brand_id', 'IN', array_keys($brandIds));
+                    $brandSearchTempObj->addOrder('ctr_display_order', 'ASC');
                     if (false === MOBILE_APP_API_CALL) {
                         $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
                     }
                     $rs = $brandSearchTempObj->getResultSet();
+                    $brands = $db->fetchAll($rs);
+                    if (empty($brands)) {
+                        continue 2;
+                    }
+
                     /* ] */
                     if (true === MOBILE_APP_API_CALL) {
                         $collections[$i] = $collection;
                         $collections[$i]['totBrands'] = $brandSearchTempObj->recordCount();
-                        $collections[$i]['brands'] = $db->fetchAll($rs);
+                        $collections[$i]['brands'] = $brands;
                     } else {
                         $collections[$collection['collection_id']] = $collection;
                         $collections[$collection['collection_id']]['totBrands'] = $brandSearchTempObj->recordCount();
-                        $collections[$collection['collection_id']]['brands'] = $db->fetchAll($rs);
+                        $collections[$collection['collection_id']]['brands'] = $brands;
                     }
-
                     unset($brandSearchTempObj);
                     unset($tempObj);
                     break;
                 case Collections::COLLECTION_TYPE_BLOG:
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
-                    $rs = $tempObj->getResultSet();
-                    $blogPostIds = $db->fetchAll($rs, 'ctr_record_id');
-                    if (empty($blogPostIds)) {
-                        continue 2;
-                    }
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
+                    // $rs = $tempObj->getResultSet();
+                    // $blogPostIds = $db->fetchAll($rs, 'ctr_record_id');
+                    // if (empty($blogPostIds)) {
+                    //     continue 2;
+                    // }
 
                     /* fetch Blog data[ */
                     $attr = [
@@ -790,19 +855,23 @@ class HomeController extends MyAppController
                         'post_updated_on',
                         'post_updated_on',
                         'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames',
-                        'post_short_description',
                         'post_description'
                     ];
                     $blogSearchObj = BlogPost::getSearchObject($langId, true, true);
                     $blogSearchTempObj = clone $blogSearchObj;
                     $blogSearchTempObj->addMultipleFields($attr);
-                    $blogSearchTempObj->addCondition('post_id', 'IN', array_keys($blogPostIds));
+                    $blogSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'post_id = ctr.ctr_record_id', 'ctr');
+                    //$blogSearchTempObj->addCondition('post_id', 'IN', array_keys($blogPostIds));
+                    $blogSearchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     if (false === MOBILE_APP_API_CALL) {
                         $blogSearchTempObj->setPageSize($collection['collection_primary_records']);
                     }
                     $blogSearchTempObj->addGroupBy('post_id');
                     $rs = $blogSearchTempObj->getResultSet();
                     $blogPostsDetail = $db->fetchAll($rs);
+                    if (empty($blogPostsDetail)) {
+                        continue 2;
+                    }
                     /* ] */
                     if (true === MOBILE_APP_API_CALL) {
                         array_walk($blogPostsDetail, function (&$value, &$key) {
@@ -819,6 +888,137 @@ class HomeController extends MyAppController
 
                     unset($blogSearchTempObj);
                     unset($tempObj);
+                    break;
+                case Collections::COLLECTION_TYPE_FAQ:
+                    $tempObj = clone $collectionObj;
+                    $tempObj->addCondition('collection_id', '=', $collection_id);
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
+                    //$tempObj->addOrder('ctr_display_order', 'ASC');
+                    // $res = $tempObj->getResultSet();
+                    // $faqIds = $db->fetchAll($res, 'ctr_record_id');
+                    // if (empty($faqIds)) {
+                    //     continue 2;
+                    // }
+
+                    /* fetch FAQ data[ */
+                    $attr = [
+                        'faq_id', 'faqcat_id', 'IFNULL(faq_title, faq_identifier) as faq_title', 'faq_content', 'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
+                    ];
+                    $faqSearchObj = Faq::getSearchObject($langId);
+                    $faqSearchTempObj = clone $faqSearchObj;
+                    $faqSearchTempObj->joinTable(
+                        FaqCategory::DB_TBL,
+                        'INNER JOIN',
+                        'faq_faqcat_id = faqcat_id',
+                        'fc'
+                    );
+                    $faqSearchTempObj->joinTable(FaqCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'faqcat_id = fc.' . FaqCategory::tblFld('id') . ' and fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'fc_l');
+                    $faqSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'faq_id = ctr.ctr_record_id', 'ctr');
+                    $faqSearchTempObj->addMultipleFields($attr);
+                    $faqSearchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
+                    //$faqSearchTempObj->addCondition('faq_id', 'IN', array_keys($faqIds));
+                    $faqSearchTempObj->addGroupBy('faq_id');
+                    $res = $faqSearchTempObj->getResultSet();
+                    $faqsDetail = $db->fetchAll($res);
+                    if (empty($faqsDetail)) {
+                        continue 2;
+                    }
+                    /* ] */
+                    if (true === MOBILE_APP_API_CALL) {
+                        $collections[$i] = $collection;
+                        $collections[$i]['totFaqs'] = $faqSearchTempObj->recordCount();
+                        $collections[$i]['faqs'] = $faqsDetail;
+                    } else {
+                        $collections[$collection['collection_id']] = $collection;
+                        $collections[$collection['collection_id']]['totFaqs'] = $faqSearchTempObj->recordCount();
+                        $collections[$collection['collection_id']]['faqs'] = $faqsDetail;
+                    }
+
+                    unset($faqSearchTempObj);
+                    unset($tempObj);
+                    break;
+
+                case Collections::COLLECTION_TYPE_TESTIMONIAL:
+                    $tempObj = clone $collectionObj;
+                    $tempObj->addCondition('collection_id', '=', $collection_id);
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
+                    /*  $res = $tempObj->getResultSet();
+                    $testimonialIds = $db->fetchAll($res, 'ctr_record_id');
+                    if (empty($testimonialIds)) {
+                        continue 2;
+                    } */
+
+                    /* fetch Testimonial data[ */
+                    $attr = [
+                        'testimonial_id', 'testimonial_user_name', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title', 'testimonial_text'
+                    ];
+                    $testimonialSrchObj = Testimonial::getSearchObject($langId, true);
+                    $testimonialSrchObj = clone $testimonialSrchObj;
+                    $testimonialSrchObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'testimonial_id = ctr.ctr_record_id', 'ctr');
+                    $testimonialSrchObj->addMultipleFields($attr);
+                    //$testimonialSrchObj->addCondition('testimonial_id', 'IN', array_keys($testimonialIds));
+                    $testimonialSrchObj->addGroupBy('testimonial_id');
+                    $testimonialSrchObj->addOrder('ctr.ctr_display_order', 'ASC');
+                    $testimonialSrchObj->setPageSize(Collections::LIMIT_TESTIMONIAL_LAYOUT1);
+                    $res = $testimonialSrchObj->getResultSet();
+                    $testimonialsDetail = $db->fetchAll($res);
+                    if (empty($testimonialsDetail)) {
+                        continue 2;
+                    }
+                    /* ] */
+                    if (true === MOBILE_APP_API_CALL) {
+                        $collections[$i] = $collection;
+                        $collections[$i]['totTestimonials'] = $testimonialSrchObj->recordCount();
+                        $collections[$i]['testimonials'] = $testimonialsDetail;
+                    } else {
+                        $collections[$collection['collection_id']] = $collection;
+                        $collections[$collection['collection_id']]['totTestimonials'] = $testimonialSrchObj->recordCount();
+                        $collections[$collection['collection_id']]['testimonials'] = $testimonialsDetail;
+                    }
+
+                    unset($testimonialSrchObj);
+                    unset($tempObj);
+                    break;
+
+                    /* case Collections::COLLECTION_TYPE_CONTENT_BLOCK:
+                    $srch = Extrapage::getSearchObject($langId, true);
+                    $srch->joinTable(
+                        Collections::DB_TBL_COLLECTION_TO_RECORDS, 'INNER JOIN', 'epage_id = ctr_record_id', 'ctr'
+                    );
+                    $srch->addCondition(Collections::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id', '=', $collection_id);
+                    $srch->addMultipleFields(array('epage_id', 'IFNULL(epage_label, epage_identifier) as epage_label', 'epage_content'));
+                    $res = $srch->getResultSet();
+                    $epageData = $db->fetch($res);
+                    if (true === MOBILE_APP_API_CALL) {
+                        $collections[$i] = $collection;
+                        $collections[$i]['epageContent'] = $epageData;
+                    } else {
+                        $collections[$collection['collection_id']] = $collection;
+                        $collections[$collection['collection_id']]['epageContent'] = $epageData;
+                    }
+
+                    unset($epageData);
+                    unset($tempObj);
+                    break; */
+                case Collections::COLLECTION_TYPE_REVIEWS:
+                    $collections[$i] = $collection;
+                    $collections[$i]['pendingForReviews'] = array();
+                    $loggedUserId = UserAuthentication::getLoggedUserId(true);
+                    if (0 < $loggedUserId && (FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0))) {
+                        $pendingForReviews = OrderProduct::pendingForReviews($loggedUserId, $this->siteLangId);
+                        if (is_array($pendingForReviews) && 0 < count($pendingForReviews)) {
+                            foreach ($pendingForReviews as $key => &$orderProduct) {
+                                $canSubmitFeedback = Orders::canSubmitFeedback($orderProduct['order_user_id'], $orderProduct['order_id'], $orderProduct['op_selprod_id']);
+                                if (false === $canSubmitFeedback) {
+                                    continue;
+                                }
+                                $orderProduct['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], "THUMB", $orderProduct['op_selprod_id'], 0, $this->siteLangId));
+                            }
+                            $collections[$i]['pendingForReviews'] = $pendingForReviews;
+                        }
+                    }
                     break;
             }
             $i++;
@@ -1125,23 +1325,23 @@ class HomeController extends MyAppController
         ];
 
         $data['languageLabels'] = [
-           'language_code' => $langCode,
-           'language_layout_direction' => Language::getLayoutDirection($this->siteLangId),
-           'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $this->siteLangId)),
-           'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
+            'language_code' => $langCode,
+            'language_layout_direction' => Language::getLayoutDirection($this->siteLangId),
+            'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $this->siteLangId)),
+            'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
         ];
 
         $data['appThemeSetting'] = [
-           'primaryThemeColor' => FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-           'primaryInverseThemeColor' => FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-           'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-           'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryThemeColor' => FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryInverseThemeColor' => FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
         ];
 
         $data['isWishlistEnable'] = FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1);
         $data['canSendSms'] = SmsArchive::canSendSms() ? 1 : 0;
         $data['canAddReview'] = FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 1);
-      
+
         $this->set('data', $data);
         $this->_template->render();
     }
@@ -1153,7 +1353,7 @@ class HomeController extends MyAppController
             LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         $detail = CommonHelper::getUrlTypeData($url);
-        $this->set('data', ['urlSegmentsDetail' => $detail]);
+        $this->set('data', ['urlSegmentsDetail' => (object) $detail]);
         $this->_template->render();
     }
 
@@ -1162,38 +1362,40 @@ class HomeController extends MyAppController
         $address = new Address();
         $lat = FatApp::getPostedData('lat', FatUtility::VAR_STRING, '');
         $lng = FatApp::getPostedData('lng', FatUtility::VAR_STRING, '');
-        
+
         $response = $address->getGeoData($lat, $lng);
         if (false === $response['status']) {
             FatUtility::dieJsonError($response['msg']);
         }
         FatUtility::dieJsonSuccess($response);
     }
-        
+
     public function pwaManifest()
     {
         $manifestFile = CONF_UPLOADS_PATH . '/manifest-' . $this->siteLangId . '.json';
         if (!file_exists($manifestFile)) {
-            $iconsArr = [36, 48, 57, 60, 70, 72, 76, 96, 114, 120, 144, 192, 152, 180, 150, 310, 512 ];
+            $iconsArr = [36, 48, 57, 60, 70, 72, 76, 96, 114, 120, 144, 192, 152, 180, 150, 310, 512];
             $websiteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->siteLangId, FatUtility::VAR_STRING, '');
 
             $srch = new MetaTagSearch($this->siteLangId);
             $cond = $srch->addCondition('meta_controller', '=', 'Home');
             $cond->attachCondition('meta_controller', '=', '', 'OR');
-            
+
             $cond1 = $srch->addCondition('meta_action', '=', 'index');
             $cond1->attachCondition('meta_action', '=', '', 'OR');
-            
+
             $srch->addOrder('meta_default', 'asc');
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $srch->addMultipleFields(array(
                 'meta_title',
-                'meta_keywords', 'meta_description', 'meta_other_meta_tags' ));
-            
+                'meta_keywords', 'meta_description', 'meta_other_meta_tags'
+            ));
+
             $rs = $srch->getResultSet();
             $metas = FatApp::getDb()->fetch($rs);
             $arr = array(
+                "display" => "standalone",
                 "name" => $websiteName,
                 "short_name" => $websiteName,
                 "description" => isset($metas['meta_description']) ? $metas['meta_description'] : $websiteName,
@@ -1203,7 +1405,7 @@ class HomeController extends MyAppController
                 "background_color" => isset($this->themeDetail[ThemeColor::TYPE_BODY]) ? '#' . $this->themeDetail[ThemeColor::TYPE_BODY] : '',
                 "theme_color" => isset($this->themeDetail[ThemeColor::TYPE_BRAND]) ? '#' . $this->themeDetail[ThemeColor::TYPE_BRAND] : '',
             );
-            
+
             foreach ($iconsArr as $key => $val) {
                 $iconUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'appleTouchIcon', array($this->siteLangId, $val . '-' . $val)), CONF_IMG_CACHE_TIME, '.png');
                 $icons = [

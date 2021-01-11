@@ -87,25 +87,27 @@ echo $frm->getFormTag(); ?>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="field-set">
-              <div class="field-wraper">
-                    <div class="field_cover">
-                        <label class="checkbox">
-                            <?php
-                                $fld = $frm->getField('cc_save_card');
-                                $fldHtml = $fld->getHTML();
-                                $fldHtml = str_replace("<label >", "", $fldHtml);
-                                $fldHtml = str_replace("</label>", "", $fldHtml);
-                                echo $fldHtml;
-                            ?>
-                            <i class="input-helper"></i> </label>
+    <?php $fld = $frm->getField('cc_save_card'); 
+    if (null != $fld) { ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="field-set">
+                <div class="field-wraper">
+                        <div class="field_cover">
+                            <label class="checkbox">
+                                <?php
+                                    $fldHtml = $fld->getHTML();
+                                    $fldHtml = str_replace("<label >", "", $fldHtml);
+                                    $fldHtml = str_replace("</label>", "", $fldHtml);
+                                    echo $fldHtml;
+                                ?>
+                                <i class="input-helper"></i> </label>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php } ?>
     <div class="row">
         <div class="col-md-12">
             <div class="field-set">
@@ -117,10 +119,10 @@ echo $frm->getFormTag(); ?>
                         <?php 
                             $btn = $frm->getField('btn_submit');
                             $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('L_Please_Wait..', $siteLangId));
-                            $btn->addFieldTagAttribute('class', "btn btn-primary");
+                            $btn->addFieldTagAttribute('class', "btn btn-brand");
                             echo $frm->getFieldHtml('btn_submit');
                         ?>
-                        <a href="javascript:void(0);" class="btn btn-outline-primary cancelCardForm-js"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
+                        <a href="<?php echo $cancelBtnUrl;  ?>" class="btn btn-outline-brand"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
                     </div>
                 </div>
             </div>

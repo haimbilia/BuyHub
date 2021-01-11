@@ -17,7 +17,7 @@ class ShipStationShipping extends ShippingServicesBase
     private const REQUEST_FULFILLMENTS = 5;
     private const REQUEST_GET_ORDER = 6;
     private const REQUEST_MARK_AS_SHIPPED = 7;
-    
+
     private $resp;
     private $endpoint = '';
 
@@ -25,7 +25,7 @@ class ShipStationShipping extends ShippingServicesBase
         'api_key',
         'api_secret_key'
     ];
-        
+
     /**
      * __construct
      *
@@ -38,7 +38,7 @@ class ShipStationShipping extends ShippingServicesBase
             $this->langId = CommonHelper::getLangId();
         }
     }
-        
+
     /**
      * init
      *
@@ -64,7 +64,7 @@ class ShipStationShipping extends ShippingServicesBase
         }
         return $this->getResponse();
     }
-    
+
     /**
      * getRates
      *
@@ -111,7 +111,7 @@ class ShipStationShipping extends ShippingServicesBase
 
         $orderTimestamp = strtotime($orderDetail['order_date_added']);
         $orderDate = date('Y-m-d', $orderTimestamp) . 'T' . date('H:i:s', $orderTimestamp) . '.0000000';
-        
+
         $taxCharged = 0;
         $orderInvoiceNumber = 0;
 
@@ -157,14 +157,14 @@ class ShipStationShipping extends ShippingServicesBase
         $this->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone']);
         $this->order['shipTo'] = $this->getAddress();
 
-        $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId);
+        $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $weightUnitName = ($orderDetail['op_product_weight_unit']) ? $weightUnitsArr[$orderDetail['op_product_weight_unit']] : '';
         $productWeightInOunce = Shipping::convertWeightInOunce($orderDetail['op_product_weight'], $weightUnitName);
 
         $this->setWeight($productWeightInOunce);
         $this->order['weight'] = $this->getWeight();
 
-        $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId);
+        $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId, true);
         $dimUnitName = ($orderDetail['op_product_dimension_unit']) ? $lengthUnitsArr[$orderDetail['op_product_dimension_unit']] : '';
 
         $lengthInCenti = Shipping::convertLengthInCenti($orderDetail['op_product_length'], $dimUnitName);
@@ -178,7 +178,7 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['items'] = [$this->getItem()];
         return $this->doRequest(self::REQUEST_CREATE_ORDER, $this->order); //Return bool
     }
-        
+
     /**
      * bindLabel - This function should be called after addOrder
      *
@@ -196,7 +196,7 @@ class ShipStationShipping extends ShippingServicesBase
      * @param  string $filename
      * @return void
      */
-    public function downloadLabel(string $labelData, string $filename = "label", bool $preview = false)
+    public function downloadLabel(string $labelData, string $filename = "label.pdf", bool $preview = false)
     {
         $disposition = (true === $preview ? 'inline' : 'attachment');
         header("Pragma: public");
@@ -205,13 +205,13 @@ class ShipStationShipping extends ShippingServicesBase
         header("Cache-Control: public");
         header("Content-Description: File Transfer");
         header("Content-Type: application/pdf");
-        header("Content-Disposition: " . $disposition . "; filename=" . $filename . '.pdf');
+        header("Content-Disposition: " . $disposition . "; filename=" . $filename);
         header("Content-Transfer-Encoding: binary");
-        
+
         echo base64_decode($labelData);
         die;
     }
-            
+
     /**
      * setAddress
      *
@@ -240,7 +240,7 @@ class ShipStationShipping extends ShippingServicesBase
         $this->address['phone'] = $phone;
         return true;
     }
-    
+
     /**
      * getAddress
      *
@@ -250,7 +250,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return empty($this->address) ? [] : $this->address;
     }
-          
+
     /**
      * setWeight
      *
@@ -276,7 +276,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return empty($this->weight) ? [] : $this->weight;
     }
-         
+
     /**
      * setDimensions
      *
@@ -307,7 +307,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return empty($this->dimensions) ? [] : $this->dimensions;
     }
-         
+
     /**
      * setItem
      *
@@ -348,7 +348,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->doRequest(self::REQUEST_FULFILLMENTS, $requestParam);
     }
-        
+
     /**
      * loadOrder
      *
@@ -370,7 +370,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->doRequest(self::REQUEST_MARK_AS_SHIPPED, $requestParam);
     }
-        
+
     /**
      * doRequest
      *
@@ -405,15 +405,15 @@ class ShipStationShipping extends ShippingServicesBase
                     $this->markAsShipped($requestParam);
                     break;
             }
-            
-            if (array_key_exists('Message', $this->getResponse(true))) {
+
+            if (array_key_exists('Message', (array)$this->getResponse(true))) {
                 $this->error = (true === $formatError) ? $this->getResponse(true) : $this->resp;
                 if (true === $formatError) {
                     $this->error = $this->formatError();
                 }
                 return false;
             }
-
+            
             return true;
         } catch (Exception $e) {
             $this->error = $e->getMessage();

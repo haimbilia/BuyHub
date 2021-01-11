@@ -1,5 +1,6 @@
 <?php
-use Aws\S3\S3Client;  
+
+use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
 class AttachedFile extends MyAppModel
@@ -13,7 +14,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_SELLER_APPROVAL_FILE = 3;
     public const FILETYPE_SHOP_LOGO = 4;
     public const FILETYPE_SHOP_BANNER = 5;
-    
+
     public const FILETYPE_PAYMENT_METHOD = 6;
 
     public const FILETYPE_USER_IMAGE = 7;
@@ -72,6 +73,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_APP_LOGO = 56;
     public const FILETYPE_PUSH_NOTIFICATION_IMAGE = 57;
     public const FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE = 58;
+    public const FILETYPE_META_IMAGE = 59;
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -131,24 +133,24 @@ class AttachedFile extends MyAppModel
     public static function getFileTypeArray($langId)
     {
         return $arr = array(
-        static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_Product_Category_Image', $langId),
-        static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_Category_Icon', $langId),
-        static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Category_Image', $langId),
-        static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-        static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_Category_Banner_Seller', $langId),
+            static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_Product_Category_Image', $langId),
+            static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_Category_Icon', $langId),
+            static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Category_Image', $langId),
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
+            static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_Category_Banner_Seller', $langId),
         );
         return $arr;
     }
-	
-	public static function getImgAttrTypeArray($langId)
+
+    public static function getImgAttrTypeArray($langId)
     {
         return $arr = array(
-        static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_Products', $langId),
-        static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_Brand_Logo', $langId),
-        static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_Brand_Banner', $langId),
-        /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Categories', $langId), */
-        static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-        static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_Blogs', $langId),
+            static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_Products', $langId),
+            static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_Brand_Logo', $langId),
+            static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_Brand_Banner', $langId),
+            /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Categories', $langId), */
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
+            static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_Blogs', $langId),
         );
         return $arr;
     }
@@ -156,8 +158,8 @@ class AttachedFile extends MyAppModel
     public static function getRatioTypeArray($langId)
     {
         return $arr = array(
-        static::RATIO_TYPE_SQUARE => Labels::getLabel('LBL_1:1', $langId),
-        static::RATIO_TYPE_RECTANGULAR => Labels::getLabel('LBL_16:9', $langId)
+            static::RATIO_TYPE_SQUARE => Labels::getLabel('LBL_1:1', $langId),
+            static::RATIO_TYPE_RECTANGULAR => Labels::getLabel('LBL_16:9', $langId)
         );
         return $arr;
     }
@@ -249,7 +251,23 @@ class AttachedFile extends MyAppModel
             reset($data);
             return current($data);
         }
-        return null;
+
+        return [
+            'afile_id' => -1,
+            'afile_type' => 0,
+            'afile_record_id' => -1,
+            'afile_record_subid' => 0,
+            'afile_lang_id' => 0,
+            'afile_screen' => 0,
+            'afile_physical_path' => '',
+            'afile_name' => '',
+            'afile_attribute_title' => '',
+            'afile_attribute_alt' => '',
+            'afile_aspect_ratio' => 0,
+            'afile_display_order' => 0,
+            'afile_downloaded_times' => 0,
+            'afile_updated_at' => '',
+        ];
     }
 
     public function validateFile($file, $name, $defaultLangIdForErrors)
@@ -262,10 +280,12 @@ class AttachedFile extends MyAppModel
                 return false;
             }
 
-            $fileMimeType = mime_content_type($file);
-            if (false === in_array($fileMimeType, applicationConstants::allowedMimeTypes())) {
-                $this->error = Labels::getLabel('MSG_INVALID_FILE_MIME_TYPE', $defaultLangIdForErrors);
-                return false;
+            if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
+                $fileMimeType = mime_content_type($file);
+                if (false === in_array($fileMimeType, applicationConstants::allowedMimeTypes())) {
+                    $this->error = Labels::getLabel('MSG_INVALID_FILE_MIME_TYPE', $defaultLangIdForErrors);
+                    return false;
+                }
             }
         } else {
             $this->error = Labels::getLabel('MSG_NO_FILE_UPLOADED', $defaultLangIdForErrors);
@@ -291,6 +311,13 @@ class AttachedFile extends MyAppModel
         $path = $path . $date_wise_path;
 
         $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9]/', '', $name);
+        if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
+            $fileExt = pathinfo($name, PATHINFO_EXTENSION);
+            $fileExt = strtolower($fileExt);
+            if ('zip' == $fileExt) {
+                $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9.]/', '', $name);
+            }
+        }
 
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
@@ -305,6 +332,9 @@ class AttachedFile extends MyAppModel
             return false;
         }
 
+        if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
+            $saveName = preg_replace('/[^a-zA-Z0-9-]/', '', $saveName);
+        }
         $fileLoc = $date_wise_path . $saveName;
 
         return $this->updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord, $aspectRatio);
@@ -350,16 +380,17 @@ class AttachedFile extends MyAppModel
 
     private function updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord, $aspectRatio = 0)
     {
+        $defaultLangIdForErrors = ($langId == 0) ? $this->commonLangId : $langId;
         $this->assignValues(
             array(
-            'afile_type' => $fileType,
-            'afile_record_id' => $recordId,
-            'afile_record_subid' => $recordSubid,
-            'afile_physical_path' => $fileLoc,
-            'afile_name' => $name,
-            'afile_lang_id' => $langId,
-            'afile_screen' => $screen,
-            'afile_aspect_ratio' => $aspectRatio
+                'afile_type' => $fileType,
+                'afile_record_id' => $recordId,
+                'afile_record_subid' => $recordSubid,
+                'afile_physical_path' => $fileLoc,
+                'afile_name' => $name,
+                'afile_lang_id' => $langId,
+                'afile_screen' => $screen,
+                'afile_aspect_ratio' => $aspectRatio
             )
         );
 
@@ -391,8 +422,8 @@ class AttachedFile extends MyAppModel
             $db->deleteRecords(
                 static::DB_TBL,
                 array(
-                'smt' => 'afile_type = ? AND afile_record_id = ? AND afile_record_subid = ? AND afile_lang_id = ?  AND afile_id != ? AND afile_screen = ?',
-                'vals' => array($fileType, $recordId, $recordSubid, $langId, $this->mainTableRecordId, $screen)
+                    'smt' => 'afile_type = ? AND afile_record_id = ? AND afile_record_subid = ? AND afile_lang_id = ?  AND afile_id != ? AND afile_screen = ?',
+                    'vals' => array($fileType, $recordId, $recordSubid, $langId, $this->mainTableRecordId, $screen)
                 )
             );
         }
@@ -446,12 +477,13 @@ class AttachedFile extends MyAppModel
     public static function displayImage($image_name, $w, $h, $no_image = '', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
     {
         ob_end_clean();
+        ini_set('memory_limit', '-1');
         if ($no_image == '') {
             $no_image = 'images/defaults/no_image.jpg';
         } else {
             $no_image = 'images/defaults/' . $no_image;
         }
-		
+
         $originalImageName = $image_name;
 
         if (trim($uploadedFilePath) != '') {
@@ -505,7 +537,7 @@ class AttachedFile extends MyAppModel
                         $fileContent = file_get_contents($imagePath);
                         FatCache::set($imagePath, $fileContent, '.jpg');
                     }
-                    
+
                     $tempPath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
                     $img = new ImageResize($tempPath);
                 } else {
@@ -545,6 +577,7 @@ class AttachedFile extends MyAppModel
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_end_clean();
             ob_start();
+            ini_set('memory_limit', '-1');
             static::setContentType($imagePath, $fileMimeType);
             if ($imageCompression) {
                 $img->displayImage(80, false);
@@ -584,9 +617,9 @@ class AttachedFile extends MyAppModel
     {
         if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
             if (empty($fileMimeType)) {
-                $fileMimeType = mime_content_type($imagePath); 
+                $fileMimeType = mime_content_type($imagePath);
             }
-            
+
             if ($fileMimeType != '') {
                 header("content-type: " . $fileMimeType);
             } else {
@@ -597,9 +630,9 @@ class AttachedFile extends MyAppModel
 
         if (substr($imagePath, strlen($imagePath) - 3, strlen($imagePath)) == "svg") {
             header("Content-type: image/svg+xml");
-        }else {
+        } else {
             header("content-type: image/jpeg");
-        }   
+        }
     }
 
     public static function setLastModified($image_name)
@@ -651,12 +684,12 @@ class AttachedFile extends MyAppModel
         if (empty($image_name) || !file_exists($uploadedFilePath . $image_name)) {
             $imagePath = $no_image;
         }
-        
+
         if (strpos($_SERVER['REQUEST_URI'], '?t=') === false) {
             $filemtime = filemtime($imagePath);
             $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
         }
-       
+
         static::setHeaders();
 
         static::checkModifiedHeader($imagePath);
@@ -762,7 +795,7 @@ class AttachedFile extends MyAppModel
             return;
         }
 
-        $name = substr(preg_replace('/[^a-zA-Z0-9\/\-\_\.]/', '', basename($url)), 50);
+        $name = substr(preg_replace('/[^a-zA-Z0-9\/\-\_\.]/', '', basename($url)), 0, 50);
         $path = CONF_UPLOADS_PATH;
 
         /* files path[ */
@@ -806,15 +839,15 @@ class AttachedFile extends MyAppModel
         $langId = $arr['afile_lang_id'];
         $screen = $arr['afile_screen'];
         $data = array(
-        'afile_type' => $fileType,
-        'afile_record_id' => $recordId,
-        'afile_record_subid' => $recordSubid,
-        'afile_physical_path' => $date_wise_path . $saveName,
-        'afile_lang_id' => $langId,
-        'afile_screen' => $arr['afile_screen'],
-        'afile_display_order' => $arr['afile_display_order'],
-        'afile_name' => $name,
-        'afile_updated_at' => date('Y-m-d H:i:s'),
+            'afile_type' => $fileType,
+            'afile_record_id' => $recordId,
+            'afile_record_subid' => $recordSubid,
+            'afile_physical_path' => $date_wise_path . $saveName,
+            'afile_lang_id' => $langId,
+            'afile_screen' => $arr['afile_screen'],
+            'afile_display_order' => $arr['afile_display_order'],
+            'afile_name' => $name,
+            'afile_updated_at' => date('Y-m-d H:i:s'),
         );
 
         $db = FatApp::getDb();
@@ -822,8 +855,8 @@ class AttachedFile extends MyAppModel
             $db->deleteRecords(
                 static::DB_TBL,
                 array(
-                'smt' => 'afile_type = ? AND afile_record_id = ? AND afile_record_subid = ? AND afile_lang_id = ?  AND afile_screen = ?',
-                'vals' => array($fileType, $recordId, $recordSubid, $langId, $screen)
+                    'smt' => 'afile_type = ? AND afile_record_id = ? AND afile_record_subid = ? AND afile_lang_id = ?  AND afile_screen = ?',
+                    'vals' => array($fileType, $recordId, $recordSubid, $langId, $screen)
                 )
             );
         }
@@ -845,7 +878,7 @@ class AttachedFile extends MyAppModel
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+        // curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 200);
         curl_setopt($ch, CURLOPT_AUTOREFERER, false);
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -936,22 +969,22 @@ class AttachedFile extends MyAppModel
     }
 
     public static function registerS3ClientStream()
-     {
-       if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
-           return;
-       }
+    {
+        if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
+            return;
+        }
 
-       if (!defined('S3_KEY')) {
-           trigger_error('S3 Settings not found.', E_USER_ERROR);
-       }
-       
-       $client = S3Client::factory([
-                   'credentials' => ['key' => S3_KEY, 'secret' => S3_SECRET],
-                   'region' => S3_REGION,
-                   'version' => 'latest'
-       ]);
+        if (!defined('S3_KEY')) {
+            trigger_error('S3 Settings not found.', E_USER_ERROR);
+        }
+
+        $client = S3Client::factory([
+            'credentials' => ['key' => S3_KEY, 'secret' => S3_SECRET],
+            'region' => S3_REGION,
+            'version' => 'latest'
+        ]);
         $client->registerStreamWrapper();
-     }
+    }
 
     public static function setTimeParam($dateTime)
     {

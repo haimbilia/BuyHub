@@ -1,12 +1,45 @@
 $(document).ready(function(){
-	listCartProducts(2);
+	var type = $('input[name="fulfillment_type"]:checked').val();
+	listCartProducts(type);
 });
 (function() {
 	listCartProducts = function(fulfilmentType = 2){
+		if(fulfilmentType == 2){
+            $( "#shipping" ).prop( "checked", true );
+            $( "#pickup" ).prop( "checked", false );
+        }
+        if(fulfilmentType == 1){
+            $( "#pickup" ).prop( "checked", true );
+            $( "#shipping" ).prop( "checked", false );
+        }
 		$('#cartList').html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Cart','listing', [fulfilmentType]),'',function(res){
-			$("#cartList").html(res);
-		});
+			var json = $.parseJSON(res);  
+            if(json.hasPhysicalProduct == false){
+                $("#js-shiporpickup").remove();
+            }
+            
+            if(json.cartProductsCount == 0){
+                $("#js-cart-listing").html(json.html);
+            }else{
+				$("#cartList").html(json.html);				
+                getCartFinancialSummary(fulfilmentType);
+            }
+			
+			if(json.shipProductsCount == 0){
+                $("#pickup").prop("checked", true);
+                $("#shipping").prop("checked", false).prop("disabled", true).next('label').addClass("disabled").parent().attr("onclick", null);
+            }else{
+                $("#shipping").prop("disabled", false).next('label').removeClass("disabled").parent().attr("onclick", "listCartProducts(2)");
+            }
+            
+            if(json.pickUpProductsCount == 0){
+                $("#shipping").prop("checked", true);
+                $("#pickup").prop("checked", false).prop("disabled", true).next('label').addClass("disabled").parent().attr("onclick", null);
+            }else{
+                $("#pickup").prop("disabled", false).next('label').removeClass("disabled").parent().attr("onclick", "listCartProducts(1)");
+            }
+		}); 
 	};
 
 	getPromoCode = function(){
@@ -98,7 +131,7 @@ $(document).ready(function(){
 		});
 	};
     
-    moveToSaveForLater = function( key, selProdId ){
+    moveToSaveForLater = function( key, selProdId, fulfilmentType ){
 		if( isUserLogged() == 0 ){
 			loginPopUpBox();
 			return false;
@@ -106,7 +139,8 @@ $(document).ready(function(){
 		$.mbsmessage.close();
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'moveToSaveForLater', [selProdId]), '', function(ans) {
 			if( ans.status ){
-				removeFromCart( key );
+				listCartProducts(fulfilmentType);
+				$.mbsmessage(langLbl.MovedSuccessfully, true, 'alert--success');
 			}
 		});
 	};
@@ -117,12 +151,17 @@ $(document).ready(function(){
 		listCartProducts();
 	};
     
-    moveToCart = function(selprod_id, wish_list_id){
+    moveToCart = function(selprod_id, wish_list_id, event, fulfilmentType){
         var data = 'selprod_id[0]='+selprod_id;
         fcom.updateWithAjax(fcom.makeUrl('cart', 'addSelectedToCart' ), data, function(ans) {
             addRemoveWishListProduct(selprod_id, wish_list_id, event);
-            listCartProducts();
+            listCartProducts(fulfilmentType);
             $('#cartSummary').load(fcom.makeUrl('cart', 'getCartSummary'));
+            setTimeout(function(){
+                if (1 > $("#cartList").length) {
+                    location.reload();
+                }
+            }, 500);
 		});
 	};
     
@@ -153,6 +192,12 @@ $(document).ready(function(){
             }
             document.location.href = fcom.makeUrl('Checkout');
         });
+    }
+    
+    getCartFinancialSummary = function(type){
+        fcom.ajax(fcom.makeUrl('Cart','getCartFinancialSummary', [type]),'',function(res){
+			$("#js-cartFinancialSummary").html(res);
+		});
     }
 
 })();

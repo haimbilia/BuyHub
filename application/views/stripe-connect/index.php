@@ -1,60 +1,51 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="cards">
-    <div class="cards-content">
+<div class="card">
+    <div class="card-body">
         <div class="row justify-content-center my-5">
             <div class="col-lg-8">
                 <?php if (empty($accountId)) { ?>
                     <div class="features-block">
                         <div class="features-block_head">
-                            <h4>Features</h4>
-                            <p>Connect’s flexible set of features includes:</p>
+                            <h4><?php echo Labels::getLabel('LBL_FEATURES', $siteLangId); ?></h4>
+                            <p><?php echo Labels::getLabel('API_CONNECT_FLEXIBLE_SET_OF_FEATURES_INCLUDES', $siteLangId); ?></p>
                         </div>
                         <ul class="features-block_list">
                             <li>
-                                <p><strong>Payouts</strong>:</p>
-                                <p> Route funds to your recipients’ bank accounts and debit card
-                                    flexibly and programmatically </p>
+                                <p><strong><?php echo Labels::getLabel('LBL_PAYOUTS', $siteLangId); ?></strong>:</p>
+                                <p><?php echo Labels::getLabel('API_ROUTE_FUNDS_TO_YOUR_RECIPIENTS', $siteLangId); ?></p>
                             </li>
 
                             <li>
-                                <p> <strong>Fee collection</strong>: </p>
-                                <p> Drive revenue for your business by collecting fees for
-                                    your services </p>
+                                <p> <strong><?php echo Labels::getLabel('LBL_FEE_COLLECTION', $siteLangId); ?></strong>: </p>
+                                <p> <?php echo Labels::getLabel('API_DRIVE_REVENUE_FOR_YOUR_BUSINESS', $siteLangId); ?> </p>
                             </li>
                             <li>
-                                <p> <strong>Onboarding</strong>:</p>
-                                <p> Collect any information through your own flow and let
-                                    Stripe take
-                                    care of the rest through its mobile friendly and conversion-optimized UI </p>
+                                <p> <strong><?php echo Labels::getLabel('API_ONBOARDING', $siteLangId); ?></strong>:</p>
+                                <p> <?php echo Labels::getLabel('API_MOBILE_FRIENDLY_AND_CONVERSION_OPTIMIZED_UI', $siteLangId); ?> </p>
                             </li>
                         </ul>
-                        <div class="text-center"> <a class="btn btn-outline-primary btn-sm mr-2" onClick="register(this)"
-                                href="javascript:void(0)"
-                                data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
+                        <div class="text-center"> <a class="btn btn-outline-brand btn-sm mr-2" onClick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
                                 <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
                             </a>
-                            <a class="btn btn-primary btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'login') ?>"
-                                title="<?php echo Labels::getLabel('MSG_LOGIN', $siteLangId); ?>">
+                            <a class="btn btn-brand btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'login') ?>" title="<?php echo Labels::getLabel('MSG_LOGIN', $siteLangId); ?>">
                                 <?php echo Labels::getLabel('LBL_ALREADY_HAVE_ACCOUNT_?', $siteLangId); ?>
                             </a>
                         </div>
                     </div>
-                <?php } else { 
+                    <?php } else {
                     if ('custom' == $stripeAccountType) { ?>
                         <div class="text-center">
                             <h5>
-                                <?php echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; ?>                                    
-                                <a class="btn btn-primary btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)"
-                                    data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>"
-                                    title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
+                                <?php echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; ?>
+                                <a class="btn btn-brand btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>" title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </h5>
                         </div>
-                    <?php } 
+                <?php }
                 } ?>
                 <?php if (!empty($loginUrl)) { ?>
-                    <a class="btn btn-primary btn-sm" href="<?php echo $loginUrl; ?>" target="_blank">
+                    <a class="btn btn-brand btn-sm" href="<?php echo $loginUrl; ?>" target="_blank">
                         <?php echo Labels::getLabel('LBL_STRIPE_DASHBOARD', $siteLangId); ?>
                     </a>
                 <?php } ?>
@@ -65,7 +56,7 @@
                 <div class="col-md-12 requiredFieldsForm-js"></div>
             </div>
             <script>
-            requiredFieldsForm();
+                requiredFieldsForm();
             </script>
         <?php } elseif (!empty($accountId) && !empty($stripeUserData)) { ?>
             <ul class="stripe-stats">
@@ -116,17 +107,17 @@
                     <div class="stats">
                         <span class="title"><?php echo Labels::getLabel('MSG_BANK_DETAIL', $siteLangId); ?></span>
                         <?php foreach ($stripeUserData['external_accounts']['data'] as $index => $bank) { ?>
-                        <p><?php echo Labels::getLabel('MSG_BANK_NAME', $siteLangId); ?> : <?php echo $bank['bank_name']; ?>
-                        </p>
-                        <p><?php echo Labels::getLabel('MSG_ACCOUNT_HOLDER_NAME', $siteLangId); ?> :
-                            <?php echo $bank['account_holder_name']; ?></p>
-                        <p><?php echo Labels::getLabel('MSG_ACCOUNT_NUMBER', $siteLangId); ?> :
-                            <?php echo '****' . $bank['last4']; ?></p>
-                        <p><?php echo Labels::getLabel('MSG_ROUTING_NUMBER', $siteLangId); ?> :
-                            <?php echo $bank['routing_number']; ?></p>
-                        <?php if (($index + 1) < count($stripeUserData['external_accounts']['data'])) { ?>
+                            <p><?php echo Labels::getLabel('MSG_BANK_NAME', $siteLangId); ?> : <?php echo $bank['bank_name']; ?>
+                            </p>
+                            <p><?php echo Labels::getLabel('MSG_ACCOUNT_HOLDER_NAME', $siteLangId); ?> :
+                                <?php echo $bank['account_holder_name']; ?></p>
+                            <p><?php echo Labels::getLabel('MSG_ACCOUNT_NUMBER', $siteLangId); ?> :
+                                <?php echo '****' . $bank['last4']; ?></p>
+                            <p><?php echo Labels::getLabel('MSG_ROUTING_NUMBER', $siteLangId); ?> :
+                                <?php echo $bank['routing_number']; ?></p>
+                            <?php if (($index + 1) < count($stripeUserData['external_accounts']['data'])) { ?>
 
-                        <?php } ?>
+                            <?php } ?>
                         <?php } ?>
                     </div>
                 </li>
@@ -134,3 +125,44 @@
         <?php } ?>
     </div>
 </div>
+<script>
+    var keyName = '<?php echo $keyName; ?>';
+    $(document).on('keyup', ".mcc-js", function() {
+        var currObj = $(this);
+        var valueFld = currObj.data('valfld');
+        console.log(valueFld);
+        if ('' != currObj.val()) {
+            currObj.siblings('ul.dropdown-menu').remove();
+            currObj.autocomplete({
+                'classes': {
+                    "ui-autocomplete": "custom-ui-autocomplete"
+                },
+                'source': function(request, response) {
+                    $.ajax({
+                        url: fcom.makeUrl(keyName, 'getMerchantCategory'),
+                        data: {
+                            fIsAjax: 1,
+                            keyword: currObj.val()
+                        },
+                        dataType: 'json',
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(value, index) {
+                                return {
+                                    label: value,
+                                    value: value,
+                                    id: index
+                                };
+                            }));
+                        },
+                    });
+                },
+                select: function(event, ui) {
+                    $("." + valueFld).val(ui.item.id);
+                }
+            });
+        } else {
+            $("." + valueFld).val('');
+        }
+    });
+</script>

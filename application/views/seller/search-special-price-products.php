@@ -1,5 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = array(
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php $arr_flds = array(
     'select_all' => '',
     'product_name' => Labels::getLabel('LBL_Name', $siteLangId),
     'selprod_price' => Labels::getLabel('LBL_Original_Price', $siteLangId),
@@ -13,7 +14,11 @@ if ($canEdit) {
 if (!$canEdit || 1 > count($arrListing)) {
     unset($arr_flds['select_all']);
 }
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table splPriceList-js'));
+$tableClass = '';
+if (0 < count($arrListing)) {
+	$tableClass = "table-justified";
+}
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table splPriceList-js '.$tableClass));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
 foreach ($arr_flds as $column => $lblTitle) {
     if ('select_all' == $column) {
@@ -21,7 +26,7 @@ foreach ($arr_flds as $column => $lblTitle) {
     } else {
         $th->appendElement('th', array(), $lblTitle);
     }
-}
+} 
 
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array());
@@ -37,8 +42,11 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'product_name':
                 // last Param of getProductDisplayTitle function used to get title in html form.
+                $txt = '<div class="item__description">';
                 $productName = SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true);
-                $td->appendElement('plaintext', array(), $productName, true);
+                $txt .= '<div class="item__title">' . $productName . '</div>';
+                $txt .= '</div>';
+                $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'selprod_price':
                 $price = CommonHelper::displayMoneyFormat($row[$column], true, true);
@@ -97,14 +105,13 @@ echo $frm->getFormTag();
 echo $tbl->getHtml();
 ?>
 </form>
+</div>
 <?php
-
 if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-}
-
-$postedData['page'] = $page;
+} ?>
+<?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchSpecialPricePaging'));
 
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage', 'adminLangId' => $siteLangId);

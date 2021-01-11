@@ -108,6 +108,7 @@ class User extends MyAppModel
         'credential_active as user_active',
         'credential_username',
         'credential_password',
+        'credential_verified',
     ];
 
     public const DEVICE_OS_BOTH = 0;
@@ -134,9 +135,9 @@ class User extends MyAppModel
             )
         );
 
-        if (0 < $this->parentId) {
+        /* if (0 < $this->parentId) {
             $this->addCondition('user_parent', '=', $this->parentId);
-        }
+        } */
     }
 
     public static function getUserTypesArr($langId)
@@ -908,11 +909,11 @@ class User extends MyAppModel
         }
 
         if (!FatApp::getDb()->deleteRecords(static::DB_TBL_USR_RETURN_ADDR, array('smt' => 'ura_user_id = ?', 'vals' => array($this->mainTableRecordId)))) {
-            $this->error = $db->getError();
+            $this->error = FatApp::getDb()->getError();
             return false;
         }
         if (!FatApp::getDb()->deleteRecords(static::DB_TBL_USR_RETURN_ADDR_LANG, array('smt' => 'uralang_user_id = ?', 'vals' => array($this->mainTableRecordId)))) {
-            $this->error = $db->getError();
+            $this->error = FatApp::getDb()->getError();
             return false;
         }
         return true;
@@ -1609,7 +1610,7 @@ class User extends MyAppModel
             $this->error = Labels::getLabel('ERR_INVALID_CODE', $this->commonLangId);
             return false;
         }
-        
+
         $userId = FatUtility::int($arrCode[0]);
 
         $emvSrch = new SearchBase(static::DB_TBL_USER_EMAIL_VER);
@@ -1649,7 +1650,8 @@ class User extends MyAppModel
             static::DB_TBL_UPV_PREFIX . 'country_iso',
             static::DB_TBL_UPV_PREFIX . 'dial_code',
             static::DB_TBL_UPV_PREFIX . 'phone',
-            static::DB_TBL_UPV_PREFIX . 'expired_on'
+            static::DB_TBL_UPV_PREFIX . 'expired_on',
+            static::DB_TBL_UPV_PREFIX . 'otp'
         ];
         $emvSrch->addMultipleFields($attr);
 
@@ -1776,8 +1778,12 @@ class User extends MyAppModel
         ];
         $smsArchive = new SmsArchive();
         $smsArchive->toPhone($phone);
-        $smsArchive->setTemplate($langId, $tpl, $replacements);
-        if (!$smsArchive->send()) {
+        if (false === $smsArchive->setTemplate($langId, $tpl, $replacements)) {
+            $this->error = $smsArchive->getError();
+            return false;
+        }
+
+        if (false === $smsArchive->send()) {
             $this->error = $smsArchive->getError();
             return false;
         }
@@ -1824,7 +1830,7 @@ class User extends MyAppModel
         if (!empty($phone)) {
             $phone .= array_key_exists('user_dial_code', $data) ? $data['user_dial_code'] : '';
         }
-        
+
         $data = array(
             'user_name' => $data['user_name'],
             'user_email' => $data['user_email'],
@@ -2000,7 +2006,7 @@ class User extends MyAppModel
             'withdrawal_account_number' => isset($data['ub_account_number']) ? $data['ub_account_number'] : '',
             'withdrawal_ifc_swift_code' => isset($data['ub_ifsc_swift_code']) ? $data['ub_ifsc_swift_code'] : '',
             'withdrawal_bank_address' => isset($data['ub_bank_address']) ? $data['ub_bank_address'] : '',
-            'withdrawal_comments' => isset($data['withdrawal_comments']) ? $data['withdrawal_comments'] : '',
+            'withdrawal_instructions' => isset($data['withdrawal_instructions']) ? $data['withdrawal_instructions'] : '',
             'withdrawal_status' => 0,
             'withdrawal_request_date' => date('Y-m-d H:i:s'),
             'withdrawal_cheque_payee_name' => isset($data['withdrawal_cheque_payee_name']) ? $data['withdrawal_cheque_payee_name'] : '',
@@ -2009,8 +2015,10 @@ class User extends MyAppModel
 
         $broken = false;
 
-        if (FatApp::getDb()->startTransaction() && FatApp::getDb()->insertFromArray(static::DB_TBL_USR_WITHDRAWAL_REQ, $assignFields)) {
-            $withdrawRequestId = FatApp::getDb()->getInsertId();
+        $db = FatApp::getDb();
+        $db->startTransaction();
+        if ($db->insertFromArray(static::DB_TBL_USR_WITHDRAWAL_REQ, $assignFields)) {
+            $withdrawRequestId = $db->getInsertId();
 
             $formattedRequestValue = '#' . str_pad($withdrawRequestId, 6, '0', STR_PAD_LEFT);
 
@@ -2031,13 +2039,16 @@ class User extends MyAppModel
                 $this->error = $transObj->getError();
                 $broken = true;
             }
+        } else {
+            $this->error = $db->getError();
+            $broken = true;
         }
 
-        if ($broken === false && FatApp::getDb()->commitTransaction()) {
+        if ($broken === false && $db->commitTransaction()) {
             return $withdrawRequestId;
         }
 
-        FatApp::getDb()->rollbackTransaction();
+        $db->rollbackTransaction();
         return false;
     }
 
@@ -2145,7 +2156,7 @@ class User extends MyAppModel
         $srch->addFld(array('usuprequest_attempts', 'usuprequest_id', 'usuprequest_status'));
         $rs = $srch->getResultSet();
         $supplierRequest = FatApp::getDb()->fetch($rs);
-        if ($supplierRequest['usuprequest_status'] == User::SUPPLIER_REQUEST_APPROVED) {
+        if (is_array($supplierRequest) && $supplierRequest['usuprequest_status'] == User::SUPPLIER_REQUEST_APPROVED) {
             return true;
         }
         return false;
@@ -2340,7 +2351,7 @@ class User extends MyAppModel
         }
         $db = FatApp::getDb();
 
-        $srch = self::getSearchObject(true, true);
+        $srch = self::getSearchObject(true);
         $srch->joinTable(UserAuthentication::DB_TBL_USER_AUTH, 'LEFT OUTER JOIN', 'uauth.uauth_user_id = u.user_id', 'uauth');
         $srch->addCondition('user_id', '=', $this->mainTableRecordId);
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
@@ -2412,14 +2423,6 @@ class User extends MyAppModel
             }
         }
 
-        if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
-            if (!$this->notifyAdminRegistration($postedData, $this->commonLangId)) {
-                $db->rollbackTransaction();
-                $this->error = Labels::getLabel("ERR_ERROR_IN_SENDING_NOTIFICATION_EMAIL_TO_ADMIN", $this->commonLangId);
-                return false;
-            }
-        }
-
         if ($socialUser == false) {
             if (!$this->saveUserNotifications()) {
                 $db->rollbackTransaction();
@@ -2449,6 +2452,14 @@ class User extends MyAppModel
                     $message = Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->siteLangId);
                     return false;
                 }
+            }
+        }
+
+        if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
+            if (!$this->notifyAdminRegistration($postedData, $this->commonLangId)) {
+                $db->rollbackTransaction();
+                $this->error = Labels::getLabel("ERR_ERROR_IN_SENDING_NOTIFICATION_EMAIL_TO_ADMIN", $this->commonLangId);
+                return false;
             }
         }
 
@@ -2554,7 +2565,7 @@ class User extends MyAppModel
 
         $rewardsRecord = new UserRewards();
         $referralUserName = User::getAttributesById($referredUserId, "user_name");
-        $urpComments = Labels::getLabel("LBL_Signup_Reward_Points._Your_Referral_{username}_registered.", $langId);
+        $urpComments = Labels::getLabel("LBL_Signup_Reward_Points._Your_Referral_{username}_registered.", CommonHelper::getLangId());
         $urpComments = str_replace("{username}", $referralUserName, $urpComments);
         $rewardsRecord->assignValues(
             array(
@@ -2573,10 +2584,20 @@ class User extends MyAppModel
         } else {
             $this->error = $rewardsRecord->getError();
         }
-        $where = array('smt' => 'user_id = ?', 'vals' => array($userId));
+        $where = array('smt' => 'user_id = ?', 'vals' => array($referrerUserId));
         FatApp::getDb()->updateFromArray(static::DB_TBL, array('user_updated_on' => date('Y-m-d  H:i:s')), $where);
     }
 
+    /**
+     * validateUser - Used in case of social login.
+     *
+     * @param  string $email
+     * @param  string $username
+     * @param  string $socialAccountId
+     * @param  string $keyName
+     * @param  string $userType
+     * @return mixed
+     */
     public function validateUser($email, $username, $socialAccountId, $keyName, $userType)
     {
         $db = FatApp::getDb();
@@ -2634,11 +2655,15 @@ class User extends MyAppModel
                 return false;
             }
 
-            if (empty($row['credential_email'])) {
+            if (empty($row['credential_email']) || applicationConstants::YES > $row['credential_email']) {
                 $assignValues = [
                     static::DB_TBL_CRED_PREFIX . 'user_id' => $row['user_id'],
                     static::DB_TBL_CRED_PREFIX . 'email' => $email,
                 ];
+                if (!empty($socialAccountId)) {
+                    $assignValues[static::DB_TBL_CRED_PREFIX . 'verified'] = applicationConstants::YES;
+                }
+
                 if (!FatApp::getDb()->insertFromArray(static::DB_TBL_CRED, $assignValues, false, array(), $assignValues)) {
                     $this->error = FatApp::getDb()->getError();
                     return false;
@@ -2682,6 +2707,7 @@ class User extends MyAppModel
             $userPreferredDashboard = static::USER_BUYER_DASHBOARD;
             $user_registered_initially_for = static::USER_TYPE_BUYER;
             $user_is_buyer = 1;
+            $user_is_supplier = (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1) || FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) ? 0 : 1;
         }
         if (isset($userType) && $userType == static::USER_TYPE_SELLER) {
             $userPreferredDashboard = static::USER_SELLER_DASHBOARD;
@@ -2768,7 +2794,7 @@ class User extends MyAppModel
         $CONF_REGISTRATION_REFERRAL_REWARD_POINTS = FatApp::getConfig("CONF_REGISTRATION_REFERRAL_REWARD_POINTS", FatUtility::VAR_INT, 0);
 
         $rewardsRecord = new UserRewards();
-        $urpComments = Labels::getLabel("LBL_Signup_Reward_Points._Registered_through_referral_link_of_your_friend_{referrerusername}.", $langId);
+        $urpComments = Labels::getLabel("LBL_Signup_Reward_Points._Registered_through_referral_link_of_your_friend_{referrerusername}.", $this->commonLangId);
         $urpComments = str_replace("{referrerusername}", $referrerUserName, $urpComments);
         $rewardsRecord->assignValues(
             array(

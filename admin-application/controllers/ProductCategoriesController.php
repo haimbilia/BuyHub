@@ -76,12 +76,16 @@ class ProductCategoriesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function form($prodCatId = 0)
+    public function form($prodCatId = 0, $productReq = 0)
     {
         $this->objPrivilege->canEditProductCategories();
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $prodCatId = FatUtility::int($prodCatId);
-        $prodCatFrm = $this->getCategoryForm($prodCatId);
+        $prodCatFrm = $this->getCategoryForm($prodCatId, $productReq);
+        $prodCat = new ProductCategory();
+        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $prodCatId);
+        $categories =  array(0 => Labels::getLabel('LBL_Root_Category', $this->adminLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
+        $data = array('parent_category_name' => $categories[0]);
         if (0 < $prodCatId) {
             $data = ProductCategory::getAttributesById($prodCatId);
             if ($data === false) {
@@ -92,35 +96,49 @@ class ProductCategoriesController extends AdminBaseController
             foreach ($langData as $value) {
                 $catNameArr[ProductCategory::DB_TBL_PREFIX . 'name'][$value[ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id']] = $value[ProductCategory::DB_TBL_PREFIX . 'name'];
             }
+            $data['parent_category_name'] = $categories[$data['prodcat_parent']] ?? '';
+
             $data = array_merge($data, $catNameArr);
-            $prodCatFrm->fill($data);
         }
+        $prodCatFrm->fill($data);
         $mediaLanguages = applicationConstants::bannerTypeArr();
         $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
         $langData = Language::getAllNames();
         unset($langData[$siteDefaultLangId]);
+        $this->set('productReq', $productReq);
         $this->set('prodCatFrm', $prodCatFrm);
         $this->set('mediaLanguages', $mediaLanguages);
         $this->set('screenArr', $screenArr);
         $this->set('otherLangData', $langData);
+        $this->set('categories', $categories);
         $this->_template->render(false, false);
     }
 
-    private function getCategoryForm($prodCatId = 0)
+    private function getCategoryForm($prodCatId = 0, $productReq = 0)
     {
         $prodCatId = FatUtility::int($prodCatId);
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $frm = new Form('frmProdCategory');
         $frm->addHiddenField('', 'prodcat_id', $prodCatId);
         $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'prodcat_name[' . $siteDefaultLangId . ']');
-
+        $frm->addRequiredField(Labels::getLabel('LBL_Category_Identifier', $this->adminLangId), 'prodcat_identifier');
+        /*
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $prodCatId);
         $categories = array(0 => Labels::getLabel('LBL_Root_Category', $this->adminLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $frm->addSelectBox(Labels::getLabel('LBL_Parent_Category', $this->adminLangId), 'prodcat_parent', $categories, '', array(), '');
+         * 
+         */
+
+        $frm->addRequiredField(Labels::getLabel('LBL_Parent_Category', $this->adminLangId), 'parent_category_name');
+        $frm->addHiddenField('', 'prodcat_parent', $prodCatId);
 
         $yesNoArr = applicationConstants::getYesNoArr($this->adminLangId);
         $frm->addRadioButtons(Labels::getLabel('LBL_Publish', $this->adminLangId), 'prodcat_active', $yesNoArr, '1', array());
+
+        if (0 < $productReq) {
+            $frm->addRadioButtons(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'prodcat_status', $yesNoArr, '1', array());
+        }
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $langData = Language::getAllNames();
@@ -160,10 +178,10 @@ class ProductCategoriesController extends AdminBaseController
         return $frm;
     }
 
-    public function setup()
+    public function setup($prodCatReq = 0)
     {
         $this->objPrivilege->canEditProductCategories();
-        $frm = $this->getCategoryForm();
+        $frm = $this->getCategoryForm(0, $prodCatReq);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
@@ -171,13 +189,16 @@ class ProductCategoriesController extends AdminBaseController
         }
 
         $prodCatId = FatUtility::int($post['prodcat_id']);
-        $post['prodcat_status'] = ProductCategory::REQUEST_APPROVED;
+        $prodCatStatus = FatApp::getPostedData('prodcat_status', FatUtility::VAR_INT, 0);
+        $post['prodcat_status'] = 0 < $prodCatReq ? $prodCatStatus : ProductCategory::REQUEST_APPROVED;
+
         $productCategory = new ProductCategory($prodCatId);
         if (!$productCategory->saveCategoryData($post)) {
             Message::addErrorMessage($productCategory->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->adminLangId));
+
+        $this->set('msg', Labels::getLabel('LBL_SETUP_SUCCESSFUL', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -202,11 +223,11 @@ class ProductCategoriesController extends AdminBaseController
         $prodcat_id = FatUtility::int($prodcat_id);
         $lang_id = FatUtility::int($lang_id);
         $catIcons = $catBanners = array();
-        if ($imageType=='icon') {
+        if ($imageType == 'icon') {
             $catIcons = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, false);
             $this->set('images', $catIcons);
             $this->set('imageFunction', 'icon');
-        } elseif ($imageType=='banner') {
+        } elseif ($imageType == 'banner') {
             $catBanners = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodcat_id, 0, $lang_id, false, $slide_screen);
             $this->set('images', $catBanners);
             $this->set('imageFunction', 'banner');
@@ -242,7 +263,7 @@ class ProductCategoriesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        ProductCategory:: deleteImagesWithOutCategoryId($file_type);
+        ProductCategory::deleteImagesWithOutCategoryId($file_type);
 
         $fileHandlerObj = new AttachedFile($afileId);
         if (!$res = $fileHandlerObj->saveImage(
@@ -263,7 +284,7 @@ class ProductCategoriesController extends AdminBaseController
         ProductCategory::setImageUpdatedOn($prodcat_id);
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('prodcat_id', $prodcat_id);
-        $this->set('msg', $_FILES['cropped_image']['name'].' '.Labels::getLabel('LBL_Uploaded_Successfully', $this->adminLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_Uploaded_Successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -277,9 +298,9 @@ class ProductCategoriesController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        if ($imageType=='icon') {
+        if ($imageType == 'icon') {
             $fileType = AttachedFile::FILETYPE_CATEGORY_ICON;
-        } elseif ($imageType=='banner') {
+        } elseif ($imageType == 'banner') {
             $fileType = AttachedFile::FILETYPE_CATEGORY_BANNER;
         }
         $fileHandlerObj = new AttachedFile();
@@ -340,7 +361,8 @@ class ProductCategoriesController extends AdminBaseController
             array(
                 ProductCategory::tblFld('status') => ProductCategory::REQUEST_APPROVED,
                 ProductCategory::tblFld('active') => applicationConstants::ACTIVE,
-                ProductCategory::tblFld('updated_on') => date('Y-m-d H:i:s')
+                ProductCategory::tblFld('updated_on') => date('Y-m-d H:i:s'),
+                ProductCategory::tblFld('status_updated_on') => date('Y-m-d H:i:s')
             )
         );
         if (!$prodCat->save()) {
@@ -385,27 +407,30 @@ class ProductCategoriesController extends AdminBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        $nodes = array();
+        parent::getBreadcrumbNodes($action);
+
         switch ($action) {
             case 'index':
             case 'form':
-                $nodes[] = array('title' => Labels::getLabel('LBL_Categories', $this->adminLangId), 'href' => UrlHelper::generateUrl('ProductCategories'));
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_Categories', $this->adminLangId), 'href' => UrlHelper::generateUrl('ProductCategories')]
+                ];
         }
-        return $nodes;
+        return $this->nodes;
     }
 
     public function autocomplete()
     {
         $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $search_keyword = urldecode($search_keyword);
         $prodCateObj = new ProductCategory();
-        $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 10, $this->adminLangId);
+        $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 10, $this->adminLangId, $collectionId);
         $json = array();
-        $matches = $categories;
-        foreach ($matches as $key => $val) {
+        foreach ($categories as $key => $val) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($val, ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($val, ENT_QUOTES, 'UTF-8'))
             );
         }
         echo json_encode($json);
@@ -419,8 +444,8 @@ class ProductCategoriesController extends AdminBaseController
         $json = array();
         foreach ($arr_options as $key => $product) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));
@@ -432,7 +457,7 @@ class ProductCategoriesController extends AdminBaseController
         $search = $this->getSearchForm(true);
         $data = FatApp::getPostedData();
         if ($data) {
-            $data['prodcat_id'] = $data['id'];
+            $data['prodcat_id'] = isset($data['id']) ? $data['id'] : 0;
             unset($data['id']);
             $search->fill($data);
         }
@@ -468,13 +493,12 @@ class ProductCategoriesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = ProductCategory::getSearchObject(false, $this->adminLangId, false, ProductCategory::REQUEST_PENDING);
+        $srch = ProductCategory::getSearchObject(false, $this->adminLangId, false, ProductCategory::REQUEST_PENDING);        
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = prodcat_seller_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
-        $srch->addMultipleFields(array('m.*','prodcat_name', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
-        $srch->addCondition('prodcat_seller_id', '>', 0);
-        $srch->addOrder('prodcat_id', 'desc');
+        $srch->addMultipleFields(array('m.*', 'prodcat_name', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
+        $srch->addOrder('prodcat_requested_on', 'desc');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -490,7 +514,7 @@ class ProductCategoriesController extends AdminBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
+        $rs = $srch->getResultSet();        
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arr_listing", $records);
@@ -501,46 +525,5 @@ class ProductCategoriesController extends AdminBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->_template->render(false, false);
-    }
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditBrands();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $brandIdsArr = FatUtility::int(FatApp::getPostedData('brandIds'));
-        if (empty($brandIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
-        }
-
-        foreach ($brandIdsArr as $brandId) {
-            if (1 > $brandId) {
-                continue;
-            }
-
-            $this->updateBrandStatus($brandId, $status);
-        }
-        Product::updateMinPrices();
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function updateCategoryStatus($brandId, $status)
-    {
-        $status = FatUtility::int($status);
-        $brandId = FatUtility::int($brandId);
-        if (1 > $brandId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
-        }
-
-        $brandObj = new Brand($brandId);
-        if (!$brandObj->changeStatus($status)) {
-            Message::addErrorMessage($brandObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
     }
 }

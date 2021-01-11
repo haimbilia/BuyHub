@@ -9,7 +9,7 @@ class ImportExportController extends SellerBaseController
         if (!$shop->isActive()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
-        
+
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
@@ -50,7 +50,7 @@ class ImportExportController extends SellerBaseController
                 if (isset($endId) && $endId > 1 && $endId > $min) {
                     $max = $endId;
                 }
-                $obj->export($actionType, $langId, $sheetType, null, null, $min, $max, $userId);
+                $obj->export($actionType, $langId, $sheetType, null, null, $min, $max, $userId, true);
                 break;
             case Importexport::BY_BATCHES:
                 if (isset($batchNumber) && $batchNumber > 0) {
@@ -62,11 +62,11 @@ class ImportExportController extends SellerBaseController
                     $max = $batchCount;
                 }
                 $min = (!$min) ? 1 : $min;
-                $obj->export($actionType, $langId, $sheetType, $min, $max, null, null, $userId);
+                $obj->export($actionType, $langId, $sheetType, $min, $max, null, null, $userId, true);
                 break;
 
             default:
-                $obj->export($actionType, $langId, $sheetType, null, null, null, null, $userId);
+                $obj->export($actionType, $langId, $sheetType, null, null, null, null, $userId, true);
                 break;
         }
     }
@@ -196,10 +196,11 @@ class ImportExportController extends SellerBaseController
         $title = $options[$actionType];
 
         switch ($actionType) {
-         /* case Importexport::TYPE_CATEGORIES:         */
+                /* case Importexport::TYPE_CATEGORIES:         */
             case Importexport::TYPE_BRANDS:
             case Importexport::TYPE_PRODUCTS:
             case Importexport::TYPE_SELLER_PRODUCTS:
+            case Importexport::TYPE_INVENTORIES:
                 $displayMediaTab = true;
                 break;
         }
@@ -230,6 +231,7 @@ class ImportExportController extends SellerBaseController
 
     public function importForm($actionType)
     {
+        $post = FatApp::getPostedData();
         $options = Importexport::getImportExportTypeArr('import', $this->siteLangId, true);
         if (!isset($options[$actionType])) {
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
@@ -241,12 +243,15 @@ class ImportExportController extends SellerBaseController
         switch ($actionType) {
             case Importexport::TYPE_CATEGORIES:
             case Importexport::TYPE_BRANDS:
-            case Importexport::TYPE_PRODUCTS:
+            case Importexport::TYPE_SELLER_PRODUCTS:
                 $displayMediaTab = true;
                 break;
         }
 
         $frm = $this->getImportExportForm($this->siteLangId, 'IMPORT', $actionType);
+        if (!empty($post)) {
+            $frm->fill($post);
+        }
         $this->set('frm', $frm);
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
@@ -262,10 +267,11 @@ class ImportExportController extends SellerBaseController
         $displayMediaTab = false;
         switch ($actionType) {
             case Importexport::TYPE_PRODUCTS:
+            case Importexport::TYPE_SELLER_PRODUCTS:
                 $displayMediaTab = true;
                 $pageData = $obj->getContentByPageType(Extrapage::SELLER_CATALOG_MANAGEMENT_INSTRUCTIONS, $langId);
                 break;
-            case Importexport::TYPE_SELLER_PRODUCTS:
+            case Importexport::TYPE_INVENTORIES:
                 $pageData = $obj->getContentByPageType(Extrapage::SELLER_PRODUCT_INVENTORY_INSTRUCTIONS, $langId);
                 break;
             default:
@@ -372,14 +378,14 @@ class ImportExportController extends SellerBaseController
 
         foreach ($settingArr as $k => $val) {
             $data = array(
-            'impexp_setting_key' => $k,
-            'impexp_setting_user_id' => $userId,
-            'impexp_setting_value' => isset($post[$k]) ? $post[$k] : 0,
+                'impexp_setting_key' => $k,
+                'impexp_setting_user_id' => $userId,
+                'impexp_setting_value' => isset($post[$k]) ? $post[$k] : 0,
             );
             FatApp::getDb()->insertFromArray(Importexport::DB_TBL_SETTINGS, $data, false, array(), $data);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successfull', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -431,8 +437,8 @@ class ImportExportController extends SellerBaseController
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_product_type_id_instead_of_product_type_identifier", $langId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_product_type_id_instead_of_product_type_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $langId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
-        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_dimension_unit_id_instead_of_dimension_unit_identifier_in_worksheets", $langId) . '</small>';
+        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $langId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
+        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_dimension_unit_id_instead_of_dimension_unit_identifier_in_worksheets", $langId) . '</small>'; */
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_weight_unit_id_instead_of_weight_unit_identifier", $langId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_weight_unit_id_instead_of_weight_unit_identifier_in_worksheets", $langId) . '</small>';
@@ -458,8 +464,8 @@ class ImportExportController extends SellerBaseController
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_id_instead_of_policy_point_identifier", $langId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_id_instead_of_policy_point_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $langId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
-        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_company_id_instead_of_shipping_company_identifier_in_worksheets", $langId) . '</small>';
+        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $langId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
+        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_company_id_instead_of_shipping_company_identifier_in_worksheets", $langId) . '</small>'; */
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_type_id_instead_of_policy_point_type_identifier", $langId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_type_id_instead_of_policy_point_type_identifier_in_worksheets", $langId) . '</small>';
@@ -467,8 +473,8 @@ class ImportExportController extends SellerBaseController
         /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_method_id_instead_of_shipping_method_identifier",$langId),'CONF_USE_SHIPPING_METHOD_ID',1,array(),false,0);
         $fld->htmlAfterField = '<br><small>'.Labels::getLabel("MSG_Use_shipping_method_id_instead_of_shipping_method_identifier_in_worksheets",$langId).'</small>'; */
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $langId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
-        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_duration_id_instead_of_shipping_duration_identifier_in_worksheets", $langId) . '</small>';
+        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $langId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
+        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_duration_id_instead_of_shipping_duration_identifier_in_worksheets", $langId) . '</small>'; */
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_profile_id_instead_of_shipping_profile_identifier", $langId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_profile_id_instead_of_shipping_profile_identifier_in_worksheets", $langId) . '</small>';
@@ -489,6 +495,7 @@ class ImportExportController extends SellerBaseController
         $options = Importexport::getImportExportTypeArr('import', $langId, true);
         if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
             unset($options[Importexport::TYPE_PRODUCTS]);
+            unset($options[Importexport::TYPE_SELLER_PRODUCTS]);
         }
         $fld = $frm->addRadioButtons(
             '',
@@ -539,10 +546,11 @@ class ImportExportController extends SellerBaseController
             case 'EXPORT':
                 switch ($actionType) {
                     case Importexport::TYPE_PRODUCTS:
+                    case Importexport::TYPE_SELLER_PRODUCTS:
                         $displayRangeFields = true;
                         $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getProductCatalogContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
-                    case Importexport::TYPE_SELLER_PRODUCTS:
+                    case Importexport::TYPE_INVENTORIES:
                         $displayRangeFields = true;
                         $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getSellerProductContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
@@ -555,23 +563,24 @@ class ImportExportController extends SellerBaseController
                 switch ($actionType) {
                     case Importexport::TYPE_PRODUCTS:
                     case Importexport::TYPE_SELLER_PRODUCTS:
+                    case Importexport::TYPE_INVENTORIES:
                         $displayRangeFields = true;
                         break;
                 }
                 break;
             case 'IMPORT':
                 switch ($actionType) {
-                    case Importexport::TYPE_PRODUCTS:
+                    case Importexport::TYPE_SELLER_PRODUCTS:
                         $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getProductCatalogContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
-                    case Importexport::TYPE_SELLER_PRODUCTS:
+                    case Importexport::TYPE_INVENTORIES:
                         $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getSellerProductContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
                 }
                 $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_File_to_be_uploaded:', $langId), 'import_file', array('id' => 'import_file'));
                 $fldImg->setFieldTagAttribute('onChange', '$(\'#importFileName\').html(this.value)');
                 $fldImg->htmlBeforeField = '<div class="filefield">';
-                $fldImg->htmlAfterField = "<label class='filelabel'>" . Labels::getLabel('LBL_Browse_File', $this->siteLangId) . "</label></div><small>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</small>";
+                $fldImg->htmlAfterField = "</div><span class='form-text text-muted'>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</span>";
                 /*$fldImg->htmlBeforeField = '<div class="filefield"><span class="filename" id="importFileName"></span>';
                 $fldImg->htmlAfterField = '</div>'; */
                 break;
@@ -579,7 +588,7 @@ class ImportExportController extends SellerBaseController
                 $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_File_to_be_uploaded:', $langId), 'import_file', array('id' => 'import_file'));
                 $fldImg->setFieldTagAttribute('onChange', '$(\'#importFileName\').html(this.value)');
                 $fldImg->htmlBeforeField = '<div class="filefield">';
-                $fldImg->htmlAfterField = "<label class='filelabel'>" . Labels::getLabel('LBL_Browse_File', $this->siteLangId) . "</label></div><small>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</small>";
+                $fldImg->htmlAfterField = "</div><span class='form-text text-muted'>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</span>";
                 /* $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename" id="importFileName"></span>';
                 $fldImg->htmlAfterField = '</div>'; */
                 break;
@@ -802,7 +811,7 @@ class ImportExportController extends SellerBaseController
         if ($firstLine != $defaultColArr) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Coloum_CSV_File', $this->siteLangId));
         }
-        
+
         $db = FatApp::getDb();
         $error = false;
         $row = 1;
@@ -822,7 +831,7 @@ class ImportExportController extends SellerBaseController
             $prodData = Product::getAttributesById($productId, array('product_min_selling_price'));
 
             if ($selprod_cost_price <= 0) {
-                $msg = Labels::getLabel('MSG_PRODUCT_COST_PRICE_MUST_BE_GREATER_THAN_0',$this->siteLangId);
+                $msg = Labels::getLabel('MSG_PRODUCT_COST_PRICE_MUST_BE_GREATER_THAN_0', $this->siteLangId);
                 $err = array($row, 4, $msg);
                 CommonHelper::writeToCSVFile($CSVfileObj, $err);
                 $error = true;
@@ -830,28 +839,28 @@ class ImportExportController extends SellerBaseController
             }
 
             if ($selprod_price < $prodData['product_min_selling_price']) {
-                $msg = Labels::getLabel('MSG_SELLING_PRICE_SHOULD_BE_GREATER_THAN_EQUALS_TO_PRODUCT_MIN_SELLING_PRICE',$this->siteLangId);
+                $msg = Labels::getLabel('MSG_SELLING_PRICE_SHOULD_BE_GREATER_THAN_EQUALS_TO_PRODUCT_MIN_SELLING_PRICE', $this->siteLangId);
                 $err = array($row, 5, $msg);
                 CommonHelper::writeToCSVFile($CSVfileObj, $err);
                 $error = true;
                 continue;
             }
-            
+
             if ($selprod_price <= 0) {
-                $msg = Labels::getLabel('MSG_PRODUCT_SELLING_PRICE_MUST_BE_GREATER_THAN_0',$this->siteLangId);
+                $msg = Labels::getLabel('MSG_PRODUCT_SELLING_PRICE_MUST_BE_GREATER_THAN_0', $this->siteLangId);
                 $err = array($row, 5, $msg);
                 CommonHelper::writeToCSVFile($CSVfileObj, $err);
                 $error = true;
                 continue;
             }
-            
+
             if ($selprod_stock <= 0) {
-                $msg = Labels::getLabel('MSG_STOCK_VALUE_MUST_BE_GREATER_THAN_0',$this->siteLangId);
+                $msg = Labels::getLabel('MSG_STOCK_VALUE_MUST_BE_GREATER_THAN_0', $this->siteLangId);
                 $err = array($row, 6, $msg);
                 CommonHelper::writeToCSVFile($CSVfileObj, $err);
                 $error = true;
                 continue;
-            }     
+            }
 
             $assignValues = array();
             if ($selprod_price != '') {

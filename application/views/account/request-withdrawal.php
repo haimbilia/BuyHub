@@ -1,8 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="cards-header">
-    <h5 class="cards-title"><?php echo Labels::getLabel('LBL_Request_Withdrawal', $siteLangId);?></h5>
+<div class="card-header">
+    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Withdrawal', $siteLangId);?></h5>
 </div>
-<div class="cards-content ">
+<div class="card-body ">
     <?php $frm->setFormTagAttribute('class', 'form');
     $frm->developerTags['colClassPrefix'] = 'col-md-';
     if (User::isAffiliate()) {
@@ -44,13 +44,13 @@
     }
 
     $submitBtnFld = $frm->getField('btn_submit');
-    $submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary btn-block');
+    $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
     $submitBtnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
     $submitBtnFld->developerTags['col'] = 3;
 
     $cancelBtnFld = $frm->getField('btn_cancel');
     $cancelBtnFld->setFieldTagAttribute('onClick', 'closeForm()');
-    $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
+    $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
     $cancelBtnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
     $cancelBtnFld->developerTags['col'] = 3;
     //$submitBtnFld->attachField($cancelBtnFld);

@@ -11,4 +11,19 @@ $(document).ready(function () {
             window.location.reload();
         });
     };
+    approve = function (orderPaymentId) {
+        if( !confirm(langLbl.confirmUpdate) ){ return; }
+        fcom.updateWithAjax(fcom.makeUrl('Orders', 'approvePayment', [orderPaymentId]), '', function (t) {
+            location.reload();
+        });
+    };
+    reject = function (orderPaymentId) {
+        if( !confirm(langLbl.confirmUpdate) ){ return; }
+        fcom.updateWithAjax(fcom.makeUrl('Orders', 'rejectPayment', [orderPaymentId]), '', function (t) {
+            location.reload();
+        });
+    };
+    viewPaymemntGatewayResponse = function(data){
+        $.facebox(data, 'faceboxWidth');
+    };
 })();

@@ -1,8 +1,8 @@
 <div class="tabs  align-items-center">
     <?php require_once(CONF_THEME_PATH.'_partial/seller/customCatalogProductNavigationLinks.php'); ?>
 </div>
-<div class="cards">
-    <div class="cards-content ">
+<div class="card">
+    <div class="card-body ">
         <div class="row">
             <div class="col-md-12">
                 <div class="">
@@ -12,7 +12,7 @@
                     if (!empty($translatorSubscriptionKey) && $product_lang_id != $siteDefaultLangId) { ?> 
                         <div class="row justify-content-end"> 
                             <div class="col-auto mb-4">
-                                <input class="btn btn-primary" 
+                                <input class="btn btn-brand" 
                                     type="button" 
                                     value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
                                     onClick="customCatalogProductLangForm(<?php echo $preqId; ?>, <?php echo $product_lang_id; ?>, 1)">

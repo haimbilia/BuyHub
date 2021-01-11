@@ -20,9 +20,6 @@ class OrderProduct extends MyAppModel
     public const CHARGE_TYPE_REWARD_POINT_DISCOUNT = 5;
     public const CHARGE_TYPE_VOLUME_DISCOUNT = 6;
     public const CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE = 7;
-    
-    public const TYPE_SHIP = 1;    
-    public const TYPE_PICKUP = 2;
 
     public function __construct($id = 0)
     {
@@ -53,12 +50,12 @@ class OrderProduct extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::CHARGE_TYPE_TAX => Labels::getLabel('LBL_Order_Product_Tax_Charges', $langId),
-        static::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_Order_Product_Discount_Charges', $langId),
-        static::CHARGE_TYPE_SHIPPING => Labels::getLabel('LBL_Order_Product_Shipping_Charges', $langId),
-        /* static::CHARGE_TYPE_BATCH_DISCOUNT=>Labels::getLabel('LBL_Order_Product_Batch_Discount', $langId), */
-        static::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_Order_Product_Reward_Point', $langId),
-        static::CHARGE_TYPE_VOLUME_DISCOUNT => Labels::getLabel('LBL_Order_Product_Volume_Discount', $langId),
+            static::CHARGE_TYPE_TAX => Labels::getLabel('LBL_Order_Product_Tax_Charges', $langId),
+            static::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_Order_Product_Discount_Charges', $langId),
+            static::CHARGE_TYPE_SHIPPING => Labels::getLabel('LBL_Order_Product_Shipping_Charges', $langId),
+            /* static::CHARGE_TYPE_BATCH_DISCOUNT=>Labels::getLabel('LBL_Order_Product_Batch_Discount', $langId), */
+            static::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_Order_Product_Reward_Point', $langId),
+            static::CHARGE_TYPE_VOLUME_DISCOUNT => Labels::getLabel('LBL_Order_Product_Volume_Discount', $langId),
         );
     }
 
@@ -97,10 +94,10 @@ class OrderProduct extends MyAppModel
         }
 
         $data = array(
-        'opsetting_op_id' => $this->mainTableRecordId,
-        'op_tax_collected_by_seller' => FatApp::getConfig('CONF_TAX_COLLECTED_BY_SELLER', FatUtility::VAR_INT, 0),
-        'op_commission_include_tax' => FatApp::getConfig('CONF_COMMISSION_INCLUDING_SHIPPING', FatUtility::VAR_INT, 0),
-        'op_commission_include_shipping' => FatApp::getConfig('CONF_COMMISSION_INCLUDING_TAX', FatUtility::VAR_INT, 0)
+            'opsetting_op_id' => $this->mainTableRecordId,
+            'op_tax_collected_by_seller' => FatApp::getConfig('CONF_TAX_COLLECTED_BY_SELLER', FatUtility::VAR_INT, 0),
+            'op_commission_include_tax' => FatApp::getConfig('CONF_COMMISSION_INCLUDING_TAX', FatUtility::VAR_INT, 0),
+            'op_commission_include_shipping' => FatApp::getConfig('CONF_COMMISSION_INCLUDING_SHIPPING', FatUtility::VAR_INT, 0)
         );
 
         if (FatApp::getDb()->insertFromArray(static::DB_TBL_SETTINGS, $data, false, array(), $data)) {
@@ -111,13 +108,13 @@ class OrderProduct extends MyAppModel
 
     public static function pendingForReviews($userId, $langId = 0)
     {
-        $srch = new OrderProductSearch(0, true);
+        $srch = new OrderProductSearch($langId, true);
         $srch->joinSellerProducts($langId);
         $srch->addStatusCondition(SelProdReview::getBuyerAllowedOrderReviewStatuses());
         $srch->joinTable('tbl_seller_product_reviews', 'left outer join', 'o.order_id = spr.spreview_order_id and ((op.op_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 0) || (op.op_batch_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 1))', 'spr');
         $srch->addCondition('o.order_user_id', '=', $userId);
         $srch->addCondition('spr.spreview_id', 'is', 'mysql_func_null', 'and', true);
-        $srch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_order_id', 'selprod_title', 'selprod_product_id', 'order_id', 'order_user_id'));
+        $srch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_order_id', 'selprod_title', 'selprod_product_id', 'order_id', 'order_user_id', 'op_qty', 'op_unit_price', 'op_selprod_options'));
         $rows = FatApp::getDb()->fetchAll($srch->getResultSet());
         return $rows;
     }

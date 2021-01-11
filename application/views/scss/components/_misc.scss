@@ -22,7 +22,7 @@ html {
 }
 
 body {
-    font-family: $family-secondary;
+    font-family: $family-primary;
 }
 
 :focus {
@@ -43,6 +43,11 @@ p {
     margin: 0;
 }
 
+b,
+strong {
+    font-weight: 500;
+}
+
 ol,
 ul {
     padding: 0;
@@ -59,7 +64,16 @@ a {
 }
 
 a:hover {
+    color: $brand-color;
     text-decoration: none;
+}
+
+.mleft-auto {
+    margin-#{$start-direction}: auto !important;
+}
+
+.mright-auto {
+    margin-#{$end-direction}: auto !important;
 }
 
 .text-left {
@@ -131,10 +145,6 @@ a:hover {
     text-decoration: underline;
     font-size: 0.9em;
     color: $brand-color !important;
-}
-
-.column {
-    margin-bottom: 30px;
 }
 
 .gap {
@@ -211,15 +221,6 @@ a:hover {
     }
 }
 
-.coupon-code {
-    padding: 0.3rem 1.2rem;
-    border-radius: 2rem;
-    color: lighten($body-color, 50%);
-    border: dashed 1px $border-color;
-    display: inline-block;
-    font-weight: 600;
-}
-
 .profile-image {
     .avtar {
         margin: 0 auto;
@@ -246,17 +247,21 @@ a:hover {
 
 .custom-ui-autocomplete {
     max-height: 200px;
+    max-width: 500px;
     overflow: hidden;
     overflow-y: auto;
     box-shadow: 0 0 35px 10px rgba(0, 0, 0, 0.1);
     border-radius: $radius4;
+    font-family: $family-primary !important;
+    font-weight: 400;
     font-size: 0.8rem !important;
     border: $border;
+    animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
     .ui-menu-item {
         border-bottom: $border;
         .ui-menu-item-wrapper {
-            padding: 0.5rem;
-            border: none !important;
+            padding: 0.8rem;
+            border-color: transparent !important;
         }
         &:last-child {
             border-bottom: none;
@@ -334,4 +339,8 @@ a:hover {
     .checkbox {
         font-size: inherit;
     }
+}
+
+.scroll {
+    padding-#{$end-direction}: 15px;
 }

@@ -45,16 +45,23 @@ class Plugin extends MyAppModel
         self::TYPE_PUSH_NOTIFICATION,
         self::TYPE_ADVERTISEMENT_FEED,
         self::TYPE_SMS_NOTIFICATION,
-        self::TYPE_TAX_SERVICES ,
-        self::TYPE_FULL_TEXT_SEARCH,
+        self::TYPE_TAX_SERVICES,
+        // self::TYPE_FULL_TEXT_SEARCH, /* NOT IN USE */
         self::TYPE_SPLIT_PAYMENT_METHOD,
         self::TYPE_SHIPPING_SERVICES,
         self::TYPE_SHIPMENT_TRACKING,
     ];
 
+    /* Payment Gateways Applicable For Pay Later. */
+    public const PAY_LATER = [
+        'CashOnDelivery',
+        'PayAtStore'
+    ];
+
     public const ATTRS = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'code',
+        self::DB_TBL_PREFIX . 'type',
         self::DB_TBL_PREFIX . 'description',
         'COALESCE(plg_l.' . self::DB_TBL_PREFIX . 'name, plg.' . self::DB_TBL_PREFIX . 'identifier) as plugin_name',
         self::DB_TBL_PREFIX . 'active',
@@ -67,7 +74,7 @@ class Plugin extends MyAppModel
             array('plugin_code')
         );
     }
-    
+
     /**
      * getTypeArr - Used to get plugin type
      *
@@ -83,8 +90,8 @@ class Plugin extends MyAppModel
             self::TYPE_PAYOUTS => Labels::getLabel('LBL_PAYOUT', $langId),
             self::TYPE_ADVERTISEMENT_FEED => Labels::getLabel('LBL_ADVERTISEMENT_FEED', $langId),
             self::TYPE_SMS_NOTIFICATION => Labels::getLabel('LBL_SMS_NOTIFICATION', $langId),
-            self::TYPE_TAX_SERVICES => Labels::getLabel('LBL_Tax_Services', $langId),
-            self::TYPE_FULL_TEXT_SEARCH => Labels::getLabel('LBL_FULL_TEXT_SEARCH', $langId),
+            self::TYPE_TAX_SERVICES => Labels::getLabel('LBL_TAX_SERVICES', $langId),
+            // self::TYPE_FULL_TEXT_SEARCH => Labels::getLabel('LBL_FULL_TEXT_SEARCH', $langId), /* NOT IN USE */
             self::TYPE_SPLIT_PAYMENT_METHOD => Labels::getLabel('LBL_SPLIT_PAYMENT_METHODS', $langId),
             self::TYPE_REGULAR_PAYMENT_METHOD => Labels::getLabel('LBL_REGULAR_PAYMENT_METHODS', $langId),
             self::TYPE_SHIPPING_SERVICES => Labels::getLabel('LBL_SHIPPING_SERVICES', $langId),
@@ -92,12 +99,12 @@ class Plugin extends MyAppModel
             self::TYPE_SHIPMENT_TRACKING => Labels::getLabel('LBL_SHIPMENT_TRACKING', $langId),
         ];
     }
-    
+
     /**
      * getDirectory - Used to get plugin directory
      *
      * @param  mixed $pluginType
-     * @return void
+     * @return mixed
      */
     public static function getDirectory(int $pluginType)
     {
@@ -107,7 +114,7 @@ class Plugin extends MyAppModel
             self::TYPE_PUSH_NOTIFICATION => "push-notification",
             self::TYPE_ADVERTISEMENT_FEED => "advertisement-feed",
             self::TYPE_SMS_NOTIFICATION => "sms-notification",
-            self::TYPE_FULL_TEXT_SEARCH => "full-text-search",
+            // self::TYPE_FULL_TEXT_SEARCH => "full-text-search", /* NOT IN USE */
             self::TYPE_TAX_SERVICES => "tax",
             self::TYPE_SPLIT_PAYMENT_METHOD => "payment-methods",
             self::TYPE_MARKETPLACE_CHANNELS => "marketplace-channels",
@@ -121,7 +128,25 @@ class Plugin extends MyAppModel
         }
         return false;
     }
-    
+
+    /**
+     * getActivatationLimit
+     *
+     * @param  int $typeId
+     * @return void
+     */
+    public static function getActivatationLimit(int $typeId): int
+    {
+        if (false === static::getDirectory($typeId)) {
+            return -1;
+        }
+
+        $pluginTypeArr = [
+            self::TYPE_REGULAR_PAYMENT_METHOD => 4,
+        ];
+        return array_key_exists($typeId, $pluginTypeArr) ? $pluginTypeArr[$typeId] : 0;
+    }
+
     /**
      * getGroupType
      *
@@ -144,7 +169,7 @@ class Plugin extends MyAppModel
         }
         return $groupArr;
     }
-    
+
     /**
      * getEnvArr
      *
@@ -163,7 +188,7 @@ class Plugin extends MyAppModel
             self::ENV_PRODUCTION => Labels::getLabel('LBL_PRODUCTION', $langId),
         ];
     }
-        
+
     /**
      * getSearchObject
      *
@@ -197,7 +222,7 @@ class Plugin extends MyAppModel
         }
         return $srch;
     }
-    
+
     /**
      * isActive
      *
@@ -208,7 +233,26 @@ class Plugin extends MyAppModel
     {
         return (0 < static::getAttributesByCode($code, self::DB_TBL_PREFIX . 'active') ? true : false);
     }
-    
+
+    /**
+     * isActive
+     *
+     * @param  string $code - Keyname
+     * @return bool
+     */
+    public static function isActiveByType(string $type): bool
+    {
+        $srch = new SearchBase(static::DB_TBL, 'plg');
+        $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'type', '=', $type);
+        $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (!empty($row)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * getAttributesByCode
      *
@@ -239,13 +283,13 @@ class Plugin extends MyAppModel
         if (empty($row) || !is_array($row)) {
             return false;
         }
-        
+
         if (!empty($attr) && is_string($attr)) {
             return $row[$attr];
         }
         return $row;
     }
-    
+
     /**
      * pluginTypeSrchObj
      *
@@ -265,7 +309,7 @@ class Plugin extends MyAppModel
         $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'type', '=', $typeId);
         return $srch;
     }
-    
+
     /**
      * getDataByType
      *
@@ -296,17 +340,17 @@ class Plugin extends MyAppModel
                 ]
             );
         }
-
+        $srch->addOrder('plugin_display_order', 'ASC');
         $rs = $srch->getResultSet();
 
         $db = FatApp::getDb();
         if (true == $assoc) {
             return $db->fetchAllAssoc($rs);
         }
-        
+
         return $db->fetchAll($rs, static::DB_TBL_PREFIX . 'id');
     }
-    
+
     /**
      * getNamesByType
      *
@@ -321,9 +365,9 @@ class Plugin extends MyAppModel
         if (1 > $typeId && 1 > $langId) {
             return false;
         }
-        return $pluginsTypeArr = static::getDataByType($typeId, $langId, true);
+        return static::getDataByType($typeId, $langId, true);
     }
-    
+
     /**
      * getNamesWithCode
      *
@@ -345,7 +389,7 @@ class Plugin extends MyAppModel
         });
         return $arr;
     }
-    
+
     /**
      * getSocialLoginPluginsStatus
      *
@@ -365,7 +409,7 @@ class Plugin extends MyAppModel
 
         return FatApp::getDb()->fetchAllAssoc($rs);
     }
-    
+
     /**
      * getDefaultPluginKeyName - Used for Kingpin plugins only
      *
@@ -376,7 +420,7 @@ class Plugin extends MyAppModel
     {
         return $this->getDefaultPluginData($typeId, 'plugin_code');
     }
-    
+
     /**
      * getDefaultPluginData - Used for Kingpin plugins only
      *
@@ -409,7 +453,7 @@ class Plugin extends MyAppModel
                         }
                         $srch->addFld($attr);
                         break;
-                    
+
                     default:
                         $srch->addMultipleFields($attr);
                         break;
@@ -425,7 +469,7 @@ class Plugin extends MyAppModel
         }
         return Plugin::getAttributesById($kingPin, $attr);
     }
-    
+
     /**
      * canSendSms
      *
@@ -438,7 +482,7 @@ class Plugin extends MyAppModel
         $status = empty($tpl) ? 1 : SmsTemplate::getTpl($tpl, 0, 'stpl_status');
         return (false != $active && !empty($active) && 0 < $status);
     }
-    
+
     /**
      * updateStatus
      *
@@ -452,15 +496,40 @@ class Plugin extends MyAppModel
     {
         $db = FatApp::getDb();
         $langId = CommonHelper::getLangId();
+        $pluginKey = Plugin::getAttributesById($id, 'plugin_code');
         $pluginTypesArr = static::getTypeArr($langId);
         $plugins = static::getDataByType($typeId, $langId);
+        // CommonHelper::printArray($plugins);
         $activationLimit = static::getActivatationLimit($typeId);
+        $payLater = self::PAY_LATER;
+
+        $msg = '';
+        if (self::TYPE_REGULAR_PAYMENT_METHOD == $typeId) {
+            $msg = ' ' . Labels::getLabel('MSG_EXCEPT_PAY_LATER_PLUGINS.', $langId);
+            $plugins = !$plugins ? [] : $plugins;
+            $activatedPayLaterPlugins = 0;
+            array_walk($plugins, function ($plugin) use (&$activationLimit, $pluginKey, $payLater, &$activatedPayLaterPlugins) {
+                if (in_array($plugin['plugin_code'], $payLater)) {
+                    $activatedPayLaterPlugins++;
+                }
+
+                if (in_array($pluginKey, $payLater) && in_array($plugin['plugin_code'], $payLater)) {
+                    $activationLimit++;
+                    return;
+                }
+            });
+
+            if (!in_array($pluginKey, $payLater) && $activationLimit == count($plugins) && $activatedPayLaterPlugins == count($payLater)) {
+                $activationLimit++;
+            }
+        }
+
         if (0 < $activationLimit && $activationLimit <= count($plugins) && self::ACTIVE == $status) {
-            $msg = Labels::getLabel("MSG_MAXIMUM_OF_{LIMIT}_{PLUGIN-TYPE}_CAN_BE_ACTIVATED_SIMULTANEOUSLY", $langId);
+            $msg = Labels::getLabel("MSG_MAXIMUM_OF_{LIMIT}_{PLUGIN-TYPE}_CAN_BE_ACTIVATED_SIMULTANEOUSLY.", $langId) . $msg;
             $error = CommonHelper::replaceStringData($msg, ['{LIMIT}' => $activationLimit, '{PLUGIN-TYPE}' => $pluginTypesArr[$typeId]]);
             return false;
         }
-        
+
         $max = in_array($typeId, self::HAVING_KINGPIN) && applicationConstants::ACTIVE == $status ? 2 : 1;
 
         for ($i = 0; $i < $max; $i++) {
@@ -485,23 +554,5 @@ class Plugin extends MyAppModel
             }
         }
         return true;
-    }
-    
-    /**
-     * getActivatationLimit
-     *
-     * @param  int $typeId
-     * @return void
-     */
-    public static function getActivatationLimit(int $typeId): int
-    {
-        if (false === static::getDirectory($typeId)) {
-            return -1;
-        }
-
-        $pluginTypeArr = [
-            self::TYPE_REGULAR_PAYMENT_METHOD => 3,
-        ];
-        return array_key_exists($typeId, $pluginTypeArr) ? $pluginTypeArr[$typeId] : 0;
     }
 }

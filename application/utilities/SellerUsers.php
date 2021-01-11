@@ -15,8 +15,12 @@ trait SellerUsers
     public function users()
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            $msg = Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId);
+            if (FatUtility::isAjaxCall()) {
+                FatUtility::dieWithError($msg);
+            }
+            Message::addErrorMessage($msg);
+            FatApp::redirectUser(UrlHelper::generateUrl('seller'));
         }
         $this->set('frmSearch', $this->getUserSearchForm());
         $this->_template->render(true, true);
@@ -344,7 +348,7 @@ trait SellerUsers
         $frm = new Form('frmAllAccess');
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_permission_for_all_modules', $this->siteLangId), 'permissionForAll', $permissionArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply_to_All', $this->siteLangId), array('onclick' => 'updatePermission(0);return false;'));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Apply_to_All', $this->siteLangId), array('onclick' => 'updatePermission(0);return false;'));
         return $frm;
     }
 
@@ -419,7 +423,7 @@ trait SellerUsers
             $permissionModules = UserPrivilege::getSellerPermissionModulesArr($this->siteLangId);
             $permissionArr = UserPrivilege::getPermissionArr($this->siteLangId);
             if (!array_key_exists($moduleId, $permissionModules) || !array_key_exists($permission, $permissionArr)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request1', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
             if (!$userPermission->updatePermissions($this->siteLangId, $data)) {

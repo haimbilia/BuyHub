@@ -1,5 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = array(
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php $arr_flds = array(
     'select_all' => '',
     'product_name' => Labels::getLabel('LBL_Name', $siteLangId),
     'voldiscount_min_qty' => Labels::getLabel('LBL_Minimum_Quantity', $siteLangId),
@@ -11,7 +12,11 @@ if ($canEdit) {
 if (!$canEdit || 1 > count($arrListing)) {
     unset($arr_flds['select_all']);
 }
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered volDiscountList-js'));
+$tableClass = '';
+if (0 < count($arrListing)) {
+	$tableClass = "table-justified";
+}
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered volDiscountList-js '.$tableClass));
 $thead = $tbl->appendElement('thead');
 $th = $thead->appendElement('tr', array('class' => ''));
 
@@ -69,6 +74,7 @@ $frm->setFormTagAttribute('class', 'form');
 echo $frm->getFormTag();
 echo $tbl->getHtml(); ?>
 </form>
+</div>
 <?php
 
 if (count($arrListing) == 0) {

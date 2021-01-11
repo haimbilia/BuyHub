@@ -17,7 +17,7 @@
                                         $optionData[$key]['value'] = $data['option_name'] . '(' . $data['option_identifier'] . ')';
                                     }
                                     ?>
-                                    <input type="text" name="option_groups" value='<?php echo json_encode($optionData); ?>'>
+                                    <input type="text" name="option_groups" value='<?php echo htmlspecialchars(json_encode($optionData)); ?>'>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                             <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <input class="tag_name" type="text" name="tag_name" id="get-tags"  value='<?php echo json_encode($tagData); ?>'>
+                                    <input class="tag_name" type="text" name="tag_name" id="get-tags"  value='<?php echo htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8'); ?>'>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                 <div class="caption-wraper"><label class="field_label"></label></div>
                 <div class="field-wraper">
                     <div class="field_cover">
-                        <input type="button" class="btn btn-outline-primary" onClick= "productAttributeAndSpecificationsFrm(<?php echo $preqId; ?>)" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
+                        <input type="button" class="btn btn-outline-brand" onClick= "productAttributeAndSpecificationsFrm(<?php echo $preqId; ?>)" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <div class="field-wraper">
                     <div class="field_cover">
                         <input type="hidden" name="preq_id" value="<?php echo $preqId; ?>">
-                        <input type="button" class="btn btn-primary" onClick= "<?php if ($productType == Product::PRODUCT_TYPE_DIGITAL) { ?> productMedia(<?php echo $productId; ?>) <?php } else { ?> productShipping(<?php echo $preqId; ?>) <?php } ?>" value="<?php echo Labels::getLabel('LBL_Save_And_Next', $siteLangId); ?>">
+                        <input type="button" class="btn btn-brand" onClick= "<?php if ($productType == Product::PRODUCT_TYPE_DIGITAL) { ?> customCatalogProductImages(<?php echo $preqId; ?>) <?php } else { ?> productShipping(<?php echo $preqId; ?>) <?php } ?>" value="<?php echo Labels::getLabel('LBL_Save_And_Next', $siteLangId); ?>">
                     </div>
                 </div>
             </div>
@@ -107,26 +107,30 @@
             var tag_id = e.detail.tag.id;
             removeProductTag(preq_id, tag_id);
         }
-
-        getTagsAutoComplete = function () {
+        
+        
+        getTagsAutoComplete = function(e){
+            var keyword = e.detail.value;
+            tagify.loading(true).dropdown.hide.call(tagify)
             var list = [];
-            fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), '', function (t) {
+            fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), {keyword:keyword}, function(t) {          
                 var ans = $.parseJSON(t);
-                for (i = 0; i < ans.length; i++) {
+                for (i = 0; i < ans.length; i++) {            
                     list.push({
-                        "id": ans[i].id,
-                        "value": ans[i].tag_identifier,
+                        "id" : ans[i].id,
+                        "value" : ans[i].tag_identifier, 
                     });
-                }
-            });
-            return list;
+                } 
+                tagify.settings.whitelist = list;
+                tagify.loading(false).dropdown.show.call(tagify, keyword);
+            });       
         }
 
         tagify = new Tagify(document.querySelector('input[name=tag_name]'), {
-            whitelist: getTagsAutoComplete(),
+            whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addTagData).on('remove', removeTagData);
+        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
 
 
 
@@ -144,27 +148,30 @@
             var option_id = e.detail.tag.id;
             removeProductOption(preq_id, option_id);
         }
-
-        getOptionsAutoComplete = function () {
+        
+            
+        getOptionsAutoComplete = function(e){
+            var keyword = e.detail.value;
+            tagifyOption.loading(true).dropdown.hide.call(tagifyOption);
             var listOptions = [];
-            fcom.ajax(fcom.makeUrl('Seller', 'autoCompleteOptions'), '', function (t) {
+            fcom.ajax(fcom.makeUrl('Seller', 'autoCompleteOptions'), {keyword:keyword}, function(t) {           
                 var ans = $.parseJSON(t);
-                for (i = 0; i < ans.length; i++) {
+                for (i = 0; i < ans.length; i++) {            
                     listOptions.push({
-                        "id": ans[i].id,
-                        "value": ans[i].name + '(' + ans[i].option_identifier + ')',
+                        "id" : ans[i].id,
+                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
                     });
-                }
+                }            
+                tagifyOption.settings.whitelist = listOptions;
+                tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);            
             });
-            return listOptions;
-        };
 
-
+        }; 
         tagifyOption = new Tagify(document.querySelector('input[name=option_groups]'), {
-            whitelist: getOptionsAutoComplete(),
+            whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addOption).on('remove', removeOption);
+        }).on('add', addOption).on('remove', removeOption).on('input', getOptionsAutoComplete);
 
     });
 </script>

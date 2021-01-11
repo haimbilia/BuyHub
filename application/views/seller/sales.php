@@ -60,15 +60,15 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="replaced">
                                 <?php
                                 $submitFld = $frmOrderSrch->getField('btn_submit');
-                                $submitFld->setFieldTagAttribute('class', 'btn btn-primary btn-block ');
+                                $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
                                 $fldClear= $frmOrderSrch->getField('btn_clear');
-                                $fldClear->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
+                                $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                 echo $frmOrderSrch->getFormHtml();
                                 ?>
                             </div>
@@ -79,8 +79,8 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div id="ordersListing"></div>
                             <span class="gap"></span>
                         </div>

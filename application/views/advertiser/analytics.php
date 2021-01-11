@@ -11,14 +11,14 @@
 	<div class="content-body">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="cards">
-					<div class="cards-header">
-						<h5 class="cards-title "><?php echo ucfirst($promotionDetails['promotion_name']);?></h5>
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title "><?php echo ucfirst($promotionDetails['promotion_name']);?></h5>
 						<div class="btn-group">
-							<a href="<?php echo UrlHelper::generateUrl('advertiser','promotions');?>" class="btn btn-outline-primary btn-sm"><?php echo Labels::getLabel('LBL_My_promotions',$siteLangId);?></a>
+							<a href="<?php echo UrlHelper::generateUrl('advertiser','promotions');?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_My_promotions',$siteLangId);?></a>
 						</div>
 					</div>
-					<div class="cards-content ">
+					<div class="card-body ">
 						<div class="replaced">
 						<?php 
 							$searchForm->setFormTagAttribute('class', 'form');
@@ -40,13 +40,13 @@
                             $dateToFld->developerTags['noCaptionTag'] = true;
                             
 							$submitBtnFld = $searchForm->getField('btn_submit');
-							$submitBtnFld->setFieldTagAttribute('class','btn-block');
+							$submitBtnFld->setFieldTagAttribute('class','btn btn-brand btn-block');
 							$submitBtnFld->setWrapperAttribute('class','col-sm-6 ');
                             $submitBtnFld->developerTags['col'] = 2;
                             $submitBtnFld->developerTags['noCaptionTag'] = true;
 
 							$cancelBtnFld = $searchForm->getField('btn_clear');
-							$cancelBtnFld->setFieldTagAttribute('class','btn-block');
+							$cancelBtnFld->setFieldTagAttribute('class','btn btn-outline-brand btn-block');
 							$cancelBtnFld->setWrapperAttribute('class','col-sm-6 ');
 							$cancelBtnFld->developerTags['col'] = 2;
                             $cancelBtnFld->developerTags['noCaptionTag'] = true;

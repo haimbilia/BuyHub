@@ -216,7 +216,7 @@ class ConfigurationsController extends AdminBaseController
         }
 
         if (isset($post['CONF_SITE_ROBOTS_TXT'])) {
-            $filePath = CONF_INSTALLATION_PATH . 'public/robots.txt';
+            $filePath = CONF_UPLOADS_PATH . 'robots.txt';
             $robotfile = fopen($filePath, "w");
             fwrite($robotfile, $post['CONF_SITE_ROBOTS_TXT']);
             fclose($robotfile);
@@ -332,6 +332,7 @@ class ConfigurationsController extends AdminBaseController
             AttachedFile::FILETYPE_APP_MAIN_SCREEN_IMAGE,
             AttachedFile::FILETYPE_APP_LOGO,
             AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE,
+            AttachedFile::FILETYPE_META_IMAGE,
         );
 
         if (!in_array($file_type, $allowedFileTypeArr)) {
@@ -360,10 +361,10 @@ class ConfigurationsController extends AdminBaseController
     {
         include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
         $analyticArr = array(
-        'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
-        'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
-        'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
-        'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
+            'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
+            'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
+            'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
+            'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
         );
         try {
             $analytics = new Ykart_analytics($analyticArr);
@@ -582,9 +583,9 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addSelectBox(Labels::getLabel('LBL_Cookies_Policies_Page', $this->adminLangId), 'CONF_COOKIES_BUTTON_LINK', $cpagesArr);
                 $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Cookies_Policies', $this->adminLangId), 'CONF_ENABLE_COOKIES', 1, array(), false, 0);
                 $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_cookies_policies_section_will_be_shown_on_frontend", $this->adminLangId) . "</small>";
-                
+
                 $frm->addCheckBox(Labels::getLabel("LBL_Header_Mega_Menu", $this->adminLangId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
-                
+
                 $fld3 = $frm->addTextBox(Labels::getLabel("LBL_Admin_Default_Items_Per_Page", $this->adminLangId), "CONF_ADMIN_PAGESIZE");
                 $fld3->requirements()->setInt();
                 $fld3->requirements()->setRange('1', '2000');
@@ -630,7 +631,8 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_SEO:
-                $fld = $frm->addCheckBox(Labels::getLabel('LBL_Add_LANGUAGE_CODE_IN_URLS', $this->adminLangId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
+                $fld = $frm->addCheckBox(Labels::getLabel('LBL_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING', $this->adminLangId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Twitter_Username', $this->adminLangId), 'CONF_TWITTER_USERNAME');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_This_is_required_for_Twitter_Card_code_SEO_Update", $this->adminLangId) . '</small>';
@@ -648,59 +650,57 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Body_Script", $this->adminLangId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->adminLangId) . "</small>";
 
-				$frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Google_Webmaster", $this->adminLangId) . '</h3>');
-				$fld = $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $this->adminLangId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
-				$htmlAfterField = '';
-				$target_dir = CONF_INSTALLATION_PATH.'public/';
-				$files = preg_grep('~^google.*\.html$~', scandir($target_dir));
-				$file = current($files);
-				if ($file!='') {
-					$htmlAfterField .= $fld->htmlAfterField = '<a href="'.UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL).$file.'" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_View_File", $this->adminLangId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_Delete_File", $this->adminLangId) . '" onclick="deleteVerificationFile(\'google\')"><i class="fa fa-trash  icon"></i></a>';
+                $frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Google_Webmaster", $this->adminLangId) . '</h3>');
+                $fld = $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $this->adminLangId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
+                $htmlAfterField = '';
+                $target_dir = CONF_INSTALLATION_PATH . 'public/';
+                $files = preg_grep('~^google.*\.html$~', scandir($target_dir));
+                $file = current($files);
+                if ($file != '') {
+                    $htmlAfterField .= $fld->htmlAfterField = '<a href="' . UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $file . '" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_View_File", $this->adminLangId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_Delete_File", $this->adminLangId) . '" onclick="deleteVerificationFile(\'google\')"><i class="fa fa-trash  icon"></i></a>';
                 }
-				$htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_HTML_file_provided_by_Google_webmaster_tool.", $this->adminLangId) . "</small>";
-				$fld->htmlAfterField = $htmlAfterField;
+                $htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_HTML_file_provided_by_Google_webmaster_tool.", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = $htmlAfterField;
 
-				$frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Bing_Webmaster", $this->adminLangId) . '</h3>');
-				$fld = $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $this->adminLangId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
-				$htmlAfterField = '';
-				if (file_exists(CONF_INSTALLATION_PATH.'public/BingSiteAuth.xml')) {
-					$htmlAfterField .= $fld->htmlAfterField = '<a href="'.UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL).'BingSiteAuth.xml'.'" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_View_File", $this->adminLangId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_Delete_File", $this->adminLangId) . '" onclick="deleteVerificationFile(\'bing\')"><i class="fa fa-trash  icon"></i></a>';
+                $frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Bing_Webmaster", $this->adminLangId) . '</h3>');
+                $fld = $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $this->adminLangId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
+                $htmlAfterField = '';
+                if (file_exists(CONF_INSTALLATION_PATH . 'public/BingSiteAuth.xml')) {
+                    $htmlAfterField .= $fld->htmlAfterField = '<a href="' . UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'BingSiteAuth.xml' . '" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_View_File", $this->adminLangId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_Delete_File", $this->adminLangId) . '" onclick="deleteVerificationFile(\'bing\')"><i class="fa fa-trash  icon"></i></a>';
                 }
-				$htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_BindSiteAuthXML_file_provided_by_Bing_webmaster_tool.", $this->adminLangId) . "</small>";
-				$fld->htmlAfterField = $htmlAfterField;
+                $htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_BindSiteAuthXML_file_provided_by_Bing_webmaster_tool.", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = $htmlAfterField;
 
-				$frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Hotjar", $this->adminLangId) . '</h3>');
-				$fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->adminLangId), 'CONF_HOTJAR_HEAD_SCRIPT');
-				$fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_hotjar_for_integration.", $this->adminLangId) . "</small>";
+                $frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Hotjar", $this->adminLangId) . '</h3>');
+                $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->adminLangId), 'CONF_HOTJAR_HEAD_SCRIPT');
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_hotjar_for_integration.", $this->adminLangId) . "</small>";
 
-				$frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Schema_COdes", $this->adminLangId) . '</h3>');
-				$fld = $frm->addTextarea(Labels::getLabel("LBL_Default_Schema", $this->adminLangId), 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT');
-				$fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Update_Schema_code_related_information.", $this->adminLangId) . "</small>";
+                $frm->addHtml('', 'Analytics', '<h3>' . Labels::getLabel("LBL_Schema_COdes", $this->adminLangId) . '</h3>');
+                $fld = $frm->addTextarea(Labels::getLabel("LBL_Default_Schema", $this->adminLangId), 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT');
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Update_Schema_code_related_information.", $this->adminLangId) . "</small>";
 
                 break;
 
             case Configurations::FORM_PRODUCT:
                 $frm->addHtml('', 'Product', '<h3>' . Labels::getLabel('LBL_Product', $this->adminLangId) . '</h3>');
 
-                $fld4 = $frm->addCheckBox(
-                    Labels::getLabel("LBL_Allow_Seller_to_add_products", $this->adminLangId),
+                $frm->addCheckBox(
+                    Labels::getLabel("LBL_Allow_Sellers_to_add_products", $this->adminLangId),
                     'CONF_ENABLED_SELLER_CUSTOM_PRODUCT',
                     1,
                     array(),
                     false,
                     0
                 );
-                $fld4->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_Products_option_will_enabled_for_seller_dashboard", $this->adminLangId) . '</small>';
 
-                $fld3 = $frm->addCheckBox(
-                    Labels::getLabel("LBL_Activate_Administrator_Approval_on_Products", $this->adminLangId),
+                $frm->addCheckBox(
+                    Labels::getLabel("LBL_Enable_Admin_Approval_on_Products_added_by_sellers", $this->adminLangId),
                     'CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL',
                     1,
                     array(),
                     false,
                     0
                 );
-                $fld3->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_Products_required_admin_approval_to_display", $this->adminLangId) . '</small>';
 
 
                 /* $fld4 = $frm->addCheckBox(Labels::getLabel("LBL_Allow_Sellers_to_request_adding_new_products_to_the_Catalog",$this->adminLangId),'CONF_SELLER_CAN_REQUEST_PRODUCT',1,
@@ -708,47 +708,46 @@ class ConfigurationsController extends AdminBaseController
                 $fld4->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_Seller_can_request_to_add_product_on_catalog",$this->adminLangId) . '</small>'; */
 
                 $fld4 = $frm->addCheckBox(
-                    Labels::getLabel("LBL_ALLOW_SELLERS_TO_REQUEST_PRODUCTS_WHICH_IS_AVAILABLE_TO_ALL_SELLERS", $this->adminLangId),
+                    Labels::getLabel("LBL_ALLOW_SELLERS_TO_REQUEST_PRODUCTS_WHICH_ARE_AVAILABLE_TO_ALL_SELLERS", $this->adminLangId),
                     'CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT',
                     1,
                     array(),
                     false,
                     0
                 );
-                $fld4->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_Seller_can_request_to_add_products_available_for_all_sellers", $this->adminLangId) . '</small>';
+                // $fld4->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_Seller_can_request_to_add_products_available_for_all_sellers", $this->adminLangId) . '</small>';
 
-                $fld1 = $frm->addCheckBox(Labels::getLabel("LBL_Product_Inclusive_Tax", $this->adminLangId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
-                $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_will_make_Products_inclusive_tax", $this->adminLangId) . "</small>";
+                $fld1 = $frm->addCheckBox(Labels::getLabel("LBL_Adding_Model_#_for_products_will_be_mandatory", $this->adminLangId), 'CONF_PRODUCT_MODEL_MANDATORY', 1, array(), false, 0);
 
-                $fld1 = $frm->addCheckBox(Labels::getLabel("LBL_Product's_Model_Mandatory", $this->adminLangId), 'CONF_PRODUCT_MODEL_MANDATORY', 1, array(), false, 0);
-                $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_will_make_Product's_model_mandatory", $this->adminLangId) . "</small>";
+                $frm->addCheckBox(Labels::getLabel("LBL_Adding_SKU_for_products_will_be_mandatory", $this->adminLangId), 'CONF_PRODUCT_SKU_MANDATORY', 1, array(), false, 0);
 
-                $fld2 = $frm->addCheckBox(Labels::getLabel("LBL_Product's_SKU_Mandatory", $this->adminLangId), 'CONF_PRODUCT_SKU_MANDATORY', 1, array(), false, 0);
-                $fld2->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_will_make_Product's_SKU_mandatory", $this->adminLangId) . "</small>";
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Enable_linking_shipping_packages_to_products", $this->adminLangId), 'CONF_PRODUCT_DIMENSIONS_ENABLE', 1, array(), false, 0);
+                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Shipping_packages_are_required_in_case_Shipping_API_is_enabled", $this->adminLangId) . "</small>";
 
-                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Product's_Dimensions", $this->adminLangId), 'CONF_PRODUCT_DIMENSIONS_ENABLE', 1, array(), false, 0);
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_dimensions_of_the_product_will_be_required_to_be_filled._Dimensions_are_required_in_case_of_Shipstation_API_(If_Enabled)_for_Live_Shipping_Charges", $this->adminLangId) . "</small>";
-
-                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Brand_Request_Approval", $this->adminLangId), 'CONF_BRAND_REQUEST_APPROVAL', 1, array(), false, 0);
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Brands_requested_by_sellers_will_require_approval", $this->adminLangId), 'CONF_BRAND_REQUEST_APPROVAL', 1, array(), false, 0);
                 $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $this->adminLangId) . "</small>";
-                
-                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Product_Category_Request_Approval", $this->adminLangId), 'CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', 1, array(), false, 0);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Categories_requested_by_sellers_will_require_approval", $this->adminLangId), 'CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', 1, array(), false, 0);
                 $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_Product_category_requests_(User_Cannot_link_the_requested_category_with_any_product_until_it_gets_approved_by_Admin)", $this->adminLangId) . "</small>";
 
+                $brandFld = $frm->addCheckBox(Labels::getLabel("LBL_Brand_will_be_mandatory_for_products", $this->adminLangId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
 
-                $brandFld = $frm->addCheckBox(Labels::getLabel("LBL_Product's_Brand_Mandatory", $this->adminLangId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
-                $brandFld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_will_make_Product's_brand_mandatory", $this->adminLangId) . "</small>";
+                $fld1 = $frm->addCheckBox(Labels::getLabel("LBL_Product_prices_will_be_inclusive_of_tax", $this->adminLangId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Enable_tax_code_for_categories", $this->adminLangId), 'CONF_TAX_CATEGORIES_CODE', 1, array(), false, 0);
+                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_will_enable_tax_categories_code", $this->adminLangId) . "</small>";
+
+                $filterLayout = FilterHelper::getLayouts($this->adminLangId);
+                $frm->addSelectBox(Labels::getLabel('LBL_Filters_Layout', $this->adminLangId), 'CONF_FILTERS_LAYOUT', $filterLayout, applicationConstants::NO, array(), '');
 
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId);
                 $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'CONF_FULFILLMENT_TYPE', $fulFillmentArr, applicationConstants::NO, array(), '');
-                
-                $brandFld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_will_make_Product's_brand_mandatory", $this->adminLangId) . "</small>";
 
                 $fld3 = $frm->addTextBox(Labels::getLabel("LBL_Default_Items_Per_Page_(Catalog)", $this->adminLangId), "CONF_ITEMS_PER_PAGE_CATALOG");
                 $fld3->requirements()->setInt();
                 $fld3->requirements()->setRange('1', '2000');
                 $fld3->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Determines_how_many_catalog_items_are_shown_per_page_(products,_categories,_etc)", $this->adminLangId) . ".</small>";
-                
+
                 $frm->addHtml('', 'geolocation', '<h3>' . Labels::getLabel('LBL_Location', $this->adminLangId) . '</h3>');
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_ACTIVATE_GEO_LOCATION", $this->adminLangId),
@@ -758,15 +757,22 @@ class ConfigurationsController extends AdminBaseController
                     array('class' => 'list-inline')
                 );
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_PRODUCT_LISTING", $this->adminLangId) . "</small>";
+
+                $prodGeoSettingArr = applicationConstants::getProductListingSettings($this->adminLangId);
+
+                $shippingServiceActive = Plugin::isActiveByType(Plugin::TYPE_SHIPPING_SERVICES);
+                if ($shippingServiceActive) {
+                    unset($prodGeoSettingArr[applicationConstants::BASED_ON_DELIVERY_LOCATION]);
+                }
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_PRODUCT_LISTING", $this->adminLangId),
                     'CONF_PRODUCT_GEO_LOCATION',
-                    applicationConstants::getProductListingSettings($this->adminLangId),
+                    $prodGeoSettingArr,
                     '',
                     array('class' => 'list-inline')
                 );
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_LOCATION", $this->adminLangId) . "</small>";
-                
+
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_PRODUCT_LISTING_FILTER", $this->adminLangId),
                     'CONF_LOCATION_LEVEL',
@@ -776,6 +782,8 @@ class ConfigurationsController extends AdminBaseController
                 );
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_CRITERIA", $this->adminLangId) . "</small>";
 
+                $fld = $frm->addTextBox(Labels::getLabel('LBL_RADIUS_MAX_DISTANCE_IN_MILES', $this->adminLangId), 'CONF_RADIUS_DISTANCE_IN_MILES');
+                $fld->requirements()->setInt();
                 break;
 
             case Configurations::FORM_USER_ACCOUNT:
@@ -888,12 +896,13 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_is_the_maximum_cash_on_delivery_order_total,_eligible_for_COD_payments._Default_is_0", $this->adminLangId) . "</small>";
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_COD_MIN_WALLET_BALANCE');
                 $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->adminLangId) . "</small>";
-                
+
                 $frm->addHtml('', 'Checkout', '<h3>' . Labels::getLabel('LBL_Pickup', $this->adminLangId) . '</h3>');
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $this->adminLangId). ' ['.Labels::getLabel('LBL_Hours', $this->adminLangId).']', 'CONF_TIME_SLOT_ADDITION', 2);
+                $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $this->adminLangId) . ' [' . Labels::getLabel('LBL_Hours', $this->adminLangId) . ']', 'CONF_TIME_SLOT_ADDITION', 2);
                 $fld->requirements()->setInt();
                 $fld->requirements()->setRange('2', '9999999999');
-                
+                $fld->requirements()->setRequired(true);
+
                 $frm->addHtml('', 'Checkout', '<h3>' . Labels::getLabel('LBL_Checkout_Process', $this->adminLangId) . '</h3>');
                 $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $this->adminLangId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
                 $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->adminLangId) . "</small>";
@@ -981,6 +990,9 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = $frm->addSelectBox(Labels::getLabel("LBL_Return_Request_Approved_Order_Status", $this->adminLangId), 'CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS', $orderStatusArr, false, array(), '');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_default_child_order_status_when_return_request_is_accepted_by_the_Seller.", $this->adminLangId) . "</small>";
+
+                $fld = $frm->addSelectBox(Labels::getLabel("LBL_Pay_At_Store_Order_Status", $this->adminLangId), 'CONF_PAY_AT_STORE_ORDER_STATUS', $orderStatusArr, false, array(), '');
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_Pay_at_store_order_status.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addSelectBox(Labels::getLabel("LBL_Cash_on_Delivery_Order_Status", $this->adminLangId), 'CONF_COD_ORDER_STATUS', $orderStatusArr, false, array(), '');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_Cash_on_delivery_order_status.", $this->adminLangId) . "</small>";
@@ -1221,10 +1233,10 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<small>Set the order status the customer's order considered completed to earn rewards points.</small>"; */
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Minimum_buying_value", $this->adminLangId), 'CONF_BUYING_IN_AN_YEAR_MIN_VALUE');
-                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_User_get_this_reward_points_on_min_buying_value_in_an_year.", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Min_buying_value_in_an_year_to_get_reward_points", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Reward_Points", $this->adminLangId), 'CONF_BUYING_IN_AN_YEAR_REWARD_POINTS');
-                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_User_get_this_reward_points_on_his_birthday.", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_User_get_this_reward_points_on_min_buying_value_in_an_year", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Reward_Points_Validity", $this->adminLangId), 'CONF_BUYING_IN_AN_YEAR_REWARD_POINTS_VALIDITY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Reward_Points_validity_in_days_from_the_date_of_credit", $this->adminLangId) . "</small>";
@@ -1288,7 +1300,7 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_THIRD_PARTY_API:
-				$frm->addHtml('', 'GooglePushNotification', '<h3>' . Labels::getLabel("LBL_GOOGLE_PUSH_NOTIFICATION", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'GooglePushNotification', '<h3>' . Labels::getLabel("LBL_GOOGLE_PUSH_NOTIFICATION", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Google_Push_Notification_API_KEY", $this->adminLangId), 'CONF_GOOGLE_PUSH_NOTIFICATION_API_KEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_api_key_used_in_push_notifications.", $this->adminLangId) . "</small>";
 
@@ -1342,10 +1354,10 @@ class ConfigurationsController extends AdminBaseController
                 $accessToken = FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN", FatUtility::VAR_STRING, '');
                 include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
                 $analyticArr = array(
-                'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
-                'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY", FatUtility::VAR_STRING, ''),
-                'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
-                'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID", FatUtility::VAR_STRING, '')
+                    'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
+                    'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY", FatUtility::VAR_STRING, ''),
+                    'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
+                    'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID", FatUtility::VAR_STRING, '')
                 );
                 try {
                     $analytics = new Ykart_analytics($analyticArr);
@@ -1644,11 +1656,10 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_GENERAL:
                 $frm->addTextBox(Labels::getLabel("LBL_Site_Name", $this->adminLangId), 'CONF_WEBSITE_NAME_' . $langId);
                 $frm->addTextBox(Labels::getLabel("LBL_Site_Owner", $this->adminLangId), 'CONF_SITE_OWNER_' . $langId);
-                $frm->addTextarea(Labels::getLabel("LBL_ADDRESS", $this->adminLangId), 'CONF_ADDRESS_' . $langId);
                 $frm->addTextarea(Labels::getLabel('LBL_Cookies_Policies_Text', $this->adminLangId), 'CONF_COOKIES_TEXT_' . $langId);
                 break;
             case Configurations::FORM_LOCAL:
-                $frm->addTextBox(Labels::getLabel("LBL_Address", $this->adminLangId), 'CONF_ADDRESS_' . $langId);
+                $frm->addTextarea(Labels::getLabel("LBL_Address", $this->adminLangId), 'CONF_ADDRESS_' . $langId);
                 $frm->addTextBox(Labels::getLabel("LBL_City", $this->adminLangId), 'CONF_CITY_' . $langId);
                 break;
             case Configurations::FORM_EMAIL:
@@ -1658,8 +1669,8 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_SHARING:
                 $frm->addHtml('', 'ShareAndEarn', '<h3>' . Labels::getLabel('LBL_Share_and_Earn_Settings', $this->adminLangId) . '</h3>');
 
-				$fld = $frm->addTextBox(Labels::getLabel("LBL_Facebook_APP_ID", $this->adminLangId), 'CONF_FACEBOOK_APP_ID');
-                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_application_ID_used_in_login_and_post.", $this->adminLangId) . "</small>";
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_Facebook_APP_ID", $this->adminLangId), 'CONF_FACEBOOK_APP_ID');
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_application_ID_used_in_post.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Facebook_App_Secret", $this->adminLangId), 'CONF_FACEBOOK_APP_SECRET');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_Facebook_secret_key_used_for_authentication_and_other_Facebook_related_plugins_support.", $this->adminLangId) . "</small>";
@@ -1671,7 +1682,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Facebook_Post_Description", $this->adminLangId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_' . $langId);
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_description_shared_on_facebook", $this->adminLangId) . "</small>";
 
-				$fld = $frm->addTextBox(Labels::getLabel("LBL_Twitter_APP_KEY", $this->adminLangId), 'CONF_TWITTER_API_KEY');
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_Twitter_APP_KEY", $this->adminLangId), 'CONF_TWITTER_API_KEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_application_ID_used_in_post.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Twitter_App_Secret", $this->adminLangId), 'CONF_TWITTER_API_SECRET');
@@ -1689,20 +1700,20 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_Select_Admin_Logo', $this->adminLangId) . ' </h3> <div class="logoWrap"><div class="uploaded--image">';
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $langId)) {
-					$uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-					$image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeSiteAdminLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div>';
 
                 $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach($ratioArr as $key=>$data){
+                foreach ($ratioArr as $key => $data) {
                     $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_'.AttachedFile::FILETYPE_ADMIN_LOGO;
-                    $ul->htmlAfterField .="<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='".$name."' value='".$key."' $checked><i class='input-helper'></i></span>".$data."</label></li>";
+                    $name = 'ratio_type_' . AttachedFile::FILETYPE_ADMIN_LOGO;
+                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
                 }
-                $ul->htmlAfterField .='</ul>';
+                $ul->htmlAfterField .= '</ul>';
 
                 $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="admin_logo" id="admin_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_ADMIN_LOGO . ' value="Upload file"></div>';
 
@@ -1710,8 +1721,8 @@ class ConfigurationsController extends AdminBaseController
 
 
                 if ($fileData = attachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $langId)) {
-					$uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-					$image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeDesktopLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
@@ -1720,14 +1731,14 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= ' </div></div>';
 
                 $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach($ratioArr as $key=>$data){
+                foreach ($ratioArr as $key => $data) {
                     $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_'.AttachedFile::FILETYPE_FRONT_LOGO;
-                    $ul->htmlAfterField .="<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='".$name."' value='".$key."' $checked><i class='input-helper'></i></span>".$data."</label></li>";
+                    $name = 'ratio_type_' . AttachedFile::FILETYPE_FRONT_LOGO;
+                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
                 }
-                $ul->htmlAfterField .='</ul>';
+                $ul->htmlAfterField .= '</ul>';
 
-                $ul->htmlAfterField .= '<input onchange="popupImage(this)" data-frm="frmShopLogo" data-min_height="150" data-min_width="150" data-file_type='.AttachedFile::FILETYPE_FRONT_LOGO.' title="Upload" type="file" name="front_logo" value=""></div>';
+                $ul->htmlAfterField .= '<input onchange="popupImage(this)" data-frm="frmShopLogo" data-min_height="150" data-min_width="150" data-file_type=' . AttachedFile::FILETYPE_FRONT_LOGO . ' title="Upload" type="file" name="front_logo" value=""></div>';
 
                 /*$frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'front_logo', array('accept' => 'image/*', 'onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-min_height' => '45', 'data-min_width' => '142', 'data-file_type' => AttachedFile::FILETYPE_FRONT_LOGO));*/
 
@@ -1744,8 +1755,11 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_Select_Website_Favicon', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
-                if (AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, 0, 0, $langId)) {
-                    $ul->htmlAfterField .= '<img src="' . UrlHelper::generateFullUrl('Image', 'favicon', array($langId), CONF_WEBROOT_FRONT_URL) . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, 0, 0, $langId)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'favicon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="favicon" id="favicon" data-min_width = "16" data-min_height = "16" data-file_type=' . AttachedFile::FILETYPE_FAVICON . ' value="Upload file"></div>';
@@ -1754,8 +1768,10 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_Select_Social_Feed_Image', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
-                if (AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $langId)) {
-                    $ul->htmlAfterField .= '<img src="' . UrlHelper::generateFullUrl('Image', 'socialFeed', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeSocialFeedImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                if ($fileData =  AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $langId)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'socialFeed', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeSocialFeedImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="social_feed_image" id="social_feed_image" data-min_width = "160" data-min_height = "240" data-file_type=' . AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE . ' value="Upload file"><small>Dimensions 160*240</small></div>';
@@ -1766,28 +1782,30 @@ class ConfigurationsController extends AdminBaseController
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO, 0, 0, $langId)) {
-					$uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-					$image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removePaymentPageLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div>';
 
                 $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach($ratioArr as $key=>$data){
+                foreach ($ratioArr as $key => $data) {
                     $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_'.AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO;
-                    $ul->htmlAfterField .="<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='".$name."' value='".$key."' $checked><i class='input-helper'></i></span>".$data."</label></li>";
+                    $name = 'ratio_type_' . AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO;
+                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
                 }
-                $ul->htmlAfterField .='</ul>';
+                $ul->htmlAfterField .= '</ul>';
 
-                $ul->htmlAfterField .='<input type="file" onChange="popupImage(this)" name="payment_page_logo" id="payment_page_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO . ' value="Upload file"></div>';
+                $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="payment_page_logo" id="payment_page_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO . ' value="Upload file"><small>'.Labels::getLabel('MSG_PLEASE_UPLOAD_WHITE_PNG_IMAGE', $this->adminLangId).'</small></div>';
 
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_Select_Watermark_Image', $this->adminLangId) . '</h3><div class="logoWrap"><div class="uploaded--image">';
 
 
-                if (AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, $langId)) {
-                    $ul->htmlAfterField .= '<img src="' . UrlHelper::generateFullUrl('Image', 'watermarkImage', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeWatermarkImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, $langId)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'watermarkImage', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeWatermarkImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="watermark_image" id="watermark_image" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_WATERMARK_IMAGE . ' value="Upload file"><small>Dimensions 168*37</small></div>';
@@ -1796,8 +1814,10 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= '<div class="col-md-4  mb-5"> <h3>' . Labels::getLabel('LBL_Select_Apple_Touch_Icon', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
-                if (AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, 0, 0, $langId)) {
-                    $ul->htmlAfterField .= '<img src="' . UrlHelper::generateFullUrl('Image', 'appleTouchIcon', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeAppleTouchIcon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, 0, 0, $langId)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeAppleTouchIcon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="apple_touch_icon" id="apple_touch_icon" data-min_width = "152" data-min_height = "152" data-file_type=' . AttachedFile::FILETYPE_APPLE_TOUCH_ICON . ' value="Upload file"></div>';
@@ -1806,8 +1826,10 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_Select_Mobile_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
-                if (AttachedFile::getAttachment(AttachedFile::FILETYPE_MOBILE_LOGO, 0, 0, $langId)) {
-                    $ul->htmlAfterField .= '<img src="' . UrlHelper::generateFullUrl('Image', 'mobileLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeMobileLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_MOBILE_LOGO, 0, 0, $langId)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'mobileLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeMobileLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="mobile_logo" id="mobile_logo" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_MOBILE_LOGO . ' value="Upload file"><small>Dimensions 168*37</small></div>';
@@ -1834,33 +1856,48 @@ class ConfigurationsController extends AdminBaseController
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_INVOICE_LOGO, 0, 0, $langId)) {
-					$uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-					$image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeInvoiceLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div>';
 
                 $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach($ratioArr as $key=>$data){
+                foreach ($ratioArr as $key => $data) {
                     $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_'.AttachedFile::FILETYPE_INVOICE_LOGO;
-                    $ul->htmlAfterField .="<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='".$name."' value='".$key."' $checked><i class='input-helper'></i></span>".$data."</label></li>";
+                    $name = 'ratio_type_' . AttachedFile::FILETYPE_INVOICE_LOGO;
+                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
                 }
-                $ul->htmlAfterField .='</ul>';
+                $ul->htmlAfterField .= '</ul>';
 
-                $ul->htmlAfterField .='<input type="file" onChange="popupImage(this)" name="invoice_logo" id="invoice_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_INVOICE_LOGO . ' value="Upload file"></div>';
+                $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="invoice_logo" id="invoice_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_INVOICE_LOGO . ' value="Upload file"></div>';
 
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_Select_First_Purchase_Discount_Image', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
-                if (AttachedFile::getAttachment(AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE, 0, 0, $langId)) {
-                    $ul->htmlAfterField .= '<img src="' . UrlHelper::generateFullUrl('Image', 'firstPurchaseCoupon', array($langId), CONF_WEBROOT_FRONT_URL) . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE, 0, 0, $langId)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'firstPurchaseCoupon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="purchase_discount" id="purchase_discount" data-min_width = "120" data-min_height = "120" data-file_type=' . AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE . ' value="Upload file"><small>Dimensions 120*120</small></div>';
 
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_SELECT_META_IMAGE', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+
+                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $langId)) {
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                }
+
+                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="meta_image" id="meta_image" data-file_type=' . AttachedFile::FILETYPE_META_IMAGE . ' value="Upload file"></div>';
+
                 $ul->htmlAfterField .= '</div>';
+
                 break;
 
             case Configurations::FORM_PPC:
@@ -1898,57 +1935,66 @@ class ConfigurationsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-	public function updateVerificationFile()
-	{
-		$post = FatApp::getPostedData();
+    public function updateVerificationFile()
+    {
+        $post = FatApp::getPostedData();
         if (empty($post)) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $fileType = FatApp::getPostedData('fileType', FatUtility::VAR_STRING, '');
-		if (!isset($_FILES['verification_file']['name'])){
-			Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+        if (!isset($_FILES['verification_file']['name'])) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
-		}
+        }
 
-		$target_dir = CONF_INSTALLATION_PATH.'public/';
-		$file = $_FILES['verification_file']['name'];
-		$temp_name = $_FILES['verification_file']['tmp_name'];
-		if ($fileType == 'bing') {
-			$path_filename = $target_dir.'BingSiteAuth.xml';
-		} else {
-			$path = pathinfo($file);
-			$filename = $path['filename'];
-			$ext = $path['extension'];
-			$path_filename = $filename.'.'.$ext;
-		}
-		// Check if file already exists
-		if (file_exists($path_filename)) {
-			unlink($path_filename);
-		}
-		move_uploaded_file($temp_name,$path_filename);
-		$this->set('msg', Labels::getLabel('LBL_File_uploaded_successfully', $this->adminLangId));
+        $target_dir = CONF_UPLOADS_PATH;
+        $file = $_FILES['verification_file']['name'];
+        $temp_name = $_FILES['verification_file']['tmp_name'];
+        $path = pathinfo($file);
+        $ext = $path['extension'];
+        if (!in_array(strtoupper($ext), ['XML', 'HTML'])) {
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        if ($fileType == 'bing') {
+            /*If we change file name then we also need to update in htacces file */
+            $path_filename = $target_dir . 'BingSiteAuth.xml';
+        } else if ($fileType == 'google') {
+            $path_filename = $target_dir . 'google-site-verification.html';
+            /* $filename = $path['filename'];
+            $ext = $path['extension'];
+            $path_filename = $filename . '.' . $ext; */
+        }
+        // Check if file already exists
+        if (file_exists($path_filename)) {
+            unlink($path_filename);
+        }
+        move_uploaded_file($temp_name, $path_filename);
+        $this->set('msg', Labels::getLabel('LBL_File_uploaded_successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
-	}
+    }
 
-	public function deleteVerificationFile($fileType)
-	{
+    public function deleteVerificationFile($fileType)
+    {
         if ($fileType == '') {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-		$target_dir = CONF_INSTALLATION_PATH.'public/';
-		if ($fileType == 'bing') {
-			$path_filename = $target_dir.'BingSiteAuth.xml';
-		} else {
-			$files = preg_grep('~^google.*\.html$~', scandir($target_dir));
-			$file = current($files);
-			$path_filename = $target_dir.$file;
-		}
-		if (file_exists($path_filename)) {
-			unlink($path_filename);
-		}
-		$this->set('msg', Labels::getLabel('LBL_File_deleted_successfully', $this->adminLangId));
+        $target_dir = CONF_UPLOADS_PATH;
+        if ($fileType == 'bing') {
+            $path_filename = $target_dir . 'BingSiteAuth.xml';
+        } else {
+            $path_filename = $target_dir . 'google-site-verification.html';
+            /* $files = preg_grep('~^google.*\.html$~', scandir($target_dir));
+            $file = current($files);
+            $path_filename = $target_dir . $file; */
+        }
+        if (file_exists($path_filename)) {
+            unlink($path_filename);
+        }
+        $this->set('msg', Labels::getLabel('LBL_File_deleted_successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
-	}
+    }
 }

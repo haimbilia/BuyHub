@@ -1,5 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = [
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php $arr_flds = [
     'select_all' => '',
     'selprod_title' => Labels::getLabel('LBL_PRODUCT', $siteLangId),
     'abprod_item_group_identifier' => Labels::getLabel('LBL_ITEM_GROUP_IDENTIFIER', $siteLangId),
@@ -11,7 +12,11 @@ $arr_flds = [
 if (1 > count($arrListing)) {
     unset($arr_flds['select_all']);
 }
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table','id' => 'plugin'));
+$tableClass = '';
+if (0 < count($arrListing)) {
+	$tableClass = "table-justified";
+}
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table '.$tableClass, 'id' => 'plugin'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ('select_all' == $key) {
@@ -78,8 +83,9 @@ echo $tbl->getHtml(); ?>
 if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_RECORD_NOT_FOUND', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', ['siteLangId' => $siteLangId, 'message' => $message]);
-}
-$postedData['page'] = $page;
+}?>
+</div>
+<?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchPaging'));
 
 $pagingArr = ['pageCount' => $pageCount, 'page' => $page];

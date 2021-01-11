@@ -39,11 +39,11 @@ $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary');
+$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitBtnFld->developerTags['col'] = 12;
 
 $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary js-cancel-inventory');
+$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-inventory');
 
 ?>
 <div class="row">
@@ -219,6 +219,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary js-cancel-
                         </div>
                     </div>
                 </div>
+                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL && !empty($shipBySeller)) { ?>
                 <div class="selprod_fulfillment_type_fld col-md-6">
                     <div class="field-set">
                         <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_fulfillment_type')->getCaption(); ?></label>
@@ -229,31 +230,34 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary js-cancel-
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div>           
             <div class="row">
                 <div class="col-md-12">
-                    <table id="optionsTable-js" class="table">
+                    <div class="js-scrollable table-wrap">
+                    <table id="optionsTable-js" class="table table-justified">
                         <thead>
                             <tr>
                                 <?php if (($selprod_id == 0 && !empty($availableOptions)) || !empty($optionValues)) { ?>
-                                <th width="20%"><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
+                                <th><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
                                 </th>
                                 <?php }?>
-                                <th width="20%"><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
+                                <th><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
                                 </th>
                                 <?php $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_This_price_is_including_the_tax_rates.', $siteLangId) : Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $siteLangId);
                                              $selPriceTitle .= ' '.Labels::getLabel('LBL_Min_Selling_price', $siteLangId).' '. CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
                                              ?>
-                                <th width="20%"><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
+                                <th><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
                                     <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right"
                                         title="<?php echo $selPriceTitle; ?>"></i>
                                 </th>
-                                <th width="20%"><?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
+                                <th><?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
                                 </th>
-                                <th width="20%"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
+                                <th><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
                                     <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right"
                                         title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
                                 </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -305,9 +309,10 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary js-cancel-
                             <?php } ?>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="field-set">
                         <div class="caption-wraper"><label class="field_label">
@@ -344,14 +349,14 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary js-cancel-
                     <?php foreach ($languages as $langId => $langName) {
                     $layout = Language::getLayoutDirection($langId); ?>
                     <div class="accordion mt-4" id="specification-accordion">
-                        <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapseOne"
-                            aria-expanded="true" aria-controls="collapseOne"><span
+                        <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapseOne<?php echo $langId; ?>"
+                            aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>"><span
                                 onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
                                 <?php echo Labels::getLabel('LBL_Inventory_Data_for', $siteLangId) ?>
                                 <?php echo $langName; ?>
                             </span>
                         </h6>
-                        <div id="collapseOne"
+                        <div id="collapseOne<?php echo $langId; ?>"
                             class="collapse collapse-js-<?php echo $langId; ?>"
                             aria-labelledby="headingOne" data-parent="#specification-accordion">
                             <div class="p-4 mb-4 bg-gray rounded"

@@ -77,7 +77,7 @@ class BlogController extends MyAppController
     private function getBlogSearchObject()
     {
         $srch = BlogPost::getSearchObject($this->siteLangId, true, false, true);
-        $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'bp_l.post_short_description', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes', 'post_description'));
+        $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes', 'post_description'));
         $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
         $srch->addCondition('post_published', '=', applicationConstants::YES);
         $srch->addGroupby('post_id');
@@ -93,7 +93,7 @@ class BlogController extends MyAppController
         }
 
         $srch = BlogPost::getSearchObject($this->siteLangId, true, false, true);
-        $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'bp_l.post_short_description', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes'));
+        $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes'));
         $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
         $srch->addCondition('ptc_bpcategory_id', '=', $categoryId);
         $srch->addCondition('post_published', '=', applicationConstants::YES);
@@ -147,7 +147,7 @@ class BlogController extends MyAppController
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $srch = BlogPost::getSearchObject($this->siteLangId, true, false, true);
-        $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'bp_l.post_short_description', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes', 'post_description'));
+        $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes', 'post_description'));
         $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
 
         if ($categoryId = FatApp::getPostedData('categoryId', FatUtility::VAR_INT, 0)) {
@@ -155,7 +155,6 @@ class BlogController extends MyAppController
             $this->set('bpCategoryId', $categoryId);
         } elseif ($keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '')) {
             $keywordCond = $srch->addCondition('post_title', 'like', "%$keyword%");
-            $keywordCond->attachCondition('post_short_description', 'like', "%$keyword%");
             $keywordCond->attachCondition('post_description', 'like', "%$keyword%");
             $this->set('keyword', $keyword);
         }
@@ -179,7 +178,7 @@ class BlogController extends MyAppController
         $this->set('postList', $records);
         $this->set('recordCount', $totalRecords);
         $this->set('postedData', $post);
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -203,14 +202,17 @@ class BlogController extends MyAppController
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('Blog'));
         }
-
+        $appUser = FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0);
+        if (0 < $appUser) {
+            commonhelper::setAppUser();
+        }
         $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPostId, 0, $this->siteLangId);
         $this->set('post_images', $post_images);
 
         $srch = BlogPost::getSearchObject($this->siteLangId, true, true);
         $srch->addCondition('post_id', '=', $blogPostId);
         $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'bp_l.post_description', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames'));
-                
+
         $srch->addGroupby('post_id');
         if (!$blogPostData = FatApp::getDb()->fetch($srch->getResultSet())) {
             $message = Labels::getLabel('Lbl_Invalid_Request', $this->siteLangId);
@@ -227,6 +229,7 @@ class BlogController extends MyAppController
         $srchComment->joinTable(BlogComment::DB_TBL, 'inner join', 'bpcomment.bpcomment_post_id = post_id and bpcomment.bpcomment_deleted=0', 'bpcomment');
         $srchComment->addMultipleFields(array('bpcomment.*'));
         $srchComment->addCondition('bpcomment_approved', '=', BlogComment::COMMENT_STATUS_APPROVED);
+        $srchComment->addCondition('post_id', '=', $blogPostId);
 
         $commentsResultSet = $srchComment->getResultSet();
         $this->set('commentsCount', $srchComment->recordCount());
@@ -299,7 +302,7 @@ class BlogController extends MyAppController
             $this->_template->addJs(array('js/masonry.pkgd.js'));
             $this->_template->addJs(array('js/slick.js'));
         }
-        $this->_template->render();
+        $this->_template->render(true, (!CommonHelper::isAppUser()));
     }
 
     public function setupPostComment()
@@ -312,7 +315,7 @@ class BlogController extends MyAppController
         }
         $blogPostId = FatApp::getPostedData('bpcomment_post_id', FatUtility::VAR_INT, 0);
         if ($blogPostId <= 0) {
-            Message::addErrorMessage(Labels('Lbl_Invalid_Request'));
+            Message::addErrorMessage(Labels::getLabel('Lbl_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $frm = $this->getPostCommentForm($blogPostId);
@@ -349,11 +352,11 @@ class BlogController extends MyAppController
         $blogCommentId = $blogComment->getMainTableRecordId();
 
         $notificationData = array(
-        'notification_record_type' => Notification::TYPE_BLOG,
-        'notification_record_id' => $blogCommentId,
-        'notification_user_id' => UserAuthentication::getLoggedUserId(true),
-        'notification_label_key' => Notification::BLOG_COMMENT_NOTIFICATION,
-        'notification_added_on' => date('Y-m-d H:i:s'),
+            'notification_record_type' => Notification::TYPE_BLOG,
+            'notification_record_id' => $blogCommentId,
+            'notification_user_id' => UserAuthentication::getLoggedUserId(true),
+            'notification_label_key' => Notification::BLOG_COMMENT_NOTIFICATION,
+            'notification_added_on' => date('Y-m-d H:i:s'),
         );
 
         if (!Notification::saveNotifications($notificationData)) {
@@ -482,11 +485,11 @@ class BlogController extends MyAppController
         $contributionId = $contribution->getMainTableRecordId();
 
         $notificationData = array(
-        'notification_record_type' => Notification::TYPE_BLOG,
-        'notification_record_id' => $contributionId,
-        'notification_user_id' => UserAuthentication::getLoggedUserId(true),
-        'notification_label_key' => Notification::BLOG_CONTRIBUTION_NOTIFICATION,
-        'notification_added_on' => date('Y-m-d H:i:s'),
+            'notification_record_type' => Notification::TYPE_BLOG,
+            'notification_record_id' => $contributionId,
+            'notification_user_id' => UserAuthentication::getLoggedUserId(true),
+            'notification_label_key' => Notification::BLOG_CONTRIBUTION_NOTIFICATION,
+            'notification_added_on' => date('Y-m-d H:i:s'),
         );
 
         if (!Notification::saveNotifications($notificationData)) {
@@ -513,9 +516,9 @@ class BlogController extends MyAppController
         $fld_phn->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $this->siteLangId), 'file')->requirements()->setRequired(true);
-        
+
         CommonHelper::addCaptchaField($frm);
-        
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }

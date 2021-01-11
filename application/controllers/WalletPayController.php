@@ -44,7 +44,7 @@ class WalletPayController extends MyAppController
         $srch->doNotLimitRecords();
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('order_user_id', '=', $user_id);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         if (isset($_SESSION['subscription_shopping_cart']["order_id"]) && $orderId == $_SESSION['subscription_shopping_cart']["order_id"]) {
             $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         } else {
@@ -149,7 +149,7 @@ class WalletPayController extends MyAppController
         $srch->doNotLimitRecords();
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('order_user_id', '=', $loggedUserId);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $srch->addCondition('order_type', '=', Orders::ORDER_WALLET_RECHARGE);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
@@ -175,7 +175,7 @@ class WalletPayController extends MyAppController
         $pmRs = $pmSrch->getResultSet();
         $paymentMethods = FatApp::getDb()->fetchAll($pmRs);
         $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
-
+        
         $this->set('paymentMethods', $paymentMethods);
         $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
         $this->set('headerData', $headerData);
@@ -203,7 +203,7 @@ class WalletPayController extends MyAppController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('order_id', '=', $order_id);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         /* $orderObj = new Orders();
@@ -236,7 +236,7 @@ class WalletPayController extends MyAppController
                 'order_type' => $orderInfo['order_type'],
                 'order_id' => $order_id,
                 'plugin_id' => $plugin_id
-                )
+            )
         );
 
         $this->set('orderInfo', $orderInfo);
@@ -250,7 +250,7 @@ class WalletPayController extends MyAppController
         $frm = new Form('frmPaymentTabForm');
         $frm->setFormTagAttribute('id', 'frmPaymentTabForm');
 
-        if (strtolower($paymentMethodCode) == "cashondelivery") {
+        if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
             CommonHelper::addCaptchaField($frm);
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm_Payment', $langId));
@@ -260,13 +260,13 @@ class WalletPayController extends MyAppController
         return $frm;
     }
 
-    public function ConfirmOrder()
+    public function confirmOrder()
     {
         $order_type = FatApp::getPostedData('order_type', FatUtility::VAR_INT, 0);
 
         /* Loading Money to wallet[ */
         if ($order_type == Orders::ORDER_WALLET_RECHARGE) {
-            $criteria = array( 'isUserLogged' => true );
+            $criteria = array('isUserLogged' => true);
             /* if( !$this->isEligibleForNextStep( $criteria ) ){
             if( Message::getErrorCount() > 0 ){
             $errMsg = Message::getHtml();
@@ -297,7 +297,7 @@ class WalletPayController extends MyAppController
             $srch->doNotLimitRecords();
             $srch->addCondition('order_id', '=', $order_id);
             $srch->addCondition('order_user_id', '=', $user_id);
-            $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+            $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
             $srch->addCondition('order_type', '=', Orders::ORDER_WALLET_RECHARGE);
             $rs = $srch->getResultSet();
             $orderInfo = FatApp::getDb()->fetch($rs);
@@ -311,8 +311,8 @@ class WalletPayController extends MyAppController
         }
         /* ] */
 
-        /* ConfirmOrder function is called for both wallet payments and for paymentgateway selection as well. */
-        $criteria = array( 'isUserLogged' => true, 'hasProducts' => true, 'hasStock' => true, 'hasBillingAddress' => true );
+        /* confirmOrder function is called for both wallet payments and for paymentgateway selection as well. */
+        $criteria = array('isUserLogged' => true, 'hasProducts' => true, 'hasStock' => true, 'hasBillingAddress' => true);
         if ($this->cartObj->hasPhysicalProduct()) {
             $criteria['hasShippingAddress'] = true;
             $criteria['isProductShippingMethodSet'] = true;
@@ -331,7 +331,7 @@ class WalletPayController extends MyAppController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        if (strtolower($paymentMethodRow['plugin_code']) == 'cashondelivery' && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
+        if (in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore']) && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
             if (!CommonHelper::verifyCaptcha()) {
                 Message::addErrorMessage(Labels::getLabel('MSG_That_captcha_was_incorrect', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
@@ -353,7 +353,7 @@ class WalletPayController extends MyAppController
         $srch->doNotLimitRecords();
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_user_id', '=', $user_id);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {

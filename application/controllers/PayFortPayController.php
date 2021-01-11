@@ -57,7 +57,7 @@ class PayFortPayController extends PaymentController
         $this->set('orderInfo', $orderInfo);
         $this->set('exculdeMainHeaderDiv', true);
         if (FatUtility::isAjaxCall()) {
-            $json['html'] = $this->_template->render(false, false, 'pay-fort-pay/charge.php', true, false);
+            $json['html'] = $this->_template->render(false, false, 'pay-fort-pay/charge-ajax.php', true, false);
             FatUtility::dieJsonSuccess($json);
         }
         $this->_template->render(true, false);
@@ -110,12 +110,12 @@ class PayFortPayController extends PaymentController
             }
 
             $gateWayCharges = ($paymentGatewayCharge / 100);
-            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $_REQUEST['fort_id'], $gateWayCharges, 'Received Payment', implode('&', $message));
-
+            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $_REQUEST['fort_id'], $gateWayCharges, 'Received Payment', json_encode($_REQUEST));
             FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
         } else {
             $orderPaymentObj->addOrderPaymentComments('#' . $_REQUEST['response_code'] . ': ' . $_REQUEST['response_message']);
         }
+        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($_REQUEST));
         if (substr($_REQUEST['response_code'], 2) == '072') {
             FatApp::redirectUser(CommonHelper::getPaymentCancelPageUrl());
         } else {
@@ -135,7 +135,7 @@ class PayFortPayController extends PaymentController
         if (!$orderInfo['id']) {
             $this->error = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
             return false;
-        } elseif ($orderInfo["order_is_paid"] != Orders::ORDER_IS_PENDING) {
+        } elseif ($orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
             $this->error = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             return false;
         }

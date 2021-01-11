@@ -15,7 +15,7 @@
                     </svg>
                 </span>
                 <span class="order-summary-toggle__text">
-                    <span>Order Summary <i class="arrow">
+                    <span><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?><i class="arrow">
                             <svg class="svg">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-right"
                                     href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-right"></use> 
@@ -24,7 +24,7 @@
                         </i></span>
                 </span>
                 <span class="order-summary-toggle__total-recap total-recap">
-                    <span class="total-recap__final-price">$226.15</span>
+                    <span class="total-recap__final-price" id="netAmountSummary"></span>
                 </span>
             </span>
         </div>
@@ -58,8 +58,10 @@
     $("document").ready(function() {
         <?php if (empty($addresses) || count($addresses) == 0){ ?>
             showAddressFormDiv();
+            loadFinancialSummary();
         <?php } else {?>
             loadShippingSummaryDiv();
-        <?php } ?>
+            loadFinancialSummary();
+        <?php } ?>        
     });
 </script>

@@ -3,7 +3,7 @@ $frm->setFormTagAttribute('class', 'form form--horizontal');
 $frm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-';
 $frm->developerTags['fld_default_col'] = 6;
 $frm->setFormTagAttribute('onSubmit', 'exportData(this,' . $actionType . '); return false;');
-$actionTypeArr = array(Importexport::TYPE_PRODUCTS,Importexport::TYPE_SELLER_PRODUCTS,Importexport::TYPE_USERS);
+$actionTypeArr = array(Importexport::TYPE_PRODUCTS, Importexport::TYPE_SELLER_PRODUCTS, Importexport::TYPE_INVENTORIES,Importexport::TYPE_USERS);
 
 if (in_array($actionType, $actionTypeArr)) {
     $startIdFld = $frm->getField('start_id');
@@ -23,10 +23,11 @@ if (in_array($actionType, $actionTypeArr)) {
 }
 $tabsAllowedFor = [
     Importexport::TYPE_PRODUCTS,
-    Importexport::TYPE_BRANDS
+    Importexport::TYPE_BRANDS,
+    Importexport::TYPE_SELLER_PRODUCTS,
 ];
 $submitFld = $frm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', "btn btn-primary");
+$submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
 <?php if (in_array($actionType, $tabsAllowedFor)) { ?>
     <div class="tabs tabs-sm tabs--scroll clearfix">

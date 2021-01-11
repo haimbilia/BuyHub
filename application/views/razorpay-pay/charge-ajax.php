@@ -1,21 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
-
-$button_confirm = Labels::getLabel('LBL_CONFIRM', $siteLangId);
+$frm->developerTags['fld_default_col'] = 12;
+$btn = $frm->getField('btn_submit');
+if (null != $btn) {
+    $btn->developerTags['noCaptionTag'] = true;
+    $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
+    $btn->setFieldTagAttribute('onclick', "razorpaySubmit(this);");
+}
 if (!isset($error)) { ?>
-    <p><?php echo Labels::getLabel('MSG_CONFIRM_TO_PROCEED_FOR_PAYMENT_?', $siteLangId); ?></p>
-    <?php echo $frm->getFormHtml(); ?>
-    <div class="gap"></div>
-    <input type="submit" onclick="razorpaySubmit(this);" value="<?php echo $button_confirm; ?>" data-processing-text='<?php echo Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId); ?>' class="btn btn-primary" />
-    <?php if (FatUtility::isAjaxCall()) { ?>
-        <a href="javascript:void(0);" onclick="loadPaymentSummary()" class="btn btn-outline-primary">
-            <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
-        </a>
-    <?php } else { ?>
-        <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-primary"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
-    <?php }
+    <div class="text-center">
+        <p><?php echo Labels::getLabel('LBL_PROCEED_TO_PAYMENT_?', $siteLangId); ?></p>
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
+<?php
 } else { ?>
     <div class="alert alert--danger"><?php echo $error; ?></div>
-<?php } 
+<?php }
 
 if (!FatUtility::isAjaxCall()) { ?>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -34,7 +33,7 @@ if (!FatUtility::isAjaxCall()) { ?>
             contact: "<?php echo $orderInfo["customer_phone"]; ?>"
         },
         notes: {
-            system_order_id: "<?php echo $orderInfo["id"];; ?>"
+            system_order_id: "<?php echo $orderInfo["id"]; ?>"
         },
         handler: function(transaction) {
             document.getElementById('razorpay_payment_id').value = transaction.razorpay_payment_id;
@@ -56,7 +55,7 @@ if (!FatUtility::isAjaxCall()) { ?>
                 razorpay_instance = new Razorpay(razorpay_options);
                 if (razorpay_submit_btn) {
                     razorpay_submit_btn.disabled = false;
-                    razorpay_submit_btn.value = "<?php echo $button_confirm; ?>";
+                    razorpay_submit_btn.value = $(el).data('value');
                 }
             }
             razorpay_instance.open();

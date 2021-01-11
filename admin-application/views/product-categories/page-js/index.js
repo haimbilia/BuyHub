@@ -95,7 +95,7 @@ $(document).ready(function(){
                 searchProductCategories();
                 getTotalBlock();
 			} else {
-				fcom.displa(ans.msg);
+				fcom.displayErrorMessage(ans.msg);
 			}
 		});
 		$.systemMessage.close();
@@ -233,7 +233,9 @@ $(document).ready(function(){
 	                },
 	                minCropBoxWidth: minWidth,
 	                minCropBoxHeight: minHeight,
-	                toggleDragModeOnDblclick: false,
+					toggleDragModeOnDblclick: false,
+					imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
 		        };
 				$(inputBtn).val('');
 		    	return cropImage(file, options, 'uploadCatImages', inputBtn);
@@ -256,7 +258,9 @@ $(document).ready(function(){
 	                },
 	                minCropBoxWidth: minWidth,
 	                minCropBoxHeight: minHeight,
-	                toggleDragModeOnDblclick: false,
+					toggleDragModeOnDblclick: false,
+					imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
 		        };
 				$(inputBtn).val('');
     	  		return cropImage(file, options, 'uploadCatImages', inputBtn);

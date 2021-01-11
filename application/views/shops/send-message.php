@@ -5,7 +5,10 @@
 	$frm->developerTags['fld_default_col'] = 12;
 	$frm->setFormTagAttribute('onSubmit', 'setUpSendMessage(this); return false;');
 	$fromFld = $frm->getField('send_message_from');
-	$toFld = $frm->getField('send_message_to');
+    $toFld = $frm->getField('send_message_to');
+    
+	$btnFld = $frm->getField('btn_submit');
+	$btnFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
 
 	$fromFldHtml = new HtmlElement( 'div', array( 'class'=>'field-set' ));
 	$fromFldCaptionWrapper = $fromFldHtml->appendElement('div', array('class' => 'caption-wraper'));
@@ -56,7 +59,7 @@
            
            <div class="section-head section--white--head mb-0">
             <div class="section__heading">
-                <h2><?php echo $shop['shop_name']; ?></h2>
+                <h1><?php echo $shop['shop_name']; ?></h1>
               <p><?php echo $shopLocation; ?> <?php echo Labels::getLabel('LBL_Opened_on', $siteLangId); ?> <?php echo FatDate::format($shop['shop_created_on']); ?></p>
             </div>
         </div>

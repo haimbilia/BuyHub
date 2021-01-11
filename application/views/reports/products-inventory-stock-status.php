@@ -29,17 +29,17 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true; ?> <?php $this->includeTemp
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
+                    <div class="card">
 
-                        <div class="cards-content">
+                        <div class="card-body">
                                 <div class="replaced">
                                     <div class="row">
                                         <div class="col-lg-6"> <?php
                                             $submitFld = $frmSrch->getField('btn_submit');
-                                            $submitFld->setFieldTagAttribute('class', 'btn btn-primary btn-block ');
+                                            $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
                                             $fldClear= $frmSrch->getField('btn_clear');
-                                            $fldClear->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
+                                            $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                             echo $frmSrch->getFormHtml(); ?>
                                         </div>
                                     </div>
@@ -52,9 +52,9 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true; ?> <?php $this->includeTemp
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
+                    <div class="card">
 
-                        <div class="cards-content">
+                        <div class="card-body">
                             <div id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                             <div class="gap"></div>
                         </div>

@@ -1,15 +1,19 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = array();
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php $arr_flds = array();
 if (count($arrListing) > 0) {
     $arr_flds['select_all'] = '';
 }
-$arr_flds['listserial'] = Labels::getLabel('LBL_Sr', $siteLangId);
+$arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
 $arr_flds['credential_username'] = Labels::getLabel('LBL_Username', $siteLangId);
 $arr_flds['credential_email'] = Labels::getLabel('LBL_Email', $siteLangId);
 $arr_flds['credential_active'] = Labels::getLabel('LBL_Status', $siteLangId);
 $arr_flds['action'] = '';
-
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--orders'));
+$tableClass = '';
+if (0 < count($arrListing)) {
+	$tableClass = "table-justified";
+}
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--orders '.$tableClass));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
 foreach ($arr_flds as $key => $val) {
     if ('select_all' == $key) {
@@ -103,9 +107,9 @@ if (count($arrListing) == 0) {
     echo $frm->getFormTag();
     echo $frm->getFieldHtml('status');
     echo $tbl->getHtml(); ?> </form> <?php
-}
-
-$postedData['page'] = $page;
+} ?>
+</div>
+<?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmUserSearchPaging'));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page,'recordCount' => $recordCount, 'callBackJsFunc' => 'goToUserSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

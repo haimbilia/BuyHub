@@ -2,7 +2,8 @@
     $selProdId = (!empty($data['voldiscount_selprod_id']) ? $data['voldiscount_selprod_id'] : 0);
     $frm = SellerProduct::volumeDiscountForm($siteLangId);
 
-    $prodName = $frm->addTextBox(Labels::getLabel('LBL_Product', $siteLangId), 'product_name', '', array('class'=>'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $siteLangId)));
+    //$prodName = $frm->addTextBox(Labels::getLabel('LBL_Product', $siteLangId), 'product_name', '', array('class'=>'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $siteLangId)));
+    $prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $siteLangId), 'product_name', [], '', array('class' => 'selProd--js','placeholder' => Labels::getLabel('LBL_Select_Product', $siteLangId)));
     $prodName->requirements()->setRequired();
 
     $minQty = $frm->getField('voldiscount_min_qty');
@@ -21,7 +22,7 @@
 
     $frm->addHiddenField('', 'addMultiple', 0);
 
-    $frm->addSubmitButton('', 'btn_update', Labels::getLabel('LBL_Save', $siteLangId), array('class'=>'btn btn-primary btn-block '));
+    $frm->addSubmitButton('', 'btn_update', Labels::getLabel('LBL_Save', $siteLangId), array('class'=>'btn btn-brand btn-block '));
 
 if (!empty($data) && 0 < count($data)) {
     $data['product_name'] = isset($data['product_name']) ? html_entity_decode($data['product_name'], ENT_QUOTES, 'UTF-8') : '';
@@ -29,7 +30,7 @@ if (!empty($data) && 0 < count($data)) {
     $frm->fill($data);
 }
 ?>
-<div class="cards-content">
+<div class="card-body">
     <div class="replaced">
         <?php
         echo $frm->getFormTag();
@@ -72,4 +73,4 @@ if (!empty($data) && 0 < count($data)) {
         <?php echo $frm->getExternalJs(); ?>
     </div>
 </div>
-<div class="divider"></div>
+<div class="divider m-0"></div>

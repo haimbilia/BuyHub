@@ -48,7 +48,7 @@ class TaxRule extends MyAppModel
     */
     public function deleteRules(int $taxCatId): bool
     {
-        if(!FatApp::getDb()->query('DELETE rules, ruleDetails, ruleDetailsLang FROM '. self::DB_TBL .' rules LEFT JOIN '. TaxRuleCombined::DB_TBL .' ruleDetails ON ruleDetails.taxruledet_taxrule_id  = rules.taxrule_id LEFT JOIN '. TaxRuleCombined::DB_TBL_LANG . ' ruleDetailsLang ON ruleDetails.taxruledet_id  = ruleDetailsLang.taxruledetlang_taxruledet_id WHERE rules.taxrule_taxcat_id = '. $taxCatId)) {
+        if(!FatApp::getDb()->query('DELETE rules, ruleDetails FROM '. self::DB_TBL .' rules LEFT JOIN '. TaxRuleCombined::DB_TBL .' ruleDetails ON ruleDetails.taxruledet_taxrule_id  = rules.taxrule_id WHERE rules.taxrule_taxcat_id = '. $taxCatId)) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
@@ -59,14 +59,13 @@ class TaxRule extends MyAppModel
     * getRuleForm
     *
     * @param  int $langId
-    * @param  int $userId
     * @return object
     */
-    public static function getRuleForm(int $langId, int $userId): object
+    public static function getRuleForm(int $langId): object
     {
+        
         $frm = new Form('frmTaxRule');
         $frm->addHiddenField('', 'taxcat_id', 0);
-        $frm->addHiddenField('', 'taxval_seller_user_id', $userId);
 
         /* [ TAX CATEGORY RULE FORM */
         $frm->addHiddenField('', 'taxrule_id[]', 0);
@@ -74,7 +73,11 @@ class TaxRule extends MyAppModel
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Tax_Rate(%)', $langId), 'taxrule_rate[]', '');
         $fld->requirements()->setPositive();
 
-        $fld = $frm->addCheckBox(Labels::getLabel('LBL_Combined_Tax', $langId), 'taxrule_is_combined[]', 1);
+        // $fld = $frm->addCheckBox(Labels::getLabel('LBL_Combined_Tax', $langId), 'taxrule_is_combined[]', 1);
+		
+		$taxStructures = TaxStructure::getAllAssoc($langId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_Tax', $langId), 'taxrule_taxstr_id[]', $taxStructures, '', array(), Labels::getLabel('LBL_Select_Tax', $langId));
+        $fld->requirements()->setRequired();
         /* ] */
 
         /* [ TAX CATEGORY RULE LOCATIONS FORM */
@@ -86,10 +89,12 @@ class TaxRule extends MyAppModel
         });
         $locattionTypeOtions = static::getTypeOptions($langId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'taxruleloc_country_id[]', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $langId));
-        $frm->addSelectBox(Labels::getLabel('LBL_States', $langId), 'taxruleloc_type[]', $locattionTypeOtions, '', array(), Labels::getLabel('LBL_Select', $langId));
-        $frm->addSelectBox(Labels::getLabel('LBL_States', $langId), 'taxruleloc_state_id[]', array(), '', array(), '');
-
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'taxruleloc_country_id[]', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $langId));
+        $fld->requirements()->setRequired();
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_States_Type', $langId), 'taxruleloc_type[]', $locattionTypeOtions, '', array(), Labels::getLabel('LBL_Select', $langId));
+        $fld->requirements()->setRequired();
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_States', $langId), 'taxruleloc_state_id[]', array(), '', array(), '');
+        $fld->requirements()->setRequired();
         /* ] */
 
         /* [ TAX GROUP RULE COMBINED DETAILS FORM */
@@ -121,8 +126,6 @@ class TaxRule extends MyAppModel
         }
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $langId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Cancel', $langId));
-        $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
@@ -133,10 +136,13 @@ class TaxRule extends MyAppModel
     * @param  int $langId
     * @return array
     */
-    public function getRules(int $taxCatId): array
+    public function getRules(int $taxCatId, int $langId): array
     {
         $srch = TaxRule::getSearchObject();
+        $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$langId);
         $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);
+        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'taxrule_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
         $res = $srch->getResultSet();
         $rulesData = FatApp::getDb()->fetchAll($res);
         return $rulesData;
@@ -146,30 +152,22 @@ class TaxRule extends MyAppModel
     * getCombinedRuleDetails
     *
     * @param  array $rulesIds
+    * @param int $langId
     * @return array
     */
-    public function getCombinedRuleDetails(array $rulesIds): array
+    public function getCombinedRuleDetails(array $rulesIds, int $langId): array
     {
         if (empty($rulesIds)) {
             return [];
         }
         $srch = TaxRuleCombined::getSearchObject();
+        $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id');
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$langId);
         $srch->addCondition('taxruledet_taxrule_id', 'IN', $rulesIds);
-
+        $srch->addMultipleFields(array('taxstr_id', 'taxruledet_taxrule_id', 'taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $combinedData = FatApp::getDb()->fetchAll($rs);
-
-        $taxRuleCom = new TaxRuleCombined();
-        $languages = Language::getAllNames();
-        foreach ($combinedData as $key => $val) {
-            foreach ($languages as $langId => $lang) {
-                $rulesLangData = $taxRuleCom->getAttributesByLangId($langId, $val['taxruledet_id']);
-                if (!empty($rulesLangData)) {
-                    $combinedData[$key]['taxruledet_name'][$langId] = $rulesLangData['taxruledet_name'];
-                }
-            }
-        }
-
         return self::groupDataByKey($combinedData, 'taxruledet_taxrule_id');
     }
 
@@ -179,10 +177,19 @@ class TaxRule extends MyAppModel
     * @param  int $taxCatId
     * @return array
     */
-    public function getLocations(int $taxCatId): array
+    public function getLocations(int $taxCatId, bool $joinCountryState = false, $langId = 0): array
     {
         $srch = TaxRuleLocation::getSearchObject();
         $srch->addCondition('taxruleloc_taxcat_id', '=', $taxCatId);
+        if ($joinCountryState) {
+            $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'taxruleloc_state_id = s.state_id', 's');
+            $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND statelang_lang_id = ' . $langId, 's_l');
+
+            $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'taxruleloc_country_id = c.country_id', 'c');
+            $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c.country_id = c_l.countrylang_country_id AND countrylang_lang_id = ' . $langId, 'c_l');
+
+            $srch->addMultipleFields(array('taxruleloc_taxcat_id', 'taxruleloc_taxrule_id', 'taxruleloc_country_id', 'taxruleloc_state_id', 'taxruleloc_type', 'taxruleloc_unique', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
+        }
         $res = $srch->getResultSet();
         $locationsData = FatApp::getDb()->fetchAll($res);
         return self::groupDataByKey($locationsData, 'taxruleloc_taxrule_id');

@@ -462,4 +462,37 @@ class TestimonialsController extends AdminBaseController
         }
         return false;
     }
+
+    public function autoComplete()
+    {
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
+        $post = FatApp::getPostedData();
+
+        $srch = Testimonial::getSearchObject($this->adminLangId, false);
+        $srch->addMultipleFields(array('testimonial_id', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title'));
+
+        if (!empty($post['keyword'])) {
+            $cond = $srch->addCondition('testimonial_title', 'LIKE', '%' . $post['keyword'] . '%');
+            $cond->attachCondition('testimonial_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
+        $alreadyAdded = Collections::getRecords($collectionId);
+        if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
+            $srch->addCondition('testimonial_id', 'NOT IN', array_keys($alreadyAdded));
+        }
+
+        $srch->setPageSize($pagesize);
+        $rs = $srch->getResultSet();
+        $db = FatApp::getDb();
+        $posts = $db->fetchAll($rs, 'testimonial_id');
+        $json = array();
+        foreach ($posts as $key => $post) {
+            $json[] = array(
+            'id' => $key,
+            'name' => strip_tags(html_entity_decode($post['testimonial_title'], ENT_QUOTES, 'UTF-8'))
+            );
+        }
+        die(json_encode($json));
+    }
 }

@@ -5,6 +5,7 @@ class Common
     public static function headerWishListAndCartSummary($template)
     {
         $cartObj = new Cart();
+        $cartObj->invalidateCheckoutType();
         $siteLangId = CommonHelper::getLangId();
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
@@ -19,7 +20,9 @@ class Common
         $wislistPSrchObj->addMultipleFields(array('uwlp_uwlist_id'));
         $rs = $wislistPSrchObj->getResultSet();
         $totalWishListItems = $wislistPSrchObj->recordCount();
-
+        if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+            $cartObj->excludeTax();
+        }
         $productsArr = $cartObj->getProducts($siteLangId);
 
         $cartSummary = $cartObj->getCartFinancialSummary($siteLangId);
@@ -127,6 +130,7 @@ class Common
             /* ] */
 
             $catSrch = ProductCategory::getSearchObject(false, $siteLangId);
+            $catSrch->addOrder('m.prodcat_active', 'DESC');
             $catSrch->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as category_name'));
             $catSrch->addOrder('category_name');
             $catSrch->doNotCalculateRecords();
@@ -193,7 +197,7 @@ class Common
         $brandSrch->joinTable(Product::DB_TBL, 'INNER JOIN', 'brand_id = p.product_brand_id', 'p');
         $brandSrch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'sp');
         $brandSrch->doNotCalculateRecords();
-        $brandSrch->addMultipleFields(array( 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty'));
+        $brandSrch->addMultipleFields(array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty'));
         $brandSrch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
         $brandSrch->addCondition('brand_active', '=', applicationConstants::YES);
         $brandSrch->addGroupBy('brand_id');
@@ -216,7 +220,7 @@ class Common
         $catSrch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'ptc');
         $catSrch->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_product_id = ptc.ptc_product_id', 'sp');
         $catSrch->doNotCalculateRecords();
-        $catSrch->addMultipleFields(array( 'c.prodcat_id', 'IFNULL(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty'));
+        $catSrch->addMultipleFields(array('c.prodcat_id', 'IFNULL(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty'));
         $catSrch->addCondition('prodcat_active', '=', applicationConstants::YES);
         $catSrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
         $catSrch->addGroupBy('prodcat_id');
@@ -251,20 +255,20 @@ class Common
         return $frm;
     }
 
-    public static function brandFilters($template)
+    /* public static function brandFilters($template)
     {
         $brandSrch = clone $prodSrchObj;
         $brandSrch->addGroupBy('brand_id');
         $brandSrch->addOrder('brand_name');
-        $brandSrch->addMultipleFields(array( 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'));
+        $brandSrch->addMultipleFields(array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'));
         /* if needs to show product counts under brands[ */
-        //$brandSrch->addFld('count(selprod_id) as totalProducts');
-        /* ] */
+    //$brandSrch->addFld('count(selprod_id) as totalProducts');
+    /* ] *//*
         //echo $brandSrch->getQuery(); die();
         $brandRs = $brandSrch->getResultSet();
-        $brandsArr = $db->fetchAll($brandRs);
+        $brandsArr = FatApp::getDb()->fetchAll($brandRs);
         $template->set('brandsArr', $brandsArr);
-    }
+    } */
 
     public static function userMessages($template)
     {
@@ -356,7 +360,7 @@ class Common
         $frm = new Form('frmPoll');
         $frm->addHiddenField('', 'pollfeedback_polling_id', $pollId);
         $frm->addRadioButtons('', 'pollfeedback_response_type', Polling::getPollingResponseTypeArr($langId), '1', array('class' => 'listing--vertical listing--vertical-chcek'), array());
-        $submitBtn = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('Lbl_Vote', $langId), array('class' => 'btn btn-primary poll--link-js'));
+        $submitBtn = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('Lbl_Vote', $langId), array('class' => 'btn btn-brand poll--link-js'));
         /* $viewResultsFld = $frm->addHTML('View Results', 'btn_view_results','<a href="javascript:void(0)" class="link--underline view--link-js" >'.Labels::getLabel('Lbl_View_Results',$langId).'</a>');
         $submitBtn->attachField($viewResultsFld); */
         return $frm;

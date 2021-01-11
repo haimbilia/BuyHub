@@ -69,10 +69,12 @@ class ShippingZoneRatesController extends AdminBaseController
                 }
             }
         } else {
-            $rateId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        
+
+        $shipProfileId = ShippingProfileZone::getAttributesById($post['shiprate_shipprozone_id'], 'shipprozone_shipprofile_id');
+        ShippingProfile::setDefaultRates($post['shiprate_shipprozone_id'], $shipProfileId);
+
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
         $this->set('zoneId', $post['shiprate_shipprozone_id']);
         $this->set('rateId', $rateId);
@@ -150,6 +152,51 @@ class ShippingZoneRatesController extends AdminBaseController
     public function deleteRate($rateId)
     {
         $this->objPrivilege->canEditShippingManagement();
+
+        $srch = ShippingRate::getSearchObject(0);
+        $srch->joinTable(
+            ShippingProfileZone::DB_TBL,
+            'LEFT OUTER JOIN',
+            'tspz.' . ShippingProfileZone::DB_TBL_PREFIX . 'id = srate.' . ShippingRate::DB_TBL_PREFIX . 'shipprozone_id',
+            'tspz'
+        );
+        $srch->joinTable(
+            ShippingRate::DB_TBL,
+            'LEFT OUTER JOIN',
+            'tsr.' . ShippingRate::DB_TBL_PREFIX . 'shipprozone_id = tspz.' . ShippingProfileZone::DB_TBL_PREFIX . 'id',
+            'tsr'
+        );
+        $srch->addMultipleFields(['tsr.*']);
+        $srch->addCondition('srate.shiprate_id', '=', $rateId);
+        $rs = $srch->getResultSet();
+        $rates = FatApp::getDb()->fetchAll($rs);
+        
+        if (is_array($rates) && !empty($rates)) {
+            $canDelete = false;
+            $withoutCondtionCount = 0;
+            $conditional = false;
+            foreach ($rates as $rate) {
+                if ($rateId == $rate['shiprate_id'] && 0 != $rate['shiprate_condition_type']) {
+                    $conditional = true;
+                    break;
+                }
+
+                if (0 == $rate['shiprate_condition_type']) {
+                    $withoutCondtionCount++;
+                }
+            }
+
+            if (0 == $withoutCondtionCount || 1 < $withoutCondtionCount || true === $conditional) {
+                $canDelete = true;
+            }
+
+            if (false === $canDelete) {
+                $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_RATE_WITHOUT_CONDITION', $this->adminLangId);
+                Message::addErrorMessage($msg);
+                FatUtility::dieJsonError(Message::getHtml());
+            }
+        }
+
         $sObj = new ShippingRate($rateId);
         if (!$sObj->deleteRecord(true)) {
             Message::addErrorMessage($sObj->getError());
@@ -172,7 +219,7 @@ class ShippingZoneRatesController extends AdminBaseController
         
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->adminLangId), 'shiprate_cost');
         
-        $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));
+        $fld = $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));        
         
         $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->adminLangId));
         $fldCndTypeUnReq->setRequired(false);
@@ -211,8 +258,11 @@ class ShippingZoneRatesController extends AdminBaseController
         $cndFld->requirements()->addOnChangerequirementUpdate(0, 'eq', 'shiprate_condition_type', $fldCndTypeUnReq);
         
         $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        /*
         $btn = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->adminLangId));
         $fld->attachField($btn);
+         * 
+         */
         return $frm;
     }
     
@@ -224,8 +274,11 @@ class ShippingZoneRatesController extends AdminBaseController
         $frm->addHiddenField('', 'lang_id', $langId);
         $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->adminLangId), 'shiprate_name');
         $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        /*
         $btn = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->adminLangId));
         $fld->attachField($btn);
+         * 
+         */
         return $frm;
     }
 }

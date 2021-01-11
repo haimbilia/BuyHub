@@ -1,6 +1,33 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <?php if ($headerNavigation || $headerCategories) {
 $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
+
+if(count($headerNavigation)) {
+    $noOfCharAllowedInNav = 90;
+    $rightNavCharCount = 5;
+    if (!$isUserLogged) {
+        $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Sign_In', $siteLangId), ENT_QUOTES, 'UTF-8'));
+    } else {
+        $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Hi,', $siteLangId).' '.$userName, ENT_QUOTES, 'UTF-8'));
+    }
+    $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel("LBL_Cart", $siteLangId), ENT_QUOTES, 'UTF-8'));
+    $noOfCharAllowedInNav = $noOfCharAllowedInNav - $rightNavCharCount;
+
+    $navLinkCount = 0;
+    foreach ($headerNavigation as $nav) {
+        if (!$nav['pages']) {
+            break;
+        }
+        foreach ($nav['pages'] as $link) {
+            $noOfCharAllowedInNav = $noOfCharAllowedInNav - mb_strlen(html_entity_decode($link['nlink_caption'], ENT_QUOTES, 'UTF-8'));
+            if ($noOfCharAllowedInNav < 0) {
+                break;
+            }
+            $navLinkCount++;
+        }
+    }
+}
+    
 ?>
 <div class="last-bar no-print">
     <div class="container">
@@ -8,18 +35,26 @@ $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
         <div class="navigation-wrapper">
             <ul class="navigations <?php echo ($navLinkCount > 4) ? 'justify-content-between' : '' ; ?>">
                 <?php if(count($headerCategories)) { ?>
-                    <li class="navchild categories ">
-                        <a href="javascript:void()">
-                            <?php echo Labels::getLabel('LBL_Categories', $siteLangId);?> <i class="c-hamburger js-hamburger"> <span
+                    <li class="navchild categories">
+                        <a class="categories-link" href="javascript:void(0)">
+                        <i class="c-hamburger js-hamburger">
+                                 <span
                                     class="c-hamburger__line c-hamburger__line--top"></span>
                                 <span class="c-hamburger__line c-hamburger__line--middle"></span>
                                 <span class="c-hamburger__line c-hamburger__line--bottom"></span>
                             </i>
+                            
+                            <?php echo Labels::getLabel('LBL_Shop_by_Categories', $siteLangId);?> 
+                            
                         </a>
+                        <span class="link__mobilenav"></span>
                         <div class="vertical-menu">
                             <ul class="menu">
                             <?php
+                            $count = 0;
                             foreach ($headerCategories as $link) {
+                                $count++;
+                                if ($count > 9) { break; }
                                 $navUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
                                 $OrgnavUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']), '', null, false, $getOrgUrl);
 
@@ -27,7 +62,7 @@ $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
                                 $navchild = '';
                                 $class = '';
                                 if (0 < count($link['children'])) {
-                                    $href = 'javascript:void(0)';
+                                    // $href = 'javascript:void(0)';
                                     $navchild = 'navchild';
                                     $class = 'has-child';
                                 } ?> 
@@ -41,7 +76,7 @@ $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
                                                 $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
                                                 $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
                                                 ?>
-                                            <li class="head"><a data-org-url="<?php echo $subCatOrgUrl; ?>"
+                                            <li class="head"><a class="level2" data-org-url="<?php echo $subCatOrgUrl; ?>"
                                                     href="<?php echo $subCatUrl;?>"><?php echo $children['prodcat_name'];?></a>
                                                 <?php if (isset($children['children']) && count($children['children'])>0) { ?>
                                                 <ul>
@@ -88,30 +123,6 @@ $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
                 <?php } ?>
                 <?php
                 if(count($headerNavigation)) {
-                    $noOfCharAllowedInNav = 90;
-                    $rightNavCharCount = 5;
-                    if (!$isUserLogged) {
-                        $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Sign_In', $siteLangId), ENT_QUOTES, 'UTF-8'));
-                    } else {
-                        $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Hi,', $siteLangId).' '.$userName, ENT_QUOTES, 'UTF-8'));
-                    }
-                    $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel("LBL_Cart", $siteLangId), ENT_QUOTES, 'UTF-8'));
-                    $noOfCharAllowedInNav = $noOfCharAllowedInNav - $rightNavCharCount;
-
-                    $navLinkCount = 0;
-                    foreach ($headerNavigation as $nav) {
-                        if (!$nav['pages']) {
-                            break;
-                        }
-                        foreach ($nav['pages'] as $link) {
-                            $noOfCharAllowedInNav = $noOfCharAllowedInNav - mb_strlen(html_entity_decode($link['nlink_caption'], ENT_QUOTES, 'UTF-8'));
-                            if ($noOfCharAllowedInNav < 0) {
-                                break;
-                            }
-                            $navLinkCount++;
-                        }
-                    }
-                    
                     foreach ($headerNavigation as $nav) {
                         if ($nav['pages']) {
                             $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
@@ -143,7 +154,7 @@ $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
                                                 $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
                                                 $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
                                                 ?>
-                                            <li class="head"><a data-org-url="<?php echo $subCatOrgUrl; ?>"
+                                            <li class="head"><a class="level2" data-org-url="<?php echo $subCatOrgUrl; ?>"
                                                     href="<?php echo $subCatUrl;?>"><?php echo $children['prodcat_name'];?></a>
                                                 <?php if (isset($children['children']) && count($children['children'])>0) { ?>
                                                 <ul>
@@ -203,19 +214,8 @@ $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
                     if (count($subMoreNavigation)) {    ?>
                 <li class="navchild three-pin">
                     <a href="javascript:void(0)"
-                        class="more"><span><?php echo Labels::getLabel('L_More', $siteLangId);?></span><i class="icn">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-                                y="0px" width="512px" height="121.904px" viewBox="0 195.048 512 121.904"
-                                enable-background="new 0 195.048 512 121.904" xml:space="preserve">
-                                <g id="XMLID_27_">
-                                    <path id="XMLID_28_" d="M60.952,195.048C27.343,195.048,0,222.391,0,256s27.343,60.952,60.952,60.952s60.952-27.343,60.952-60.952
-                            S94.562,195.048,60.952,195.048z" />
-                                    <path id="XMLID_30_" d="M256,195.048c-33.609,0-60.952,27.343-60.952,60.952s27.343,60.952,60.952,60.952
-                            s60.952-27.343,60.952-60.952S289.61,195.048,256,195.048z" />
-                                    <path id="XMLID_71_" d="M451.047,195.048c-33.609,0-60.952,27.343-60.952,60.952s27.343,60.952,60.952,60.952S512,289.609,512,256
-                            S484.656,195.048,451.047,195.048z" />
-                                </g>
-                            </svg> </i></a>
+                        class="more"><span><?php echo Labels::getLabel('L_More', $siteLangId);?></span>
+                         </a>
                     <span class="link__mobilenav"></span>
                     <div class="subnav">
                         <div class="subnav__wrapper ">

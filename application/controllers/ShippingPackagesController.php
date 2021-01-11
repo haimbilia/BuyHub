@@ -4,6 +4,17 @@ class ShippingPackagesController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
+        if (1 > FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
+            $msg = Labels::getLabel('LBL_PRODUCT_DIMENSION_SETTING_NOT_ENABLED', $this->siteLangId);
+            Message::addErrorMessage($msg);
+            CommonHelper::redirectUserReferer();
+        }
+        
+        if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
         $this->userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId());
     }
     
@@ -11,7 +22,7 @@ class ShippingPackagesController extends SellerBaseController
     {
         $frmSearch = $this->getSearchForm();
         $this->set("frmSearch", $frmSearch);
-        $this->set('canEdit', $this->userPrivilege->canViewShippingPackages(0, true));
+        $this->set('canEdit', $this->userPrivilege->canEditShippingPackages(0, true));
         $this->_template->render();
     }
     
@@ -39,7 +50,7 @@ class ShippingPackagesController extends SellerBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('canEdit', $this->userPrivilege->canViewShippingPackages(0, true));
+        $this->set('canEdit', $this->userPrivilege->canEditShippingPackages(0, true));
         $this->_template->render(false, false);
     }
     
@@ -65,7 +76,7 @@ class ShippingPackagesController extends SellerBaseController
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId) ));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId));
         return $frm;
     }
     

@@ -2,6 +2,8 @@
 #!/.gitignore
 /robots.txt
 /public/robots.txt
+/public/health.html
+/health.html
 /.htaccess
 /public/.htaccess
 /user-uploads/*
@@ -24,6 +26,11 @@
 /testcases/bootstrap.php
 /error_log
 /application/views/designer/*
+/public/application_top.php
+/node_modules
+/public/apple-app-site-association
+package-lock.json
+/.well-known
 
 # zip files
 /*.zip
@@ -104,3 +111,8 @@ php_errors.log
 # Php Unit Test
 .phpunit.result.cache
 /testcases/bootstrap.php
+
+#css
+
+/application/views/css/main-ltr.css.map
+/application/views/css/main-rtl.css.map

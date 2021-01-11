@@ -43,7 +43,6 @@ $(document).on("change", ".state", function() {
     $(this).removeAttr("disabled");
 });
 
-
 (function() {
     var runningAjaxReq = false;
     var dv = '#shopFormBlock';
@@ -150,26 +149,6 @@ $(document).on("change", ".state", function() {
         fcom.ajax(fcom.makeUrl('Seller', 'shopLangForm', [shopId, langId, autoFillLangData]), '', function(t) {
             $(dv).html(t);
             fcom.setEditorLayout(langId);
-            var frm = $(dv + ' form')[0];
-            var validator = $(frm).validation({
-                errordisplay: 3
-            });
-            $(frm).submit(function(e) {
-                e.preventDefault();
-                if (validator.validate() == false) {
-                    return;
-                }
-                var data = fcom.frmData(frm);
-                fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShopLang'), data, function(t) {
-                    runningAjaxReq = false;
-                    $.mbsmessage.close();
-                    if (t.langId > 0 && t.shopId > 0) {
-                        shopLangForm(t.shopId, t.langId);
-                        return;
-                    }
-                    returnAddressForm();
-                });
-            });
         });
     };
 
@@ -184,7 +163,7 @@ $(document).on("change", ".state", function() {
                 shopLangForm(t.shopId, t.langId);
                 return;
             }
-            shopForm();
+            returnAddressForm();
         });
     };
 
@@ -513,11 +492,23 @@ $(document).on("change", ".state", function() {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id]), '', function(t) {
             $(dv).html(t);
+            setTimeout(function(){$('.fromTime-js').change();}, 500);
         });
     };
 
     setPickupAddress = function(frm) {
         if (!$(frm).validate()) return;
+        if (1 == $(".availabilityType-js:checked").val()) {
+            if (1 > $(".slotDays-js:checked").length) {
+                $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
+                return false;
+            }
+        } else {
+            if ('' == $(".selectAllFromTime-js option:selected").val() || '' == $(".selectAllToTime-js option:selected").val()) {
+                $.mbsmessage(langLbl.invalidTimeSlot, true, 'alert--danger');
+                return false;
+            }
+        }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setPickupAddress'), data, function(t) {
             pickupAddress();
@@ -612,6 +603,8 @@ $(document).on("change", ".state", function() {
                     minCropBoxWidth: minWidth,
                     minCropBoxHeight: minHeight,
                     toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val('');
                 return cropImage(file, options, 'uploadShopImages', inputBtn);
@@ -640,6 +633,8 @@ $(document).on("change", ".state", function() {
                     minCropBoxWidth: minWidth,
                     minCropBoxHeight: minHeight,
                     toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val('');
                 return cropImage(file, options, 'uploadShopImages', inputBtn);
@@ -718,6 +713,8 @@ $(document).on("change", ".state", function() {
                     minCropBoxWidth: collectionMediaWidth,
                     minCropBoxHeight: collectionMediaHeight,
                     toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val('');
                 return cropImage(file, options, 'uploadCollectionImage', inputBtn);
@@ -840,37 +837,54 @@ $(document).on("change", ".state", function() {
 })();
 
 function bindAutoComplete() {
-    $("input[name='scp_selprod_id']").autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
+     $("select[name='scp_selprod_id']").select2({
+        closeOnSelect: true,
+        dir: langLbl.layoutDirection,
+        allowClear: true,
+        //placeholder: $("select[name='scp_selprod_id']").attr('placeholder'),
+        ajax: {
+            url: fcom.makeUrl('seller', 'autoCompleteProducts'),
+            dataType: 'json',
+            delay: 250,
+            method: 'post',
+            data: function (params) {
+                return {
+                    keyword: params.term, // search term
+                    page: params.page,                   
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: data.products,
+                    pagination: {
+                        more: params.page < data.pageCount
+                    }
+                };
+            },
+            cache: true
+        },        
+        minimumInputLength: 0,
+        templateResult: function (result)
+        {
+            return  (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
         },
-        'source': function(request, response) {
-            $.ajax({
-                url: fcom.makeUrl('seller', 'autoCompleteProducts'),
-                data: {
-                    keyword: request['term'],
-                    fIsAjax: 1
-                },
-                dataType: 'json',
-                type: 'post',
-                success: function(json) {
-                    response($.map(json, function(item) {
-                        return {
-                            label: item['name'] + '[' + item['product_identifier'] + ']',
-                            value: item['name'] + '[' + item['product_identifier'] + ']',
-                            id: item['id']
-                        };
-                    }));
-                },
-            });
-        },
-        select: function(event, ui) {
-            $('input[name=\'scp_selprod_id\']').val('');
-            $('#selprod-products' + ui.item.id).remove();
-            $('#selprod-products ul ').append('<li id="selprod-products' + ui.item.id + '"><i class="remove_link remove_param fa fa-remove"></i> ' + ui.item.label + '<input type="hidden" name="product_ids[]" value="' + ui.item.id + '" /></li>');
-            return false;
+        templateSelection: function (result)
+        {
+            return  (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
         }
+    }).on('select2:selecting', function (e)
+    {   
+        var item = e.params.args.data;      
+        $('input[name=\'scp_selprod_id\']').val('');
+        $('#selprod-products' + item.id).remove();
+        $('#selprod-products ul ').append('<li id="selprod-products' + item.id + '">' + item.name + '[' + item.product_identifier + ']' + '<i class="remove_link remove_param fa fa-times"></i> <input type="hidden" name="product_ids[]" value="' + item.id + '" /></li>');
+        
+        setTimeout(function () {
+           $('select[name=\'scp_selprod_id\']').val('').trigger('change.select2');
+        }, 200);
     });
+    
 }
 
 $(document).on('click', '.catFile-Js', function() {

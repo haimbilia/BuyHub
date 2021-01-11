@@ -20,7 +20,7 @@ class ShopCollection extends MyAppModel
     public function __construct($scollectionId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $scollectionId);
-        $this->objMainTableRecord->setSensitiveFields(array());
+        $this->objMainTableRecord->setSensitiveFields(array(static::DB_TBL_PREFIX . 'id'));
     }
 
     public static function getSearchObject()
@@ -38,12 +38,12 @@ class ShopCollection extends MyAppModel
         return $this->mainTableRecordId;
     }
 
-    public static function getCollectionGeneralDetail($shop_id, $scollection_id = 0, $langId = 0)
+    public static function getCollectionGeneralDetail($shop_id, $scollection_id = 0, $langId = 0, $join = 'LEFT OUTER JOIN')
     {
         $langId = FatUtility::int($langId);
         $srch = self::getSearchObject();
         if (0 < $langId) {
-            $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', static::DB_TBL_LANG_PREFIX . 'scollection_id = ' . static::DB_TBL_PREFIX . 'id and ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId);
+            $srch->joinTable(static::DB_TBL_LANG, $join, static::DB_TBL_LANG_PREFIX . 'scollection_id = ' . static::DB_TBL_PREFIX . 'id and ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId);
             $srch->addMultipleFields(['scollection_id', 'scollection_shop_id', 'scollection_identifier', 'scollection_active', 'IFNULL(scollection_name, scollection_identifier) as scollection_name']);
         }
 
@@ -118,9 +118,11 @@ class ShopCollection extends MyAppModel
         $srch->joinTable(static::DB_SELLER_PRODUCTS . '_lang', 'LEFT JOIN', 'slang.' . static::DB_SELLER_PRODUCTS_LANG_TBL_PREFIX . 'selprod_id = ' . static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'selprod_id AND ' . static::DB_SELLER_PRODUCTS_LANG_TBL_PREFIX . 'lang_id = ' . $lang_id, 'slang');
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_SELLER_PRODUCTS_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_SELLER_PRODUCTS_LANG_TBL_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'selprod_user_id = seller_user.user_id and seller_user.user_is_supplier = ' . applicationConstants::YES . ' AND seller_user.user_deleted = ' . applicationConstants::NO, 'seller_user');
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = seller_user.user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES, 'tuc');
         $srch->addMultipleFields(
             array(
-            'selprod_id', 'IFNULL(selprod_title ,product_name) as product_name', 'product_identifier')
+            'selprod_id', 'IFNULL(selprod_title ,product_name) as product_name', 'product_identifier', 'credential_username')
         );
 
 

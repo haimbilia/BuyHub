@@ -7,7 +7,12 @@
 	$frm->setFormTagAttribute('class','form form--horizontal');
 	$frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 	$frm->developerTags['fld_default_col'] = 12;
-	$frm->setFormTagAttribute('onSubmit', 'setUpShopSpam(this); return false;');
+    $frm->setFormTagAttribute('onSubmit', 'setUpShopSpam(this); return false;');
+    
+    $btnFld = $frm->getField('btn_submit');
+    if (null != $btnFld) {
+        $btnFld->addFieldTagAttribute('class', 'btn btn-brand');
+    }
 ?>
 
 <div id="body" class="body">
@@ -19,7 +24,7 @@
           
           <div class="section-head section--white--head mb-0">
 						<div class="section__heading">
-							<h2><?php echo $shop['shop_name']; ?></h2>
+							<h1><?php echo $shop['shop_name']; ?></h1>
 							<p><?php echo $shopLocation; ?> <?php echo Labels::getLabel('LBL_Opened_on', $siteLangId); ?> <?php echo FatDate::format($shop['shop_created_on']); ?></p>
                         </div>
                     </div>

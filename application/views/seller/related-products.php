@@ -12,8 +12,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 			<?php if($canEdit){ ?>
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <?php $relProdFrm->setFormTagAttribute('onsubmit', 'setUpSellerProductLinks(this); return(false);');
                             $relProdFrm->setFormTagAttribute('class', 'form form--horizontal');
                             $prodFld = $relProdFrm->getField('product_name');
@@ -23,15 +23,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             $relProdFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Add_Related_Products', $siteLangId));
 
                             $submitBtnFld = $relProdFrm->getField('btn_submit');
-                            $submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary btn-block '); ?>
+                            $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block '); ?>
                             <?php echo $relProdFrm->getFormTag(); ?>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="field-set">
                                         <div class="field-wraper">
                                             <div class="field_cover">
-                                                <?php echo $relProdFrm->getFieldHTML('product_name');?>
-                                                <div class='dvFocus-js form-control focused-div'></div>
+                                                <?php echo $relProdFrm->getFieldHTML('product_name');?>                                  
                                             </div>
                                         </div>
                                     </div>
@@ -66,8 +65,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 			<?php }?>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div id="listing">
                                 <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                             </div>

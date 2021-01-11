@@ -1,8 +1,8 @@
 <div class="tabs  align-items-center">
     <?php require_once(CONF_THEME_PATH.'_partial/seller/customCatalogProductNavigationLinks.php'); ?>
 </div>
-<div class="cards">
-    <div class="cards-content">
+<div class="card">
+    <div class="card-body">
         <div class="row">
             <div class="col-md-12">
                 <div class="form__subcontent">
@@ -15,7 +15,7 @@
                     $optionSectionHeading->value = '<h2>Set Up Options</h2>';
                     //TODO:: Make, final word from language labels. */
                     /* $submitBtn = $frmSellerProduct->getField('btn_submit');
-                    $submitBtn->setFieldTagAttribute('class','btn btn-primary btn-sm');
+                    $submitBtn->setFieldTagAttribute('class','btn btn-brand btn-sm');
 
                     $cancelBtn = $frmSellerProduct->getField('btn_cancel');
                     $cancelBtn->setFieldTagAttribute('class','btn btn-secondary btn-sm'); */

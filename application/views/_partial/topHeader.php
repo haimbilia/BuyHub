@@ -1,10 +1,10 @@
 <div class="outdated">
     <div class="outdated-inner">
-        <div class="outdated-messages">
-            <h2>The browser you are using is not supported. Some critical security features are not available for your
-                browser version.</h2>
-            <p>We want you to have the best possible experience with <?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '');?>.
-                For this you'll need to use a supported browser and upgrade to the latest version. </p>
+        <div class="outdated-messages"> 
+            <div class="heading">The browser you are using is not supported. Some critical security features are not available for your
+                browser version.</div>
+            <div class="para">We want you to have the best possible experience with <?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '');?>.
+                For this you'll need to use a supported browser and upgrade to the latest version. </div>
             <ul class="list-browser">
                 <li><a href="https://www.google.com/chrome" target="_blank" rel="noopener noreferrer"><i
                             class="icn chrome"></i>
@@ -45,10 +45,10 @@
 		} ?>
         <div class="top-bar no-print">
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col">
-                    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {?>                        
-                            <a href="javascript:void(0)" onClick="accessLocation(true)" class="" title="<?php echo Labels::getLabel("LBL_Location", $siteLangId); ?>">
+                <div class="top-bar__inner">
+                    <div class="top-bar__left">
+                    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>                        
+                            <a href="javascript:void(0)" onClick="accessLocation(true)" class="location" title="<?php echo Labels::getLabel("LBL_Location", $siteLangId); ?>">
                             <i class="icn">
                                 <svg class="svg" width="15px" height="15px">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps">
@@ -64,7 +64,7 @@
                         
                         <?php }?>
                     </div>
-                    <div class="col-auto">
+                    <div class="top-bar__right">
                         <div class="short-links">
                             <ul>
                                 <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?>
@@ -92,18 +92,22 @@
                             <?php
                             $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
                             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                            $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                             ?>
                             <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?>
                             data-ratio= "<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>"
-                            <?php } ?> src="<?php echo UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL); ?>"
+                            <?php } ?> src="<?php echo $siteLogo; ?>"
                             alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>"
                             title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
                         </a>
                     </div>
                     <?php $this->includeTemplate('_partial/headerSearchFormArea.php'); ?>
+					<?php if ($controllerName != 'Cart') { ?>
                     <div class="cart dropdown" id="cartSummary">
                         <?php $this->includeTemplate('_partial/headerWishListAndCartSummary.php'); ?>
                     </div>
+					<?php } ?>
                 </div>
             </div>
         </div> <?php $this->includeTemplate('_partial/headerNavigation.php'); ?>

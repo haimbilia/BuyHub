@@ -65,8 +65,6 @@ function showCartReviewDiv() {
     return loadCartReviewDiv();
 }
 $("document").ready(function () {
-    loadFinancialSummary();
-
     $(document).on("keydown", "#cc_number", function () {
         var obj = $(this);
         var cc = obj.val();
@@ -107,9 +105,10 @@ $("document").ready(function () {
 
     loadFinancialSummary = function () {
         $(financialSummary).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Checkout', 'getFinancialSummary'), '', function (ans) {
-            $(financialSummary).html(ans);
-        });
+        fcom.updateWithAjax(fcom.makeUrl('Checkout', 'getFinancialSummary'), '', function (ans) {          
+            $(financialSummary).html(ans.data);
+            $('#netAmountSummary').html(ans.netAmount);
+        }, [], false);
     };
 
     setUpRegisteration = function (frm, v) {
@@ -249,12 +248,12 @@ $("document").ready(function () {
                 }else {
                     if (t.hasPhysicalProduct) {
                         $(shippingSummaryDiv).show();
-                        loadShippingSummaryDiv();
                     } else {
                         $(shippingSummaryDiv).hide();
                         loadShippingAddress();
-                        loadCartReviewDiv();
+                        //loadCartReviewDiv();                    
                     }
+                    loadShippingSummaryDiv();
                     loadFinancialSummary();
                 }
             }
@@ -361,7 +360,6 @@ $("document").ready(function () {
         fcom.ajax(fcom.makeUrl('Checkout', 'loadShippingSummary'), '', function (ans) {
             $(shippingSummaryDiv).html(ans);
             /* fcom.scrollToTop("#shipping-summary"); */
-
         });
     };
 
@@ -437,11 +435,9 @@ $("document").ready(function () {
 
         $.mbsmessage(langLbl.requestProcessing, false, 'alert--process');
         fcom.ajax(fcom.makeUrl('Checkout', 'PaymentSummary'), '', function (ans) {
+			$.mbsmessage.close();
             $(pageContent).html(ans);
             $(paymentDiv).addClass('is-current');
-            setTimeout(function () {
-                $("#payment_methods_tab li:first a").trigger('click').addClass('active');
-            }, 500);
         });
     };
 
@@ -559,14 +555,22 @@ $("document").ready(function () {
     }
 
     sendPayment = function (frm, dv = '') {
+        if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         var action = $(frm).attr('action');
+        var submitBtn = $('input[type=submit]', frm);
+        var btnText = submitBtn.val();
+        submitBtn.attr('disabled', 'disabled');
+        submitBtn.val(submitBtn.data('processing-text'));
+        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
         fcom.ajax(action, data, function (t) {
+            submitBtn.val(btnText);
             // debugger;
             try {
                 var json = $.parseJSON(t);
                 if (typeof json.status != 'undefined' && 1 > json.status) {
-                    $.systemMessage(json.msg, 'alert--danger');
+                    submitBtn.removeAttr('disabled');
+                    $.mbsmessage(json.msg, true, 'alert--danger');
                     return false;
                 }
                 if (typeof json.html != 'undefined') {
@@ -581,28 +585,17 @@ $("document").ready(function () {
         });
     };
 
-    displayPickupAddress = function (level, recordId) {
+    displayPickupAddress = function (pickUpBy, recordId) {
         $.facebox(function () {
-            var data = 'level=' + level + '&recordId=' + recordId;
+            var addrId = $(".js-slot-addr-"+pickUpBy).attr('data-addr-id');
+            var slotId = $("input[name='slot_id[" + pickUpBy + "]']").val();
+            var slotDate = $("input[name='slot_date[" + pickUpBy + "]']").val(); 
+            var data = 'pickUpBy=' + pickUpBy + '&recordId=' + recordId +'&addrId=' + addrId + '&slotId=' + slotId + '&slotDate=' + slotDate;
             fcom.ajax(fcom.makeUrl('Addresses', 'getPickupAddresses'), data, function (rsp) {
                 $.facebox(rsp, 'faceboxWidth medium-fb-width');
                 $("input[name='coupon_code']").focus();
             });
         });
-    }
-
-    selectTimeSlot = function (ele, level) {
-        var slot_id = $(ele).attr('id');
-        var slot_date = $('.js-datepicker').val();
-        $("input[name='slot_id[" + level + "]']").val(slot_id);
-        $("input[name='slot_date[" + level + "]']").val(slot_date);
-
-        var slot_time = $(ele).next().children('.time').html();
-
-        var slotAddr = $("input[name='pickup_address']:checked").next().next('.js-addr').html();
-        var slotHtml = "<div>" + slotAddr + "<br/><strong>" + slot_date + ' ' + slot_time + "</strong></div>";
-        $(".js-slot-addr_" + level).html(slotHtml);
-        $("#facebox .close").trigger('click');
     }
 
     setUpPickup = function () {
@@ -642,13 +635,18 @@ $("document").ready(function () {
         });
     };
 
-    /* Phone Verification for COD */
+    /* Phone/Email Verification for COD */
     validateOtp = function (frm){
-		if (!$(frm).validate()) return;	
+        if (!$(frm).validate()) return;	
         var data = fcom.frmData(frm);
+        var method = $(frm).data('method');
+        var orderId = $(frm).find('input[name="order_id"]').val();
 		fcom.ajax(fcom.makeUrl('Checkout', 'validateOtp'), data, function(t) {
             t = $.parseJSON(t);						
             if (1 == t.status) {
+                if ('undefined' != typeof method) {
+                    $(frm).attr('action', fcom.makeUrl(method + 'Pay', 'charge', [orderId]));
+                }
                 $.mbsmessage(t.msg, false, 'alert--success');
                 $('.successOtp-js').removeClass('d-none');
                 $('.otpBlock-js').addClass('d-none');
@@ -657,17 +655,23 @@ $("document").ready(function () {
                 $.mbsmessage(t.msg, false, 'alert--danger');
                 invalidOtpField();
             }
-        });	
+        });
         return false;
     };
     
-    resendOtp = function (){
+    resendOtp = function (frm = ''){
         $.mbsmessage(langLbl.processing, false, 'alert--process');
-		fcom.ajax(fcom.makeUrl( 'Checkout', 'resendOtp'), '', function(t) {
+		fcom.ajax(fcom.makeUrl('Checkout', 'resendOtp'), '', function(t) {
             t = $.parseJSON(t);
             if(typeof t.status != 'undefined' &&  1 > t.status){
                 $.mbsmessage(t.msg, false, 'alert--danger');
                 return false
+            }
+            $(".otpVal-js").val('');
+            if ('' != frm) {
+               $(frm).attr('onsubmit', 'validateOtp(this); return(false);');
+                $('input[name="btn_submit"]', frm).val(langLbl.proceed);
+                $(".otpVal-js").removeAttr('disabled');
             }
             $.mbsmessage(t.msg, false, 'alert--success');
             startOtpInterval('', "showElements");
@@ -675,10 +679,11 @@ $("document").ready(function () {
         });
         return false;
     };
-    /* Phone Verification for COD */
+    /* Phone/Email Verification for COD */
 
-    displaySelectedPickUpAddresses = function(){
-        fcom.ajax(fcom.makeUrl('Checkout', 'displaySelectedPickUpAddresses'), '', function (rsp) {
+    orderPickUpData = function(order_id){
+        var data = 'order_id='+order_id;
+        fcom.ajax(fcom.makeUrl('Checkout', 'orderPickUpData'), data, function (rsp) {
             $.facebox(rsp, 'faceboxWidth medium-fb-width');
         });
     }
@@ -689,6 +694,13 @@ $("document").ready(function () {
         }else{
             window.location.href = fcom.makeUrl('Cart');
         }
+    }
+    
+    orderShippingData = function(order_id){
+        var data = 'order_id='+order_id;
+        fcom.ajax(fcom.makeUrl('Checkout', 'orderShippingData'), data, function (rsp) {
+            $.facebox(rsp, 'faceboxWidth medium-fb-width');
+        });
     }
     
 })();

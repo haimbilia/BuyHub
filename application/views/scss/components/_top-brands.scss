@@ -4,8 +4,8 @@
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: start;
-        -ms-flex-align: start;
+        -webkit-box-align:flex-start;
+        -ms-flex-align:flex-start;
         align-items: flex-start;
         justify-content: center;
         flex-wrap: nowrap;
@@ -51,6 +51,12 @@
         border-radius: $radius2;
         img {
             margin: auto;
+            &[data-ratio="16:9"] {
+                max-width: 120px;
+            }
+            &[data-ratio="1:1"] {
+                max-width: 60px;
+            }
         }
     }
 }

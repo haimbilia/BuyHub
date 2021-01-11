@@ -1,16 +1,11 @@
 $(document).ready(function(){
-	
-	$(".trackingDiv-js").hide();		
-	
 	$("select[name='op_status_id']").change(function(){
 		var data = 'val='+$(this).val();
 		fcom.ajax(fcom.makeUrl('SellerOrders', 'checkIsShippingMode'), data, function(t) {			
 			var response = $.parseJSON(t);
 			if (response["shipping"]){
-				$(".trackingDiv-js").show();				
-			}else{
-				$(".trackingDiv-js").hide();				
-			}			
+				$('.manualShipping-js').attr('data-fatreq', '{"required":false}');				
+			}		
 		});
 	});
 	
@@ -29,7 +24,7 @@ function pageRedirect(op_id) {
         var data = fcom.frmData(frm);
         var orderStatusId = $(frm.op_status_id).val();
 
-        if ('' == $(".shippingUser-js").val()){
+        if (0 < $(".shippingUser-js").length && '' == $(".shippingUser-js").val()){
             $.systemMessage(langLbl.shippingUser,'alert--danger', false);
             return;
         }

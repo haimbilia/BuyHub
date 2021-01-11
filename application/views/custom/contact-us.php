@@ -9,8 +9,12 @@ $fld = $contactFrm->getField('message');
 $fld->developerTags['col'] = 12;
 
 $fld = $contactFrm->getField('htmlNote');
-$fld->developerTags['col'] = 12;
+if (null != $fld) {
+    $fld->developerTags['col'] = 12;
+}
+
 $fld = $contactFrm->getField('btn_submit');
+$fld->addFieldTagAttribute('class', 'btn btn-brand');
 $fld->developerTags['col'] = 12;
 ?>
 <script>
@@ -23,8 +27,8 @@ $fld->developerTags['col'] = 12;
                 <div class="col-md-8 col-sm-8">
                     <div class="section-head section--white--head justify-content-center mb-0">
                         <div class="section__heading text-center">
-                            <h2><?php echo Labels::getLabel('LBL_Get_in_Touch', $siteLangId);?>
-                            </h2>
+                            <h1><?php echo Labels::getLabel('LBL_Get_in_Touch', $siteLangId);?>
+                            </h1>
                             <p><?php echo Labels::getLabel('LBL_Get_in_Touch_Txt', $siteLangId);?>
                             </p>
                         </div>
@@ -87,8 +91,5 @@ $fld->developerTags['col'] = 12;
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
 if (!empty($siteKey) && !empty($secretKey)) {?>
-    <script src='https://www.google.com/recaptcha/api.js?render=<?php echo $siteKey; ?>'></script>
-    <script>
-        googleCaptcha();
-    </script>
+    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
 <?php } ?>

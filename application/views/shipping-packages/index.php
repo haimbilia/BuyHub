@@ -6,19 +6,16 @@ $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
 $frmSearch->developerTags['fld_default_col'] = 6;
 
 $keywordFld = $frmSearch->getField('keyword');
-$keywordFld->setWrapperAttribute('class', 'col-lg-4');
-$keywordFld->developerTags['col'] = 4;
+$keywordFld->developerTags['col'] = 8;
 $keywordFld->developerTags['noCaptionTag'] = true;
 
 $submitBtnFld = $frmSearch->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary btn-block ');
-$submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
+$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 $submitBtnFld->developerTags['col'] = 2;
 $submitBtnFld->developerTags['noCaptionTag'] = true;
 
 $cancelBtnFld = $frmSearch->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
-$cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
+$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
@@ -33,8 +30,8 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="replaced">
                                 <?php
                                 $submitFld = $frmSearch->getField('btn_submit');
@@ -51,8 +48,8 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                         </div>
                     </div>

@@ -5,7 +5,7 @@ class OrderProductSearch extends SearchBase
     private $langId;
     private $isOrdersTableJoined;
     private $isOrderUserTableJoined;
-    private $isOrderProductStatusJoined;
+    private $isShopJoined;
     private $commonLangId;
 
     public function __construct($langId = 0, $joinOrders = false, $joinOrderProductStatus = false, $deletedOrders = false)
@@ -15,6 +15,8 @@ class OrderProductSearch extends SearchBase
         $this->isOrdersTableJoined = false;
         $this->isOrderUserTableJoined = false;
         $this->isOrderProductStatusJoined = false;
+        $this->isShippingChargesTblJoined = false;
+        $this->isShopJoined = false;
         $this->commonLangId = CommonHelper::getLangId();
         if ($this->langId > 0) {
             $this->joinTable(
@@ -110,6 +112,57 @@ class OrderProductSearch extends SearchBase
         }
     }
 
+    public function joinShop($langId = 0)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId) {
+            $langId = $this->langId;
+        }
+        $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'sh.shop_user_id = op.op_selprod_user_id', 'sh');
+        if ($langId) {
+            $this->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sh_l.shoplang_shop_id = sh.shop_id AND sh_l.shoplang_lang_id = ' . $langId, 'sh_l');
+        }
+        $this->isShopJoined = true;
+    }
+
+    public function joinShopCountry($langId = 0, $isActive = true)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId) {
+            $langId = $this->langId;
+        }
+        if (!$this->isShopJoined) {
+            trigger_error("Please use joinShop first, then try to join joinShopCountry");
+        }
+        $this->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'sh.shop_country_id = shop_country.country_id', 'shop_country');
+
+        if ($langId) {
+            $this->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop_country.country_id = shop_country_l.countrylang_country_id AND shop_country_l.countrylang_lang_id = ' . $langId, 'shop_country_l');
+        }
+        if ($isActive) {
+            $this->addCondition('shop_country.country_active', '=', applicationConstants::ACTIVE);
+        }
+    }
+
+    public function joinShopState($langId = 0, $isActive = true)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId) {
+            $langId = $this->langId;
+        }
+        if (!$this->isShopJoined) {
+            trigger_error("Please use joinShop first, then try to join joinShopState");
+        }
+        $this->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'sh.shop_state_id = shop_state.state_id', 'shop_state');
+
+        if ($langId) {
+            $this->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop_state.state_id = shop_state_l.statelang_state_id AND shop_state_l.statelang_lang_id = ' . $langId, 'shop_state_l');
+        }
+        if ($isActive) {
+            $this->addCondition('shop_state.state_active', '=', applicationConstants::ACTIVE);
+        }
+    }
+
     public function joinPaymentMethod($langId = 0)
     {
         $langId = FatUtility::int($langId);
@@ -138,7 +191,25 @@ class OrderProductSearch extends SearchBase
 
     public function joinShippingCharges()
     {
+        $this->isShippingChargesTblJoined = true;
         $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+    }
+
+    public function joinAddress(int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = $this->commonLangId;
+        }
+
+        if (false === $this->isShippingChargesTblJoined) {
+            trigger_error(Labels::getLabel('MSG_PLEASE_USE_JOINSHIPPINGCHARGES()_FIRST,_THEN_TRY_TO_JOIN_JOINADDRESS()', $langId), E_USER_ERROR);
+        }
+
+        $this->joinTable(Address::DB_TBL, 'LEFT OUTER JOIN', 'addr.addr_id = ops.opshipping_pickup_addr_id', 'addr');
+        $this->joinTable(States::DB_TBL, 'LEFT JOIN', 'addr.addr_state_id=ts.state_id', 'ts');
+        $this->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'st_l.statelang_state_id = ts.state_id and st_l.statelang_lang_id = ' . $langId, 'st_l');
+        $this->joinTable(Countries::DB_TBL, 'LEFT JOIN', 'addr.addr_country_id=tc.country_id', 'tc');
+        $this->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.countrylang_country_id = tc.country_id and c_l.countrylang_lang_id = ' . $langId, 'c_l');
     }
 
     public function joinOrderCancellationRequest()
@@ -146,14 +217,14 @@ class OrderProductSearch extends SearchBase
         $this->joinTable(OrderCancelRequest::DB_TBL, 'LEFT OUTER JOIN', 'ocr.ocrequest_op_id = op.op_id', 'ocr');
     }
 
-    public function joinDigitalDownloads($type = AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)
+    public function joinDigitalDownloads($type = AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $join = 'INNER JOIN')
     {
-        $this->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'opa.afile_record_id = op.op_id and afile_type = ' . $type, 'opa');
+        $this->joinTable(AttachedFile::DB_TBL, $join, 'opa.afile_record_id = op.op_id and afile_type = ' . $type, 'opa');
     }
 
-    public function joinDigitalDownloadLinks()
+    public function joinDigitalDownloadLinks($join = 'INNER JOIN')
     {
-        $this->joinTable(OrderProductDigitalLinks::DB_TBL, 'INNER JOIN', 'opd.opddl_op_id = op.op_id', 'opd');
+        $this->joinTable(OrderProductDigitalLinks::DB_TBL, $join, 'opd.opddl_op_id = op.op_id', 'opd');
     }
 
     public function addDigitalDownloadCondition()
@@ -255,20 +326,20 @@ class OrderProductSearch extends SearchBase
         $subSrch = Stats::getSalesStatsObj($startDate, $endDate, $alias . '_t', $type);
 
         $subSrch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', $alias . '_tc.opcharge_op_id = ' . $alias . '_t.op_id', $alias . '_tc');
-		$subSrch->joinTable(OrderProduct::DB_TBL_SETTINGS, 'LEFT OUTER JOIN', $alias . '_ts.opsetting_op_id = ' . $alias . '_t.op_id', $alias . '_ts');
-		$subSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', $alias . '_tops.opshipping_op_id = ' . $alias . '_t.op_id', $alias . '_tops');
+        $subSrch->joinTable(OrderProduct::DB_TBL_SETTINGS, 'LEFT OUTER JOIN', $alias . '_ts.opsetting_op_id = ' . $alias . '_t.op_id', $alias . '_ts');
+        $subSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', $alias . '_tops.opshipping_op_id = ' . $alias . '_t.op_id', $alias . '_tops');
         /* $cnd = $subSrch->addCondition($alias.'_tc.opcharge_type','=',OrderProduct::CHARGE_TYPE_SHIPPING);
         $cnd->attachCondition($alias.'_tc.opcharge_type','=',OrderProduct::CHARGE_TYPE_TAX,'OR'); */
         $subSrch->addFld($alias . '_tc.opcharge_op_id,SUM(' . $alias . '_tc.opcharge_amount) as opcharge_amount');
         $subSrch->addGroupBy($alias . '_tc.opcharge_op_id');
-		
-		$cnd = $subSrch->addCondition($alias.'_tc.opcharge_type','=',OrderProduct::CHARGE_TYPE_SHIPPING);
+
+        $cnd = $subSrch->addCondition($alias . '_tc.opcharge_type', '=', OrderProduct::CHARGE_TYPE_SHIPPING);
         $cnd->attachCondition('opshipping_by_seller_user_id', '>', 0, 'AND');
-		$cnd = $subSrch->addCondition($alias.'_tc.opcharge_type','=',OrderProduct::CHARGE_TYPE_TAX, 'OR');
+        $cnd = $subSrch->addCondition($alias . '_tc.opcharge_type', '=', OrderProduct::CHARGE_TYPE_TAX, 'OR');
         $cnd->attachCondition('op_tax_collected_by_seller', '>', 0, 'AND');
-		$subSrch->addCondition($alias.'_tc.opcharge_type','IN',array(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, OrderProduct::CHARGE_TYPE_DISCOUNT, OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT), 'OR');
+        $subSrch->addCondition($alias . '_tc.opcharge_type', 'IN', array(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, /*OrderProduct::CHARGE_TYPE_DISCOUNT, OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT*/), 'OR');
         
-		$srch->joinTable('(' . $subSrch->getQuery() . ')', 'LEFT OUTER JOIN', $alias . 'c.opcharge_op_id = ' . $alias . '.op_id', $alias . 'c');
+        $srch->joinTable('(' . $subSrch->getQuery() . ')', 'LEFT OUTER JOIN', $alias . 'c.opcharge_op_id = ' . $alias . '.op_id', $alias . 'c');
 
         switch ($type) {
             case Stats::REFUNDED_SALES:
@@ -283,7 +354,7 @@ class OrderProductSearch extends SearchBase
         }
 
         $srch->addGroupBy($alias . '.op_selprod_user_id');
-
+       
         $qrytotalOrders = $srch->getQuery();
         $this->joinTable('(' . $qrytotalOrders . ')', 'LEFT OUTER JOIN', 'op.op_selprod_user_id = ' . $alias . '.' . $alias . '_op_selprod_user_id', $alias);
     }
@@ -349,17 +420,21 @@ class OrderProductSearch extends SearchBase
         $this->addCondition('o.order_net_amount', '<=', $priceTo);
     }
 
-    public function addStatusCondition($op_status)
+    public function addStatusCondition($op_status, $orderPaymentCancel = false)
     {
         if (is_array($op_status)) {
             if (!empty($op_status)) {
-                $this->addCondition('op.op_status_id', 'IN', $op_status);
+                $cnd = $this->addCondition('op.op_status_id', 'IN', $op_status);
             } else {
-                $this->addCondition('op.op_status_id', '=', 0);
+                $cnd = $this->addCondition('op.op_status_id', '=', 0);
             }
         } else {
             $op_status_id = FatUtility::int($op_status);
-            $this->addCondition('op.op_status_id', '=', $op_status_id);
+            $cnd = $this->addCondition('op.op_status_id', '=', $op_status_id);
+        }
+
+        if (true === $orderPaymentCancel) {
+            $cnd->attachCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_CANCELLED, 'OR');
         }
     }
 
@@ -375,7 +450,7 @@ class OrderProductSearch extends SearchBase
 
     public function joinOrderProductSpecifics()
     {
-        $this->joinTable(OrderProductSpecifics::DB_TBL, 'LEFT JOIN', 'ops.ops_op_id = op.op_id', 'ops');
+        $this->joinTable(OrderProductSpecifics::DB_TBL, 'LEFT JOIN', 'opspec.ops_op_id = op.op_id', 'opspec');
     }
 
     public function joinOrderProductShipment()

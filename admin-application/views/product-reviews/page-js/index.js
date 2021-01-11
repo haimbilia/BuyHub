@@ -8,7 +8,7 @@ $(document).ready(function(){
 		'source': function(request, response) {		
 			$.ajax({
 				url: fcom.makeUrl('Users', 'autoCompleteJson'),
-				data: {keyword: request['term'], user_is_buyer: 1, fIsAjax:1},
+				data: {keyword: request['term'], user_is_supplier: 1, fIsAjax:1},
 				dataType: 'json',
 				type: 'post',
 				success: function(json) {
@@ -19,11 +19,17 @@ $(document).ready(function(){
 			});
 		},
 		select: function(event, ui) {
+			console.log('select');
 			$("input[name='reviewed_for_id']").val( ui.item.id );
 		}
 	});
-	$('input[name=\'reviewed_for\']').keyup(function(){
-		$('input[name=\'reviewed_for_id\']').val('');
+	$('input[name=\'reviewed_for\']').keydown(function(){		
+		if(event.keyCode == 13) {
+			event.preventDefault();
+		}else {
+			$('input[name=\'reviewed_for_id\']').val('');
+		}	
+		
 	});
 });
 (function() {

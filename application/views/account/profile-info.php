@@ -10,11 +10,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <?php if (0 == $userParentId) { ?>
             <div class="col-auto">
                 <div class="btn-group">
-                    <a class="btn btn-outline-primary btn-sm" href="javascript:void(0)" onclick="truncateDataRequestPopup()"><?php echo Labels::getLabel('LBL_Request_to_remove_my_data', $siteLangId); ?></a>
-                    <a class="btn btn-outline-primary btn-sm" href="javascript:void(0)" onclick="requestData()"><?php echo Labels::getLabel('LBL_Request_My_Data', $siteLangId); ?></a>
+                    <a class="btn btn-outline-brand btn-sm" href="javascript:void(0)" onclick="truncateDataRequestPopup()"><?php echo Labels::getLabel('LBL_Request_to_remove_my_data', $siteLangId); ?></a>
+                    <a class="btn btn-outline-brand btn-sm" href="javascript:void(0)" onclick="requestData()"><?php echo Labels::getLabel('LBL_Request_My_Data', $siteLangId); ?></a>
                     <?php if ($showSellerActivateButton) { ?>
                     <a href="<?php echo UrlHelper::generateUrl('Seller'); ?>"
-                            class="btn btn-outline-primary btn-sm panel__head_action"
+                            class="btn btn-outline-brand btn-sm panel__head_action"
                             title="<?php echo Labels::getLabel('LBL_Activate_Seller_Account', $siteLangId); ?>">
                             <strong> <?php echo Labels::getLabel('LBL_Activate_Seller_Account', $siteLangId); ?></strong>
                     </a>
@@ -26,8 +26,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         <div class="content-body">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content ">
+                    <div class="card">
+                        <div class="card-body ">
                             <?php if ($userParentId == 0) { ?>
                             <div class="tabs ">
                                 <ul class="tabs-js">

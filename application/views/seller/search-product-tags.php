@@ -1,5 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = array(
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php $arr_flds = array(
     'listserial'=>'#',
     'product_identifier' => Labels::getLabel('LBL_Product', $siteLangId),
     'tags' => Labels::getLabel('LBL_Tags', $siteLangId)
@@ -40,7 +41,7 @@ foreach ($arr_listing as $sn => $row) {
                     $tagData[$key]['value'] = $data['tag_identifier'];
                 }
                 $readOnly = (!$canEdit) ? 'readonly' : '';
-                $encodedData = json_encode($tagData);
+                $encodedData = htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8');
                 $td->appendElement('plaintext', array(), "<div class='product-tag scroll-y' id='product".$row['product_id']."' data-simplebar><input ".$readOnly." class='tag_name' type='text' name='tag_name".$row['product_id']."' value='".$encodedData."' data-product_id='".$row['product_id']."'></div>", true);
                 break;
             default:
@@ -55,11 +56,10 @@ if (count($arr_listing) == 0) {
     $this->includeTemplate('_partial/no-record-found-with-info.php', array('siteLangId'=>$siteLangId,'message'=>$message));
 } else {
     echo $tbl->getHtml();
-}
-
-$postedData['page'] = $page;
+} ?>
+</div>
+<?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmCatalogProductSearchPaging'));
-
 $pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'callBackJsFunc' => 'goToCatalogProductSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 ?>
@@ -67,9 +67,10 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 <script>
 var productsArr = [<?php echo '"'.implode('","', $productsArr).'"' ?>];
 $("document").ready(function() {
-    getTagsAutoComplete = function(){
-        var list = [];
-        fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), '', function(t) {
+    getTagsAutoComplete = function(e){  
+        var keyword = e.detail.value;
+        var list = [];   
+        fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), {keyword:keyword}, function(t) {
             var ans = $.parseJSON(t);
             for (i = 0; i < ans.length; i++) {
                 list.push({
@@ -77,18 +78,17 @@ $("document").ready(function() {
                     "value" : ans[i].tag_identifier,
                 });
             }
-        });
-        return list;
+            e.detail.tagify.settings.whitelist = list;        
+        });       
     }
-    var whitelist = getTagsAutoComplete();
-    console.log(whitelist);
+   
     $.each(productsArr, function( index, value ) {
         tagify = new Tagify(document.querySelector('input[name=tag_name'+value+']'), {
-               whitelist : whitelist,
+               whitelist : [],
                delimiters : "#",
                editTags : false,
                backspace : false
-            }).on('add', addTagData).on('remove', removeTagData);
+            }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
     });
 
 });

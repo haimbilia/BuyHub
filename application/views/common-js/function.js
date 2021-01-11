@@ -98,9 +98,13 @@ $(document).ready(function () {
         setSlider();
     });
 
-    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0) {
+    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0 && CONF_MAINTENANCE == 0 &&  ( getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController' )) {
         accessLocation();
     }
+});
+
+$(document).on('afterClose.facebox',$('.location-permission').closest("#facebox"), function(){
+    setCookie('_ykGeoDisabled', 1, 0.5);
 });
 
 /* for search form */
@@ -555,29 +559,34 @@ function getCookie(cname) {
     return "";
 }
 
-var gCaptcha = false;
+/*Google reCaptcha V3  */
 function googleCaptcha() {
     $("body").addClass("captcha");
     var inputObj = $("form input[name='g-recaptcha-response']");
+    if ('' != inputObj.val()) { return; }
+
     var submitBtn = inputObj.parent("form").find('input[type="submit"]');
-	var submitLbl = submitBtn.val();
-    submitBtn.attr({ "disabled": "disabled", "type": "button" }).val(langLbl.loadingCaptcha);
+    $.mbsmessage(langLbl.loadingCaptcha, false, 'alert--process');
+    submitBtn.attr({ "disabled": "disabled", "type": "button" });
 
+    var counter = 0;
     var checkToken = setInterval(function () {
-        if (true === gCaptcha) {
-            submitBtn.removeAttr("disabled").attr('type', 'submit').val(submitLbl);
+        counter++
+        /* Check if not loaded until 30 Sec = counter 150. Because it run 5 times in 1 sec. */
+        if (150 == counter) {
+            $.mbsmessage(langLbl.invalidGRecaptchaKeys, true, 'alert--danger');
             clearInterval(checkToken);
+            return;
         }
-    }, 500);
-
-    /*Google reCaptcha V3  */
-    setTimeout(function () {
+        
         if (0 < inputObj.length && 'undefined' !== typeof grecaptcha) {
             grecaptcha.ready(function () {
                 try {
                     grecaptcha.execute(langLbl.captchaSiteKey, { action: inputObj.data('action') }).then(function (token) {
                         inputObj.val(token);
-                        gCaptcha = true;
+                        submitBtn.removeAttr("disabled").attr('type', 'submit');
+                        clearInterval(checkToken);
+                        $.mbsmessage.close();
                     });
                 }
                 catch (error) {
@@ -585,10 +594,9 @@ function googleCaptcha() {
                     return;
                 }
             });
-        } else if ('undefined' === typeof grecaptcha) {
-            $.mbsmessage(langLbl.invalidGRecaptchaKeys, true, 'alert--danger');
         }
-    }, 200);
+    }, 200); /* 1000 MS = 1 Sec. */
+    return;
 }
 
 function getLocation() {
@@ -606,8 +614,17 @@ function accessLocation(force = false) {
     if ("" == location.lat || "" == location.lng || "" == location.countryCode || force) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Home', 'accessLocation'), '', function (t) {
-                $.facebox(t, 'location-popup-width');
-                googleAddressAutocomplete();
+                try {
+                    var json = $.parseJSON(t);
+                    if (1 > json.status) {
+                        $.mbsmessage(json.msg, false, 'alert--danger');
+                    }
+                    $(document).trigger('close.facebox');
+                    return false;
+                } catch (exc) {
+                    $.facebox(t, 'location-popup-width');
+                    googleAddressAutocomplete();
+                }
             });
         });
     }
@@ -619,7 +636,7 @@ function loadGeoLocation() {
     }
 
     if (typeof navigator.geolocation == 'undefined') {
-        console.log(langLbl.geoLocationNotSupported);
+        $.mbsmessage(langLbl.geoLocationNotSupported, true, 'alert--danger');
         return false;
     }
 
@@ -627,6 +644,10 @@ function loadGeoLocation() {
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
         getGeoAddress(lat, lng);
+    }, function (error) {
+        if (1 == error.code) {
+            $.mbsmessage(error.message, true, 'alert--danger');
+        }
     });
 }
 

@@ -45,7 +45,7 @@ $priceDetail['priceDetail'] = array(
         'value' => count($products)
     ),
     array(
-        'key' => Labels::getLabel('LBL_Total', $siteLangId),
+        'key' => Labels::getLabel('LBL_SUB_TOTAL', $siteLangId),
         'value' => CommonHelper::displayMoneyFormat($cartTotal)
     )
 );
@@ -72,8 +72,8 @@ if (0 < $coupon_discount_total) {
 }
 
 if (0 < $cartTaxTotal) {
-    if (isset($cartSummary['taxOptions']) && !empty($cartSummary['taxOptions'])) { 
-        foreach($cartSummary['taxOptions'] as $taxName => $taxVal){
+    if (isset($cartSummary['taxOptions']) && !empty($cartSummary['taxOptions'])) {
+        foreach ($cartSummary['taxOptions'] as $taxName => $taxVal) {
             $priceDetail['priceDetail'][] = array(
                 'key' => $taxVal['title'],
                 'value' => CommonHelper::displayMoneyFormat($taxVal['value'])
@@ -94,9 +94,22 @@ if (0 < $shippingTotal) {
     );
 }
 
+if (array_key_exists('roundingOff', $cartSummary) && $cartSummary['roundingOff'] != 0 && !isset($cartPage)) {
+    $priceDetail['priceDetail'][] = array(
+        'key' => (0 < $cartSummary['roundingOff']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId),
+        'value' => CommonHelper::displayMoneyFormat($cartSummary['roundingOff'])
+    );
+}
+
+$orderNetAmount = $cartSummary['orderNetAmount'];
+if (isset($cartPage) && true === $cartPage) {
+    $orderNetAmount = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
+    $orderNetAmount = $orderNetAmount - ((isset($cartSummary['cartDiscounts']['coupon_discount_total']) && 0 < $cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0);
+}
+
 $priceDetail['netPayable'] = array(
     'key' => Labels::getLabel('LBL_Net_Payable', $siteLangId),
-    'value' => CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'])
+    'value' => CommonHelper::displayMoneyFormat($orderNetAmount)
 );
 
 $data['cartSummary']['cartDiscounts'] = !empty($data['cartSummary']['cartDiscounts']) ? $data['cartSummary']['cartDiscounts'] : (object)array();

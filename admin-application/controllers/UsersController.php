@@ -21,7 +21,7 @@ class UsersController extends AdminBaseController
         $this->objPrivilege->canViewUsers();
         $frmSearch = $this->getUserSearchForm();
         $data = FatApp::getPostedData();
-        if ($data) {
+        if (is_array($data) && isset($data['id'])) {
             $data['user_id'] = $data['id'];
             unset($data['id']);
             $frmSearch->fill($data);
@@ -1174,6 +1174,9 @@ class UsersController extends AdminBaseController
 
         $srch = SupplierFormFields::getSearchObject();
         $srch->addCondition('sf.sformfield_identifier', '=', $post['sformfield_identifier']);
+        if (0 < $post['sformfield_id']) {
+            $srch->addCondition('sf.sformfield_id', '!=', $post['sformfield_id']);
+        }
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {

@@ -5,10 +5,6 @@ class CustomController extends MyAppController
     public function contactUs()
     {
         $contactFrm = $this->contactUsForm();
-        $post = $contactFrm->getFormDataFromArray(FatApp::getPostedData());
-        if (false != $post) {
-            $contactFrm->fill($post);
-        }
         $this->set('contactFrm', $contactFrm);
         $this->set('siteLangId', $this->siteLangId);
         $this->_template->render(true, true, 'custom/contact-us.php');
@@ -165,10 +161,16 @@ class CustomController extends MyAppController
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function searchFaqs($catId = '')
+    public function searchFaqs($page = 'faq', $catId = 0)
     {
-        $searchFrm = $this->getSearchFaqForm();
-        $faqMainCat = FatApp::getConfig("CONF_FAQ_PAGE_MAIN_CATEGORY", null, '');
+        if ($page == 'faq') {
+            $faqPage = FaqCategory::FAQ_PAGE;
+            $faqMainCat = FatApp::getConfig("CONF_FAQ_PAGE_MAIN_CATEGORY", null, '');
+        } else {
+            $faqPage = FaqCategory::SELLER_PAGE;
+            $faqMainCat = FatApp::getConfig("CONF_SELLER_PAGE_MAIN_CATEGORY", null, '');
+        }
+
         if (!empty($catId) && $catId > 0) {
             $faqCatId = array($catId);
         } elseif ($faqMainCat) {
@@ -178,25 +180,27 @@ class CustomController extends MyAppController
             $srchFAQCat->setPageSize(1);
             $srchFAQCat->addFld('faqcat_id');
             $srchFAQCat->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
-            $srchFAQCat->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
+            $srchFAQCat->addCondition('faqcat_type', '=', $faqPage);
             $rs = $srchFAQCat->getResultSet();
             $faqCatId = FatApp::getDb()->fetch($rs, 'faqcat_id');
         }
-        $post = $searchFrm->getFormDataFromArray(FatApp::getPostedData());
+
         $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
         $srch->joinTable('tbl_faqs_lang', 'LEFT OUTER JOIN', 'faqlang_faq_id = faq_id');
         $srch->addCondition('faqlang_lang_id', '=', $this->siteLangId);
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
+        $srch->addCondition('faqcat_type', '=', $faqPage);
         if ($faqCatId) {
             $srch->addCondition('faqcat_id', 'IN', $faqCatId);
         }
+
         $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
         if (!empty($question)) {
             $srchCondition = $srch->addCondition('faq_title', 'like', "%$question%");
             $srch->doNotLimitRecords();
         }
+
         $srch->addOrder('faqcat_display_order', 'asc');
         $srch->addOrder('faq_faqcat_id', 'asc');
         $srch->addOrder('faq_display_order', 'asc');
@@ -214,6 +218,11 @@ class CustomController extends MyAppController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('faqCatIdArr', $faqCatId);
         $this->set('list', $records);
+        
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
+
         $json['html'] = $this->_template->render(false, false, '_partial/no-record-found.php', true, false);
         if (!empty($records)) {
             $json['html'] = $this->_template->render(false, false, 'custom/search-faqs.php', true, false);
@@ -263,6 +272,12 @@ class CustomController extends MyAppController
         // commonHelper::printArray($recordsCategories); die;
         $this->set('listCategories', $recordsCategories);
         $this->set('faqMainCat', $faqMainCat);
+        $this->set('page', 'faq');
+        
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
+
         $json['html'] = $this->_template->render(false, false, '_partial/no-record-found.php', true, false);
         if (!empty($records)) {
             $json['html'] = $this->_template->render(false, false, 'custom/search-faqs.php', true, false);
@@ -402,7 +417,7 @@ class CustomController extends MyAppController
             $orderObj = new Orders();
             $orderDetail = $orderObj->getOrderById($cartOrderId);
 
-            $cartInfo = unserialize($orderDetail['order_cart_data']);
+            $cartInfo = json_decode($orderDetail['order_cart_data'], true);
             unset($cartInfo['shopping_cart']);
 
             $db = FatApp::getDb();
@@ -412,7 +427,7 @@ class CustomController extends MyAppController
             }
             /* $cartObj = new Cart();
             foreach ($cartInfo as $key => $quantity) {
-                $keyDecoded = unserialize(base64_decode($key));
+                $keyDecoded = json_decode(base64_decode($key), true);
 
                 $selprod_id = 0;
 
@@ -441,7 +456,7 @@ class CustomController extends MyAppController
             $orderObj = new Orders();
             $orderDetail = $orderObj->getOrderById($cartOrderId);
 
-            $cartInfo = unserialize($orderDetail['order_cart_data']);
+            $cartInfo = json_decode($orderDetail['order_cart_data'], true);
             unset($cartInfo['shopping_cart']);
             $db = FatApp::getDb();
             if (!$db->deleteRecords('tbl_user_cart', array('smt' => '`usercart_user_id`=? and `usercart_type`=?', 'vals' => array(UserAuthentication::getLoggedUserId(), CART::TYPE_PRODUCT)))) {
@@ -451,7 +466,7 @@ class CustomController extends MyAppController
 
             /* $cartObj = new Cart();
             foreach ($cartInfo as $key => $quantity) {
-                $keyDecoded = unserialize(base64_decode($key));
+                $keyDecoded = json_decode(base64_decode($key), true);
 
                 $selprod_id = 0;
 
@@ -476,92 +491,114 @@ class CustomController extends MyAppController
             FatUtility::exitWithErrorCode(404);
         }
 
-        $userId = UserAuthentication::getLoggedUserId();
-        $userObj = new User($userId);
-        $srch = $userObj->getUserSearchObj(['credential_email']);
-        $rs = $srch->getResultSet();
-        if (!$rs) {
-            FatUtility::exitWithErrorCode(404);
-        }
-        $user = FatApp::getDb()->fetch($rs);
-
         $orderObj = new Orders();
         $orderInfo = $orderObj->getOrderById($orderId, $this->siteLangId);
 
+        $user = [];
         if ($orderInfo['order_user_id'] > 0) {
+            if (0 < UserAuthentication::getLoggedUserId(true) && $orderInfo['order_user_id'] != UserAuthentication::getLoggedUserId(true)) {
+                $message = Labels::getLabel("LBL_INVALID_ORDER", $this->siteLangId);
+                if (true === MOBILE_APP_API_CALL) {
+                    LibHelper::dieJsonError(current($message));
+                }
+                Message::addErrorMessage($message);
+                FatApp::redirectUser(UrlHelper::generateUrl());
+            }
+
             $orderProdData = OrderProduct::getOpArrByOrderId($orderId);
             foreach ($orderProdData as $data) {
                 $amount = $data['op_unit_price'] * $data['op_qty'];
                 AbandonedCart::saveAbandonedCart($orderInfo['order_user_id'], $data['op_selprod_id'], $data['op_qty'], AbandonedCart::ACTION_PURCHASED, $amount);
             }
+
+            $userObj = new User($orderInfo['order_user_id']);
+            $srch = $userObj->getUserSearchObj(['credential_email']);
+            $rs = $srch->getResultSet();
+            if (!$rs) {
+                if (true === MOBILE_APP_API_CALL) {
+                    LibHelper::dieJsonError($srch->getError());
+                }
+                FatUtility::exitWithErrorCode(404);
+            }
+            $user = FatApp::getDb()->fetch($rs);
+
+            $cartObj = new Cart($orderInfo['order_user_id'], $this->siteLangId, $this->app_user['temp_user_id']);
+            $cartObj->clear();
+            $cartObj->updateUserCart();
         }
 
-        $cartObj = new Cart($userId, $this->siteLangId, $this->app_user['temp_user_id']);
-        $cartObj->clear();
-        $cartObj->updateUserCart();
-
+        $orderFulFillmentTypeArr = [];
         if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
-            /* $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('buyer') . '">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{history}' => '<a href="' . UrlHelper::generateUrl('buyer', 'orders') . '">' . Labels::getLabel('MSG_History', $this->siteLangId) . '</a>',
-                '{contactus}' => '<a href="' . UrlHelper::generateUrl('custom', 'contactUs') . '">' . Labels::getLabel('MSG_Store_Owner', $this->siteLangId) . '</a>',
-                '{buyer-email}' => '<strong>' . $user['credential_email'] . '</strong>',
+            if (!empty($user)) {
+                $searchReplaceArray = array(
+                    '{BUYER-EMAIL}' => '<strong>' . $user['credential_email'] . '</strong>',
+                );
+                $textMessage = Labels::getLabel('MSG_CUSTOMER_SUCCESS_ORDER_{BUYER-EMAIL}', $this->siteLangId);
+                $textMessage = CommonHelper::replaceStringData($textMessage, $searchReplaceArray);
+            } else {
+                $textMessage = Labels::getLabel('MSG_CUSTOMER_SUCCESS_ORDER', $this->siteLangId);
+            }
+
+            $srch = new OrderProductSearch($this->siteLangId);
+            $srch->joinShippingCharges();
+            $srch->joinAddress();
+            $srch->addCondition('op_order_id', '=', $orderId);
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+
+            $srch->addMultipleFields(
+                array('ops.*', 'op_product_type', 'op_invoice_number', 'addr.*', 'ts.*', 'tc.*', 'COALESCE(state_name, state_identifier) as state_name', 'COALESCE(country_name, country_code) as country_name')
             );
-            $textMessage = Labels::getLabel('MSG_customer_success_order_{account}_{history}_{contactus}', $this->siteLangId); */
-            $searchReplaceArray = array(
-                '{BUYER-EMAIL}' => '<strong>' . $user['credential_email'] . '</strong>',
-            );
-            $textMessage = Labels::getLabel('MSG_CUSTOMER_SUCCESS_ORDER_{BUYER-EMAIL}', $this->siteLangId);
-            $textMessage = CommonHelper::replaceStringData($textMessage, $searchReplaceArray);
+            $srch->addGroupBy('opshipping_pickup_addr_id');
+            $rs = $srch->getResultSet();
+            $orderFulFillmentTypeArr = FatApp::getDb()->fetchAll($rs);
+            // CommonHelper::printArray($orderFulFillmentTypeArr, true);
         } elseif ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('seller') . '">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions') . '">' . Labels::getLabel('MSG_My_Subscription', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('seller') . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
+                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions') . '" class="link">' . Labels::getLabel('MSG_My_Subscription', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_subscription_success_order_{account}_{subscription}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
         } elseif ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('account') . '">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits') . '">' . Labels::getLabel('MSG_My_Credits', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('account') . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
+                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits') . '" class="link">' . Labels::getLabel('MSG_My_Credits', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_wallet_success_order_{account}_{credits}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
         } else {
+            $message = Labels::getLabel('MSG_INVALID_ORDER_TYPE', $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($message);
+            }
             FatUtility::exitWithErrorCode(404);
         }
 
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            $textMessage = str_replace('{contactus}', '<a href="' . UrlHelper::generateUrl('custom', 'contactUs') . '">' . Labels::getLabel('MSG_Store_Owner', $this->siteLangId) . '</a>', Labels::getLabel('MSG_guest_success_order_{contactus}', $this->siteLangId));
+            $textMessage = str_replace('{contactus}', '<a href="' . UrlHelper::generateUrl('custom', 'contactUs') . '" class="link">' . Labels::getLabel('MSG_Store_Owner', $this->siteLangId) . '</a>', Labels::getLabel('MSG_guest_success_order_{contactus}', $this->siteLangId));
         }
-
-        /* Clear cart upon successfull redirection from Payment gateway[ */
-        /* if( $_SESSION['cart_user_id'] ){
-        $userId = (UserAuthentication::isUserLogged()) ? UserAuthentication::getLoggedUserId() : 0;
-        $cartObj = new Cart($userId);
-        $cartObj->clear();
-        $cartObj->updateUserCart();
-        unset($_SESSION['cart_user_id']);
-        } */
-        /* ] */
 
         if (UserAuthentication::isGuestUserLogged()) {
             unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
         }
 
         $address = $orderObj->getOrderAddresses($orderInfo['order_id']);
-        $orderInfo['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
-        $orderInfo['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE]) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : []);
-        
+        if (!empty($address)) {
+            $orderInfo['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
+            $orderInfo['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE]) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : []);
+        }
+
         $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
 
         $this->set('textMessage', $textMessage);
         $this->set('orderInfo', $orderInfo);
-        
+
         $print = ('print' == $print);
         $this->set('print', $print);
-        // CommonHelper::printArray($orderInfo, true);
-        if (CommonHelper::isAppUser()) {
+
+        $this->set('orderFulFillmentTypeArr', $orderFulFillmentTypeArr);
+        if (CommonHelper::isAppUser() && false ===  MOBILE_APP_API_CALL) {
             $this->set('exculdeMainHeaderDiv', true);
             $this->_template->render(false, false);
         } else {
@@ -729,7 +766,7 @@ class CustomController extends MyAppController
         $brandSrch->addOrder('brand_name', 'asc');
         $brandRs = $brandSrch->getResultSet();
         $brandsArr = FatApp::getDb()->fetchAll($brandRs);
-        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, '', true, false, true);
+        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, 0, true, false, true);
         $contentPages = ContentPage::getPagesForSelectBox($this->siteLangId);
         $srch = new ShopSearch($this->siteLangId);
         $srch->setDefinedCriteria($this->siteLangId);

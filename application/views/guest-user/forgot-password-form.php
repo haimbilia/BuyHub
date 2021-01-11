@@ -63,10 +63,10 @@ if (0 < $withPhone) {
                                     $frm->setValidatorJsObjectName('forgotValObj');
                                     $frm->setFormTagAttribute('action', UrlHelper::generateUrl('GuestUser', 'forgotPassword'));
                                     $btnFld = $frm->getField('btn_submit');
-                                    $btnFld->setFieldTagAttribute('class', 'btn-block');
+                                    $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
                                     if (1 > $withPhone) {
                                         $frmFld = $frm->getField('user_email_username');
-                                        $frmFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_EMAIL_ADDRESS', $siteLangId));
+                                        $frmFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Username_or_email', $siteLangId));
                                     } else {
                                         $frmFld = $frm->getField('user_phone');
                                     }
@@ -96,8 +96,5 @@ if (0 < $withPhone) {
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
 if (!empty($siteKey) && !empty($secretKey)) {?>
-    <script src='https://www.google.com/recaptcha/api.js?render=<?php echo $siteKey; ?>'></script>
-    <script>
-        googleCaptcha();
-    </script>
+    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
 <?php } ?>

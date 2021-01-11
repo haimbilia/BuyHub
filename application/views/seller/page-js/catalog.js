@@ -103,16 +103,12 @@ $(document).on('change','.language-js',function(){
 			console.log(runningAjaxMsg);
 			return;
 		}
-				var data = fcom.frmData(frm);
+		var data = fcom.frmData(frm);
 
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupSellerShipping'), (data), function(t) {
 			runningAjaxReq = false;
-
-
-
 			productId =  t.product_id;
-			searchCatalogProducts();
-
+			searchCatalogProducts(document.frmSearchCatalogProduct);
 		});
 	}
 
@@ -319,7 +315,9 @@ $(document).on('change','.language-js',function(){
 	                },
 	                minCropBoxWidth: minWidth,
 	                minCropBoxHeight: minHeight,
-	                toggleDragModeOnDblclick: false,
+					toggleDragModeOnDblclick: false,
+					imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
 		        };
 				$(inputBtn).val('');
 		    	return cropImage(file, options, 'uploadImages', inputBtn);

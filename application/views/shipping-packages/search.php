@@ -1,9 +1,10 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (count($arr_listing) == 0) {
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php if (count($arr_listing) == 0) {
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
 } else {
     $arr_flds = array(
-        'listserial' => Labels::getLabel('LBL_Sr.', $siteLangId),
+        'listserial' => '#',
         'shippack_name' => Labels::getLabel('LBL_Name', $siteLangId),
         'shippack_units' => Labels::getLabel('LBL_Dimensions', $siteLangId)
     );
@@ -46,6 +47,7 @@ if (count($arr_listing) == 0) {
     echo $frm->getFormTag();
     echo $tbl->getHtml(); ?>
 </form>
+</div>
 <?php $postedData['page'] = $page;
     echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmPackageSearchPaging'));
     $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToPackagesSearchPage', 'siteLangId' => $siteLangId);

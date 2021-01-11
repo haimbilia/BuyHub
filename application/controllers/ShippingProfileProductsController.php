@@ -16,7 +16,8 @@ class ShippingProfileProductsController extends SellerBaseController
     
     public function search($profileId)
     {
-        $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+        // $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+        $pageSize = 12;
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         
@@ -74,10 +75,11 @@ class ShippingProfileProductsController extends SellerBaseController
         $defaultProfileId = ShippingProfile::getDefaultProfileId($userId);
         /* [ REMOVE PRODUCT FROM CURRENT PROFILE AND ADD TO DEFAULT PROFILE */
         $data = array(
+            'shippro_user_id' => $this->userParentId,
             'shippro_shipprofile_id' => $defaultProfileId,
             'shippro_product_id' => $productId
         );
-        
+
         $spObj = new ShippingProfileProduct();
         if (!$spObj->addProduct($data)) {
             Message::addErrorMessage($spObj->getError());
@@ -94,7 +96,7 @@ class ShippingProfileProductsController extends SellerBaseController
         $profileId = FatUtility::int($profileId);
         $frm = new Form('frmProfileProducts');
         $frm->addHiddenField('', 'shippro_shipprofile_id', $profileId);
-        $frm->addHiddenField('', 'shippro_product_id', '')->requirements()->setRequired(true);
+        $frm->addHiddenField('', 'shippro_product_id', '');
         $fld = $frm->addTextBox(Labels::getLabel('', $this->siteLangId), 'product_name');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
@@ -104,11 +106,13 @@ class ShippingProfileProductsController extends SellerBaseController
     {
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $post = FatApp::getPostedData();
-        
+        $shipProfileId = FatApp::getPostedData('shipProfileId', FatUtility::VAR_INT, 0);        
         $srch = new ProductSearch($this->siteLangId, null, null, false, false);
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
+        //$srch->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'product_id = sppro.shippro_product_id', 'sppro');
+        
        
         if (User::canAddCustomProduct()) {
             $srch->addDirectCondition('((product_seller_id = 0 and psbs.psbs_user_id = ' . $this->userParentId . ') OR product_seller_id = ' . $this->userParentId . ')');
@@ -118,7 +122,8 @@ class ShippingProfileProductsController extends SellerBaseController
         }
         
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
-
+        //$srch->addDirectCondition('sppro.shippro_product_id is null');
+        
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $keyword . '%');
@@ -127,9 +132,15 @@ class ShippingProfileProductsController extends SellerBaseController
             $cnd->attachCondition('product_model', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('upc_code', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('product_upc', 'like', '%' . $keyword . '%');
-        }
+        }        
+    
+        if(0 < $shipProfileId ){            
+            $srch->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'p.product_id = sppro.shippro_product_id and shippro_user_id = '. $this->userParentId, 'sppro');
+            $srch->addCondition(ShippingProfileProduct::DB_TBL_PREFIX . 'shipprofile_id', '!=', $shipProfileId);
+        }  
 
         $srch->addGroupBy('product_id');
+        //echo $srch->getQuery();
         $srch->addMultipleFields(
             array(
             'product_id as id', 'IFNULL(product_name, product_identifier) as product_name', 'product_identifier')

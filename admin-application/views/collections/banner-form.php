@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'web_form form_horizontal');
+$frm->setFormTagAttribute('class', 'web_form');
 $frm->setFormTagAttribute('onsubmit', 'setupBanners(this); return(false);');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
@@ -8,11 +8,13 @@ $extUrlField = $frm->getField('banner_url');
 $extUrlField->addFieldTagAttribute('placeholder', 'http://');
 
 $fld = $frm->getField('auto_update_other_langs_data');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+if (null != $fld) {
+    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+}
 
 $bannerFld = $frm->getField('banner');
-$bannerFld->addFieldTagAttribute('class', 'btn btn-primary btn-sm');
+$bannerFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $bannerFld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
 $bannerFld->htmlAfterField = '<small class="text--small preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '1350 x 405').'</small>';
 
@@ -96,7 +98,11 @@ $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR
 				if(!empty($translatorSubscriptionKey) && count($otherLangData) > 0){
 			?>
 			<div class="col-md-6">
-				<div class="field-set d-flex align-items-center">
+				<div class="field-set">
+					<div class="caption-wraper">
+						<label class="field_label">
+						</label>
+					</div>
 					<div class="field-wraper w-auto">
 						<div class="field_cover">
 							<?php echo $frm->getFieldHtml('auto_update_other_langs_data'); ?>
@@ -155,7 +161,9 @@ $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6" id="banner-image-listing"></div>
+				<div class="col-md-6" id="banner-image-listing">
+					
+				</div>
 			</div>
 		</div>
 		<?php if(!empty($otherLangData)){

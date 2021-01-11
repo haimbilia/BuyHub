@@ -1,5 +1,6 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = array(
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php $arr_flds = array(
     'listserial'=>'Sr.',
     'product_identifier' => Labels::getLabel('LBL_Product', $siteLangId),
     'product_added_on' => Labels::getLabel('LBL_Date', $siteLangId),
@@ -10,7 +11,12 @@ $arr_flds = array(
 $arr_flds['product_active'] = Labels::getLabel('LBL_Status', $siteLangId);
 $arr_flds['action'] = '';
 
-$tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table'));
+$tableClass = '';
+if (0 < count($arr_listing)) {
+	$tableClass = "table-justified";
+}
+
+$tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table '.$tableClass));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
@@ -70,9 +76,8 @@ echo $tbl->getHtml();
 if (count($arr_listing) == 0) {
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId'=>$siteLangId,'message'=>$message));
-}
-    
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmCustomProductSearchPaging'));
-
+} ?>
+</div>
+<?php echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmCustomProductSearchPaging'));
 $pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'callBackJsFunc' => 'goToCustomProductSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

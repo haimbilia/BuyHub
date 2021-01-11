@@ -91,9 +91,10 @@ class CollectionsController extends MyAppController
         /* ] */
 
         $productSrchObj = new ProductSearch($this->siteLangId);
+        $productSrchObj->setGeoAddress();
         $productSrchObj->setDefinedCriteria();
         $productSrchObj->joinProductToCategory($this->siteLangId);
-
+        $productSrchObj->validateAndJoinDeliveryLocation();
 
         $productSrchObj->doNotCalculateRecords();
         // $productSrchObj->setPageSize(10);
@@ -197,7 +198,8 @@ class CollectionsController extends MyAppController
                             $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
                             $cat['image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($cat['prodcat_id'], $this->siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         } else {
-                            $cat['children'] = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $cat['prodcat_id']);
+                            $parentId = FatUtility::int($cat['prodcat_id']);
+                            $cat['children'] = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId);
                         }
                     }
                 }
@@ -309,7 +311,6 @@ class CollectionsController extends MyAppController
                     'post_updated_on',
                     'post_updated_on',
                     'IFNULL(bpcategory_name, bpcategory_identifier) as bpcategory_name',
-                    'post_short_description',
                     'post_description'
                 ];
                 $blogSearchObj = BlogPost::getSearchObject($this->siteLangId, true, true);

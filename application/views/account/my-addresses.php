@@ -9,15 +9,15 @@
             </div>
             <div class="col-auto">
                 <div class="content-header-right btn-group">
-                 <a href="javascript:void(0);" onClick="addAddressForm(0)" class="btn btn-outline-primary btn-sm"><?php echo Labels::getLabel('LBL_Add_new_address', $siteLangId);?> </a>
+                 <a href="javascript:void(0);" onClick="addAddressForm(0)" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Add_new_address', $siteLangId);?> </a>
                 </div>
             </div>
             
             
         </div>
         <div class="content-body">
-            <div class="cards">
-                <div class="cards-content">
+            <div class="card">
+                <div class="card-body">
                     <div id="listing"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                 </div>
             </div>

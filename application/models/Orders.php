@@ -1,5 +1,7 @@
 <?php
 
+use Aws\Crypto\Cipher\Cbc;
+
 class Orders extends MyAppModel
 {
     public const DB_TBL = 'tbl_orders';
@@ -32,9 +34,9 @@ class Orders extends MyAppModel
     public const SHIPPING_ADDRESS_TYPE = 2;
     public const PICKUP_ADDRESS_TYPE = 3;
 
-    public const ORDER_IS_CANCELLED = -1;
-    public const ORDER_IS_PENDING = 0;
-    public const ORDER_IS_PAID = 1;
+    public const ORDER_PAYMENT_CANCELLED = -1;
+    public const ORDER_PAYMENT_PENDING = 0;
+    public const ORDER_PAYMENT_PAID = 1;
 
     public const PAYMENT_GATEWAY_STATUS_PENDING = 0;
     public const PAYMENT_GATEWAY_STATUS_PAID = 1;
@@ -67,15 +69,15 @@ class Orders extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::ORDER_IS_CANCELLED => Labels::getLabel('LBL_Order_Payment_Status_Cancelled', $langId),
-            static::ORDER_IS_PENDING => Labels::getLabel('LBL_Order_Payment_Status_Pending', $langId),
-            static::ORDER_IS_PAID => Labels::getLabel('LBL_Order_Payment_Status_Paid', $langId),
+            static::ORDER_PAYMENT_CANCELLED => Labels::getLabel('LBL_Order_Payment_Status_Cancelled', $langId),
+            static::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_Order_Payment_Status_Pending', $langId),
+            static::ORDER_PAYMENT_PAID => Labels::getLabel('LBL_Order_Payment_Status_Paid', $langId),
         );
     }
     public static function getActiveSubscriptionStatusArr()
     {
         $activeSubscriptionStatuses =
-            array(FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS"));
+            array(FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
 
 
 
@@ -106,7 +108,7 @@ class Orders extends MyAppModel
         $srchOrderStatus->doNotLimitRecords();
         $srchOrderStatus->addMultipleFields(array('orderstatus_priority'));
         $record = FatApp::getDb()->fetch($srchOrderStatus->getResultSet());
-        $orderStatusPriority = FatUtility::int($record['orderstatus_priority']);
+        $orderStatusPriority = (!$record ? 0 : FatUtility::int($record['orderstatus_priority']));
 
         if ($langId > 0) {
             $srch->joinTable(
@@ -138,7 +140,7 @@ class Orders extends MyAppModel
         return $row = FatApp::getDb()->fetchAllAssoc($rs);
     }
 
-    public static function getOrderProductStatusArr($langId, $inArray = array(), $current = 0, $isDigital = 0)
+    public static function getOrderProductStatusArr($langId, $inArray = array(), $current = 0, $isDigital = 0, $assoc = true)
     {
         $current = FatUtility::int($current);
         $srch = new SearchBase(Orders::DB_TBL_ORDERS_STATUS, 'ostatus');
@@ -187,7 +189,11 @@ class Orders extends MyAppModel
         if (!$rs) {
             return array();
         }
-        return $row = FatApp::getDb()->fetchAllAssoc($rs);
+
+        if (true === $assoc) {
+            return FatApp::getDb()->fetchAllAssoc($rs);
+        }
+        return FatApp::getDb()->fetchAll($rs);
     }
     public static function getOrderSubscriptionStatusArr($langId, $inArray = array(), $current = 0)
     {
@@ -201,7 +207,7 @@ class Orders extends MyAppModel
         $srchOrderStatus->doNotLimitRecords();
         $srchOrderStatus->addMultipleFields(array('orderstatus_priority'));
         $record = FatApp::getDb()->fetch($srchOrderStatus->getResultSet());
-        $orderStatusPriority = FatUtility::int($record['orderstatus_priority']);
+        $orderStatusPriority = !$record ? 0 : FatUtility::int($record['orderstatus_priority']);
 
         if ($langId > 0) {
             $srch->joinTable(
@@ -288,26 +294,40 @@ class Orders extends MyAppModel
     {
         $db = FatApp::getDb();
 
-        $ordersLangData = $data['orderLangData'];
+        $ordersLangData = [];
+        if (array_key_exists('orderLangData', $data)) {
+            $ordersLangData = $data['orderLangData'];
+            unset($data['orderLangData']);
+        }
 
-        unset($data['orderLangData']);
-
-        $discountInfo = array();
+        $discountInfo = [];
         if (array_key_exists('order_discount_info', $data)) {
             $discountInfo = json_decode($data['order_discount_info'], true);
         }
 
-        $products = $data['products'];
-        unset($data['products']);
+        $products = [];
+        if (array_key_exists('products', $data)) {
+            $products = $data['products'];
+            unset($data['products']);
+        }
 
-        $addresses = $data['userAddresses'];
-        unset($data['userAddresses']);
+        $addresses = [];
+        if (array_key_exists('userAddresses', $data)) {
+            $addresses = $data['userAddresses'];
+            unset($data['userAddresses']);
+        }
 
-        $extras = $data['extra'];
-        unset($data['extra']);
+        $extras = [];
+        if (array_key_exists('extra', $data)) {
+            $extras = $data['extra'];
+            unset($data['extra']);
+        }
 
-        $prodCharges = $data['prodCharges'];
-        unset($data['prodCharges']);
+        $prodCharges = [];
+        if (array_key_exists('prodCharges', $data)) {
+            $prodCharges = $data['prodCharges'];
+            unset($data['prodCharges']);
+        }
 
         if (!$data['order_id']) {
             $order_id = $this->generateOrderId();
@@ -349,8 +369,8 @@ class Orders extends MyAppModel
 
         $_SESSION['shopping_cart']["order_id"] = $this->getOrderId();
 
-        $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => array($this->getOrderId())));
         if (!empty($ordersLangData)) {
+            $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => array($this->getOrderId())));
             $recordObj = new TableRecord(static::DB_TBL_LANG);
             foreach ($ordersLangData as $orderLangData) {
                 $orderLangData['orderlang_order_id'] = $this->getOrderId();
@@ -373,7 +393,7 @@ class Orders extends MyAppModel
                 $db->deleteRecords(OrderProductChargeLog::DB_TBL, array('smt' => 'opchargelog_op_id = ?', 'vals' => array($opId)));
                 $db->deleteRecords(OrderProductChargeLog::DB_TBL_LANG, array('smt' => 'opchargeloglang_op_id = ?', 'vals' => array($opId)));
                 $db->deleteRecords(OrderProductSpecifics::DB_TBL, array('smt' => 'ops_op_id = ?', 'vals' => array($opId)));
-                $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_op_id = ?', 'vals' => array($opId )));
+                $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_op_id = ?', 'vals' => array($opId)));
             }
         }
         $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS, array('smt' => 'op_order_id = ?', 'vals' => array($this->getOrderId())));
@@ -384,7 +404,6 @@ class Orders extends MyAppModel
             $opLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_LANG);
             $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
             $opShippingLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG);
-            $opChargeLogLangObj = new TableRecord(OrderProductChargeLog::DB_TBL_LANG);
 
             $counter = 1;
             foreach ($products as $selprodId => $product) {
@@ -481,12 +500,12 @@ class Orders extends MyAppModel
                     }
                 }
                 /*]*/
-                
+
                 /* saving of products Pickup data[ */
                 $productPickUpData = $product['productPickUpData'];
                 if (!empty($productPickUpData)) {
                     $productPickUpData['opshipping_op_id'] = $op_id;
-
+                    $productPickUpData['opshipping_by_seller_user_id'] = !empty($productPickUpData['opshipping_by_seller_user_id']) ? $productPickUpData['opshipping_by_seller_user_id'] : 0;
                     $opShippingRecordObj->assignValues($productPickUpData);
                     if (!$opShippingRecordObj->addNew()) {
                         $db->rollbackTransaction();
@@ -495,13 +514,13 @@ class Orders extends MyAppModel
                     }
                 }
                 /*]*/
-                
+
                 /* saving of products Pickup address[ */
                 $productPickupAddress = $product['productPickupAddress'];
                 if (!empty($productPickupAddress)) {
                     $productPickupAddress['oua_order_id'] = $this->getOrderId();
                     $productPickupAddress['oua_op_id'] = $op_id;
-                    
+
                     $ouaRecordObj = new TableRecord(static::DB_TBL_ORDER_USER_ADDRESS);
                     $ouaRecordObj->assignValues($productPickupAddress);
                     if (!$ouaRecordObj->addNew()) {
@@ -528,10 +547,12 @@ class Orders extends MyAppModel
                 /*]*/
 
                 /* saving of products Charges log & log lang data[ */
-                $opChargeLog = new OrderProductChargeLog($op_id);
                 $prodChargeslogData = $product['productChargesLogData'];
                 if (!empty($prodChargeslogData)) {
+                    $db->deleteRecords(OrderProductChargeLog::DB_TBL, array('smt' => 'opchargelog_op_id = ?', 'vals' => array($op_id)));
+                    $db->deleteRecords(OrderProductChargeLog::DB_TBL_LANG, array('smt' => 'opchargeloglang_op_id = ?', 'vals' => array($op_id)));
                     foreach ($prodChargeslogData as $id => $prodChargeslog) {
+                        $opChargeLog = new OrderProductChargeLog($op_id);
                         $prodChargeslog['opchargelog_op_id'] = $op_id;
                         $opChargeLog->assignValues($prodChargeslog);
                         if (!$opChargeLog->save()) {
@@ -541,6 +562,7 @@ class Orders extends MyAppModel
                         }
                         $opChargeLogId = $opChargeLog->getMainTableRecordId();
                         foreach ($prodChargeslog['langData'] as $langId => $langData) {
+                            $opChargeLogLangObj = new TableRecord(OrderProductChargeLog::DB_TBL_LANG);
                             $langData['opchargeloglang_opchargelog_id'] = $opChargeLogId;
                             $langData['opchargeloglang_op_id'] = $op_id;
                             $opChargeLogLangObj->assignValues($langData);
@@ -556,7 +578,6 @@ class Orders extends MyAppModel
 
                 if (!empty($prodCharges)) {
                     $chargeTypeArr = OrderProduct::getChargeTypeArr($langId);
-                    $oChargesRecordObj = new TableRecord(OrderProduct::DB_TBL_CHARGES);
                     foreach ($chargeTypeArr as $chargeType => $chargeVal) {
                         if (!array_key_exists($selprodId, $prodCharges)) {
                             continue;
@@ -570,14 +591,13 @@ class Orders extends MyAppModel
                         if ($amnt == 0) {
                             continue;
                         }
-
+                        $oChargesRecordObj = new TableRecord(OrderProduct::DB_TBL_CHARGES);
                         $assignValues = array(
                             OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id' => $op_id,
                             OrderProduct::DB_TBL_CHARGES_PREFIX . 'order_type' => ORDERS::ORDER_PRODUCT,
                             OrderProduct::DB_TBL_CHARGES_PREFIX . 'type' => $chargeType,
                             OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount' => $prodCharges[$selprodId][$chargeType]['amount'],
                         );
-
                         $oChargesRecordObj->assignValues($assignValues);
                         if (!$oChargesRecordObj->addNew(array())) {
                             $db->rollbackTransaction();
@@ -602,9 +622,8 @@ class Orders extends MyAppModel
             }
         }
         /* CommonHelper::printArray($addresses);die; */
-       // $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_order_id = ?', 'vals' => array($this->getOrderId())));
-        $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_order_id = ? and oua_op_id = ?', 'vals' => array($this->getOrderId(), 0 )));
         if (!empty($addresses)) {
+            $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_order_id = ? and oua_op_id = ?', 'vals' => array($this->getOrderId(), 0)));
             $ouaRecordObj = new TableRecord(static::DB_TBL_ORDER_USER_ADDRESS);
             foreach ($addresses as $address) {
                 $address['oua_order_id'] = $this->getOrderId();
@@ -861,6 +880,10 @@ class Orders extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Order_Id_Is_Not_Passed', $this->commonLangId), E_USER_ERROR);
         }
         $srch = static::getSearchObject($langId);
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT JOIN', 'order_pmethod_id = plugin_id');
+        if (0 < $langId) {
+            $srch->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
+        }
         $srch->addCondition('order_id', '=', $order_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -874,7 +897,7 @@ class Orders extends MyAppModel
         $opId = FatUtility::int($opId);
         $srch = new SearchBase(static::DB_TBL_ORDER_USER_ADDRESS);
         $srch->addCondition('oua_order_id', '=', $order_id);
-        if($opId > 0){
+        if ($opId > 0) {
             $srch->addCondition('oua_op_id', '=', $opId);
         }
         $srch->doNotCalculateRecords();
@@ -950,7 +973,7 @@ class Orders extends MyAppModel
 
         $ocSrch->addGroupBy('opc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id');
         $qryOtherCharges = $ocSrch->getQuery();
-        
+
         $childOrders = array();
         if ($orderType == Orders::ORDER_PRODUCT) {
             $srch = self::searchOrderProducts($criterias, $langId);
@@ -1051,7 +1074,7 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('b.user_name as buyer_name', 'CONCAT(b.user_dial_code, b.user_phone) as buyer_phone', 'bc.credential_email as buyer_email'));
         }
 
-        $srch->addMultipleFields(array('tosh.*', 'tor.order_is_paid', 'order_language_id', 'torp.*', 'torp.op_id'));
+        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id'));
 
         foreach ($criteria as $key => $val) {
             if (strval($val) == '') {
@@ -1100,7 +1123,7 @@ class Orders extends MyAppModel
         if ($orderInfo) {
             if (!FatApp::getDb()->updateFromArray(
                 Orders::DB_TBL,
-                array('order_is_paid' => FatUtility::int($orderPaymentStatus), 'order_date_updated' => date('Y-m-d H:i:s')),
+                array('order_payment_status' => FatUtility::int($orderPaymentStatus), 'order_date_updated' => date('Y-m-d H:i:s')),
                 array('smt' => 'order_id = ? ', 'vals' => array($orderId))
             )) {
                 $this->error = FatApp::getDb()->getError();
@@ -1128,13 +1151,13 @@ class Orders extends MyAppModel
 
         // If order Payment status is 0 then becomes greater than 0 mail to Vendors and Update Child Order Status to Paid & Give Referral Reward Points
 
-        if (!$orderInfo['order_is_paid'] && ($orderPaymentStatus > 0)) {
+        if (!$orderInfo['order_payment_status'] && ($orderPaymentStatus > 0)) {
             $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type']);
 
             $orderInfo = $this->getOrderById($orderId);
 
             foreach ($subOrders as $subkey => $subval) {
-                $this->addChildSubscriptionOrderHistory($orderId, $subval[OrderSubscription::DB_TBL_PREFIX . "id"], $orderInfo[Orders::DB_TBL_PREFIX . 'language_id'], FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS"), '', true);
+                $this->addChildSubscriptionOrderHistory($orderId, $subval[OrderSubscription::DB_TBL_PREFIX . "id"], $orderInfo[Orders::DB_TBL_PREFIX . 'language_id'], FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS", FatUtility::VAR_INT, 11), '', true);
 
 
 
@@ -1203,9 +1226,11 @@ class Orders extends MyAppModel
         $emailNotificationObj = new EmailHandler();
 
         $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($langId, $childOrderInfo['order_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'id'));
-        $currentActiveSubscrId = $currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'id'];
-        if ($currentActiveSubscrId) {
-            $this->cancelCurrentActivePlan($orderId, $currentActiveSubscrId, $childOrderInfo['order_user_id'], $notify);
+        if (false != $currentPlanData) {
+            $currentActiveSubscrId = $currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'id'];
+            if ($currentActiveSubscrId) {
+                $this->cancelCurrentActivePlan($orderId, $currentActiveSubscrId, $childOrderInfo['order_user_id'], $notify);
+            }
         }
 
         $planDetails = OrderSubscription::getAttributesById($childOrderInfo['ossubs_id']);
@@ -1268,9 +1293,9 @@ class Orders extends MyAppModel
 
         // If order Payment status is 0 then becomes greater than 0 send main html email
         $paymentMethodCode = Plugin::getAttributesById($orderInfo['order_pmethod_id'], 'plugin_code');
-        if (!$orderInfo['order_is_paid'] && $orderPaymentStatus) {
+        if (!$orderInfo['order_payment_status'] && $orderPaymentStatus) {
             $emailNotify = $emailObj->orderPaymentUpdateBuyerAdmin($orderId);
-        } elseif (strtolower($paymentMethodCode) == 'cashondelivery') {
+        } elseif (strtolower($paymentMethodCode) == 'cashondelivery' || strtolower($paymentMethodCode) == 'payatstore') {
             $emailNotify = $emailObj->cashOnDeliveryOrderUpdateBuyerAdmin($orderId);
             $emailObj->newOrderVendor($orderId, 0, $paymentMethodCode);
         } elseif (strtolower($paymentMethodCode) == 'transferbank') {
@@ -1279,13 +1304,13 @@ class Orders extends MyAppModel
         }
 
         // If order Payment status is 0 then becomes greater than 0 mail to Vendors and Update Child Order Status to Paid & Give Referral Reward Points
-        if (!$orderInfo['order_is_paid'] && ($orderPaymentStatus > 0)) {
+        if (!$orderInfo['order_payment_status'] && ($orderPaymentStatus > 0)) {
             $emailObj->newOrderVendor($orderId);
             $emailObj->newOrderBuyerAdmin($orderId, $orderInfo['order_language_id']);
 
             $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type']);
             foreach ($subOrders as $subkey => $subval) {
-                $this->addChildProductOrderHistory($subval["op_id"], $orderInfo['order_language_id'], FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS"), '', true);
+                $this->addChildProductOrderHistory($subval["op_id"], $orderInfo['order_language_id'], FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0), '', true);
                 if ($subval['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                     $emailObj->newDigitalOrderBuyer($orderId, $subval["op_id"], $orderInfo['order_language_id']);
                 }
@@ -1294,10 +1319,12 @@ class Orders extends MyAppModel
             $isReferrerRewarded = false;
             $isReferralRewarded = false;
 
+            $walletSelected = array_key_exists("order_is_wallet_selected" , $orderInfo) ? FatUtility::int($orderInfo["order_is_wallet_selected"]) : 0;
+
             $paymentMethodRow = Plugin::getAttributesById($orderInfo['order_pmethod_id']);
 
             /* Use Reward Point [ */
-            if (strtolower($paymentMethodRow['plugin_code']) != 'cashondelivery' && $orderInfo['order_reward_point_used'] > 0) {
+            if (0 < $walletSelected || (is_array($paymentMethodRow) && !empty($paymentMethodRow) && !in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore']) && $orderInfo['order_reward_point_used'] > 0)) {
                 UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_language_id']);
             }
             /*]*/
@@ -1374,10 +1401,10 @@ class Orders extends MyAppModel
         }
 
         // If order Payment status is 0 then becomes less than 0 send mail to Vendors and Update Child Order Status to Cancelled
-        if (!$orderInfo['order_is_paid'] && ($orderPaymentStatus < 0)) {
+        if (!$orderInfo['order_payment_status'] && ($orderPaymentStatus < 0)) {
             $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type']);
             foreach ($subOrders as $subkey => $subval) {
-                $this->addChildProductOrderHistory($subval["op_id"], $orderInfo['order_language_id'], FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"), '', true);
+                $this->addChildProductOrderHistory($subval["op_id"], $orderInfo['order_language_id'], FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0), '', true);
             }
         }
     }
@@ -1423,7 +1450,7 @@ class Orders extends MyAppModel
         }
 
         // If current order status is not paid up but new status is paid then commence updating the product's weightage
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")) && strtolower($childOrderInfo['plugin_code']) != "cashondelivery") {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
             if ($childOrderInfo['op_is_batch']) {
                 $opSelprodCodeArr = explode('|', $childOrderInfo['op_selprod_code']);
             } else {
@@ -1449,7 +1476,7 @@ class Orders extends MyAppModel
             unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))
         );
 
-        if (!in_array($childOrderInfo['op_status_id'], $arr) && in_array($opStatusId, array_diff($arr, array(FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS"))))) {
+        if (!in_array($childOrderInfo['op_status_id'], $arr) && in_array($opStatusId, array_diff($arr, array(FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0))))) {
             $selProdIdArr = array();
             if ($childOrderInfo['op_is_batch']) {
                 $selProdIdArr = explode('|', $childOrderInfo['op_batch_selprod_id']);
@@ -1479,7 +1506,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If old order status is the processing or complete status but new status is not then commence restock, and remove coupon, voucher and reward history [ */
-        if (in_array($childOrderInfo['op_status_id'], array_merge($arr, array(FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS")))) && in_array($opStatusId, array(FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS"), FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")))) {
+        if (in_array($childOrderInfo['op_status_id'], array_merge($arr, array(FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0)))) && in_array($opStatusId, array(FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0), FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0)))) {
             // ReStock subtraction can work manually
             /* foreach($selProdIdArr as $opSelprodId){
             if(empty($opSelprodId)) { continue; }
@@ -1489,7 +1516,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not cancelled but new status is cancelled then commence cancelling the order [ */
-        if (($childOrderInfo['op_status_id'] != FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")) && ($opStatusId == FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID)) {
+        if (($childOrderInfo['op_status_id'] != FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($opStatusId == FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID)) {
             if ($moveRefundToWallet) {
                 /* CommonHelper::printArray($childOrderInfo); die; */
                 $formattedRequestValue = "#" . $childOrderInfo["op_invoice_number"];
@@ -1501,7 +1528,7 @@ class Orders extends MyAppModel
                     $comments = sprintf(Labels::getLabel('LBL_Order_has_been_Cancelled', $langId), $formattedRequestValue);
                 }
 
-                $txnAmount = (($childOrderInfo["op_unit_price"] * $childOrderInfo["op_qty"]) + $childOrderInfo["op_other_charges"]);
+                $txnAmount = (($childOrderInfo["op_unit_price"] * $childOrderInfo["op_qty"]) + $childOrderInfo["op_other_charges"] + $childOrderInfo["op_rounding_off"]);
 
                 /*Refund to Buyer[*/
                 if ($txnAmount > 0) {
@@ -1580,12 +1607,11 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not return request approved but new status is return request approved then commence the order operation [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS")) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID || strtolower($childOrderInfo['plugin_code']) == "cashondelivery")) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
             if ($moveRefundToWallet) {
                 $formattedRequestValue = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = sprintf(Labels::getLabel('LBL_Return_Request_Approved', $langId), $formattedRequestValue);
                 $txnAmount = $childOrderInfo['op_refund_amount'];
-
                 /*Refund to Buyer[*/
                 if ($txnAmount > 0) {
                     $txnArray["utxn_user_id"] = $childOrderInfo['order_user_id'];
@@ -1664,7 +1690,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not shipped but new status is shipped then commence shipping the order [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID)) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID)) {
             $db->updateFromArray(
                 Orders::DB_TBL_ORDER_PRODUCTS,
                 array('op_shipped_date' => date('Y-m-d H:i:s')),
@@ -1674,7 +1700,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not delivered but new Status is delivered and the order is of COD, then, check if delivered by seller then debiting transaction entry from seller wallet [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && strtolower($childOrderInfo['plugin_code']) == "cashondelivery") {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('Msg_Cash_collected_for_COD_order', $langId) . ' ' . $formattedInvoiceNumber;
@@ -1697,7 +1723,7 @@ class Orders extends MyAppModel
         /*]*/
 
         // If COD order and shipping user not set then assign shipping company  user seller/admin shiping company.
-        if (strtolower($childOrderInfo['plugin_code']) == "cashondelivery" && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
+        if (in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']) && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $shippingUserdata = array('optsu_op_id' => $childOrderInfo['op_id'], 'optsu_user_id' => $childOrderInfo['op_selprod_user_id']);
                 $db->insertFromArray(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, $shippingUserdata, false, array('IGNORE'));
@@ -1705,9 +1731,9 @@ class Orders extends MyAppModel
         }
 
         // If current order status is not completed but new status is completed then commence completing the order
-        if (!in_array($childOrderInfo['op_status_id'], (array) $this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array) $this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_is_paid"] == Orders::ORDER_IS_PAID || strtolower($childOrderInfo['plugin_code']) == "cashondelivery")) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) $this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array) $this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
             /* If shipped by admin credit to shipping user as COD order payment deposited by them[*/
-            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && strtolower($childOrderInfo['plugin_code']) == "cashondelivery") {
+            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('Msg_Cash_Deposited_for_COD_order', $langId) . ' ' . $formattedInvoiceNumber;
                 $amt = CommonHelper::orderProductAmount($childOrderInfo);
@@ -1861,9 +1887,9 @@ class Orders extends MyAppModel
             $buyerAllowCancelStatuses = unserialize(FatApp::getConfig("CONF_ALLOW_CANCELLATION_ORDER_STATUS"));
         }
 
-        // $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, (array)FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
+        // $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, (array)FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
 
-        $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"));
+        $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")));
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
 
@@ -1876,8 +1902,8 @@ class Orders extends MyAppModel
         /* if( $isDigitalProduct ){
         $buyerAllowReturnStatuses = unserialize(FatApp::getConfig("CONF_DIGITAL_RETURN_READY_ORDER_STATUS"));
         } */
-        $buyerAllowReturnStatuses = array_diff($buyerAllowReturnStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
-        $buyerAllowReturnStatuses = array_diff($buyerAllowReturnStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"));
+        $buyerAllowReturnStatuses = array_diff($buyerAllowReturnStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $buyerAllowReturnStatuses = array_diff($buyerAllowReturnStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $buyerAllowReturnStatuses = array_diff($buyerAllowReturnStatuses, unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         return $buyerAllowReturnStatuses;
     }
@@ -1885,26 +1911,26 @@ class Orders extends MyAppModel
     public static function getVendorOrderPaymentCreditedStatuses()
     {
         $vendorPaymentStatuses = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"));
-        $vendorPaymentStatuses = array_diff($vendorPaymentStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
-        $vendorPaymentStatuses = array_diff($vendorPaymentStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"));
-        $vendorPaymentStatuses = array_diff($vendorPaymentStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS"));
+        $vendorPaymentStatuses = array_diff($vendorPaymentStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $vendorPaymentStatuses = array_diff($vendorPaymentStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $vendorPaymentStatuses = array_diff($vendorPaymentStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0));
         return $vendorPaymentStatuses;
     }
 
     public static function getBuyerAllowedDigitalDownloadStatues()
     {
-        $buyerAllowDigitalDownloadStatuses = unserialize(FatApp::getConfig("CONF_ENABLE_DIGITAL_DOWNLOADS", null, ''));
+        $buyerAllowDigitalDownloadStatuses = unserialize(FatApp::getConfig("CONF_ENABLE_DIGITAL_DOWNLOADS"));
         return $buyerAllowDigitalDownloadStatuses;
     }
 
-    public function getVendorAllowedUpdateOrderStatuses($fetchForDigitalProduct = false, $fetchForCOD = false)
+    public function getVendorAllowedUpdateOrderStatuses($fetchForDigitalProduct = false, $fetchForCOD = false, $fetchForPayPickup = false)
     {
-        $processingStatuses = array_merge(unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")), (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_STRING, ''));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS"));
+        $processingStatuses = array_merge(unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")), (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS"));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0));
 
         $digitalProdOrderStatusArr = Orders::getOrderProductStatusArr(CommonHelper::getLangId(), array(), 0, true);
         $digitalProductOrderStatusArr = array();
@@ -1922,29 +1948,44 @@ class Orders extends MyAppModel
         if ($fetchForCOD) {
             $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
             $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_PAY_AT_STORE_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        }
+
+        if ($fetchForPayPickup) {
+            $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_PAY_AT_STORE_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_merge($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
 
         return $processingStatuses;
     }
 
-    public function getAdminAllowedUpdateOrderStatuses($fetchForCOD = false, $productType = false)
+    public function getAdminAllowedUpdateOrderStatuses($fetchForCOD = false, $productType = false, $fetchForPayPickup = false)
     {
         $processingStatuses = array_merge(unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")), unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-        $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS"));
+        $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0));
 
         if ($fetchForCOD) {
-            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS"));
-            $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_COD_ORDER_STATUS"));
+            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_PAY_AT_STORE_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        }
+
+        if ($fetchForPayPickup) {
+            $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_PAY_AT_STORE_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
 
         switch ($productType) {
             case Product::PRODUCT_TYPE_DIGITAL:
-                $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
-                $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"));
+                $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+                $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS", FatUtility::VAR_INT, 0));
                 break;
         }
 
@@ -1954,24 +1995,25 @@ class Orders extends MyAppModel
     public function getAdminAllowedUpdateShippingUser()
     {
         $processingStatuses = unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS"));
-        $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS"));
+        $processingStatuses = array_merge((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS"));
-        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS"));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0));
         return $processingStatuses;
     }
 
     public function getNotAllowedOrderCancellationStatuses()
     {
         $cancellationStatuses = array_merge(
-            (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", null, ''),
-            (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", null, ''),
-            (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", null, ''),
-            (array) FatApp::getConfig("CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS", null, ''),
-            (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", null, ''),
+            (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0),
+            (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0),
+            (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0),
+            (array) FatApp::getConfig("CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS", FatUtility::VAR_INT, 0),
+            (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0),
+            (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS", FatUtility::VAR_INT, 0),
             unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))
         );
         return $cancellationStatuses;
@@ -1988,7 +2030,7 @@ class Orders extends MyAppModel
         $srch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'opc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id = op.op_id', 'opc');
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
 
-        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_id', 'o.order_is_paid', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id'));
+        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_id', 'o.order_payment_status', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id'));
         $srch->addCondition('op_id', '=', $op_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -2088,7 +2130,6 @@ class Orders extends MyAppModel
         }
 
         $srch = new SearchBase(static::DB_TBL_ORDER_PAYMENTS, 'opayment');
-
         foreach ($criteria as $key => $val) {
             if (strval($val) == '') {
                 continue;
@@ -2226,7 +2267,7 @@ class Orders extends MyAppModel
         return $digitalDownloads;
     }
 
-    public function searchOrderProducts($criteria = array(), $langId = 0)
+    public static function searchOrderProducts($criteria = array(), $langId = 0)
     {
         $srch = static::getOrderProductSearchObject($langId);
 
@@ -2237,7 +2278,7 @@ class Orders extends MyAppModel
             switch ($key) {
                 case 'id':
                 case 'op_id':
-                    $op_id = FatUtility::int($op_id);
+                    $op_id = FatUtility::int($val);
                     $srch->addCondition('op.op_id', '=', $op_id);
                     break;
                 case 'order':
@@ -2389,6 +2430,7 @@ class Orders extends MyAppModel
                     'oua_state' => static::REPLACE_ORDER_USER_ADDRESS,
                     'oua_country' => static::REPLACE_ORDER_USER_ADDRESS,
                     'oua_country_code' => static::REPLACE_ORDER_USER_ADDRESS,
+                    'oua_country_code_alpha3' => static::REPLACE_ORDER_USER_ADDRESS,
                     'oua_state_code' => static::REPLACE_ORDER_USER_ADDRESS,
                     'oua_phone' => static::REPLACE_ORDER_USER_ADDRESS,
                     'oua_zip' => static::REPLACE_ORDER_USER_ADDRESS
@@ -2468,7 +2510,7 @@ class Orders extends MyAppModel
         $srch->joinOrderBuyerUser();
         $srch->addMultipleFields(
             array(
-                'order_id', 'order_user_id', 'order_date_added', 'order_is_paid', 'order_tax_charged', 'order_site_commission',
+                'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
                 'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(plugin_name,plugin_identifier)as plugin_name', 'order_discount_total', 'plugin_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted'
             )
         );
@@ -2528,5 +2570,42 @@ class Orders extends MyAppModel
         $order['comments'] = $orderObj->getOrderComments($langId, array("order_id" => $order['order_id']));
         $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
         return $order;
+    }
+
+    public function getOrderPickUpData($orderId, $langId)
+    {
+        $srch = new OrderProductSearch($langId, true);
+        $srch->joinShippingCharges();
+        $srch->joinTable(Orders::DB_TBL_ORDER_USER_ADDRESS, 'LEFT OUTER JOIN', 'oua.oua_op_id = op.op_id', 'oua');
+        $srch->addCondition('order_id', '=', $orderId);
+        $srch->addCondition('oua_type', '=', Orders::PICKUP_ADDRESS_TYPE);
+        $srch->addCondition('op_product_type', '=', product::PRODUCT_TYPE_PHYSICAL);
+        $srch->addGroupBy('opshipping_pickup_addr_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
+        return $records;
+    }
+
+    public function getOrderShippingData($orderId, $langId)
+    {
+        $srch = new OrderProductSearch($langId, true);
+        $srch->joinSellerProducts($langId);
+        $srch->joinShippingCharges();
+        $srch->addCondition('order_id', '=', $orderId);
+        $srch->addCondition('op_product_type', '=', product::PRODUCT_TYPE_PHYSICAL);
+        $srch->addOrder('opshipping_op_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
+        return $records;
+    }
+
+    public static function isExistTransactionId($gatewayTxnId)
+    {
+        $srch = new SearchBase(static::DB_TBL_ORDER_PAYMENTS);
+        $srch->addCondition('opayment_gateway_txn_id', '=', $gatewayTxnId);
+        $srch->addFld('opayment_gateway_txn_id');
+        $srch->doNotLimitRecords();
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 }

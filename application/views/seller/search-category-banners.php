@@ -1,12 +1,16 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = array(
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="js-scrollable table-wrap">
+<?php $arr_flds = array(
 	'listserial'=>'Sr.',
 	'prodcat_name' => Labels::getLabel('LBL_Category', $siteLangId),
 	'banner' => Labels::getLabel('LBL_Banner', $siteLangId),
 	'action' => ''
 );
-$tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table'));
+$tableClass = '';
+if (0 < count($arr_listing)) {
+	$tableClass = "table-justified";
+}
+$tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table '.$tableClass));
 $th = $tbl->appendElement('thead')->appendElement('tr',array('class' => ''));
 foreach ($arr_flds as $val) {
 	$e = $th->appendElement('th', array(), $val);
@@ -48,9 +52,9 @@ echo $tbl->getHtml();
 if (count($arr_listing) == 0) {
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId'=>$siteLangId,'message'=>$message));
-}
-$postedData['page'] = $page;
+} ?>
+</div>
+<?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData ( $postedData, array ('name' => 'frmCategoryBannerSrchPaging') );
-
 $pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'callBackJsFunc' => 'goToCategoryBannerSrchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr,false);

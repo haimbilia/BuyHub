@@ -37,7 +37,7 @@ class AuthorizeAimPayController extends PaymentController
         $this->settings = $this->plugin->getSettings();
     }
     
-    public function charge($orderId = '')
+    public function charge($orderId)
     {
         if (empty($orderId)) {
             FatUtility::exitWIthErrorCode(404);
@@ -49,7 +49,7 @@ class AuthorizeAimPayController extends PaymentController
 
         if (!$orderInfo['id']) {
             FatUtility::exitWIthErrorCode(404);
-        } elseif ($orderInfo["order_is_paid"] == Orders::ORDER_IS_PENDING) {
+        } elseif ($orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
             $frm = $this->getPaymentForm($orderId);
             $this->set('frm', $frm);
             $this->set('paymentAmount', $paymentAmount);

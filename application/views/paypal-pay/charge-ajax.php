@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<p><?php echo Labels::getLabel('MSG_PAYMENT_OPTIONS', $siteLangId); ?></p>
+<p class='loading-js'><?php echo Labels::getLabel('MSG_LOADING_PAYMENT_OPTIONS...', $siteLangId); ?></p>
 <div id="paypal-buttons"></div>
 
 <?php if (!FatUtility::isAjaxCall()) { ?>
@@ -19,7 +19,7 @@
             },
             //=== Call your server to create an order
             createOrder: function(data, actions) {
-                $.mbsmessage(langLbl.requestProcessing, true, 'alert--process');
+                $.mbsmessage(langLbl.requestProcessing, false, 'alert--process');
                 return fetch(fcom.makeUrl('PaypalPay', 'createOrder', ['<?php echo $orderInfo['id']; ?>']), {
                     method: "POST",
                 }).then(function(res) {
@@ -36,6 +36,7 @@
             },
             //=== Call your server to save the transaction
             onApprove: function(data, actions) {
+                $.mbsmessage(langLbl.requestProcessing, false, 'alert--process');
                 return fetch(fcom.makeUrl('PaypalPay', 'captureOrder', [data.orderID]), {
                     method: "POST",
                 }).then(function(res) {
@@ -48,7 +49,6 @@
                         data: data,
                         dataType: 'json',
                         success: function(resp) {
-                            console.log(resp);
                             if (1 > resp.status) {
                                 $.mbsmessage(resp.msg, true, 'alert--danger');
                             } else {
@@ -66,5 +66,10 @@
 
     $(document).ready(function() {
         loadPayPalButtons();
+        setTimeout(function() {
+            if ('' != $("#paypal-buttons").html()) {
+                $(".loading-js").hide();
+            }
+        }, 1000);
     });
 </script>

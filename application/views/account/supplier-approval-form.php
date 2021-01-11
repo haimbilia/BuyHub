@@ -5,7 +5,7 @@ $approvalFrm->developerTags['colClassPrefix'] = 'col-md-';
 $approvalFrm->developerTags['fld_default_col'] = '4';
 
 $btn = $approvalFrm->getField('btn_submit');
-$btn->setFieldTagAttribute('class', "btn btn-primary btn-wide");
+$btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
@@ -18,11 +18,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             </div>
         </div>
         <div class="content-body">
-            <div class="cards">
-                <div class="cards-header">
-                    <h5 class="cards-title"><?php echo Labels::getLabel('Lbl_Seller_Approval_Form', $siteLangId);?></h5>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title"><?php echo Labels::getLabel('Lbl_Seller_Approval_Form', $siteLangId);?></h5>
                 </div>
-                <div class="cards-content ">
+                <div class="card-body ">
                     <?php echo $approvalFrm->getFormHtml(); ?>
                 </div>
             </div>

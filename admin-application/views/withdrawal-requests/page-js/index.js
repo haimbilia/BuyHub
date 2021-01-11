@@ -16,7 +16,7 @@ $(document).ready(function(){
 	}
 
 	reloadList = function() {
-		var frm = document.frmReqSearchPaging;
+		var frm = document.frmReqSearch;
 		searchListing(frm);
 	}
 
@@ -25,6 +25,9 @@ $(document).ready(function(){
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
+		}        
+		if (!$(form).validate()) {
+			return;
 		}
 		/*]*/
 		
@@ -34,7 +37,7 @@ $(document).ready(function(){
 			$(dv).html(res);
 		});
 	};
-	
+	/*
 	updateStatus = function(id,status,statusName){
 		data = 'id='+id+'&status='+status;
 		if(confirm(langLbl.DoYouWantTo+' '+statusName+' '+langLbl.theRequest)){
@@ -43,18 +46,54 @@ $(document).ready(function(){
 			});
 		}
 	};
-	requestOutside = function(object, id, status, statusName){
-		data = 'id='+id+'&status='+status;
-		if(confirm(langLbl.DoYouWantTo+' '+statusName+' '+langLbl.theRequest)){
+        * 
+        */
+        updateStatusForm = function(id){
+		$.facebox(function() {
+			fcom.ajax(fcom.makeUrl('WithdrawalRequests', 'updateStatusForm', [id]), '', function(t) {
+				$.facebox(t,'faceboxWidth');
+			});
+		});
+	};        
+        setupStatus = function(frm,pluginName = ''){
+		if (!$(frm).validate()) return;
+                var data = fcom.frmData(frm);
+                var status = frm.withdrawal_status.value;
+                var id = frm.withdrawal_id.value; 
+                var comment = frm.withdrawal_comments.value;
+                if(status == transactionApprovedStatus && pluginName !=''){
+                    requestOutside(pluginName,id,status,comment);
+                    return;
+                }else{
+                    var url = fcom.makeUrl('WithdrawalRequests', 'setupUpdateStatus');
+                }
+                
+		fcom.updateWithAjax(url, data, function(t) {
+			reloadList();
+			$(document).trigger('close.facebox');                    
+		});
+	};
+	requestOutside = function(object, id, status,comment=''){
+		data = 'id='+id+'&status='+status+'&comment='+comment;
+		/*if(confirm(langLbl.DoYouWantTo+' '+statusName+' '+langLbl.theRequest)){ */
 			fcom.updateWithAjax(fcom.makeUrl(object), data, function(t) {
 				reloadList();
+                                $(document).trigger('close.facebox');
 			});
-		}
+		/* } */
 	};
 	
 	clearTagSearch = function(){
 		document.frmReqSearch.reset();
 		searchListing(document.frmReqSearch);
 	};
+        
+        viewComment = function(id){
+                $.facebox(function() {
+                        fcom.ajax(fcom.makeUrl('WithdrawalRequests', 'viewComment', [id]), '', function(t) {
+                                $.facebox(t,'faceboxWidth');
+                        });
+                });
+	};        
 
 })();

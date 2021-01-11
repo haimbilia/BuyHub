@@ -1,6 +1,6 @@
 <?php
 
-class PaymentMethodBase extends pluginBase
+class PaymentMethodBase extends PluginBase
 {
     public $userData;
     public $userMeta;
@@ -41,15 +41,19 @@ class PaymentMethodBase extends pluginBase
             'IFNULL(state_name, state_identifier) as state_name',
             'IFNULL(shop_name, shop_identifier) as shop_name',
             'shop_description',
+            'shop_address_line_1',
+            'shop_address_line_2',
             'user_dob',
             'shop_city',
             'country_code',
+            'country_code_alpha3',
             'state_code',
             'ub.*'
         ]);
         $srch->addCondition('user_id', '=', $this->userId);
         $rs = $srch->getResultSet();
         $this->userData = FatApp::getDb()->fetch($rs);
+
         return true;
     }
 

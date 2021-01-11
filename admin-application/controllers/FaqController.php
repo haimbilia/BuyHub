@@ -360,4 +360,37 @@ class FaqController extends AdminBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
         return $frm;
     }
+
+    public function autoComplete()
+    {
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
+        $post = FatApp::getPostedData();
+
+        $srch = Faq::getSearchObject($this->adminLangId);
+        $srch->addMultipleFields(array('faq_id, IFNULL(faq_title, faq_identifier) as faq_title'));
+
+        if (!empty($post['keyword'])) {
+            $cond = $srch->addCondition('faq_title', 'LIKE', '%' . $post['keyword'] . '%');
+            $cond->attachCondition('faq_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
+        $alreadyAdded = Collections::getRecords($collectionId);
+        if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
+            $srch->addCondition('faq_id', 'NOT IN', array_keys($alreadyAdded));
+        }
+
+        $srch->setPageSize($pagesize);
+        $rs = $srch->getResultSet();
+        $db = FatApp::getDb();
+        $posts = $db->fetchAll($rs, 'faq_id');
+        $json = array();
+        foreach ($posts as $key => $post) {
+            $json[] = array(
+            'id' => $key,
+            'name' => strip_tags(html_entity_decode($post['faq_title'], ENT_QUOTES, 'UTF-8'))
+            );
+        }
+        die(json_encode($json));
+    }
 }

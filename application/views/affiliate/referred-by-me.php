@@ -17,12 +17,12 @@ $keywordFld->setWrapperAttribute('class', 'col-lg-2');
 $keywordFld->developerTags['col'] = 2;
 
 $submitBtnFld = $frmSearch->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary btn-block ');
+$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 $submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $submitBtnFld->developerTags['col'] = 2;
 
 $cancelBtnFld = $frmSearch->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn-block btn-outline-primary');
+$cancelBtnFld->setFieldTagAttribute('class', 'btn-block btn-outline-brand');
 $cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $cancelBtnFld->developerTags['col'] = 2;
 ?>
@@ -38,8 +38,8 @@ $cancelBtnFld->developerTags['col'] = 2;
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="replaced">
                                 <?php echo $frmSearch->getFormHtml(); ?>
                             </div>
@@ -50,8 +50,8 @@ $cancelBtnFld->developerTags['col'] = 2;
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div id="usersListing"></div>
                         </div>
                     </div>

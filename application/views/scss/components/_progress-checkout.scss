@@ -15,13 +15,18 @@ $white: #fff;
     .progress-track {
         position: absolute;
         top: 7px;
-        width: 76%;
+        width: 67%;
         height: 2px;
         background-color: $grey2;
         z-index: -1;
         left: 0;
         right: 0;
         margin: 0 auto;
+        @include media-breakpoint-down(sm) {
+            & {
+                width: 100%;
+            }
+        }
     }
     // Each Step on the Progress Bar
     .progress-step {
@@ -55,7 +60,7 @@ $white: #fff;
             content: "";
             position: absolute;
             top: 7px;
-            left: 50%;
+            #{$start-direction}: 50%;
             width: 0%;
             transition: width 1s ease-in;
             height: 2px;

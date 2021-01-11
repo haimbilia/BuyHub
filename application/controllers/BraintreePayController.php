@@ -54,7 +54,7 @@ class BraintreePayController extends PaymentController
             FatUtility::exitWithErrorCode(404);
         }
         $currencyCode = '';
-        if (count($orderInfo) < 1 || (count($orderInfo) > 1 && $orderInfo["order_is_paid"] != Orders::ORDER_IS_PENDING)) {
+        if (count($orderInfo) < 1 || (count($orderInfo) > 1 && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING)) {
             $this->error = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
         } else {
             $currencyCode = strtolower($orderInfo["order_currency_code"]);
@@ -144,26 +144,23 @@ class BraintreePayController extends PaymentController
 
                     $charge = (array) $charge;
                     $message = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+                    $orderPaymentObj = new OrderPayment($orderInfo['id']);
                     if (!empty($charge) && 0 < count($charge)) {
-                        $orderPaymentObj = new OrderPayment($orderInfo['id']);
                         if (isset($charge['success']) && 0 < $charge['success'] || (isset($charge['transaction']) && !is_null($charge['transaction']))) {
-                            $message = 'Id: ' . (string) $charge['transaction']->id . "&";
-                            $message .= 'Object: ' . (string) $charge['transaction'] . "&";
-                            $message .= 'Amount: ' . (string) $charge['transaction']->amount . "&";
-
-                            $message .= 'Status: ' . (string) $charge['transaction']->status . "&";
+                            
                             /* Recording Payment in DB */
-
-                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge['transaction']->id, ($payment_amount / 100), Labels::getLabel("MSG_Received_Payment", $this->siteLangId), $message);
+                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge['transaction']->id, ($payment_amount / 100), Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($charge));
                             /* End Recording Payment in DB */
                             $checkPayment = true;
 
                             FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['id'])));
                         } else {
+                            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderInfo['id'], json_encode($charge));
                             $orderPaymentObj->addOrderPaymentComments($message);
                             FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentFailed'));
                         }
                     } else {
+                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderInfo['id'], json_encode($charge));
                         $orderPaymentObj->addOrderPaymentComments($message);
                         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentFailed'));
                     }

@@ -43,8 +43,6 @@
                 width: 16px;
                 height: auto;
                 fill: $brand-color;
-                -webkit-margin-start: 0.3rem;
-                -moz-margin-start: 0.3rem;
                 margin-#{$start-direction}: 0.3rem;
             }
         }
@@ -166,8 +164,6 @@
             -webkit-padding-start: 0;
             -moz-padding-start: 0;
             padding-#{$start-direction}: 0;
-            -webkit-margin-start: 0;
-            -moz-margin-start: 0;
             margin-#{$start-direction}: 0;
         }
         a {
@@ -530,8 +526,8 @@
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: start;
-        -ms-flex-align: start;
+        -webkit-box-align:flex-start;
+        -ms-flex-align:flex-start;
         align-items: flex-start;
     }
     .media__image {

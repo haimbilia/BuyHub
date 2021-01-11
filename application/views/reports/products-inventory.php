@@ -11,13 +11,13 @@ $keyFld->developerTags['col'] = 8;
 $keyFld->developerTags['noCaptionTag'] = true;
 
 $submitBtnFld = $frmSrch->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary btn-block');
+$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 $submitBtnFld->setWrapperAttribute('class', 'col-6');
 $submitBtnFld->developerTags['col'] = 2;
 $submitBtnFld->developerTags['noCaptionTag'] = true;
 
 $cancelBtnFld = $frmSrch->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
+$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->setWrapperAttribute('class', 'col-6');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true; ?>
@@ -34,15 +34,15 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true; ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-header">
-                            <h5 class="cards-title"><?php echo Labels::getLabel('LBL_Products_Inventory_Report', $siteLangId);?></h5>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Products_Inventory_Report', $siteLangId);?></h5>
                             <div class="action">
                                 <?php
                                     echo '<div class="btn-group"><a href="javascript:void(0)" onClick="exportProductsInventoryReport()" class="btn btn-secondary btn-sm btn-block">'.Labels::getLabel('LBL_Export', $siteLangId).'</a></div>';?>
                             </div>
                         </div>
-                        <div class="cards-content">
+                        <div class="card-body">
                         <?php echo $frmSrch->getFormHtml(); ?>
                         </div>
                     </div>
@@ -50,10 +50,10 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true; ?>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
-                            <div class="gap"></div>
+                            
                         </div>
                     </div>
                 </div>

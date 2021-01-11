@@ -12,7 +12,7 @@ $address2 = $frm->getField('ura_address_line_2');
 $address2->developerTags['col'] = 6;
 
 $submitFld = $frm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', "btn btn-primary btn-wide");
+$submitFld->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $langFld = $frm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);");
@@ -20,8 +20,8 @@ $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);")
 $variables= array('language' => $language,'siteLangId' => $siteLangId,'shop_id' => $shop_id,'action' => $action);
 $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false); ?>
 <div class="tabs__content tabs__content-js">
-    <div class="cards">
-        <div class="cards-content ">
+    <div class="card">
+        <div class="card-body ">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="">
@@ -45,7 +45,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                     if (!empty($translatorSubscriptionKey) && $formLangId != $siteDefaultLangId) { ?>
                         <div class="row justify-content-end">
                             <div class="col-auto mb-4">
-                                <input class="btn btn-primary"
+                                <input class="btn btn-brand"
                                     type="button"
                                     value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
                                     onClick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">

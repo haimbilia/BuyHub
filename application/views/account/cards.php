@@ -11,7 +11,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
             </div>
             <?php if (!empty($savedCards)) { ?>
                 <div class="col-auto">
-                    <a class="btn btn-outline-primary btn-sm" href="javascript:void(0);" onclick="addNewCardForm()">
+                    <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onclick="addNewCardForm()">
                         <i class="icn">
                             <svg class="svg">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add"
@@ -27,8 +27,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <?php if (empty($savedCards)) { ?>
                                 <div class="no-data-found">
                                     <div class="img">
@@ -40,7 +40,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                                         <p><?php echo Labels::getLabel("LBL_ADD_CARDS_TO_CHECKOUT_FASTER", $siteLangId); ?>
                                         </p>
                                         <div class="action">
-                                            <a class="btn btn-primary btn-wide" href="javascript:void(0);"
+                                            <a class="btn btn-brand btn-wide" href="javascript:void(0);"
                                                 onclick="addNewCardForm()">
                                                 <?php echo Labels::getLabel("LBL_ADD_NEW_CARD", $siteLangId); ?>
                                             </a>

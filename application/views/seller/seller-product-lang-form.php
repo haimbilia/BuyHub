@@ -2,8 +2,8 @@
 <div class="tabs ">
     <?php require_once('sellerCatalogProductTop.php');?>
 </div>
-<div class="cards">
-<div class="cards-content ">	
+<div class="card">
+<div class="card-body ">	
 	<div class="tabs__content form">
 		<div class="row">
 			<div class="col-md-12">
@@ -33,7 +33,7 @@
                     if (!empty($translatorSubscriptionKey) && $formLangId != $siteDefaultLangId) { ?> 
                         <div class="row justify-content-end"> 
                             <div class="col-auto mb-4">
-                                <input class="btn btn-primary" 
+                                <input class="btn btn-brand" 
                                     type="button" 
                                     value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
                                     onClick="sellerProductLangForm(<?php echo $formLangId; ?>, <?php echo $selprod_id; ?>, 1)">

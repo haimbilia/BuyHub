@@ -39,7 +39,7 @@ class ImportexportCommon extends FatModel
         if (empty($fileName)) {
             return false;
         }
-        $this->CSVfileName = $this->CSVFileName($fileName);
+        $this->CSVfileName = $this->CSVFileName($fileName, $langId);
 
         if (true === $errorLog) {
             if (!file_exists(self::IMPORT_ERROR_LOG_PATH)) {
@@ -47,9 +47,9 @@ class ImportexportCommon extends FatModel
             }
             $file = self::IMPORT_ERROR_LOG_PATH . $this->CSVfileName;
             $headingsArr = array(
-            Labels::getLabel('LBL_Row', $langId),
-            Labels::getLabel('LBL_Column', $langId),
-            Labels::getLabel('LBL_Description', $langId)
+                Labels::getLabel('LBL_Row', $langId),
+                Labels::getLabel('LBL_Column', $langId),
+                Labels::getLabel('LBL_Description', $langId)
             );
             $handle = fopen($file, "w");
         }
@@ -63,7 +63,7 @@ class ImportexportCommon extends FatModel
             $langId = CommonHelper::getLangId();
         }
 
-        CommonHelper::writeToCSVFile($handle, $headingsArr);
+        CommonHelper::writeToCSVFile($handle, $headingsArr, false, true);
         return $handle;
     }
 
@@ -92,7 +92,6 @@ class ImportexportCommon extends FatModel
     public function isValidColumns($headingsArr, $coloumArr)
     {
         $arr = array_diff($headingsArr, $coloumArr);
-
         if (count($arr) || count($headingsArr) != count($coloumArr)) {
             return false;
         }
@@ -122,7 +121,9 @@ class ImportexportCommon extends FatModel
                     $errMsg = (0 > FatUtility::float($columnValue)) ? Labels::getLabel("MSG_{column-name}_should_be_greater_than_0.", $langId) : false;
                     break;
             }
-            return (false !== $errMsg) ? str_replace('{column-name}', $columnTitle, $errMsg) : $errMsg;
+            
+            $errMsg = (false !== $errMsg) ? mb_strtolower($errMsg)  : $errMsg;
+            return (false !== $errMsg) ? mb_convert_case(str_replace('{column-name}', $columnTitle, $errMsg), MB_CASE_TITLE, "UTF-8") : $errMsg;
         }
         return $errMsg;
     }
@@ -225,6 +226,7 @@ class ImportexportCommon extends FatModel
                 $arr['urlrewrite_custom'] = Labels::getLabel('LBL_Seo_friendly_url', $langId);
                 /*$arr['prodcat_featured'] = Labels::getLabel('LBL_Featured', $langId);*/
                 $arr['prodcat_active'] = Labels::getLabel('LBL_Active', $langId);
+                $arr['prodcat_status'] = Labels::getLabel('LBL_STATUS', $langId);
                 $arr['prodcat_display_order'] = Labels::getLabel('LBL_Display_Order', $langId);
                 $arr['prodcat_deleted'] = Labels::getLabel('LBL_Deleted', $langId);
             }
@@ -270,7 +272,7 @@ class ImportexportCommon extends FatModel
         $arr['brand_name'] = Labels::getLabel('LBL_Name', $langId);
 
         if (!$userId) {
-            $arr['brand_short_description'] = Labels::getLabel('LBL_Description', $langId);
+            /*$arr['brand_short_description'] = Labels::getLabel('LBL_Description', $langId);*/
 
             if ($this->isDefaultSheetData($langId)) {
                 $arr['urlrewrite_custom'] = Labels::getLabel('LBL_Seo_friendly_url', $langId);
@@ -305,7 +307,7 @@ class ImportexportCommon extends FatModel
         return $arr;
     }
 
-    public function getProductsCatalogColoumArr($langId, $userId = 0)
+    public function getProductsCatalogColoumArr($langId, $userId = 0, $actionType = null)
     {
         $arr = array();
 
@@ -320,8 +322,8 @@ class ImportexportCommon extends FatModel
             }
             $arr['product_identifier'] = Labels::getLabel('LBL_Product_identifier', $langId);
         }
-
-        if ($this->isDefaultSheetData($langId)) {
+        
+        if ($this->isDefaultSheetData($langId) && $actionType != Importexport::ACTION_ADMIN_PRODUCTS) {
             if ($this->settings['CONF_USE_USER_ID']) {
                 $arr['product_seller_id'] = Labels::getLabel('LBL_User_ID', $langId);
             } else {
@@ -329,7 +331,7 @@ class ImportexportCommon extends FatModel
             }
         }
 
-        $arr['product_name'] = Labels::getLabel('LBL_Name', $langId);
+        $arr['product_name'] = Labels::getLabel('LBL_PRODUCT_NAME', $langId);
         /* $arr['product_short_description'] = Labels::getLabel('LBL_Short_Description', $langId); */
         $arr['product_description'] = Labels::getLabel('LBL_Description', $langId);
         $arr['product_youtube_video'] = Labels::getLabel('LBL_Youtube_Video', $langId);
@@ -408,14 +410,16 @@ class ImportexportCommon extends FatModel
                 }
             }
 
+            if (0 == $userId) {
+                $arr['product_fulfillment_type'] = Labels::getLabel('LBL_FULFILLMENT_TYPE', $langId);
+            }
+
             if ((0 == $userId && $shippedBy) || !$shippedBy) {
-                $arr['ps_free'] = Labels::getLabel('LBL_Free_Shipping', $langId);
+                // $arr['ps_free'] = Labels::getLabel('LBL_Free_Shipping', $langId);
                 $arr['product_cod_enabled'] = Labels::getLabel('LBL_COD_available', $langId);
             }
 
-            if (!$userId) {
-                $arr['product_featured'] = Labels::getLabel('LBL_Featured', $langId);
-            }
+            $arr['product_featured'] = Labels::getLabel('LBL_Featured', $langId);
             $arr['product_approved'] = Labels::getLabel('LBL_Approved', $langId);
             $arr['product_active'] = Labels::getLabel('LBL_Active', $langId);
             $arr['product_deleted'] = Labels::getLabel('LBL_Deleted', $langId);
@@ -606,6 +610,7 @@ class ImportexportCommon extends FatModel
             $arr['selprod_available_from'] = Labels::getLabel('LBL_Available_from', $langId);
             $arr['selprod_active'] = Labels::getLabel('LBL_Active', $langId);
             $arr['selprod_cod_enabled'] = Labels::getLabel('LBL_COD_Available', $langId);
+            $arr['selprod_fulfillment_type'] = Labels::getLabel('LBL_FULFILLMENT_TYPE', $langId);
             $arr['selprod_deleted'] = Labels::getLabel('LBL_Deleted', $langId);
             if (!$userId) {
                 $arr['selprod_sold_count'] = Labels::getLabel('LBL_Sold_Count', $langId);
@@ -1006,6 +1011,7 @@ class ImportexportCommon extends FatModel
     public function getAllCategoryIdentifiers($byId = true, $catIdOrIdentifier = false)
     {
         $srch = ProductCategory::getSearchObject(false, false, false);
+        $srch->addOrder('m.prodcat_active', 'DESC');
         $srch->doNotCalculateRecords();
         if ($catIdOrIdentifier) {
             $srch->setPageSize(1);

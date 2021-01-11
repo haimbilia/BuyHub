@@ -9,7 +9,7 @@
             </div>
             <div class="col-auto">
                 <div class="btn-group">
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'products');?>" class="btn btn-outline-primary btn-sm">
+                    <a href="<?php echo UrlHelper::generateUrl('seller', 'products');?>" class="btn btn-outline-brand btn-sm">
                     <?php echo Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)?>
                     </a>
                 </div>
@@ -32,8 +32,8 @@
                     </ul>
                 </div>
             <?php } ?>
-            <div class="cards">
-                <div class="cards-content">
+            <div class="card">
+                <div class="card-body">
                     <div class="tabs__content">
                         <div id="tabs_001" class="tabs_panel" style="display: block;"></div>
                         <div id="tabs_002" class="tabs_panel" style="display: none;"> </div>

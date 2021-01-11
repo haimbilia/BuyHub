@@ -143,24 +143,25 @@ $(document).on('change','.prefDimensions-js',function(){
 	};
 
 	clearSearch = function(){
-		document.frmSearch.reset();
+        document.frmSearch.reset();
+        $("input[name='user_id']").val("");
 		searchProductBrands(document.frmSearch);
 	};
 
-	deleteMedia = function( brandId, fileType, langId, slide_screen ){
+	deleteMedia = function( brandId, fileType, afileId ){
 		if(!confirm(langLbl.confirmDelete)){return;}
-		fcom.updateWithAjax(fcom.makeUrl('brands', 'removeBrandMedia',[brandId, fileType, langId, slide_screen]), '', function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('brands', 'removeBrandMedia',[brandId, fileType, afileId]), '', function(t) {
 			brandImages(brandId,fileType,slide_screen,langId);
 			reloadList();
 		});
 	};
 
 	addBrandRequestForm= function(id){
-
-		$.facebox(function() {brandRequestForm(id)
-
+		$.facebox(function() {
+            brandRequestForm(id);
 		});
-	}
+    }
+    
 	brandRequestForm = function(id) {
 		fcom.displayProcessing();
 		var frm = document.frmBrandSearchPaging;
@@ -193,7 +194,9 @@ $(document).on('change','.prefDimensions-js',function(){
 	                },
 	                minCropBoxWidth: minWidth,
 	                minCropBoxHeight: minHeight,
-	                toggleDragModeOnDblclick: false,
+					toggleDragModeOnDblclick: false,
+					imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
 		        };
 				$(inputBtn).val('');
     	  		return cropImage(file, options, 'uploadBrandImages', inputBtn);
@@ -222,7 +225,9 @@ $(document).on('change','.prefDimensions-js',function(){
 	                },
 	                minCropBoxWidth: minWidth,
 	                minCropBoxHeight: minHeight,
-	                toggleDragModeOnDblclick: false,
+					toggleDragModeOnDblclick: false,
+					imageSmoothingQuality: 'high',
+					imageSmoothingEnabled: true,
 		        };
 				$(inputBtn).val('');
     	  		return cropImage(file, options, 'uploadBrandImages', inputBtn);

@@ -8,9 +8,11 @@ $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
 $fileFld = $frm->getField('file');
 $fileFld->htmlBeforeField='<div class="filefield"><span class="filename"></span>';
-$preferredDimensionsStr = '<label class="filelabel">'.Labels::getLabel('LBL_Browse_File', $siteLangId).'</label></div><small class="form-text text-muted">'.Labels::getLabel('MSG_Allowed_Extensions', $siteLangId).'</small>';
+$preferredDimensionsStr = '</div><span class="form-text text-muted">'.Labels::getLabel('MSG_Allowed_Extensions', $siteLangId).'</span>';
 $fileFld->htmlAfterField = $preferredDimensionsStr;
 
+$btnSubmitFld = $frm->getField('btn_submit');
+$btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
 $isUserLogged = UserAuthentication::isUserLogged();
 if ($isUserLogged) {
     $nameFld = $frm->getField(BlogContribution::DB_TBL_PREFIX.'author_first_name');
@@ -24,11 +26,11 @@ if ($isUserLogged) {
           <div class="col">
                <div class="section-head section--white--head mb-0">
 						<div class="section__heading">
-                		<h2 class="mb-0"><?php echo Labels::getLabel('Lbl_Blog_Contribution', $siteLangId); ?></h2>
+                		<h1 class="mb-0"><?php echo Labels::getLabel('Lbl_Blog_Contribution', $siteLangId); ?></h1>
                         </div>
                      </div>
           </div>
-          <div class="col-auto"><a href="<?php echo UrlHelper::generateUrl('Blog'); ?>" class="btn btn-primary btn-sm"><?php echo Labels::getLabel('Lbl_Back_to_home', $siteLangId); ?></a></div>
+          <div class="col-auto"><a href="<?php echo UrlHelper::generateUrl('Blog'); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('Lbl_Back_to_home', $siteLangId); ?></a></div>
         </div>
       </div>
     </div>
@@ -48,8 +50,5 @@ if ($isUserLogged) {
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
 if (!empty($siteKey) && !empty($secretKey)) {?>
-    <script src='https://www.google.com/recaptcha/api.js?render=<?php echo $siteKey; ?>'></script>
-    <script>
-        googleCaptcha();
-    </script>
+    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
 <?php } ?>

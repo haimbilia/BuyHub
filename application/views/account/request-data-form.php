@@ -5,7 +5,7 @@
     $frm->setFormTagAttribute('onsubmit', 'setupRequestData(this); return(false);');
     
     $submitFld = $frm->getField('btn_submit');
-    $submitFld->setFieldTagAttribute('class', 'btn btn-primary btn-wide');
+    $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
 ?>
 <div class="cols--group">
     <div class="box__head">
@@ -20,7 +20,7 @@
             <?php
             $btnFld = $frm->getField('btn_submit');
             if (!empty($gdprPolicyLinkHref)) {
-                $btnFld->htmlBeforeField = str_replace("{clickhere}", '<a target="_blank" href="' . $gdprPolicyLinkHref . '">' . Labels::getLabel('LBL_Click_Here', $siteLangId) . '</a>', Labels::getLabel('LBL_{CLICKHERE}_TO_READ_THE_POLICIES_OF_GDPR', $siteLangId)) . '<br/><br/>';
+                $btnFld->htmlBeforeField = str_replace("{clickhere}", '<a class="btn-link" target="_blank" href="' . $gdprPolicyLinkHref . '">' . Labels::getLabel('LBL_Click_Here', $siteLangId) . '</a>', Labels::getLabel('LBL_{CLICKHERE}_TO_READ_THE_POLICIES_OF_GDPR', $siteLangId)) . '<br/><br/>';
             }
             echo $frm->getFormHtml();
             ?>

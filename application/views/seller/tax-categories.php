@@ -38,17 +38,17 @@
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="cards">
-                        <div class="cards-content">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="replaced">
                                 <div class="row">
                                     <div class="col-lg-8">
                                         <?php
                                         $submitFld = $frmSearch->getField('btn_submit');
-                                        $submitFld->setFieldTagAttribute('class', 'btn btn-primary btn-block ');
+                                        $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
                                         $fldClear= $frmSearch->getField('btn_clear');
-                                        $fldClear->setFieldTagAttribute('class', 'btn btn-outline-primary btn-block');
+                                        $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                         echo $frmSearch->getFormHtml();
                                         echo $frmSearch->getExternalJS();?>
                                     </div>
@@ -61,9 +61,9 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cards">
+                    <div class="card">
 
-                        <div class="cards-content">
+                        <div class="card-body">
                             <div id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
 
                         </div>

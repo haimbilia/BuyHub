@@ -9,7 +9,7 @@ class Importexport extends ImportexportCommon
     public const TYPE_CATEGORIES = 1;
     public const TYPE_BRANDS = 2;
     public const TYPE_PRODUCTS = 3;
-    public const TYPE_SELLER_PRODUCTS = 4;
+    public const TYPE_INVENTORIES = 4;
     public const TYPE_OPTIONS = 5;
     public const TYPE_OPTION_VALUES = 6;
     public const TYPE_TAG = 7;
@@ -20,6 +20,7 @@ class Importexport extends ImportexportCommon
     public const TYPE_TAX_CATEGORY = 12;
     public const TYPE_LANGUAGE_LABELS = 13;
     public const TYPE_INVENTORY_UPDATE = 14;
+    public const TYPE_SELLER_PRODUCTS = 15;
 
 
     public const MAX_LIMIT = 1000;
@@ -48,13 +49,20 @@ class Importexport extends ImportexportCommon
     private $headingIndexArr = array();
     private $CSVfileObj;
 
+    public const ACTION_ALL_PRODUCTS = 1;
+    public const ACTION_ADMIN_PRODUCTS = 2;
+    public const ACTION_SELLER_PRODUCTS = 3;
+
+    private $actionType = self::ACTION_ALL_PRODUCTS;
+
     public static function getImportExportTypeArr($type, $langId, $sellerDashboard = false)
     {
         switch (strtoupper($type)) {
             case 'EXPORT':
                 $arr[static::TYPE_CATEGORIES] = Labels::getLabel('LBL_Categories', $langId);
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_Catalogs', $langId);
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_Marketplace_Products', $langId);
                 $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_Seller_Products', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('LBL_Seller_Inventories', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('LBL_INVENTORY_UPDATE', $langId);
                 $arr[static::TYPE_BRANDS] = Labels::getLabel('LBL_Brands', $langId);
                 $arr[static::TYPE_OPTIONS] = Labels::getLabel('LBL_Options', $langId);
@@ -67,11 +75,15 @@ class Importexport extends ImportexportCommon
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_USERS] = Labels::getLabel('LBL_users', $langId);
                     $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('LBL_Language_Labels', $langId);
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
+                } else {
+                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
                 }
                 break;
             case 'IMPORT':
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_Catalogs', $langId);
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_Marketplace_Products', $langId);
                 $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_Seller_Products', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('LBL_Seller_Inventories', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('LBL_INVENTORY_UPDATE', $langId);
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_CATEGORIES] = Labels::getLabel('LBL_Categories', $langId);
@@ -83,6 +95,10 @@ class Importexport extends ImportexportCommon
                     $arr[static::TYPE_STATE] = Labels::getLabel('LBL_States', $langId);
                     $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('LBL_Language_Labels', $langId);
                     //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('LBL_Policy_Points', $langId);
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
+                } else {
+                    unset($arr[static::TYPE_PRODUCTS]);
+                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
                 }
                 break;
         }
@@ -115,7 +131,7 @@ class Importexport extends ImportexportCommon
     {
         $arr = array(
             static::SELLER_PROD_GENERAL_DATA => Labels::getLabel('LBL_General_Data', $langId),
-            static::SELLER_PROD_OPTION => Labels::getLabel('LBL_Product_Options', $langId),
+            static::SELLER_PROD_OPTION => Labels::getLabel('LBL_INVENTORY_OPTIONS', $langId),
             static::SELLER_PROD_SEO => Labels::getLabel('LBL_SEO_Data', $langId),
             static::SELLER_PROD_SPECIAL_PRICE => Labels::getLabel('LBL_Special_Price', $langId),
             static::SELLER_PROD_VOLUME_DISCOUNT => Labels::getLabel('LBL_Volume_Discount', $langId),
@@ -166,6 +182,17 @@ class Importexport extends ImportexportCommon
     private function validateCSVHeaders($csvFilePointer, $coloumArr, $langId)
     {
         $headingRow = $this->getFileRow($csvFilePointer);
+        $i = 0;
+        array_walk(
+            $headingRow,
+            function (&$string) use (&$i) {
+                if (0 == $i) {
+                    $string = str_replace('"', '', preg_replace('/[^\x{0600}-\x{06FF}A-Za-z !@#$%^&*()]/u', '', $string));
+                }
+                $i++;
+            }
+        );
+
         if (!$this->isValidColumns($headingRow, $coloumArr)) {
             Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Coloum_CSV_File", $langId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -173,7 +200,7 @@ class Importexport extends ImportexportCommon
         $this->headingIndexArr = array_flip($headingRow);
     }
 
-    public function export($type, $langId, $sheetType, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = 0)
+    public function export($type, $langId, $sheetType, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = 0, $sellerDashboard = false)
     {
         $all = !isset($offset) && !isset($noOfRows) && !isset($minId) && !isset($maxId);
         $userId = FatUtility::int($userId);
@@ -203,29 +230,30 @@ class Importexport extends ImportexportCommon
                 $this->exportCategories($langId, $userId);
                 break;
             case Importexport::TYPE_PRODUCTS:
+                $this->actionType = self::ACTION_ADMIN_PRODUCTS;
                 switch ($sheetType) {
                     case Importexport::PRODUCT_CATALOG:
-                        $sheetName = Labels::getLabel('LBL_Product_Catalogs', $langId) . $sheetName;
+                        $sheetName = (!$sellerDashboard ? Labels::getLabel('LBL_My_Products', $langId) : Labels::getLabel('LBL_Marketplace_Products', $langId)) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductsCatalog($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
                     case Importexport::PRODUCT_OPTION:
-                        $sheetName = Labels::getLabel('LBL_Catalog_Options', $langId) . $sheetName;
+                        $sheetName = (!$sellerDashboard ? Labels::getLabel('LBL_My_Product_Options', $langId) : Labels::getLabel('LBL_Marketplace_Product_Options', $langId)) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductOptions($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
                     case Importexport::PRODUCT_TAG:
-                        $sheetName = Labels::getLabel('LBL_Catalog_Tags', $langId) . $sheetName;
+                        $sheetName = Labels::getLabel('LBL_Marketplace_Product_Tags', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductTags($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
                     case Importexport::PRODUCT_SPECIFICATION:
-                        $sheetName = Labels::getLabel('LBL_Catalog_Specification', $langId) . $sheetName;
+                        $sheetName = (!$sellerDashboard ? Labels::getLabel('LBL_My_Product_Specifications', $langId) : Labels::getLabel('LBL_Marketplace_Product_Specifications', $langId)) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductSpecification($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
                     case Importexport::PRODUCT_SHIPPING:
-                        $sheetName = Labels::getLabel('LBL_Catalog_Shipping', $langId) . $sheetName;
+                        $sheetName = Labels::getLabel('LBL_Marketplace_Product_Shipping', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductShipping($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
@@ -235,14 +263,47 @@ class Importexport extends ImportexportCommon
                 }
                 break;
             case Importexport::TYPE_SELLER_PRODUCTS:
+                $this->actionType = self::ACTION_SELLER_PRODUCTS;
+                switch ($sheetType) {
+                    case Importexport::PRODUCT_CATALOG:
+                        $sheetName = ((0 < $userId) ? Labels::getLabel('LBL_My_Products', $langId) : Labels::getLabel('LBL_Seller_Products', $langId)) . $sheetName;
+                        $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
+                        $this->exportProductsCatalog($langId, $offset, $noOfRows, $minId, $maxId, $userId);
+                        break;
+                    case Importexport::PRODUCT_OPTION:
+                        $sheetName = ((0 < $userId) ? Labels::getLabel('LBL_My_Product_Options', $langId) : Labels::getLabel('LBL_Seller_Product_Options', $langId)) . $sheetName;
+                        $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
+                        $this->exportProductOptions($langId, $offset, $noOfRows, $minId, $maxId, $userId);
+                        break;
+                    case Importexport::PRODUCT_TAG:
+                        $sheetName = Labels::getLabel('LBL_Seller_Product_Tags', $langId) . $sheetName;
+                        $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
+                        $this->exportProductTags($langId, $offset, $noOfRows, $minId, $maxId, $userId);
+                        break;
+                    case Importexport::PRODUCT_SPECIFICATION:
+                        $sheetName = ((0 < $userId) ? Labels::getLabel('LBL_My_Product_Specifications', $langId) : Labels::getLabel('LBL_Seller_Product_Specifications', $langId)) . $sheetName;
+                        $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
+                        $this->exportProductSpecification($langId, $offset, $noOfRows, $minId, $maxId, $userId);
+                        break;
+                    case Importexport::PRODUCT_SHIPPING:
+                        $sheetName = Labels::getLabel('LBL_Seller_Product_Shipping', $langId) . $sheetName;
+                        $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
+                        $this->exportProductShipping($langId, $offset, $noOfRows, $minId, $maxId, $userId);
+                        break;
+                    default:
+                        $default = true;
+                        break;
+                }
+                break;
+            case Importexport::TYPE_INVENTORIES:
                 switch ($sheetType) {
                     case Importexport::SELLER_PROD_GENERAL_DATA:
-                        $sheetName = Labels::getLabel('LBL_Seller_Product_General', $langId) . $sheetName;
+                        $sheetName = Labels::getLabel('LBL_SELLER_INVENTORY_GENERAL', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportSellerProdGeneralData($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
                     case Importexport::SELLER_PROD_OPTION:
-                        $sheetName = Labels::getLabel('LBL_Seller_Product_Option', $langId) . $sheetName;
+                        $sheetName = Labels::getLabel('LBL_SELLER_INVENTORY_OPTIONS', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportSellerProdOptionData($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
@@ -373,11 +434,13 @@ class Importexport extends ImportexportCommon
                 $this->exportCategoryMedia($langId);
                 break;
             case Importexport::TYPE_PRODUCTS:
+            case Importexport::TYPE_SELLER_PRODUCTS:
+                $catMediaId = $type == Importexport::TYPE_PRODUCTS ? 0 : $userId;
                 $sheetName = Labels::getLabel('LBL_Product_Media', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
-                $this->exportProductMedia($langId, $offset, $noOfRows, $minId, $maxId, $userId);
+                $this->exportProductMedia($langId, $offset, $noOfRows, $minId, $maxId, $catMediaId, $type);
                 break;
-            case Importexport::TYPE_SELLER_PRODUCTS:
+            case Importexport::TYPE_INVENTORIES:
                 $sheetName = Labels::getLabel('LBL_Seller_Product_Digital_File', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                 $this->exportSellerProductMedia($langId, $offset, $noOfRows, $minId, $maxId, $userId);
@@ -407,6 +470,8 @@ class Importexport extends ImportexportCommon
                 Product::updateMinPrices();
                 break;
             case Importexport::TYPE_PRODUCTS:
+            case Importexport::TYPE_SELLER_PRODUCTS:
+                $this->actionType = ($type == self::TYPE_PRODUCTS) ? self::ACTION_ADMIN_PRODUCTS : self::ACTION_SELLER_PRODUCTS;
                 switch ($sheetType) {
                     case Importexport::PRODUCT_CATALOG:
                         $sheetName = Labels::getLabel('LBL_Products_catalog_Error', $langId);
@@ -439,7 +504,7 @@ class Importexport extends ImportexportCommon
                         break;
                 }
                 break;
-            case Importexport::TYPE_SELLER_PRODUCTS:
+            case Importexport::TYPE_INVENTORIES:
                 switch ($sheetType) {
                     case Importexport::SELLER_PROD_GENERAL_DATA:
                         $sheetName = Labels::getLabel('LBL_Seller_Product_General_Data_Error', $langId);
@@ -490,18 +555,10 @@ class Importexport extends ImportexportCommon
                 }
                 break;
             case Importexport::TYPE_OPTIONS:
-                switch ($sheetType) {
-                    case Importexport::PRODUCT_CATALOG:
-                        $sheetName = Labels::getLabel('LBL_Options_Error', $langId);
-                        $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
-                        $this->importOptions($csvFilePointer, $post, $langId);
-                        break;
-                    case Importexport::PRODUCT_OPTION:
-                        $sheetName = Labels::getLabel('LBL_Option_Values_Error', $langId);
-                        $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
-                        $this->importOptionValues($csvFilePointer, $post, $langId);
-                        break;
-                }
+                $sheetName = Labels::getLabel('LBL_Options_Error', $langId);
+                $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
+                $this->importOptions($csvFilePointer, $post, $langId);
+                break;
                 break;
             case Importexport::TYPE_OPTION_VALUES:
                 $sheetName = Labels::getLabel('LBL_Option_Values_Error', $langId);
@@ -559,6 +616,7 @@ class Importexport extends ImportexportCommon
                 $this->importCategoryMedia($csvFilePointer, $post, $langId);
                 break;
             case Importexport::TYPE_PRODUCTS:
+            case Importexport::TYPE_SELLER_PRODUCTS:
                 $sheetName = Labels::getLabel('LBL_Product_Catalog_Media_Error', $langId);
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
                 $this->importProductCatalogMedia($csvFilePointer, $post, $langId, $userId);
@@ -582,7 +640,8 @@ class Importexport extends ImportexportCommon
         }
 
         $srch = ProductCategory::getSearchObject(false, $langId, false);
-        $srch->addMultipleFields(array('prodcat_id', 'prodcat_identifier', 'prodcat_parent', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'prodcat_description', 'prodcat_featured', 'prodcat_active', 'prodcat_deleted', 'prodcat_display_order'));
+        $srch->addOrder('m.prodcat_active', 'DESC');
+        $srch->addMultipleFields(array('prodcat_id', 'prodcat_identifier', 'prodcat_parent', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'prodcat_description', 'prodcat_featured', 'prodcat_active', 'prodcat_status', 'prodcat_deleted', 'prodcat_display_order'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('prodcat_id', 'asc');
@@ -595,7 +654,7 @@ class Importexport extends ImportexportCommon
 
         /* Sheet Heading Row [ */
         $headingsArr = $this->getCategoryColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -603,7 +662,7 @@ class Importexport extends ImportexportCommon
             foreach ($headingsArr as $columnKey => $heading) {
                 $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
 
-                if (in_array($columnKey, array('prodcat_featured', 'prodcat_active', 'prodcat_deleted')) && !$this->settings['CONF_USE_O_OR_1']) {
+                if (in_array($columnKey, array('prodcat_featured', 'prodcat_active', 'prodcat_status', 'prodcat_deleted')) && !$this->settings['CONF_USE_O_OR_1']) {
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
                 }
 
@@ -624,6 +683,7 @@ class Importexport extends ImportexportCommon
     public function exportCategoryMedia($langId)
     {
         $srch = ProductCategory::getSearchObject(false, false, false);
+        $srch->addOrder('m.prodcat_active', 'DESC');
         $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'prodcat_id = afile_record_id and ( afile_type = ' . AttachedFile::FILETYPE_CATEGORY_ICON . ' or afile_type = ' . AttachedFile::FILETYPE_CATEGORY_BANNER . ')');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -633,7 +693,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getCategoryMediaColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         $languageCodes = Language::getAllCodesAssoc(true);
@@ -688,12 +748,16 @@ class Importexport extends ImportexportCommon
                     $err = array($rowIndex, ($colIndex + 1), $errMsg);
                     CommonHelper::writeToCSVFile($this->CSVfileObj, $err);
                 } else {
-                    if (in_array($columnKey, array('prodcat_featured', 'prodcat_active', 'prodcat_deleted', 'prodcat_display_order'))) {
+                    if (in_array($columnKey, array('prodcat_featured', 'prodcat_active', 'prodcat_status', 'prodcat_deleted'))) {
                         if ($this->settings['CONF_USE_O_OR_1']) {
                             $colValue = (FatUtility::int($colValue) == 1) ? applicationConstants::YES : applicationConstants::NO;
                         } else {
                             $colValue = (strtoupper($colValue) == 'YES') ? applicationConstants::YES : applicationConstants::NO;
                         }
+                    }
+
+                    if ('prodcat_display_order' == $columnKey) {
+                        $colValue = FatUtility::int($colValue);
                     }
 
                     if ('prodcat_parent_identifier' == $columnKey) {
@@ -728,13 +792,16 @@ class Importexport extends ImportexportCommon
                     }
                 }
 
+                $categoryId = 0;
                 if ($this->settings['CONF_USE_CATEGORY_ID']) {
                     $categoryId = $prodCatDataArr['prodcat_id'];
                     $categoryData = ProductCategory::getAttributesById($categoryId, array('prodcat_id'));
                 } else {
                     $identifier = $prodCatDataArr['prodcat_identifier'];
                     $categoryData = ProductCategory::getAttributesByIdentifier($identifier, array('prodcat_id'));
-                    $categoryId = $categoryData['prodcat_id'];
+                    if ($categoryData != false) {
+                        $categoryId = $categoryData['prodcat_id'];
+                    }
                 }
 
                 if (!$this->isDefaultSheetData($langId)) {
@@ -750,14 +817,14 @@ class Importexport extends ImportexportCommon
                 if (!empty($categoryData) && $categoryData['prodcat_id']) {
                     $where = array('smt' => 'prodcat_id = ?', 'vals' => array($categoryId));
                     $this->db->updateFromArray(ProductCategory::DB_TBL, $prodCatDataArr, $where);
-                } else {
+                } elseif (false === $errInSheet) {
                     if ($this->isDefaultSheetData($langId)) {
                         $this->db->insertFromArray(ProductCategory::DB_TBL, $prodCatDataArr);
                         $categoryId = $this->db->getInsertId();
                     }
                 }
 
-                if ($categoryId) {
+                if (0 < $categoryId) {
                     /* Lang Data [*/
                     $langData = array(
                         'prodcatlang_prodcat_id' => $categoryId,
@@ -788,7 +855,7 @@ class Importexport extends ImportexportCommon
                 $errInSheet = true;
             }
         }
-        
+
         $ProductCategory = new ProductCategory();
         $ProductCategory->updateCatCode();
         // Close File
@@ -796,8 +863,9 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
+
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
             FatUtility::dieJsonError($success);
@@ -939,7 +1007,7 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -973,7 +1041,7 @@ class Importexport extends ImportexportCommon
 
         /* Sheet Heading Row [ */
         $headingsArr = $this->getBrandColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
         // $data = $this->db->fetchAll($rs);
 
@@ -1044,7 +1112,7 @@ class Importexport extends ImportexportCommon
                     }
                 }
             }
-
+            $brandId = 0;
             if (false === $errorInRow && count($brandDataArr)) {
                 if ($this->settings['CONF_USE_BRAND_ID']) {
                     $brandId = $brandDataArr['brand_id'];
@@ -1052,10 +1120,12 @@ class Importexport extends ImportexportCommon
                 } else {
                     $identifier = $brandDataArr['brand_identifier'];
                     $brandData = Brand::getAttributesByIdentifier($identifier, array('brand_id'));
-                    $brandId = $brandData['brand_id'];
+                    if ($brandData !== false) {
+                        $brandId = $brandData['brand_id'];
+                    }
                 }
 
-                if (!empty($brandData) && $brandData['brand_id']) {
+                if (!empty($brandData) && $brandId > 0) {
                     $where = array('smt' => 'brand_id = ?', 'vals' => array($brandId));
                     $this->db->updateFromArray(Brand::DB_TBL, $brandDataArr, $where);
                 } else {
@@ -1097,7 +1167,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -1110,7 +1180,7 @@ class Importexport extends ImportexportCommon
     public function exportBrandMedia($langId)
     {
         $srch = Brand::getSearchObject();
-        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'brand_id = afile_record_id');
+        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'brand_id = afile_record_id AND ( afile_type = ' . AttachedFile::FILETYPE_BRAND_LOGO . ' OR afile_type = ' . AttachedFile::FILETYPE_BRAND_IMAGE . ')');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('brand_id', 'brand_identifier', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_screen', 'afile_physical_path', 'afile_name', 'afile_display_order', 'afile_type'));
@@ -1120,7 +1190,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getBrandMediaColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         $languageCodes = Language::getAllCodesAssoc(true);
@@ -1297,7 +1367,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -1307,7 +1377,7 @@ class Importexport extends ImportexportCommon
         FatUtility::dieJsonSuccess($success);
     }
 
-    public function exportProductsCatalog($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
+    private function exportProductsCatalog($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
     {
         $userId = FatUtility::int($userId);
         $useProductId = false;
@@ -1366,9 +1436,24 @@ class Importexport extends ImportexportCommon
         //$srch->joinTable(Countries::DB_TBL,'LEFT OUTER JOIN','c.country_id = tp.product_ship_country','c');
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(['tp.*', 'tp_l.*', 'ps.ps_from_country_id', 'ps.ps_free', 'user_id', 'credential_username', 'brand_id', 'brand_identifier', 'country_id', 'country_code', 'product_warranty', 'sppro.shippro_shipprofile_id']);
-        if ($userId) {
-            $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
-            $cnd->attachCondition('tp.product_seller_id', '=', 0);
+
+        switch ($this->actionType) {
+            case self::ACTION_ADMIN_PRODUCTS:
+                $srch->addCondition('tp.product_added_by_admin_id', '>', 0);
+                break;
+            case self::ACTION_SELLER_PRODUCTS:
+                if ($userId) {
+                    $srch->addCondition('tp.product_seller_id', '=', $userId);
+                } else {
+                    $srch->addCondition('tp.product_seller_id', '>', 0);
+                }
+                break;
+            default:
+                if ($userId) {
+                    $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
+                    $cnd->attachCondition('tp.product_seller_id', '=', 0);
+                }
+                break;
         }
 
         if (isset($offset) && isset($noOfRows)) {
@@ -1387,8 +1472,8 @@ class Importexport extends ImportexportCommon
 
         $sheetData = array();
         /* Sheet Heading Row [ */
-        $headingsArr = $this->getProductsCatalogColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        $headingsArr = $this->getProductsCatalogColoumArr($langId, $userId, $this->actionType);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -1403,6 +1488,23 @@ class Importexport extends ImportexportCommon
 
                 if (in_array($columnKey, array('brand_featured', 'brand_active')) && !$this->settings['CONF_USE_O_OR_1']) {
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
+                }
+
+                if ('product_fulfillment_type' == $columnKey) {
+                    switch ($colValue) {
+                        case Shipping::FULFILMENT_SHIP:
+                            $colValue = Labels::getLabel('LBL_SHIPPED_ONLY', $langId);
+                            break;
+                        case Shipping::FULFILMENT_PICKUP:
+                            $colValue = Labels::getLabel('LBL_PICKUP_ONLY', $langId);
+                            break;
+                        case Shipping::FULFILMENT_ALL:
+                            $colValue = Labels::getLabel('LBL_SHIPPED_AND_PICKUP', $langId);
+                            break;
+                        default:
+                            $colValue = Labels::getLabel('LBL_SHIPPED_ONLY', $langId);
+                            break;
+                    }
                 }
 
                 if (in_array($columnKey, array('category_Id', 'category_indentifier'))) {
@@ -1436,6 +1538,10 @@ class Importexport extends ImportexportCommon
 
                 if ('shipping_profile_identifier' == $columnKey) {
                     $colValue = (!empty($row['shippro_shipprofile_id']) && array_key_exists($row['shippro_shipprofile_id'], $shippingProfiles) ? $shippingProfiles[$row['shippro_shipprofile_id']] : '');
+                }
+
+                if ('shipping_profile_id' == $columnKey) {
+                    $colValue = (!empty($row['shippro_shipprofile_id']) ? $row['shippro_shipprofile_id'] : '');
                 }
 
                 /* if ('product_dimension_unit_identifier' == $columnKey) {
@@ -1474,9 +1580,7 @@ class Importexport extends ImportexportCommon
             $prodTypeIdentifierArr = $this->array_change_key_case_unicode(array_flip($prodTypeIdentifierArr), CASE_LOWER);
         }
 
-        if (!$this->settings['CONF_USE_SHIPPING_PROFILE_ID']) {
-            $shippingProfiles = $this->getShippingProfileArr(false);
-        }
+        $shippingProfiles = $this->getShippingProfileArr($this->settings['CONF_USE_SHIPPING_PROFILE_ID']);
 
         if (!$this->settings['CONF_USE_SHIPPING_PACKAGE_ID']) {
             $shippingPackages = $this->getShippingPackageArr();
@@ -1495,34 +1599,35 @@ class Importexport extends ImportexportCommon
 
         $shippingProfileArr = ShippingProfile::getProfileArr(0, true, true, true);
         $adminDefaultShipProfileId =  array_key_first($shippingProfileArr);
-
-        $coloumArr = $this->getProductsCatalogColoumArr($langId, $sellerId);
+        $coloumArr = $this->getProductsCatalogColoumArr($langId, $sellerId, $this->actionType);
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
 
         $errInSheet = false;
-        $prodType = PRODUCT::PRODUCT_TYPE_PHYSICAL;
+        $prodType = Product::PRODUCT_TYPE_PHYSICAL;
         while (($row = $this->getFileRow($csvFilePointer)) !== false) {
             $rowIndex++;
             $prodDataArr = $prodlangDataArr = $categoryIds = $prodShippingArr = array();
             $errorInRow = $taxCatId = false;
-
+            $productId = 0;
             $breakForeach = false;
             foreach ($coloumArr as $columnKey => $columnTitle) {
                 $colIndex = $this->headingIndexArr[$columnTitle];
                 $colValue = $this->getCell($row, $colIndex, '');
 
-                if ($this->settings['CONF_USE_PRODUCT_TYPE_ID']) {
-                    $productTypeTitle = $coloumArr['product_type'];
-                    $prodType = mb_strtolower($this->getCell($row, $this->headingIndexArr[$productTypeTitle], ''));
-                } else {
-                    $productTypeTitle = $coloumArr['product_type_identifier'];
-                    $prodType = mb_strtolower($this->getCell($row, $this->headingIndexArr[$productTypeTitle], ''));
-                    $prodType = (array_key_exists($prodType, $prodTypeIdentifierArr) ? $prodTypeIdentifierArr[$prodType] : 0);
+                if ($this->isDefaultSheetData($langId)) {
+                    if ($this->settings['CONF_USE_PRODUCT_TYPE_ID']) {
+                        $productTypeTitle = $coloumArr['product_type'];
+                        $prodType = mb_strtolower($this->getCell($row, $this->headingIndexArr[$productTypeTitle], ''));
+                    } else {
+                        $productTypeTitle = $coloumArr['product_type_identifier'];
+                        $prodType = mb_strtolower($this->getCell($row, $this->headingIndexArr[$productTypeTitle], ''));
+                        $prodType = (array_key_exists($prodType, $prodTypeIdentifierArr) ? $prodTypeIdentifierArr[$prodType] : 0);
+                    }
                 }
 
                 $invalid = $errMsg = false;
 
-                if ($this->isDefaultSheetData($langId) && in_array($columnKey, array('product_seller_id', 'credential_username', 'product_id', 'product_identifier'))) {
+                if ($this->isDefaultSheetData($langId) && $this->actionType != Importexport::ACTION_ADMIN_PRODUCTS && in_array($columnKey, array('product_seller_id', 'credential_username'))) {
                     if ($this->settings['CONF_USE_USER_ID']) {
                         $colTitle = ('product_seller_id' != $columnKey) ? $coloumArr['product_seller_id'] : $columnTitle;
                         $colInd = $this->headingIndexArr[$colTitle];
@@ -1559,7 +1664,6 @@ class Importexport extends ImportexportCommon
                             $colValue = $userId;
                         }
                     }
-
                     if (0 < $sellerId && ($sellerId != $userId || 1 > $userId)) {
                         $colIndex = $colInd;
                         $errMsg = Labels::getLabel("MSG_Sorry_you_are_not_authorized_to_update_this_product.", $langId);
@@ -1568,7 +1672,7 @@ class Importexport extends ImportexportCommon
 
                     if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && in_array($columnKey, array('credential_username', 'product_seller_id')) && 0 < $userId) {
                         if (!array_key_exists($userId, $userProdUploadLimit)) {
-                            $userProdUploadLimit[$userId] = SellerPackages::getAllowedLimit($userId, $langId, 'spackage_products_allowed');
+                            $userProdUploadLimit[$userId] = SellerPackages::getAllowedLimit($userId, $langId, 'ossubs_products_allowed');
                         }
                     }
                 }
@@ -1595,16 +1699,17 @@ class Importexport extends ImportexportCommon
                                     }
                                 }
 
-                                $prodDataArr['product_id'] = $colValue;
+                                $productId = $prodDataArr['product_id'] = $colValue;
 
                                 $prodData = Product::getAttributesById($colValue, array('product_id', 'product_seller_id', 'product_featured', 'product_approved'));
                             }
                             break;
                         case 'product_identifier':
                             $prodData = Product::getAttributesByIdentifier($colValue, array('product_id', 'product_seller_id', 'product_featured', 'product_approved'));
-                            if ($sellerId && !empty($prodData) && $prodData['product_seller_id'] != $sellerId) {
+                            if ($sellerId && is_array($prodData) && !empty($prodData) && $prodData['product_seller_id'] != $sellerId) {
                                 $invalid = true;
                             }
+                            $productId = false == $prodData ? 0 : $prodData['product_id'];
                             break;
                         case 'product_seller_id':
                             $colValue = 0;
@@ -1697,6 +1802,9 @@ class Importexport extends ImportexportCommon
                             }
                             $taxCatId = isset($taxCategoryArr[$colValue]) ? $taxCategoryArr[$colValue] : 0;
                             break;
+                        case 'product_ship_package_id':
+                            $columnKey = 'product_ship_package';
+                            break;
                         case 'product_ship_package_identifier':
                             $columnKey = 'product_ship_package';
                             if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
@@ -1707,6 +1815,12 @@ class Importexport extends ImportexportCommon
                                 } else {
                                     $colValue = $shippingPackages[$colValue];
                                 }
+                            }
+                            break;
+                        case 'shipping_profile_id':
+                            $columnKey = 'shippro_shipprofile_id';
+                            if (!array_key_exists($colValue, $shippingProfiles)) {
+                                $invalid = true;
                             }
                             break;
                         case 'shipping_profile_identifier':
@@ -1728,7 +1842,7 @@ class Importexport extends ImportexportCommon
                             break;
                         case 'product_dimension_unit_identifier':
                             $columnKey = 'product_dimension_unit';
-                            if (FatApp::getConfig('CONF_PRODUCT_DIMENSIONS_ENABLE', FatUtility::VAR_INT, 0) && $prodType == PRODUCT::PRODUCT_TYPE_PHYSICAL) {
+                            if (FatApp::getConfig('CONF_PRODUCT_DIMENSIONS_ENABLE', FatUtility::VAR_INT, 0) && $prodType == Product::PRODUCT_TYPE_PHYSICAL) {
                                 if (!array_key_exists($colValue, $lengthUnitsArr)) {
                                     $invalid = true;
                                 } else {
@@ -1740,11 +1854,11 @@ class Importexport extends ImportexportCommon
 
                             break;
                         case 'product_weight_unit_identifier':
+                            $columnKey = 'product_weight_unit';
                             if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
                                 $colValue = '';
                             } else {
-                                $columnKey = 'product_weight_unit';
-                                if (FatApp::getConfig('CONF_PRODUCT_DIMENSIONS_ENABLE', FatUtility::VAR_INT, 0) && $prodType == PRODUCT::PRODUCT_TYPE_PHYSICAL) {
+                                if (FatApp::getConfig('CONF_PRODUCT_DIMENSIONS_ENABLE', FatUtility::VAR_INT, 0) && $prodType == Product::PRODUCT_TYPE_PHYSICAL) {
                                     if (!array_key_exists($colValue, $weightUnitsArr)) {
                                         $invalid = true;
                                     } else {
@@ -1773,6 +1887,25 @@ class Importexport extends ImportexportCommon
                             if (0 > $colValue) {
                                 $invalid = true;
                             }
+                            break;
+                        case 'product_fulfillment_type':
+                            $colValue = str_replace(' ', '_', mb_strtolower($colValue));
+                            switch ($colValue) {
+                                case 'shipped_only':
+                                    $colValue = Shipping::FULFILMENT_SHIP;
+                                    break;
+                                case 'pickup_only':
+                                    $colValue = Shipping::FULFILMENT_PICKUP;
+                                    break;
+                                case 'shipped_and_pickup':
+                                    $colValue = Shipping::FULFILMENT_ALL;
+                                    break;
+                                default:
+                                    $colValue = Shipping::FULFILMENT_SHIP;
+                                    break;
+                            }
+                            $productId = FatUtility::int($productId);
+                            $colValue = Product::setProductFulfillmentType($productId, $sellerId, $colValue);
                             break;
                     }
 
@@ -1805,22 +1938,19 @@ class Importexport extends ImportexportCommon
             }
 
             if (false === $errorInRow && count($prodDataArr)) {
-                $prodDataArr['product_added_on'] = date('Y-m-d H:i:s');;
+                $prodDataArr['product_added_on'] = date('Y-m-d H:i:s');
                 $prodDataArr['product_added_by_admin_id'] = (1 > $userId) ? applicationConstants::YES : applicationConstants::NO;
-
                 $shippro_shipprofile_id = 0;
                 if (array_key_exists('shippro_shipprofile_id', $prodDataArr)) {
                     $shippro_shipprofile_id = $prodDataArr['shippro_shipprofile_id'];
                     unset($prodDataArr['shippro_shipprofile_id']);
                 }
-
                 $newRecord = false;
                 if (!empty($prodData) && $prodData['product_id'] && (!$sellerId || ($sellerId && $prodData['product_seller_id'] == $sellerId))) {
                     unset($prodData['product_seller_id']);
                     $productId = $prodData['product_id'];
 
                     if ($sellerId) {
-                        $prodDataArr['product_featured'] = $prodData['product_featured'];
                         $prodDataArr['product_approved'] = $prodData['product_approved'];
                         unset($prodDataArr['product_added_on']);
                     }
@@ -1830,7 +1960,6 @@ class Importexport extends ImportexportCommon
                         CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
                         continue;
                     }
-
                     $where = array('smt' => 'product_id = ?', 'vals' => array($productId));
                     $this->db->updateFromArray(Product::DB_TBL, $prodDataArr, $where);
 
@@ -1891,7 +2020,6 @@ class Importexport extends ImportexportCommon
 
                 if (!empty($productId)) {
                     $prodSepc['ps_product_id'] = $productId;
-
                     $productSpecificsObj = new ProductSpecifics($productId);
                     $productSpecificsObj->assignValues($prodSepc);
                     $prodSepcData = $productSpecificsObj->getFlds();
@@ -1919,18 +2047,18 @@ class Importexport extends ImportexportCommon
                                 $prodShippingArr['ps_from_country_id'] = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
                                 $prodShippingArr['ps_free'] = 0;
                                 $productSellerShiping = array_merge($productSellerShiping, $prodShippingArr);
-                                FatApp::getDb()->insertFromArray(PRODUCT::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping);
+                                FatApp::getDb()->insertFromArray(Product::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping);
                             }
                         }
-
                         if ($shippro_shipprofile_id > 0) {
                             $shipProProdData = array(
                                 'shippro_shipprofile_id' => $shippro_shipprofile_id,
                                 'shippro_product_id' => $productId,
                                 'shippro_user_id' => $shippedByUserId
                             );
+
                             $productSellerShiping = array_merge($productSellerShiping, $prodShippingArr);
-                            FatApp::getDb()->insertFromArray(PRODUCT::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping);
+                            FatApp::getDb()->insertFromArray(Product::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping);
                         }
 
                         if (!empty($shipProProdData)) {
@@ -1983,7 +2111,7 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
 
         if ($errInSheet) {
@@ -1995,7 +2123,7 @@ class Importexport extends ImportexportCommon
         FatUtility::dieJsonSuccess($success);
     }
 
-    public function exportProductOptions($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
+    private function exportProductOptions($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
     {
         $userId = FatUtility::int($userId);
         $srch = Product::getSearchObject();
@@ -2003,9 +2131,23 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . Product::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
         $srch->addMultipleFields(array('option_id', 'option_identifier', 'product_id', 'product_identifier'));
         $srch->doNotCalculateRecords();
-        if ($userId) {
-            $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
-            $cnd->attachCondition('tp.product_seller_id', '=', 0);
+        switch ($this->actionType) {
+            case self::ACTION_ADMIN_PRODUCTS:
+                $srch->addCondition('tp.product_added_by_admin_id', '>', 0);
+                break;
+            case self::ACTION_SELLER_PRODUCTS:
+                if ($userId) {
+                    $srch->addCondition('tp.product_seller_id', '=', $userId);
+                } else {
+                    $srch->addCondition('tp.product_seller_id', '>', 0);
+                }
+                break;
+            default:
+                if ($userId) {
+                    $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
+                    $cnd->attachCondition('tp.product_seller_id', '=', 0);
+                }
+                break;
         }
 
         if (isset($offset) && isset($noOfRows)) {
@@ -2025,7 +2167,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getProductOptionColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -2132,7 +2274,7 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -2143,7 +2285,7 @@ class Importexport extends ImportexportCommon
         FatUtility::dieJsonSuccess($success);
     }
 
-    public function exportProductTags($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
+    private function exportProductTags($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
     {
         $userId = FatUtility::int($userId);
         $srch = Product::getSearchObject();
@@ -2151,9 +2293,23 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', Tag::DB_TBL_PREFIX . 'id = ' . Product::DB_PRODUCT_TO_TAG_PREFIX . 'tag_id');
         $srch->addMultipleFields(array('tag_id', 'tag_identifier', 'product_id', 'product_identifier'));
         $srch->doNotCalculateRecords();
-        if ($userId) {
-            $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
-            $cnd->attachCondition('tp.product_seller_id', '=', 0);
+        switch ($this->actionType) {
+            case self::ACTION_ADMIN_PRODUCTS:
+                $srch->addCondition('tp.product_added_by_admin_id', '>', 0);
+                break;
+            case self::ACTION_SELLER_PRODUCTS:
+                if ($userId) {
+                    $srch->addCondition('tp.product_seller_id', '=', $userId);
+                } else {
+                    $srch->addCondition('tp.product_seller_id', '>', 0);
+                }
+                break;
+            default:
+                if ($userId) {
+                    $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
+                    $cnd->attachCondition('tp.product_seller_id', '=', 0);
+                }
+                break;
         }
 
         if (isset($offset) && isset($noOfRows)) {
@@ -2172,7 +2328,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getProductTagColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -2281,7 +2437,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -2291,7 +2447,7 @@ class Importexport extends ImportexportCommon
         FatUtility::dieJsonSuccess($success);
     }
 
-    public function exportProductSpecification($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
+    private function exportProductSpecification($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
     {
         $userId = FatUtility::int($userId);
         $srch = Product::getSearchObject();
@@ -2300,9 +2456,23 @@ class Importexport extends ImportexportCommon
         $srch->addMultipleFields(array('prodspec_id', 'prodspeclang_lang_id', 'prodspec_name', 'prodspec_value', 'prodspec_group', 'product_id', 'product_identifier'));
         $srch->joinTable(Language::DB_TBL, 'INNER JOIN', 'language_id = prodspeclang_lang_id');
         $srch->doNotCalculateRecords();
-        if ($userId) {
-            $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
-            $cnd->attachCondition('tp.product_seller_id', '=', 0);
+        switch ($this->actionType) {
+            case self::ACTION_ADMIN_PRODUCTS:
+                $srch->addCondition('tp.product_added_by_admin_id', '>', 0);
+                break;
+            case self::ACTION_SELLER_PRODUCTS:
+                if ($userId) {
+                    $srch->addCondition('tp.product_seller_id', '=', $userId);
+                } else {
+                    $srch->addCondition('tp.product_seller_id', '>', 0);
+                }
+                break;
+            default:
+                if ($userId) {
+                    $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'OR');
+                    $cnd->attachCondition('tp.product_seller_id', '=', 0);
+                }
+                break;
         }
 
         if (isset($offset) && isset($noOfRows)) {
@@ -2327,7 +2497,7 @@ class Importexport extends ImportexportCommon
         /* Sheet Heading Row [ */
         $headingsArr = $this->getProductSpecificationColoumArr($langId);
 
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
         $languageCodes = Language::getAllCodesAssoc();
 
@@ -2471,7 +2641,7 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -2481,7 +2651,7 @@ class Importexport extends ImportexportCommon
         FatUtility::dieJsonSuccess($success);
     }
 
-    public function exportProductShipping($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
+    private function exportProductShipping($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
     {
         $userId = FatUtility::int($userId);
         $srch = Product::getSearchObject();
@@ -2494,8 +2664,22 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tpsr.pship_user_id = uc.credential_user_id', 'uc');
         $srch->addMultipleFields(array('product_id', 'product_identifier', 'scompany_id', 'scompany_identifier', 'shippingapi_id', 'shippingapi_identifier', 'sduration_id', 'sduration_identifier', 'user_id', 'credential_username', 'country_id', 'country_code', 'pship_charges', 'pship_additional_charges'));
         $srch->doNotCalculateRecords();
-        if ($userId) {
-            $srch->addDirectCondition("( ( tp.product_seller_id = '" . $userId . "' and (tpsr.pship_user_id = '" . $userId . "' or tpsr.pship_user_id = 0)) or (tp.product_seller_id = 0 and (tpsr.pship_user_id = '" . $userId . "' or tpsr.pship_user_id = 0)))");
+        switch ($this->actionType) {
+            case self::ACTION_ADMIN_PRODUCTS:
+                $srch->addDirectCondition("( tp.product_seller_id = 0 and tpsr.pship_user_id = 0)");
+                break;
+            case self::ACTION_SELLER_PRODUCTS:
+                if ($userId) {
+                    $srch->addDirectCondition("( ( tp.product_seller_id = '" . $userId . "' and (tpsr.pship_user_id = '" . $userId . "' or tpsr.pship_user_id = 0)) )");
+                } else {
+                    $srch->addDirectCondition("( ( tp.product_seller_id > 0 and (tpsr.pship_user_id > 0 or tpsr.pship_user_id = 0)))");
+                }
+                break;
+            default:
+                if ($userId) {
+                    $srch->addDirectCondition("( ( tp.product_seller_id = '" . $userId . "' and (tpsr.pship_user_id = '" . $userId . "' or tpsr.pship_user_id = 0)) or (tp.product_seller_id = 0 and (tpsr.pship_user_id = '" . $userId . "' or tpsr.pship_user_id = 0)))");
+                }
+                break;
         }
 
         if (isset($offset) && isset($noOfRows)) {
@@ -2515,7 +2699,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getProductShippingColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -2717,7 +2901,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -2727,7 +2911,7 @@ class Importexport extends ImportexportCommon
         FatUtility::dieJsonSuccess($success);
     }
 
-    public function exportProductMedia($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
+    public function exportProductMedia($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null, $type = 0)
     {
         $userId = FatUtility::int($userId);
         $srch = Product::getSearchObject();
@@ -2736,8 +2920,10 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(Option::DB_TBL, 'LEFT OUTER JOIN', 'o.option_id = ov.optionvalue_option_id', 'o');
         $srch->doNotCalculateRecords();
         if ($userId) {
-            $cnd = $srch->addCondition('tp.product_seller_id', '=', $userId, 'AND');
-            $cnd->attachCondition('tp.product_seller_id', '=', 0);
+            $srch->addCondition('tp.product_seller_id', '=', $userId);
+        } else {
+            $opr = $type == Importexport::TYPE_SELLER_PRODUCTS ? '>' : '=';
+            $srch->addCondition('tp.product_seller_id', $opr, 0);
         }
 
         if (isset($offset) && isset($noOfRows)) {
@@ -2754,11 +2940,10 @@ class Importexport extends ImportexportCommon
 
         $srch->addMultipleFields(array('product_id', 'product_identifier', 'afile_record_id', 'afile_record_subid', 'afile_type', 'afile_lang_id', 'afile_screen', 'afile_physical_path', 'afile_name', 'afile_display_order', 'optionvalue_identifier', 'option_identifier', 'optionvalue_id', 'option_id'));
         $rs = $srch->getResultSet();
-
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getProductMediaColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         $languageCodes = Language::getAllCodesAssoc(true);
@@ -2986,7 +3171,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -3031,7 +3216,7 @@ class Importexport extends ImportexportCommon
 
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdMediaColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         $languageCodes = Language::getAllCodesAssoc(true);
@@ -3084,7 +3269,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdGeneralColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         $conditionArr = Product::getConditionArr($langId);
@@ -3105,6 +3290,23 @@ class Importexport extends ImportexportCommon
                 }
                 if (in_array($columnKey, array('selprod_subtract_stock', 'selprod_track_inventory', 'selprod_active', 'selprod_cod_enabled', 'selprod_deleted')) && !$this->settings['CONF_USE_O_OR_1']) {
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
+                }
+
+                if ('selprod_fulfillment_type' == $columnKey) {
+                    switch ($colValue) {
+                        case Shipping::FULFILMENT_SHIP:
+                            $colValue = Labels::getLabel('LBL_SHIPPED_ONLY', $langId);
+                            break;
+                        case Shipping::FULFILMENT_PICKUP:
+                            $colValue = Labels::getLabel('LBL_PICKUP_ONLY', $langId);
+                            break;
+                        case Shipping::FULFILMENT_ALL:
+                            $colValue = Labels::getLabel('LBL_SHIPPED_AND_PICKUP', $langId);
+                            break;
+                        default:
+                            $colValue = Labels::getLabel('LBL_SHIPPED_ONLY', $langId);
+                            break;
+                    }
                 }
 
                 $sheetData[] = $this->parseContentForExport($colValue);
@@ -3140,7 +3342,9 @@ class Importexport extends ImportexportCommon
 
             //if(array_key_exists($row['selprod_product_id'], $prodTypeArr))
             $selProdSepc = [];
+            $productId = 0;
             foreach ($coloumArr as $columnKey => $columnTitle) {
+                $checkOption = false;
                 $colIndex = $this->headingIndexArr[$columnTitle];
                 $colValue = $this->getCell($row, $colIndex, '');
                 $invalid = false;
@@ -3165,9 +3369,11 @@ class Importexport extends ImportexportCommon
                             break;
                         case 'selprod_product_id':
                             $productId = $colValue;
+                            $checkOption = true;
                             break;
                         case 'product_identifier':
                             $columnKey = 'selprod_product_id';
+
                             $colValue = mb_strtolower($colValue);
                             if (!array_key_exists($colValue, $prodIndetifierArr)) {
                                 $res = $this->array_change_key_case_unicode($this->getAllProductsIdentifiers(false, $colValue), CASE_LOWER);
@@ -3177,7 +3383,9 @@ class Importexport extends ImportexportCommon
                                     $prodIndetifierArr = $prodIndetifierArr + $res;
                                 }
                             }
+
                             $productId = $colValue = array_key_exists($colValue, $prodIndetifierArr) ? $prodIndetifierArr[$colValue] : 0;
+                            $checkOption = true;
                             break;
                         case 'selprod_user_id':
                             $userId = $colValue;
@@ -3201,7 +3409,7 @@ class Importexport extends ImportexportCommon
                             $prodConditions = $this->array_change_key_case_unicode($prodConditionArr, CASE_LOWER);
                             $colValue = array_key_exists($colValue, $prodConditions) ? $prodConditions[$colValue] : 0;
                             $productType = Product::getAttributesById($productId, 'product_type');
-                            
+
                             if (0 < $productId && Product::PRODUCT_TYPE_PHYSICAL == $productType && 1 > $colValue) {
                                 $invalid = true;
                             }
@@ -3227,17 +3435,52 @@ class Importexport extends ImportexportCommon
                                 $invalid = true;
                             }
                             break;
+                        case 'selprod_fulfillment_type':
+                            $colValue = str_replace(' ', '_', mb_strtolower($colValue));
+                            switch ($colValue) {
+                                case 'shipped_only':
+                                    $colValue = Shipping::FULFILMENT_SHIP;
+                                    break;
+                                case 'pickup_only':
+                                    $colValue = Shipping::FULFILMENT_PICKUP;
+                                    break;
+                                case 'shipped_and_pickup':
+                                    $colValue = Shipping::FULFILMENT_ALL;
+                                    break;
+                                default:
+                                    $colValue = Shipping::FULFILMENT_SHIP;
+                                    break;
+                            }
+                            $colValue = SellerProduct::setSellerProdFulfillmentType($colValue);
+                            break;
                     }
+                    /* Check if inventory already added for the product without option [ */
+                    if (0 < $productId && true === $checkOption) {
+                        $srch = Product::getSearchObject();
+                        $srch->joinTable(Product::DB_PRODUCT_TO_OPTION, 'LEFT JOIN', 'product_id = prodoption_product_id', 'tpo');
+                        $srch->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'product_id = selprod_product_id', 'sp');
+                        $srch->addCondition('selprod_product_id', '=', $productId);
+                        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+                        $srch->addMultipleFields(array('selprod_product_id', 'selprod_id', 'prodoption_option_id'));
+                        $rs = $srch->getResultSet();
+                        $sellerProduct = FatApp::getDb()->fetch($rs);
+
+                        if (!empty($sellerProduct['selprod_id']) && $sellerProduct['selprod_id'] != $selprodId && empty($sellerProduct['prodoption_option_id'])) {
+                            $errMsg = Labels::getLabel("LBL_INVENTORY_ALREADY_ADDED", $langId);
+                            $invalid = true;
+                        }
+                    }
+                    /* ] */
 
                     if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && 0 < $userId) {
                         if (!array_key_exists($userId, $userProdUploadLimit)) {
-                            $userProdUploadLimit[$userId] = SellerPackages::getAllowedLimit($userId, $langId, 'spackage_inventory_allowed');
+                            $userProdUploadLimit[$userId] = SellerPackages::getAllowedLimit($userId, $langId, 'ossubs_inventory_allowed');
                         }
                     }
 
                     if (true === $invalid) {
                         $errorInRow = true;
-                        $errMsg = str_replace('{column-name}', $columnTitle, Labels::getLabel("MSG_Invalid_{column-name}.", $langId));
+                        $errMsg = !empty($errMsg) ? $errMsg : str_replace('{column-name}', $columnTitle, Labels::getLabel("MSG_Invalid_{column-name}.", $langId));
                         $err = array($rowIndex, ($colIndex + 1), $errMsg);
                         CommonHelper::writeToCSVFile($this->CSVfileObj, $err);
                     } else {
@@ -3247,6 +3490,9 @@ class Importexport extends ImportexportCommon
                             if ('' != $colValue) {
                                 $selProdSepc[$columnKey] = $colValue;
                             }
+                        } elseif (in_array($columnKey, array('selprod_subtract_stock', 'selprod_track_inventory',)) && !$this->settings['CONF_USE_O_OR_1']) {
+                            $colValue = ('yes' == strtolower($colValue)) ? 1 : 0;
+                            $selProdGenArr[$columnKey] = $colValue;
                         } else {
                             $selProdGenArr[$columnKey] = $colValue;
                         }
@@ -3256,13 +3502,34 @@ class Importexport extends ImportexportCommon
 
             $userId = (!$sellerId) ? $userId : $sellerId;
             $selProdGenArr['selprod_user_id'] = $userId;
-
             if (false === $errorInRow && count($selProdGenArr)) {
                 $prodData = Product::getAttributesById($productId, array('product_min_selling_price'));
 
-                if (array_key_exists('selprod_price', $selProdGenArr) && $selProdGenArr['selprod_price'] < $prodData['product_min_selling_price']) {
-                    $selProdGenArr['selprod_price'] = $prodData['product_min_selling_price'];
+                if (array_key_exists('selprod_price', $selProdGenArr)) {
+                    if (is_array($prodData) && array_key_exists('product_min_selling_price', $prodData) && $selProdGenArr['selprod_price'] < $prodData['product_min_selling_price']) {
+                        $selProdGenArr['selprod_price'] = $prodData['product_min_selling_price'];
+                    }
+
+                    $srch = new SearchBase(SellerProductSpecialPrice::DB_TBL);
+                    $srch->addCondition('splprice_selprod_id', '=', $selprodId);
+                    $srch->addCondition('splprice_price', '>=', $selProdGenArr['selprod_price']);
+                    $srch->addCondition('splprice_end_date', '>=', date('Y-m-d H:i:s'));
+                    $srch->addFld('splprice_price');
+                    $srch->addOrder('splprice_price', 'DESC');
+                    $srch->doNotCalculateRecords();
+                    $db = FatApp::getDb();
+                    $rs = $srch->getResultSet();
+                    $result = $db->fetch($rs);
+                    if (is_array($result) && !empty($result)) {
+                        $price =  CommonHelper::displayMoneyFormat($result['splprice_price']);
+                        $errMsg = Labels::getLabel('MSG_SELLING_PRICE_MUST_BE_GREATER_THAN_SPECIAL_PRICE_{SPECIAL-PRICE}', $langId);
+                        $errMsg = CommonHelper::replaceStringData($errMsg, ['{SPECIAL-PRICE}' => $price]);
+                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
+                        $errInSheet = true;
+                        continue;
+                    }
                 }
+
                 $selProdGenArr['selprod_added_on'] = date('Y-m-d H:i:s');
 
                 $selProdData = SellerProduct::getAttributesById($selprodId, array('selprod_id', 'selprod_sold_count', 'selprod_user_id'));
@@ -3278,9 +3545,9 @@ class Importexport extends ImportexportCommon
                     if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && 0 < $userId && SellerProduct::getActiveCount($userId, $selprodId) >= $userProdUploadLimit[$userId]) {
                         $errMsg = Labels::getLabel("MSG_You_have_crossed_your_package_limit.", $langId);
                         CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
+                        $errInSheet = true;
                         continue;
                     }
-
                     $this->db->updateFromArray(SellerProduct::DB_TBL, $selProdGenArr, $where);
 
                     if ($sellerId && $this->isDefaultSheetData($langId)) {
@@ -3298,11 +3565,11 @@ class Importexport extends ImportexportCommon
                         unset($selProdGenArr['selprod_id']);
                         unset($selProdGenArr['selprod_sold_count']);
                     }
-
                     if ($this->isDefaultSheetData($langId)) {
                         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && 0 < $userId && SellerProduct::getActiveCount($userId) >= $userProdUploadLimit[$userId]) {
                             $errMsg = Labels::getLabel("MSG_You_have_crossed_your_package_limit.", $langId);
                             CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
+                            $errInSheet = true;
                             continue;
                         }
                         $this->db->insertFromArray(SellerProduct::DB_TBL, $selProdGenArr);
@@ -3326,6 +3593,7 @@ class Importexport extends ImportexportCommon
                         if (!$selProdSpecificsObj->addNew(array(), $selProdSepc)) {
                             $errMsg = $selProdSpecificsObj->getError();
                             CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
+                            $errInSheet = true;
                             continue;
                         }
                     }
@@ -3357,9 +3625,8 @@ class Importexport extends ImportexportCommon
         // Close File
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 
-
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -3401,7 +3668,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdOptionsColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -3570,7 +3837,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -3616,7 +3883,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdSeoColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -3720,7 +3987,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -3759,7 +4026,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdSpecialPriceColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
 
@@ -3788,7 +4055,9 @@ class Importexport extends ImportexportCommon
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
 
         $errInSheet = false;
+        $productArr = [];
         while (($row = $this->getFileRow($csvFilePointer)) !== false) {
+            $selProdId = 0;
             $rowIndex++;
 
             $sellerProdSplPriceArr = array();
@@ -3800,7 +4069,6 @@ class Importexport extends ImportexportCommon
                 $invalid = $errMsg = false;
 
                 $errMsg = SellerProduct::validateSplPriceFields($columnKey, $columnTitle, $colValue, $langId);
-
                 if (false !== $errMsg) {
                     $errorInRow = true;
                     $err = array($rowIndex, ($colIndex + 1), $errMsg);
@@ -3814,12 +4082,38 @@ class Importexport extends ImportexportCommon
                         if (!$selProdId) {
                             $invalid = true;
                         }
+
+                        if (0 < $selProdId && !array_key_exists($selProdId, $productArr)) {
+                            $prodSrch = new ProductSearch($langId);
+                            $prodSrch->joinSellerProducts($userId, '', array(), false);
+                            $prodSrch->addCondition('selprod_id', '=', $selProdId);
+                            $prodSrch->addMultipleFields(array('product_min_selling_price', 'selprod_price', 'selprod_available_from'));
+                            $prodSrch->setPageSize(1);
+                            $rs = $prodSrch->getResultSet();
+                            $productArr[$selProdId] = FatApp::getDb()->fetch($rs);
+                        }
+                    } else if ('splprice_price' == $columnKey) {
+                        if ($colValue < $productArr[$selProdId]['product_min_selling_price'] || $colValue >= $productArr[$selProdId]['selprod_price']) {
+                            $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $langId);
+                            $minSellingPrice = CommonHelper::displayMoneyFormat($productArr[$selProdId]['product_min_selling_price'], false, true, true);
+                            $sellingPrice = CommonHelper::displayMoneyFormat($productArr[$selProdId]['selprod_price'], false, true, true);
+
+                            $errMsg = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
+                            $invalid = true;
+                        }
+                    } else if ('splprice_start_date' == $columnKey) {
+                        if (strtotime($colValue) < strtotime($productArr[$selProdId]['selprod_available_from'])) {
+                            $str = Labels::getLabel('MSG_Special_Price_Date_Must_Be_Greater_Or_Than_Equal_To_{availablefrom}', $langId);
+                            $errMsg = CommonHelper::replaceStringData($str, array('{availablefrom}' => date('Y-m-d', strtotime($productArr[$selProdId]['selprod_available_from']))));
+                            $invalid = true;
+                        }
                     }
+
                     if (in_array($columnKey, array('splprice_start_date', 'splprice_end_date'))) {
                         $colValue = $this->getDateTime($colValue, false);
                     }
                     if (true === $invalid) {
-                        $errMsg = str_replace('{column-name}', $columnTitle, Labels::getLabel("MSG_Invalid_{column-name}.", $langId));
+                        $errMsg = !empty($errMsg) ? $errMsg : str_replace('{column-name}', $columnTitle, Labels::getLabel("MSG_Invalid_{column-name}.", $langId));
                         CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
                     } else {
                         $sellerProdSplPriceArr[$columnKey] = $colValue;
@@ -3852,7 +4146,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -3890,7 +4184,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdVolumeDiscountColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -3971,7 +4265,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -4009,7 +4303,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdBuyTogetherColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -4119,7 +4413,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -4157,7 +4451,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdRelatedProductColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -4207,6 +4501,15 @@ class Importexport extends ImportexportCommon
                         if (!$selProdId) {
                             $invalid = true;
                         }
+                    } elseif ('related_recommend_sellerproduct_id' == $columnKey) {
+                        $relSelProdId = $colValue;
+                        if (0 < $userId) {
+                            $relSelProdId = $colValue = $this->getCheckAndSetSelProdIdByTempId($relSelProdId, $userId);
+                        }
+
+                        if (1 > $relSelProdId) {
+                            $invalid = true;
+                        }
                     }
 
                     if (true === $invalid) {
@@ -4233,7 +4536,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -4272,7 +4575,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSelProdPolicyColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -4383,7 +4686,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -4411,7 +4714,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getOptionsColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         /* $optionTypeArr = Option::getOptionTypes($langId); */
@@ -4544,7 +4847,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -4575,7 +4878,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getOptionsValueColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -4711,7 +5014,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -4735,7 +5038,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getTagColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -4866,7 +5169,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -4899,7 +5202,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getCountryColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -5036,7 +5339,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -5076,7 +5379,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getStatesColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -5203,7 +5506,7 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -5228,7 +5531,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getPolicyPointsColoumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         $usePolicyPointId = false;
@@ -5359,7 +5662,7 @@ class Importexport extends ImportexportCommon
 
 
         if (CommonHelper::checkCSVFile($this->CSVfileName)) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($this->CSVfileName), CONF_WEBROOT_FRONTEND);
         }
         if ($errInSheet) {
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
@@ -5394,7 +5697,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getUsersColoumArr($langId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         $userTypeArr = User::getUserTypesArr($langId);
@@ -5408,13 +5711,13 @@ class Importexport extends ImportexportCommon
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
                 }
 
-                if ('urlrewrite_custom' == $columnKey) {
+                /* if ('urlrewrite_custom' == $columnKey) {
                     $colValue = isset($urlKeywords[ProductCategory::REWRITE_URL_PREFIX . $row['prodcat_id']]) ? $urlKeywords[ProductCategory::REWRITE_URL_PREFIX . $row['prodcat_id']] : '';
                 }
 
                 if ('prodcat_parent_identifier' == $columnKey) {
                     $colValue = array_key_exists($row['prodcat_parent'], $categoriesIdentifiers) ? $categoriesIdentifiers[$row['prodcat_parent']] : '';
-                }
+                } */
 
                 $sheetData[] = $this->parseContentForExport($colValue);
             }
@@ -5440,7 +5743,7 @@ class Importexport extends ImportexportCommon
         $sheetData = array();
         /* Sheet Heading Row [ */
         $headingsArr = $this->getSalesTaxColumArr($langId, $userId);
-        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
 
         while ($row = $this->db->fetch($rs)) {
@@ -5463,7 +5766,8 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
     }
 
-    public function array_change_key_case_unicode($arr, $c = MB_CASE_LOWER) {
+    public function array_change_key_case_unicode($arr, $c = MB_CASE_LOWER)
+    {
         $c = ($c == CASE_LOWER) ? MB_CASE_LOWER : MB_CASE_UPPER;
         $ret = [];
         foreach ($arr as $k => $v) {

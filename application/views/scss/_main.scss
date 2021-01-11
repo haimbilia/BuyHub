@@ -1,9 +1,10 @@
 @import "themes/theme";
-@import 'bootstrap/bootstrap';
+@import 'bootstrap/bootstrap.scss';
 @import 'bootstrap/variables';
 @import 'layout/header';
 @import 'layout/nav';
 @import 'layout/footer';
+@import 'components/main-search';
 @import 'components/accordion';
 @import 'components/categories';
 @import 'components/tagify';
@@ -103,9 +104,14 @@
 @import 'pages/packages';
 @import 'pages/payment';
 @import 'pages/order-completed';
+@import 'pages/collections';
 //@import 'pages/responsive';
 @import 'pages/seller';
 @import 'pages/shop';
 @import 'pages/testimonials';
 @import 'pages/sitemap';
 @import 'pages/rtl';
+//
+// custom-theme
+//
+//@import 'custom-theme/';

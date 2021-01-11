@@ -80,7 +80,7 @@ class ImageController extends FatController
         if ($file_row == false) {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $recordId, 0, $lang_id);
         }
-        $image_name = isset($file_row['afile_physical_path']) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
 
         switch (strtoupper($sizeType)) {
             case 'THUMB':
@@ -145,7 +145,7 @@ class ImageController extends FatController
             $srch->setPageNumber(1);
             $srch->setPageSize(1);
             /* $srch->addMultipleFields(array('selprod_id', 'selprod_product_id', 'selprodoption_option_id', 'afile_id', 'afile_record_id', 'afile_record_subid')); */
-            $srch->addMultipleFields(array( 'afile_id', 'afile_record_id', 'afile_record_subid'));
+            $srch->addMultipleFields(array('afile_id', 'afile_record_id', 'afile_record_subid'));
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             /* CommonHelper::printArray($row); die(); */
@@ -166,7 +166,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $recordId, -1, $lang_id);
         }
 
-        $image_name = isset($file_row['afile_physical_path']) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         /* CommonHelper::printArray($image_name); die();  */
 
         switch (strtoupper($sizeType)) {
@@ -207,8 +207,8 @@ class ImageController extends FatController
                 AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             case 'ORIGINAL':
-                $w = 2000;
-                $h = 2000;
+                $w = 1500;
+                $h = 1500;
                 AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             case 'FB_RECOMMEND':
@@ -252,7 +252,7 @@ class ImageController extends FatController
         switch (strtoupper($type)) {
             case 'MINI':
                 return AttachedFile::displayImage($img, 50, 50, 'promotions/', 'shop_default.jpg');
-            break;
+                break;
             default:
                 return AttachedFile::displayImage($img, 50, 50, $default_image);
         }
@@ -841,6 +841,22 @@ class ImageController extends FatController
         }
     }
 
+    public function metaImage($lang_id = 0, $sizeType = '')
+    {
+        $lang_id = FatUtility::int($lang_id);
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $lang_id);
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        $default_image = '';
+
+        switch (strtoupper($sizeType)) {
+            default:
+                $w = 600;
+                $h = 400;
+                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                break;
+        }
+    }
+
     public function firstPurchaseCoupon($lang_id = 0, $sizeType = '')
     {
         $lang_id = FatUtility::int($lang_id);
@@ -1211,10 +1227,10 @@ class ImageController extends FatController
             case 'THUMB':
                 $w = 100;
                 $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
+                AttachedFile::displayImage($image_name, $w, $h, 'seller-bg.png');
                 break;
             case 'DEFAULT':
-                AttachedFile::displayOriginalImage($image_name);
+                AttachedFile::displayOriginalImage($image_name, 'seller-bg.png');
                 break;
         }
     }

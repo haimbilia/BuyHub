@@ -1,9 +1,6 @@
 .header-supplier {
     .logo-bar {
         padding: 10px 0;
-        @include media-breakpoint-down(sm) {
-            & {}
-        }
         .logo {
             margin: 0;
             img {
@@ -51,7 +48,7 @@
         }
         .forgot {
             display: inline-block;
-            margin-top: 14px;
+            margin-top: 5px;
             margin-#{$start-direction}: 10px;
         }
     }

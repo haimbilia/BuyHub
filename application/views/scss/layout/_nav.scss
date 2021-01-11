@@ -31,15 +31,7 @@
     .more {
         cursor: pointer;
         z-index: 1;
-        @include media-breakpoint-down(lg) {
-            & {
-                width: auto;
-                padding: 15px 10px;
-                height: auto;
-            }
-        }
         span {
-            display: none;
             @include media-breakpoint-down(lg) {
                 & {
                     display: block;
@@ -71,6 +63,7 @@
     display: flex;
     padding: 0;
     font-size: 0.85rem;
+    transform: rotate(0deg);
     @include media-breakpoint-down(lg) {
         & {
             margin: 0;
@@ -80,8 +73,8 @@
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            -webkit-box-pack: start !important;
-            -ms-flex-pack: start !important;
+            -webkit-box-pack:flex-start !important;
+            -ms-flex-pack:flex-start !important;
             justify-content: flex-start !important;
         }
     }
@@ -120,7 +113,7 @@
             position: relative;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-weight: 600;
+            font-weight: 500;
             @include media-breakpoint-down(lg) {
                 & {
                     color: inherit;
@@ -263,10 +256,14 @@
     top: 0;
     visibility: visible;
     width: 40px;
+    height: 40px;
     z-index: 1;
     @include media-breakpoint-down(lg) {
         & {
             display: block;
+            &.active~.vertical-menu {
+                display: block;
+            }
         }
     }
     &:before {
@@ -308,10 +305,10 @@
         }
     }
     .head {
-        >a {
+        .level2 {
             color: #222;
-            font-weight: 600;
             text-transform: uppercase;
+            font-weight: 500;
             &:hover {
                 color: $brand-color;
             }
@@ -321,6 +318,7 @@
         color: currentColor;
         display: inline-block;
         font-weight: 300;
+        font-size: 0.8rem;
     }
     >li {
         margin: 0;
@@ -375,12 +373,12 @@
                         }
                     }
                 }
-                .seemore {
-                    a {
-                        font-weight: 600;
-                    }
-                }
             }
+        }
+    }
+    .seemore {
+        a {
+            font-weight: 600;
         }
     }
 }

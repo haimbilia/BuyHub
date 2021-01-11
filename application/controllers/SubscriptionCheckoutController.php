@@ -63,7 +63,8 @@ class SubscriptionCheckoutController extends LoggedUserController
         }
         $obj = new Extrapage();
         $headerData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_HEADER_BLOCK, $this->siteLangId);
-        $this->set('sCartSummary', $this->scartObj->getSubscriptionCartFinancialSummary($this->siteLangId));
+        $sCartSummary = $this->scartObj->getSubscriptionCartFinancialSummary($this->siteLangId);
+        $this->set('sCartSummary', $sCartSummary);
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_RIGHT_BLOCK, $this->siteLangId);
         $this->set('pageData', $pageData);
@@ -195,7 +196,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         /* $orderData['order_user_name'] = $userDataArr['user_name'];
         $orderData['order_user_email'] = $userDataArr['credential_email'];
         $orderData['order_user_phone'] = $userDataArr['user_phone']; */
-        $orderData['order_is_paid'] = Orders::ORDER_IS_PENDING;
+        $orderData['order_payment_status'] = Orders::ORDER_PAYMENT_PENDING;
         $orderData['order_date_added'] = date('Y-m-d H:i:s');
         $orderData['order_type'] = Orders::ORDER_SUBSCRIPTION;
         $orderData['order_renew'] = 0;
@@ -353,7 +354,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->doNotLimitRecords();
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         /* $orderInfo = $orderObj->getOrderById( $order_id, $this->siteLangId, array('payment_status' => 0) ); */
@@ -381,6 +382,8 @@ class SubscriptionCheckoutController extends LoggedUserController
         $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
 
         $redeemRewardFrm = $this->getRewardsForm($this->siteLangId);
+        
+        $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
         $this->set('subscriptionType', $subscriptionType);
         $this->set('redeemRewardFrm', $redeemRewardFrm);
         $this->set('paymentMethods', $paymentMethods);
@@ -421,7 +424,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('order_id', '=', $order_id);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         /* $orderObj = new Orders();
@@ -443,8 +446,12 @@ class SubscriptionCheckoutController extends LoggedUserController
             FatUtility::dieWithError(Labels::getLabel("MSG_Selected_Payment_method_not_found!", $this->siteLangId));
         }
 
-        $frm = $this->getPaymentTabForm($this->siteLangId, $paymentMethod['plugin_code']);
+        $frm = $this->getPaymentTabForm($this->siteLangId, $paymentMethod['plugin_code']);        
         $controller = $paymentMethod['plugin_code'] . 'Pay';
+        $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');        
+        $frm->setFormTagAttribute('data-method', $methodCode);
+        $frm->setFormTagAttribute('data-external', UrlHelper::generateUrl($controller, 'getExternalLibraries'));
+        
         $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'])));
         $frm->fill(
             array(
@@ -453,7 +460,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             )
         );
 
-
+        
         $this->set('paymentMethod', $paymentMethod);
         $this->set('frm', $frm);
 
@@ -531,7 +538,7 @@ class SubscriptionCheckoutController extends LoggedUserController
     public function confirmOrder()
     {
         $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
-        /* ConfirmOrder function is called for both wallet payments and for paymentgateway selection as well. */
+        /* confirmOrder function is called for both wallet payments and for paymentgateway selection as well. */
         $criteria = array( 'isUserLogged' => true, 'hasSubscription' => true );
 
         if (!$this->isEligibleForNextStep($criteria)) {
@@ -572,7 +579,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
-        $srch->addCondition('order_is_paid', '=', Orders::ORDER_IS_PENDING);
+        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
@@ -630,9 +637,10 @@ class SubscriptionCheckoutController extends LoggedUserController
         $frm = new Form('frmPaymentTabForm');
         $frm->setFormTagAttribute('id', 'frmPaymentTabForm');
 
-        if (strtolower($paymentMethodCode) == "cashondelivery") {
+		if (in_array(strtolower($paymentMethodCode), ["cashondelivery", "payatstore"])) {
             CommonHelper::addCaptchaField($frm);
         }
+		
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm_Payment', $langId));
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'plugin_id');
@@ -856,7 +864,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch = new OrderSubscriptionSearch();
         $srch->joinOrders();
         $srch->joinOrderUser();
-        $srch->addCondition('order_is_paid', '=', ORDERS::ORDER_IS_PAID);
+        $srch->addCondition('order_payment_status', '=', ORDERS::ORDER_PAYMENT_PAID);
         $srch->addCondition('ossubs_status_id', 'in', $statusArr);
         $srch->addCondition('ossubs_id', '=', $ossubs_id);
         $srch->addCondition('ossubs_type', '=', SellerPackages::PAID_TYPE);
@@ -894,7 +902,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         /* $orderData['order_user_name'] = $userDataArr['user_name'];
         $orderData['order_user_email'] = $userDataArr['credential_email'];
         $orderData['order_user_phone'] = $userDataArr['user_phone']; */
-        $orderData['order_is_paid'] = Orders::ORDER_IS_PENDING;
+        $orderData['order_payment_status'] = Orders::ORDER_PAYMENT_PENDING;
         $orderData['order_date_added'] = date('Y-m-d H:i:s');
         $orderData['order_type'] = Orders::ORDER_SUBSCRIPTION;
 

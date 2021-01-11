@@ -124,6 +124,10 @@ $(document).ready(function () {
             reloadList();
         });
     };
+    syncCategories = function(){        
+        fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
+        },{},false);
+    }
 })();
 
 $(document).on('click', '.uploadFile-Js', function () {
@@ -173,24 +177,4 @@ $(document).on('click', '.uploadFile-Js', function () {
             });
         }
     }, 500);
-});
-
-$(document).on('change', '#setupEnvFields', function () {
-    var form = $(this).closest('form');
-    var formElements = form.prop('elements');
-    $(formElements).each(function (index) {
-        var elementObj = $(this);
-        if ('submit' == elementObj.attr('type') || 'button' == elementObj.attr('type')) {
-            return;
-        }
-
-        var requirement = elementObj.attr('data-fatreq');
-        var requirementObject = JSON.parse(requirement);
-        var elementRow = elementObj.closest('.row');
-        if (false == requirementObject.required) {
-            elementRow.hide();
-        } else {
-            elementRow.show();
-        }
-    });
 });

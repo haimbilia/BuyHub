@@ -96,6 +96,9 @@ class States extends MyAppModel
 
         $srch = static::getSearchObject($isActive, $langId);
         $srch->addCondition('state_country_id', '=', $countryId);
+        if ('state_code' == $idCol) {
+            $srch->addCondition('state_code', '!=', '');
+        }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('state_name', 'ASC');
@@ -144,8 +147,8 @@ class States extends MyAppModel
 
         return $row;
     }
-    
-     public static function getStateByCountryAndCode($countryId, $stateCode)
+
+    public static function getStateByCountryAndCode($countryId, $stateCode)
     {
         $countryId = FatUtility::int($countryId);
         if ($countryId < 1 || !$stateCode) {

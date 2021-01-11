@@ -7,17 +7,19 @@
          background: #f5f5f5;
          border-radius: $radius4;
      }
+     label,
      .field_label {
-         font-size: 0.9em;
+         font-size: 0.8rem;
          color: $txt-gray;
          margin: 0;
          margin-bottom: 5px;
+         min-height: 15px; /*for alignment issue where no content in form lebal - form button and input alignment */
          display: inline-block;
          min-height: none;
          cursor: default;
          /*opacity: 0.6;*/
          &:empty {
-             min-height: 18px;
+             min-height: 15px;
          }
      }
      input {
@@ -66,6 +68,8 @@
          }
          &[type="file"] {
              @extend input;
+             width: auto;
+             overflow: hidden;
          }
          &[type="file"] {
              height: auto;
@@ -115,6 +119,7 @@
          resize: vertical;
          height: 120px;
          line-height: 1.5;
+         padding-top: 10px;
          &.txtarea-height {
              height: 85px;
          }
@@ -165,19 +170,22 @@
              transition: opacity 0.2s;
              pointer-events: none;
          }
+         i{
+             &:before{opacity: 1 !important;}
+         }
          &:focus {
-              :before {
+              > :before {
                  opacity: 0.2;
              }
          }
          &:active {
-              :before {
+              > :before {
                  opacity: 0.32;
              }
          }
          &:disabled {
               :before {
-                 opacity: 0;
+                 /*opacity: 0;*/
              }
          }
          &:after {
@@ -221,11 +229,11 @@
              }
          }
      }
-     .btn-primary {
+     .btn-brand {
          background-color: $brand-color;
          color: $brand-color-inverse;
      }
-     .btn-outline-primary {
+     .btn-outline-brand {
          border-color: $brand-color;
      }
      .no--focus {

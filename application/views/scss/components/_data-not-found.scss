@@ -22,8 +22,8 @@
 }
 
 .block--empty {
-    padding: 20px;
-    margin: 2rem auto;
+    padding: 2rem 20px;
+    margin: auto;
     .block__img {
         display: block;
         margin: 20px auto 30px !important;
@@ -35,6 +35,14 @@
         margin: 20px auto 0;
     }
     &-sm {}
+    h3 {
+        font-size: 1.2rem;
+    }
+    h6 {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: $txt-gray;
+    }
 }
 
 .no-product {

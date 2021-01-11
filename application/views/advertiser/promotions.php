@@ -10,21 +10,21 @@
         <div class="content-header-right col-auto">
             <div class="btn-group">
                 <?php if ($canEdit) { ?>
-                    <a href="javascript:void(0)" onClick="promotionForm()" class="btn btn-outline-primary btn-sm"><?php echo Labels::getLabel('LBL_Add_Promotion', $siteLangId);?></a>
+                    <a href="javascript:void(0)" onClick="promotionForm()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Add_Promotion', $siteLangId);?></a>
                 <?php }?>
-                <a href="javascript:void(0)" onClick="reloadList()" class="btn btn-outline-primary btn-sm"><?php echo Labels::getLabel('LBL_My_promotions', $siteLangId);?></a>
+                <a href="javascript:void(0)" onClick="reloadList()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_My_promotions', $siteLangId);?></a>
             </div>
         </div>
     </div>
     <div class="content-body">
         <div class="row mb-4">
             <div class="col-md-12">
-                <div class="cards">
-                    <div class="cards-header">
-                        <!-- <h5 class="cards-title "><?php echo Labels::getLabel('LBL_Promotions', $siteLangId);?></h5> -->
+                <div class="card">
+                    <div class="card-header">
+                        <!-- <h5 class="card-title "><?php echo Labels::getLabel('LBL_Promotions', $siteLangId);?></h5> -->
                         <p class="note"><?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_Promotions', $siteLangId).' : '. CommonHelper::displaymoneyformat(FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE'));?></p>
                     </div>
-                    <div class="cards-content ">
+                    <div class="card-body ">
                         <div id="promotionForm">
                             <div class="replaced formshowhide-js">
                                 <?php
@@ -64,13 +64,13 @@
                                     $dateToFld->developerTags['noCaptionTag'] = true;
 
                                     $submitBtnFld = $frmSearchPromotions->getField('btn_submit');
-                                    $submitBtnFld->setFieldTagAttribute('class', 'btn btn-primary btn-block ');
+                                    $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
                                     $submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
                                     $submitBtnFld->developerTags['col'] = 2;
                                     $submitBtnFld->developerTags['noCaptionTag'] = true;
 
                                     $cancelBtnFld = $frmSearchPromotions->getField('btn_clear');
-                                    $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-block btn-outline-primary');
+                                    $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-block btn-outline-brand');
                                     $cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
                                     $cancelBtnFld->developerTags['col'] = 2;
                                     $cancelBtnFld->developerTags['noCaptionTag'] = true;
@@ -84,8 +84,8 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <div class="cards">
-                    <div class="cards-content">
+                <div class="card">
+                    <div class="card-body">
                         <div id="listing">
                             <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                         </div>

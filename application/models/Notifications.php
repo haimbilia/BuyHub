@@ -46,7 +46,8 @@ class Notifications extends MyAppModel
             /* require_once(CONF_INSTALLATION_PATH . 'library/APIs/notifications/pusher.php');
             $pusher = new Pusher($google_push_notification_api_key); */
             foreach ($fcmDeviceIds as $pushNotificationApiToken) {
-                $message = array( 'text' => $data['unotification_body'], 'type' => $data['unotification_type']);
+                $siteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->commonLangId, FatUtility::VAR_STRING, 'Yo!Kart');
+                $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type']);
                 self::sendPushNotification($google_push_notification_api_key, $pushNotificationApiToken['uauth_fcm_id'], $message);
                 /* $pusher->notify($pushNotificationApiToken['uauth_fcm_id'], array('text'=>$data['unotification_body'],'type'=>$data['unotification_type'])); */
             }
@@ -57,25 +58,35 @@ class Notifications extends MyAppModel
 
     public static function sendPushNotification($serverKey, $deviceToken, $data = array())
     {
-        $url = "https://fcm.googleapis.com/fcm/send";
+        if (!array_key_exists('body', $data)) {
+            $data['body'] = '';
+        }
 
-        $notification = $data;
-        $arrayToSend = array('to' => $deviceToken, 'notification' => $notification, 'priority' => 'high');
-        $json = json_encode($arrayToSend);
-        $headers = array();
-        $headers[] = 'Content-Type: application/json';
-        $headers[] = 'Authorization: key=' . $serverKey;
+        if (array_key_exists('text', $data)) {
+            $data['body'] = $data['text'];
+        }
+
+        $fields = [
+            'registration_ids' => [$deviceToken],
+            'notification' => $data, /* Required For IOS */
+            'data' => $data, /* Required For ANDROID */
+            'priority' => 'high'
+        ];
+        $headers = [
+            'Authorization: key=' . $serverKey,
+            'Content-Type: application/json'
+        ];
+        $url = "https://fcm.googleapis.com/fcm/send";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        //Send the request
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $response = curl_exec($ch);
-        //Close request
+
         $data = array();
         if ($response === false) {
             $data['status'] = false;
