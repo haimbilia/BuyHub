@@ -1,4 +1,4 @@
-/* EasyECom */
+-- --------EasyECom---------- --
 INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`, `plugin_description`) VALUES ('36', '1', 'EasyEcom', '
                     <div class="cms">
                         <div class="text-center my-5">
@@ -76,4 +76,4 @@ INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `p
                             </div>
                         </li>
                     </ul>');
-/* EasyECom */
+-- --------EasyECom---------- --
