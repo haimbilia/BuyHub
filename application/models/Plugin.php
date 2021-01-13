@@ -27,8 +27,8 @@ class Plugin extends MyAppModel
     public const TYPE_SHIPPING_SERVICES = 8;
     public const TYPE_TAX_SERVICES  = 10;
     public const TYPE_SPLIT_PAYMENT_METHOD  = 11;
-    public const TYPE_REGULAR_PAYMENT_METHOD  = 13;
     public const TYPE_MARKETPLACE_CHANNELS  = 12;
+    public const TYPE_REGULAR_PAYMENT_METHOD  = 13;
     public const TYPE_SHIPMENT_TRACKING = 14;
 
     /* Define here :  if system can activate only one plugin from any group.*/

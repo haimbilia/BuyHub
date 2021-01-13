@@ -1,5 +1,8 @@
 -- --------EasyECom---------- --
-INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`, `plugin_description`) VALUES ('36', '1', 'EasyEcom', '
+INSERT IGNORE INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'EasyEcom', '12', 'EasyEcom', '0', '1');
+
+INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`, `plugin_description`)
+  SELECT `plugin_id`, '1', 'EasyEcom',  '
                     <div class="cms">
                         <div class="text-center my-5">
                             <small class="mb-5"> FEATURES</small>
@@ -75,5 +78,6 @@ INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `p
                                 </p>
                             </div>
                         </li>
-                    </ul>');
+                    </ul>'
+  FROM `tbl_plugins` WHERE plugin_code = "EasyEcom";
 -- --------EasyECom---------- --

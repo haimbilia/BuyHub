@@ -3,6 +3,8 @@
 class GuestUserController extends MyAppController
 {
     private $authToken = '';
+    private $username = '';
+
 
     public function loginForm($isRegisterForm = 0)
     {
@@ -1185,7 +1187,7 @@ class GuestUserController extends MyAppController
      *
      * @return void
      */
-    private function validateAuthLoginRequest()
+    private function validateAuthLoginRequest(bool $authTokenRequest = false)
     {
         $maketPlaceAuthToken = $_SERVER['HTTP_EEC_TOKEN'];
         $uAuth = new UserAuthentication();
@@ -1195,8 +1197,14 @@ class GuestUserController extends MyAppController
             FatUtility::dieJsonError($resp);
         }
 
-        $this->authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
-        if (empty($this->authToken)) {
+        $requestParam = "";
+        if (true === $authTokenRequest) {
+            $requestParam = $this->authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
+        } else {
+            $requestParam = $this->username = FatApp::getPostedData('username', FatUtility::VAR_STRING, '');
+        }
+
+        if (empty($requestParam)) {
             $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
             FatUtility::dieJsonError($resp);
@@ -1210,37 +1218,24 @@ class GuestUserController extends MyAppController
      */
     public function getAuthToken()
     {
-        $this->validateAuthLoginRequest();
+        $this->validateAuthLoginRequest(true);
 
-        $data = UserAuthentication::checkLoginTokenInDB($this->authToken, true);
-        $userId = isset($data['uauth_user_id']) ? $data['uauth_user_id'] : '';
-        if (empty($data)) {
-            $userData = current(User::getUserMetaDetail('seller_auth_token', $this->authToken));
-            if (empty($userData)) {
-                $msg = Labels::getLabel('MSG_INVALID_USER', $this->siteLangId);
-                $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
-                FatUtility::dieJsonError($resp);
-            }
-            $userId = $userData['usermeta_user_id'];
+        $uObj = new User();
+        $data = $uObj->checkUserByEmailOrUserName($this->username, $this->username);
+        if (false === $data || empty($data)) {
+            $msg = Labels::getLabel('MSG_INVALID_USER', $this->siteLangId);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            FatUtility::dieJsonError($resp);
         }
-        
-        $uObj = new User($userId);
+        $userId = array_key_exists('user_id', $data) ? $data['user_id'] : '';
+        $uObj->setMainTableRecordId($userId);
+
         if (!$newAuthToken = $uObj->setMobileAppToken(UserAuthentication::TOKEN_AGE_IN_DAYS)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-
-        if (!empty($data)) {
-            $db = FatApp::getDb();
-            $db->deleteRecords(UserAuthentication::DB_TBL_USER_AUTH,
-                [
-                    'smt' => UserAuthentication::DB_TBL_UAUTH_PREFIX . 'token = ?',
-                    'vals' => [$this->authToken]
-                ]
-            );
-        }
         
         if (false === $uObj->updateUserMeta('seller_auth_token', $newAuthToken)) {
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $user->getError());
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $uObj->getError());
             FatUtility::dieJsonError($resp);
         }
 
