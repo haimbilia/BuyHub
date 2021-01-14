@@ -1,33 +1,50 @@
 var keyName = 'EasyEcom';
 
-$(document).ready(function() {
+$(document).ready(function () {
     landingPage();
 });
 
-(function() {
+(function () {
     var dv = '#landingpage-js';
-    landingPage = function(){
-		$(dv).html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl(keyName, 'landingPage'), '', function(res){
-			$(dv).html(res);
-		});
+    landingPage = function () {
+        $(dv).html(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl(keyName, 'landingPage'), '', function (res) {
+            $(dv).html(res);
+        });
     };
 
-    register = function (){
+    register = function () {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(keyName, 'register'), '', function(res) {
+        fcom.ajax(fcom.makeUrl(keyName, 'register'), '', function (res) {
             res = $.parseJSON(res);
             if (1 > res.status) {
-                $.systemMessage(res.msg,'alert--danger', false);
+                $.systemMessage(res.msg, 'alert--danger', false);
             } else {
-                $.systemMessage(res.msg,'alert--success', false);
+                $.systemMessage(res.msg, 'alert--success', false);
             }
             landingPage();
         });
     }
 
-    login = function (userTempToken){
-        setCookie('_ykEasyLogin', userTempToken);
-        setTimeout(function(){ window.open('https://api.marketplace.4qcteam.com/', '_blank'); }, 1000);
+    login = function (userTempToken) {
+        setCookie('_ykEasyLogin', userTempToken, true, 365, goToDashboard);
+    }
+
+    goToDashboard = function () {
+        window.open('https://api.marketplace.4qcteam.com/', '_blank');
+    }
+
+    syncStatusToggle = function (e, obj) {
+        e.preventDefault();
+        fcom.ajax(fcom.makeUrl(keyName, 'syncStatus', [$(obj).val()]), '', function (res) {
+            res = $.parseJSON(res);
+            if (1 > res.status) {
+                $.systemMessage(res.msg, 'alert--danger', true);
+            } else {
+                $.systemMessage(res.msg, 'alert--success', true);
+                var value = $(obj).is(":checked") ? 1 : 0;
+                $(obj).prop('checked', !($(obj).is(":checked"))).val(value);
+            }
+        });
     }
 })();

@@ -282,7 +282,7 @@ class User extends MyAppModel
             return false;
         }
 
-        if (empty($key) || empty($value)) {
+        if (empty($key) || '' == $value) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_PARAMETERS', $this->commonLangId);
             return false;
         }

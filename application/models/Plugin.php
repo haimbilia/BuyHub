@@ -11,6 +11,12 @@ class Plugin extends MyAppModel
     public const RETURN_FALSE  = 0;
     public const RETURN_TRUE  = 1;
 
+    /* Response Codes */
+    public const RC_OK = 200;
+    public const RC_BAD_REQUEST = 400;
+    public const RC_UNAUTHORIZED = 401;
+    /* Response Codes */
+
     public const ENV_SANDBOX = 0;
     public const ENV_PRODUCTION = 1;
 

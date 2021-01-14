@@ -20,7 +20,13 @@ class LibHelper extends FatUtility
     public static function exitWithError($message, $json = false, $redirect = false)
     {
         if (true === MOBILE_APP_API_CALL) {
-            $message = strip_tags($message);
+            if (is_array($message)) {
+                array_walk_recursive($message, function (&$item) {
+                    $item = trim(strip_tags($item));
+                });
+            } else {
+                $message = strip_tags($message);
+            }
             FatUtility::dieJsonError($message);
         }
 
@@ -34,6 +40,28 @@ class LibHelper extends FatUtility
 
         if (true === $redirect) {
             Message::addErrorMessage($message);
+        }
+    }
+
+    public static function exitWithSuccess($message, $json = false, $redirect = false)
+    {
+        if (true === MOBILE_APP_API_CALL) {
+            if (is_array($message)) {
+                array_walk_recursive($message, function (&$item) {
+                    $item = trim(strip_tags($item));
+                });
+            } else {
+                $message = strip_tags($message);
+            }
+            FatUtility::dieJsonSuccess($message);
+        }
+
+        if (true === $json) {
+            FatUtility::dieJsonSuccess($message);
+        }
+
+        if (true === $redirect) {
+            Message::addMessage($message);
         }
     }
 
@@ -95,7 +123,7 @@ class LibHelper extends FatUtility
         }
         return (int) $iValue;
     }
-    
+
     /**
      * bytesToSize
      *
@@ -120,7 +148,7 @@ class LibHelper extends FatUtility
 
         return $bytes;
     }
-    
+
     /**
      * verify
      *
@@ -135,7 +163,7 @@ class LibHelper extends FatUtility
             mb_substr($bundle, 0, 64, '8bit')
         );
     }
-    
+
     /**
      * getKey
      *
@@ -146,7 +174,7 @@ class LibHelper extends FatUtility
     {
         return hash_pbkdf2('sha256', self::ENCRYPTION_KEY, 'some_token', 100000, $keysize, true);
     }
-    
+
     /**
      * encrypt
      *
@@ -161,7 +189,7 @@ class LibHelper extends FatUtility
         $result = hash_hmac('sha256', $string, $key) . $string;
         return bin2hex($iv) . bin2hex($result);
     }
-    
+
     /**
      * decrypt
      *
@@ -178,7 +206,7 @@ class LibHelper extends FatUtility
         }
         return openssl_decrypt(mb_substr($data, 64, null, '8bit'), 'aes-256-ctr', $key, OPENSSL_RAW_DATA, $iv);
     }
-        
+
     /**
      * isJson
      *
@@ -204,6 +232,6 @@ class LibHelper extends FatUtility
 
     public static function phoneNumberMasking(string $phone): string
     {
-        return substr($phone, 0, 1) . str_repeat('*',(strlen($phone) - 2)) . substr($phone, -1);
+        return substr($phone, 0, 1) . str_repeat('*', (strlen($phone) - 2)) . substr($phone, -1);
     }
 }

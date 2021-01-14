@@ -697,7 +697,7 @@ function getGeoAddress(lat, lng) {
     });
 }
 
-function setCookie(cname, cvalue, canSetCookie = true, exdays = 365) {
+function setCookie(cname, cvalue, canSetCookie = true, exdays = 365, callback = '') {
 	if (false == canSetCookie) {
 		return false;
 	}
@@ -705,6 +705,9 @@ function setCookie(cname, cvalue, canSetCookie = true, exdays = 365) {
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=." + window.location.hostname + ";path=/";
+    if ('' != callback) {
+        callback();
+    }
 }
 
 function getCookie(cname) {

@@ -16,7 +16,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     public function __construct(string $action)
     {
         parent::__construct($action);
-        $this->easyEcom = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->easyEcom = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $action], $error, $this->siteLangId);
         if (false === $this->easyEcom) {
             $error = is_string($error) ? ['msg' => $error, 'status' => Plugin::RETURN_FALSE] : $error;
             $this->dieWithJsonResponse($error);
@@ -65,6 +65,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (!$uObj->createUserTempToken($userTempToken)) {
             FatUtility::dieJsonError($uObj->getError());
         }
+        $this->set('userId', $userId);
         $this->set('userTempToken', $userTempToken);
         $this->set('pluginDescription', $this->settings['plugin_description']);
         $this->set('easyEcomSellerToken', $easyEcomSellerToken);
@@ -216,5 +217,23 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $resp = $this->easyEcom->markOrderAsShipped(FatApp::getPostedData());
         $this->dieWithJsonResponse($resp);
+    }
+    
+    /**
+     * syncStatus : Used in case vendor don't want to sync orders or products.
+     *
+     * @return void
+     */
+    public function syncStatus(int $status)
+    {
+        $msg = Labels::getLabel('MSG_AUTO_SYNC_TURNED_OFF', $this->siteLangId);
+        if (0 < $status) {
+            $msg = Labels::getLabel('MSG_AUTO_SYNC_TURNED_ON', $this->siteLangId);
+        }
+        $response = ['msg' => $msg, 'status' => Plugin::RETURN_TRUE];
+        if (false === $this->updateUserMeta('easyEcomSyncingStatus', $status)) {
+            $response = ['msg' => $this->getError(), 'status' => Plugin::RETURN_FALSE];
+        }
+        $this->dieWithJsonResponse($response);
     }
 }

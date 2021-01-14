@@ -1199,9 +1199,9 @@ class GuestUserController extends MyAppController
 
         $requestParam = "";
         if (true === $authTokenRequest) {
-            $requestParam = $this->authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
-        } else {
             $requestParam = $this->username = FatApp::getPostedData('username', FatUtility::VAR_STRING, '');
+        } else {
+            $requestParam = $this->authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
         }
 
         if (empty($requestParam)) {

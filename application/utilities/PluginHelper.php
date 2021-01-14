@@ -185,10 +185,11 @@ trait PluginHelper
      * @param  array $data
      * @return array
      */
-    public function formatOutput(int $status, string $msg, array $data = []): array
+    public function formatOutput(int $status, string $msg, array $data = [], $responseCode = Plugin::RC_BAD_REQUEST): array
     {
         return [
             'status' => $status,
+            'responseCode' => (Plugin::ACTIVE == $status) ? Plugin::RC_OK : $responseCode,
             'msg' => $msg,
             'data' => $data
         ];
@@ -202,12 +203,18 @@ trait PluginHelper
      */
     public function dieWithJsonResponse(array $data = [])
     {
-        if (true === MOBILE_APP_API_CALL) {
-            CommonHelper::jsonEncodeUnicode($data, true);
+        $status = array_key_exists('status', $data) && 0 < FatUtility::int($data['status']) ? FatUtility::int($data['status']) : Plugin::RETURN_FALSE;
+        $msg = 0 < $status ? Labels::getLabel("MSG_SUCCESS", $this->langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $this->langId);
+        $data['msg'] = array_key_exists('msg', $data) ? $data['msg'] : $msg;
+
+        $isAjaxCall = FatUtility::isAjaxCall();
+
+        if (Plugin::RETURN_FALSE == $status) {
+            LibHelper::exitWithError($data, $isAjaxCall, !$isAjaxCall);
+        } else {
+            LibHelper::exitWithSuccess($data, $isAjaxCall, !$isAjaxCall);
         }
-        $msg = isset($data['status']) && 0 < $data['status'] ? Labels::getLabel("MSG_SUCCESS", $this->langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $this->langId);
-        $msg = isset($data['msg']) ? $data['msg'] : $msg; 
-        Message::addErrorMessage($msg);
+
         CommonHelper::redirectUserReferer();
     }
 }
