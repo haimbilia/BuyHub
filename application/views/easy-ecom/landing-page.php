@@ -23,7 +23,10 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                                     <input <?php echo $active; ?> type="checkbox" value="<?php echo $value; ?>" onclick="syncStatusToggle(event, this)" />
                                     <div class="slider round"></div>
                                 </label>
-                                <p><?php echo Labels::getLabel('LBL_AUTO_SYNC', $siteLangId); ?></p>
+                                <p>
+                                    <?php echo Labels::getLabel('LBL_AUTO_SYNC', $siteLangId); ?>
+                                    <i class='fa fa-info-circle spn_must_field align-middle' data-toggle='tooltip' data-placement='top' title='<?php echo Labels::getLabel('MSG_YOU_CAN_TURN_OFF_AUTO_SYNC_FEATURE_TO_RESTRICT_SYNCING_PRODUCTS_AND_ORDERS_TO_EASYECOM.', $siteLangId); ?>'></i>
+                                </p>
                             </div>
                             <a class="btn btn-primary btn-lg" href="javascript:void(0)" onClick="login('<?php echo $userTempToken; ?>')" style="background-color: #27ae60; border-color: #27ae60;">
                                 <?php echo Labels::getLabel('LBL_GO_TO_DASHBOARD', $siteLangId); ?>
