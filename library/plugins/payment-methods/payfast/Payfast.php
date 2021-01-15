@@ -247,7 +247,7 @@ class Payfast extends PaymentMethodBase
 
             $response = curl_exec($ch);
             curl_close($ch);
-            if ($response === 'VALID') {
+            if (strtoupper($response) === 'VALID') {
                 return true;
             }
         }

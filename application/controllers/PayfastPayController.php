@@ -7,11 +7,6 @@
 class PayfastPayController extends PaymentController
 {
     public const KEY_NAME = "Payfast";
-    private $userId = 0;
-    private $paymentHost = '';
-    private $passphrase = '';
-    private $merchantId = '';
-    private $merchantKey = '';
     private $actionUrl = '';
 
     /**
@@ -46,9 +41,6 @@ class PayfastPayController extends PaymentController
         if (false === $this->plugin->init()) {
             $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
         }
-        $this->passphrase = $this->plugin->getPassphrase();
-        $this->merchantId = $this->plugin->getmerchantId();
-        $this->merchantKey = $this->plugin->getMerchantKey();
         $this->actionUrl = $this->plugin->getActionUrl();
     }
 
