@@ -143,7 +143,7 @@ class Payfast extends PaymentMethodBase
             return true;
         }
         
-        if($this->getPassphrase() = '') {
+        if($this->passphrase = '') {
             $signature = md5(http_build_query($this->getRequestBody()));
         } else {
             $signature = md5(http_build_query($this->getRequestBody().'&passphrase='.$this->passphrase));
