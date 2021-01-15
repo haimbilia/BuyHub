@@ -143,12 +143,24 @@ class Payfast extends PaymentMethodBase
             return true;
         }
         
-        if($this->passphrase = '') {
-            $signature = md5(http_build_query($this->getRequestBody()));
-        } else {
-            $signature = md5(http_build_query($this->getRequestBody().'&passphrase='.$this->passphrase));
-        }
         //$signature = md5(http_build_query($this->getRequestBody()));
+        foreach( $this->requestBody as $key => $val ) {
+            $this->requestBody[$key] = stripslashes( $val );
+        }
+        foreach( $this->requestBody as $key => $val ) {
+            if( $key !== 'signature' ) {
+                $paramString .= $key .'='. urlencode( $val ) .'&';
+            } else {
+                break;
+            }
+        }
+        $paramString = substr( $paramString, 0, -1 );
+        if($this->passphrase = '') {
+            $paramString = $paramString;
+        } else {
+            $paramString = $paramString.'&passphrase='.urlencode( $this->passphrase );
+        }
+        $signature = md5( $paramString );
 
         if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
             return false;
