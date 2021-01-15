@@ -142,8 +142,13 @@ class Payfast extends PaymentMethodBase
             $this->signature = $this->settings['signature'];
             return true;
         }
-         
-        $signature = md5(http_build_query($this->getRequestBody().'&passphrase='.$this->passphrase));
+        
+        if($this->getPassphrase() = '') {
+            $signature = md5(http_build_query($this->getRequestBody()));
+        } else {
+            $signature = md5(http_build_query($this->getRequestBody().'&passphrase='.$this->passphrase));
+        }
+        //$signature = md5(http_build_query($this->getRequestBody()));
 
         if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
             return false;
