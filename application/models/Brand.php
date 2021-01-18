@@ -106,8 +106,9 @@ class Brand extends MyAppModel
         return $srch;
     }
 
-    public static function getAllIdentifierAssoc($langId = 0, $isDeleted = true, $isActive = false)
+    public static function getAllIdentifierAssoc(int $langId = 0, bool $isDeleted = true, bool $isActive = false): array
     {
+        $langId = FatUtility::int($langId);
         $srch = self::getSearchObject($langId, true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -141,7 +142,7 @@ class Brand extends MyAppModel
         return false;
     }
 
-    public function rewriteUrl($keyword)
+    public function rewriteUrl(string $keyword): string
     {
         if ($this->mainTableRecordId < 1) {
             return false;
@@ -166,7 +167,7 @@ class Brand extends MyAppModel
         return $obj->addUpdate($brandId,SmartUserActivityBrowsing::TYPE_BRAND); */
     }
 
-    public static function getBrandReqStatusArr($langId)
+    public static function getBrandReqStatusArr(int $langId)
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
@@ -189,7 +190,7 @@ class Brand extends MyAppModel
         );
     }
 
-    public static function getBrandName($brandId, $langId, $isActive = true)
+    public static function getBrandName(int $brandId, int $langId, bool $isActive = true)
     {
         $srch = static::getListingObj($langId, null, $isActive);
         $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $brandId);

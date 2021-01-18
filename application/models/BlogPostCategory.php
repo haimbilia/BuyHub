@@ -49,7 +49,7 @@ class BlogPostCategory extends MyAppModel
         return $srch;
     }
 
-    public function getMaxOrder($parent = 0)
+    public function getMaxOrder(int $parent = 0): int
     {
         $srch = new SearchBase(static::DB_TBL);
         $srch->addFld("MAX(" . static::DB_TBL_PREFIX . "display_order) as max_order");
@@ -66,7 +66,7 @@ class BlogPostCategory extends MyAppModel
         return 1;
     }
 
-    public function getCategoryStructure($bpcategory_id, $category_tree_array = '')
+    public function getCategoryStructure(int $bpcategory_id, array $category_tree_array = array()): array
     {
         if (!is_array($category_tree_array)) {
             $category_tree_array = array();

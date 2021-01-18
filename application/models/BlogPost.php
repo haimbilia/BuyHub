@@ -68,7 +68,7 @@ class BlogPost extends MyAppModel
         return $srch;
     }
 
-    public static function getBlogPostsUnderCategory($langId, $bpcategory_id)
+    public static function getBlogPostsUnderCategory(int $langId, int $bpcategory_id): array
     {
         $srch = BlogPost::getSearchObject($langId);
         $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
