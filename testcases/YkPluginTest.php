@@ -17,5 +17,7 @@ class YkPluginTest extends YkAppTest
         if (false === PluginHelper::includePlugin($keyName, $directory, $error, $langId, false)) {
             FatUtility::dieJsonError($error);
         }
+
+        define('LANG_CODES_ARR', Language::getAllCodesAssoc());
     }
 }

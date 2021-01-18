@@ -1,4 +1,7 @@
 <?php
+/* 
+    Docs : https://phpunit.readthedocs.io/en/9.5/
+*/
 
 declare(strict_types=1);
 
@@ -40,7 +43,7 @@ class YkAppTest extends TestCase
 
             if (true === $invalidParam) {
                 $this->error = $this->getError();
-                return false;
+                return $this->returnResponse();
             }
         }
 
@@ -51,7 +54,7 @@ class YkAppTest extends TestCase
 
         if (true === $invalidParam) {
             $this->error = $this->getError();
-            return false;
+            return $this->returnResponse();
         }
 
         if (!$reflectMethod->isStatic()) {
@@ -59,13 +62,12 @@ class YkAppTest extends TestCase
             $this->classObj = $reflectionClass;
             if (method_exists($this, 'init') && false === $this->init()) {
                 $this->error = $reflectionClass->getError();
-                return false;
+                return $this->returnResponse();
             }
         }
 
         $reflectionMethod = new ReflectionMethod($class, $method);
         $this->result = $reflectionMethod->invokeArgs($reflectionClass, $args);
-
         return $this->returnResponse();
     }
 
@@ -130,8 +132,17 @@ class YkAppTest extends TestCase
     private function returnResponse()
     {
         switch ($this->returnType) {
+            case self::TYPE_BOOL:
+                return empty($this->result) || !is_bool($this->result) ? false : $this->result;
+                break;
+            case self::TYPE_INT:
+                return empty($this->result) || !is_int($this->result) ? 0 : $this->result;
+                break;
+            case self::TYPE_STRING:
+                return empty($this->result) || !is_string($this->result) ? '' : $this->result;
+                break;
             case self::TYPE_ARRAY:
-                return is_array($this->result);
+                return empty($this->result) || !is_array($this->result) ? [] : $this->result;
                 break;
             default:
                 return $this->result;
@@ -148,16 +159,6 @@ class YkAppTest extends TestCase
     public function expectedReturnType(int $returnType): void
     {
         $this->returnType = $returnType;
-    }
-
-    /**
-     * getResult
-     *
-     * @return mixed
-     */
-    public function getResult()
-    {
-        return $this->result;
     }
 
     /**
