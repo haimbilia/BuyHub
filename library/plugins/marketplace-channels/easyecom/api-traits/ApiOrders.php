@@ -34,7 +34,6 @@ trait ApiOrders
         	'order_date_added as created_date',
         	'order_date_updated as updated_date',
         	'order_net_amount',
-        	'order_is_paid',
         	'IFNULL(plugin_name, plugin_identifier) as plugin_name',
         	'plugin_code',
         	'buyer.user_name as buyer_user_name',
