@@ -19,11 +19,23 @@ class FcmPushNotificationTest extends YkPluginTest
         ];
         $this->classObj->setDeviceTokens($deviceTokens);
     }
+    
+    /**
+     * settings - Plugin setting need to configure first to test plugin method.
+     *
+     * @return void
+     */
+    public static function settings()
+    {
+        return [
+            'server_api_key' => 'AAAAld-BZYQ:APA91bEwdNyqPBYqiuXFAY_kYZRqju5wuiduZiuUx1RwcTasWLz__uiHUMnsKV95CQVi_BJVnX062LOdUWCd1-gwYDdA2139jNXPccLIckl5cH2ANeJyufAoS-UJGIMjZtbRAW0fAyk1'
+        ];
+    }
 
     /**
      * testRequestAccessToken
      *
-     * @dataProvider dataNotify
+     * @dataProvider inputNotify
      * @param  int $expected
      * @param  mixed $title
      * @param  mixed $message
@@ -33,16 +45,18 @@ class FcmPushNotificationTest extends YkPluginTest
      */
     public function testNotify($expected, $title, $message, $os, $data = [])
     {
+        $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'notify', [$title, $message, $os, $data]);
-        $this->assertEquals($expected, $response['status']);
+        $status = empty($response) ? Plugin::RETURN_FALSE : $response['status'];
+        $this->assertEquals($expected, $status);
     }
         
     /**
-     * dataNotify
+     * inputNotify
      *
      * @return array
      */
-    public function dataNotify()
+    public function inputNotify()
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [

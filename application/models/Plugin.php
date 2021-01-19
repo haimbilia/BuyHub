@@ -496,7 +496,6 @@ class Plugin extends MyAppModel
         $pluginKey = Plugin::getAttributesById($id, 'plugin_code');
         $pluginTypesArr = static::getTypeArr($langId);
         $plugins = static::getDataByType($typeId, $langId);
-        // CommonHelper::printArray($plugins);
         $activationLimit = static::getActivatationLimit($typeId);
         $payLater = self::PAY_LATER;
 
@@ -543,12 +542,15 @@ class Plugin extends MyAppModel
 
         if (in_array($typeId, self::HAVING_KINGPIN)) {
             $kingPin = (self::INACTIVE == $status) ? self::INACTIVE : $id;
-
-            $confRecord = new Configurations();
-            if (!$confRecord->update(['CONF_DEFAULT_PLUGIN_' . $typeId => $kingPin])) {
-                $error = $confRecord->getError();
-                return false;
-            }
+            
+            $assignValues = ['CONF_DEFAULT_PLUGIN_' . $typeId => $kingPin];
+            FatApp::getDb()->insertFromArray(
+                'tbl_configurations',
+                $assignValues,
+                false,
+                array(),
+                $assignValues
+            );
         }
         return true;
     }
