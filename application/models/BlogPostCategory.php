@@ -108,7 +108,7 @@ class BlogPostCategory extends MyAppModel
         return true;
     }
 
-    public function isExistBlogPostCatLang($lang_id, $bpcategory_id)
+    public function isExistBlogPostCatLang(int $lang_id, int $bpcategory_id): bool
     {
         $srch = new SearchBase(static::DB_TBL_LANG);
         $srch->addCondition('bpcategorylang_bpcategory_id', '=', $bpcategory_id);
@@ -120,7 +120,7 @@ class BlogPostCategory extends MyAppModel
         return false;
     }
 
-    public function getParentTreeStructure($bpCategory_id = 0, $level = 0, $name_suffix = '')
+    public function getParentTreeStructure(int $bpCategory_id = 0, int $level = 0, string $name_suffix = ''): string
     {
         $srch = static::getSearchObject();
         $srch->addFld('bpc.bpcategory_id,bpc.bpcategory_identifier,bpc.bpcategory_parent');
@@ -129,7 +129,6 @@ class BlogPostCategory extends MyAppModel
         $srch->addCondition('bpc.bpCategory_id', '=', FatUtility::int($bpCategory_id));
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
-
         $name = '';
         $seprator = '';
         if ($level > 0) {
@@ -145,7 +144,7 @@ class BlogPostCategory extends MyAppModel
         return $name;
     }
 
-    public function getBlogPostCatAutoSuggest($keywords = '', $limit = 10)
+    public function getBlogPostCatAutoSuggest(string $keywords = '', int $limit = 10): array
     {
         $srch = static::getSearchObject();
         $srch->addFld('bpc.bpcategory_id,bpc.bpcategory_identifier,bpc.bpcategory_parent');
@@ -174,8 +173,9 @@ class BlogPostCategory extends MyAppModel
         return $return;
     }
 
-    public function getNestedArray($langId)
+    public function getNestedArray(int $langId): array
     {
+        $langId = FatUtility::int($langId);
         $arr = $this->getCategoriesForSelectBox($langId);
 
         $out = array();
@@ -194,7 +194,7 @@ class BlogPostCategory extends MyAppModel
         return $out;
     }
 
-    public static function isCategoryActive($categoryId)
+    public static function isCategoryActive(int $categoryId): int
     {
         $categoryId = FatUtility::int($categoryId);
 
@@ -254,7 +254,7 @@ class BlogPostCategory extends MyAppModel
         return $out;
     }
 
-    public function getCategoriesForSelectBox($langId, $ignoreCategoryId = 0)
+    public function getCategoriesForSelectBox(int $langId, int $ignoreCategoryId = 0)
     {
         $srch = static::getSearchObject();
         $srch->joinTable(
@@ -282,7 +282,7 @@ class BlogPostCategory extends MyAppModel
         return FatApp::getDb()->fetchAll($rs, 'bpcategory_id');
     }
 
-    public function getFeaturedCategories($langId)
+    public function getFeaturedCategories(int $langId): array
     {
         $srch = static::getSearchObject();
         $srch->joinTable(
@@ -334,7 +334,7 @@ class BlogPostCategory extends MyAppModel
         return $return;
     }
 
-    public static function getBlogPostCatParentChildWiseArr($langId = 0, $parentId = 0, $includeChildCat = true, $forSelectBox = false)
+    public static function getBlogPostCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false): array
     {
         $parentId = FatUtility::int($parentId);
         $langId = FatUtility::int($langId);
@@ -357,7 +357,7 @@ class BlogPostCategory extends MyAppModel
         if (!$includeChildCat) {
             return $categoriesArr;
         }
-        if ($categoriesArr) {
+        if (!empty($categoriesArr) && $forSelectBox == false) {
             foreach ($categoriesArr as &$cat) {
                 $cat['children'] = self::getBlogPostCatParentChildWiseArr($langId, $cat['bpcategory_id']);
                 $childPosts = BlogPost::getBlogPostsUnderCategory($langId, $cat['bpcategory_id']);
@@ -368,7 +368,7 @@ class BlogPostCategory extends MyAppModel
         return $categoriesArr;
     }
 
-    public static function getRootBlogPostCatArr($langId)
+    public static function getRootBlogPostCatArr(int $langId): array
     {
         $langId = FatUtility::int($langId);
         if (!$langId) {

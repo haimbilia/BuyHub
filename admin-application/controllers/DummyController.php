@@ -14,6 +14,13 @@ class DummyController extends AdminBaseController
         $rs = $srch->getResultSet();
         echo $srch->getQuery(); exit; */
 
+
+
+        $blogPostCategoryObj = new BlogPostCategory();
+        echo "d".$blogPostCategoryObj->getParentTreeStructure(9, 0, 'test');
+        die;
+         
+
         $orderObj = new Orders();
         $orderDetail = $orderObj->getOrderById('O1605086396', 1);
         CommonHelper::printArray($orderDetail, true); exit;

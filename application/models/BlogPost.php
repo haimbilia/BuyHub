@@ -70,6 +70,8 @@ class BlogPost extends MyAppModel
 
     public static function getBlogPostsUnderCategory(int $langId, int $bpcategory_id): array
     {
+        $langId = FatUtility::int($langId);
+        $bpcategory_id = FatUtility::int($bpcategory_id);
         $srch = BlogPost::getSearchObject($langId);
         $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
         $srch->addCondition('ptc_bpcategory_id', '=', $bpcategory_id);
@@ -77,7 +79,7 @@ class BlogPost extends MyAppModel
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
-    public function updateImagesOrder($post_id, $order)
+    public function updateImagesOrder(int $post_id, array $order): bool
     {
         $post_id = FatUtility :: int($post_id);
         if (is_array($order) && sizeof($order) > 0) {
@@ -92,7 +94,7 @@ class BlogPost extends MyAppModel
         return false;
     }
 
-    public function getPostCategories($post_id)
+    public function getPostCategories(int $post_id): array
     {
         $srch = new SearchBase(static::DB_POST_TO_CAT_TBL, 'ptc');
         $srch->addCondition(static::DB_POST_TO_CAT_TBL_PREFIX . 'post_id', '=', $post_id);
@@ -103,12 +105,12 @@ class BlogPost extends MyAppModel
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         if (!$records) {
-            return false;
+            return [];
         }
         return $records;
     }
 
-    public function addUpdateCategories($post_id, $categories = array())
+    public function addUpdateCategories(int $post_id, array $categories = array()): bool
     {
         if (!$post_id) {
             $this->error = Labels::getLabel('MSG_Invalid_Request!', $this->commonLangId);
@@ -134,7 +136,7 @@ class BlogPost extends MyAppModel
         return true;
     }
 
-    public function rewriteUrl($keyword, $suffixWithId = true)
+    public function rewriteUrl(string $keyword, bool $suffixWithId = true): bool
     {
         if ($this->mainTableRecordId < 1) {
             return false;
@@ -178,7 +180,7 @@ class BlogPost extends MyAppModel
         return false;
     }
 
-    public function deleteBlogPostImage($post_id, $image_id)
+    public function deleteBlogPostImage(int $post_id, int $image_id): bool
     {
         $post_id = FatUtility :: int($post_id);
         $image_id = FatUtility :: int($image_id);
@@ -200,7 +202,7 @@ class BlogPost extends MyAppModel
         return SearchItem::convertArrToSrchFiltersAssocArr($arr);
     }
 
-    public function setPostViewsCount($post_id = 0)
+    public function setPostViewsCount(int $post_id = 0): bool
     {
         $post_id = FatUtility :: int($post_id);
         if ($post_id < 1) {
