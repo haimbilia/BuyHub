@@ -14,7 +14,7 @@ class YkAppTest extends TestCase
     public const TYPE_STRING = 3;
     public const TYPE_ARRAY = 4;
 
-    private $returnType = self::TYPE_BOOL;
+    private $returnType;
     private $result = '';
     private $error = '';
     protected $classObj;
@@ -151,7 +151,7 @@ class YkAppTest extends TestCase
     }
 
     /**
-     * expectedReturnType
+     * expectedReturnType - Call this function before calling execute if calling test case method having return type.
      *
      * @param  int $returnType
      * @return void
