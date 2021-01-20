@@ -186,73 +186,74 @@ class BlogPostTest extends YkModelTest
     } 
     
     /**
-     * testGetBlogPostsUnderCategory
+     * @test
      *
-     * @dataProvider providerGetBlogPostsUnderCategory
+     * @dataProvider feedGetBlogPostsUnderCategory
      * @param  int $langId
-     * @param  int $isDeleted
-     * @param  int $isActive
+     * @param  int $categoryId
      * @return void
      */
-    public function testGetBlogPostsUnderCategory($langId, $categoryId)
+    public function getBlogPostsUnderCategory($expected, $langId, $categoryId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getBlogPostsUnderCategory', [$langId, $categoryId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
     
     /**
-     * providerGetBlogPostsUnderCategory
+     * feedGetBlogPostsUnderCategory
      *
      * @return array
      */
-    public function providerGetBlogPostsUnderCategory()
+    public function feedGetBlogPostsUnderCategory()
     {  
         return [
-            ['test', 1],  // Invalid langId , Valid categoryId   
-            ['test', 1000],  // Invalid langId , Invalid categoryId   
-            [1, 1000],  // Valid langId , Invalid categoryId           
-            [1, 1],  // Valid langId , Valid categoryId
+            [0, 'test', 1],  // Invalid langId , Valid categoryId   
+            [0, 'test', 1000],  // Invalid langId , Invalid categoryId   
+            [0, 1, 1000],  // Valid langId , Invalid categoryId           
+            [2, 1, 1],  // Valid langId , Valid categoryId
         ];
     }
 
     /**
-     * testGetPostCategories
+     * @test
      *
-     * @dataProvider providerGetPostCategories
-     * @param  int $postId
+     * @dataProvider feedGetPostCategories
+     * @param int $postId
      * @return void
      */
-    public function testGetPostCategories($postId)
+    public function getPostCategories($expected, $postId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getPostCategories', [$postId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
     
     /**
-     * providerGetPostCategories
+     * feedGetPostCategories
      *
      * @return array
      */
-    public function providerGetPostCategories()
+    public function feedGetPostCategories()
     {  
         return [
-            ['test'],  // Invalid postId
-            [1000],  // Invalid postId  
-            [1],  // Valid postId
+            [0, 'test'],  // Invalid postId
+            [0, 1000],  // Invalid postId  
+            [2, 1],  // Valid postId
         ];
     }
 
     /**
-     * testAddUpdateCategories
+     * @test
      *
-     * @dataProvider providerAddUpdateCategories
-     * @param  mixed $postId
-     * @param  mixed $categories
+     * @dataProvider feedAddUpdateCategories
+     * @param mixed $postId
+     * @param mixed $categories
      * @return void
      */
-    public function testAddUpdateCategories($expected, $postId, $categories)
+    public function addUpdateCategories($expected, $postId, $categories)
     {
         $this->expectedReturnType(YkAppTest::TYPE_BOOL);
         $result = $this->execute($this->class, [], 'addUpdateCategories', [$postId, $categories]);
@@ -260,11 +261,11 @@ class BlogPostTest extends YkModelTest
     }
     
     /**
-     * providerAddUpdateCategories
+     * feedAddUpdateCategories
      *
      * @return array
      */
-    public function providerAddUpdateCategories()
+    public function feedAddUpdateCategories()
     {  
         return [
             [false, 'test', 'test'],  // Invalid postId, Invalid categories 
@@ -275,14 +276,14 @@ class BlogPostTest extends YkModelTest
     }
 
     /**
-     * testUpdateImagesOrder
+     * @test
      *
-     * @dataProvider providerUpdateImagesOrder
+     * @dataProvider feedUpdateImagesOrder
      * @param  int $postId
      * @param  int $order
      * @return void
      */
-    public function testUpdateImagesOrder($expected, $postId, $order)
+    public function updateImagesOrder($expected, $postId, $order)
     {
         $this->expectedReturnType(YkAppTest::TYPE_BOOL);
         $result = $this->execute($this->class, [], 'updateImagesOrder', [$postId, $order]);
@@ -290,11 +291,11 @@ class BlogPostTest extends YkModelTest
     }
     
     /**
-     * providerUpdateImagesOrder
+     * feedUpdateImagesOrder
      *
      * @return array
      */
-    public function providerUpdateImagesOrder()
+    public function feedUpdateImagesOrder()
     {  
         return [
             [false, 'test', 'test'],  // Invalid postId, Invalid order 
@@ -305,14 +306,14 @@ class BlogPostTest extends YkModelTest
     }    
 
     /**
-     * testDeleteBlogPostImage
+     * @test
      *
-     * @dataProvider providerDeleteBlogPostImage
+     * @dataProvider feedDeleteBlogPostImage
      * @param  int $postId
      * @param  int $imageId
      * @return void
      */
-    public function testDeleteBlogPostImage($expected, $postId, $imageId)
+    public function deleteBlogPostImage($expected, $postId, $imageId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_BOOL);
         $result = $this->execute($this->class, [], 'deleteBlogPostImage', [$postId, $imageId]);
@@ -320,11 +321,11 @@ class BlogPostTest extends YkModelTest
     }
     
     /**
-     * providerDeleteBlogPostImage
+     * feedDeleteBlogPostImage
      *
      * @return array
      */
-    public function providerDeleteBlogPostImage()
+    public function feedDeleteBlogPostImage()
     {  
         return [
             [false, 'test', 'test'],  // Invalid postId, Invalid imageId 
@@ -335,13 +336,13 @@ class BlogPostTest extends YkModelTest
     } 
 
     /**
-     * testSetPostViewsCount
+     * @test
      *
-     * @dataProvider providerSetPostViewsCount
+     * @dataProvider feedSetPostViewsCount
      * @param  int $postId
      * @return void
      */
-    public function testSetPostViewsCount($expected, $postId)
+    public function setPostViewsCount($expected, $postId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_BOOL);
         $result = $this->execute($this->class, [], 'setPostViewsCount', [$postId]);
@@ -349,11 +350,11 @@ class BlogPostTest extends YkModelTest
     }
     
     /**
-     * providerSetPostViewsCount
+     * feedSetPostViewsCount
      *
      * @return array
      */
-    public function providerSetPostViewsCount()
+    public function feedSetPostViewsCount()
     {  
         return [
             [false, 'test'],  // Invalid postId 

@@ -274,13 +274,13 @@ class BlogPostCategoryTest extends YkModelTest
     }
 
     /**
-     * testGetBlogPostCatParentChildWiseArr
+     * @test
      *
-     * @dataProvider providerGetBlogPostCatParentChildWiseArr
+     * @dataProvider feedGetBlogPostCatParentChildWiseArr
      * @param  int $langId
      * @return void
      */
-    public function testGetBlogPostCatParentChildWiseArr($expected, $langId, $parentId, $includeChildCat, $forSelectBox)
+    public function getBlogPostCatParentChildWiseArr($expected, $langId, $parentId, $includeChildCat, $forSelectBox)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getBlogPostCatParentChildWiseArr', [$langId, $parentId, $includeChildCat, $forSelectBox]);
@@ -289,11 +289,11 @@ class BlogPostCategoryTest extends YkModelTest
     }
 
     /**
-     * providerGetBlogPostCatParentChildWiseArr
+     * feedGetBlogPostCatParentChildWiseArr
      *
      * @return array
      */
-    public function providerGetBlogPostCatParentChildWiseArr()
+    public function feedGetBlogPostCatParentChildWiseArr()
     {
         return [
             [0, 'test', 0, false, false],  // Return blank array, Invalid langId   
@@ -312,14 +312,15 @@ class BlogPostCategoryTest extends YkModelTest
      * @test
      *
      * @dataProvider feedGetRootBlogPostCatArr
-     * @param  int $langId
+     * @param int $langId
      * @return void
      */
-    public function getRootBlogPostCatArr($langId)
+    public function getRootBlogPostCatArr($expected, $langId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getRootBlogPostCatArr', [$langId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
 
     /**
@@ -330,63 +331,66 @@ class BlogPostCategoryTest extends YkModelTest
     public function feedGetRootBlogPostCatArr()
     {
         return [
-            ['test'],  // Invalid langId   
-            [1],  // Valid langId
+            [0, 'test'],  // Invalid langId   
+            [2, 1],  // Valid langId
         ];
     }
 
     /**
-     * testGetCategoriesForSelectBox
+     * @test
      *
-     * @dataProvider providerGetCategoriesForSelectBox
+     * @dataProvider feedGetCategoriesForSelectBox
      * @param  int $langId
      * @param  int $ignoreCategoryId
      * @return void
      */
-    public function testGetCategoriesForSelectBox($langId, $ignoreCategoryId)
+    public function getCategoriesForSelectBox($expected, $langId, $ignoreCategoryId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getCategoriesForSelectBox', [$langId, $ignoreCategoryId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
 
     /**
-     * providerGetCategoriesForSelectBox
+     * feedGetCategoriesForSelectBox
      *
      * @return array
      */
-    public function providerGetCategoriesForSelectBox()
+    public function feedGetCategoriesForSelectBox()
     {
         return [
-            ['test', 0],  //Return blank array, Invalid langId   
-            [1, 1],  // Return array, Valid langId
+            [0, 'test', 0],  //Return blank array, Invalid langId 
+            [3, 1, 0],  // Return array, Valid langId  
+            [1, 1, 2],  // Return array, Valid langId
         ];
     }
 
     /**
-     * testGetFeaturedCategories
+     * @test
      *
-     * @dataProvider providerGetFeaturedCategories
+     * @dataProvider feedGetFeaturedCategories
      * @param  int $langId
      * @return void
      */
-    public function testGetFeaturedCategories($langId)
+    public function getFeaturedCategories($expected, $langId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getFeaturedCategories', [$langId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
 
     /**
-     * providerGetFeaturedCategories
+     * feedGetFeaturedCategories
      *
      * @return array
      */
-    public function providerGetFeaturedCategories()
+    public function feedGetFeaturedCategories()
     {
         return [
-            ['test'],  //Return blank array, Invalid langId   
-            [1],  // Return array, Valid langId
+            [0, 'test'],  //Return blank array, Invalid langId 
+            [1, 1],  // Return array, Valid langId
         ];
     }
 }

@@ -64,26 +64,26 @@ class AddressTest extends YkModelTest
     }
 
     /**
-     * testGetDefaultByRecordId
+     * @test
      *
-     * @dataProvider provideGetDefaultByRecordId
+     * @dataProvider feedGetDefaultByRecordId
      * @param  mixed $type
      * @param  mixed $recordId
      * @param  mixed $langId
      * @return void
      */
-    public function testGetDefaultByRecordId($type, $recordId, $langId)
+    public function getDefaultByRecordId($type, $recordId, $langId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getDefaultByRecordId', [$type, $recordId, $langId]);
         $this->assertIsArray($result);
     }    
     /**
-     * provideGetDefaultByRecordId
+     * feedGetDefaultByRecordId
      *
      * @return array
     */
-    public function provideGetDefaultByRecordId()
+    public function feedGetDefaultByRecordId()
     {  
         return [
             ['test', 1, 1],   //Invalid type, valid recordId, valid langId,
@@ -94,27 +94,27 @@ class AddressTest extends YkModelTest
     } 
 
     /**
-     * testGetData
+     * @test
      *
-     * @dataProvider provideGetData
+     * @dataProvider feedGetData
      * @param  mixed $type
      * @param  mixed $recordId
      * @param  mixed $isDefault
      * @param  mixed $joinTimeSlots
      * @return void
      */
-    public function testGetData($type, $recordId, $isDefault, $joinTimeSlots)
+    public function getData($type, $recordId, $isDefault, $joinTimeSlots)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getData', [$type, $recordId, $isDefault, $joinTimeSlots]);
         $this->assertIsArray($result);
     }    
     /**
-     * provideGetData
+     * feedGetData
      *
      * @return array
     */
-    public function provideGetData()
+    public function feedGetData()
     {  
         return [
             ['test', 1, 0, false],   //Invalid type, valid recordId, valid isDefault, valid joinTimeSlots
@@ -125,27 +125,27 @@ class AddressTest extends YkModelTest
     } 
 
     /**
-     * testDeleteByRecordId
+     * @test
      *
-     * @dataProvider provideDeleteByRecordId
+     * @dataProvider feedDeleteByRecordId
      * @param  mixed $type
      * @param  mixed $recordId
      * @param  mixed $isDefault
      * @param  mixed $joinTimeSlots
      * @return void
      */
-    public function testDeleteByRecordId($expected, $type, $recordId)
+    public function deleteByRecordId($expected, $type, $recordId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_BOOL);
         $result = $this->execute($this->class, [], 'deleteByRecordId', [$type, $recordId]);
         $this->assertEquals($expected, $result);
     }    
     /**
-     * provideDeleteByRecordId
+     * feedDeleteByRecordId
      *
      * @return array
     */
-    public function provideDeleteByRecordId()
+    public function feedDeleteByRecordId()
     {  
         return [
             [false, 'test', 1],   //Invalid type, valid recordId
@@ -156,27 +156,27 @@ class AddressTest extends YkModelTest
     }
 
     /**
-     * testGetGeoData
+     * @test
      *
-     * @dataProvider provideGetGeoData
+     * @dataProvider feedGetGeoData
      * @param  mixed $lat
      * @param  mixed $long
      * @param  mixed $countryCode
      * @param  mixed $stateCode
      * @return void
      */
-    public function testGetGeoData($lat, $long, $countryCode, $stateCode, $zipCode, $address)
+    public function getGeoData($lat, $long, $countryCode, $stateCode, $zipCode, $address)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getGeoData', [$lat, $long, $countryCode, $stateCode, $zipCode, $address]);
         $this->assertIsArray($result);
     }    
     /**
-     * provideGetGeoData
+     * feedGetGeoData
      *
      * @return array
     */
-    public function provideGetGeoData()
+    public function feedGetGeoData()
     {  
         return [
             ['test', 'test', 0, 0, 0, ''],  //Return array, invalid lat, invalid long  

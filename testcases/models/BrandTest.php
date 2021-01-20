@@ -87,26 +87,26 @@ class BrandTest extends YkModelTest
     } 
     
     /**
-     * testGetAllIdentifierAssoc
+     * @test
      *
-     * @dataProvider providerGetAllIdentifierAssoc
+     * @dataProvider feedGetAllIdentifierAssoc
      * @param  mixed $langId
      * @param  mixed $isDeleted
      * @param  mixed $isActive
      * @return void
      */
-    public function testGetAllIdentifierAssoc($langId, $isDeleted, $isActive)
+    public function getAllIdentifierAssoc($langId, $isDeleted, $isActive)
     {
         $result = $this->execute($this->class, [], 'getAllIdentifierAssoc', [$langId, $isDeleted, $isActive]);
         $this->assertIsArray($result);
     }
     
     /**
-     * providerGetAllIdentifierAssoc
+     * feedGetAllIdentifierAssoc
      *
      * @return array
      */
-    public function providerGetAllIdentifierAssoc()
+    public function feedGetAllIdentifierAssoc()
     {  
         return [
             [1, false, true],  // Valid langId , valid isDeleted, valid isActive   
@@ -114,27 +114,27 @@ class BrandTest extends YkModelTest
     }
 
     /**
-     * testGetBrandName
+     * @test
      *
-     * @dataProvider providerGetBrandName
+     * @dataProvider feedGetBrandName
      * @param  mixed $expected
      * @param  mixed $brandId
      * @param  mixed $langId
      * @param  mixed $isActive
      * @return void
      */
-    public function testGetBrandName($expected, $brandId, $langId, $isActive)
+    public function getBrandName($expected, $brandId, $langId, $isActive)
     {
         $result = $this->execute($this->class, [], 'getBrandName', [$brandId, $langId, $isActive]);
         $this->assertEquals($expected, $result);
     }
     
     /**
-     * providerGetBrandName
+     * feedGetBrandName
      *
      * @return array
      */
-    public function providerGetBrandName()
+    public function feedGetBrandName()
     {  
        return [
             [false, 'test', 'test', true], // Invalid brandId and Invalid langId
