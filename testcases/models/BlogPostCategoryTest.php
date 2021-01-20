@@ -280,11 +280,12 @@ class BlogPostCategoryTest extends YkModelTest
      * @param  int $langId
      * @return void
      */
-    public function testGetBlogPostCatParentChildWiseArr($langId, $parentId, $includeChildCat, $forSelectBox)
+    public function testGetBlogPostCatParentChildWiseArr($expected, $langId, $parentId, $includeChildCat, $forSelectBox)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getBlogPostCatParentChildWiseArr', [$langId, $parentId, $includeChildCat, $forSelectBox]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
 
     /**
@@ -295,26 +296,26 @@ class BlogPostCategoryTest extends YkModelTest
     public function providerGetBlogPostCatParentChildWiseArr()
     {
         return [
-            ['test', 0, false, false],  // Return blank array, Invalid langId   
-            [1, 0, 'test', 'test'],  // Return blank array, Valid langId, valid parentId,  Invalid includeChildCat, invalid forSelectBox
-            [1, 0, false, 'test'],  // Return blank array, Valid langId, valid parentId,  Invalid includeChildCat, invalid forSelectBox
-            [1, 0, 'test', false],  // Return array, Valid langId  
-            [1, 0, true, false],  // Return array, Valid langId 
-            [1, 0, false, true],  // Return array, Valid langId 
-            [1, 0, false, false],  // Return array, Valid langId   
-            [1, 0, true, true],  // Return array, Valid langId   
-            [1, 2, true, true],  // Return array, Valid langId
+            [0, 'test', 0, false, false],  // Return blank array, Invalid langId   
+            [0, 1, 0, 'test', 'test'],  // Return blank array, Valid langId, valid parentId,  Invalid includeChildCat, invalid forSelectBox
+            [0, 1, 0, false, 'test'],  // Return blank array, Valid langId, valid parentId,  Invalid includeChildCat, invalid forSelectBox
+            [0, 1, 0, 'test', false],  // Return array, Valid langId  
+            [2, 1, 0, true, false],  // Return array, Valid langId 
+            [2, 1, 0, false, true],  // Return array, Valid langId 
+            [2, 1, 0, false, false],  // Return array, Valid langId   
+            [2, 1, 0, true, true],  // Return array, Valid langId   
+            [1, 1, 2, true, true],  // Return array, Valid langId
         ];
     }
 
     /**
-     * testGetRootBlogPostCatArr
+     * @test
      *
-     * @dataProvider providerGetRootBlogPostCatArr
+     * @dataProvider feedGetRootBlogPostCatArr
      * @param  int $langId
      * @return void
      */
-    public function testGetRootBlogPostCatArr($langId)
+    public function getRootBlogPostCatArr($langId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getRootBlogPostCatArr', [$langId]);
@@ -322,11 +323,11 @@ class BlogPostCategoryTest extends YkModelTest
     }
 
     /**
-     * providerGetRootBlogPostCatArr
+     * feedGetRootBlogPostCatArr
      *
      * @return array
      */
-    public function providerGetRootBlogPostCatArr()
+    public function feedGetRootBlogPostCatArr()
     {
         return [
             ['test'],  // Invalid langId   
