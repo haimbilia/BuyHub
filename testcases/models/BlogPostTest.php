@@ -189,9 +189,9 @@ class BlogPostTest extends YkModelTest
      * testGetBlogPostsUnderCategory
      *
      * @dataProvider providerGetBlogPostsUnderCategory
-     * @param  mixed $langId
-     * @param  mixed $isDeleted
-     * @param  mixed $isActive
+     * @param  int $langId
+     * @param  int $isDeleted
+     * @param  int $isActive
      * @return void
      */
     public function testGetBlogPostsUnderCategory($langId, $categoryId)
@@ -220,7 +220,7 @@ class BlogPostTest extends YkModelTest
      * testGetPostCategories
      *
      * @dataProvider providerGetPostCategories
-     * @param  mixed $postId
+     * @param  int $postId
      * @return void
      */
     public function testGetPostCategories($postId)
@@ -278,8 +278,8 @@ class BlogPostTest extends YkModelTest
      * testUpdateImagesOrder
      *
      * @dataProvider providerUpdateImagesOrder
-     * @param  mixed $postId
-     * @param  mixed $order
+     * @param  int $postId
+     * @param  int $order
      * @return void
      */
     public function testUpdateImagesOrder($expected, $postId, $order)
@@ -308,8 +308,8 @@ class BlogPostTest extends YkModelTest
      * testDeleteBlogPostImage
      *
      * @dataProvider providerDeleteBlogPostImage
-     * @param  mixed $postId
-     * @param  mixed $imageId
+     * @param  int $postId
+     * @param  int $imageId
      * @return void
      */
     public function testDeleteBlogPostImage($expected, $postId, $imageId)
@@ -338,7 +338,7 @@ class BlogPostTest extends YkModelTest
      * testSetPostViewsCount
      *
      * @dataProvider providerSetPostViewsCount
-     * @param  mixed $postId
+     * @param  int $postId
      * @return void
      */
     public function testSetPostViewsCount($expected, $postId)

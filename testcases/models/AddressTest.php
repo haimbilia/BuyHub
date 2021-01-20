@@ -124,4 +124,65 @@ class AddressTest extends YkModelTest
         ];
     } 
 
+    /**
+     * testDeleteByRecordId
+     *
+     * @dataProvider provideDeleteByRecordId
+     * @param  mixed $type
+     * @param  mixed $recordId
+     * @param  mixed $isDefault
+     * @param  mixed $joinTimeSlots
+     * @return void
+     */
+    public function testDeleteByRecordId($expected, $type, $recordId)
+    {
+        $this->expectedReturnType(YkAppTest::TYPE_BOOL);
+        $result = $this->execute($this->class, [], 'deleteByRecordId', [$type, $recordId]);
+        $this->assertEquals($expected, $result);
+    }    
+    /**
+     * provideDeleteByRecordId
+     *
+     * @return array
+    */
+    public function provideDeleteByRecordId()
+    {  
+        return [
+            [false, 'test', 1],   //Invalid type, valid recordId
+            [false, 1, 'test'],   //Valid type, Invalid recordId
+            [false, 'test', 'test'],   //Invalid type, Invalid recordId
+            [true, 1, 1],       //Valid type, valid recordId
+        ];
+    }
+
+    /**
+     * testGetGeoData
+     *
+     * @dataProvider provideGetGeoData
+     * @param  mixed $lat
+     * @param  mixed $long
+     * @param  mixed $countryCode
+     * @param  mixed $stateCode
+     * @return void
+     */
+    public function testGetGeoData($lat, $long, $countryCode, $stateCode, $zipCode, $address)
+    {
+        $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
+        $result = $this->execute($this->class, [], 'getGeoData', [$lat, $long, $countryCode, $stateCode, $zipCode, $address]);
+        $this->assertIsArray($result);
+    }    
+    /**
+     * provideGetGeoData
+     *
+     * @return array
+    */
+    public function provideGetGeoData()
+    {  
+        return [
+            ['test', 'test', 0, 0, 0, ''],  //Return array, invalid lat, invalid long  
+            ['test', '70.1', 0, 0, 0, ''],  //Return array, invalid lat, valid long        
+            ['30.2', '70.1', 0, 0, 0, ''],  //Return array, valid lat, valid long       
+        ];
+    }
+
 }

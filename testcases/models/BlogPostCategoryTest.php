@@ -184,7 +184,7 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetMaxOrder
      *
      * @dataProvider provideGetMaxOrder
-     * @param  mixed $parentId
+     * @param  int $parentId
      * @return void
      */
     public function testGetMaxOrder($parentId)
@@ -211,8 +211,8 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetCategoryStructure
      *
      * @dataProvider providerGetCategoryStructure
-     * @param  mixed $bpcategory_id
-     * @param  mixed $category_tree_array
+     * @param  int $bpcategory_id
+     * @param  array $category_tree_array
      * @return void
      */
     public function testGetCategoryStructure($bpcategory_id, $category_tree_array)
@@ -239,8 +239,8 @@ class BlogPostCategoryTest extends YkModelTest
      * testIsExistBlogPostCatLang
      *
      * @dataProvider providerIsExistBlogPostCatLang
-     * @param  mixed $lang_id
-     * @param  mixed $bpcategory_id
+     * @param  int $lang_id
+     * @param  int $bpcategory_id
      * @return void
      */
     public function testIsExistBlogPostCatLang($expected, $lang_id, $bpcategory_id)
@@ -269,8 +269,8 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetParentTreeStructure
      *
      * @dataProvider providerGetParentTreeStructure
-     * @param  mixed $bpcategory_id
-     * @param  mixed $level
+     * @param  int $bpcategory_id
+     * @param  int $level
      * @param  mixed $name_suffix
      * @return void
      */
@@ -299,7 +299,7 @@ class BlogPostCategoryTest extends YkModelTest
      *
      * @dataProvider providerGetBlogPostCatAutoSuggest
      * @param  mixed $keyword
-     * @param  mixed $limit
+     * @param  int $limit
      * @return void
      */
     public function testGetBlogPostCatAutoSuggest($keyword, $limit)
@@ -325,7 +325,7 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetNestedArray
      *
      * @dataProvider providerGetNestedArray
-     * @param  mixed $langId
+     * @param  int $langId
      * @return void
      */
     public function testGetNestedArray($langId)
@@ -352,7 +352,7 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetBlogPostCatParentChildWiseArr
      *
      * @dataProvider providerGetBlogPostCatParentChildWiseArr
-     * @param  mixed $langId
+     * @param  int $langId
      * @return void
      */
     public function testGetBlogPostCatParentChildWiseArr($langId, $parentId, $includeChildCat, $forSelectBox)
@@ -386,7 +386,7 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetRootBlogPostCatArr
      *
      * @dataProvider providerGetRootBlogPostCatArr
-     * @param  mixed $langId
+     * @param  int $langId
      * @return void
      */
     public function testGetRootBlogPostCatArr($langId)
@@ -413,8 +413,8 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetCategoriesForSelectBox
      *
      * @dataProvider providerGetCategoriesForSelectBox
-     * @param  mixed $langId
-     * @param  mixed $ignoreCategoryId
+     * @param  int $langId
+     * @param  int $ignoreCategoryId
      * @return void
      */
     public function testGetCategoriesForSelectBox($langId, $ignoreCategoryId)
@@ -441,7 +441,7 @@ class BlogPostCategoryTest extends YkModelTest
      * testGetFeaturedCategories
      *
      * @dataProvider providerGetFeaturedCategories
-     * @param  mixed $langId
+     * @param  int $langId
      * @return void
      */
     public function testGetFeaturedCategories($langId)
