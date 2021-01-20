@@ -27,7 +27,9 @@ class YkPluginTest extends YkAppTest
             FatUtility::dieJsonError($error);
         }
 
-        define('LANG_CODES_ARR', Language::getAllCodesAssoc());
+        if (!defined('LANG_CODES_ARR')) {
+            define('LANG_CODES_ARR', Language::getAllCodesAssoc());
+        }
 
         if (Plugin::INACTIVE == self::$plugin['plugin_active']) {
             if (true === Plugin::updateStatus(self::$plugin['plugin_type'], Plugin::ACTIVE, self::$plugin['plugin_id'])) {
@@ -58,7 +60,7 @@ class YkPluginTest extends YkAppTest
             }
         }
     }
-    
+
     /**
      * updateSettings - Update Plugin's default settings to make it temporarily working.
      *

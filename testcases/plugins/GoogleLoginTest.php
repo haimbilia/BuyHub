@@ -19,25 +19,39 @@ class GoogleLoginTest extends YkPluginTest
     }
 
     /**
-     * testAuthenticate
+     * settings - Plugin setting need to configure first to test plugin method.
      *
-     * @dataProvider dataAuthenticate
+     * @return void
+     */
+    public static function settings()
+    {
+        return [
+            'client_id' => '293307261869-g6ns17slnsutjf8smv6v0210mbqnajl2.apps.googleusercontent.com',
+            'client_secret' => 'Q7RN2uPn0jY7QPzsK2WB1iUL',
+            'developer_key' => 'AIzaSyAYRPS5jwNbMHoowNhNvna5b_bdYffcwdE',
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider feedAuthenticate
      * @param  bool $expected
      * @param  mixed $code
      * @return void
      */
-    public function testAuthenticate($expected, $code)
+    public function authenticate($expected, $code)
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'authenticate', [$code]);
         $this->assertEquals($expected, $response);
     }
         
     /**
-     * dataAuthenticate
+     * feedAuthenticate
      *
      * @return array
      */
-    public function dataAuthenticate(): array
+    public function feedAuthenticate(): array
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [
@@ -48,25 +62,25 @@ class GoogleLoginTest extends YkPluginTest
     }
 
     /**
-     * testSetAccessToken
+     * @test
      *
-     * @dataProvider dataAccessToken
+     * @dataProvider feedAccessToken
      * @param  bool $expected
      * @param  mixed $accessToken
      * @return void
      */
-    public function testSetAccessToken($expected, $accessToken)
+    public function setAccessToken($expected, $accessToken)
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'setAccessToken', [$accessToken]);
         $this->assertEquals($expected, $response);
     }
         
     /**
-     * dataAccessToken
+     * feedAccessToken
      *
      * @return array
      */
-    public function dataAccessToken()
+    public function feedAccessToken()
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [

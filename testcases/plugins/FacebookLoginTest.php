@@ -19,33 +19,46 @@ class FacebookLoginTest extends YkPluginTest
     }
 
     /**
-     * testVerifyAccessToken
+     * settings - Plugin setting need to configure first to test plugin method.
      *
-     * @dataProvider setInput
+     * @return void
+     */
+    public static function settings()
+    {
+        return [
+            'app_id' => '300972908012491',
+            'app_secret' => '772448424077daa677ff01903746a2e4'
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider feedVerifyAccessToken
      * @param  mixed $expected
      * @param  mixed $accessToken
      * @param  mixed $state
      * @return void
      */
-    public function testVerifyAccessToken(bool $expected, $accessToken, $state = ''): void
+    public function verifyAccessToken(bool $expected, $accessToken, $state = ''): void
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'verifyAccessToken', [$accessToken, $state]);
         $this->assertEquals($expected, $response);
     }
         
     /**
-     * setInput
+     * feedVerifyAccessToken
      *
      * @return array
      */
-    public function setInput(): array
+    public function feedVerifyAccessToken(): array
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [
             [false, '', ''], // Return False in case of all input empty.
             [false, 'abc', 'xyz'], // Return False in case of all input empty
-            [true, 'EAAEViMZCbui8BAOgZB44rNUIWWbIRUtbJjzMI63nvW3iIcd1mAozgtfZCixUPMl6VC3YXA9ocjauZBxi5V6gFeijZBZABtaTY5Sy8Ym5ADZBfS70oG5cDaOa3X5HEDC5irEAPUnZCKfKklZAYmL2AUPnLuBT0TeQdsIDYl9r7kgGvAwZDZD'], // Return True in case state empty
-            [true, 'EAAEViMZCbui8BAOgZB44rNUIWWbIRUtbJjzMI63nvW3iIcd1mAozgtfZCixUPMl6VC3YXA9ocjauZBxi5V6gFeijZBZABtaTY5Sy8Ym5ADZBfS70oG5cDaOa3X5HEDC5irEAPUnZCKfKklZAYmL2AUPnLuBT0TeQdsIDYl9r7kgGvAwZDZD', 'ce5f965b037a2a71a316dd7cb2f94e2b'], // Return False in case of same access token been already used
+            [false, 'EAAEViMZCbui8BAOgZB44rNUIWWbIRUtbJjzMI63nvW3iIcd1mAozgtfZCixUPMl6VC3YXA9ocjauZBxi5V6gFeijZBZABtaTY5Sy8Ym5ADZBfS70oG5cDaOa3X5HEDC5irEAPUnZCKfKklZAYmL2AUPnLuBT0TeQdsIDYl9r7kgGvAwZDZD'], // Return false in case invalid token
+            [false, 'EAAEViMZCbui8BAOgZB44rNUIWWbIRUtbJjzMI63nvW3iIcd1mAozgtfZCixUPMl6VC3YXA9ocjauZBxi5V6gFeijZBZABtaTY5Sy8Ym5ADZBfS70oG5cDaOa3X5HEDC5irEAPUnZCKfKklZAYmL2AUPnLuBT0TeQdsIDYl9r7kgGvAwZDZD', 'ce5f965b037a2a71a316dd7cb2f94e2b'], // Return False in case of same access token but invalid.
         ];
     }
 }

@@ -33,9 +33,9 @@ class FcmPushNotificationTest extends YkPluginTest
     }
 
     /**
-     * testRequestAccessToken
+     * @test
      *
-     * @dataProvider inputNotify
+     * @dataProvider feedNotify
      * @param  int $expected
      * @param  mixed $title
      * @param  mixed $message
@@ -43,7 +43,7 @@ class FcmPushNotificationTest extends YkPluginTest
      * @param  mixed $data
      * @return void
      */
-    public function testNotify($expected, $title, $message, $os, $data = [])
+    public function notify($expected, $title, $message, $os, $data = [])
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'notify', [$title, $message, $os, $data]);
@@ -52,11 +52,11 @@ class FcmPushNotificationTest extends YkPluginTest
     }
         
     /**
-     * inputNotify
+     * feedNotify
      *
      * @return array
      */
-    public function inputNotify()
+    public function feedNotify()
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [
