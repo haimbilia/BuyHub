@@ -68,7 +68,12 @@ class PluginSetting
             $settingsData['plugin_name'] = !empty($settingsData['plugin_name']) ? $settingsData['plugin_name'] : $settingsData['plugin_identifier'];
         }
         $settings = array_merge($row, $settingsData);
-        return (!empty($column) && is_string($column) && isset($settings[$column])) ? $settings[$column] : $settings;
+
+        if (!empty($column) && is_string($column)) {
+            return array_key_exists($column, $settings) ? $settings[$column] : '';
+        }
+
+        return $settings;
     }
 
     public function save(array $data): bool

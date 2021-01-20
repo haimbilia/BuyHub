@@ -19,25 +19,38 @@ class InstagramLoginTest extends YkPluginTest
     }
 
     /**
-     * testRequestAccessToken
+     * settings - Plugin setting need to configure first to test plugin method.
      *
-     * @dataProvider dataRequestAccessToken
+     * @return void
+     */
+    public static function settings()
+    {
+        return [
+            'client_id' => '2614237385501383',
+            'client_secret' => '542c48a187e0828d07690b43fa9e3a43',
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider feedRequestAccessToken
      * @param  bool $expected
      * @param  mixed $code
      * @return void
      */
-    public function testRequestAccessToken($expected, $code)
+    public function requestAccessToken($expected, $code)
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'requestAccessToken', [$code]);
         $this->assertEquals($expected, $response);
     }
         
     /**
-     * dataRequestAccessToken
+     * feedRequestAccessToken
      *
      * @return array
      */
-    public function dataRequestAccessToken(): array
+    public function feedRequestAccessToken(): array
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [
@@ -48,25 +61,25 @@ class InstagramLoginTest extends YkPluginTest
     }
 
     /**
-     * testRequestUserProfileInfo
+     * @test
      *
-     * @dataProvider setAccessTokenInput
+     * @dataProvider feedAccessTokenInput
      * @param  bool $expected
      * @param  mixed $accessToken
      * @return void
      */
-    public function testRequestUserProfileInfo($expected, $accessToken): void
+    public function requestUserProfileInfo($expected, $accessToken): void
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'requestUserProfileInfo', [$accessToken]);
         $this->assertEquals($expected, $response);
     }
         
     /**
-     * setAccessTokenInput
+     * feedAccessTokenInput
      *
      * @return array
      */
-    public function setAccessTokenInput(): array
+    public function feedAccessTokenInput(): array
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [

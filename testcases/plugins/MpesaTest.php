@@ -20,24 +20,41 @@ class MpesaTest extends YkPluginTest
     }
 
     /**
-     * testCallbackUrl
+     * settings - Plugin setting need to configure first to test plugin method.
      *
-     * @dataProvider dataCallbackUrl
+     * @return void
+     */
+    public static function settings()
+    {
+        return [
+            'env' => PLUGIN::ENV_SANDBOX,
+            'consumer_key' => '1ay0T0g8uZ6eVrzwocZB4c945gcmYz9m',
+            'consumer_secret' => 'EBD7NmLBwF5LOvTA',
+            'account_reference' => 'YOKART2020',
+            'shortcode' => '174379',
+            'passkey' => 'AAAAld-BZYQ:APA91bEwdNyqPBYqiuXFAY_kYZRqju5wuiduZiuUx1RwcTasWLz__uiHUMnsKV95CQVi_BJVnX062LOdUWCd1-gwYDdA2139jNXPccLIckl5cH2ANeJyufAoS-UJGIMjZtbRAW0fAyk1'
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider feedCallbackUrl
      * @param  mixed $orderId
      * @return void
      */
-    public function testCallbackUrl($orderId)
+    public function callbackUrl($orderId)
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'callbackUrl', [$orderId]);
         $this->assertIsString($response);
     }
 
     /**
-     * dataCallbackUrl
+     * feedCallbackUrl
      *
      * @return array
      */
-    public function dataCallbackUrl(): array
+    public function feedCallbackUrl(): array
     {
         return [
             [''], // Return url string in case of all input empty.
@@ -48,23 +65,23 @@ class MpesaTest extends YkPluginTest
     }
 
     /**
-     * testGenerateToken
+     * @test
      *
-     * @dataProvider dataGenerateToken
+     * @dataProvider feedGenerateToken
      * @return void
      */
-    public function testGenerateToken(): void
+    public function generateToken(): void
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'generateToken');
         $this->assertIsBool($response);
     }
 
     /**
-     * dataGenerateToken
+     * feedGenerateToken
      *
      * @return array
      */
-    public function dataGenerateToken(): array
+    public function feedGenerateToken(): array
     {
         return [
             [], // Return bool(true/false) if token generated or not.
@@ -72,23 +89,23 @@ class MpesaTest extends YkPluginTest
     }
 
     /**
-     * testGetToken
+     * @test
      *
-     * @dataProvider dataGetToken
+     * @dataProvider feedGetToken
      * @return void
      */
-    public function testGetToken(): void
+    public function getToken(): void
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'getToken');
         $this->assertIsString($response);
     }
 
     /**
-     * dataGetToken
+     * feedGetToken
      *
      * @return array
      */
-    public function dataGetToken(): array
+    public function feedGetToken(): array
     {
         return [
             [], // Return string type if response set or not.
@@ -96,27 +113,27 @@ class MpesaTest extends YkPluginTest
     }
 
     /**
-     * testSTKPushSimulation
+     * @test
      *
-     * @dataProvider dataSTKPushSimulation
+     * @dataProvider feedSTKPushSimulation
      * @param  mixed $orderId
      * @param  mixed $amount
      * @param  mixed $customerPhone
      * @param  mixed $transactionDesc
      * @return void
      */
-    public function testSTKPushSimulation($expected, $orderId, $amount, $customerPhone, $transactionDesc): void
+    public function sTKPushSimulation($expected, $orderId, $amount, $customerPhone, $transactionDesc): void
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'STKPushSimulation', [$orderId, $amount, $customerPhone, $transactionDesc]);
         $this->assertEquals($expected, $response);
     }
 
     /**
-     * dataSTKPushSimulation
+     * feedSTKPushSimulation
      *
      * @return array
      */
-    public function dataSTKPushSimulation(): array
+    public function feedSTKPushSimulation(): array
     {
         return [
             [false, 'O1607946732', '80', '918053250813', 'test'], // Return false if all invalid values are passed
@@ -128,24 +145,24 @@ class MpesaTest extends YkPluginTest
     }
     
     /**
-     * testSTKPushQuery
+     * @test
      *
-     * @dataProvider dataSTKPushQuery
+     * @dataProvider feedSTKPushQuery
      * @param  mixed $checkoutRequestID
      * @return void
      */
-    public function testSTKPushQuery($checkoutRequestID): void
+    public function sTKPushQuery($checkoutRequestID): void
     {
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'STKPushQuery', [$checkoutRequestID]);
         $this->assertIsBool($response);
     }
 
     /**
-     * dataSTKPushQuery
+     * feedSTKPushQuery
      *
      * @return array
      */
-    public function dataSTKPushQuery(): array
+    public function feedSTKPushQuery(): array
     {
         return [
             ['O1607946732'], // Return false if all invalid values are passed

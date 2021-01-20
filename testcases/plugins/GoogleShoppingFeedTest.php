@@ -5,13 +5,27 @@ class GoogleShoppingFeedTest extends YkPluginTest
     public const KEY_NAME = 'GoogleShoppingFeed';
 
     /**
-     * testAgeGroup
+     * settings - Plugin setting need to configure first to test plugin method.
      *
-     * @dataProvider inputAgeGroup
+     * @return void
+     */
+    public static function settings()
+    {
+        return [
+            'client_id' => '989922044446-f9uj7vt2uir3amtmv7ieufqqt98k8llg.apps.googleusercontent.com',
+            'client_secret' => 'Eug6sn8yKkd4iAZHTtCkaZ6p',
+            'developer_key' => 'AIzaSyAQeP-6U2NVbQODmAbEStE_yLEg49Ew20E',
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider feedAgeGroup
      * @param  mixed $langId
      * @return void
      */
-    public function testAgeGroup($langId)
+    public function ageGroup($langId)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'ageGroup', [$langId]);
@@ -19,11 +33,11 @@ class GoogleShoppingFeedTest extends YkPluginTest
     }
         
     /**
-     * inputAgeGroup
+     * feedAgeGroup
      *
      * @return array
      */
-    public function inputAgeGroup(): array
+    public function feedAgeGroup(): array
     {
         return [
             [1], // Return array with values
@@ -34,15 +48,15 @@ class GoogleShoppingFeedTest extends YkPluginTest
     }
     
     /**
-     * testGetProductCategory
+     * @test
      *
-     * @dataProvider inputProductCategory
+     * @dataProvider feedGetProductCategory
      * @param  mixed $userId
      * @param  mixed $keyword
      * @param  mixed $returnFullArray
      * @return void
      */
-    public function testGetProductCategory($userId, $keyword, $returnFullArray)
+    public function getProductCategory($userId, $keyword, $returnFullArray)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId(), $userId], 'getProductCategory', [$keyword, $returnFullArray]);
@@ -50,11 +64,11 @@ class GoogleShoppingFeedTest extends YkPluginTest
     }
     
     /**
-     * inputProductCategory
+     * feedGetProductCategory
      *
      * @return array
      */
-    public function inputProductCategory(): array
+    public function feedGetProductCategory(): array
     {
         return [
             [4, 12, true], // Return empty array if invalid type values passed. Return invalid argument type error by actual method.
@@ -67,15 +81,15 @@ class GoogleShoppingFeedTest extends YkPluginTest
     }
     
     /**
-     * testPublishBatch
+     * @test
      *
-     * @dataProvider inputPublishBatch
+     * @dataProvider feedPublishBatch
      * @param  mixed $expected
      * @param  mixed $userId
      * @param  mixed $data
      * @return void
      */
-    public function testPublishBatch($expected, $userId, $data)
+    public function publishBatch($expected, $userId, $data)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId(), $userId], 'publishBatch', [$data]);
@@ -84,11 +98,11 @@ class GoogleShoppingFeedTest extends YkPluginTest
     }
     
     /**
-     * inputPublishBatch
+     * feedPublishBatch
      *
      * @return array
      */
-    public function inputPublishBatch(): array
+    public function feedPublishBatch(): array
     {
         return [
             [0, 4, []], // Return 0. No Data

@@ -543,14 +543,20 @@ class Plugin extends MyAppModel
         if (in_array($typeId, self::HAVING_KINGPIN)) {
             $kingPin = (self::INACTIVE == $status) ? self::INACTIVE : $id;
             
-            $assignValues = ['CONF_DEFAULT_PLUGIN_' . $typeId => $kingPin];
-            FatApp::getDb()->insertFromArray(
+            $assignValues = [
+                'conf_name' => 'CONF_DEFAULT_PLUGIN_' . $typeId,
+                'conf_val' => $kingPin
+            ];
+            if (false === $db->insertFromArray(
                 'tbl_configurations',
                 $assignValues,
                 false,
                 array(),
                 $assignValues
-            );
+            )) {
+                $error = $db->getError();
+                return false;
+            }
         }
         return true;
     }

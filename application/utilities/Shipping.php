@@ -252,7 +252,7 @@ class Shipping
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
         foreach ($this->selProdShipRates as $rateId => $rates) {
             $product = $productInfo[$rates['selprod_id']];
-            if (!empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
+            if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
                 SystemLog::set($msg);
