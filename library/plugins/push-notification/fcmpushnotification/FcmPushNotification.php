@@ -35,7 +35,7 @@ class FcmPushNotification extends PushNotificationBase
             'status' => $status,
             'msg' => $msg,
             'data' => $data,
-        ];
+        ];        
     }
     
     /**

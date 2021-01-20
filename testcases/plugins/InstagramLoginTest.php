@@ -41,7 +41,7 @@ class InstagramLoginTest extends YkPluginTest
      */
     public function requestAccessToken($expected, $code)
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'requestAccessToken', [$code]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'requestAccessToken', [$code]);
         $this->assertEquals($expected, $response);
     }
         
@@ -70,7 +70,7 @@ class InstagramLoginTest extends YkPluginTest
      */
     public function requestUserProfileInfo($expected, $accessToken): void
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'requestUserProfileInfo', [$accessToken]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'requestUserProfileInfo', [$accessToken]);
         $this->assertEquals($expected, $response);
     }
         

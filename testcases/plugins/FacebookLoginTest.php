@@ -42,7 +42,7 @@ class FacebookLoginTest extends YkPluginTest
      */
     public function verifyAccessToken(bool $expected, $accessToken, $state = ''): void
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'verifyAccessToken', [$accessToken, $state]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'verifyAccessToken', [$accessToken, $state]);
         $this->assertEquals($expected, $response);
     }
         

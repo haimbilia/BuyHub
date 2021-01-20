@@ -26,12 +26,13 @@ class CurrencyConverterTest extends YkPluginTest
     public function getRates($expected, $toCurrencies)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'getRates', [$toCurrencies]);
-        $this->assertIsArray($response);
-        $status = empty($response) ? Plugin::RETURN_FALSE : $response['status'];
-        $this->assertEquals($expected, $status);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'getRates', [$toCurrencies]);
+        $this->assertArrayHasKey('status', $response);
+        $this->assertArrayHasKey('msg', $response);
+        $this->assertArrayHasKey('data', $response);       
+        $this->assertEquals($expected, $response['status']);
     }
-        
+
     /**
      * feedGetRates
      *
@@ -40,9 +41,9 @@ class CurrencyConverterTest extends YkPluginTest
     public function feedGetRates(): array
     {
         return [
-            [Plugin::RETURN_TRUE, ['USD', 'INR']], // Correct Values. Return array . Expected status 1(TRUE)
-            [Plugin::RETURN_FALSE, []], // No Value. Return array . Expected status 0(FALSE)
-            [Plugin::RETURN_FALSE, 'test'],   // Invalid Value. Return array . Expected status 0(FALSE)
+            [1, ['USD', 'INR']], // Correct Values. Return array . Expected status 1(TRUE)
+            [0, []], // No Value. Return array . Expected status 0(FALSE)
+            [0, 'test'],   // Invalid Value. Return array . Expected status 0(FALSE)
         ];
     }
 }

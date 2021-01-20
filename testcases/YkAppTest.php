@@ -19,7 +19,7 @@ class YkAppTest extends TestCase
     private $error = '';
     protected $classObj;
 
-    public $langId = CONF_LANG_ID;
+    public $langId = SYSTEM_LANG_ID;
 
     /**
      * execute
