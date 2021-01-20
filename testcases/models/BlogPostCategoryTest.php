@@ -315,11 +315,12 @@ class BlogPostCategoryTest extends YkModelTest
      * @param int $langId
      * @return void
      */
-    public function getRootBlogPostCatArr($langId)
+    public function getRootBlogPostCatArr($expected, $langId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getRootBlogPostCatArr', [$langId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
 
     /**
@@ -330,8 +331,8 @@ class BlogPostCategoryTest extends YkModelTest
     public function feedGetRootBlogPostCatArr()
     {
         return [
-            ['test'],  // Invalid langId   
-            [1],  // Valid langId
+            [0, 'test'],  // Invalid langId   
+            [2, 1],  // Valid langId
         ];
     }
 
@@ -343,11 +344,12 @@ class BlogPostCategoryTest extends YkModelTest
      * @param  int $ignoreCategoryId
      * @return void
      */
-    public function getCategoriesForSelectBox($langId, $ignoreCategoryId)
+    public function getCategoriesForSelectBox($expected, $langId, $ignoreCategoryId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getCategoriesForSelectBox', [$langId, $ignoreCategoryId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
 
     /**
@@ -358,8 +360,9 @@ class BlogPostCategoryTest extends YkModelTest
     public function feedGetCategoriesForSelectBox()
     {
         return [
-            ['test', 0],  //Return blank array, Invalid langId   
-            [1, 1],  // Return array, Valid langId
+            [0, 'test', 0],  //Return blank array, Invalid langId 
+            [3, 1, 0],  // Return array, Valid langId  
+            [1, 1, 2],  // Return array, Valid langId
         ];
     }
 
@@ -370,11 +373,12 @@ class BlogPostCategoryTest extends YkModelTest
      * @param  int $langId
      * @return void
      */
-    public function getFeaturedCategories($langId)
+    public function getFeaturedCategories($expected, $langId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getFeaturedCategories', [$langId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
 
     /**
@@ -385,8 +389,8 @@ class BlogPostCategoryTest extends YkModelTest
     public function feedGetFeaturedCategories()
     {
         return [
-            ['test'],  //Return blank array, Invalid langId   
-            [1],  // Return array, Valid langId
+            [0, 'test'],  //Return blank array, Invalid langId 
+            [1, 1],  // Return array, Valid langId
         ];
     }
 }

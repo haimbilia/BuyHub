@@ -190,15 +190,15 @@ class BlogPostTest extends YkModelTest
      *
      * @dataProvider feedGetBlogPostsUnderCategory
      * @param  int $langId
-     * @param  int $isDeleted
-     * @param  int $isActive
+     * @param  int $categoryId
      * @return void
      */
-    public function getBlogPostsUnderCategory($langId, $categoryId)
+    public function getBlogPostsUnderCategory($expected, $langId, $categoryId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getBlogPostsUnderCategory', [$langId, $categoryId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
     
     /**
@@ -209,10 +209,10 @@ class BlogPostTest extends YkModelTest
     public function feedGetBlogPostsUnderCategory()
     {  
         return [
-            ['test', 1],  // Invalid langId , Valid categoryId   
-            ['test', 1000],  // Invalid langId , Invalid categoryId   
-            [1, 1000],  // Valid langId , Invalid categoryId           
-            [1, 1],  // Valid langId , Valid categoryId
+            [0, 'test', 1],  // Invalid langId , Valid categoryId   
+            [0, 'test', 1000],  // Invalid langId , Invalid categoryId   
+            [0, 1, 1000],  // Valid langId , Invalid categoryId           
+            [2, 1, 1],  // Valid langId , Valid categoryId
         ];
     }
 
@@ -220,14 +220,15 @@ class BlogPostTest extends YkModelTest
      * @test
      *
      * @dataProvider feedGetPostCategories
-     * @param  int $postId
+     * @param int $postId
      * @return void
      */
-    public function getPostCategories($postId)
+    public function getPostCategories($expected, $postId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getPostCategories', [$postId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
     
     /**
@@ -238,9 +239,9 @@ class BlogPostTest extends YkModelTest
     public function feedGetPostCategories()
     {  
         return [
-            ['test'],  // Invalid postId
-            [1000],  // Invalid postId  
-            [1],  // Valid postId
+            [0, 'test'],  // Invalid postId
+            [0, 1000],  // Invalid postId  
+            [2, 1],  // Valid postId
         ];
     }
 
@@ -248,8 +249,8 @@ class BlogPostTest extends YkModelTest
      * @test
      *
      * @dataProvider feedAddUpdateCategories
-     * @param  mixed $postId
-     * @param  mixed $categories
+     * @param mixed $postId
+     * @param mixed $categories
      * @return void
      */
     public function addUpdateCategories($expected, $postId, $categories)
