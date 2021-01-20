@@ -72,11 +72,12 @@ class AddressTest extends YkModelTest
      * @param  mixed $langId
      * @return void
      */
-    public function getDefaultByRecordId($type, $recordId, $langId)
+    public function getDefaultByRecordId($expected, $type, $recordId, $langId)
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getDefaultByRecordId', [$type, $recordId, $langId]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, $result['addr_id']);
     }    
     /**
      * feedGetDefaultByRecordId
@@ -86,10 +87,10 @@ class AddressTest extends YkModelTest
     public function feedGetDefaultByRecordId()
     {  
         return [
-            ['test', 1, 1],   //Invalid type, valid recordId, valid langId,
-            [1, 'test', 1],   //Valid type, Invalid recordId, valid langId
-            [1, 1, 'test'],   //Valid type, valid recordId, Invalid langId
-            [1, 1, 1],   //Valid type, valid recordId, valid langId
+            [0, 'test', 1, 1],   //Invalid type, valid recordId, valid langId,
+            [0, 1, 'test', 1],   //Valid type, Invalid recordId, valid langId
+            [0, 1, 1, 'test'],   //Valid type, valid recordId, Invalid langId
+            [1, 1, 1, 1],   //Valid type, valid recordId, valid langId
         ];
     } 
 

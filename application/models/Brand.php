@@ -129,7 +129,7 @@ class Brand extends MyAppModel
         return false;
     }
 
-    public function canRecordUpdateStatus($id)
+    /* public function canRecordUpdateStatus($id)
     {
         $srch = $this->getSearchObject();
         $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $id);
@@ -141,7 +141,7 @@ class Brand extends MyAppModel
         }
         return false;
     }
-
+    */
     public function rewriteUrl(string $keyword): string
     {
         if ($this->mainTableRecordId < 1) {

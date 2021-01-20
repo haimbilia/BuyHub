@@ -90,15 +90,17 @@ class BrandTest extends YkModelTest
      * @test
      *
      * @dataProvider feedGetAllIdentifierAssoc
-     * @param  mixed $langId
-     * @param  mixed $isDeleted
-     * @param  mixed $isActive
+     * @param  int $langId
+     * @param  bool $isDeleted
+     * @param  bool $isActive
      * @return void
      */
-    public function getAllIdentifierAssoc($langId, $isDeleted, $isActive)
+    public function getAllIdentifierAssoc($expected, $langId, $isDeleted, $isActive)
     {
+        $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
         $result = $this->execute($this->class, [], 'getAllIdentifierAssoc', [$langId, $isDeleted, $isActive]);
         $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
     }
     
     /**
@@ -109,7 +111,38 @@ class BrandTest extends YkModelTest
     public function feedGetAllIdentifierAssoc()
     {  
         return [
-            [1, false, true],  // Valid langId , valid isDeleted, valid isActive   
+            [0, 'test', false, false],  // Invalid langId , valid isDeleted, valid isActive  
+            [2, 1, false, false],  // Valid langId , valid isDeleted, valid isActive  
+            [2, 1, false, true],  // Valid langId , valid isDeleted, valid isActive   
+            [2, 1, true, false],  // Valid langId , valid isDeleted, valid isActive
+            [2, 1, true, true],  // Valid langId , valid isDeleted, valid isActive
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider feedCanRecordMarkDelete
+     * @param  int $id
+     * @return void
+     */
+    public function canRecordMarkDelete($expected, $id)
+    {
+        $this->expectedReturnType(YkAppTest::TYPE_BOOL);
+        $result = $this->execute($this->class, [], 'canRecordMarkDelete', [$id]);
+        $this->assertEquals($expected, $result);
+    }
+    
+    /**
+     * feedCanRecordMarkDelete
+     *
+     * @return array
+     */
+    public function feedCanRecordMarkDelete()
+    {  
+        return [
+            [false, 'test'],  // Invalid id
+            [true, 1],  // Valid id
         ];
     }
 
@@ -117,10 +150,9 @@ class BrandTest extends YkModelTest
      * @test
      *
      * @dataProvider feedGetBrandName
-     * @param  mixed $expected
-     * @param  mixed $brandId
-     * @param  mixed $langId
-     * @param  mixed $isActive
+     * @param  int $brandId
+     * @param  int $langId
+     * @param  bool $isActive
      * @return void
      */
     public function getBrandName($expected, $brandId, $langId, $isActive)
