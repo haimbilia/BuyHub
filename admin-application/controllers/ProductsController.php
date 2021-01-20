@@ -978,6 +978,7 @@ class ProductsController extends AdminBaseController
 
     private function getProductIntialSetUpFrm($productId, $prodCatId = 0)
     {
+        $prodCatId = FatUtility::int($prodCatId);
         $frm = new Form('frmProductIntialSetUp');
         $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $this->adminLangId), 'product_identifier');
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($this->adminLangId), Product::PRODUCT_TYPE_PHYSICAL, array(), '');
@@ -1066,9 +1067,9 @@ class ProductsController extends AdminBaseController
             Message::addErrorMessage($prod->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        
-        $productSellerId = Product::getAttributesById($productId, 'product_seller_id');  
-        if( !$productSellerId ) {
+
+        $productSellerId = Product::getAttributesById($productId, 'product_seller_id');
+        if (!$productSellerId) {
             $productSellerId = 0;
         }
         if (!$prod->saveProductTax($post['ptt_taxcat_id'], $productSellerId)) {

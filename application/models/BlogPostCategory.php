@@ -49,11 +49,17 @@ class BlogPostCategory extends MyAppModel
         return $srch;
     }
 
+    /**
+     * getMaxOrder
+     *
+     * @param  int $parent
+     * @return int
+     */
     public function getMaxOrder(int $parent = 0): int
     {
         $srch = new SearchBase(static::DB_TBL);
         $srch->addFld("MAX(" . static::DB_TBL_PREFIX . "display_order) as max_order");
-        if ($parent > 0) {
+        if (0 < $parent) {
             $srch->addCondition(static::DB_TBL_PREFIX . 'parent', '=', $parent);
         }
         $srch->doNotCalculateRecords();
@@ -63,33 +69,38 @@ class BlogPostCategory extends MyAppModel
         if (!empty($record)) {
             return $record['max_order'] + 1;
         }
-        return 1;
+        return 0;
     }
 
-    public function getCategoryStructure(int $bpcategory_id, array $category_tree_array = array()): array
+    /**
+     * getCategoryStructure
+     *
+     * @param  int $bpcategoryId
+     * @param  array $categoryTreeArray
+     * @return array
+     */
+    public function getCategoryStructure(int $bpcategoryId, array $categoryTreeArray = array()): array
     {
-        if (!is_array($category_tree_array)) {
-            $category_tree_array = array();
+        if (!is_array($categoryTreeArray)) {
+            $categoryTreeArray = array();
         }
 
         $srch = static::getSearchObject();
         $srch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
         $srch->addCondition('bpc.bpcategory_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('bpc.bpcategory_id', '=', $bpcategory_id);
+        $srch->addCondition('bpc.bpcategory_id', '=', $bpcategoryId);
         $srch->addOrder('bpc.bpcategory_display_order', 'asc');
         $srch->addOrder('bpc.bpcategory_identifier', 'asc');
         $rs = $srch->getResultSet();
-        if ($rs) {
-            while ($categories = FatApp::getDb()->fetch($rs)) {
-                $category_tree_array[] = $categories;
-                $category_tree_array = $this->getCategoryStructure($categories['bpcategory_parent'], $category_tree_array);
-            }
+        while ($categories = FatApp::getDb()->fetch($rs)) {
+            $categoryTreeArray[] = $categories;
+            $categoryTreeArray = $this->getCategoryStructure($categories['bpcategory_parent'], $categoryTreeArray);
         }
-        sort($category_tree_array);
-        return $category_tree_array;
+        sort($categoryTreeArray);
+        return $categoryTreeArray;
     }
 
-    public function addUpdateBlogPostCatLang($data, $lang_id, $bpcategory_id)
+    /* public function addUpdateBlogPostCatLang($data, $lang_id, $bpcategory_id)
     {
         $tbl = new TableRecord(static::DB_TBL_LANG);
         $data['bpcategorylang_bpcategory_id'] = FatUtility::int($bpcategory_id);
@@ -106,27 +117,35 @@ class BlogPostCategory extends MyAppModel
             return false;
         }
         return true;
-    }
-
-    public function isExistBlogPostCatLang(int $lang_id, int $bpcategory_id): bool
+    } 
+        
+    public function isExistBlogPostCatLang(int $langId, int $bpcategoryId): bool
     {
         $srch = new SearchBase(static::DB_TBL_LANG);
-        $srch->addCondition('bpcategorylang_bpcategory_id', '=', $bpcategory_id);
-        $srch->addCondition('bpcategorylang_lang_id', '=', $lang_id);
+        $srch->addCondition('bpcategorylang_bpcategory_id', '=', $bpcategoryId);
+        $srch->addCondition('bpcategorylang_lang_id', '=', $langId);
         $row = FatApp::getDb()->fetch($srch->getResultSet());
         if (!empty($row)) {
             return true;
         }
         return false;
     }
-
-    public function getParentTreeStructure(int $bpCategory_id = 0, int $level = 0, string $name_suffix = ''): string
+*/    
+    /**
+     * getParentTreeStructure
+     *
+     * @param  mixed $bpCategoryId
+     * @param  mixed $level
+     * @param  mixed $nameSuffix
+     * @return string
+     */
+    public function getParentTreeStructure(int $bpCategoryId = 0, int $level = 0, string $nameSuffix = ''): string
     {
         $srch = static::getSearchObject();
         $srch->addFld('bpc.bpcategory_id,bpc.bpcategory_identifier,bpc.bpcategory_parent');
         $srch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
         $srch->addCondition('bpc.bpcategory_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('bpc.bpCategory_id', '=', FatUtility::int($bpCategory_id));
+        $srch->addCondition('bpc.bpCategory_id', '=', FatUtility::int($bpCategoryId));
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
         $name = '';
@@ -136,7 +155,7 @@ class BlogPostCategory extends MyAppModel
         }
 
         if ($records) {
-            $name = $records['bpcategory_identifier'] . $seprator . $name_suffix;
+            $name = $records['bpcategory_identifier'] . $seprator . $nameSuffix;
             if ($records['bpcategory_parent'] > 0) {
                 $name = $this->getParentTreeStructure($records['bpcategory_parent'], $level + 1, $name);
             }
@@ -144,7 +163,7 @@ class BlogPostCategory extends MyAppModel
         return $name;
     }
 
-    public function getBlogPostCatAutoSuggest(string $keywords = '', int $limit = 10): array
+    /* public function getBlogPostCatAutoSuggest(string $keywords = '', int $limit = 10): array
     {
         $srch = static::getSearchObject();
         $srch->addFld('bpc.bpcategory_id,bpc.bpcategory_identifier,bpc.bpcategory_parent');
@@ -171,9 +190,9 @@ class BlogPostCategory extends MyAppModel
             }
         }
         return $return;
-    }
+    } */
 
-    public function getNestedArray(int $langId): array
+    /* public function getNestedArray(int $langId): array
     {
         $langId = FatUtility::int($langId);
         $arr = $this->getCategoriesForSelectBox($langId);
@@ -192,7 +211,7 @@ class BlogPostCategory extends MyAppModel
         }
 
         return $out;
-    }
+    } */
 
     public static function isCategoryActive(int $categoryId): int
     {
