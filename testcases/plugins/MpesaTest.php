@@ -45,7 +45,7 @@ class MpesaTest extends YkPluginTest
      */
     public function callbackUrl($orderId)
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'callbackUrl', [$orderId]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'callbackUrl', [$orderId]);
         $this->assertIsString($response);
     }
 
@@ -72,7 +72,7 @@ class MpesaTest extends YkPluginTest
      */
     public function generateToken(): void
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'generateToken');
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'generateToken');
         $this->assertIsBool($response);
     }
 
@@ -96,7 +96,7 @@ class MpesaTest extends YkPluginTest
      */
     public function getToken(): void
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'getToken');
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'getToken');
         $this->assertIsString($response);
     }
 
@@ -124,7 +124,7 @@ class MpesaTest extends YkPluginTest
      */
     public function sTKPushSimulation($expected, $orderId, $amount, $customerPhone, $transactionDesc): void
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'STKPushSimulation', [$orderId, $amount, $customerPhone, $transactionDesc]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'STKPushSimulation', [$orderId, $amount, $customerPhone, $transactionDesc]);
         $this->assertEquals($expected, $response);
     }
 
@@ -153,7 +153,7 @@ class MpesaTest extends YkPluginTest
      */
     public function sTKPushQuery($checkoutRequestID): void
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'STKPushQuery', [$checkoutRequestID]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'STKPushQuery', [$checkoutRequestID]);
         $this->assertIsBool($response);
     }
 

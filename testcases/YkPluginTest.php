@@ -21,9 +21,8 @@ class YkPluginTest extends YkAppTest
         self::$keyName = (self::$class)::KEY_NAME;
         self::$plugin = Plugin::getAttributesByCode(self::$keyName, ['plugin_id', 'plugin_type', 'plugin_active']);
         self::$directory = Plugin::getDirectory(self::$plugin['plugin_type']);
-        $langId = CommonHelper::getLangId();
-
-        if (false === PluginHelper::includePlugin(self::$keyName, self::$directory, $error, $langId, false)) {
+        
+        if (false === PluginHelper::includePlugin(self::$keyName, self::$directory, $error, SYSTEM_LANG_ID, false)) {
             FatUtility::dieJsonError($error);
         }
 

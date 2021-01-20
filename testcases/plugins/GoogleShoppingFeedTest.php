@@ -28,7 +28,7 @@ class GoogleShoppingFeedTest extends YkPluginTest
     public function ageGroup($langId)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'ageGroup', [$langId]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'ageGroup', [$langId]);
         $this->assertIsArray($response);
     }
         
@@ -59,7 +59,7 @@ class GoogleShoppingFeedTest extends YkPluginTest
     public function getProductCategory($userId, $keyword, $returnFullArray)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId(), $userId], 'getProductCategory', [$keyword, $returnFullArray]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID, $userId], 'getProductCategory', [$keyword, $returnFullArray]);
         $this->assertIsArray($response);
     }
     
@@ -92,7 +92,7 @@ class GoogleShoppingFeedTest extends YkPluginTest
     public function publishBatch($expected, $userId, $data)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId(), $userId], 'publishBatch', [$data]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID, $userId], 'publishBatch', [$data]);
         $status = empty($response) ? 0 : $response['status'];
         $this->assertEquals($expected, $status);
     }

@@ -26,7 +26,7 @@ class FixerCurrencyConverterTest extends YkPluginTest
     public function getRates($toCurrencies)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'getRates', [$toCurrencies]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'getRates', [$toCurrencies]);
         $this->assertIsArray($response);
         $status = empty($response) ? Plugin::RETURN_FALSE : $response['status'];
         $this->assertEquals($expected, $status);

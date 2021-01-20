@@ -42,7 +42,7 @@ class GoogleLoginTest extends YkPluginTest
      */
     public function authenticate($expected, $code)
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'authenticate', [$code]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'authenticate', [$code]);
         $this->assertEquals($expected, $response);
     }
         
@@ -71,7 +71,7 @@ class GoogleLoginTest extends YkPluginTest
      */
     public function setAccessToken($expected, $accessToken)
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'setAccessToken', [$accessToken]);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'setAccessToken', [$accessToken]);
         $this->assertEquals($expected, $response);
     }
         
