@@ -142,7 +142,7 @@ class Brand extends MyAppModel
         return false;
     }
     */
-    public function rewriteUrl(string $keyword): string
+    public function rewriteUrl(string $keyword)
     {
         if ($this->mainTableRecordId < 1) {
             return false;
