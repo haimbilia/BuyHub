@@ -34,7 +34,7 @@ class Testimonial extends MyAppModel
         return $srch;
     }
 
-    public function canRecordMarkDelete($testimonialId)
+    public function canRecordMarkDelete(int $testimonialId): bool
     {
         $srch = static::getSearchObject();
         $srch->addCondition('testimonial_deleted', '=', applicationConstants::NO);
