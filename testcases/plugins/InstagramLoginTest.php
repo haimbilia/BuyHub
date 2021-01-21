@@ -3,6 +3,7 @@
 class InstagramLoginTest extends YkPluginTest
 {
     public const KEY_NAME = 'InstagramLogin';
+    public const PLUGIN_TYPE = Plugin::TYPE_SOCIAL_LOGIN;
 
     /**
      * init
@@ -11,24 +12,18 @@ class InstagramLoginTest extends YkPluginTest
      */
     public function init()
     {
+        /* Plugin setting need to configure first to test plugin method. */
+        $this->classObj->settings = [
+            'plugin_active' => 1,
+            'client_id' => '2614237385501383',
+            'client_secret' => '542c48a187e0828d07690b43fa9e3a43',
+        ];
+
         if (false === $this->classObj->init()) {
             $this->error = $this->classObj->getError();
             return false;
         }
         return true;
-    }
-
-    /**
-     * settings - Plugin setting need to configure first to test plugin method.
-     *
-     * @return void
-     */
-    public static function settings()
-    {
-        return [
-            'client_id' => '2614237385501383',
-            'client_secret' => '542c48a187e0828d07690b43fa9e3a43',
-        ];
     }
 
     /**
@@ -55,7 +50,8 @@ class InstagramLoginTest extends YkPluginTest
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [
             [false, ''], // Return False in case of all input empty.
-            [false, 'abc'], // Return False in case of all input empty
+            [false, 'abc'], // Return False in case of invalid 2nd arugument
+            [false, 123], // Return False in case of invalid 2nd arugument type
             [false, 'AQDr4yahWlB7JuyWEJT-y5PCrw8zBlqM7mzMF5L4TXjjTJa9ldEv-nRx0XJ7ro_RxR-clLsDp_Vz_YjEk-cQh2yD9g4DDpIaFGnitBy1z6ZH9wQMo0bLZKim_tnVf0vmHIMpWl5hgNqt-E0zHHZ33rbhsupE4ufsohZZEIR1xmdl6RWvgI1ZFiuhFWT5Rldnjn2xT9Q6iCRFePf_Vs4qwbuczfJk49kwA9oQBk_LKazGTQ#_'], // Return false if expired 
         ];
     }
@@ -85,6 +81,7 @@ class InstagramLoginTest extends YkPluginTest
         return [
             [false, ''], // Return False in case of empty input.
             [false, 'abc'], // Return False in case of invalid input.
+            [false, 123], // Return False in case of invalid 2nd arugument type
             [false, 'IGQVJYQ0FTUW5fdzdjWkVLM21CM2hQdDZAWOWRXU04wcTdrc2tmWElPd3RyZAkFhcGxybVBYWnJWODRGS045aVNJRWRDRWUxTEpBM05HUy1PZAUdHOVFMRWtPcVVvMDYxcUFoNGkwOWpVRmdHb0hkdU4wYUN1SzVpdEtucVRv'], // Return false if expired
         ];
     }

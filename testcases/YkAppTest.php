@@ -60,6 +60,7 @@ class YkAppTest extends TestCase
         if (!$reflectMethod->isStatic()) {
             $reflectionClass = $reflectionClass->newInstanceArgs($constructorArgs);
             $this->classObj = $reflectionClass;
+
             if (method_exists($this, 'init') && false === $this->init()) {
                 $this->error = $reflectionClass->getError();
                 return $this->returnResponse();

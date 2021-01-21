@@ -3,6 +3,7 @@
 class MpesaTest extends YkPluginTest
 {
     public const KEY_NAME = 'Mpesa';
+    public const PLUGIN_TYPE = Plugin::TYPE_REGULAR_PAYMENT_METHOD;
 
     /**
      * init
@@ -11,22 +12,9 @@ class MpesaTest extends YkPluginTest
      */
     public function init()
     {
-        $userId = UserAuthentication::getLoggedUserId(true);
-        if (false === $this->classObj->init($userId)) {
-            $this->error = $this->classObj->getError();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * settings - Plugin setting need to configure first to test plugin method.
-     *
-     * @return void
-     */
-    public static function settings()
-    {
-        return [
+        /* Plugin setting need to configure first to test plugin method. */
+        $this->classObj->settings = [
+            'plugin_active' => 1,
             'env' => PLUGIN::ENV_SANDBOX,
             'consumer_key' => '1ay0T0g8uZ6eVrzwocZB4c945gcmYz9m',
             'consumer_secret' => 'EBD7NmLBwF5LOvTA',
@@ -34,6 +22,13 @@ class MpesaTest extends YkPluginTest
             'shortcode' => '174379',
             'passkey' => 'AAAAld-BZYQ:APA91bEwdNyqPBYqiuXFAY_kYZRqju5wuiduZiuUx1RwcTasWLz__uiHUMnsKV95CQVi_BJVnX062LOdUWCd1-gwYDdA2139jNXPccLIckl5cH2ANeJyufAoS-UJGIMjZtbRAW0fAyk1'
         ];
+
+        $userId = UserAuthentication::getLoggedUserId(true);
+        if (false === $this->classObj->init($userId)) {
+            $this->error = $this->classObj->getError();
+            return false;
+        }
+        return true;
     }
 
     /**

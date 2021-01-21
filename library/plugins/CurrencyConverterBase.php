@@ -2,7 +2,7 @@
 
 class CurrencyConverterBase extends PluginBase
 {
-    protected $systemCurrencyCode = '';
+    public $systemCurrencyCode = '';
 
     /**
      * loadBaseCurrency
@@ -11,6 +11,10 @@ class CurrencyConverterBase extends PluginBase
      */
     protected function loadBaseCurrency(): bool
     {
+        if (!empty($this->systemCurrencyCode)) {
+            return true;
+        }
+
         $currency = Currency::getDefault();
         if (empty($currency)) {
             $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_NOT_SET', $this->langId);
