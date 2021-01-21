@@ -12,14 +12,6 @@ class GoogleLoginTest extends YkPluginTest
      */
     public function init()
     {
-        /* Plugin setting need to configure first to test plugin method. */
-        $this->classObj->settings = [
-            'plugin_active' => 1,
-            'client_id' => '293307261869-g6ns17slnsutjf8smv6v0210mbqnajl2.apps.googleusercontent.com',
-            'client_secret' => 'Q7RN2uPn0jY7QPzsK2WB1iUL',
-            'developer_key' => 'AIzaSyAYRPS5jwNbMHoowNhNvna5b_bdYffcwdE',
-        ];
-
         if (false === $this->classObj->init()) {
             $this->error = $this->classObj->getError();
             return false;

@@ -12,13 +12,6 @@ class FacebookLoginTest extends YkPluginTest
      */
     public function init()
     {
-        /* Plugin setting need to configure first to test plugin method. */
-        $this->classObj->settings = [
-            'plugin_active' => 1,
-            'app_id' => '300972908012491',
-            'app_secret' => '772448424077daa677ff01903746a2e4'
-        ];
-
         if (false === $this->classObj->init()) {
             $this->error = $this->classObj->getError();
             return false;

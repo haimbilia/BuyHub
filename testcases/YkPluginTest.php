@@ -1,6 +1,8 @@
 <?php
 class YkPluginTest extends YkAppTest
 {
+    protected $pluginTest = true;
+
     /**
      * setupBeforeClass - This will treat as constructor.
      *
@@ -14,7 +16,7 @@ class YkPluginTest extends YkAppTest
         $directory = Plugin::getDirectory($pluginType);
         
         require_once CONF_PLUGIN_DIR . $directory . '/' . strtolower($keyName) . '/' . $keyName . '.php';
-
+        
         if (!defined('LANG_CODES_ARR')) {
             $langCodeArr = [
                 '1' => 'EN',

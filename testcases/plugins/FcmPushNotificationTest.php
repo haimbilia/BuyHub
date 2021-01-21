@@ -12,12 +12,6 @@ class FcmPushNotificationTest extends YkPluginTest
      */
     public function init()
     {
-        /* Plugin setting need to configure first to test plugin method. */
-        $this->classObj->settings = [
-            'plugin_active' => 1,
-            'server_api_key' => 'AAAAld-BZYQ:APA91bEwdNyqPBYqiuXFAY_kYZRqju5wuiduZiuUx1RwcTasWLz__uiHUMnsKV95CQVi_BJVnX062LOdUWCd1-gwYDdA2139jNXPccLIckl5cH2ANeJyufAoS-UJGIMjZtbRAW0fAyk1'
-        ];
-
         $deviceTokens = [
             'dk3NLiO2u1E:APA91bFvzOfGpl6shjmNSQYcQ5TQGpePXuHqC5KxbO0Ej8k9dezACGPdPxWxPjjPKMvWWtbc_jHe22YRCUY6TOQbsE5mG1Pw3X-NvCzDqolqNXpJU0nkSmfKsqyQwYkfF-J4xlyYxEEV',
             'fRgOw1XauQU:APA91bHUecfYKOZLAGjvLzJvKfvR8Y3gFTmHGiq9FDJS9dNWTTzN7SxK6GtuyERVgyZLbZ96879mCU3AWR5EhN21ewAVO8B6Y_xzev_mPLrOmtLsbTJ03W-yi6FeWLJOjgkBHRGqeFKH',
@@ -43,7 +37,7 @@ class FcmPushNotificationTest extends YkPluginTest
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'notify', [$title, $message, $os, $data]);
-
+        
         $status = 0;
         if (!empty($response)) {
             $this->assertArrayHasKey('status', $response);
@@ -68,10 +62,10 @@ class FcmPushNotificationTest extends YkPluginTest
             [1, 'Title4', 'Message4', 1, []], // Return 1 Either Invalid Device token but function run successfully. Because It will tell number of successfully sent and number of failure.
             [1, 'Title5', 'Message5', 1, ['test' => 'body']], // Return 1 Either Invalid Device token but function run successfully. Because It will tell number of successfully sent and number of failure.
             [0, 123, 'Message5', 1, ['test' => 'body']], // Invalid value type. Return 0
-            [0, 'Title5', 123, 1, ['test' => 'body']], // Invalid value type. Return 0
-            [0, 'Title5', 'Message5', 'ANDROID', ['test' => 'body']], // Invalid value type. Return 0
-            [0, 'Title5', 'Message5', 1, 1], // Invalid value type. Return 0
-            [0, 'Title5', 'Message5', 1, 'avs'], // Invalid value type. Return 0
+            [0, 'Title6', 123, 1, ['test' => 'body']], // Invalid value type. Return 0
+            [0, 'Title7', 'Message5', 'ANDROID', ['test' => 'body']], // Invalid value type. Return 0
+            [0, 'Title8', 'Message5', 1, 1], // Invalid value type. Return 0
+            [0, 'Title8', 'Message5', 1, 'avs'], // Invalid value type. Return 0
             [0, 123, 123, 'IOS', 1], // Invalid value type. Return 0
         ];
     }

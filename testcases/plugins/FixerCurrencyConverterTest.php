@@ -12,11 +12,6 @@ class FixerCurrencyConverterTest extends YkPluginTest
      */
     public function init()
     {
-        /* Plugin setting need to configure first to test plugin method. */
-        $this->classObj->settings = [
-            'plugin_active' => 1,
-            'access_key' => 'a95a5e7415cb80554448f926ca7f68d8'
-        ];
         $this->classObj->systemCurrencyCode = 'EUR';
     }
 

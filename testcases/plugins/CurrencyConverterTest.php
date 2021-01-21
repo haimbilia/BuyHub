@@ -12,11 +12,6 @@ class CurrencyConverterTest extends YkPluginTest
      */
     public function init()
     {
-        /* Plugin setting need to configure first to test plugin method. */
-        $this->classObj->settings = [
-            'plugin_active' => 1,
-            'api_key' => 'c22be3bbee2ffc600da0'
-        ];
         $this->classObj->systemCurrencyCode = 'EUR';
     }
 

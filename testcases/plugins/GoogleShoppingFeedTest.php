@@ -6,22 +6,6 @@ class GoogleShoppingFeedTest extends YkPluginTest
     public const PLUGIN_TYPE = Plugin::TYPE_ADVERTISEMENT_FEED;
 
     /**
-     * init
-     *
-     * @return void
-     */
-    public function init()
-    {
-        /* Plugin setting need to configure first to test plugin method. */
-        $this->classObj->settings = [
-            'plugin_active' => 1,
-            'client_id' => '989922044446-f9uj7vt2uir3amtmv7ieufqqt98k8llg.apps.googleusercontent.com',
-            'client_secret' => 'Eug6sn8yKkd4iAZHTtCkaZ6p',
-            'developer_key' => 'AIzaSyAQeP-6U2NVbQODmAbEStE_yLEg49Ew20E',
-        ];
-    }
-
-    /**
      * @test
      *
      * @dataProvider feedAgeGroup

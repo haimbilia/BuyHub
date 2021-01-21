@@ -12,13 +12,6 @@ class InstagramLoginTest extends YkPluginTest
      */
     public function init()
     {
-        /* Plugin setting need to configure first to test plugin method. */
-        $this->classObj->settings = [
-            'plugin_active' => 1,
-            'client_id' => '2614237385501383',
-            'client_secret' => '542c48a187e0828d07690b43fa9e3a43',
-        ];
-
         if (false === $this->classObj->init()) {
             $this->error = $this->classObj->getError();
             return false;
