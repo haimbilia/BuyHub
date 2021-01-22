@@ -202,13 +202,38 @@ class Payfast extends PaymentMethodBase
      */
     public function validateResponseSignature(array $response): bool
     {
-        $responseSignature = $response['signature'];
+        /*$responseSignature = $response['signature'];
         unset($response['signature']);
         $this->requestBody = $response;
         if (false === $this->loadSignature()) {
             return false;
         }
-        return ($responseSignature === $this->getSignature());
+        return ($responseSignature === $this->getSignature());*/
+		
+		$payfastResponse = $response;
+
+        foreach( $payfastResponse as $key => $val ) {
+            $payfastResponse[$key] = stripslashes( $val );
+        }
+    
+        foreach( $payfastResponse as $key => $val ) {
+            if( $key !== 'signature' ) {
+                $paramString .= $key .'='. urlencode( $val ) .'&';
+            } else {
+                break;
+            }
+        }
+
+        $paramString = substr( $paramString, 0, -1 );
+        if($this->passphrase === null) {
+            $paramString = $paramString;
+        } else {
+            $paramString = $paramString.'&passphrase='.urlencode( $this->passphrase );
+        }
+    
+        $signature = md5( $paramString );
+        return ( $payfastResponse['signature'] === $signature );
+		
     }
 
     /**
