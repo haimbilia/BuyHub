@@ -207,13 +207,16 @@ class Payfast extends PaymentMethodBase
     public function validateResponseSignature(array $response): bool
     {		
 		$responseSignature = $response['signature'];
+		unset($response['signature']);
 		foreach( $response as $key => $val ) {
             $response[$key] = stripslashes( $val );
         }
-		unset($response['signature']);
+		if(!empty($this->passphrase)) {
+			$response['passphrase'] = $this->passphrase;
+        }
+		
         $this->requestBody = $response;
-        return ($responseSignature === $this->getSignature());
-	
+        return ($responseSignature === $this->getSignature());		
     }
 
     /**
