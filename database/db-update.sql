@@ -1,3 +1,4 @@
+ALTER TABLE `tbl_shop_specifics` ADD `shop_pickup_interval` TINYINT(1) NOT NULL COMMENT 'In Hours' AFTER `shop_invoice_codes`;
 -- --------EasyECom---------- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'EasyEcom', '12', 'EasyEcom', '0', '1');
 
