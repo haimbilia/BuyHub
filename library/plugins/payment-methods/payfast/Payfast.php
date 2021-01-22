@@ -208,9 +208,9 @@ class Payfast extends PaymentMethodBase
     {		
 		$responseSignature = $response['signature'];
 		unset($response['signature']);
-		foreach( $response as $key => $val ) {
+		/* foreach( $response as $key => $val ) {
             $response[$key] = stripslashes( $val );
-        }
+        } */
 		if(!empty($this->passphrase)) {
 			$response['passphrase'] = $this->passphrase;
         }
