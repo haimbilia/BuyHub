@@ -138,16 +138,17 @@ class Payfast extends PaymentMethodBase
      */
     private function loadSignature(): bool
     {
-        if (!empty($this->settings['signature'])) {
+        /*if (!empty($this->settings['signature'])) {
             $this->signature = $this->settings['signature'];
             return true;
-        }
-        
-        $signature = md5(http_build_query($this->getRequestBody()));
+        }*/		
+		
 
-        if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
+		$signature = md5(http_build_query($this->getRequestBody()));
+
+       /*  if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
             return false;
-        }
+        } */
         $this->signature = $signature;
         return true;
     }
@@ -174,7 +175,7 @@ class Payfast extends PaymentMethodBase
             'merchant_id' => $this->getmerchantId(),
             'merchant_key' => $this->getMerchantKey(),
             'return_url' => CommonHelper::generateFullUrl('Custom', 'paymentSuccess', [$orderId]),
-            'cancel_url' => CommonHelper::generateFullUrl('Custom', 'paymentFailed', [$orderId]),
+			'cancel_url' => CommonHelper::generateFullUrl('Custom', 'paymentFailed'),
             'notify_url' => CommonHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'callback', [$orderId]),
             // Buyer details
             'name_first' => $this->userData['user_name'],
@@ -189,7 +190,7 @@ class Payfast extends PaymentMethodBase
         if (false === $this->loadSignature()) {
             return false;
         }
-        $this->requestBody['signature'] = $this->getSignature();
+        $this->requestBody['signature'] = $this->getSignature();	
         return true;
     }
     

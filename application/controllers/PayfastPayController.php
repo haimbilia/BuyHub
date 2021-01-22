@@ -128,10 +128,10 @@ class PayfastPayController extends PaymentController
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', [$orderId]) : $this->actionUrl;
 
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
-        $frm->addHiddenField('', 'orderId');
-        if (false === $processRequest) {
+        if (false === $processRequest) {	
+			$frm->addHiddenField('', 'orderId');
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
-        } else {
+        } else {	
             $this->plugin->buildRequestBody($orderId);
             foreach ($this->plugin->getRequestBody() as $name => $value) {
                 $frm->addHiddenField('', $name, $value);
