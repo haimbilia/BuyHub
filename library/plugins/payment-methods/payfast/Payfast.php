@@ -149,6 +149,10 @@ class Payfast extends PaymentMethodBase
        /*  if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
             return false;
         } */
+		if(empty($signature)){
+			return false;
+		}
+		
         $this->signature = $signature;
         return true;
     }
@@ -201,39 +205,15 @@ class Payfast extends PaymentMethodBase
      * @return bool
      */
     public function validateResponseSignature(array $response): bool
-    {
-        /*$responseSignature = $response['signature'];
-        unset($response['signature']);
+    {		
+		$responseSignature = $response['signature'];
+		foreach( $response as $key => $val ) {
+            $response[$key] = stripslashes( $val );
+        }
+		unset($response['signature']);
         $this->requestBody = $response;
-        if (false === $this->loadSignature()) {
-            return false;
-        }
-        return ($responseSignature === $this->getSignature());*/
-		
-		$payfastResponse = $response;
-
-        foreach( $payfastResponse as $key => $val ) {
-            $payfastResponse[$key] = stripslashes( $val );
-        }
-    
-        foreach( $payfastResponse as $key => $val ) {
-            if( $key !== 'signature' ) {
-                $paramString .= $key .'='. urlencode( $val ) .'&';
-            } else {
-                break;
-            }
-        }
-
-        $paramString = substr( $paramString, 0, -1 );
-        if($this->passphrase === null) {
-            $paramString = $paramString;
-        } else {
-            $paramString = $paramString.'&passphrase='.urlencode( $this->passphrase );
-        }
-    
-        $signature = md5( $paramString );
-        return ( $payfastResponse['signature'] === $signature );
-		
+        return ($responseSignature === $this->getSignature());
+	
     }
 
     /**
