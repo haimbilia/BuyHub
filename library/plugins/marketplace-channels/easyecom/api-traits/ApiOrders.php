@@ -138,22 +138,40 @@ trait ApiOrders
 
         $opSrch->addMultipleFields([
             'op_invoice_number',
+            'opshipping_by_seller_user_id',
             'opship_tracking_number',
+            'opship_tracking_url',
             'opshipping_label',
             'opshipping_carrier_code',
-            'opshipping_service_code'
+            'opshipping_service_code',
+            'opship_response',
         ]);
         $opRs = $opSrch->getResultSet();
         $carrierDetail = FatApp::getDb()->fetch($opRs);
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
         if (empty($carrierDetail)) {
-            $carrierDetail = [];
             $msg = Labels::getLabel("MSG_NO_RECORD_FOUND", $this->langId);
-        } else if (!empty($carrierDetail['opship_tracking_number'])) {
+            return $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+        }
+
+        $carrierDetail['label'] = '';
+        if (!empty($carrierDetail['opship_tracking_number']) && !empty($carrierDetail['opship_response'])) {
             $excryptedOpId = LibHelper::encrypt($opId);
             $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId]);    
+        } else if (!empty($carrierDetail['opship_tracking_url'])) {
+            $shipBy = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_INT, 1);
+            if (0 < $carrierDetail['opshipping_by_seller_user_id']) {
+                $shop = Shop::getAttributesByUserId($carrierDetail['opshipping_by_seller_user_id'], ['shop_identifier', 'shop_name'], true, $this->langId);
+                $shipBy = empty($shop['shop_name']) ? $shop['shop_name'] : $shop['shop_identifier'];
+            }
+            $label = Labels::getLabel('LBL_SHIPPING', $this->langId);
+            $carrierDetail['opshipping_label'] = $shipBy . ' - ' . $label;    
+            $carrierDetail['opshipping_carrier_code'] = '';    
+            $carrierDetail['opshipping_service_code'] = '';    
         }
-        return $this->formatOutput(true, $msg, $carrierDetail);
+        unset($carrierDetail['opship_response']);
+
+        return $this->formatOutput(Plugin::RETURN_TRUE, $msg, $carrierDetail);
     }
 
     /**

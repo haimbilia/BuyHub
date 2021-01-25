@@ -153,7 +153,7 @@ trait ApiProducts
         ];
 
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
-        return $this->formatOutput(true, $msg, $data);
+        return $this->formatOutput(Plugin::RETURN_TRUE, $msg, $data);
     }
 
     /**
@@ -170,7 +170,7 @@ trait ApiProducts
 
         if (1 > $selProdId || 0 > $balanceQty) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
-            return $this->formatOutput(false, $msg);
+            return $this->formatOutput(Plugin::RETURN_FALSE, $msg);
         }
 
         $db = FatApp::getDb();
@@ -187,6 +187,6 @@ trait ApiProducts
             WHERE selprod_id = '" . $selProdId . "'
             AND selprod_user_id = " . $this->userId);
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
-        return $this->formatOutput(true, $msg);
+        return $this->formatOutput(Plugin::RETURN_TRUE, $msg);
     }
 }

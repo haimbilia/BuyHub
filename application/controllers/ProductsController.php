@@ -1317,7 +1317,7 @@ class ProductsController extends MyAppController
         // $frm->addSubmitButton(null, 'btnProductBuy', Labels::getLabel('LBL_Buy_Now', $formLangId ), array( 'id' => 'btnProductBuy' ) );
         //$frm->addSubmitButton(null, 'btnAddToCart', Labels::getLabel('LBL_Add_to_Cart', $formLangId), array( 'id' => 'btnAddToCart' ));
         // $frm->addHTML(null, 'btnProductBuy', '<button name="btnProductBuy" type="submit" id="btnProductBuy" class="btn btn-brand block-on-mobile add-to-cart--js btnBuyNow"> ' . Labels::getLabel('LBL_Buy_Now', $formLangId) . '</button>');
-        $frm->addHTML(null, 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('LBL_Add_to_Cart', $formLangId) . '</button>');
+        $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('LBL_Add_to_Cart', $formLangId) . '</button>');
         $frm->addHiddenField('', 'selprod_id');
         return $frm;
     }
@@ -1439,7 +1439,7 @@ class ProductsController extends MyAppController
                 'pclick_session_id' => session_id(),
             );
 
-            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, '', $promotionClickData);
+            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, [], $promotionClickData);
             $clickId = FatApp::getDb()->getInsertId();
 
             $promotionClickChargesData = array(
@@ -2043,7 +2043,7 @@ class ProductsController extends MyAppController
         }
 
         $orderProductShipmentDetail = OrderProductShipment::getAttributesById($opId);
-        if (empty($orderProductShipmentDetail)) {
+        if (empty($orderProductShipmentDetail) || empty($orderProductShipmentDetail['opship_response'])) {
             FatUtility::dieJsonError(Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->siteLangId));
         }
 
