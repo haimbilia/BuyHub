@@ -57,20 +57,32 @@ trait ApiOrders
         $rs = $srch->getResultSet();
         $orders = FatApp::getDb()->fetchAll($rs);
         
-        $payementStatusArr = Orders::getOrderPaymentStatusArr($this->langId);
-
         $oObj = new Orders();
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id']);
             $order['charges'] = $charges;
             $order['shipping_charges'] = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'SHIPPING'));
 
-            $paymentMode = 'PREPAID';
-	        if (!empty($order['plugin_name']) && 'cashondelivery' == strtolower($order['plugin_code'])) {
-	        	$paymentMode = 'COD';	
+            switch (strtolower($order['plugin_code'])) {
+                case 'cashondelivery':
+                    $paymentMode = 'COD';
+                    break;
+                
+                case 'PayAtStore':
+                    $paymentMode = 'PAYATSTORE';
+                    break;
+                
+                default:
+                    $paymentMode = 'PREPAID';
+                    if (Orders::ORDER_PAYMENT_PENDING == $order['order_payment_status']) {
+                        $paymentMode = 'PENDING';
+                    } else if (Orders::ORDER_PAYMENT_CANCELLED == $order['order_payment_status']) {
+                        $paymentMode = 'CANCELLED';
+                    }
+                    break;
             }
+
             $order['paymentMode'] = $paymentMode;
-            $order['order_payment_status'] = $payementStatusArr[$order['order_payment_status']];
             
             $addresses = $oObj->getOrderAddresses($order['order_id']);
 	        $billingAddress = $addresses[Orders::BILLING_ADDRESS_TYPE];
