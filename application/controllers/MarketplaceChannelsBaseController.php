@@ -65,18 +65,6 @@ class MarketplaceChannelsBaseController extends SellerPluginBaseController
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
-        
-    /**
-     * getShopDetail
-     *
-     * @return array
-     */
-    protected function getShopDetail(): array
-    {
-        $srch = User::getSearchObject();
-        $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = sh.shop_user_id', 'sh');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sh.shop_id = sh_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->langId, 'sh_l');
-    }
 
     /**
      * getUserId

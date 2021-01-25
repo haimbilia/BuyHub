@@ -23,13 +23,13 @@ class EasyEcom extends MarketplaceChannelsBase
     private $db;
     private $userId;
 
-    public function __construct(int $langId, string $action)
+    public function __construct(int $langId, string $action, int $userId)
     {
         $this->langId = FatUtility::int($langId);
         if (1 > $this->langId) {
             $this->langId = CommonHelper::getLangId();
         }
-        $this->userId = UserAuthentication::getLoggedUserId(true);
+        $this->userId = $userId;
 
         if (in_array($action, self::API)) {
             $autoSyncStatus = User::getUserMeta($this->userId, 'easyEcomSyncingStatus');

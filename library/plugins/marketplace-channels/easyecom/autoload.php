@@ -2,7 +2,13 @@
 
 spl_autoload_register('includeApiTraits');
 
-function includeApiTraits($className)
+/**
+ * includeApiTraits - Used to include called class.
+ *
+ * @param  string $className
+ * @return void
+ */
+function includeApiTraits(string $className)
 {
 	$path = dirname(__FILE__) . '/api-traits/';
 	include_once $path . $className . '.php';

@@ -21,7 +21,8 @@ trait ApiProducts
             'selprod_price',
             'selprod_sku',
             'selprod_user_id',
-            'selprod_stock'
+            'selprod_stock',
+            'selprod_fulfillment_type'
         ]);
         $srch->addCondition('selprod_deleted', '=', 0);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);

@@ -16,7 +16,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     public function __construct(string $action)
     {
         parent::__construct($action);
-        $this->easyEcom = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $action], $error, $this->siteLangId);
+        $this->userId = $this->getUserId();
+        $this->easyEcom = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $action, $this->userId], $error, $this->siteLangId);
         if (false === $this->easyEcom) {
             $error = is_string($error) ? $this->formatOutput(Plugin::RETURN_FALSE, $error) : $error;
             $this->dieWithJsonResponse($error);
@@ -58,14 +59,13 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function landingPage()
     {
-        $userId = UserAuthentication::getLoggedUserId();
-        $easyEcomSellerToken = User::getUserMeta($userId, 'easyEcomSellerToken');
+        $easyEcomSellerToken = User::getUserMeta($this->userId, 'easyEcomSellerToken');
         $userTempToken = substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
-        $uObj = new User($userId);
+        $uObj = new User($this->userId);
         if (!$uObj->createUserTempToken($userTempToken)) {
             FatUtility::dieJsonError($uObj->getError());
         }
-        $this->set('userId', $userId);
+        $this->set('userId', $this->userId);
         $this->set('userTempToken', $userTempToken);
         $this->set('pluginDescription', $this->settings['plugin_description']);
         $this->set('easyEcomSellerToken', $easyEcomSellerToken);
