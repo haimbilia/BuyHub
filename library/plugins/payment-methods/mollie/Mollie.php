@@ -4,7 +4,6 @@ class Mollie extends PaymentMethodBase
 {
     public const KEY_NAME = __CLASS__;
     private $privateKey = '';
-    private $publishableKey = '';
     private $actionUrl = '';
 	public $requiredKeys = [];
     /**
@@ -28,7 +27,6 @@ class Mollie extends PaymentMethodBase
     {
 		$this->requiredKeys = [
 			'privateKey',
-			'publishableKey',
 		];
     }
 
@@ -48,7 +46,6 @@ class Mollie extends PaymentMethodBase
         }
 
         $this->privateKey = $this->settings['privateKey'];
-        $this->publishableKey = $this->settings['publishableKey'];
         return true;
     }
     
