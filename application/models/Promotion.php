@@ -103,7 +103,7 @@ class Promotion extends MyAppModel
         FatApp::getDb()->insertFromArray(static::DB_TBL_LOGS, $bannerLogData, true, array(), $onDuplicateBannerLogData);
     }
 
-    public static function getPromotionCostPerClick($promotionType, $blocation_id = 0)
+    public static function getPromotionCostPerClick(int $promotionType, int $blocation_id = 0): string
     {
         switch ($promotionType) {
             case PROMOTION::TYPE_SHOP:
@@ -129,7 +129,7 @@ class Promotion extends MyAppModel
         }
     }
 
-    public function getPromotionLastChargedEntry($promotionId = 0)
+    public function getPromotionLastChargedEntry(int $promotionId = 0): array
     {
         $promotionId = FatUtility::int($promotionId);
         if (1 > $promotionId) {
@@ -148,7 +148,7 @@ class Promotion extends MyAppModel
         }
     }
 
-    public static function getTotalChargedAmount($userId, $active = false)
+    public static function getTotalChargedAmount(int $userId, bool $active = false)
     {
         $srch = new SearchBase(Promotion::DB_TBL_CHARGES, 'tpc');
         $srch->addCondition('tpc.' . Promotion::DB_TBL_CHARGES_PREFIX . 'user_id', '=', $userId);

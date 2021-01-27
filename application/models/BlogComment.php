@@ -32,15 +32,15 @@ class BlogComment extends MyAppModel
         return $srch;
     }
 
-    public function canMarkRecordDelete($bpcomment_id)
+    public function canMarkRecordDelete(int $bpcommentId): bool
     {
         $srch = static::getSearchObject();
         $srch->addCondition('bpcomment_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('bpcomment_id', '=', $bpcomment_id);
+        $srch->addCondition('bpcomment_id', '=', $bpcommentId);
         $srch->addFld('bpcomment_id');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row) && $row['bpcomment_id'] == $bpcomment_id) {
+        if (!empty($row) && $row['bpcomment_id'] == $bpcommentId) {
             return true;
         }
         return false;

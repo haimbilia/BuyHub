@@ -18,6 +18,8 @@ class PromotionTest extends YkModelTest
         $obj->insertShopRewriteUrl();
         $obj->inserPromotionData();
         $obj->inserPromotionLangData();
+        $obj->inserPromotionChargeData();
+        $obj->inserPromotionClickData();
     }
 
     /**
@@ -44,6 +46,7 @@ class PromotionTest extends YkModelTest
         FatApp::getDb()->query("TRUNCATE TABLE ".Shop::DB_TBL_SHOP_FAVORITE); 
         FatApp::getDb()->query("TRUNCATE TABLE ".Promotion::DB_TBL);
         FatApp::getDb()->query("TRUNCATE TABLE ".Promotion::DB_TBL_LANG);
+        FatApp::getDb()->query("TRUNCATE TABLE ".Promotion::DB_TBL_CHARGES);
     }
     
     /**
@@ -183,6 +186,36 @@ class PromotionTest extends YkModelTest
     }
 
     /**
+    * inserPromotionChargeData
+    *
+    * @return void
+    */     
+    private function inserPromotionChargeData()
+    {
+        $arr = [
+            [
+            'pcharge_user_id' => 1, 'pcharge_promotion_id' => 1, 'pcharge_charged_amount' => 1, 'pcharge_clicks' => 1, 'pcharge_date' => '2021-01-27 00:00:00', 'pcharge_start_piclick_id'=>0, 'pcharge_end_piclick_id' => 0, 'pcharge_start_date' => '2021-01-26 00:00:00', 'pcharge_end_date' => '2021-01-29 00:00:00'
+            ]
+        ];
+        $this->InsertDbData(Promotion::DB_TBL_CHARGES, $arr);
+    }
+
+    /**
+    * inserPromotionClickData
+    *
+    * @return void
+    */     
+    private function inserPromotionClickData()
+    {
+        $arr = [
+            [
+            'pclick_promotion_id' => 1, 'pclick_user_id' => 1, 'pclick_datetime' => '2021-01-28 00:00:00', 'pclick_ip' => '192.12.12.1', 'pclick_cost' => 1, 'pclick_session_id'=>0
+            ]
+        ];
+        $this->InsertDbData(Promotion::DB_TBL_CLICKS, $arr);
+    }
+
+    /**
      * @test
      *
      * @dataProvider feedGetPromotionCostPerClick
@@ -192,10 +225,9 @@ class PromotionTest extends YkModelTest
      */
     public function getPromotionCostPerClick($expected, $promotionType, $blocation_id)
     {
+        $this->expectedReturnType(YkAppTest::TYPE_STRING);
         $result = $this->execute($this->class, [], 'getPromotionCostPerClick', [$promotionType, $blocation_id]);
-        $this->assertIsArray($result);
-        CommonHelper::printArray($result, 1);
-        $this->assertEquals($expected, $result['addr_id']);
+        $this->assertEquals($expected, $result);
     }    
     /**
      * feedGetPromotionCostPerClick
@@ -205,8 +237,71 @@ class PromotionTest extends YkModelTest
     public function feedGetPromotionCostPerClick()
     {  
         return [
-            [0, 'test', 0],   //Invalid promotionType
-            [0, 1, 0],   //Valid promotionType     
+            ['', 'test', 0],   //Invalid promotionType
+            [1, 1, 0],   //Promotion type - Shop  
+            [1, 2, 0],   //Promotion type - Product
+            ['', 3, 0],   //Promotion type - Banner  
+            [2, 4, 0],   //Promotion type - Slides   
         ];
     } 
+
+    /**
+     * @test
+     *
+     * @dataProvider feedGetPromotionLastChargedEntry
+     * @param  int $promotionType
+     * @return void
+     */
+    public function getPromotionLastChargedEntry($expected, $promotionType)
+    {
+        $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
+        $result = $this->execute($this->class, [], 'getPromotionLastChargedEntry', [$promotionType]);
+        $this->assertIsArray($result);
+        $this->assertEquals($expected, count($result));
+    }    
+    /**
+     * feedGetPromotionLastChargedEntry
+     *
+     * @return array
+    */
+    public function feedGetPromotionLastChargedEntry()
+    {  
+        return [
+            [0, 'test'],   //Invalid promotionType
+            [10, 1],   //Promotion type - Shop  
+            [0, 2],   //Promotion type - Product
+            [0, 3],   //Promotion type - Banner  
+            [0, 4],   //Promotion type - Slides   
+        ];
+    }
+
+     /**
+     * @test
+     *
+     * @dataProvider feedGetTotalChargedAmount
+     * @param  int $userId
+     * @param  bool $active
+     * @return void
+     */
+    public function getTotalChargedAmount($expected, $userId, $active)
+    {
+        $result = $this->execute($this->class, [], 'getPromotionLastChargedEntry', [$userId, $active]);
+        $this->assertEquals($expected, count($result));
+    }    
+    /**
+     * feedGetTotalChargedAmount
+     *
+     * @return array
+    */
+    public function feedGetTotalChargedAmount()
+    {  
+        return [
+            [0, 'test'],   //Invalid promotionType
+            [10, 1],   //Promotion type - Shop  
+            [0, 2],   //Promotion type - Product
+            [0, 3],   //Promotion type - Banner  
+            [0, 4],   //Promotion type - Slides   
+        ];
+    }
+    
 }

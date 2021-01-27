@@ -12,6 +12,8 @@ class FaqTest extends YkModelTest
     { 
         self::truncateDbData();
         $obj = new self();
+        $obj->insertFaqCategoryData();
+        $obj->insertFaqCategoryLangData();
         $obj->insertFaqData();
         $obj->insertFaqLangData();
     }  
@@ -32,8 +34,39 @@ class FaqTest extends YkModelTest
      */
     public static function truncateDbData()
     {
+        FatApp::getDb()->query("TRUNCATE TABLE ".FaqCategory::DB_TBL);
+        FatApp::getDb()->query("TRUNCATE TABLE ".FaqCategory::DB_TBL_LANG);
         FatApp::getDb()->query("TRUNCATE TABLE ".Faq::DB_TBL);
         FatApp::getDb()->query("TRUNCATE TABLE ".Faq::DB_TBL_LANG);
+    }
+    /**
+    * insertFaqCategoryData
+    *
+    * @return void
+    */
+    private function insertFaqCategoryData()
+    {
+        $arr = [
+            [
+            'faqcat_id'=>1, 'faqcat_identifier' => 'Test Faq Category', 'faqcat_active' => 1, 'faqcat_type' => 1,'faqcat_deleted'=>0, 'faqcat_display_order' => 1,
+            'faqcat_featured' => 1
+            ]
+        ];
+        $this->InsertDbData(FaqCategory::DB_TBL, $arr);       
+    }
+    /**
+    * insertFaqCategoryLangData
+    *
+    * @return void
+    */
+    private function insertFaqCategoryLangData()
+    {
+        $arr = [
+            [
+                'faqcatlang_faqcat_id' => 1, 'faqcatlang_lang_id' => 1, 'faqcat_name'=> 'Test Faq Category'
+            ],
+        ];            
+        $this->InsertDbData(FaqCategory::DB_TBL_LANG, $arr);
     }
     /**
     * insertFaqData
