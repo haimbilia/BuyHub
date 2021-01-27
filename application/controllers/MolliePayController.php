@@ -3,8 +3,7 @@
 class MolliePayController extends PaymentController
 {
     public const KEY_NAME = "Mollie";
-    private $actionUrl = '';
-
+    
     /**
      * __construct
      *
@@ -37,7 +36,6 @@ class MolliePayController extends PaymentController
         if (false === $this->plugin->init()) {
             $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
         }
-        //$this->actionUrl = $this->plugin->getActionUrl();
     }
 
     /**
@@ -48,7 +46,7 @@ class MolliePayController extends PaymentController
      */
     public function charge($orderId)
     {
-        if ($orderId == '') {
+        if (empty($orderId)) {
             $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
@@ -69,6 +67,7 @@ class MolliePayController extends PaymentController
             $processRequest = true;
         }
 		
+        $frm->fill(['orderId' => $orderId]);
         $this->set('frm', $frm);
         $this->set('processRequest', $processRequest);
         $this->set('exculdeMainHeaderDiv', true);
@@ -82,34 +81,49 @@ class MolliePayController extends PaymentController
 
         $this->set('cancelBtnUrl', $cancelBtnUrl);
         if (FatUtility::isAjaxCall()) {
-            $json['html'] = $this->_template->render(false, false, 'payfast-pay/charge-ajax.php', true, false);
+            $json['html'] = $this->_template->render(false, false, 'mollie-pay/charge-ajax.php', true, false);
             FatUtility::dieJsonSuccess($json);
         }
         $this->_template->render(true, false);
     }
-
+    
     /**
-     * logFailure
+     * callback - Used for webhook
      *
      * @param  string $orderId
      * @return void
      */
-    private function logFailure(string $orderId, string $msg = '', array $response = [])
+    public function callback(string $orderId)
     {
-        $response = !empty($response) ? $response : $_REQUEST;
-        $orderPaymentObj = new OrderPayment($orderId);
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
-
-        if (empty($msg)) {
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
-            $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
+		$post = FatApp::getPostedData();
+        $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
+        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
+            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->logFailure($orderId, $msg);
+            return false;
         }
 
-        $orderPaymentObj->addOrderPaymentComments($msg);
-        Message::addErrorMessage($msg);
-        FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
-        die;
-    }
+		if(strlen(trim($post['id'])) <= 0 ){
+			$msg = Labels::getLabel('MSG_Invalid_Callback_Response', $this->siteLangId);
+            $this->logFailure($orderId, $msg);
+            return false;
+		}
+		
+        if ($this->plugin->validatePaymentResponse($post) === false) {
+            $msg = Labels::getLabel('MSG_Invalid_Payment_Response', $this->siteLangId);
+            $this->logFailure($orderId, $msg);
+            return false;
+        }
+		
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['id'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
+            $msg = $orderPaymentObj->getError();
+            $this->logFailure($orderId, $msg);
+            return false;
+        }
+		return true;
+	}
 
     /**
      * getPaymentForm
@@ -120,19 +134,42 @@ class MolliePayController extends PaymentController
      */
     private function getPaymentForm(string $orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', [$orderId]) : $this->actionUrl;
-
+        if(false === $processRequest){
+            $actionUrl = UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', [$orderId]);
+        }else{ 
+            $this->plugin->createPaymentAndActionUrl($orderId);
+            $actionUrl  = $this->plugin->getActionUrl();
+        }
+       
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         if (false === $processRequest) {	
+            $frm->addHiddenField('', 'orderId');
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
-        } else {	
-            $this->plugin->buildRequestBody($orderId);
-            foreach ($this->plugin->getRequestBody() as $name => $value) {
-                $frm->addHiddenField('', $name, $value);
-            }
         }
         return $frm;
     }
+    
+    /**
+     * logFailure
+     *
+     * @param  string $orderId
+     * @return void
+     */
+    private function logFailure(string $orderId, string $msg = '', array $response = [])
+    {
+        $response = !empty($response) ? $response : $_REQUEST;
+        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+        if (empty($msg)) {
+            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+            $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
+        }
+        
+        $orderPaymentObj = new OrderPayment($orderId);
+        $orderPaymentObj->addOrderPaymentComments($msg);
+        exit;
+    }
+    
+  
 
 
 }
