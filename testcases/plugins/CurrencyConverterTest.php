@@ -3,17 +3,16 @@
 class CurrencyConverterTest extends YkPluginTest
 {
     public const KEY_NAME = 'CurrencyConverter';
-
+    public const PLUGIN_TYPE = Plugin::TYPE_CURRENCY_CONVERTER;
+    
     /**
-     * settings - Plugin setting need to configure first to test plugin method.
+     * init - Called before execution.
      *
      * @return void
      */
-    public static function settings()
+    public function init()
     {
-        return [
-            'api_key' => 'c22be3bbee2ffc600da0'
-        ];
+        $this->classObj->systemCurrencyCode = 'EUR';
     }
 
     /**
@@ -27,10 +26,16 @@ class CurrencyConverterTest extends YkPluginTest
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'getRates', [$toCurrencies]);
-        $this->assertArrayHasKey('status', $response);
-        $this->assertArrayHasKey('msg', $response);
-        $this->assertArrayHasKey('data', $response);       
-        $this->assertEquals($expected, $response['status']);
+        
+        $status = 0;
+        if (!empty($response)) {
+            $this->assertArrayHasKey('status', $response);
+            $this->assertArrayHasKey('msg', $response);
+            $this->assertArrayHasKey('data', $response);       
+            $status = $response['status'];
+        }
+
+        $this->assertEquals($expected, $status);
     }
 
     /**

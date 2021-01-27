@@ -3,20 +3,7 @@
 class GoogleShoppingFeedTest extends YkPluginTest
 {
     public const KEY_NAME = 'GoogleShoppingFeed';
-
-    /**
-     * settings - Plugin setting need to configure first to test plugin method.
-     *
-     * @return void
-     */
-    public static function settings()
-    {
-        return [
-            'client_id' => '989922044446-f9uj7vt2uir3amtmv7ieufqqt98k8llg.apps.googleusercontent.com',
-            'client_secret' => 'Eug6sn8yKkd4iAZHTtCkaZ6p',
-            'developer_key' => 'AIzaSyAQeP-6U2NVbQODmAbEStE_yLEg49Ew20E',
-        ];
-    }
+    public const PLUGIN_TYPE = Plugin::TYPE_ADVERTISEMENT_FEED;
 
     /**
      * @test
@@ -93,7 +80,15 @@ class GoogleShoppingFeedTest extends YkPluginTest
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID, $userId], 'publishBatch', [$data]);
-        $status = empty($response) ? 0 : $response['status'];
+
+        $status = 0;
+        if (!empty($response)) {
+            $this->assertArrayHasKey('status', $response);
+            $this->assertArrayHasKey('msg', $response);
+            $this->assertArrayHasKey('data', $response);       
+            $status = $response['status'];
+        }
+
         $this->assertEquals($expected, $status);
     }
     
@@ -108,6 +103,8 @@ class GoogleShoppingFeedTest extends YkPluginTest
             [0, 4, []], // Return 0. No Data
             [0, 4, ['abc']], // Return 0. Invalid Data Format.
             [0, 4, ['data' => []]], // Return 0. Missing Data.
+            [0, 4, 123], // Return 0. Invalid 3rd param type expected array but passed int.
+            [0, 4, 'abc'], // Return 0. Invalid 3rd param type expected array but passed string.
             [1, 4, [   
                     'batchId' => 1,
                     'currency_code' => 'USD',

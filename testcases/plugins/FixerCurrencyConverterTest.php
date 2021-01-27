@@ -3,32 +3,37 @@
 class FixerCurrencyConverterTest extends YkPluginTest
 {
     public const KEY_NAME = 'FixerCurrencyConverter';
+    public const PLUGIN_TYPE = Plugin::TYPE_CURRENCY_CONVERTER;
 
     /**
-     * settings - Plugin setting need to configure first to test plugin method.
+     * init
      *
      * @return void
      */
-    public static function settings()
+    public function init()
     {
-        return [
-            'access_key' => 'a95a5e7415cb80554448f926ca7f68d8'
-        ];
+        $this->classObj->systemCurrencyCode = 'EUR';
     }
 
     /**
-     * @test 
+     * @test
      *
      * @dataProvider feedGetRates
      * @param  mixed $toCurrencies
      * @return void
      */
-    public function getRates($toCurrencies)
+    public function getRates($expected, $toCurrencies)
     {
         $this->expectedReturnType(static::TYPE_ARRAY);
         $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'getRates', [$toCurrencies]);
-        $this->assertIsArray($response);
-        $status = empty($response) ? Plugin::RETURN_FALSE : $response['status'];
+        $status = 0;
+        if (!empty($response)) {
+            $this->assertArrayHasKey('status', $response);
+            $this->assertArrayHasKey('msg', $response);
+            $this->assertArrayHasKey('data', $response);       
+            $status = $response['status'];
+        }
+
         $this->assertEquals($expected, $status);
     }
         
@@ -40,9 +45,9 @@ class FixerCurrencyConverterTest extends YkPluginTest
     public function feedGetRates(): array
     {
         return [
-            [['USD', 'INR']], // Return Passed Currencies Conversion Rates. Expected TRUE
-            [[]], // It is required to pass currencies to convert. Expected TRUE
-            ['test'],   // Return error, Invalid request param,
+            [1, ['USD', 'INR']], // Correct Values. Return array . Expected status 1(TRUE)
+            [1, []], // No Value. Return all converted currencies array with by default base currency EUR . Expected status 1(TRU)
+            [0, 'test'],   // Invalid Value. Return array . Expected status 0(FALSE)
         ];
     }
 }

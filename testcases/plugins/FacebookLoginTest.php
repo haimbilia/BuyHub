@@ -3,6 +3,7 @@
 class FacebookLoginTest extends YkPluginTest
 {
     public const KEY_NAME = 'FacebookLogin';
+    public const PLUGIN_TYPE = Plugin::TYPE_SOCIAL_LOGIN;
     
     /**
      * init
@@ -15,22 +16,10 @@ class FacebookLoginTest extends YkPluginTest
             $this->error = $this->classObj->getError();
             return false;
         }
+
         return true;
     }
-
-    /**
-     * settings - Plugin setting need to configure first to test plugin method.
-     *
-     * @return void
-     */
-    public static function settings()
-    {
-        return [
-            'app_id' => '300972908012491',
-            'app_secret' => '772448424077daa677ff01903746a2e4'
-        ];
-    }
-
+    
     /**
      * @test
      *
