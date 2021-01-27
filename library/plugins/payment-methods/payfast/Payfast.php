@@ -19,7 +19,6 @@ class Payfast extends PaymentMethodBase
         'merchant_key',
     ];
     private $env = Plugin::ENV_SANDBOX;
-    private $response = '';
     private $passphrase = '';
     private $signature = '';
     private $merchantId = '';

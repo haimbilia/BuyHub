@@ -111,8 +111,8 @@ class PayfastPayController extends PaymentController
         }
 
         $orderPaymentObj->addOrderPaymentComments($msg);
-        Message::addErrorMessage($msg);
-        FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+        /*Message::addErrorMessage($msg);
+        FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());*/
         die;
     }
 
@@ -154,7 +154,8 @@ class PayfastPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
             $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
-            $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
+            $this->logFailure($orderId, $msg);
+            return false;
         }
 
         if ($this->plugin->validateResponseSignature($post) === false) {
@@ -182,8 +183,6 @@ class PayfastPayController extends PaymentController
             $this->logFailure($orderId, $msg);
             return false;
         }
-
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
         if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['pf_payment_id'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
             $msg = $orderPaymentObj->getError();
