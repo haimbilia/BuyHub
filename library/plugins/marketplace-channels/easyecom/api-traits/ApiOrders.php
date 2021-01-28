@@ -226,8 +226,9 @@ trait ApiOrders
     {
         $opId = FatUtility::int($post['op_id']);
         $trackingNumber = $post['tracking_number'];
+        $trackingUrl = $post['tracking_url'];
 
-        if (1 > $opId || empty($trackingNumber)) {
+        if (1 > $opId || empty($trackingNumber) || empty($trackingUrl)) {
             $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
             return $this->formatOutput(false, $msg);
         }
@@ -235,6 +236,15 @@ trait ApiOrders
         $resp = $this->getOrderStatus($opId);
         if (false === $resp['status']) {
             return $resp;
+        }
+        
+        $updateData = [
+            'opship_op_id' => $opId,
+            'opship_tracking_number' => $trackingNumber,
+            'opship_tracking_url' => $trackingUrl,
+        ];
+        if (false == FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+            return $this->formatOutput(false, FatApp::getDb()->getError());
         }
 
         $comment = Labels::getLabel('MSG_MARKED_AS_SHIPPED_BY_EASY_ECOM', $this->langId);
