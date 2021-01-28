@@ -1,0 +1,1 @@
+INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'Shopify', '16', 'Shopify', '0', '1');
