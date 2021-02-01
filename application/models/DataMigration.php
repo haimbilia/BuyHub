@@ -2,9 +2,9 @@
 
 class DataMigration
 {
-    
     public const TYPE_CATEGORY = 1;
-    public const TYPE_PRODUCT = 2;       
+    public const TYPE_PRODUCT = 2;
+    public const TYPE_USER = 3;
     
     public function sync()
     {
@@ -24,11 +24,17 @@ class DataMigration
                 die($migrationApi->getError());
                 // need to update
                 return;
-            }
-            $products = $migrationApi->getProducts();
+            }           
             
-            print_r($products);
+            
+            $users = $migrationApi->getUsers();
+            
+            print_r($users);
         }
+    }
+    
+    public function syncUsers(){
+        
     }
 
     /**
@@ -40,5 +46,15 @@ class DataMigration
     {
         $pluginObj = new Plugin();
         return (int) $pluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, 'plugin_id');
+    }
+    
+    public static function getSyncType()
+    {
+        $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
+        return array(
+            self::TYPE_CATEGORIES => Labels::getLabel('LBL_CATEGORIES', $langId),
+            self::TYPE_PRODUCTS => Labels::getLabel('LBL_PRODUCTS', $langId),
+            self::TYPE_USER => Labels::getLabel('LBL_USERS', $langId),
+        );
     }
 }
