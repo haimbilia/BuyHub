@@ -38,6 +38,9 @@ $keys = [
     'AppleLogin' => [
         'client_id' => 'com.fatbit.YoKartMarketplaceLogin'
     ],
+    'AfterShipShipment' => [
+        'api_key' => 'a603e21c-339c-4496-9c19-7da8d8457ab7'
+    ],
 ];
 
 $keys = array_key_exists($class, $keys) ? $keys[$class] : [];

@@ -22,7 +22,6 @@ class YkAppTest extends TestCase
     protected $pluginTest = false;
 
     public $langId = SYSTEM_LANG_ID;
-
     /**
      * execute
      *
@@ -192,5 +191,15 @@ class YkAppTest extends TestCase
                 FatApp::getDb()->insertFromArray($table, $data, false, array(), $data);
             }
         }
+    }
+
+    /**
+     * getClassObject
+     *
+     * @return object
+     */
+    protected function getClassObject(): object
+    {
+        return is_null($this->classObj) ? (object) $this->classObj : $this->classObj;
     }
 }
