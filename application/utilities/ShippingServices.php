@@ -35,13 +35,12 @@ trait ShippingServices
     /**
      * generateLabel
      *
-     * @param  string $orderId
      * @param  int $opId
      * @return void
      */
-    public function generateLabel(string $orderId, int $opId)
+    public function generateLabel(int $opId)
     {
-        if (false === $this->shippingService->addOrder($orderId, $opId)) {
+        if (false === $this->shippingService->addOrder($opId)) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
         $order = $this->shippingService->getResponse();

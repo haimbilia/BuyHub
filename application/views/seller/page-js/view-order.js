@@ -39,8 +39,8 @@ $(document).ready(function(){
     };
 
     /* ShipStation */
-    generateLabel = function (orderId, opId) {
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [orderId, opId]), '', function (t) {
+    generateLabel = function (opId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
             window.location.reload();
         });
     }

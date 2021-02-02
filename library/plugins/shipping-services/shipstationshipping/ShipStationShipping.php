@@ -31,7 +31,7 @@ class ShipStationShipping extends ShippingServicesBase
      *
      * @return void
      */
-    public function __construct($langId)
+    public function __construct(int $langId)
     {
         $this->langId = FatUtility::int($langId);
         if (1 > $this->langId) {
@@ -46,10 +46,7 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function init(): bool
     {
-        if (false == $this->validateSettings($this->langId)) {
-            return false;
-        }
-        return true;
+        return $this->validateSettings($this->langId);
     }
 
     /**
@@ -59,7 +56,7 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function getCarriers(): array
     {
-        if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
+        if (Plugin::INACTIVE == $this->settings['plugin_active'] || false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
             return [];
         }
         return $this->getResponse();
@@ -75,6 +72,10 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function getRates(string $carrierCode, string $shipFromPostalCode): array
     {
+        if (Plugin::INACTIVE == $this->settings['plugin_active'] || empty($this->address)) {
+            return [];
+        }
+
         $pkgDetail = [
             'carrierCode' => $carrierCode,
             'serviceCode' => null,
@@ -97,14 +98,12 @@ class ShipStationShipping extends ShippingServicesBase
     /**
      * addOrder
      *
-     * @param  string $orderId
      * @param  int $opId
      * @return bool
      */
-    public function addOrder(string $orderId, int $opId): bool
+    public function addOrder(int $opId): bool
     {
         $orderDetail = $this->getSystemOrder($opId);
-
         if (empty($orderDetail)) {
             return false;
         }
@@ -141,14 +140,14 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['amountPaid'] = $orderDetail['order_net_amount'];
         $this->order['taxAmount'] = (1 > $taxCharged ? $orderDetail['order_tax_charged'] : $taxCharged);
         $this->order['shippingAmount'] = $shippingTotal;
-        /* $this->order['customerNotes']     = null;
-        $this->order['internalNotes']     = "Express Shipping Please"; */
+        /* $this->order['customerNotes'] = null;
+        $this->order['internalNotes'] = "Express Shipping Please"; */
         $this->order['paymentMethod'] = $orderDetail['plugin_name'];
-        $this->order['carrierCode']       = $orderDetail['opshipping_carrier_code'];
-        $this->order['serviceCode']       = $orderDetail['opshipping_service_code'];
+        $this->order['carrierCode'] = $orderDetail['opshipping_carrier_code'];
+        $this->order['serviceCode'] = $orderDetail['opshipping_service_code'];
         $this->order['packageCode'] = "package";
-        /* $this->order['confirmation']      = null;
-        $this->order['shipDate']          = null; */
+        /* $this->order['confirmation'] = null;
+        $this->order['shipDate'] = null; */
 
 
         $this->setAddress($billingAddress['oua_name'], $billingAddress['oua_address1'], $billingAddress['oua_address2'], $billingAddress['oua_city'], $billingAddress['oua_state'], $billingAddress['oua_zip'], $billingAddress['oua_country_code'], $billingAddress['oua_phone']);
@@ -413,7 +412,7 @@ class ShipStationShipping extends ShippingServicesBase
                 }
                 return false;
             }
-            
+
             return true;
         } catch (Exception $e) {
             $this->error = $e->getMessage();

@@ -41,6 +41,10 @@ $keys = [
     'AfterShipShipment' => [
         'api_key' => 'a603e21c-339c-4496-9c19-7da8d8457ab7'
     ],
+    'ShipStationShipping' => [
+        'api_key' => '366da0dfeea246d0926798bc10ac60c8',
+        'api_secret_key' => '60e27c9440d44c92a9387f7cdfebb773'
+    ],
 ];
 
 $keys = array_key_exists($class, $keys) ? $keys[$class] : [];

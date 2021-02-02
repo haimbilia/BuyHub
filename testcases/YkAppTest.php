@@ -50,7 +50,6 @@ class YkAppTest extends TestCase
 
         //Get the parameters of a method
         $reflectionParam = $reflectMethod->getParameters();
-        
         $invalidParam = $this->validateParamType($reflectionParam, $args);
 
         if (true === $invalidParam) {
@@ -87,9 +86,9 @@ class YkAppTest extends TestCase
     private function validateParamType(array $reflectionParam, array $args): bool
     {
         $invalidParam = false;
+        
         foreach ($reflectionParam as $index => $param) {
             $paramValue = (array_key_exists($index, $args)) ? $args[$index] : null;
-
             if ($param->isOptional() && null == $paramValue) {
                 continue;
             }
@@ -116,6 +115,9 @@ class YkAppTest extends TestCase
                     break;
                 case 'array':
                     $invalidParam = (false === is_array($paramValue));
+                    break;
+                default:
+                    $invalidParam = false;
                     break;
             }
 
