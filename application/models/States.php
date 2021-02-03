@@ -162,4 +162,23 @@ class States extends MyAppModel
         $row = FatApp::getDb()->fetch($rs);
         return $row;
     }
+    
+    public static function getStateAttrByCountryIdAndName(int $countryId, string $stateName, int $langId, string $attr): string
+    {
+        $stateArr = $this->getStateArrByCountryIdAndName($countryId, $stateName, $langId, [$attr]);
+        return (string) (array_key_exists($attr, $stateArr) ? $stateArr[$attr] : '');
+    }
+
+    public static function getStateArrByCountryIdAndName(int $countryId, string $stateName, int $langId, array $attr = []): array
+    {
+        if (1 > $countryId || empty($stateName) || 1 > $langId) {
+            return [];
+        }
+
+        $srch = static::getSearchObject(true, $langId);
+        $srch->addCondition('state_name', '=', $stateName);
+
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetch($rs);
+    }
 }

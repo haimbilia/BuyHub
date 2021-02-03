@@ -36,23 +36,27 @@ class Shopify extends DataMigrationBase
     public function getUsers()
     {
         $paginationParam = $this->getData('userPaginationParam');
-        
-        
-        
-        
-        $paginationParam = !empty($paginationParam) ? $paginationParam : ['limit' => 1];
-
+        if ($this->isSyncCompleted($paginationParam)) {
+            return [];
+        }
+        $paginationParam = $paginationParam === NULL ? ['limit' => 1] : $paginationParam;
         $users = $this->fetchCustomers($paginationParam);
-
-        print_r($users);
-
         $mappedUsers = [];
-
+        
         foreach ($users as $key => $user) {
             $mappedUser = array(
                 'user_name' => $user->first_name . " " . $user->last_name,
                 'user_phone' => $user->phone,
                 'credential_email' => $user->email,
+                'user_is_buyer' => User::USER_TYPE_BUYER,
+                'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD,
+                'user_registered_initially_for' => User::USER_TYPE_BUYER,
+                'user_verify' => 1,
+                'user_active' => 1,
+                'user_is_supplier' => 1,
+                'user_is_advertiser' => 1,
+                'credential_username' => '',
+                'id'=> $user->id                
             );
             $mappedAddress = [];
 
@@ -62,12 +66,14 @@ class Shopify extends DataMigrationBase
                     'addr_name' => $address->name,
                     'addr_address1' => $address->address1,
                     'addr_address2' => $address->address2,
-                    'addr_country_code' => $address->country_code,
-                    'addr_state_code' => $address->province_code,
                     'addr_city' => $address->city,
                     'addr_zip' => $address->zip,
                     'addr_phone' => $address->phone,
                     'addr_is_default' => $user->default_address->id == $address->id ? 1 : 0,
+                    'country_code' => $address->country_code,
+                    'country_name' => $address->country_name,
+                    'state_code' => $address->province_code,
+                    'state_name' => $address->province,
                 );
             }
             $mappedUsers[] = $mappedUser + array('addresses' => $mappedAddress);
@@ -75,6 +81,14 @@ class Shopify extends DataMigrationBase
 
         $this->saveData(['userPaginationParam' => $this->getNextPageParams()]);
         return $mappedUsers;
+    }
+
+    public function isSyncCompleted($paginationParam)
+    {
+        if (is_array($paginationParam) && 1 > count($paginationParam)) {
+            return true;
+        }
+        return false;
     }
 
     private function fetchCustomers($params = [])
@@ -226,7 +240,7 @@ class Shopify extends DataMigrationBase
         $val = FatApp::getConfig($confName, FatUtility::VAR_STRING, '');
         $data = !empty($val) ? json_decode($val, true) : [];
         if (!empty($key)) {
-            return isset($data[$key]) ? $data[$key] : '';
+            return isset($data[$key]) ? $data[$key] : NULL;
         }
         return $data;
     }
