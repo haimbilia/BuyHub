@@ -6,7 +6,7 @@ class Shopify extends DataMigrationBase
 {
     public const KEY_NAME = __CLASS__;
     
-    public $requiredKeys = ['shop_url','api_key','password'];
+    public $requiredKeys = ['shop_url','password'];
     
     private const API_VERSION = '2021-01';
 
@@ -14,6 +14,10 @@ class Shopify extends DataMigrationBase
     private $prevLink;
     
     public $langId;
+    
+    public const MULTIVENDOR_API_URL = 'https://mvmapi.webkul.com';
+    public const MULTIVENDOR_API_VERSION = 'v2';
+    
 
     /**
      * init
@@ -67,12 +71,12 @@ class Shopify extends DataMigrationBase
                 'user_phone' => $user->phone,
                 'credential_email' => $user->email,
                 'user_is_buyer' => User::USER_TYPE_BUYER,
-                'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD, //User::USER_SELLER_DASHBOARD
-                'user_registered_initially_for' => User::USER_TYPE_BUYER,  // User::USER_TYPE_SELLER;
+                'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD, 
+                'user_registered_initially_for' => User::USER_TYPE_BUYER, 
                 'user_verify' => 1,
                 'user_active' => 1,
-                'user_is_supplier' => 1,
-                'user_is_advertiser' => 1,
+                'user_is_supplier' => 0,
+                'user_is_advertiser' => 0,
                 'credential_username' => '',
                 'id'=> $user->id
             );
@@ -100,13 +104,69 @@ class Shopify extends DataMigrationBase
         return $mappedUsers;
     }
     
-    public function saveUsersPaginationData(){
+    
+    public function getSellers()
+    { 
+        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_SELLER);
+        $paginationParam = $this->getData($paginationSavedString);
+   
+        if ($this->isSyncCompleted($paginationParam)) {
+            return [];
+        }        
+        $paginationParam = $paginationParam === null ? ['page'=> 1,'limit' => 50] : $paginationParam;
         
-        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_USER);
+        $users = $this->fetchSellers($paginationParam);
+        
+        print_r($sellers);
+
+        $mappedSellers = [];
+        
+        foreach ($users as $key => $user) {
+            $mappedUser = array(
+                'user_name' => $user->full_name,
+                'user_phone' => $user->phone,
+                'credential_email' => $user->email,
+                'user_is_buyer' => 1,
+                'user_preferred_dashboard' => User::USER_SELLER_DASHBOARD, 
+                'user_registered_initially_for' => User::USER_TYPE_SELLER, 
+                'user_verify' => 1,
+                'user_active' => 1,
+                'user_is_supplier' => 1,
+                'user_is_advertiser' => 1,
+                'credential_username' => '',
+                'id'=> $user->id                    
+            );
+            
+            $shop = array(
+                'shop_identifier' => $user->sp_store_name,
+                'urlrewrite_custom' => $user->sp_store_name,
+                'shop_phone' => $user->sp_store_name,
+                'shop_country_code' => $user->sp_store_name,
+                'shop_state' => $user->sp_store_name,
+                'shop_postalcode' => $user->sp_store_name,
+                'shop_active' => 1,
+                'shop_cod_min_wallet_balance' => 1,
+                'shop_fulfillment_type'=> 0,
+                'shop_return_age' => 0,
+                'shop_cancellation_age' => 0,
+                'shop_logo'=> $user->shop_logo,
+                'shop_seller_info'=> $user->description,
+                ''
+            );
+            
+            $mappedUsers[] = $mappedUser + array('shop' => $shop);
+        }
+        
+        return $mappedUsers;
+    }
+    
+    public function savePaginationData($type){
+        
+        $paginationSavedString = $this->getPaginationStringName($type);
         $this->saveData([$paginationSavedString => $this->getNextPageParams()]);
         
-    }
-
+    }    
+    
     public function isSyncCompleted($paginationParam)
     {
         if (is_array($paginationParam) && 1 > count($paginationParam)) {
@@ -115,6 +175,21 @@ class Shopify extends DataMigrationBase
         return false;
     }
 
+    private function fetchSellers($params = [])
+    {       
+        $url = $this->generateUrl(DataMigration::TYPE_SELLER, $params);
+        $response = $this->sendMultiVendorGetRequest($url);         
+        $sellers = $response->sellers;
+        $this->nextLink = '';
+        if(0 < count($sellers)){
+            $params['page']++;
+            $this->nextLink = $this->generateUrl(DataMigration::TYPE_SELLER, $params);
+        }
+        
+        return $sellers;
+    }
+    
+    
     private function fetchCustomers($params = [])
     {
         $url = $this->generateUrl(DataMigration::TYPE_USER, $params);
@@ -136,6 +211,23 @@ class Shopify extends DataMigrationBase
         } else {
             $responseHeaders = $curl->getResponseHeaders();
             $this->getLinks($responseHeaders);
+            return $curl->response;
+        }
+    }
+    
+    private function sendMultiVendorGetRequest($url)
+    {
+        $curl = new Curl();
+        $curl->setHeader('Authorization', 'Bearer'. ' ' .$this->settings['multivendor_access_token']);
+        $curl->get($url);
+        if ($curl->error) {
+            if (isset($curl->response->error)) {
+                $message = $this->castString($curl->response->error_description);
+                throw new Exception($message, $curl->errorCode);
+            }
+            throw new Exception($curl->errorMessage, $curl->errorCode);
+        } else {
+            $this->currentLink = $url;
             return $curl->response;
         }
     }
@@ -173,10 +265,15 @@ class Shopify extends DataMigrationBase
             case DataMigration::TYPE_USER:
                 $urlType = 'customers';
                 break;
-            default:
-                $urlType = '';
-            // need to handle error
+            case DataMigration::TYPE_SELLER:
+                $urlType = 'sellers';
+                break;            
         }
+
+        if (in_array($type, [DataMigration::TYPE_SELLER])) {
+            return self::MULTIVENDOR_API_URL . DIRECTORY_SEPARATOR . 'api/' . self::MULTIVENDOR_API_VERSION . DIRECTORY_SEPARATOR . $urlType . '.json' . (!empty($urlParams) ? '?' . http_build_query($urlParams) : '');
+        }
+
         return $this->settings['shop_url'] . DIRECTORY_SEPARATOR . 'admin/api/' . self::API_VERSION . DIRECTORY_SEPARATOR . $urlType . '.json' . (!empty($urlParams) ? '?' . http_build_query($urlParams) : '');
     }
 
@@ -248,6 +345,9 @@ class Shopify extends DataMigrationBase
                 break;
             case DataMigration::TYPE_USER:
                 $stringName = 'user' . $stringName;
+                break;
+            case DataMigration::TYPE_SELLER:
+                $stringName = 'seller' . $stringName;
                 break;
         }
         

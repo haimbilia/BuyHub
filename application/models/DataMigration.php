@@ -5,7 +5,8 @@ class DataMigration
     public const TYPE_CATEGORY = 1;
     public const TYPE_PRODUCT = 2;
     public const TYPE_USER = 3;
-
+    public const TYPE_SELLER = 4;
+    
     public $activedServiceId = 0;
     private $langId;
     private $pluginObj;
@@ -13,8 +14,7 @@ class DataMigration
 
     public function __construct(int $langId = 0)
     {
-        $this->langId = (0 < $langId ? $langId : CommonHelper::getLangId());
-        
+        $this->langId = (0 < $langId ? $langId : CommonHelper::getLangId());        
     }
 
     public function sync()
@@ -26,17 +26,20 @@ class DataMigration
             if (false === $this->pluginObj) {
                 $this->error = $error;
                 return false;
-            }
-            
+            }           
             if (false === $this->pluginObj->init()) {            
                 $this->error = $this->pluginObj->getError();
                 return false;
-            }            
-                      
-            if ($this->syncUsers()) {
+            }
+                          
+//            if ($this->syncUsers()) {
+//                return;
+//            }
+            
+            /* mark some users as seller and create shop */
+            if ($this->syncSellers()) {                
                 return;
             }
-
 
 //            if ($this->syncProducts()){
 //                return ;
@@ -56,21 +59,60 @@ class DataMigration
              */
         }
     }
+    
+    private function syncSellers()
+    {      
+        $sellers = $this->pluginObj->getSellers();
+        print_r($sellers);
+        die();
+        if (0 < count($sellers)) {            
+            if(!$this->saveSellerData($sellers)){                
+                print_r($this->getError());
+                return true;
+            } 
+            $this->pluginObj->savePaginationData(DataMigration::TYPE_SELLER);
+        } 
 
+        return (0 < count($sellers));      
+    }
+    
+
+    private function syncProducts()
+    {        
+        $products = $this->pluginObj->getProducts();
+        print_r($products);
+//        if (0 < count($products)) {            
+//            if(!$this->saveProductsData($products)){                
+//                print_r($this->getError());
+//                return true;
+//            } 
+//            $this->pluginObj->saveProductsPaginationData();
+//        } 
+//
+//        return (0 < count($users));
+    }
+    
+    
     private function syncUsers()
     {        
         $users = $this->pluginObj->getUsers();
         if (0 < count($users)) {            
-            if(!$this->saveUsersData($users)){
+            if(!$this->saveUsersData($users)){                
+                print_r($this->getError());
                 return true;
-            }
-            /* */
-            $this->pluginObj->saveUsersPaginationData();
+            } 
+            $this->pluginObj->savePaginationData(DataMigration::TYPE_USER);
         } 
 
         return (0 < count($users));
     }
-
+    
+    
+    
+    private function saveSellerData($sellers){
+        
+    }
+    
     private function saveUsersData($users)
     {    
         $countryIdArrByCode = [];
@@ -78,6 +120,8 @@ class DataMigration
 
         $stateIdArrByCode = [];
         $stateIdArrByName = [];
+        
+        $pluginName = strtolower($this->pluginObj->settings['plugin_code']);
         
         $db = FatApp::getDb();
         $db->startTransaction();
@@ -91,7 +135,7 @@ class DataMigration
 
             if (empty($userArr)) {
                 $userObj->assignValues($user);
-                if (!$userObj->save()) {
+                if (!$userObj->save()) {                  
                     $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
@@ -114,17 +158,8 @@ class DataMigration
                 if (!$userObj->setLoginCredentials($user['user_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
                     $db->rollbackTransaction();
                     return false;
-                }
+                }                
                 
-                $pluginName = strtolower($this->pluginObj->settings['plugin_code']);
-                
-                if (!$userObj->updateUserMeta($pluginName . "_id", $user['id'])) {
-                    $this->error = $userObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-
-
                 foreach ($user['addresses'] as $address) {
                     $countryCode = $address['country_code'];
                     $countryName = $address['country_name'];
@@ -140,8 +175,6 @@ class DataMigration
                             $countryId = $countryIdArrByCode[$countryCode];
                         }
                     }
-
-
 
                     if (empty($countryId) && !empty($countryName)) {
                         if (!isset($countryIdArrByName[$countryName])) {
@@ -211,6 +244,13 @@ class DataMigration
                 }
             } else {
                 $userId = $userArr['user_id'];
+                $userObj = new User($userId); 
+            }
+            
+            if (!$userObj->updateUserMeta($pluginName . "_id", $user['id'])) {                
+                $this->error = $userObj->getError();
+                $db->rollbackTransaction();
+                return false;
             }
         }
         
