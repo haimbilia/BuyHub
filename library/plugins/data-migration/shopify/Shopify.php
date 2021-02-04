@@ -4,20 +4,34 @@ use Curl\Curl;
 
 class Shopify extends DataMigrationBase
 {
-
     public const KEY_NAME = __CLASS__;
+    
+    public $requiredKeys = ['shop_url','api_key','password'];
+    
     private const API_VERSION = '2021-01';
 
     private $nextLink;
     private $prevLink;
+    
+    public $langId;
 
     /**
      * init
      *
      * @return void
      */
-    public function init()
+    
+    
+    public function __construct(int $langId)
     {
+        $this->langId = FatUtility::int($langId);
+        if (1 > $this->langId) {
+            $this->langId = CommonHelper::getLangId();
+        }
+    }
+    
+    public function init()
+    {        
         return $this->validateSettings();
     }
 
@@ -34,12 +48,16 @@ class Shopify extends DataMigrationBase
     }
 
     public function getUsers()
-    {
-        $paginationParam = $this->getData('userPaginationParam');
+    { 
+        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_USER);
+        
+        $paginationParam = $this->getData($paginationSavedString);
         if ($this->isSyncCompleted($paginationParam)) {
             return [];
-        }
-        $paginationParam = $paginationParam === NULL ? ['limit' => 1] : $paginationParam;
+        } 
+        
+        $paginationParam = $paginationParam === null ? ['limit' => 50] : $paginationParam;
+        
         $users = $this->fetchCustomers($paginationParam);
         $mappedUsers = [];
         
@@ -49,14 +67,14 @@ class Shopify extends DataMigrationBase
                 'user_phone' => $user->phone,
                 'credential_email' => $user->email,
                 'user_is_buyer' => User::USER_TYPE_BUYER,
-                'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD,
-                'user_registered_initially_for' => User::USER_TYPE_BUYER,
+                'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD, //User::USER_SELLER_DASHBOARD
+                'user_registered_initially_for' => User::USER_TYPE_BUYER,  // User::USER_TYPE_SELLER;
                 'user_verify' => 1,
                 'user_active' => 1,
                 'user_is_supplier' => 1,
                 'user_is_advertiser' => 1,
                 'credential_username' => '',
-                'id'=> $user->id                
+                'id'=> $user->id
             );
             $mappedAddress = [];
 
@@ -78,9 +96,15 @@ class Shopify extends DataMigrationBase
             }
             $mappedUsers[] = $mappedUser + array('addresses' => $mappedAddress);
         }
-
-        $this->saveData(['userPaginationParam' => $this->getNextPageParams()]);
+        
         return $mappedUsers;
+    }
+    
+    public function saveUsersPaginationData(){
+        
+        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_USER);
+        $this->saveData([$paginationSavedString => $this->getNextPageParams()]);
+        
     }
 
     public function isSyncCompleted($paginationParam)
@@ -116,7 +140,7 @@ class Shopify extends DataMigrationBase
         }
     }
 
-    protected function castString($array)
+    private function castString($array)
     {
         if (!is_object($array)) {
             return (string) $array;
@@ -182,7 +206,7 @@ class Shopify extends DataMigrationBase
         return null;
     }
 
-    public function getUrlParams($url)
+    protected function getUrlParams($url)
     {
         if ($url) {
             $parts = parse_url($url);
@@ -191,58 +215,44 @@ class Shopify extends DataMigrationBase
         return '';
     }
 
-    public function getNextPageParams()
+    private function getNextPageParams()
     {
         $nextPageParams = [];
         parse_str($this->getUrlParams($this->getNextLink()), $nextPageParams);
         return $nextPageParams;
     }
 
-    public function getPrevPageParams()
+    private function getPrevPageParams()
     {
         $nextPageParams = [];
         parse_str($this->getUrlParams($this->getPrevLink()), $nextPageParams);
         return $nextPageParams;
     }
 
-    public function getPrevLink()
+    private function getPrevLink()
     {
         return $this->prevLink;
     }
 
-    public function getNextLink()
+    private function getNextLink()
     {
         return $this->nextLink;
     }
-
-    public function saveData($dataArr)
+    
+    protected function getPaginationStringName($type)
     {
-        $pluginID = $this->settings['plugin_id'];
-        $dataArr = $dataArr + $this->getData();
-        $data = json_encode($dataArr);
-        $confName = 'DATA_MIGRATION_' . $pluginID;
-
-        $dataToSave = array('conf_name' => $confName, 'conf_val' => $data);
-
-        FatApp::getDb()->insertFromArray(
-                Configurations::DB_TBL,
-                $dataToSave,
-                false,
-                array(),
-                $dataToSave
-        );
-    }
-
-    public function getData($key = '')
-    {
-        $pluginID = $this->settings['plugin_id'];
-        $confName = 'DATA_MIGRATION_' . $pluginID;
-        $val = FatApp::getConfig($confName, FatUtility::VAR_STRING, '');
-        $data = !empty($val) ? json_decode($val, true) : [];
-        if (!empty($key)) {
-            return isset($data[$key]) ? $data[$key] : NULL;
+        $stringName = 'PaginationParam';        
+        switch ($type) {
+            case DataMigration::TYPE_PRODUCT:
+                $stringName = 'product' . $stringName;
+                break;
+            case DataMigration::TYPE_USER:
+                $stringName = 'user' . $stringName;
+                break;
         }
-        return $data;
-    }
-
+        
+        return $stringName;
+    }   
+    
+    
 }

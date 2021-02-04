@@ -5,68 +5,82 @@ class DataMigration
     public const TYPE_CATEGORY = 1;
     public const TYPE_PRODUCT = 2;
     public const TYPE_USER = 3;
-    
+
     public $activedServiceId = 0;
-    
+    private $langId;
+    private $pluginObj;
+    protected $error;
+
+    public function __construct(int $langId = 0)
+    {
+        $this->langId = (0 < $langId ? $langId : CommonHelper::getLangId());
+        
+    }
+
     public function sync()
     {
-        $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
-        
-        $activatedTaxServiceId = static::getActivatedServiceId();
+        $activatedTaxServiceId = $this->getActivatedServiceId();
         if (1 < $activatedTaxServiceId) {
             $pluginKey = Plugin::getAttributesById($activatedTaxServiceId, 'plugin_code');
-            if (false === PluginHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_DATA_MIGRATION), $error, $langId)) {
-                SystemLog::set($error);
-                die($error);
-                // need to update
-                return;
-            }
-            $migrationApi = new $pluginKey();
-            if (false === $migrationApi->init()) {
-                SystemLog::set($migrationApi->getError());
-                die($migrationApi->getError());
-                // need to update
-                return;
-            }            
-            $users = $migrationApi->getUsers();
-                    
-            if (0 < count($users)) {
-                $this->saveUsersData($users, $migrationApi::KEY_NAME);
-                return;
+            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId,], $error, $this->langId);
+            if (false === $this->pluginObj) {
+                $this->error = $error;
+                return false;
             }
             
-            /*
-            $products = $migrationApi->getProducts();
-            if(1 > count($products)){
-
+            if (false === $this->pluginObj->init()) {            
+                $this->error = $this->pluginObj->getError();
+                return false;
+            }            
+                      
+            if ($this->syncUsers()) {
                 return;
             }
+
+
+//            if ($this->syncProducts()){
+//                return ;
+//            }
+
+
+
+
+            /*
+              $products = $migrationApi->getProducts();
+              if(1 > count($products)){
+
+              return;
+              }
              *
              *
              */
         }
     }
-    
+
     private function syncUsers()
-    {
+    {        
+        $users = $this->pluginObj->getUsers();
+        if (0 < count($users)) {            
+            if(!$this->saveUsersData($users)){
+                return true;
+            }
+            /* */
+            $this->pluginObj->saveUsersPaginationData();
+        } 
+
+        return (0 < count($users));
     }
-    
-    private function saveUsersData($users, $pluginName)
-    {
-        
-        print_r($users);
-        $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
 
-        $db = FatApp::getDb();
-        $db->startTransaction();
-        $pluginName = strtolower($pluginName);
-
+    private function saveUsersData($users)
+    {    
         $countryIdArrByCode = [];
         $countryIdArrByName = [];
 
         $stateIdArrByCode = [];
-        $stateIdArrByName = [];       
-
+        $stateIdArrByName = [];
+        
+        $db = FatApp::getDb();
+        $db->startTransaction();
         foreach ($users as &$user) {
             $userObj = new User();
             if (!empty($user['credential_email'])) {
@@ -78,6 +92,7 @@ class DataMigration
             if (empty($userArr)) {
                 $userObj->assignValues($user);
                 if (!$userObj->save()) {
+                    $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
                 }
@@ -99,13 +114,16 @@ class DataMigration
                 if (!$userObj->setLoginCredentials($user['user_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
                     $db->rollbackTransaction();
                     return false;
-                }                
-
+                }
+                
+                $pluginName = strtolower($this->pluginObj->settings['plugin_code']);
+                
                 if (!$userObj->updateUserMeta($pluginName . "_id", $user['id'])) {
+                    $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
-                }   
-                
+                }
+
 
                 foreach ($user['addresses'] as $address) {
                     $countryCode = $address['country_code'];
@@ -122,8 +140,8 @@ class DataMigration
                             $countryId = $countryIdArrByCode[$countryCode];
                         }
                     }
-                    
-         
+
+
 
                     if (empty($countryId) && !empty($countryName)) {
                         if (!isset($countryIdArrByName[$countryName])) {
@@ -133,11 +151,9 @@ class DataMigration
                             $countryId = $countryIdArrByName[$countryName];
                         }
                     }
-                    
-              
 
                     if (empty($countryId)) {
-                        $countryId = $this->createCountry($countryCode, $countryName, $langId);
+                        $countryId = $this->createCountry($countryCode, $countryName, $this->langId);
                         if (empty($countryId)) {
                             $db->rollbackTransaction();
                             return false;
@@ -145,8 +161,6 @@ class DataMigration
                         $countryIdArrByCode[$countryCode] = $countryId;
                         $countryIdArrByName[$countryName] = $countryId;
                     }
-
-                 
 
                     if (!empty($stateCode)) {
                         $stateCodekey = $countryId . "_" . $stateCode;
@@ -172,7 +186,7 @@ class DataMigration
                     }
 
                     if (empty($stateId)) {
-                        $stateId = $this->createState($countryId, $stateCode, $stateName, $langId);
+                        $stateId = $this->createState($countryId, $stateCode, $stateName, $this->langId);
                         if (empty($stateId)) {
                             $db->rollbackTransaction();
                             return false;
@@ -187,20 +201,22 @@ class DataMigration
                     $addrDataToSave['addr_state_id'] = $stateId;
                     $addrDataToSave['addr_record_id'] = $userId;
                     $addrDataToSave['addr_type'] = Address::TYPE_USER;
-                    $addrDataToSave['addr_lang_id'] = $langId;
-                    
+                    $addrDataToSave['addr_lang_id'] = $this->langId;
                     $addressObj->assignValues($addrDataToSave, true);
                     if (!$addressObj->save()) {
+                        $this->error = $addressObj->getError();
                         $db->rollbackTransaction();
                         return false;
                     }
-                }                
-                $db->commitTransaction();
-                
+                }
             } else {
                 $userId = $userArr['user_id'];
             }
         }
+        
+        $db->commitTransaction();
+        
+        return true;
     }
 
     public function createCountry($countryCode, $countryName, $langId)
@@ -209,11 +225,9 @@ class DataMigration
         $countryDatatoSave = array(
             'country_code' => $countryCode
         );
-        
-        echo 1111;
         $countryObj->assignValues($countryDatatoSave);
         if (!$countryObj->save()) {
-            print_r($countryObj->getError());
+            $this->error = $countryObj->getError();
             return false;
         }
 
@@ -224,17 +238,13 @@ class DataMigration
             'countrylang_country_id' => $countryId,
             'country_name' => $countryName
         );
-       
-
         if (!$countryObj->updateLangData($langId, $countryLangDatatoSave)) {
-            print_r($countryObj->getError());
+            $this->error = $countryObj->getError();
             return false;
         }
-        
         return $countryId;
     }
-    
-    
+
     public function createState($countryId, $stateCode, $stateName, $langId)
     {
         $statesObj = new States();
@@ -245,11 +255,12 @@ class DataMigration
         );
         $statesObj->assignValues($stateDatatoSave);
         if (!$statesObj->save()) {
+            $this->error = $statesObj->getError();
             return false;
         }
 
         $stateId = $statesObj->getMainTableRecordId();
-        
+
         $stateLangDatatoSave = array(
             'statelang_lang_id' => $lang_id,
             'statelang_state_id' => $stateId,
@@ -257,9 +268,9 @@ class DataMigration
         );
 
         if (!$statesObj->updateLangData($langId, $stateLangDatatoSave)) {
+            $this->error = $statesObj->getError();
             return false;
         }
-        
         return $stateId;
     }
 
@@ -268,22 +279,15 @@ class DataMigration
      *
      * @return int
      */
-    public static function getActivatedServiceId(): int
-    {   
-        /*
+    public function getActivatedServiceId(): int
+    {
         if (1 > $this->activedServiceId) {
             $pluginObj = new Plugin();
             $this->activedServiceId = (int) $pluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, 'plugin_id');
         }
         return $this->activedServiceId;
-        
-         * 
-         */
-        
-        $pluginObj = new Plugin();
-        return (int) $pluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, 'plugin_id');
     }
-    
+
     public static function getSyncType($langId)
     {
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
@@ -293,4 +297,11 @@ class DataMigration
             self::TYPE_USER => Labels::getLabel('LBL_USERS', $langId),
         );
     }
+
+    public function getError()
+    {
+        return $this->error;
+    }
+   
+    
 }
