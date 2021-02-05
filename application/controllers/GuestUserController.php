@@ -41,11 +41,21 @@ class GuestUserController extends MyAppController
         } else {
             $termsAndConditionsLinkHref = 'javascript:void(0)';
         }
+        
+        $privacyPolicyLinkHref = 'javascript:void(0)';
+        $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
+        $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
+        if (!empty($cpage) && is_array($cpage)) {
+            $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+        } 
+        
         $registerdata = array(
             'registerFrm' => $registerFrm,
             'termsAndConditionsLinkHref' => $termsAndConditionsLinkHref,
             'siteLangId' => $this->siteLangId,
             'signUpWithPhone' => $signUpWithPhone,
+            'privacyPolicyLinkHref' => $privacyPolicyLinkHref,
         );
         $isRegisterForm = FatUtility::int($isRegisterForm);
 

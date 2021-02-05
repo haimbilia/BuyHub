@@ -91,8 +91,9 @@ echo $registerFrm->getFormTag();
                     ?>
                     <i class="input-helper"></i>
                     <?php echo sprintf(
-                        Labels::getLabel('LBL_I_agree_to_the_terms_conditions', $siteLangId),
-                        "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . '</a>'
+                        Labels::getLabel('LBL_I_agree_to_the_terms_conditions_and_privacy_policy', $siteLangId),
+                        "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . '</a>',
+                        "<a target='_blank' href='$privacyPolicyLinkHref'>" . Labels::getLabel('LBL_Privacy_Policy', $siteLangId) . '</a>'
                     ); ?>
                     </label>
                     <?php if ($registerFrm->getField('user_newsletter_signup')) { ?>
