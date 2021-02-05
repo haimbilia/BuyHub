@@ -62,14 +62,13 @@ class DataMigration
     
     private function syncSellers()
     {      
-        $sellers = $this->pluginObj->getSellers();
-        print_r($sellers);
-        die();
+        $sellers = $this->pluginObj->getSellers();       
         if (0 < count($sellers)) {            
             if(!$this->saveSellerData($sellers)){                
-                print_r($this->getError());
+                print_r($this->getError());                
                 return true;
             } 
+            die();
             $this->pluginObj->savePaginationData(DataMigration::TYPE_SELLER);
         } 
 
@@ -109,7 +108,201 @@ class DataMigration
     
     
     
-    private function saveSellerData($sellers){
+    private function saveSellerData($sellers)
+    {
+        
+        $countryIdArrByCode = [];
+        $countryIdArrByName = [];
+
+        $stateIdArrByCode = [];
+        $stateIdArrByName = [];
+        
+        $pluginName = strtolower($this->pluginObj->settings['plugin_code']);
+        
+        $db = FatApp::getDb();
+        $db->startTransaction();
+        print_r($sellers);
+        foreach ($sellers as &$user) {            
+            $userObj = new User();
+            if (!empty($user['credential_email'])) {
+                $userArr = $userObj->checkUserByEmailOrUserName($user['credential_username'], $user['credential_email']);
+            } else {
+                $userArr = $userObj->checkUserByPhoneOrUserName($user['credential_username'], $user['user_phone']);
+            }
+            
+            print_r($userArr);
+            
+            if (!empty($userArr)) {
+                $userObj = new User($userArr['user_id']);
+            }
+            /* not adding/updating data with empty values */
+            $userObj->assignValues(array_filter($user));
+            if (!$userObj->save()) {                  
+                $this->error = $userObj->getError();
+                $db->rollbackTransaction();
+                return false;
+            }
+
+            $userId = $userObj->getMainTableRecordId();
+
+            if (empty($user['user_username'])) {
+                if (!empty($user['credential_email'])) {
+                    $user['user_username'] = $user['credential_email'];
+                } else {
+                    $user['user_username'] = $user['user_phone'];
+                }
+            }
+
+            if (empty($userArr)) {
+                if (!isset($user['user_password']) || empty($user['user_password'])) {
+                    $user['user_password'] = CommonHelper::getRandomPassword(8);
+                }
+
+                if (!$userObj->setLoginCredentials($user['user_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
+                    $db->rollbackTransaction();
+                    return false;
+                }  
+            }            
+            if(!empty($user['id'])){
+                if (!$userObj->updateUserMeta($pluginName . "_id", $user['id'])) {                
+                    $this->error = $userObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+            }
+            
+            $shop = $user['shop'];
+            
+            $countryCode = $shop['shop_country_code'];
+            $countryName = $shop['shop_country_name'];
+
+            $stateCode = $shop['shop_state_code'];
+            $stateName = $shop['shop_state_name'];
+            
+            $countryId = 0;
+            $stateId = 0; 
+            
+            if (!empty($countryCode)) {
+                if (!isset($countryIdArrByCode[$countryCode])) {
+                    $countryId = Countries::getCountryByCode($countryCode, 'country_id');
+                    $countryIdArrByCode[$countryCode] = $countryId;
+                } else {
+                    $countryId = $countryIdArrByCode[$countryCode];
+                }
+            }
+
+            if (empty($countryId) && !empty($countryName)) {
+                if (!isset($countryIdArrByName[$countryName])) {
+                    $countryId = Countries::getCountryAttributeByName($countryName, 'country_id');
+                    $countryIdArrByName[$countryName] = $countryId;
+                } else {
+                    $countryId = $countryIdArrByName[$countryName];
+                }
+            }
+
+            if (empty($countryId)) {
+                $countryId = $this->createCountry($countryCode, $countryName, $this->langId);
+                if (empty($countryId)) {
+                    $db->rollbackTransaction();
+                    return false;
+                }
+                $countryIdArrByCode[$countryCode] = $countryId;
+                $countryIdArrByName[$countryName] = $countryId;
+            }
+            
+            if (!empty($stateCode)) {
+                $stateCodekey = $countryId . "_" . $stateCode;
+                if (!isset($stateIdArrByCode[$stateCodekey])) {
+                    $stateArr = States::getStateByCountryAndCode($countryId, $stateCode);
+                    if (!empty($stateArr)) {
+                        $stateId = $stateArr['state_id'];
+                        $stateIdArrByCode[$stateCodekey] = $stateId;
+                    }
+                } else {
+                    $stateId = $stateIdArrByCode[$stateCodekey];
+                }
+            }
+
+            if (empty($stateId) && !empty($stateName)) {
+                $stateNamekey = $countryId . "_" . $stateName;
+                if (!isset($stateIdArrByName[$stateNamekey])) {
+                    $stateId = States::getStateAttrByCountryIdAndName($stateName, 'state_id');
+                    $stateIdArrByName[$stateNamekey] = $stateId;
+                } else {
+                    $stateId = $stateIdArrByName[$stateNamekey];
+                }
+            }
+
+            if (empty($stateId)) {
+                $stateId = $this->createState($countryId, $stateCode, $stateName, $this->langId);
+                if (empty($stateId)) {
+                    $db->rollbackTransaction();
+                    return false;
+                }
+                $stateIdArrByCode[$stateCodekey] = $stateId;
+                $stateIdArrByName[$stateNamekey] = $stateId;
+            }
+            
+            $shop['shop_country_id'] = $countryId;
+            $shop['shop_state_id'] = $stateId;
+            $shop['shop_user_id'] = $userId;
+                    
+            $shopObj = new Shop(0, $userId);
+            $shopObj->assignValues($shop);
+            if (!$shopObj->save()) {
+                $this->error = $shopObj->getError();
+                $db->rollbackTransaction();    
+                return false;
+            }
+            
+            $shopId = $shopObj->getMainTableRecordId();
+            
+            $shopLangData = array(
+                'shop_name' => $shop['shop_name'],
+                'shop_contact_person' => $shop['shop_contact_person'],
+                'shop_city' => $shop['shop_city'],
+                'shop_seller_info' => $shop['shop_seller_info'],
+                'shop_description' => $shop['shop_description'],
+                'shop_payment_policy' => $shop['shop_payment_policy']               
+            );
+            
+            
+            if (!$shopObj->updateLangData($this->langId, $shopLangData)) {
+                $this->error = $shopObj->getError();
+                $db->rollbackTransaction();    
+                return false;
+            }
+            
+            print_r($shop);
+                   
+            if (!empty($shop['shop_logo'])) {
+                $fileAttr = array(
+                    'afile_type' => AttachedFile::FILETYPE_SHOP_LOGO,
+                    'afile_record_id' => $shopId,
+                    'afile_record_subid' => 0,
+                    'afile_lang_id' => $this->langId,
+                    'afile_screen' => 0,
+                    'afile_display_order' => 0
+                );
+                AttachedFile::getImageName($shop['shop_logo'], $fileAttr);
+            }
+
+            if (!empty($shop['shop_banner'])) {
+                $fileAttr = array(
+                    'afile_type' => AttachedFile::FILETYPE_SHOP_BANNER,
+                    'afile_record_id' => $shopId,
+                    'afile_record_subid' => 0,
+                    'afile_lang_id' => $this->langId,
+                    'afile_screen' => 0,
+                    'afile_display_order' => 0
+                );
+                AttachedFile::getImageName($shop['shop_banner'], $fileAttr);
+            }
+        }
+        
+        $db->commitTransaction();
+        
+        return true;
         
     }
     
@@ -166,7 +359,10 @@ class DataMigration
 
                     $stateCode = $address['state_code'];
                     $stateName = $address['state_name'];
-
+                    
+                    $countryId = 0;
+                    $stateId = 0;
+                    
                     if (!empty($countryCode)) {
                         if (!isset($countryIdArrByCode[$countryCode])) {
                             $countryId = Countries::getCountryByCode($countryCode, 'country_id');
@@ -273,9 +469,7 @@ class DataMigration
 
         $countryId = $countryObj->getMainTableRecordId();
 
-        $countryLangDatatoSave = array(
-            'countrylang_lang_id' => $langId,
-            'countrylang_country_id' => $countryId,
+        $countryLangDatatoSave = array( 
             'country_name' => $countryName
         );
         if (!$countryObj->updateLangData($langId, $countryLangDatatoSave)) {
@@ -301,9 +495,7 @@ class DataMigration
 
         $stateId = $statesObj->getMainTableRecordId();
 
-        $stateLangDatatoSave = array(
-            'statelang_lang_id' => $lang_id,
-            'statelang_state_id' => $stateId,
+        $stateLangDatatoSave = array(          
             'state_name' => $stateName
         );
 

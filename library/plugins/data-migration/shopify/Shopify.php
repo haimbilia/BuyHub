@@ -69,16 +69,16 @@ class Shopify extends DataMigrationBase
             $mappedUser = array(
                 'user_name' => $user->first_name . " " . $user->last_name,
                 'user_phone' => $user->phone,
-                'credential_email' => $user->email,
-                'user_is_buyer' => User::USER_TYPE_BUYER,
+                'credential_email' => $user->email,                
                 'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD, 
                 'user_registered_initially_for' => User::USER_TYPE_BUYER, 
                 'user_verify' => 1,
                 'user_active' => 1,
+                'user_is_buyer' => 1,
                 'user_is_supplier' => 0,
                 'user_is_advertiser' => 0,
                 'credential_username' => '',
-                'id'=> $user->id
+                'id'=> $user->id   /*shopify customer id */ 
             );
             $mappedAddress = [];
 
@@ -113,51 +113,66 @@ class Shopify extends DataMigrationBase
         if ($this->isSyncCompleted($paginationParam)) {
             return [];
         }        
-        $paginationParam = $paginationParam === null ? ['page'=> 1,'limit' => 50] : $paginationParam;
+        $paginationParam = $paginationParam === null ? ['page'=> 1,'limit' => 1] : $paginationParam;
         
-        $users = $this->fetchSellers($paginationParam);
-        
-        print_r($sellers);
-
+        $sellers = $this->fetchSellers($paginationParam);
+                       
         $mappedSellers = [];
         
-        foreach ($users as $key => $user) {
-            $mappedUser = array(
-                'user_name' => $user->full_name,
-                'user_phone' => $user->phone,
-                'credential_email' => $user->email,
-                'user_is_buyer' => 1,
+        foreach ($sellers as $key => $seller) {
+            $mappedSeller = array(
+                'user_name' => $seller->full_name,
+                'user_phone' => '',
+                'credential_email' => $seller->email,                
                 'user_preferred_dashboard' => User::USER_SELLER_DASHBOARD, 
                 'user_registered_initially_for' => User::USER_TYPE_SELLER, 
                 'user_verify' => 1,
                 'user_active' => 1,
+                'user_is_buyer' => 1,
                 'user_is_supplier' => 1,
                 'user_is_advertiser' => 1,
                 'credential_username' => '',
-                'id'=> $user->id                    
-            );
+                'id'=> $seller->customer_id,  /*shopify customer id */      
+            ); 
             
             $shop = array(
-                'shop_identifier' => $user->sp_store_name,
-                'urlrewrite_custom' => $user->sp_store_name,
-                'shop_phone' => $user->sp_store_name,
-                'shop_country_code' => $user->sp_store_name,
-                'shop_state' => $user->sp_store_name,
-                'shop_postalcode' => $user->sp_store_name,
+                'shop_identifier' => $seller->sp_store_name,
+                'shop_name' => $seller->sp_store_name,
+                'urlrewrite_custom' => $seller->store_name_handle,
+                'shop_contact_person' => $seller->contact,
+                'shop_phone' => '',
+                'shop_city' => $seller->city,
+                'shop_country_code' => '',
+                'shop_country_name' => '',
+                'shop_state_code' => '',
+                'shop_state_name' => '',
+                'shop_postalcode' => $seller->zipcode,
                 'shop_active' => 1,
-                'shop_cod_min_wallet_balance' => 1,
-                'shop_fulfillment_type'=> 0,
+                'shop_cod_min_wallet_balance' => 0,
+                'shop_fulfillment_type'=> Shipping::FULFILMENT_ALL,
                 'shop_return_age' => 0,
-                'shop_cancellation_age' => 0,
-                'shop_logo'=> $user->shop_logo,
-                'shop_seller_info'=> $user->description,
-                ''
+                'shop_cancellation_age' => 0,                
+                'shop_seller_info'=> $seller->description,
+                'shop_description'=> $seller->short_desc,
+                'shop_payment_policy'=> $seller->policy,
+                'shop_banner'=> $seller->store_banner,
+                'shop_logo'=> $seller->shop_logo,
             );
             
-            $mappedUsers[] = $mappedUser + array('shop' => $shop);
-        }
+            if(!empty($seller->id_country)){
+                $shop['shop_country_code'] = $seller->id_country->iso_code;
+                $shop['shop_country_name'] = $seller->id_country->name;
+            }
+            
+            if(!empty($seller->id_state)){
+                $shop['shop_state_code'] = $seller->id_state->iso_code;
+                $shop['shop_state_name'] = $seller->id_state->name;
+            }
+            
+            $mappedSellers[] = $mappedSeller + array('shop' => $shop);
+        }        
         
-        return $mappedUsers;
+        return $mappedSellers;
     }
     
     public function savePaginationData($type){
