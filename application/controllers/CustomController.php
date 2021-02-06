@@ -5,8 +5,27 @@ class CustomController extends MyAppController
     public function contactUs()
     {
         $contactFrm = $this->contactUsForm();
+        
+        $termsAndConditionsLinkHref = 'javascript:void(0)';
+        $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
+        $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
+        $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
+        if (!empty($cpage) && is_array($cpage)) {
+            $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+        }
+        
+        $privacyPolicyLinkHref = 'javascript:void(0)';
+        $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
+        $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
+        if (!empty($cpage) && is_array($cpage)) {
+            $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+        } 
+        
         $this->set('contactFrm', $contactFrm);
         $this->set('siteLangId', $this->siteLangId);
+        $this->set('termsAndConditionsLinkHref', $termsAndConditionsLinkHref);
+        $this->set('privacyPolicyLinkHref', $privacyPolicyLinkHref);
         $this->_template->render(true, true, 'custom/contact-us.php');
     }
 
@@ -751,9 +770,11 @@ class CustomController extends MyAppController
         $fld_phn->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addTextArea(Labels::getLabel('LBL_Your_Message', $this->siteLangId), 'message', '')->requirements()->setRequired();
-
+        
         CommonHelper::addCaptchaField($frm);
-
+        $fld = $frm->addCheckBox('', 'agree', 1);
+        $fld->requirements()->setRequired();
+        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Terms_Condition_And_Privacy_Policy_is_mandatory.', $this->siteLangId));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
