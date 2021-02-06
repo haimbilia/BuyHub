@@ -362,18 +362,10 @@ class UserAuthentication extends FatModel
             return false;
         }*/
         
-        if(true == $encryptPassword){
-            if(!(strtolower($row['credential_username']) === strtolower($username) || strtolower($row['credential_email']) === strtolower($username) || ($row['user_dial_code'] . $row['user_phone']) === $username)){
+        if(false == $encryptPassword && $row['credential_password'] !== $password){
                 $this->logFailedAttempt($ip, $username);
                 $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
                 return false;
-            }
-        }else{
-            if ((!(strtolower($row['credential_username']) === strtolower($username) || strtolower($row['credential_email']) === strtolower($username) || ($row['user_dial_code'] . $row['user_phone']) === $username)) || $row['credential_password'] !== $password) { 
-                $this->logFailedAttempt($ip, $username);
-                $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
-                return false;
-            }
         }
         
         if (!$isAdmin) {
