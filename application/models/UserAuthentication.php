@@ -99,7 +99,7 @@ class UserAuthentication extends FatModel
 
         $row = $db->fetch($rs);
 
-        return ($row['total'] > 3);
+        return ($row['total'] > 5);
     }
 
     public static function doAppLogin($token, $userType = 0)
