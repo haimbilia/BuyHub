@@ -2028,4 +2028,41 @@ class CommonHelper extends FatUtility
         }
         return false;
     }
+    
+    public static function displayEncryptedEmail($email)
+    {
+        $userEmail = preg_split( '/[@.]/', $email);
+        $emailFirstPart = substr($userEmail[0], 0, 1).str_repeat('*', strlen($userEmail[0]) - 1);
+        $emailSecondPart = str_repeat('*', strlen($userEmail[1]));
+        $emailThirdPart = $userEmail[2];        
+        return $emailFirstPart.'@'.$emailSecondPart.'.'.$emailThirdPart;
+    }
+    
+    public static function displayEncryptedDob($dob)
+    {
+        $userDob = explode('-', $dob);
+        $dobFirstPart = substr($userDob[0], 0, 1).str_repeat('*', strlen($userDob[0]) - 1);
+        $dobSecondPart = str_repeat('*', strlen($userDob[1]));
+        $dobThirdPart = str_repeat('*', strlen($userDob[2]) - 1).substr($userDob[2], strlen($userDob[2]) - 1, 1);
+        return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;
+    }
+    
+    public static function displayEncryptedPhoneNumber($phone)
+    {
+        $formattedNumber = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $phone);
+        $userPhone = explode('-', $formattedNumber);
+        $dobFirstPart = substr($userPhone[0], 0, 1).str_repeat('*', strlen($userPhone[0]) - 1);
+        $dobSecondPart = str_repeat('*', strlen($userPhone[1]));
+        $dobThirdPart = str_repeat('*', strlen($userPhone[2]) - 1).substr($userPhone[2], strlen($userPhone[2]) - 1, 1);
+        return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;
+    }
+    
+    public static function isFieldEncrypted($data)
+    {
+        if(strpos($data, '*') !== false){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

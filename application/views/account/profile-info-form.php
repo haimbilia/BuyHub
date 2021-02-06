@@ -14,21 +14,38 @@ $frm->setFormTagAttribute('onsubmit', 'updateProfileInfo(this); return(false);')
 $usernameFld = $frm->getField('credential_username');
 $usernameFld->setFieldTagAttribute('disabled', 'disabled');
 
+$phoneFld = $frm->getField('user_phone');
 if (true == SmsArchive::canSendSms()) {
-    $phoneFld = $frm->getField('user_phone');
     $phoneFld->setFieldTagAttribute('disabled', 'disabled');
 }
+
+if(!empty($data['user_phone'])){
+    $phoneFld->setFieldTagAttribute('id', 'user-phone');
+    $phoneFld->setFieldTagAttribute('data-value', $data['user_phone']);
+    $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedPhoneNumber($data['user_phone']));
+    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onClick ="toggleEncryptedFields(this)" class="fa js-toggle-data fa-eye"></span>';
+}
+
 
 $userDobFld = $frm->getField('user_dob');
 if (!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00') {
     $userDobFld->setFieldTagAttribute('disabled', 'disabled');
+    $userDobFld->setFieldTagAttribute('id', 'user-dob');
+    $userDobFld->setFieldTagAttribute('data-value', $data['user_dob']);
+    $userDobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
+    $userDobFld->htmlAfterField = '<span toggle="#user-dob" onClick ="toggleEncryptedFields(this)" class="fa js-toggle-data fa-eye"></span>';
 }
 
 $userDobFld->setFieldTagAttribute('class', 'user_dob_js');
 
 $emailFld = $frm->getField('credential_email');
 $emailFld->setFieldTagAttribute('disabled', 'disabled');
-
+$emailFld->setFieldTagAttribute('id', 'user-email');
+$emailFld->setFieldTagAttribute('data-value', $data['credential_email']);
+$emailFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedEmail($data['credential_email']));
+$emailFld->htmlAfterField = '<span toggle="#user-email" onClick ="toggleEncryptedFields(this)" class="fa js-toggle-data fa-eye"></span>';
+   
+    
 $countryFld = $frm->getField('user_country_id');
 $countryFld->setFieldTagAttribute('id', 'user_country_id');
 $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $stateId . ',\'#user_state_id\')');
@@ -126,6 +143,18 @@ $fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
         $('.user_dob_js').datepicker('option', {
             maxDate: new Date()
         });
+        
+        toggleEncryptedFields = function(element){
+            $(element).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(element).attr("toggle"));
+            if ($(element).hasClass('fa-eye')) {
+              input.val(input.attr('data-value'));
+            } else {
+              input.val(input.attr('data-encrypted-value'));
+            }
+        }
+        
+        $('.js-toggle-data').trigger('click');
     });
 </script>
 <?php

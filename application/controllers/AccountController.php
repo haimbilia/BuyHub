@@ -1072,6 +1072,10 @@ class AccountController extends LoggedUserController
         }
 
         /* CommonHelper::printArray($post);  */
+        if(CommonHelper::isFieldEncrypted($post['user_dob']) == true){
+            unset($post['user_dob']);
+        }
+        
         $user_state_id = FatApp::getPostedData('user_state_id', FatUtility::VAR_INT, 0);
         $post = $frm->getFormDataFromArray($post);
 
