@@ -808,7 +808,21 @@ class CustomController extends MyAppController
 
     public function updateUserCookies()
     {
-        $_SESSION['cookies_enabled'] = true;
+        $statisticalAnalysisCookies = FatApp::getPostedData('statistical_analysis_cookies', FatUtility::VAR_BOOLEAN, false);
+        $personaliseExperienceCookies = FatApp::getPostedData('personalise_experience_cookies', FatUtility::VAR_BOOLEAN, false);        
+        $userId = UserAuthentication::getLoggedUserId(true);        
+        if($userId > 0){
+            // save cookie data in datbase for logged in user
+        }else{
+            $_SESSION['cookies_enabled'] = true;
+            $_SESSION['functional_cookies'] = true;
+            if($statisticalAnalysisCookies == true){
+                $_SESSION['statistical_analysis_cookies'] = $statisticalAnalysisCookies;
+            }
+            if($personaliseExperienceCookies == true){
+                $_SESSION['personalise_experience_cookies'] = $personaliseExperienceCookies;
+            }            
+        }              
         return true;
     }
 
@@ -864,5 +878,10 @@ class CustomController extends MyAppController
     {
         setcookie('screenWidth', $width, 0, CONF_WEBROOT_URL);
         setcookie('screenHeight', $height, 0, CONF_WEBROOT_URL);
+    }
+    
+    public function cookiePreferencesData()
+    {
+        $this->_template->render(false, false);
     }
 }

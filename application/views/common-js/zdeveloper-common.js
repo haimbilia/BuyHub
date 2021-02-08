@@ -1137,11 +1137,37 @@ $(document).ready(function() {
     });
 
     $(".cc-cookie-accept-js").click(function() {
-        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), '', function(t) {
+        var data = {'statistical_analysis_cookies' : true, 'personalise_experience_cookies' : true};
+        updateUserCookies(data);
+    });
+    
+    $(".cookie-preferences-js").click(function() {
+        $.facebox(function() {
+            fcom.ajax(fcom.makeUrl('Custom', 'cookiePreferencesData'), '', function(t) {
+                fcom.updateFaceboxContent(t, 'faceboxWidth');
+            });
+        });
+    });
+    
+    setUserCookiePreferences = function(){
+        var statisticalAnalysisCookies = false;
+        if($("input[name='statistical_cookies']").prop('checked') == true){
+            statisticalAnalysisCookies = true;
+        };
+        var personaliseExperienceCookies = false;
+        if ($("input[name='personalise_cookies']").prop('checked') == true){
+            personaliseExperienceCookies = true;
+        }; 
+        var data = {'statistical_analysis_cookies' : statisticalAnalysisCookies, 'personalise_experience_cookies' : personaliseExperienceCookies};
+        updateUserCookies(data);
+    }
+    
+    updateUserCookies = function(data){
+        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), data, function(t) {
             $(".cookie-alert").hide('slow');
             $(".cookie-alert").remove();
         });
-    });
+    }
 
 
     $(document).on("click", '.increase-js', function() {
