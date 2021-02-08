@@ -18,12 +18,15 @@ $frmUser->developerTags['fld_default_col'] = 12;
 $frmUser->setFormTagAttribute('class', 'web_form form_horizontal');
 $frmUser->setFormTagAttribute('onsubmit', 'setupUsers(this); return(false);');
 
+
 $dobFld = $frmUser->getField('user_dob');
 $dobFld->setFieldTagAttribute('class','user_dob_js');
-$dobFld->setFieldTagAttribute('id', 'user-dob');
-$dobFld->setFieldTagAttribute('data-value', $data['user_dob']);
-$dobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
-$dobFld->htmlAfterField = '<span toggle="#user-dob" onClick ="toggleEncryptedFields(this,1)" class="fa js-toggle-data fa-eye"></span>';
+if(!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00'){
+    $dobFld->setFieldTagAttribute('id', 'user-dob');
+    $dobFld->setFieldTagAttribute('data-value', $data['user_dob']);
+    $dobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
+    $dobFld->htmlAfterField = '<span toggle="#user-dob" onClick ="toggleEncryptedFields(this,1)" class="fa js-toggle-data fa-eye"></span>';
+}
 
 if(!empty($data['user_phone'])){
     $phoneFld = $frmUser->getField('user_phone');
