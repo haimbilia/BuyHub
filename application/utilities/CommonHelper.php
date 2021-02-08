@@ -2047,11 +2047,11 @@ class CommonHelper extends FatUtility
         return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;
     }
     
-    public static function displayEncryptedPhoneNumber($phone)
+    public static function displayEncryptedFieldData($data)
     {
-        $len = strlen($phone);
-        return substr($phone, 0, 1).str_repeat('*', $len - 2).substr($phone, $len - 1, 1);
-    
+        $len = strlen($data);
+        return substr($data, 0, 1).str_repeat('*', $len - 2).substr($data, $len - 1, 1);
+        
         /*$formattedNumber = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $phone);
         $userPhone = explode('-', $formattedNumber);
         $dobFirstPart = substr($userPhone[0], 0, 1).str_repeat('*', strlen($userPhone[0]) - 1);

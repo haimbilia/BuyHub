@@ -18,18 +18,20 @@ $phoneFld = $frm->getField('user_phone');
 if (true == SmsArchive::canSendSms()) {
     $phoneFld->setFieldTagAttribute('disabled', 'disabled');
 }
-
 if(!empty($data['user_phone'])){
+    $phoneFld->setFieldTagAttribute('disabled', 'disabled');
     $phoneFld->setFieldTagAttribute('id', 'user-phone');
     $phoneFld->setFieldTagAttribute('data-value', $data['user_phone']);
-    $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedPhoneNumber($data['user_phone']));
-    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onClick ="toggleEncryptedFields(this)" class="fa js-toggle-data fa-eye"></span>';
+    $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedFieldData($data['user_phone']));
+    $handleDisabled = (false == SmsArchive::canSendSms()) ? 1 : 0;
+    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onClick ="toggleEncryptedFields(this, '.$handleDisabled.', 1)" class="fa js-toggle-data fa-eye"></span>';
 }
 
 
 $userDobFld = $frm->getField('user_dob');
 if (!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00') {
     $userDobFld->setFieldTagAttribute('disabled', 'disabled');
+    
     $userDobFld->setFieldTagAttribute('id', 'user-dob');
     $userDobFld->setFieldTagAttribute('data-value', $data['user_dob']);
     $userDobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
@@ -144,13 +146,27 @@ $fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
             maxDate: new Date()
         });
         
-        toggleEncryptedFields = function(element){
+        toggleEncryptedFields = function(element, handleDisabled = 0, handleValidations = 0){
             $(element).toggleClass("fa-eye fa-eye-slash");
-            var input = $($(element).attr("toggle"));
+            var input = $($(element).attr("toggle"));            
             if ($(element).hasClass('fa-eye')) {
-              input.val(input.attr('data-value'));
+                input.val(input.attr('data-value'));
+                if(handleDisabled == 1){
+                    input.removeAttr('disabled');                    
+                }
+                if(handleValidations == 1){
+                    input.attr('data-fatreq', input.attr('data-validations'));
+                }
             } else {
-              input.val(input.attr('data-encrypted-value'));
+                input.val(input.attr('data-encrypted-value'));
+                if(handleDisabled == 1){
+                    input.attr('disabled', 'disabled');                    
+                }
+                if(handleValidations == 1){
+                    var validations = input.attr('data-fatreq');
+                    input.attr('data-validations', validations);
+                    input.attr('data-fatreq', '');
+                }
             }
         }
         
