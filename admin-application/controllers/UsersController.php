@@ -159,6 +159,12 @@ class UsersController extends AdminBaseController
 
         $post = FatApp::getPostedData();
         $user_state_id = FatUtility::int($post['user_state_id']);
+        if(CommonHelper::isFieldEncrypted($post['user_dob']) == true){
+            unset($post['user_dob']);
+        }
+        if(CommonHelper::isFieldEncrypted($post['user_phone']) == true){
+            unset($post['user_phone']);
+        }
         $post = $frm->getFormDataFromArray($post);
         $post['user_state_id'] = $user_state_id;
 
@@ -171,7 +177,9 @@ class UsersController extends AdminBaseController
         unset($post['user_id']);
         unset($post['credential_username']);
         unset($post['credential_email']);
-
+        if ($post['user_dob'] == "0000-00-00" || $post['user_dob'] == "" || strtotime($post['user_dob']) == 0) {
+            unset($post['user_dob']);
+        }
         $userObj = new User($user_id);
         $userObj->assignValues($post);
         if (!$userObj->save()) {
@@ -216,6 +224,7 @@ class UsersController extends AdminBaseController
         $this->set('user_id', $user_id);
         $this->set('stateId', $stateId);
         $this->set('frmUser', $frmUser);
+        $this->set('data', $data);
         $this->_template->render(false, false);
     }
 
