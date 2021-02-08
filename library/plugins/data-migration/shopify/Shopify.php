@@ -51,12 +51,12 @@ class Shopify extends DataMigrationBase
         $products = $this->fetchProducts($paginationParam);
         
         $mappedProducts = [];
-        
-        
-        foreach($products as $product){
+       
+        foreach($products as $product){            
+           
             $catalog = [
-                'product_identifier'=>'',
-                'product_type'=> $product->requires_shipping ,
+                'product_identifier'=> $product->handle,
+                'product_type'=> $product->variants[0]->requires_shipping ?? 0 ,
                 'brand_name'=>'',
                 'category_name'=>$product->product_type ?? '',              
                 'product_min_selling_price'=> 0,
@@ -65,17 +65,86 @@ class Shopify extends DataMigrationBase
                 'product_fulfillment_type'=>'',
                 'product_name'=> $product->product_name ?? '',
                 'product_description'=>$product->product_description ?? '',
-                'product_tags_string'=>'',
+                'product_tags_string'=>$product->product_tag ?? '',
                 'product_category'=>$product->product_type,
                 'product_user_id'=>$product->seller_id,
                 'product_weight_unit' => 0,
-                'product_weight' => 0 /* shopify has different weight for each variants */                
-            ];
+                'product_weight' => 0, /* shopify has different weight for each variants */ 
+                'id' => $product->shopify_product_id
+            ]; 
             
+            $mappedOptions = [];
+            
+            /* To get option which is not created by default in multivendor  */
+            if(!(1 == count($product->options) &&  isset($product->options[0]->name) && $product->options[0]->name == 'Title')){
+                foreach($product->options as $option){ 
+                    $values = []; 
+                    foreach($option->values as $value){
+                        $values[] = $value->value;
+                    }
+                    $mappedOptions[$option->name] = array('name'=> $option->name, 'values'=> $values);
+                }   
+            }
+            $sellerProduct = [];
+            
+            $productImages = [];
+                   
+//             foreach ($product->$images as $image {
+//                $productImages[] = ['url'=>$image->img_url,'option'=>'','optionValue'=>''];
+//             }      
+                   
+                   
+                   
+            
+            foreach ($product->variants as $variant) {
+                $inventory = [
+                    'selprod_title' => $product->product_name ?? '',
+                    'selprod_subtract_stock' => $variant->track_inventory,          
+                    'selprod_active' => $product->active,
+                    'selprod_available_from' => date('Y-m-d'),
+                    'selprod_condition' => Product::CONDITION_NEW,
+                    'selprod_fulfillment_type' => 0,
+                    'selprod_cost' => $variant->price,
+                    'selprod_price' => $variant->price,
+                    'selprod_stock' => $variant->quantity ?? 0,
+                    'selprod_sku' => $variant->sku ?? '',
+                    'id'=> $variant->id
+                ];
+                $combination = [];
+                if (0 < count($mappedOptions) ){
+                    foreach($product->options as $key => $option){
+                                                                 
+                        $optionValue =  $variant->combinations[$key]->option_value ;
+                        $combination[$option->name] = $optionValue ;                                                
+                        /* issue in mutivendor api some option values are not present in $product->options */
+                        
+                        if(isset($mappedOptions[$option->name]['values'])){
+                            if(!in_array($optionValue , $mappedOptions[$option->name]['values'])){
+                                $mappedOptions[$option->name]['values'][] = $optionValue;
+                            }
+                        }
+                        
+                    }
+                } 
+                
+                $sellerProduct[] =  $inventory + ['combination' => $combination];                               
+                
+            }
+            
+            
+            
+            $mappedProducts[] = ['catalog'=> $catalog,'options'=> $mappedOptions, 'sellerProduct'=>$sellerProduct];
+            
+            
+            print_r($mappedProducts);
+            
+            print_r($product);
+            
+            die();
         }
         
         
-        print_r($products);
+        
         
         die();
     }
