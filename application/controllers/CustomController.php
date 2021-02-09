@@ -811,19 +811,23 @@ class CustomController extends MyAppController
         $statisticalAnalysisCookies = FatApp::getPostedData('statistical_analysis_cookies', FatUtility::VAR_BOOLEAN, false);
         $personaliseExperienceCookies = FatApp::getPostedData('personalise_experience_cookies', FatUtility::VAR_BOOLEAN, false);        
         $userId = UserAuthentication::getLoggedUserId(true);        
-        if($userId > 0){
-            // save cookie data in datbase for logged in user
+        if($userId > 0){          
+            $user = new User($userId);
+            if(!$user->saveUserCookiesPreferenes($statisticalAnalysisCookies, $personaliseExperienceCookies)){
+                Message::addErrorMessage($user->getError());
+                FatUtility::dieJsonError(Message::getHtml());
+            }            
         }else{
             $_SESSION['cookies_enabled'] = true;
-            $_SESSION['functional_cookies'] = true;
+            $_SESSION['yk_functional_cookies'] = true;
             if($statisticalAnalysisCookies == true){
-                $_SESSION['statistical_analysis_cookies'] = $statisticalAnalysisCookies;
+                $_SESSION['yk_statistical_cookies'] = $statisticalAnalysisCookies;
             }
             if($personaliseExperienceCookies == true){
-                $_SESSION['personalise_experience_cookies'] = $personaliseExperienceCookies;
+                $_SESSION['yk_personalise_cookies'] = $personaliseExperienceCookies;
             }            
         }              
-        return true;
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function requestDemo()

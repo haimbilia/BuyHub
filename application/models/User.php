@@ -47,6 +47,9 @@ class User extends MyAppModel
 
     public const DB_TBL_USR_MOBILE_TEMP_TOKEN = 'tbl_user_temp_token_requests';
     public const DB_TBL_USR_MOBILE_TEMP_TOKEN_PREFIX = 'uttr_';
+    
+    public const DB_TBL_USR_COOKIES_PREFERENCES = 'tbl_user_cookies_preferences';
+    public const DB_TBL_USR_COOKIES_PREFERENCES_PREFIX = 'ucp_';
 
     public const USER_FIELD_TYPE_TEXT = 1;
     public const USER_FIELD_TYPE_TEXTAREA = 2;
@@ -2933,5 +2936,26 @@ class User extends MyAppModel
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetchAllAssoc($rs);
         return array_keys($record);
+    }
+    
+    public function saveUserCookiesPreferenes($statisticalAnalysisCookies, $personaliseExperienceCookies)
+    {
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
+            return false;
+        }
+        
+        $data = [    
+            'ucp_user_id' => $this->mainTableRecordId,
+            'ucp_statistical_cookies' => ($statisticalAnalysisCookies == true) ? 1 : 0,
+            'ucp_personalized_cookies' => ($personaliseExperienceCookies == true) ? 1 : 0,
+        ];
+        $record = new TableRecord(static::DB_TBL_USR_COOKIES_PREFERENCES);
+        $record->assignValues($data);
+        if (!$record->addNew(array(), $data)) {
+            $this->error = $record->getError();
+            return false;
+        }
+        return true;
     }
 }

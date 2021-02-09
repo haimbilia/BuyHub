@@ -1163,12 +1163,17 @@ $(document).ready(function() {
     }
     
     updateUserCookies = function(data){
-        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), data, function(t) {
-            $(".cookie-alert").hide('slow');
-            $(".cookie-alert").remove();
+        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), data, function(rsp) {
+            var ans = $.parseJSON(rsp);
+            if (ans.status == 0) {
+                $.mbsmessage(ans.msg, true, 'alert--danger');
+            }else{
+                $(".cookie-alert").hide('slow');
+                $(".cookie-alert").remove();
+                $(document).trigger('close.facebox');
+            }
         });
     }
-
 
     $(document).on("click", '.increase-js', function() {
         var type = $('input[name="fulfillment_type"]:checked').val();

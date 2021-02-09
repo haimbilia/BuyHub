@@ -6,3 +6,12 @@ WHERE
     `tbl_content_pages_lang`.`cpagelang_cpage_id` = 2 AND `tbl_content_pages_lang`.`cpagelang_lang_id` = 1;
 
 UPDATE `tbl_language_labels` SET `label_caption` = 'I Agree To The %s And %s' WHERE `tbl_language_labels`.`label_key` = 'LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY';
+
+CREATE TABLE `tbl_user_cookies_preferences` (
+  `ucp_user_id` int(11) NOT NULL,
+  `ucp_statistical_cookies` tinyint(1) NOT NULL,
+  `ucp_personalized_cookies` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `tbl_user_cookies_preferences`
+  ADD PRIMARY KEY (`ucp_user_id`);
