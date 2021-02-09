@@ -103,7 +103,16 @@ class GuestUserController extends MyAppController
         $this->app_user['temp_user_id'] = 0;
 
         $userId = UserAuthentication::getLoggedUserId();
-
+        
+        if(CommonHelper::getUserCookiesEnabled()){
+            $user = new User($userId);            
+            $statisticalAnalysisCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == true) ? true : false;
+            $personaliseExperienceCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == true) ? true : false;
+            if(!$user->saveUserCookiesPreferenes($statisticalAnalysisCookies, $personaliseExperienceCookies)){
+                FatUtility::dieJsonError($user->getError());
+            }
+        }
+        
         if (true === MOBILE_APP_API_CALL) {
             $uObj = new User($userId);
             if (!$token = $uObj->setMobileAppToken()) {
