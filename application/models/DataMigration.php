@@ -6,6 +6,7 @@ class DataMigration
     public const TYPE_PRODUCT = 2;
     public const TYPE_USER = 3;
     public const TYPE_SELLER = 4;
+    public const TYPE_PRODUCT_TAG = 5;
 
     public $activedServiceId = 0;
     private $langId;
@@ -17,6 +18,7 @@ class DataMigration
     protected $countryIdArrByName;
     protected $stateIdArrByCode;
     protected $stateIdArrByName;
+    protected $productCatArr;
 
     public function __construct(int $langId = 0)
     {
@@ -82,16 +84,74 @@ class DataMigration
     private function syncProducts()
     {
         $products = $this->pluginObj->getProducts();
-        print_r($products);
-//        if (0 < count($products)) {
-//            if(!$this->saveProductsData($products)){
-//                print_r($this->getError());
-//                return true;
-//            }
-//            $this->pluginObj->saveProductsPaginationData();
-//        }
-//
-//        return (0 < count($users));
+        if (0 < count($products)) {
+            if(!$this->saveProductsData($products)){
+                print_r($this->getError());
+                return true;
+            }
+            //$this->pluginObj->saveProductsPaginationData();
+        }
+
+        return (0 < count($users));
+    }
+    
+    private function saveProductsData($products)
+    {
+        $db = FatApp::getDb();
+        $db->startTransaction();
+        foreach ($products as &$product) {
+         
+            
+            $isNewProduct = 1;
+            $productId = Product::getProdIdByPluginIdAndPluginProdId($this->pluginObj->settings['plugin_id'],$product['id']);
+            if(0 < $productId ){
+                $isNewProduct = 0 ;
+            }
+            
+            $productObj = new Product($productId);
+            if (!$productObj->saveProductData($product)) {
+                $this->error = $productObj->getError();
+                $db->rollbackTransaction();
+                return false;
+            }            
+            $productId = $productObj->getMainTableRecordId();
+            
+            
+            if($isNewProduct){   
+                $record = new TableRecord(static::DB_PRODUCT_TO_PLUGIN_PRODUCT);
+                $pluginToProductArr = array(
+                    'ptpp_product_id' => $productId,
+                    'ptpp_plugin_id' => $this->pluginObj->settings['plugin_id'],
+                    'ptpp_plugin_product_id' => $product['id']
+                );            
+                $record->assignValues($pluginToProductArr);
+                if (!$record->addNew(array(), $pluginToProductArr)) {
+                    $this->error = $record->getError();
+                    return false;
+                }                
+            }
+            
+            $productLangData = array(      
+                'product_name' => $product['product_name'],
+                'product_description' => $product['product_description'],
+                'product_youtube_video' => $product['product_youtube_video'],
+            );
+
+            if (!$productObj->updateLangData($this->langId, $productLangData)) {
+                $this->error = $productObj->getError();
+                $db->rollbackTransaction();
+                return false;
+            }
+            
+            Product::updateMinPrices($productId);
+
+            if (!$productObj->saveProductCategory($post['ptc_prodcat_id'])) {
+                $this->error = $productObj->getError();
+                $db->rollbackTransaction();
+                return false;
+            }
+            
+        }
     }
 
     private function syncUsers()
@@ -349,9 +409,6 @@ class DataMigration
             if (empty($stateId)) {
                 $stateId = $this->createState($countryId, $stateCode, $stateName, $this->langId);
                 if (empty($stateId)) {
-                    print_r($this->error);
-                    die();
-
                     return false;
                 }
 
@@ -366,6 +423,21 @@ class DataMigration
         }
 
         return $stateId;
+    }
+    
+    
+    private function getCategoryIdByName($categoryName , int $langId) : int
+    {
+        $srch = ProductCategory::getSearchObject(false, $langId, false, -1);
+        $cnd = $srch->addCondition('prodcat_identifier', "=", $categoryName);
+        $cnd->attachCondition('prodcat_name', '=', $categoryName);
+        $rs = $srch->getResultSet();        
+        $row = FatApp::getDb()->fetch($rs);
+        if(false == $row){
+            
+            
+        }        
+        return $row['prodcat_id'];
     }
 
     private function createSellerApprovalRequest(int $userId)
