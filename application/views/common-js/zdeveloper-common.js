@@ -1137,7 +1137,7 @@ $(document).ready(function() {
     });
 
     $(".cc-cookie-accept-js").click(function() {
-        var data = {'statistical_analysis_cookies' : true, 'personalise_experience_cookies' : true};
+        var data = {'statistical_cookies' : 1, 'personalise_cookies' : 1};
         updateUserCookies(data);
     });
     
@@ -1150,21 +1150,22 @@ $(document).ready(function() {
     });
     
     setUserCookiePreferences = function(){
-        var statisticalAnalysisCookies = false;
+        var statisticalCookies = 0;
         if($("input[name='statistical_cookies']").prop('checked') == true){
-            statisticalAnalysisCookies = true;
+            statisticalCookies = 1;
         };
-        var personaliseExperienceCookies = false;
+        var personaliseCookies = 0;
         if ($("input[name='personalise_cookies']").prop('checked') == true){
-            personaliseExperienceCookies = true;
+            personaliseCookies = 1;
         }; 
-        var data = {'statistical_analysis_cookies' : statisticalAnalysisCookies, 'personalise_experience_cookies' : personaliseExperienceCookies};
+        var data = {'statistical_cookies' : statisticalCookies, 'personalise_cookies' : personaliseCookies};
         updateUserCookies(data);
     }
     
     updateUserCookies = function(data){
         fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), data, function(rsp) {
             var ans = $.parseJSON(rsp);
+                        console.log(ans);
             if (ans.status == 0) {
                 $.mbsmessage(ans.msg, true, 'alert--danger');
             }else{

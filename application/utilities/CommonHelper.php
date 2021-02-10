@@ -1758,8 +1758,21 @@ class CommonHelper extends FatUtility
 
     public static function getUserCookiesEnabled()
     {   
-        return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false;
+        $userId = UserAuthentication::getLoggedUserId(true);        
+        if($userId > 0){          
+            $user = new User($userId);
+            $userSelectedCookies = $user->getUserSelectedCookies();
+            return !empty($userSelectedCookies) ? true : false; 
+        }else{  
+            return static::checkCookiesSession();          
+        } 
     }
+    
+    public static function checkCookiesSession()
+    {   
+        return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false; 
+    }
+    
 
     public static function getDefaultCurrencySymbol()
     {

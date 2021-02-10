@@ -3890,4 +3890,67 @@ class AccountController extends LoggedUserController
         FatUtility::dieJsonSuccess($json);
     }
     /* Cards Management */
+    
+    public function cookiesPreferencesForm()
+    {
+        $userId = UserAuthentication::getLoggedUserId(true);
+        $user = new User($userId);
+        $data = $user->getUserSelectedCookies();
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', ['cookiesPreferencesInfo' => (object) $data]);
+            $this->_template->render();
+        }
+
+        $frm = $this->getCookiesPreferencesForm();
+        if ($data != false) {
+            $frm->fill($data);
+        }
+
+        $this->set('frm', $frm);
+        $this->_template->render(false, false);
+    }
+    
+    private function getCookiesPreferencesForm()
+    {
+        $frm = new Form('frmCookiesPreferences');
+        $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        return $frm;
+    }
+    
+    public function updateCookiesPreferences()
+    {   
+        $post = FatApp::getPostedData();
+        if (1 > count($post) && true === MOBILE_APP_API_CALL) {
+            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+        }
+   
+        $frm = $this->getCookiesPreferencesForm();
+        $post = $frm->getFormDataFromArray($post);
+        if (false === $post) {
+            $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
+            FatUtility::dieJsonError($message);
+        }
+        
+        $data = [
+            'ucp_statistical' => FatApp::getPostedData('ucp_statistical', FatUtility::VAR_INT, 0),
+            'ucp_personalized' => FatApp::getPostedData('ucp_personalized', FatUtility::VAR_INT, 0)
+        ];
+        $userId = UserAuthentication::getLoggedUserId(true);
+        $user = new User($userId);
+        if (!$user->updateCookiesPreferences($data)) {
+            $message = Labels::getLabel($user->getError(), $this->siteLangId);
+            FatUtility::dieJsonError($message);
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
+        $this->_template->render(false, false, 'json-success.php');
+    }
+    
 }

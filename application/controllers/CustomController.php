@@ -808,25 +808,25 @@ class CustomController extends MyAppController
 
     public function updateUserCookies()
     {
-        $statisticalAnalysisCookies = FatApp::getPostedData('statistical_analysis_cookies', FatUtility::VAR_BOOLEAN, false);
-        $personaliseExperienceCookies = FatApp::getPostedData('personalise_experience_cookies', FatUtility::VAR_BOOLEAN, false);        
+        $statisticalCookies = FatApp::getPostedData('statistical_cookies', FatUtility::VAR_INT, 0);
+        $personaliseCookies = FatApp::getPostedData('personalise_cookies', FatUtility::VAR_INT, 0);        
         $userId = UserAuthentication::getLoggedUserId(true);        
         if($userId > 0){          
             $user = new User($userId);
-            if(!$user->saveUserCookiesPreferenes($statisticalAnalysisCookies, $personaliseExperienceCookies)){
+            if(!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)){
                 Message::addErrorMessage($user->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }            
-        }else{
+        }else{  
             $_SESSION['cookies_enabled'] = true;
-            $_SESSION['yk_functional_cookies'] = true;
-            if($statisticalAnalysisCookies == true){
-                $_SESSION['yk_statistical_cookies'] = $statisticalAnalysisCookies;
+            if($statisticalCookies == 1){
+                $_SESSION['yk_statistical_cookies'] = $statisticalCookies;
             }
-            if($personaliseExperienceCookies == true){
-                $_SESSION['yk_personalise_cookies'] = $personaliseExperienceCookies;
+            if($personaliseCookies == 1){
+                $_SESSION['yk_personalise_cookies'] = $personaliseCookies;
             }            
-        }              
+        }        
+
         $this->_template->render(false, false, 'json-success.php');
     }
 

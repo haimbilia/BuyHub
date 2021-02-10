@@ -3,7 +3,7 @@
 class GuestUserController extends MyAppController
 {
     public function loginForm($isRegisterForm = 0)
-    {
+    {   
         /* if(UserAuthentication::doCookieLogin()){
         FatApp::redirectUser(UrlHelper::generateUrl('account'));
         } */
@@ -104,11 +104,13 @@ class GuestUserController extends MyAppController
 
         $userId = UserAuthentication::getLoggedUserId();
         
-        if(CommonHelper::getUserCookiesEnabled()){
+        $user = new User($userId);
+        $userSelectedCookies = $user->getUserSelectedCookies();
+        if(CommonHelper::checkCookiesSession() && empty($userSelectedCookies)){
             $user = new User($userId);            
-            $statisticalAnalysisCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == true) ? true : false;
-            $personaliseExperienceCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == true) ? true : false;
-            if(!$user->saveUserCookiesPreferenes($statisticalAnalysisCookies, $personaliseExperienceCookies)){
+            $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
+            $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
+            if(!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)){
                 FatUtility::dieJsonError($user->getError());
             }
         }
@@ -1094,7 +1096,7 @@ class GuestUserController extends MyAppController
     }
 
     public function logout()
-    {
+    {   
         UserAuthentication::logout();
         if (true === MOBILE_APP_API_CALL) {
             $fcmToken = FatApp::getPostedData('fcmToken', FatUtility::VAR_STRING, '');

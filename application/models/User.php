@@ -2938,7 +2938,7 @@ class User extends MyAppModel
         return array_keys($record);
     }
     
-    public function saveUserCookiesPreferenes($statisticalAnalysisCookies, $personaliseExperienceCookies)
+    public function saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)
     {
         if (1 > $this->mainTableRecordId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
@@ -2947,9 +2947,10 @@ class User extends MyAppModel
         
         $data = [    
             'ucp_user_id' => $this->mainTableRecordId,
-            'ucp_statistical_cookies' => ($statisticalAnalysisCookies == true) ? 1 : 0,
-            'ucp_personalized_cookies' => ($personaliseExperienceCookies == true) ? 1 : 0,
+            'ucp_statistical' => $statisticalCookies,
+            'ucp_personalized' => $personaliseCookies,
         ];
+            
         $record = new TableRecord(static::DB_TBL_USR_COOKIES_PREFERENCES);
         $record->assignValues($data);
         if (!$record->addNew(array(), $data)) {
@@ -2958,4 +2959,35 @@ class User extends MyAppModel
         }
         return true;
     }
+    
+    public function getUserSelectedCookies()
+    {  
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
+            return false;
+        }
+        
+        $srch = new SearchBase(static::DB_TBL_USR_COOKIES_PREFERENCES, 'ucp');
+        $srch->addCondition('ucp_user_id', '=', $this->mainTableRecordId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetch($rs);
+    }
+    
+    public function updateCookiesPreferences($data)
+    {
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
+            return false;
+        }
+        
+        $data['ucp_user_id'] = $this->mainTableRecordId;
+        if (!FatApp::getDb()->insertFromArray(static::DB_TBL_USR_COOKIES_PREFERENCES, $data, false, array(), $data)) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
+    
 }
