@@ -1764,11 +1764,11 @@ class CommonHelper extends FatUtility
             $userSelectedCookies = $user->getUserSelectedCookies();
             return !empty($userSelectedCookies) ? true : false; 
         }else{  
-            return static::checkCookiesSession();          
+            return static::checkCookiesEnabledSession();          
         } 
     }
     
-    public static function checkCookiesSession()
+    public static function checkCookiesEnabledSession()
     {   
         return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false; 
     }

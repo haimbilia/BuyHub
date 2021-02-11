@@ -2990,4 +2990,28 @@ class User extends MyAppModel
         return true;
     }
     
+    public static function checkStatisticalCookiesEnabled()
+    {
+        $userId = UserAuthentication::getLoggedUserId(true);        
+        if($userId > 0){
+            $user = new User($userId);
+            $userSelectedCookies = $user->getUserSelectedCookies();
+            return (!empty($userSelectedCookies) && $userSelectedCookies['ucp_statistical'] == 1) ? true : false;
+        }else{
+            return (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? true : false; 
+        }
+    }
+    
+    public static function checkPersonalizedCookiesEnabled()
+    {
+        $userId = UserAuthentication::getLoggedUserId(true);        
+        if($userId > 0){
+            $user = new User($userId);
+            $userSelectedCookies = $user->getUserSelectedCookies();
+            return (!empty($userSelectedCookies) && $userSelectedCookies['ucp_personalized'] == 1) ? true : false;
+        }else{
+            return (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? true : false; 
+        }
+    }
+    
 }

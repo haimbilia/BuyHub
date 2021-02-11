@@ -757,8 +757,11 @@ class ProductsController extends MyAppController
         $recommendedProducts = $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
         $this->set('recommendedProducts', $recommendedProducts);
         /* ]  */
-
-        $this->setRecentlyViewedItem($selprod_id);
+        
+        if(User::checkPersonalizedCookiesEnabled() == true){
+            $this->setRecentlyViewedItem($selprod_id);
+        }
+        //$this->setRecentlyViewedItem($selprod_id);
 
         if (false === MOBILE_APP_API_CALL) {
             $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/xzoom.js', 'js/magnific-popup.js'));
@@ -856,7 +859,11 @@ class ProductsController extends MyAppController
         if (1 > $selprod_id) {
             return;
         }
-
+        
+        if(User::checkPersonalizedCookiesEnabled() == false){
+            return false;
+        }
+        
         /*if($recommendedProducts =  FatCache::get('recommProds'.$selprod_id.'-'.$langId.'-'.$userId, CONF_HOME_PAGE_CACHE_TIME, '.txt')){
             return  unserialize($recommendedProducts);
         }*/
@@ -984,6 +991,10 @@ class ProductsController extends MyAppController
 
     private function getRecentlyViewedProductsDetail($cookiesProductsArr = array())
     {
+        if(User::checkPersonalizedCookiesEnabled() == false){
+            return false;
+        }
+        
         if (1 > count($cookiesProductsArr)) {
             return $cookiesProductsArr;
         }

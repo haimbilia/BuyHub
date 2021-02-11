@@ -106,8 +106,8 @@ class GuestUserController extends MyAppController
         
         $user = new User($userId);
         $userSelectedCookies = $user->getUserSelectedCookies();
-        if(CommonHelper::checkCookiesSession() && empty($userSelectedCookies)){
-            $user = new User($userId);            
+        if(CommonHelper::checkCookiesEnabledSession() && empty($userSelectedCookies)){
+            //$user = new User($userId);            
             $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
             $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
             if(!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)){
