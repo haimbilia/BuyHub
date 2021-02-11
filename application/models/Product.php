@@ -1943,7 +1943,7 @@ END,   special_price_found ) as special_price_found'
         return $fulfillmentType;
     }    
     
-    public static function getProdIdByPluginIdAndPluginProdId(int $pluginId, int $pluginProdId): int
+    public static function getProdIdByPlugin(int $pluginId, int $pluginProdId): int
     {
         $srch = new SearchBase(static::DB_PRODUCT_TO_PLUGIN_PRODUCT);
         $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_id', '=', $pluginProdId);
@@ -1955,4 +1955,5 @@ END,   special_price_found ) as special_price_found'
         }
         return $records['ptpp_product_id'];
     }
+
 }

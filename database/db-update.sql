@@ -4,7 +4,7 @@ INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plu
 CREATE TABLE `tbl_products_to_plugin_product` (
   `ptpp_product_id` int NOT NULL,
   `ptpp_plugin_id` int NOT NULL,
-  `ptpp_plugin_product_id` int NOT NULL
+  `ptpp_plugin_product_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `tbl_products_to_plugin_product`
