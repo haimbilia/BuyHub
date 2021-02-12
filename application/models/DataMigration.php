@@ -19,6 +19,7 @@ class DataMigration
     protected $stateIdArrByCode;
     protected $stateIdArrByName;
     protected $productCatArr;
+    protected $optionArr;
 
     public function __construct(int $langId = 0)
     {
@@ -100,43 +101,44 @@ class DataMigration
         $db = FatApp::getDb();
         $db->startTransaction();
         foreach ($products as &$product) {
+            
+            print_r($product);
             $catalog = $product['catalog'];
-            
-            print_r($catalog);
-            
             $isNewProduct = 1;
-            $productId = Product::getProdIdByPlugin($this->pluginObj->settings['plugin_id'],$catalog['id']);
-            
-            $this->getUniqueProductIdentifier($catalog['product_identifier']);
-            if(0 < $productId ){
-                $isNewProduct = 0 ;
-                $catalog['product_identifier'] = $this->getUniqueProductIdentifier($catalog['product_identifier']);
-                
+            $productId = Product::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $catalog['id']);
+
+            if (0 < $productId) {
+                $isNewProduct = 0;
             }
             
+            if($isNewProduct){
+                $catalog['product_identifier'] = $this->getUniqueProductIdentifier($catalog['product_identifier']);
+            }else{
+                unset($catalog['product_identifier']); 
+            }
             $productObj = new Product($productId);
             if (!$productObj->saveProductData($catalog)) {
                 $this->error = $productObj->getError();
                 $db->rollbackTransaction();
                 return false;
-            }            
+            }
             $productId = $productObj->getMainTableRecordId();
-            
-            if($isNewProduct){   
+
+            if ($isNewProduct) {
                 $record = new TableRecord(Product::DB_PRODUCT_TO_PLUGIN_PRODUCT);
                 $pluginToProductArr = array(
                     'ptpp_product_id' => $productId,
                     'ptpp_plugin_id' => $this->pluginObj->settings['plugin_id'],
                     'ptpp_plugin_product_id' => $catalog['id']
-                );            
+                );
                 $record->assignValues($pluginToProductArr);
                 if (!$record->addNew(array(), $pluginToProductArr)) {
                     $this->error = $record->getError();
                     return false;
-                }                
+                }
             }
-            
-            $productLangData = array(      
+
+            $productLangData = array(
                 'product_name' => $catalog['product_name'],
                 'product_description' => $catalog['product_description'],
                 'product_youtube_video' => $catalog['product_youtube_video'],
@@ -147,18 +149,46 @@ class DataMigration
                 $db->rollbackTransaction();
                 return false;
             }
-            
-            $catId = $this->getCategoryIdByName($catalog['category_name'] , $this->langId);
-            
+        
+            $catId = $this->getCategoryIdByName($catalog['category_name'], $this->langId);
+
             Product::updateMinPrices($productId);
-            
-            if(0 < $catId){
+
+            if (0 < $catId) {
                 if (!$productObj->saveProductCategory($catId)) {
                     $this->error = $productObj->getError();
                     $db->rollbackTransaction();
                     return false;
-                }                
+                }
             }
+            
+           
+            
+            
+            
+            
+            
+            
+            $optionObj = new Option($option_id);            
+            
+            foreach($catalog['options'] as &$option){                
+                $option['option_identifier'] = $option['name']."_".$catId;
+                $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'] ,$this->langId);
+                
+                
+                
+                  
+                    
+                                        
+                    
+                    
+                }
+
+                
+                
+           // }
+            
+            
             
         }
         $db->commitTransaction();
@@ -450,15 +480,16 @@ class DataMigration
         $cnd = $srch->addCondition('prodcat_identifier', "=", $categoryName);
         $cnd->attachCondition('prodcat_name', '=', $categoryName);
         $rs = $srch->getResultSet();        
-        $row = FatApp::getDb()->fetch($rs);
-        if(false == $row){            
+        $row = FatApp::getDb()->fetch($rs);        
+        if(empty($row)){            
             $productCatObj = new ProductCategory();
             $prodDataToSave = [
                 'prodcat_identifier'=> $categoryName,
                 'prodcat_active'=> 1, 
                 'prodcat_status' => 1
-            ];       
-            if (!$productCatObj->assignValues($prodDataToSave)) {
+            ];
+            $productCatObj->assignValues($prodDataToSave);            
+            if (!$productCatObj->save()) {                
                 $this->error = $productCatObj->getError();
                 return false;
             } 
@@ -652,23 +683,58 @@ class DataMigration
     }
     
     private function getUniqueProductIdentifier(string $identifier): string
-    { 
-        $srchObj = Product::getSearchObject(0 ,false, false);
+    {
+        $srchObj = Product::getSearchObject(0, false, false);
         $srchObj->addCondition('product_identifier', "LIKE", $identifier . '%');
         $rs = $srchObj->getResultSet();
         $identifiers = FatApp::getDb()->fetchAllAssoc($rs);
-        print_r($identifiers);
-        
-        die();
-        
-        
+
+        if (0 < count($identifiers)) {
+            do {
+                $uniqueIdentifer = $identifier . "_". rand(1, 10000);
+            } while (in_array($uniqueIdentifer, $identifiers));
+            
+            return $uniqueIdentifer;
+        }
+
+        return $identifier;
     }
     
-    
-    private function isProductIdentifierUnique(string $identifier): string
-    { 
+    public function getOptionId(string $identifier, string $name, int $isColor, int $hasSeparateImages, int $displayInFilter, int $langId)
+    {  
         
+        if(isset($this->optionArr[$identifier])){
+            return $this->optionArr[$identifier];
+        }
         
+        $srch = Option::getSearchObject($this->langId);
+        $cnd = $srch->addCondition('option_identifier', "=", $identifier);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (!empty($row)) {
+            $optionData = array(
+                'option_identifier' => $identifier,
+                'option_is_color' => $isColor,
+                'option_is_separate_images' => $hasSeparateImages,
+                'option_display_in_filter' => $displayInFilter,
+                'option_seller_id' => $displayInFilter,
+                'option_type' => Option::OPTION_TYPE_SELECT,
+            );
+            $optionObj->assignValues($option);
+            if (!$optionObj->save()) {
+                $this->error = $optionObj->getError();      
+                return false;
+            }
+           
+            if (!$optionObj->updateLangData($this->langId, ['option_name'=> $name])) {
+                $this->error = $optionObj->getError();             
+                return false;
+            } 
+            $this->optionArr[$identifier] = $identifier;
+            return $optionObj->getMainTableRecordId();
+        }
+        
+        return $row['option_id'];
     }
 
     public function getError()

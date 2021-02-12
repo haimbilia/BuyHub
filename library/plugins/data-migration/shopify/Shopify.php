@@ -96,7 +96,7 @@ class Shopify extends DataMigrationBase
                     foreach ($option->values as $value) {
                         $values[] = $value->value;
                     }
-                    $mappedOptions[$option->name] = array('name' => $option->name, 'values' => $values);
+                    $mappedOptions[$option->name] = array('name' => $option->name,'option_is_color'=> 0,'option_is_separate_images'=>0,'option_display_in_filter'=>1, 'values' => $values);
                 }
             }
             $sellerProduct = [];
@@ -144,6 +144,7 @@ class Shopify extends DataMigrationBase
                     } elseif (isset($combination['Color'])) {
                         $optionName = 'Color';
                         $optionValue = $combination['Color'];
+                        $mappedOptions[$optionName]['option_is_color'] = 1;
                     } elseif (count($combination) > 1) {
                         foreach ($combination as $key => $val) {
                             if ($key !== 'Size') {
@@ -153,6 +154,7 @@ class Shopify extends DataMigrationBase
                             }
                         }
                     }
+                    $mappedOptions[$optionName]['option_is_separate_images'] = 1;
                     $productImages[$variant->image_id]['option'] = $optionName;
                     $productImages[$variant->image_id]['optionValue'] = $optionValue;
                 }

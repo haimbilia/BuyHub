@@ -1946,10 +1946,11 @@ END,   special_price_found ) as special_price_found'
     public static function getProdIdByPlugin(int $pluginId, int $pluginProdId): int
     {
         $srch = new SearchBase(static::DB_PRODUCT_TO_PLUGIN_PRODUCT);
-        $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_id', '=', $pluginProdId);
+        $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_id', '=', $pluginId);
+        $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_product_id', '=', $pluginProdId);
         $srch->addFld('ptpp_product_id');
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetch($rs); 
         if (!$records) {
             return 0;
         }
