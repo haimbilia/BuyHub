@@ -5,16 +5,6 @@ SET
 WHERE
     `tbl_content_pages_lang`.`cpagelang_cpage_id` = 2 AND `tbl_content_pages_lang`.`cpagelang_lang_id` = 1;
 
-UPDATE `tbl_language_labels` SET `label_caption` = 'I Agree To The %s And %s' WHERE `tbl_language_labels`.`label_key` = 'LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY';
-
-UPDATE `tbl_language_labels` SET `label_caption` = 'A cookie is a small text file that is stored in a dedicated location on your computer, tablet, smartphone or other device when you use your browser to visit an online service. A cookie allows its sender to identify the device on which it is stored during the period of validity of consent, which does not exceed 13 months.\r\n\r\nYou may accept or reject the cookies listed below using the check box provided.' WHERE `tbl_language_labels`.`label_key` = 'LBL_What_is_a_cookie_Information';
-
-UPDATE `tbl_language_labels` SET `label_caption` = 'These cookies are required for optimum operation of the website, and cannot be configured. They allow us to offer you the key functions of the website (language used, display resolution, account access, shopping bag, wish list, etc.), provide you with online advice and secure our website against any attempted fraud.' WHERE `tbl_language_labels`.`label_key` = 'LBL_Functional_Cookies_Information';
-
-UPDATE `tbl_language_labels` SET `label_caption` = 'These cookies are used to measure and analyse our website audience (visitor volume, pages viewed, average browsing time, etc.) to help us improve its performance. By accepting these cookies, you are helping us to improve our website.' WHERE `tbl_language_labels`.`label_key` = 'LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION';
-
-UPDATE `tbl_language_labels` SET `label_caption` = 'These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.' WHERE `tbl_language_labels`.`label_key` = 'LBL_PERSONALISE_COOKIES_INFORMATION';
-
 CREATE TABLE `tbl_user_cookies_preferences` (
   `ucp_user_id` int(11) NOT NULL,
   `ucp_statistical` tinyint(1) NOT NULL,
@@ -23,3 +13,13 @@ CREATE TABLE `tbl_user_cookies_preferences` (
 
 ALTER TABLE `tbl_user_cookies_preferences`
   ADD PRIMARY KEY (`ucp_user_id`);
+
+INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY", "1", "I Agree To The %s And %s", "2");
+
+INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_What_is_a_cookie_Information", "1", "A cookie is a small text file that is stored in a dedicated location on your computer, tablet, smartphone or other device when you use your browser to visit an online service. A cookie allows its sender to identify the device on which it is stored during the period of validity of consent, which does not exceed 13 months.\r\n\r\nYou may accept or reject the cookies listed below using the check box provided.", "2");
+
+INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_Functional_Cookies_Information", "1", "These cookies are required for optimum operation of the website, and cannot be configured. They allow us to offer you the key functions of the website (language used, display resolution, account access, shopping bag, wish list, etc.), provide you with online advice and secure our website against any attempted fraud.", "2");
+
+INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION", "1", "These cookies are used to measure and analyse our website audience (visitor volume, pages viewed, average browsing time, etc.) to help us improve its performance. By accepting these cookies, you are helping us to improve our website.", "2");
+
+INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_PERSONALISE_COOKIES_INFORMATION", "1", "These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.", "2");
