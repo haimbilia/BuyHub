@@ -1,7 +1,7 @@
 <?php
-class DpoPayController extends PaymentController
+class PaygatePayController extends PaymentController
 {
-    public const KEY_NAME = "Dpo";
+    public const KEY_NAME = "Paygate";
     private $userId = 0;
     private $payWeb3;
 
@@ -97,7 +97,7 @@ class DpoPayController extends PaymentController
 
         $this->set('cancelBtnUrl', $cancelBtnUrl);
         if (FatUtility::isAjaxCall()) {
-            $json['html'] = $this->_template->render(false, false, 'dpo-pay/charge-ajax.php', true, false);
+            $json['html'] = $this->_template->render(false, false, 'paygate-pay/charge-ajax.php', true, false);
             FatUtility::dieJsonSuccess($json);
         }
         $this->_template->render(true, false);
@@ -156,7 +156,7 @@ class DpoPayController extends PaymentController
      */
     private function getPaymentForm(string $orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('DpoPay', 'charge', array($orderId)) : $this->payWeb3::$process_url;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaygatePay', 'charge', array($orderId)) : $this->payWeb3::$process_url;
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 

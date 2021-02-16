@@ -1,10 +1,10 @@
 <?php
 
-class DpoSettingsController extends PaymentMethodSettingsController
+class PaygateSettingsController extends PaymentMethodSettingsController
 {
     public static function form(int $langId)
     {
-        $frm = new Form('frmDpo');
+        $frm = new Form('frmPaygate');
 
         $envoirment = Plugin::getEnvArr($langId);
         $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');

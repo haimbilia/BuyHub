@@ -1,9 +1,9 @@
 <?php
 require_once('paygate.payweb3.php');
 /**
- * Dpo - API's reference https://docs.paygate.co.za/
+ * Paygate - API's reference https://docs.paygate.co.za/. DPO South Africa.
  */
-class Dpo extends PaymentMethodBase
+class Paygate extends PaymentMethodBase
 {
     public const KEY_NAME = __CLASS__;
 
