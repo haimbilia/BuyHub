@@ -20,6 +20,7 @@ class DataMigration
     protected $stateIdArrByName;
     protected $productCatArr;
     protected $optionArr;
+    protected $optionValArr;
 
     public function __construct(int $langId = 0)
     {
@@ -160,36 +161,55 @@ class DataMigration
                     $db->rollbackTransaction();
                     return false;
                 }
-            }
-            
-           
-            
-            
-            
-            
-            
-            
-            $optionObj = new Option($option_id);            
-            
-            foreach($catalog['options'] as &$option){                
-                $option['option_identifier'] = $option['name']."_".$catId;
-                $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'] ,$this->langId);
+            }                      
+            foreach ($product['options'] as &$option) {                
+                $option['option_identifier'] = $option['option_name'] . "_" . $catId;
+                $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'], $this->langId);
+                if(0 > $optionId){
+                    $this->error = Labels::getLabel('MSG_UNABLE_TO_CREATE_OR_GET_OPTION', $langId);
+                    $db->rollbackTransaction();
+                    return false;
+                } 
                 
-                
-                
-                  
-                    
-                                        
-                    
-                    
+                if (!$productObj->addUpdateProductOption($optionId)) {
+                    $this->error = $productObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
                 }
-
                 
+                foreach ($option['values'] as $opValName) {                
+                    $optionValId = $this->getOptionValId($optionId, $opValName, $this->langId);                
+                }
                 
-           // }
+            }            
+            /* [ delete old product images */
+            if (0 < count($product['images'])) {
+                $db->deleteRecords(
+                        AttachedFile::DB_TBL,
+                        array(
+                            'smt' => 'afile_type = ? AND afile_record_id = ?',
+                            'vals' => array(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId)
+                        )
+                );
+            }
+            /*  delete old product images ]*/
             
-            
-            
+            foreach ($product['images'] as $prodImage) {
+                $optionId = 0;
+                $optionValId = 0;
+                if (!empty($prodImage['option']) && !empty($prodImage['optionValue'])) {
+                    
+                    print_r($this->optionArr);
+                    print_r($prodImage['option']);
+                    die();
+                    $optionId = $this->optionArr[$prodImage['option'] . "_" . $catId] ?? 0;
+                    var_dump($optionId);
+                    if (0 < $optionId) {
+                        $optionValId = $this->optionValArr[$optionId . "_" . $prodImage['optionValue']] ?? 0;
+                    }
+                }
+                $this->saveProductImage($productId, $optionValId, $prodImage['url']);
+            }
         }
         $db->commitTransaction();
         return true;
@@ -707,11 +727,11 @@ class DataMigration
             return $this->optionArr[$identifier];
         }
         
-        $srch = Option::getSearchObject($this->langId);
+        $srch = Option::getSearchObject();
         $cnd = $srch->addCondition('option_identifier', "=", $identifier);
         $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row)) {
+        $row = FatApp::getDb()->fetch($rs);        
+        if (empty($row)) {
             $optionData = array(
                 'option_identifier' => $identifier,
                 'option_is_color' => $isColor,
@@ -720,7 +740,8 @@ class DataMigration
                 'option_seller_id' => $displayInFilter,
                 'option_type' => Option::OPTION_TYPE_SELECT,
             );
-            $optionObj->assignValues($option);
+            $optionObj = new Option();
+            $optionObj->assignValues($optionData);
             if (!$optionObj->save()) {
                 $this->error = $optionObj->getError();      
                 return false;
@@ -735,6 +756,53 @@ class DataMigration
         }
         
         return $row['option_id'];
+    }
+    
+    private function getOptionValId($optionId, $name, $langId)
+    {
+        if (isset($this->optionValArr[$optionId . "_" . $name])) {
+            return $this->optionValArr[$optionId . "_" . $name];
+        }
+
+        $srch = OptionValue::getSearchObject();
+        $srch->addCondition('optionvalue_identifier', "=", $name);
+        $srch->addCondition('optionvalue_option_id', "=", $optionId);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (empty($row)) {
+            $optionValueObj = new OptionValue();
+            $opSaveData = array(
+                'optionvalue_option_id' => $optionId,
+                'optionvalue_identifier' => $name,
+            );
+            $optionValueObj->assignValues($opSaveData);
+            $data = $optionValueObj->getFlds();
+            if (!$optionValueObj->addNew(array(), $data)) {
+                $this->error = $userObj->getError();
+                return false;
+            }
+            if (!$optionValueObj->updateLangData($langId, ['optionvalue_name' => $name])) {
+                $this->error = $optionValueObj->getError();
+                return false;
+            }
+            $this->optionValArr[$optionId . "_" . $name] = $optionId . "_" . $name;
+            return $optionValueObj->getMainTableRecordId();
+        }
+        return $row['optionvalue_id'];
+    }
+    
+    private function saveProductImage($productId,$optionValId,$url){
+        
+        $fileAttr = array(
+            'afile_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE,
+            'afile_record_id' => $productId,
+            'afile_record_subid' => $optionValId,
+            'afile_lang_id' => $this->langId,
+            'afile_screen' => 0,
+            'afile_display_order' => -1,
+            'afile_unique' => 0
+        );
+        AttachedFile::getImageName($url, $fileAttr);        
     }
 
     public function getError()
