@@ -24,7 +24,11 @@ class SellerProduct extends MyAppModel
     public const DB_TBL_RELATED_PRODUCTS_PREFIX = 'related_';
 
     public const DB_TBL_EXTERNAL_RELATIONS = 'tbl_seller_product_external_relations';
-    public const DB_TBL_EXTERNAL_RELATIONS_PREFIX = 'sperel_';
+    public const DB_TBL_EXTERNAL_RELATIONS_PREFIX = 'sperel_';    
+    
+    public const DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD = 'tbl_seller_products_to_plugin_selprod';
+    public const DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX = 'spps_';
+    
     public const MAX_RANGE_OF_MINIMUM_PURCHANGE_QTY = 9999;
 
     public const VOL_DISCOUNT_MIN_QTY = 2;
@@ -1212,4 +1216,19 @@ class SellerProduct extends MyAppModel
     {
         return $fulfillmentType;
     }
+    
+    public static function getProdIdByPlugin(int $pluginId, int $pluginSelProdId): int
+    {
+        $srch = new SearchBase(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
+        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_id', '=', $pluginId);
+        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_selprod_id', '=', $pluginSelProdId);
+        $srch->addFld('spps_selprod_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs); 
+        if (!$records) {
+            return 0;
+        }
+        return $records['spps_selprod_id'];
+    }
+    
 }

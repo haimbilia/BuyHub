@@ -75,7 +75,7 @@ class Shopify extends DataMigrationBase
                 'product_name' => $product->product_name ?? '',
                 'product_description' => $product->product_description ?? '',     
                 'product_category' => $product->product_type,
-                'product_user_id' => $product->seller_id,
+                'user_id' => $product->seller_id, /* shopify user id */
                 'product_weight_unit' => 0,
                 'product_weight' => 0, /* shopify has different weight for each variants */
                 'product_youtube_video' =>''
@@ -96,10 +96,10 @@ class Shopify extends DataMigrationBase
                     foreach ($option->values as $value) {
                         $values[] = $value->value;
                     }
-                    $mappedOptions[$option->name] = array('option_name' => $option->name,'option_is_color'=> 0,'option_is_separate_images'=>0,'option_display_in_filter'=>1, 'values' => $values);
+                    $mappedOptions[$option->name] = array('option_name' => $option->name, 'option_is_color' => 0, 'option_is_separate_images' => 0, 'option_display_in_filter' => 1, 'values' => $values);
                 }
             }
-            $sellerProduct = [];
+            $sellerProducts = [];
             $productImages = [];
             foreach ($product->images as $image) {
                 $productImages[$image->id] = ['url' => $image->img_url, 'option' => '', 'optionValue' => ''];
@@ -110,6 +110,7 @@ class Shopify extends DataMigrationBase
                 $inventory = [
                     'id' => $variant->id,
                     'selprod_title' => $product->product_name ?? '',
+                    'selprod_url_keyword'=> $product->product_name ?? '',
                     'selprod_subtract_stock' => $variant->track_inventory,
                     'selprod_active' => $product->active,
                     'selprod_available_from' => date('Y-m-d'),
@@ -119,6 +120,9 @@ class Shopify extends DataMigrationBase
                     'selprod_price' => $variant->price,
                     'selprod_stock' => $variant->quantity ?? 0,
                     'selprod_sku' => $variant->sku ?? '',
+                    'selprod_min_order_qty'=> 1,
+                    'selprod_comments'=>'',
+                    'user_id' => $product->seller_id,  /* shopify user id */
                 ];
                 $combination = [];
                 if (0 < count($mappedOptions)) {
@@ -144,7 +148,7 @@ class Shopify extends DataMigrationBase
                     } elseif (isset($combination['Color'])) {
                         $optionName = 'Color';
                         $optionValue = $combination['Color'];
-                        //$mappedOptions[$optionName]['option_is_color'] = 1;
+                        $mappedOptions[$optionName]['option_is_color'] = 1;
                     } elseif (count($combination) > 1) {
                         foreach ($combination as $key => $val) {
                             if ($key !== 'Size') {
@@ -158,9 +162,9 @@ class Shopify extends DataMigrationBase
                     $productImages[$variant->image_id]['option'] = $optionName;
                     $productImages[$variant->image_id]['optionValue'] = $optionValue;
                 }
-                $sellerProduct[] = $inventory + ['combination' => $combination];
+                $sellerProducts[] = $inventory + ['combination' => $combination];
             }
-            $mappedProducts[] = ['catalog' => $catalog, 'options' => $mappedOptions, 'images' => $productImages, 'sellerProduct' => $sellerProduct, 'tags' => $tags];
+            $mappedProducts[] = ['catalog' => $catalog, 'options' => $mappedOptions, 'images' => $productImages, 'sellerProducts' => $sellerProducts, 'tags' => $tags];
         }
 
         return $mappedProducts;

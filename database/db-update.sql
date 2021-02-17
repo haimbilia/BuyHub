@@ -9,3 +9,12 @@ CREATE TABLE `tbl_products_to_plugin_product` (
 
 ALTER TABLE `tbl_products_to_plugin_product`
   ADD UNIQUE KEY `ptpp_product_id` (`ptpp_product_id`,`ptpp_plugin_id`,`ptpp_plugin_product_id`);
+
+
+CREATE TABLE `tbl_seller_products_to_plugin_selprod` (
+  `spps_selprod_id` int NOT NULL,
+  `spps_plugin_id` int NOT NULL,
+  `spps_plugin_selprod_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_seller_products_to_plugin_selprod` ADD UNIQUE( `spps_selprod_id`, `spps_plugin_id`, `spps_plugin_selprod_id`);
