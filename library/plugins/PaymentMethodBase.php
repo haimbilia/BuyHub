@@ -2,8 +2,40 @@
 
 class PaymentMethodBase extends PluginBase
 {
-    public $userData;
+    public $userData = [];
     public $userMeta;
+    public $userInfoColumns = [];
+
+    private $commonColumns = [
+        'user_name',
+        'credential_email',
+        'country_code',
+        'country_code_alpha3',
+        'state_code',
+        'IFNULL(country_name, country_code) as country_name',
+        'IFNULL(state_name, state_identifier) as state_name',
+    ];
+
+    private $buyerInfoColumns = [
+        'addr_title',
+        'addr_name',
+        'addr_address1',
+        'addr_address2',
+        'addr_city',
+        'addr_phone',
+        'addr_zip'
+    ];
+
+    private $sellerInfoColumns = [
+        'shop_phone',
+        'shop_id',
+        'shop_postalcode',
+        'IFNULL(shop_name, shop_identifier) as shop_name',
+        'shop_description',
+        'shop_address_line_1',
+        'shop_address_line_2',
+        'shop_city',
+    ];
     
     /**
      * loadLoggedUserInfo
@@ -13,13 +45,50 @@ class PaymentMethodBase extends PluginBase
      */
     public function loadLoggedUserInfo(int $userId): bool
     {
+        if (is_array($this->userData) && 0 < count($this->userData)) {
+            return true;
+        }
+
         $this->userId = $userId;
         $this->userId = FatUtility::int($this->userId);
         if (1 > $this->userId) {
             $this->error = Labels::getLabel('MSG_INVALID_USER', $this->langId);
             return false;
         }
+        $this->userInfoColumns = array_merge($this->commonColumns, $this->buyerInfoColumns);
+        $srch = User::getSearchObject();
+        $srch->joinTable(Address::DB_TBL, 'LEFT JOIN', 'ad.addr_record_id = u.user_id AND ad.addr_is_default = 1', 'ad');
+        $srch->joinTable(Countries::DB_TBL, 'LEFT JOIN', 'ad.addr_country_id = c.country_id', 'c');
+        $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT JOIN', 'c.country_id = c_l.countrylang_country_id AND countrylang_lang_id = ' . $this->langId, 'c_l');
+        $srch->joinTable(States::DB_TBL, 'LEFT JOIN', 'ad.addr_state_id = s.state_id', 's');
+        $srch->joinTable(States::DB_TBL_LANG, 'LEFT JOIN', 's.state_id = s_l.statelang_state_id AND statelang_lang_id = ' . $this->langId, 's_l');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
+        $srch->addMultipleFields($this->userInfoColumns);
+        $srch->addCondition('user_id', '=', $this->userId);
+        $rs = $srch->getResultSet();
+        $this->formatUserData((array) FatApp::getDb()->fetch($rs));
+        return true;
+    }
+    
+    /**
+     * loadSellerInfo
+     *
+     * @param  int $userId
+     * @return bool
+     */
+    public function loadSellerInfo(int $userId): bool
+    {
+        if (is_array($this->userData) && 0 < count($this->userData)) {
+            return true;
+        }
 
+        $this->userId = $userId;
+        $this->userId = FatUtility::int($this->userId);
+        if (1 > $this->userId) {
+            $this->error = Labels::getLabel('MSG_INVALID_USER', $this->langId);
+            return false;
+        }
+        $this->userInfoColumns = array_merge($this->commonColumns, $this->sellerInfoColumns);
         $srch = User::getSearchObject();
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = sh.shop_user_id', 'sh');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sh.shop_id = sh_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->langId, 'sh_l');
@@ -28,33 +97,26 @@ class PaymentMethodBase extends PluginBase
         $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'sh.shop_state_id = s.state_id', 's');
         $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND statelang_lang_id = ' . $this->langId, 's_l');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
-        $srch->joinTable(User::DB_TBL_USR_BANK_INFO, 'LEFT OUTER JOIN', 'ub.ub_user_id = u.user_id', 'ub');
-        $srch->addMultipleFields([
-            'user_id',
-            'user_name',
-            'shop_phone',
-            'shop_id',
-            'credential_email',
-            'credential_username',
-            'shop_postalcode',
-            'IFNULL(country_name, country_code) as country_name',
-            'IFNULL(state_name, state_identifier) as state_name',
-            'IFNULL(shop_name, shop_identifier) as shop_name',
-            'shop_description',
-            'shop_address_line_1',
-            'shop_address_line_2',
-            'user_dob',
-            'shop_city',
-            'country_code',
-            'country_code_alpha3',
-            'state_code',
-            'ub.*'
-        ]);
+        $srch->addMultipleFields($this->userInfoColumns);
         $srch->addCondition('user_id', '=', $this->userId);
         $rs = $srch->getResultSet();
-        $this->userData = FatApp::getDb()->fetch($rs);
-
+        $this->formatUserData((array) FatApp::getDb()->fetch($rs));
         return true;
+    }
+    
+    /**
+     * formatUserData
+     *
+     * @param  array $data
+     * @return void
+     */
+    private function formatUserData(array $data): void
+    {
+        if (empty($this->userData) || false === $this->userData) {
+            /* Delete all values from an array while keeping thier keys. */
+            $this->userData = array_map(function() {}, array_flip($this->userInfoColumns));
+        }
+        $this->userData = $data;
     }
 
     /**

@@ -112,7 +112,21 @@ class PaygatePayController extends PaymentController
     public function callback(string $orderId)
     {
         $response = FatApp::getPostedData();
-        $orderPaymentObj = new OrderPayment($orderId);
+        $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
+        
+        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
+            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $log = [
+                'msg' => $msg,
+                'response' => $response,
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($log));
+            $orderPaymentObj->addOrderPaymentComments($msg);
+            Message::addErrorMessage($msg);
+            FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+        }
+
         if (false === $this->plugin->validateResponse($orderId, $response)) {
             TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
 

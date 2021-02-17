@@ -79,7 +79,7 @@ class StripeConnect extends PaymentMethodBase
      * @param int $userId
      * @return void
      */
-    public function init(int $userId = 0)
+    public function init(int $userId = 0, bool $isSeller = false)
     {
         if (false == $this->validateSettings()) {
             return false;
@@ -96,7 +96,9 @@ class StripeConnect extends PaymentMethodBase
         }
 
         if (0 < $userId) {
-            if (false === $this->loadLoggedUserInfo($userId)) {
+            if (false === $isSeller && false === $this->loadLoggedUserInfo($userId)) {
+                return false;
+            } else if (false === $this->loadSellerInfo($userId)) {
                 return false;
             }
         }

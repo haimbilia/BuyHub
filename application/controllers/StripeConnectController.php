@@ -41,7 +41,7 @@ class StripeConnectController extends PaymentMethodBaseController
             FatUtility::dieJsonError($msg);
         }
 
-        if (false === $this->stripeConnect->init($userId)) {
+        if (false === $this->stripeConnect->init($userId, true)) {
             $this->setError();
         }
 
