@@ -165,7 +165,7 @@ class States extends MyAppModel
     
     public static function getStateAttrByCountryIdAndName(int $countryId, string $stateName, int $langId, string $attr): string
     {
-        $stateArr = $this->getStateArrByCountryIdAndName($countryId, $stateName, $langId, [$attr]);
+        $stateArr = self::getStateArrByCountryIdAndName($countryId, $stateName, $langId, [$attr]);
         return (string) (array_key_exists($attr, $stateArr) ? $stateArr[$attr] : '');
     }
 

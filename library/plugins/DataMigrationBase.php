@@ -26,7 +26,7 @@ class DataMigrationBase extends PluginBase
         $pluginID = $this->settings['plugin_id'];
         $confName = 'DATA_MIGRATION_' . $pluginID;
         $val = FatApp::getConfig($confName, FatUtility::VAR_STRING, '');        
-        $data = !empty($val) ? json_decode($val, true) : [];
+        $data = !empty($val) ? json_decode($val, true) : [];        
         if (!empty($key)) {
             return isset($data[$key]) ? $data[$key] : null;
         }

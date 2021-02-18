@@ -38,12 +38,12 @@ class Shopify extends DataMigrationBase
     public function getProducts()
     {
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_PRODUCT);
-        $paginationParam = $this->getData($paginationSavedString);
-
-        if ($this->isSyncCompleted($paginationParam)) {
+        $paginationParam = $this->getData($paginationSavedString);     
+      
+        if ($this->isSyncCompleted($paginationParam)) {     
             return [];
         }
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 10] : $paginationParam;
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 40] : $paginationParam;
         $products = $this->fetchProducts($paginationParam);
 
         $collectionsCache = FatCache::get('ShopifyCollectionsCache', CONF_IMG_CACHE_TIME, '.txt');     
@@ -82,6 +82,9 @@ class Shopify extends DataMigrationBase
             ];
 
             $tags = json_decode($product->product_tag,true);
+            if(empty($tags)){
+                $tags = []; 
+            }
               
             foreach($product->collections as $collection){            
                 $tags[]= (string)$collectionArr[$collection->shopify_category_id];
@@ -90,7 +93,7 @@ class Shopify extends DataMigrationBase
             $mappedOptions = [];
 
             /* To get option except default one which is created by multivendor on every product, named Title  */
-            if (!(1 == count($product->options) && isset($product->options[0]->name) && $product->options[0]->name == 'Title')) {
+            if (!(count($product->variants) == 1 && 1 == count($product->options) && isset($product->options[0]->name) && $product->options[0]->name == 'Title')) {
                 foreach ($product->options as $option) {
                     $values = [];
                     foreach ($option->values as $value) {
@@ -110,7 +113,7 @@ class Shopify extends DataMigrationBase
                 $inventory = [
                     'id' => $variant->id,
                     'selprod_title' => $product->product_name ?? '',
-                    'selprod_url_keyword'=> $product->product_name ?? '',
+                    'selprod_url_keyword'=> $product->handle ?? '',
                     'selprod_subtract_stock' => $variant->track_inventory,
                     'selprod_active' => $product->active,
                     'selprod_available_from' => date('Y-m-d'),
@@ -172,10 +175,16 @@ class Shopify extends DataMigrationBase
 
     private function fetchProducts($params = [])
     {
-        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
-        $url = 'https://mvmapi.webkul.com/api/v2/products.json?page=1&limit=50&sort_by=date_add&sort_order=desc&filter=%7B%22id%22%3A%224473091%22%7D';
-        $response = $this->sendMultiVendorGetRequest($url);
-        return $response->products;
+        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);        
+        $response = $this->sendMultiVendorGetRequest($url);        
+        $products = $response->products;
+        $this->nextLink = '';
+        if (0 < count($products)) {
+            $params['page']++;
+            $this->nextLink = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
+        }
+
+        return $products;        
     }
 
     private function fetchCollections($params = [])
@@ -220,16 +229,16 @@ class Shopify extends DataMigrationBase
                 $mappedAddress[] = array(
                     'addr_title' => $address->name,
                     'addr_name' => $address->name,
-                    'addr_address1' => $address->address1,
-                    'addr_address2' => $address->address2,
-                    'addr_city' => $address->city,
-                    'addr_zip' => $address->zip,
-                    'addr_phone' => $address->phone,
+                    'addr_address1' => $address->address1 ?? '',
+                    'addr_address2' => $address->address2 ?? '',
+                    'addr_city' => $address->city ?? '',
+                    'addr_zip' => $address->zip ?? '',
+                    'addr_phone' => $address->phone ?? '',
                     'addr_is_default' => $user->default_address->id == $address->id ? 1 : 0,
-                    'country_code' => $address->country_code,
-                    'country_name' => $address->country_name,
-                    'state_code' => $address->province_code,
-                    'state_name' => $address->province,
+                    'country_code' => $address->country_code ?? '',
+                    'country_name' => $address->country_name ?? '',
+                    'state_code' => $address->province_code ?? '',
+                    'state_name' => $address->province ?? '',
                 );
             }
             $mappedUsers[] = $mappedUser + array('addresses' => $mappedAddress);
@@ -241,15 +250,18 @@ class Shopify extends DataMigrationBase
     public function getSellers()
     {
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_SELLER);
-        $paginationParam = $this->getData($paginationSavedString);
-
-        if ($this->isSyncCompleted($paginationParam)) {
+        $paginationParam = $this->getData($paginationSavedString);      
+        if ($this->isSyncCompleted($paginationParam)) {           
             return [];
-        }
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 25] : $paginationParam;
-
+        } 
+        
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 25 ,'sort_by'=>'date_add','sort_order'=>'asc'] : $paginationParam;
+        
         $sellers = $this->fetchSellers($paginationParam);
-
+        if(1 > count($sellers)){
+            $this->nextLink = NULL;
+        }
+        
         $mappedSellers = [];
 
         foreach ($sellers as $key => $seller) {
@@ -383,24 +395,7 @@ class Shopify extends DataMigrationBase
     {
         if (!is_object($array)) {
             return (string) $array;
-        }
-        /*
-          $string = '';
-          $i = 0;
-          foreach ($array as $key => $val) {
-          //Add values separated by comma
-          //prepend the key string, if it's an associative key
-          //Check if the value itself is another array to be converted to string
-          $string .= ($i === $key ? '' : "$key - ") . $this->castString($val) . ', ';
-          $i++;
-          }
-
-          //Remove trailing comma and space
-          $string = rtrim($string, ', ');
-
-          return $string;
-         *
-         */
+        }        
     }
 
     private function generateUrl($type, $urlParams = array())

@@ -43,31 +43,22 @@ class DataMigration
                 return false;
             }
 
-//            if ($this->syncUsers()) {
-//                return;
-//            }
+            if ($this->syncUsers()) {
+                echo 'Users Synced';
+                return 'Users Synced'; 
+            }
 
             /* mark some users as seller and create shop */
             if ($this->syncSellers()) {
-                return;
+                echo 'Sellers Synced';
+                return 'Sellers Synced';                
             }
 
             if ($this->syncProducts()) {
-                return;
+                echo 'Products Synced';
+                return 'Products Synced';
             }
 
-
-
-
-            /*
-              $products = $migrationApi->getProducts();
-              if(1 > count($products)){
-
-              return;
-              }
-             *
-             *
-             */
         }
     }
 
@@ -77,9 +68,9 @@ class DataMigration
         if (0 < count($sellers)) {
             if (!$this->saveSellerData($sellers)) {
                 return true;
-            }
-            $this->pluginObj->savePaginationData(DataMigration::TYPE_SELLER);
+            }            
         }
+        $this->pluginObj->savePaginationData(DataMigration::TYPE_SELLER);
 
         return (0 < count($sellers));
     }
@@ -88,12 +79,11 @@ class DataMigration
     {
         $products = $this->pluginObj->getProducts();
         if (0 < count($products)) {
-            if (!$this->saveProductsData($products)) {
-                print_r($this->getError());
+            if (!$this->saveProductsData($products)) { 
                 return true;
-            }
-            //$this->pluginObj->saveProductsPaginationData();
+            }            
         }
+        $this->pluginObj->savePaginationData(DataMigration::TYPE_PRODUCT);
 
         return (0 < count($products));
     }
@@ -102,8 +92,8 @@ class DataMigration
     {
         $db = FatApp::getDb();
         $db->startTransaction();
-        foreach ($products as &$product) {
-
+        foreach ($products as $product) {
+            
             $catalog = $product['catalog'];
             $isNewProduct = 1;
             $productId = Product::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $catalog['id']);
@@ -124,7 +114,7 @@ class DataMigration
                     $catalog['product_seller_id'] = $userId;
                     $catalog['product_added_by_admin_id'] = 0;
                 }
-            }
+            }            
             $productObj = new Product($productId);
             if (!$productObj->saveProductData($catalog)) {
                 $this->error = $productObj->getError();
@@ -175,7 +165,7 @@ class DataMigration
                 $option['option_identifier'] = $option['option_name'] . "_" . $catId;
                 $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'], $this->langId);
                 if (0 > $optionId) {
-                    $this->error = Labels::getLabel('MSG_UNABLE_TO_CREATE_OR_GET_OPTION', $langId);
+                    $this->error = Labels::getLabel('MSG_UNABLE_TO_CREATE_OR_GET_OPTION', $this->langId);
                     $db->rollbackTransaction();
                     return false;
                 }
@@ -213,7 +203,7 @@ class DataMigration
                 }
                 $this->saveProductImage($productId, $optionValId, $prodImage['url']);
             }
-
+            
             foreach ($product['tags'] as $tag) {
                 $tagId = $this->getTagIdByName($tag, $this->langId);
                 $productObj->addUpdateProductTag($tagId);
@@ -304,9 +294,9 @@ class DataMigration
 
     private function syncUsers()
     {
-        $users = $this->pluginObj->getUsers();
+        $users = $this->pluginObj->getUsers();   
         if (0 < count($users)) {
-            if (!$this->saveUsersData($users)) {
+            if (!$this->saveUsersData($users)) {                
                 print_r($this->getError());
                 return true;
             }
@@ -344,12 +334,14 @@ class DataMigration
             }
 
             $userId = $userObj->getMainTableRecordId();
-
-            if (empty($user['user_username'])) {
+                        
+            if (empty($user['credential_username'])) {
                 if (!empty($user['credential_email'])) {
-                    $user['user_username'] = $user['credential_email'];
+                    $user['credential_username'] = $user['credential_email'];
+                }elseif(!empty($user['user_phone'])){
+                    $user['credential_username'] = $user['user_phone'];
                 } else {
-                    $user['user_username'] = $user['user_phone'];
+                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/'))."_".$user['id'];
                 }
             }
 
@@ -358,7 +350,7 @@ class DataMigration
                     $user['user_password'] = CommonHelper::getRandomPassword(8);
                 }
 
-                if (!$userObj->setLoginCredentials($user['user_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
+                if (!$userObj->setLoginCredentials($user['credential_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
                     $db->rollbackTransaction();
                     return false;
                 }
@@ -401,8 +393,8 @@ class DataMigration
             $stateCode = $shop['shop_state_code'];
             $stateName = $shop['shop_state_name'];
 
-            $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName);
-            $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName);
+            $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName,$this->langId);
+            $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName ,$this->langId);
 
             $shop['shop_country_id'] = $countryId;
             $shop['shop_state_id'] = $stateId;
@@ -492,7 +484,7 @@ class DataMigration
         return true;
     }
 
-    private function getCountryIdByNameOrCode($countryCode, $countryName)
+    private function getCountryIdByNameOrCode($countryCode, $countryName ,$langId)
     {
         $countryId = 0;
         if (!empty($countryCode) || !empty($countryName)) {
@@ -515,7 +507,7 @@ class DataMigration
             }
 
             if (empty($countryId)) {
-                $countryId = $this->createCountry($countryCode, $countryName, $this->langId);
+                $countryId = $this->createCountry($countryCode, $countryName, $langId);
                 if (empty($countryId)) {
                     return false;
                 }
@@ -527,7 +519,7 @@ class DataMigration
         return $countryId;
     }
 
-    private function getStateIdByNameOrCode($countryId, $stateCode, $stateName)
+    private function getStateIdByNameOrCode($countryId, $stateCode, $stateName ,$landId)
     {
         $stateId = 0;
         if (!empty($stateCode) || !empty($stateName)) {
@@ -547,7 +539,7 @@ class DataMigration
             if (empty($stateId) && !empty($stateName)) {
                 $stateNamekey = $countryId . "_" . $stateName;
                 if (!isset($this->stateIdArrByName[$stateNamekey])) {
-                    $stateId = States::getStateAttrByCountryIdAndName($stateName, 'state_id');
+                    $stateId = States::getStateAttrByCountryIdAndName($countryId,$stateName,$landId,'state_id');
                     $this->stateIdArrByName[$stateNamekey] = $stateId;
                 } else {
                     $stateId = $this->stateIdArrByName[$stateNamekey];
@@ -555,7 +547,7 @@ class DataMigration
             }
 
             if (empty($stateId)) {
-                $stateId = $this->createState($countryId, $stateCode, $stateName, $this->langId);
+                $stateId = $this->createState($countryId, $stateCode, $stateName, $landId);
                 if (empty($stateId)) {
                     return false;
                 }
@@ -637,7 +629,18 @@ class DataMigration
 
         $db = FatApp::getDb();
         $db->startTransaction();
-        foreach ($users as &$user) {
+        foreach ($users as $userkey => &$user) {
+                        
+            if (empty($user['credential_username'])) {
+                if (!empty($user['credential_email'])) {
+                    $user['credential_username'] = $user['credential_email'];
+                }elseif(!empty($user['user_phone'])){
+                    $user['credential_username'] = $user['user_phone'];
+                } else {
+                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/'))."_".$user['id'];
+                }
+            }
+            
             $userObj = new User();
             if (!empty($user['credential_email'])) {
                 $userArr = $userObj->checkUserByEmailOrUserName($user['credential_username'], $user['credential_email']);
@@ -655,23 +658,17 @@ class DataMigration
 
                 $userId = $userObj->getMainTableRecordId();
 
-                if (empty($user['user_username'])) {
-                    if (!empty($user['credential_email'])) {
-                        $user['user_username'] = $user['credential_email'];
-                    } else {
-                        $user['user_username'] = $user['user_phone'];
-                    }
-                }
 
                 if (!isset($user['user_password']) || empty($user['user_password'])) {
                     $user['user_password'] = CommonHelper::getRandomPassword(8);
                 }
-
-                if (!$userObj->setLoginCredentials($user['user_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
+                
+                              
+                if (!$userObj->setLoginCredentials($user['credential_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
+                    $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
                 }
-
                 foreach ($user['addresses'] as $address) {
                     $countryCode = $address['country_code'];
                     $countryName = $address['country_name'];
@@ -679,8 +676,8 @@ class DataMigration
                     $stateCode = $address['state_code'];
                     $stateName = $address['state_name'];
 
-                    $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName);
-                    $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName);
+                    $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName,$this->langId);
+                    $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName ,$this->langId);
 
                     $addressObj = new Address();
                     $addrDataToSave = $address;
@@ -700,14 +697,14 @@ class DataMigration
                 $userId = $userArr['user_id'];
                 $userObj = new User($userId);
             }
-
+            
             if (!$userObj->updateUserMeta($pluginCode . "_id", $user['id'])) {
                 $this->error = $userObj->getError();
                 $db->rollbackTransaction();
                 return false;
             }
         }
-
+        
         $db->commitTransaction();
 
         return true;
