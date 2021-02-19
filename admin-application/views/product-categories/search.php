@@ -25,14 +25,19 @@
                                 <div class="sorting-actions">
                                     <?php
                                     $active = "";
-                                    if ($row['prodcat_active']) {
+                                    $changeStatus = applicationConstants::ACTIVE;
+                                    if (applicationConstants::ACTIVE == $row['prodcat_active']) {
                                         $active = 'checked';
+                                        $changeStatus = applicationConstants::INACTIVE;
                                     }
-                                    $statusAct = ($canEdit === true) ? 'toggleStatus(event,this,' . applicationConstants::YES . ')' : 'toggleStatus(event,this,' . applicationConstants::NO . ')';
+
+                                    $statusAct = ($canEdit === true) ? 'toggleStatus(event,this,' . applicationConstants::YES . ', ' . $changeStatus . ')' : 'toggleStatus(event,this,' . applicationConstants::NO . ', ' . $changeStatus . ')';
                                     $statusClass = ($canEdit === false) ? 'disabled' : '';
+                                    $hasParent = 0 < $row['prodcat_parent'] ? applicationConstants::YES : applicationConstants::NO;
+                                    
                                     ?>
                                     <label class="statustab statustab-sm">
-                                        <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['prodcat_id']; ?>" value="<?php echo $row['prodcat_id']; ?>" onclick="<?php echo $statusAct; ?>" class="switch-labels" />
+                                        <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['prodcat_id']; ?>" value="<?php echo $row['prodcat_id']; ?>" onclick="<?php echo $statusAct; ?>" data-childcount="<?php echo $row['child_count']; ?>" data-hasparent="<?php echo $hasParent; ?>" class="switch-labels" />
                                         <i class="switch-handles <?php echo $statusClass; ?> clickable"></i>
                                     </label>
                                     <?php if ($canEdit) { ?>
@@ -43,7 +48,7 @@
                                 </div>
                             </div>
                             <?php if ($row['subcategory_count'] > 0) { ?>
-                                <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon" onClick="displaySubCategories(this)"></i></span>
+                                <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onClick="displaySubCategories(this)"></i></span>
                             <?php } ?>
                         </div>
                     </li>
