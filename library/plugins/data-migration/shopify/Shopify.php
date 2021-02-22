@@ -111,7 +111,7 @@ class Shopify extends DataMigrationBase
 
             foreach ($product->variants as $variant) {
                 $inventory = [
-                    'id' => $variant->id,
+                    'id' => $variant->shopify_variant_id,
                     'selprod_title' => $product->product_name ?? '',
                     'selprod_url_keyword'=> $product->handle ?? '',
                     'selprod_subtract_stock' => $variant->track_inventory,
@@ -175,7 +175,7 @@ class Shopify extends DataMigrationBase
 
     private function fetchProducts($params = [])
     {
-        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);        
+        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);  
         $response = $this->sendMultiVendorGetRequest($url);        
         $products = $response->products;
         $this->nextLink = '';
@@ -185,6 +185,123 @@ class Shopify extends DataMigrationBase
         }
 
         return $products;        
+    }
+    
+    public function getOrders()
+    {
+        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_ORDER);
+        $paginationParam = $this->getData($paginationSavedString);
+
+        if ($this->isSyncCompleted($paginationParam)) {
+            return [];
+        }
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 2] : $paginationParam;
+        $orders = $this->fetchOrders($paginationParam);
+
+        $mappedOrders = [];
+
+        foreach ($orders as $order) {
+            
+            print_r($order);
+            
+            die();
+            $mappedOrder = [
+                'id' => $order->id,
+                'created_at' => $order->created_at,
+                'buyer_id' => $order->customer->id,
+                'currency_code'=>$order->currency,
+                'total_price' => $order->total_price,
+                'subtotal_price' => $order->subtotal_price,
+                'total_weight' => $order->total_weight,
+                'total_tax' => $order->total_tax,
+                'currency' => $order->currency, // total_price_usd  need to check
+                'total_tax' => $order->total_tax,
+                'financial_status' => $order->financial_status, /// need to update  or confirmed
+                'total_discount' => $order->total_discounts,
+                    //shiping charges needd to check
+            ];
+
+            $billingAddress = [];
+            if (!empty($order->billing_address)) {
+                $billingAddress = array(
+                    "name" => $order->billing_address->name,                 
+                    "address1" => $order->billing_address->address1,
+                    "address2" => $order->billing_address->address2,
+                    "phone" => $order->billing_address->phone,
+                    "city" => $order->billing_address->city,
+                    "zip" => $order->billing_address->zip,
+                    "state" => $order->billing_address->province,
+                    "country" => $order->billing_address->country,
+                    "country_code" => $order->billing_address->country_code,
+                    "state_code" => $order->billing_address->province_code,
+                    "latitude" => $order->billing_address->latitude,
+                    "longitude" => $order->billing_address->longitude,
+                );
+            }
+
+            $shippingAddress = [];
+            if (!empty($order->shipping_address)) {
+                $shippingAddress = array(
+                    "name" => $order->shipping_address->name,
+                    "address1" => $order->shipping_address->address1,
+                    "address2" => $order->shipping_address->address2 ?? '',
+                    "phone" => $order->shipping_address->phone ?? '',
+                    "city" => $order->shipping_address->city ?? '',
+                    "zip" => $order->shipping_address->zip,
+                    "state" => $order->shipping_address->province,
+                    "country" => $order->shipping_address->country,
+                    "country_code" => $order->shipping_address->country_code,
+                    "state_code" => $order->shipping_address->province_code,
+                    "latitude" => $order->shipping_address->latitude,
+                    "longitude" => $order->shipping_address->longitude,
+                );
+            }
+
+            /*
+              $mappedtax = [];
+
+              foreach($order->tax_lines  as $tax){
+              $mappedtax[]= array(
+              'title' =>$tax->title,
+              'price'=> $tax->price,
+              'rate'=> $tax->rate,
+              );
+              }
+             * 
+             */
+
+            $products = [];
+            foreach ($order->line_items as $lineItem) {
+                $taxLines = [];
+                foreach ($lineItem->tax_lines as $ptax) {
+                    $taxLines[] = array(
+                        'title' => $ptax->title,
+                        'price' => $ptax->price,
+                        'rate' => $ptax->rate,
+                    );
+                }
+                $products[] = array(
+                    'id' => $lineItem->variant_id,
+                    'title' => $lineItem->title,
+                    'quantity' => $lineItem->quantity,
+                    'price' => $lineItem->price,
+                    'total_discount' => $lineItem->total_discount,
+                    'tax_lines' => $taxLines,
+                );
+            }
+
+            $mappedOrders[] = $mappedOrder + ["products" => $products, "billingAddress" => $billingAddress, "shippingAddress" => $shippingAddress];
+        }
+
+        return $mappedOrders;
+    }
+
+    private function fetchOrders($params = [])
+    {
+        $url = $this->generateUrl(DataMigration::TYPE_ORDER, $params);
+        $url = 'https://thelocalswpg.myshopify.com/admin/api/2021-01/orders.json?ids=3007848415276';
+        $response = $this->sendGetRequest($url);
+        return $response->orders;       
     }
 
     private function fetchCollections($params = [])
@@ -412,6 +529,9 @@ class Shopify extends DataMigrationBase
                 break;
             case DataMigration::TYPE_PRODUCT_TAG:
                 $urlType = 'collections';
+                break;
+            case DataMigration::TYPE_ORDER:
+                $urlType = 'orders';
                 break;
         }
 

@@ -29,6 +29,9 @@ class Orders extends MyAppModel
 
     public const DB_TBL_CHARGES = 'tbl_order_product_charges';
     public const DB_TBL_CHARGES_PREFIX = 'opcharge_';
+    
+    public const DB_ORDER_TO_PLUGIN_ORDER = 'tbl_orders_to_plugin_order';
+    public const DB_ORDER_TO_PLUGIN_ORDER_PREFIX = 'opo_';
 
     public const BILLING_ADDRESS_TYPE = 1;
     public const SHIPPING_ADDRESS_TYPE = 2;
@@ -2607,5 +2610,19 @@ class Orders extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+    
+    public static function getOrderIdByPlugin(int $pluginId, int $pluginOrderId): int
+    {
+        $srch = new SearchBase(static::DB_ORDER_TO_PLUGIN_ORDER);
+        $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_id', '=', $pluginId);
+        $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_order_id', '=', $pluginOrderId);
+        $srch->addFld('opo_order_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs); 
+        if (!$records) {
+            return 0;
+        }
+        return $records['opo_order_id'];
     }
 }

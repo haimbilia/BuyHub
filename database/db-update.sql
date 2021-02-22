@@ -18,3 +18,11 @@ CREATE TABLE `tbl_seller_products_to_plugin_selprod` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `tbl_seller_products_to_plugin_selprod` ADD UNIQUE( `spps_selprod_id`, `spps_plugin_id`, `spps_plugin_selprod_id`);
+
+CREATE TABLE `tbl_orders_to_plugin_order` (
+  `opo_order_id` int NOT NULL,
+  `opo_plugin_id` int NOT NULL,
+  `opo_plugin_order_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_orders_to_plugin_order` ADD UNIQUE( `opo_order_id`, `opo_plugin_id`, `opo_plugin_order_id`);

@@ -8,6 +8,7 @@ class DataMigration
     public const TYPE_USER = 3;
     public const TYPE_SELLER = 4;
     public const TYPE_PRODUCT_TAG = 5;
+    public const TYPE_ORDER = 6;
 
     public $activedServiceId = 0;
     private $langId;
@@ -43,20 +44,25 @@ class DataMigration
                 return false;
             }
 
-            if ($this->syncUsers()) {
-                echo 'Users Synced';
-                return 'Users Synced'; 
-            }
+//            if ($this->syncUsers()) {
+//                echo 'Users Synced';
+//                return 'Users Synced'; 
+//            }
+//
+//            /* mark some users as seller and create shop */
+//            if ($this->syncSellers()) {
+//                echo 'Sellers Synced';
+//                return 'Sellers Synced';                
+//            }
 
-            /* mark some users as seller and create shop */
-            if ($this->syncSellers()) {
-                echo 'Sellers Synced';
-                return 'Sellers Synced';                
-            }
-
-            if ($this->syncProducts()) {
-                echo 'Products Synced';
-                return 'Products Synced';
+//            if ($this->syncProducts()) {
+//                echo 'Products Synced';
+//                return 'Products Synced';
+//            }
+            
+            if ($this->syncOrders()) {
+                echo 'Orders Synced';
+                return 'Orders Synced';
             }
 
         }
@@ -86,6 +92,90 @@ class DataMigration
         $this->pluginObj->savePaginationData(DataMigration::TYPE_PRODUCT);
 
         return (0 < count($products));
+    }
+    
+    private function syncOrders()
+    {
+        $orders = $this->pluginObj->getOrders();
+        if (0 < count($orders)) {
+            
+            print_r($orders);
+            
+            
+            if (!$this->saveOrdersData($orders)) { 
+                return true;
+            }            
+        }
+//        $this->pluginObj->savePaginationData(DataMigration::TYPE_ORDER);
+//
+//        return (0 < count($orders));
+    }
+    
+    private function saveOrdersData($orders){
+        $db = FatApp::getDb();
+        $db->startTransaction();
+        foreach ($orders as $order) { 
+            $isNewOrder = 1;            
+            $orderId = Orders::getOrderIdByPlugin($this->pluginObj->settings['plugin_id'], $order['id']);
+            if (0 < $orderId) {
+                $isNewOrder = 0;
+            }
+            $orderData['order_id'] = $order_id;
+            $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_id'],$order['buyer_id']); 
+            $orderData['order_payment_status'] = Orders::ORDER_PAYMENT_PENDING;
+            $orderData['order_date_added'] = $order['created_at'];
+            
+            $currencyRow = Currency::getAttributesById($this->siteCurrencyId);
+            $orderData['order_currency_id'] = $currencyRow['currency_id'];
+            $orderData['order_currency_code'] = $currencyRow['currency_code'];
+            $orderData['order_currency_value'] = $currencyRow['currency_value'];
+            
+            
+            $userAddresses = [];
+            
+            if(0 < count($order['billingAddress'])){
+                $userAddresses[] = array(
+                    'oua_order_id' => $orderId,
+                    'oua_type' => Orders::BILLING_ADDRESS_TYPE,
+                    'oua_name' => $order['billingAddress']['name'],
+                    'oua_address1' => $order['billingAddress']['address1'],
+                    'oua_address2' => $order['billingAddress']['address2'],
+                    'oua_city' => $order['billingAddress']['city'],
+                    'oua_state' => $order['billingAddress']['state'],
+                    'oua_country' => $order['billingAddress']['country'],
+                    'oua_country_code' => $order['billingAddress']['country_code'],
+                    'oua_country_code_alpha3' => "",
+                    'oua_state_code' => $order['billingAddress']['state_code'],
+                    'oua_phone' => $order['billingAddress']['phone'],
+                    'oua_zip' => $order['billingAddress']['zip'],
+                );
+            }
+            
+            if (0 < count($order['shippingAddress'])) {
+                $userAddresses[] = array(
+                    'oua_order_id' => $orderId,
+                    'oua_type' => Orders::SHIPPING_ADDRESS_TYPE,
+                    'oua_name' => $order['shippingAddress']['name'],
+                    'oua_address1' => $order['shippingAddress']['address1'],
+                    'oua_address2' => $order['shippingAddress']['address2'],
+                    'oua_city' => $order['shippingAddress']['city'],
+                    'oua_state' => $order['shippingAddress']['state'],
+                    'oua_country' => $order['shippingAddress']['country'],
+                    'oua_country_code' => $order['shippingAddress']['country_code'],
+                    'oua_country_code_alpha3' => "",
+                    'oua_state_code' => $order['shippingAddress']['state_code'],
+                    'oua_phone' => $order['shippingAddress']['phone'],
+                    'oua_zip' => $order['shippingAddress']['zip'],
+                );
+            }
+            
+            $orderData['userAddresses'] = $userAddresses;
+            
+            
+        }
+        
+        //$db->commitTransaction();
+        return true;
     }
 
     private function saveProductsData($products)
