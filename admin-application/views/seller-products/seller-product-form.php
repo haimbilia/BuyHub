@@ -32,7 +32,8 @@
                     $shopUserNameFld->setfieldTagAttribute('readonly', 'readonly');
                     $urlFld= $frmSellerProduct->getField('selprod_url_keyword');
                     $urlFld->htmlAfterField = "<small class='text--small'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), CONF_WEBROOT_FRONT_URL).'</small>';
-                    $urlFld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value,$selprod_id,'post')");
+                    $urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selprod_id)");
+                    
                     $urlFld->requirements()->setRequired();
                     //$urlFld->addFieldTagAttribute('class', 'hide');
                     $selprodCodEnabledFld = $frmSellerProduct->getField('selprod_cod_enabled');

@@ -561,7 +561,22 @@ $(document).on('change', '.collection-language-js', function () {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
-    }
+    };
+    getUniqueSlugUrl = function (obj, str, recordId) {
+            if (str == '') {
+                return;
+            }
+            var data = {url_keyword: str, recordId: recordId}
+            fcom.ajax(fcom.makeUrl('Shops', 'isShopRewriteUrlUnique'), data, function (t) {
+                var ans = $.parseJSON(t);                
+                $(obj).next().html(ans.msg);
+                if(ans.status == 0){
+                    $(obj).next().addClass('text-danger');
+                }else{
+                    $(obj).next().removeClass('text-danger');
+                }
+            });
+    };
 
 })();
 

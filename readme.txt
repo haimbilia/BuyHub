@@ -33,6 +33,11 @@ Fixes:
     => 049811 - While uploading user profile image profile link is wrong in response
     => 049777 - The - button (QUANTITY reducer) is not functional when we order a product through pickup
     => 049919 - labels missing in system
+    => 049995 - If order is placed with digital product then unable to cancel the order even if it is allow from admin
+    => 049981 - seller/admin> attribute tab> some UI issue while adding product
+    => 050083 - On admin dashboard under statistics tab subscription earning data is wrong
+    => 050137 - Apart from added components in combined tax,extra Duplicate entry is visible in tax details in ORDERS .(where we have the display of the tax components)
+    => 049980 - issue with URL rewetting
     => 050289 - Order email table BG is not updating as per theme
 
 Enhancements :

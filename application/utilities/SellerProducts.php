@@ -3146,4 +3146,27 @@ trait SellerProducts
         $this->set('msg', Labels::getLabel('LBL_Record_Deleted', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+    
+    public function isProductRewriteUrlUnique()
+    {
+        $selprod_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $urlKeyword = FatApp::getPostedData('url_keyword');
+        $sellerProdObj = new SellerProduct($selprod_id);
+        $seoUrl = $sellerProdObj->sanitizeSeoUrl($urlKeyword);
+        if (1 > $selprod_id) {
+            $isUnique = UrlRewrite::isCustomUrlUnique($seoUrl);
+            if ($isUnique) {
+                FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+            }
+            FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId));
+        }
+
+        $originalUrl = $sellerProdObj->getRewriteProductOriginalUrl();
+        $customUrlData = UrlRewrite::getDataByCustomUrl($seoUrl, $originalUrl);
+        if (empty($customUrlData)) {
+            FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+        }
+        FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId));
+    }    
+    
 }

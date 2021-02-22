@@ -455,8 +455,8 @@ function animation(obj) {
             .replace(/^-+/, '')             // Trim - from start of text
             .replace(/-+$/, '');
         if ($("#" + is_slugify).val() == 0) {
-            // $("#"+str_val_id).val(str).keyup();
-            $("#" + str_val_id).val(str);
+            $("#"+str_val_id).val(str).keyup();
+            //$("#" + str_val_id).val(str);
             $("#" + caption).html(siteConstants.webroot + str);
         }
     };

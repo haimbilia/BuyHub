@@ -1429,5 +1429,26 @@ class ShopsController extends AdminBaseController
             Message::addErrorMessage($shopCollectionObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+    }    
+    public function isShopRewriteUrlUnique()
+    {
+        $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $urlKeyword = FatApp::getPostedData('url_keyword');
+        $shopObj = new Shop($shop_id);
+        $seoUrl = $shopObj->sanitizeSeoUrl($urlKeyword);
+        if (1 > $shop_id) {
+            $isUnique = UrlRewrite::isCustomUrlUnique($seoUrl);
+            if ($isUnique) {
+                FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+            }
+            FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->adminLangId));
+        }
+
+        $originalUrl = $shopObj->getRewriteShopOriginalUrl();
+        $customUrlData = UrlRewrite::getDataByCustomUrl($seoUrl, $originalUrl);
+        if (empty($customUrlData)) {
+            FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+        }
+        FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->adminLangId));
     }
 }

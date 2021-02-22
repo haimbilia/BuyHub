@@ -833,7 +833,22 @@ $(document).on("change", ".state", function() {
         fcom.updateWithAjax(href, '', function(t) {
             $('.pluginPlatform-js').click();
         });
-    }
+    };
+    getUniqueSlugUrl = function (obj, str, recordId) {
+            if (str == '') {
+                return;
+            }
+            var data = {url_keyword: str, recordId: recordId}
+            fcom.ajax(fcom.makeUrl('Seller', 'isShopRewriteUrlUnique'), data, function (t) {
+                var ans = $.parseJSON(t);
+                $(obj).next().html(ans.msg);
+                if(ans.status == 0){
+                    $(obj).next().addClass('text-danger');
+                }else{
+                    $(obj).next().removeClass('text-danger');
+                }
+            });
+    };
 })();
 
 function bindAutoComplete() {
