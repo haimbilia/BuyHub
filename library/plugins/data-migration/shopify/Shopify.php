@@ -197,14 +197,9 @@ class Shopify extends DataMigrationBase
         }
         $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 2] : $paginationParam;
         $orders = $this->fetchOrders($paginationParam);
-
         $mappedOrders = [];
 
-        foreach ($orders as $order) {
-            
-            print_r($order);
-            
-            die();
+        foreach ($orders as $order) {            
             $mappedOrder = [
                 'id' => $order->id,
                 'created_at' => $order->created_at,
@@ -277,7 +272,7 @@ class Shopify extends DataMigrationBase
                     $taxLines[] = array(
                         'title' => $ptax->title,
                         'price' => $ptax->price,
-                        'rate' => $ptax->rate,
+                        'rate' =>  $ptax->rate,
                     );
                 }
                 $products[] = array(

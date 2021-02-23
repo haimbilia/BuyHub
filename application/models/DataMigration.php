@@ -34,7 +34,7 @@ class DataMigration
         $activatedTaxServiceId = $this->getActivatedServiceId();
         if (1 < $activatedTaxServiceId) {
             $pluginKey = Plugin::getAttributesById($activatedTaxServiceId, 'plugin_code');
-            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId,], $error, $this->langId);
+            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId], $error, $this->langId);
             if (false === $this->pluginObj) {
                 $this->error = $error;
                 return false;
@@ -98,11 +98,8 @@ class DataMigration
     {
         $orders = $this->pluginObj->getOrders();
         if (0 < count($orders)) {
-            
-            print_r($orders);
-            
-            
             if (!$this->saveOrdersData($orders)) { 
+                print_r($this->getError());
                 return true;
             }            
         }
@@ -111,29 +108,35 @@ class DataMigration
 //        return (0 < count($orders));
     }
     
-    private function saveOrdersData($orders){
+    private function saveOrdersData($orders)
+    {
+
+        $currencyRow = Currency::getAttributesById($this->langId);
+        $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId);
+        $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId);
+
         $db = FatApp::getDb();
         $db->startTransaction();
-        foreach ($orders as $order) { 
-            $isNewOrder = 1;            
+        foreach ($orders as $order) {
+            $isNewOrder = 1;
             $orderId = Orders::getOrderIdByPlugin($this->pluginObj->settings['plugin_id'], $order['id']);
             if (0 < $orderId) {
                 $isNewOrder = 0;
             }
-            $orderData['order_id'] = $order_id;
-            $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_id'],$order['buyer_id']); 
+            $orderData['order_id'] = $orderId;
+            $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_id'], $order['buyer_id']);
             $orderData['order_payment_status'] = Orders::ORDER_PAYMENT_PENDING;
             $orderData['order_date_added'] = $order['created_at'];
-            
-            $currencyRow = Currency::getAttributesById($this->siteCurrencyId);
+
+
             $orderData['order_currency_id'] = $currencyRow['currency_id'];
             $orderData['order_currency_code'] = $currencyRow['currency_code'];
             $orderData['order_currency_value'] = $currencyRow['currency_value'];
-            
-            
+
+
             $userAddresses = [];
-            
-            if(0 < count($order['billingAddress'])){
+
+            if (0 < count($order['billingAddress'])) {
                 $userAddresses[] = array(
                     'oua_order_id' => $orderId,
                     'oua_type' => Orders::BILLING_ADDRESS_TYPE,
@@ -150,7 +153,7 @@ class DataMigration
                     'oua_zip' => $order['billingAddress']['zip'],
                 );
             }
-            
+
             if (0 < count($order['shippingAddress'])) {
                 $userAddresses[] = array(
                     'oua_order_id' => $orderId,
@@ -168,13 +171,285 @@ class DataMigration
                     'oua_zip' => $order['shippingAddress']['zip'],
                 );
             }
-            
+
             $orderData['userAddresses'] = $userAddresses;
+
+            // need to check again
+//        $orderData['order_discount_coupon_code'] = "";
+//        $orderData['order_discount_type'] = DiscountCoupons::TYPE_DISCOUNT;
+//        $orderData['order_discount_value'] = 0;
+//        $orderData['order_discount_total'] = 0;
+//        $orderData['order_discount_info'] = "";
+//        $orderData['order_reward_point_used'] = $cartSummary["cartRewardPoints"];
+//        $orderData['order_reward_point_value'] = CommonHelper::convertRewardPointToCurrency($cartSummary["cartRewardPoints"]);
+
+            $orderData['order_tax_charged'] = 1.44; //total_tax;
+            //$orderData['order_site_commission'] = 0;
+            //$orderData['order_volume_discount_total'] = 0; 
+
+            $orderData['order_net_amount'] = $order['total_price']; //total_price
+            $orderData['order_is_wallet_selected'] = 0;
+            $orderData['order_wallet_amount_charge'] = 0;
+            $orderData['order_type'] = Orders::ORDER_PRODUCT;
+
+            $orderData['orderLangData'] = []; // no use only using in  newOrderBuyerAdmin email
+
+            foreach ($order['products'] as $product) {
+
+                $selprodId = SellerProduct::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $product['id']);
+
+                $productInfo = $this->getSelProdDataById($selprodId, $this->langId);
+                
+                var_dump($selprodId);
+                if (empty($productInfo)) {
+                    $this->error = Labels::getLabel('MSG_SELLER_PRODUCT_NOT_FOUND', $this->langId);
+                    return false;
+                }
+
+                $productShippingData = array();
+                $productTaxChargesData = array();
+
+                $sduration_name = '';
+                $shippingDurationTitle = '';
+                $shippingDurationRow = array();
+                /*
+                  if ($productInfo['product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !empty($productSelectedShippingMethodsArr['product']) && isset($productSelectedShippingMethodsArr['product'][$productInfo['selprod_id']])) {
+                  $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$productInfo['selprod_id']];
+                  $productShippingData = array(
+                  'opshipping_code' => $shippingDurationRow['mshipapi_code'],
+                  'opshipping_level' => $shippingDurationRow['mshipapi_level'],
+                  'opshipping_label' => $shippingDurationRow['mshipapi_label'],
+                  'opshipping_by_seller_user_id' => $shippingDurationRow['shipped_by_seller']
+                  );
+                  if ($shippingDurationRow['mshipapi_type'] == Shipping::TYPE_MANUAL) {
+                  $productShippingData['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
+                  } else {
+                  $productShippingData['opshipping_service_code'] = $shippingDurationRow['mshipapi_id'];
+                  $productShippingData['opshipping_carrier_code'] = $shippingDurationRow['mshipapi_carrier'];
+                  }
+                  }
+                 * 
+                 */
+
+                $productPickUpData = array();
+                $productPickupAddress = array();
+                /*
+                  if ($productInfo['product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !empty($productSelectedPickUpAddresses) && isset($productSelectedPickUpAddresses[$productInfo['selprod_id']])) {
+                  $pickUpDataRow = $productSelectedPickUpAddresses[$productInfo['selprod_id']];
+                  $productPickUpData = array(
+                  'opshipping_fulfillment_type' => Shipping::FULFILMENT_PICKUP,
+                  'opshipping_by_seller_user_id' => $pickUpDataRow['shipped_by_seller'],
+                  'opshipping_pickup_addr_id' => $pickUpDataRow['time_slot_addr_id'],
+                  'opshipping_date' => $pickUpDataRow['time_slot_date'],
+                  'opshipping_time_slot_from' => $pickUpDataRow['time_slot_from_time'],
+                  'opshipping_time_slot_to' => $pickUpDataRow['time_slot_to_time'],
+                  );
+
+                  $addressRecordId = Address::getAttributesById($pickUpDataRow['time_slot_addr_id'], 'addr_record_id');
+                  $addr = new Address($pickUpDataRow['time_slot_addr_id'], $this->siteLangId);
+                  $pickUpAddressArr = $addr->getData($pickUpDataRow['time_slot_type'], $addressRecordId);
+                  $productPickupAddress = array(
+                  'oua_order_id' => $order_id,
+                  'oua_op_id' => '',
+                  'oua_type' => Orders::PICKUP_ADDRESS_TYPE,
+                  'oua_name' => $pickUpAddressArr['addr_name'],
+                  'oua_address1' => $pickUpAddressArr['addr_address1'],
+                  'oua_address2' => $pickUpAddressArr['addr_address2'],
+                  'oua_city' => $pickUpAddressArr['addr_city'],
+                  'oua_state' => $pickUpAddressArr['state_name'],
+                  'oua_country' => $pickUpAddressArr['country_name'],
+                  'oua_country_code' => $pickUpAddressArr['country_code'],
+                  'oua_country_code_alpha3' => $pickUpAddressArr['country_code_alpha3'],
+                  'oua_state_code' => $pickUpAddressArr['state_code'],
+                  'oua_phone' => $pickUpAddressArr['addr_phone'],
+                  'oua_zip' => $pickUpAddressArr['addr_zip'],
+                  );
+                  }
+                 */
+
+                $productTaxOption = array();                
+                $op_product_tax_options = array();
+
+                foreach ($product['tax_lines'] as $taxLineId => $taxLine) {                 
+                    $productTaxChargesData[$taxLineId] = array(
+                        'opchargelog_type' => OrderProduct::CHARGE_TYPE_TAX,
+                        'opchargelog_identifier' => $taxLine['title'],
+                        'opchargelog_value' => $taxLine['price'],
+                        'opchargelog_is_percent' => 1,
+                        'opchargelog_percentvalue' => $taxLine['rate']
+                    );
+                    $productTaxChargesData[$taxLineId]['langData'][$this->langId] = array(
+                        'opchargeloglang_lang_id' => $this->langId,
+                        'opchargelog_name' => $taxLine['title']
+                    );
+                    $op_product_tax_options[$taxLine['title']]['name'] = $taxLine['title'];
+                    $op_product_tax_options[$taxLine['title']]['value'] = $taxLine['price'];
+                    $op_product_tax_options[$taxLine['title']]['percentageValue'] = $taxLine['rate'];
+                    $op_product_tax_options[$taxLine['title']]['inPercentage'] = 1;
+                }                
+
+                $productsLangData = array();
+                $productShippingLangData = array();
+
+                /*
+                if (!empty($shippingDurationRow)) {
+                    $langData = ShippingRate::getAttributesByLangId($shippingDurationRow['mshipapi_id'], $lang_id);
+                    $label = (isset($langData['shiprate_name']) && $langData['shiprate_name'] != '') ? $langData['shiprate_name'] : $shippingDurationRow['mshipapi_label'];
+                    $productShippingLangData[$lang_id] = array(
+                        'opshipping_title' => $label,
+                        'opshipping_duration' => '',
+                        'opshipping_duration_name' => $label . '-' . $shippingDurationRow['mshipapi_cost'],
+                        'opshippinglang_lang_id' => $lang_id
+                    );
+                }
+                 * 
+                 */
+
+                
+
+                /* stamping/locking of product options language based [ */
+                $op_selprod_options = '';                
+                $productOptionsRows = SellerProduct::getSellerProductOptions($selprodId, true, $this->langId);           
+                if (!empty($productOptionsRows)) {
+                    $optionCounter = 1;
+                    foreach ($productOptionsRows as $poLang) {
+                        $op_selprod_options .= $poLang['option_name'] . ': ' . $poLang['optionvalue_name'];
+                        if ($optionCounter != count($productOptionsRows)) {
+                            $op_selprod_options .= ' | ';
+                        }
+                        $optionCounter++;
+                    }
+                }              
+                /* ] */
+
+                $op_products_dimension_unit_name = ($productInfo['product_dimension_unit']) ? $lengthUnitsArr[$productInfo['product_dimension_unit']] : '';
+                $op_product_weight_unit_name = ($productInfo['product_weight_unit']) ? $weightUnitsArr[$productInfo['product_weight_unit']] : '';
+
+                
+                $productsLangData[$this->langId] = array(
+                    'oplang_lang_id' => $this->langId,
+                    'op_product_name' => $productInfo['product_name'],
+                    'op_selprod_title' => $productInfo['selprod_title'],
+                    'op_selprod_options' => $op_selprod_options,
+                    'op_brand_name' => !empty($productInfo['brand_name']) ? $productInfo['brand_name'] : '',
+                    'op_shop_name' => $productInfo['shop_name'],
+                    'op_shipping_duration_name' => $sduration_name,
+                    'op_shipping_durations' => $shippingDurationTitle,
+                    'op_products_dimension_unit_name' => $op_products_dimension_unit_name,
+                    'op_product_weight_unit_name' => $op_product_weight_unit_name,
+                    'op_product_tax_options' => json_encode($op_product_tax_options),
+                );
+                
+                $shippingCost = 0;      // need to check
+
+                $orderData['products'][$selprodId] = array(
+                    'op_selprod_id' => $selprodId,
+                    'op_is_batch' => 0,
+                    'op_selprod_user_id' => $productInfo['selprod_user_id'],
+                    'op_selprod_code' => $productInfo['selprod_code'],
+                    'op_qty' => $product['quantity'],
+                    'op_unit_price' => $product['price'], // nned to check for multiple products
+                    'op_unit_cost' => $productInfo['selprod_cost'],// nned to check for multiple products
+                    'op_selprod_sku' => $productInfo['selprod_sku'],
+                    'op_selprod_condition' => $productInfo['selprod_condition'],
+                    'op_product_model' => $productInfo['product_model'],
+                    'op_product_type' => $productInfo['product_type'],
+                    'op_product_length' => $productInfo['product_length'],
+                    'op_product_width' => $productInfo['product_width'],
+                    'op_product_height' => $productInfo['product_height'],
+                    'op_product_dimension_unit' => $productInfo['product_dimension_unit'],
+                    'op_product_weight' => $productInfo['product_weight'],
+                    'op_product_weight_unit' => $productInfo['product_weight_unit'],
+                    'op_shop_id' => $productInfo['shop_id'],
+                    'op_shop_owner_username' => $productInfo['shop_owner_username'],
+                    'op_shop_owner_name' => $productInfo['shop_onwer_name'],
+                    'op_shop_owner_email' => $productInfo['shop_owner_email'],
+                    'op_shop_owner_phone' => isset($productInfo['shop_owner_phone']) && !empty($productInfo['shop_owner_phone']) ? $productInfo['shop_owner_phone'] : '',
+                    'op_selprod_max_download_times' => ($productInfo['selprod_max_download_times'] != '-1') ? $product['quantity'] * $productInfo['selprod_max_download_times'] : $productInfo['selprod_max_download_times'],
+                    'op_selprod_download_validity_in_days' => $productInfo['selprod_download_validity_in_days'],
+                    'opshipping_rate_id' => 0, //need to check      
+                    'op_commission_charged' => 0,
+                    'op_commission_percentage' => 0,
+                    'op_affiliate_commission_percentage' => 0,
+                    'op_affiliate_commission_charged' => 0,
+                    'op_status_id' => FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"), //need to check
+                    'productsLangData' => $productsLangData,
+                    'productShippingData' => $productShippingData,
+                    'productPickUpData' => $productPickUpData,
+                    'productPickupAddress' => $productPickupAddress,
+                    'productShippingLangData' => $productShippingLangData,
+                    'productChargesLogData' => $productTaxChargesData,
+                    'op_actual_shipping_charges' => $shippingCost,
+                    'op_tax_code' => "",
+                    'productSpecifics' => [
+//                        'op_selprod_return_age' => $productInfo['return_age'],
+//                        'op_selprod_cancellation_age' => $productInfo['cancellation_age'],
+//                        'op_product_warranty' => $productInfo['product_warranty']
+                    ],
+                    'op_rounding_off' => 0,
+                );
+
+
+                $discount = 0; // need to check
+                $rewardPoints = 0;                
+                $usedRewardPoint = 0;
+                $volumeDiscount = 0 ;// need to check
+                
+                /*
+                $rewardPoints = $orderData['order_reward_point_value'];
+                if ($rewardPoints > 0) {
+                    $selProdAmount = ($cartProduct['quantity'] * $cartProduct['theprice']) + $shippingCost + $cartProduct['tax'] - $discount - $cartProduct['volume_discount_total'];
+                    $usedRewardPoint = round((($rewardPoints * $selProdAmount) / ($orderData['order_net_amount'] + $rewardPoints)), 2);
+                }
+                 * 
+                 */
+
+                $orderData['prodCharges'][$selprodId] = array(
+                    OrderProduct::CHARGE_TYPE_SHIPPING => array(
+                        'amount' => $shippingCost 
+                    ),
+                    OrderProduct::CHARGE_TYPE_TAX => array(
+                        'amount' => 0 < count($product['tax_lines']) ? array_sum(array_column($product['tax_lines'], 'price')) : 0,
+                    ),
+                    OrderProduct::CHARGE_TYPE_DISCOUNT => array(
+                        'amount' => -$discount /* [Should be negative value] */
+                    ),
+                    OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => array(
+                        'amount' => -$usedRewardPoint
+                    ),        
+                    OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT => array(
+                        'amount' => -$volumeDiscount
+                    ),
+                );               
+            }            
+            $orderData['order_affiliate_user_id'] = 0;
+            $orderData['order_affiliate_total_commission'] = 0;
             
+            $orderObj = new Orders();
+            if (!$orderObj->addUpdateOrder($orderData, $this->langId)) {
+                echo 11111111;
+                $this->error = $orderObj->getError();               
+                $db->rollbackTransaction();
+            }
             
+            $orderId = $orderObj->getOrderId();
+            
+            if ($isNewOrder) {
+                $record = new TableRecord(Orders::DB_ORDER_TO_PLUGIN_ORDER);
+                $pluginToOrderArr = array(
+                    'opo_order_id' => $orderId,
+                    'opo_plugin_id' => $this->pluginObj->settings['plugin_id'],
+                    'opo_plugin_order_id' => $order['id']
+                );
+                $record->assignValues($pluginToOrderArr);
+                if (!$record->addNew(array(), $pluginToOrderArr)) {
+                    $this->error = $orderObj->getError();               
+                    $db->rollbackTransaction();
+                }
+            }
         }
-        
-        //$db->commitTransaction();
+
+        $db->commitTransaction();
         return true;
     }
 
@@ -1036,5 +1311,33 @@ class DataMigration
     {
         return $this->error;
     }
+    
+    private function getSelProdDataById($selProdId, $langId)
+    {
+        $srch = new ProductSearch($langId, null, null, false, false, false);        
+        $srch->joinSellerProducts(0, '', ['doNotJoinSpecialPrice'=>true], false);           
+        $srch->joinSellers();
+        $srch->joinShops($langId, false, false);
+        $srch->joinBrands($langId, false, false, false);
+        //$srch->joinShippingPackages(); 
+//        $srch->joinProductToCategory();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();       
+        $srch->addCondition('selprod_id', '=', $selProdId);
+        $fields = array('IFNULL(product_name, product_identifier) as product_name',
+            'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+            'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(shop_name, shop_identifier) as shop_name',
+            'product_dimension_unit',            'product_id', 'product_type', 'product_length', 'product_width',
+            'product_height','product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_model',
+            'selprod_user_id','selprod_code','selprod_sku','selprod_cost','selprod_condition','shop_id',
+            'selprod_max_download_times','selprod_download_validity_in_days','seller_user_cred.credential_email as shop_owner_email',
+            'seller_user_cred.credential_username as shop_owner_username','seller_user.user_name as shop_onwer_name'
+            );
+        
+        $srch->addMultipleFields($fields);
+        $rs = $srch->getResultSet();    
+        return FatApp::getDb()->fetch($rs);
+    }
+    
 
 }
