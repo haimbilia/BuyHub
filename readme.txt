@@ -38,6 +38,7 @@ Fixes:
     => 050083 - On admin dashboard under statistics tab subscription earning data is wrong
     => 050137 - Apart from added components in combined tax,extra Duplicate entry is visible in tax details in ORDERS .(where we have the display of the tax components)
     => 049980 - issue with URL rewetting
+    => 050397 - When seller click on "shipping package " then some error gets displayed
 Enhancements :
    => Make provision to made seller
    => At shop level  pickup interval option given
