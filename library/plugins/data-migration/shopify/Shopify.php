@@ -211,7 +211,7 @@ class Shopify extends DataMigrationBase
                 'total_tax' => $order->total_tax,
                 'currency' => $order->currency, // total_price_usd  need to check
                 'total_tax' => $order->total_tax,
-                'financial_status' => $order->financial_status, /// need to update  or confirmed
+                'payment_status' => in_array($order->financial_status, ['paid','partially_refunded','refunded'])  ? 1 : 0, /// need to update  or confirmed
                 'total_discount' => $order->total_discounts,
                     //shiping charges needd to check
             ];
@@ -275,7 +275,7 @@ class Shopify extends DataMigrationBase
                         'rate' =>  $ptax->rate,
                     );
                 }
-                $products[] = array(
+                $products[$lineItem->variant_id] = array(
                     'id' => $lineItem->variant_id,
                     'title' => $lineItem->title,
                     'quantity' => $lineItem->quantity,
@@ -284,8 +284,34 @@ class Shopify extends DataMigrationBase
                     'tax_lines' => $taxLines,
                 );
             }
+            
+            $mappedRefund = [];            
+            foreach ($order->refunds as $refund) {
+                $refundLines = [];
+                $refundAmount = 0;
+                foreach ($refund->refund_line_items as $refundItem) {
+                    $type = DataMigration::FULLY_REFUNDED;                    
+                    if($products[$refundItem->line_item->variant_id]["quantity"] == $refundItem->line_item->quantity){
+                        $type = DataMigration::FULLY_REFUNDED;
+                    }elseif($order->financial_status == "partially_refunded"){
+                        $type = DataMigration::PARTIALLY_REFUNDED;
+                    }                    
+                    $refundLines[] = array(
+                        'id' => $refundItem->line_item->variant_id,
+                        'title' => $refundItem->quantity,
+                        'type' =>  $type,
+                    );                                       
+                }                
+                foreach($refund->transactions as $refTrans){
+                    $refundAmount +=$refTrans->amount;
+                }                
+                $mappedRefund[] = [
+                  "amount" =>   $refundAmount,
+                  "products" => $refundLines,  
+                ];                
+            }
 
-            $mappedOrders[] = $mappedOrder + ["products" => $products, "billingAddress" => $billingAddress, "shippingAddress" => $shippingAddress];
+            $mappedOrders[] = $mappedOrder + ["products" => $products, "billingAddress" => $billingAddress, "shippingAddress" => $shippingAddress ,'refund'=> $mappedRefund];
         }
 
         return $mappedOrders;

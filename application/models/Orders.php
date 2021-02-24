@@ -2612,7 +2612,7 @@ class Orders extends MyAppModel
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
     
-    public static function getOrderIdByPlugin(int $pluginId, int $pluginOrderId): int
+    public static function getOrderIdByPlugin(int $pluginId, int $pluginOrderId): string
     {
         $srch = new SearchBase(static::DB_ORDER_TO_PLUGIN_ORDER);
         $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_id', '=', $pluginId);

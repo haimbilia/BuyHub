@@ -9,6 +9,10 @@ class DataMigration
     public const TYPE_SELLER = 4;
     public const TYPE_PRODUCT_TAG = 5;
     public const TYPE_ORDER = 6;
+    
+    
+    public const FULLY_REFUNDED = 1;
+    public const PARTIALLY_REFUNDED = 2;
 
     public $activedServiceId = 0;
     private $langId;
@@ -116,7 +120,7 @@ class DataMigration
         $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId);
 
         $db = FatApp::getDb();
-        $db->startTransaction();
+        //$db->startTransaction();
         foreach ($orders as $order) {
             $isNewOrder = 1;
             $orderId = Orders::getOrderIdByPlugin($this->pluginObj->settings['plugin_id'], $order['id']);
@@ -124,11 +128,11 @@ class DataMigration
                 $isNewOrder = 0;
             }
             $orderData['order_id'] = $orderId;
-            $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_id'], $order['buyer_id']);
-            $orderData['order_payment_status'] = Orders::ORDER_PAYMENT_PENDING;
+           
+            $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $order['buyer_id']);
+            
+            $orderData['order_payment_status'] = $order['payment_status'];
             $orderData['order_date_added'] = $order['created_at'];
-
-
             $orderData['order_currency_id'] = $currencyRow['currency_id'];
             $orderData['order_currency_code'] = $currencyRow['currency_code'];
             $orderData['order_currency_value'] = $currencyRow['currency_value'];
@@ -198,9 +202,8 @@ class DataMigration
 
                 $selprodId = SellerProduct::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $product['id']);
 
-                $productInfo = $this->getSelProdDataById($selprodId, $this->langId);
+                $productInfo = $this->getSelProdDataById($selprodId, $this->langId);               
                 
-                var_dump($selprodId);
                 if (empty($productInfo)) {
                     $this->error = Labels::getLabel('MSG_SELLER_PRODUCT_NOT_FOUND', $this->langId);
                     return false;
@@ -426,13 +429,13 @@ class DataMigration
             $orderData['order_affiliate_total_commission'] = 0;
             
             $orderObj = new Orders();
-            if (!$orderObj->addUpdateOrder($orderData, $this->langId)) {
-                echo 11111111;
+            if (!$orderObj->addUpdateOrder($orderData, $this->langId)) {                
                 $this->error = $orderObj->getError();               
                 $db->rollbackTransaction();
             }
             
             $orderId = $orderObj->getOrderId();
+            var_dump($orderId);
             
             if ($isNewOrder) {
                 $record = new TableRecord(Orders::DB_ORDER_TO_PLUGIN_ORDER);
@@ -449,7 +452,7 @@ class DataMigration
             }
         }
 
-        $db->commitTransaction();
+        //$db->commitTransaction();
         return true;
     }
 
@@ -474,7 +477,7 @@ class DataMigration
 
             $catalog['product_added_by_admin_id'] = 1;
             if (!empty($catalog['user_id'])) {
-                $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id']);
+                $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'],User::USER_TYPE_SELLER);
                 if (0 < $userId) {
                     $catalog['product_seller_id'] = $userId;
                     $catalog['product_added_by_admin_id'] = 0;
@@ -585,7 +588,7 @@ class DataMigration
                 $sellerProduct['selprod_product_id'] = $productId;
 
                 if (!empty($sellerProduct['user_id'])) {
-                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id']);
+                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id'],User::USER_TYPE_SELLER);
                     if (0 < $userId) {
                         $sellerProduct['selprod_user_id'] = $userId;
                     }
@@ -743,7 +746,7 @@ class DataMigration
 
 
             if (!empty($user['id'])) {
-                if (!$userObj->updateUserMeta($pluginCode . "_id", $user['id'])) {
+                if (!$userObj->updateUserMeta($pluginCode . "seller_id", $user['id'])) {
                     $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
@@ -1287,16 +1290,19 @@ class DataMigration
         AttachedFile::getImageName($url, $fileAttr);
     }
 
-    protected function getUserIdFromUserMeta($pluginCode, $pluginUserId): int
+    protected function getUserIdFromUserMeta($pluginCode, $pluginUserId ,$type = User::USER_TYPE_BUYER): int
     {
-
-        if (isset($this->userIdByUserMetaArr[$pluginCode . "_" . $pluginUserId])) {
-            return $this->userIdByUserMetaArr[$pluginCode . "_" . $pluginUserId];
+        $key = $pluginCode . "_".$type."_" . $pluginUserId;
+        if (isset($this->userIdByUserMetaArr[$key])) {
+            return $this->userIdByUserMetaArr[$key];
         }
 
         $srch = new SearchBase(User::DB_TBL_META);
         $srch->addFld('usermeta_user_id');
         $metaKey = $pluginCode . "_id";
+        if($type == User::USER_TYPE_SELLER){
+            $metaKey = $pluginCode . "seller_id";
+        }        
         $srch->addCondition(User::DB_TBL_META_PREFIX . 'key', '=', $metaKey);
         $srch->addCondition(User::DB_TBL_META_PREFIX . 'value', '=', $pluginUserId);
         $rs = $srch->getResultSet();
@@ -1304,7 +1310,7 @@ class DataMigration
         if (empty($row)) {
             return 0;
         }
-        return $this->userIdByUserMetaArr[$pluginCode . "_" . $pluginUserId] = $row['usermeta_user_id'];
+        return $this->userIdByUserMetaArr[$key] = $row['usermeta_user_id'];
     }
 
     public function getError()
