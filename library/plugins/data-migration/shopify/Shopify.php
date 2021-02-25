@@ -4,9 +4,10 @@ use Curl\Curl;
 
 class Shopify extends DataMigrationBase
 {
+
     public const KEY_NAME = __CLASS__;
 
-    public $requiredKeys = ['shop_url', 'password'];
+    public $requiredKeys = ['shop_url', 'password', 'multivendor_access_token'];
 
     private const API_VERSION = '2021-01';
 
@@ -38,18 +39,18 @@ class Shopify extends DataMigrationBase
     public function getProducts()
     {
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_PRODUCT);
-        $paginationParam = $this->getData($paginationSavedString);     
-      
-        if ($this->isSyncCompleted($paginationParam)) {     
+        $paginationParam = $this->getData($paginationSavedString);
+
+        if ($this->isSyncCompleted($paginationParam)) {
             return [];
         }
         $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 40] : $paginationParam;
         $products = $this->fetchProducts($paginationParam);
 
-        $collectionsCache = FatCache::get('ShopifyCollectionsCache', CONF_IMG_CACHE_TIME, '.txt');     
+        $collectionsCache = FatCache::get('ShopifyCollectionsCache', CONF_IMG_CACHE_TIME, '.txt');
         if ($collectionsCache) {
-            $collectionArr = json_decode($collectionsCache,true);
-        } else {            
+            $collectionArr = json_decode($collectionsCache, true);
+        } else {
             $collectionArr = [];
             $collections = $this->fetchCollections();
             foreach ($collections as $collection) {
@@ -61,7 +62,7 @@ class Shopify extends DataMigrationBase
         $mappedProducts = [];
 
         foreach ($products as $product) {
-        
+
             $catalog = [
                 'id' => $product->shopify_product_id,
                 'product_identifier' => $product->handle,
@@ -73,21 +74,21 @@ class Shopify extends DataMigrationBase
                 'product_active' => $product->active,
                 'product_fulfillment_type' => '',
                 'product_name' => $product->product_name ?? '',
-                'product_description' => $product->product_description ?? '',     
+                'product_description' => $product->product_description ?? '',
                 'product_category' => $product->product_type,
                 'user_id' => $product->seller_id, /* shopify user id */
                 'product_weight_unit' => 0,
                 'product_weight' => 0, /* shopify has different weight for each variants */
-                'product_youtube_video' =>''
+                'product_youtube_video' => ''
             ];
 
-            $tags = json_decode($product->product_tag,true);
-            if(empty($tags)){
-                $tags = []; 
+            $tags = json_decode($product->product_tag, true);
+            if (empty($tags)) {
+                $tags = [];
             }
-              
-            foreach($product->collections as $collection){            
-                $tags[]= (string)$collectionArr[$collection->shopify_category_id];
+
+            foreach ($product->collections as $collection) {
+                $tags[] = (string) $collectionArr[$collection->shopify_category_id];
             }
 
             $mappedOptions = [];
@@ -113,7 +114,7 @@ class Shopify extends DataMigrationBase
                 $inventory = [
                     'id' => $variant->shopify_variant_id,
                     'selprod_title' => $product->product_name ?? '',
-                    'selprod_url_keyword'=> $product->handle ?? '',
+                    'selprod_url_keyword' => $product->handle ?? '',
                     'selprod_subtract_stock' => $variant->track_inventory,
                     'selprod_active' => $product->active,
                     'selprod_available_from' => date('Y-m-d'),
@@ -123,9 +124,9 @@ class Shopify extends DataMigrationBase
                     'selprod_price' => $variant->price,
                     'selprod_stock' => $variant->quantity ?? 0,
                     'selprod_sku' => $variant->sku ?? '',
-                    'selprod_min_order_qty'=> 1,
-                    'selprod_comments'=>'',
-                    'user_id' => $product->seller_id,  /* shopify user id */
+                    'selprod_min_order_qty' => 1,
+                    'selprod_comments' => '',
+                    'user_id' => $product->seller_id, /* shopify user id */
                 ];
                 $combination = [];
                 if (0 < count($mappedOptions)) {
@@ -175,8 +176,9 @@ class Shopify extends DataMigrationBase
 
     private function fetchProducts($params = [])
     {
-        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);  
-        $response = $this->sendMultiVendorGetRequest($url);        
+        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
+        //$url = 'https://mvmapi.webkul.com/api/v2/products.json?page=1&limit=50&sort_by=date_add&sort_order=desc&filter=%7B%22id%22%3A%223949571%22%7D';
+        $response = $this->sendMultiVendorGetRequest($url);
         $products = $response->products;
         $this->nextLink = '';
         if (0 < count($products)) {
@@ -184,9 +186,9 @@ class Shopify extends DataMigrationBase
             $this->nextLink = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
         }
 
-        return $products;        
+        return $products;
     }
-    
+
     public function getOrders()
     {
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_ORDER);
@@ -195,31 +197,43 @@ class Shopify extends DataMigrationBase
         if ($this->isSyncCompleted($paginationParam)) {
             return [];
         }
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 2] : $paginationParam;
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 2, 'status' => 'any'] : $paginationParam;
         $orders = $this->fetchOrders($paginationParam);
         $mappedOrders = [];
 
-        foreach ($orders as $order) {            
+        foreach ($orders as $order) {
+
+            $discountValue = 0;
+            $discountCouponCode = "";
+            if (0 < $order->total_discounts && count($order->discount_codes)) {
+                foreach ($order->discount_applications as $disApp) {
+                    $discountValue += $disApp->value;
+                    $discountCouponCode .= $disApp->code + ", ";
+                }
+            }
+
             $mappedOrder = [
                 'id' => $order->id,
                 'created_at' => $order->created_at,
                 'buyer_id' => $order->customer->id,
-                'currency_code'=>$order->currency,
+                'currency_code' => $order->currency,
                 'total_price' => $order->total_price,
                 'subtotal_price' => $order->subtotal_price,
                 'total_weight' => $order->total_weight,
                 'total_tax' => $order->total_tax,
                 'currency' => $order->currency, // total_price_usd  need to check
                 'total_tax' => $order->total_tax,
-                'payment_status' => in_array($order->financial_status, ['paid','partially_refunded','refunded'])  ? 1 : 0, /// need to update  or confirmed
-                'total_discount' => $order->total_discounts,
+                'payment_status' => in_array($order->financial_status, ['paid', 'partially_refunded', 'refunded']) ? 1 : 0, /// need to update  or confirmed
+                'discount_total' => $order->total_discounts,
+                'discount_value' => $discountValue,
+                'discount_coupon_code' => $discountCouponCode
                     //shiping charges needd to check
             ];
 
             $billingAddress = [];
             if (!empty($order->billing_address)) {
                 $billingAddress = array(
-                    "name" => $order->billing_address->name,                 
+                    "name" => $order->billing_address->name,
                     "address1" => $order->billing_address->address1,
                     "address2" => $order->billing_address->address2,
                     "phone" => $order->billing_address->phone,
@@ -252,66 +266,127 @@ class Shopify extends DataMigrationBase
                 );
             }
 
-            /*
-              $mappedtax = [];
+            $tProdAmt = 0;
+            $tProdAmtEligibleForShip = 0;
+            $lastShipEligibleProductId;
+            $lastProductId;
+            foreach ($order->line_items as $lineItem) {
+                if ($lineItem->requires_shipping) {
+                    $tProdAmtEligibleForShip += $lineItem->price;
+                    $lastShipEligibleProductId = $lineItem->variant_id;
+                }
+                $tProdAmt += $lineItem->price;
+            }
 
-              foreach($order->tax_lines  as $tax){
-              $mappedtax[]= array(
-              'title' =>$tax->title,
-              'price'=> $tax->price,
-              'rate'=> $tax->rate,
-              );
-              }
-             * 
-             */
+            $totalShippingAmount = 0;
+            foreach ($order->shipping_lines as $shipItem) {
+                $totalShippingAmount += $shipItem->price;
+                foreach ($shipItem->tax_lines as $taxItem) {
+                    /* Added shipping tax as shipping cost */
+                    $totalShippingAmount += $taxItem->price;
+                }
+            }
 
             $products = [];
-            foreach ($order->line_items as $lineItem) {
+            foreach ($order->line_items as $lineItemKey => $lineItem) {
                 $taxLines = [];
                 foreach ($lineItem->tax_lines as $ptax) {
                     $taxLines[] = array(
                         'title' => $ptax->title,
                         'price' => $ptax->price,
-                        'rate' =>  $ptax->rate,
+                        'rate' => $ptax->rate,
                     );
                 }
+                $shippingCost = 0;
+                if ($lastShipEligibleProductId == $lineItem->variant_id) {
+                    $shippingCost = $totalShippingAmount - array_sum(array_column($products, 'shipping_cost'));
+                } elseif ($lineItem->requires_shipping) {
+                    $shippingCost = ($lineItem->price / $tProdAmtEligibleForShip) * $totalShippingAmount;
+                }
+
+                $totalDiscount = 0;
+                if (0 < $order->total_discounts) {
+                    if ($lastProductId == $lineItem->variant_id) {
+                        $totalDiscount = $order->total_discounts - array_sum(array_column($products, 'total_discount'));
+                    } elseif ($lineItem->requires_shipping) {
+                        $totalDiscount = ($lineItem->price / $tProdAmt) * $order->total_discounts;
+                    }
+                }
+
                 $products[$lineItem->variant_id] = array(
                     'id' => $lineItem->variant_id,
                     'title' => $lineItem->title,
                     'quantity' => $lineItem->quantity,
                     'price' => $lineItem->price,
-                    'total_discount' => $lineItem->total_discount,
+                    'total_discount' => $totalDiscount,
+                    'volume_discount' => 0,
+                    'shipping_cost' => $shippingCost,
                     'tax_lines' => $taxLines,
+                    'refund_amount' => 0,
+                    'refund_quantity' => 0,
+                    'refund_shipping' => 0,
+                    'status' => FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"),
                 );
             }
-            
-            $mappedRefund = [];            
-            foreach ($order->refunds as $refund) {
-                $refundLines = [];
-                $refundAmount = 0;
-                foreach ($refund->refund_line_items as $refundItem) {
-                    $type = DataMigration::FULLY_REFUNDED;                    
-                    if($products[$refundItem->line_item->variant_id]["quantity"] == $refundItem->line_item->quantity){
-                        $type = DataMigration::FULLY_REFUNDED;
-                    }elseif($order->financial_status == "partially_refunded"){
-                        $type = DataMigration::PARTIALLY_REFUNDED;
-                    }                    
-                    $refundLines[] = array(
-                        'id' => $refundItem->line_item->variant_id,
-                        'title' => $refundItem->quantity,
-                        'type' =>  $type,
-                    );                                       
-                }                
-                foreach($refund->transactions as $refTrans){
-                    $refundAmount +=$refTrans->amount;
-                }                
-                $mappedRefund[] = [
-                  "amount" =>   $refundAmount,
-                  "products" => $refundLines,  
-                ];                
+
+            foreach ($order->fulfillments as $fulfillment) {
+                foreach ($fulfillment->line_items as $lineItem) {
+                    $products[$lineItem->variant_id]['status'] = OrderStatus::ORDER_COMPLETED;
+                }
             }
 
-            $mappedOrders[] = $mappedOrder + ["products" => $products, "billingAddress" => $billingAddress, "shippingAddress" => $shippingAddress ,'refund'=> $mappedRefund];
+            foreach ($order->refunds as $refund) {
+
+                $refundAmount = 0;
+                $alreadyAllocatedRefundAmount = 0;
+                foreach ($refund->transactions as $refTrans) {
+                    $refundAmount += $refTrans->amount;
+                }
+
+                if (1 > count($refund->refund_line_items)) {
+                    $type = FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS");
+                    /* if refund array didnt contain product info the including amount as refund shipping */
+                    foreach ($products as &$product) {
+                        if (0 < $product['shipping_cost']) {
+                            if ($product['id'] == $lastShipEligibleProductId) {
+                                $refundShipping = $refundAmount - $alreadyAllocatedRefundAmount;
+                            } else {
+                                $refundShipping = ($product['price'] / $tProdAmtEligibleForShip) * $refundAmount;
+                            }
+                            $product['refund_shipping'] += $refundShipping;
+                            $product['status'] = $type;
+                            $alreadyAllocatedRefundAmount += $refundShipping;
+                        }
+                    }
+                } else {
+                    foreach ($refund->refund_line_items as $refundItemKey => $refundItem) {
+                        $type = FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS");
+
+                        /*
+                          $type = FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
+                          if ($products[$refundItem->line_item->variant_id]["quantity"] == $refundItem->line_item->quantity) {
+                          $type = FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
+                          } elseif ($order->financial_status == "partially_refunded") {
+                          $type = FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS");
+                          }
+                         * 
+                         */
+
+                        $products[$refundItem->line_item->variant_id]['status'] = $type;
+                        $products[$refundItem->line_item->variant_id]['refund_quantity'] += $refundItem->line_item->quantity;
+
+                        if ($lastProductId == $refundItem->line_item->variant_id) {
+                            $refundAmount = $refundAmount - $alreadyAllocatedRefundAmount;
+                        } else {
+                            $refundAmount = ($products[$refundItem->line_item->variant_id]['price'] / $tProdAmt) * $refundAmount;
+                        }
+                        $products[$refundItem->line_item->variant_id]['refund_amount'] += $refundAmount;
+                        $alreadyAllocatedRefundAmount += $refundAmount;
+                    }
+                }
+            }
+
+            $mappedOrders[] = $mappedOrder + ["products" => $products, "billingAddress" => $billingAddress, "shippingAddress" => $shippingAddress];
         }
 
         return $mappedOrders;
@@ -320,9 +395,9 @@ class Shopify extends DataMigrationBase
     private function fetchOrders($params = [])
     {
         $url = $this->generateUrl(DataMigration::TYPE_ORDER, $params);
-        $url = 'https://thelocalswpg.myshopify.com/admin/api/2021-01/orders.json?ids=3007848415276';
+        //$url = 'https://thelocalswpg.myshopify.com/admin/api/2021-01/orders.json?ids=get&status=any';
         $response = $this->sendGetRequest($url);
-        return $response->orders;       
+        return $response->orders;
     }
 
     private function fetchCollections($params = [])
@@ -388,18 +463,18 @@ class Shopify extends DataMigrationBase
     public function getSellers()
     {
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_SELLER);
-        $paginationParam = $this->getData($paginationSavedString);      
-        if ($this->isSyncCompleted($paginationParam)) {           
+        $paginationParam = $this->getData($paginationSavedString);
+        if ($this->isSyncCompleted($paginationParam)) {
             return [];
-        } 
-        
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 25 ,'sort_by'=>'date_add','sort_order'=>'asc'] : $paginationParam;
-        
+        }
+
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 25, 'sort_by' => 'date_add', 'sort_order' => 'asc'] : $paginationParam;
+
         $sellers = $this->fetchSellers($paginationParam);
-        if(1 > count($sellers)){
+        if (1 > count($sellers)) {
             $this->nextLink = NULL;
         }
-        
+
         $mappedSellers = [];
 
         foreach ($sellers as $key => $seller) {
@@ -490,6 +565,7 @@ class Shopify extends DataMigrationBase
     private function fetchCustomers($params = [])
     {
         $url = $this->generateUrl(DataMigration::TYPE_USER, $params);
+        //$url ="https://thelocalswpg.myshopify.com/admin/api/2021-01/customers.json?limit=1&ids=4069103894572";
         $response = $this->sendGetRequest($url);
         return $response->customers;
     }
@@ -533,7 +609,7 @@ class Shopify extends DataMigrationBase
     {
         if (!is_object($array)) {
             return (string) $array;
-        }        
+        }
     }
 
     private function generateUrl($type, $urlParams = array())
@@ -639,4 +715,5 @@ class Shopify extends DataMigrationBase
 
         return $stringName;
     }
+
 }

@@ -9,16 +9,11 @@ class DataMigration
     public const TYPE_SELLER = 4;
     public const TYPE_PRODUCT_TAG = 5;
     public const TYPE_ORDER = 6;
-    
-    
-    public const FULLY_REFUNDED = 1;
-    public const PARTIALLY_REFUNDED = 2;
 
     public $activedServiceId = 0;
     private $langId;
     private $pluginObj;
     protected $error;
-    
     protected $countryIdArrByCode;
     protected $countryIdArrByName;
     protected $stateIdArrByCode;
@@ -58,17 +53,15 @@ class DataMigration
 //                echo 'Sellers Synced';
 //                return 'Sellers Synced';                
 //            }
-
 //            if ($this->syncProducts()) {
 //                echo 'Products Synced';
 //                return 'Products Synced';
 //            }
-            
+
             if ($this->syncOrders()) {
                 echo 'Orders Synced';
                 return 'Orders Synced';
             }
-
         }
     }
 
@@ -78,7 +71,7 @@ class DataMigration
         if (0 < count($sellers)) {
             if (!$this->saveSellerData($sellers)) {
                 return true;
-            }            
+            }
         }
         $this->pluginObj->savePaginationData(DataMigration::TYPE_SELLER);
 
@@ -89,29 +82,29 @@ class DataMigration
     {
         $products = $this->pluginObj->getProducts();
         if (0 < count($products)) {
-            if (!$this->saveProductsData($products)) { 
+            if (!$this->saveProductsData($products)) {
                 return true;
-            }            
+            }
         }
-        $this->pluginObj->savePaginationData(DataMigration::TYPE_PRODUCT);
+        //$this->pluginObj->savePaginationData(DataMigration::TYPE_PRODUCT);
 
         return (0 < count($products));
     }
-    
+
     private function syncOrders()
     {
         $orders = $this->pluginObj->getOrders();
         if (0 < count($orders)) {
-            if (!$this->saveOrdersData($orders)) { 
+            if (!$this->saveOrdersData($orders)) {
                 print_r($this->getError());
                 return true;
-            }            
+            }
         }
 //        $this->pluginObj->savePaginationData(DataMigration::TYPE_ORDER);
 //
 //        return (0 < count($orders));
     }
-    
+
     private function saveOrdersData($orders)
     {
 
@@ -128,15 +121,12 @@ class DataMigration
                 $isNewOrder = 0;
             }
             $orderData['order_id'] = $orderId;
-           
             $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $order['buyer_id']);
-            
             $orderData['order_payment_status'] = $order['payment_status'];
             $orderData['order_date_added'] = $order['created_at'];
             $orderData['order_currency_id'] = $currencyRow['currency_id'];
             $orderData['order_currency_code'] = $currencyRow['currency_code'];
             $orderData['order_currency_value'] = $currencyRow['currency_value'];
-
 
             $userAddresses = [];
 
@@ -178,61 +168,45 @@ class DataMigration
 
             $orderData['userAddresses'] = $userAddresses;
 
+            $orderData['order_discount_coupon_code'] = $order['discount_coupon_code'];
+            $orderData['order_discount_type'] = DiscountCoupons::TYPE_SELLER_PACKAGE;
+            $orderData['order_discount_value'] = $order['discount_value'];
+            $orderData['order_discount_total'] = $order['discount_total'];
+            $orderData['order_discount_info'] = "";
             // need to check again
-//        $orderData['order_discount_coupon_code'] = "";
-//        $orderData['order_discount_type'] = DiscountCoupons::TYPE_DISCOUNT;
-//        $orderData['order_discount_value'] = 0;
-//        $orderData['order_discount_total'] = 0;
-//        $orderData['order_discount_info'] = "";
-//        $orderData['order_reward_point_used'] = $cartSummary["cartRewardPoints"];
-//        $orderData['order_reward_point_value'] = CommonHelper::convertRewardPointToCurrency($cartSummary["cartRewardPoints"]);
+            $orderData['order_reward_point_used'] = 0;
+            $orderData['order_reward_point_value'] = 0;
 
-            $orderData['order_tax_charged'] = 1.44; //total_tax;
-            //$orderData['order_site_commission'] = 0;
-            //$orderData['order_volume_discount_total'] = 0; 
-
-            $orderData['order_net_amount'] = $order['total_price']; //total_price
+            $orderData['order_tax_charged'] = $order['total_tax'];
+            $orderData['order_site_commission'] = 0;
+            $orderData['order_volume_discount_total'] = 0;
+            $orderData['order_net_amount'] = $order['total_price'];
             $orderData['order_is_wallet_selected'] = 0;
             $orderData['order_wallet_amount_charge'] = 0;
             $orderData['order_type'] = Orders::ORDER_PRODUCT;
 
-            $orderData['orderLangData'] = []; // no use only using in  newOrderBuyerAdmin email
+            $orderData['orderLangData'] = []; /* no use only using in  newOrderBuyerAdmin email */
 
+            $productCount = 0;
             foreach ($order['products'] as $product) {
-
                 $selprodId = SellerProduct::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $product['id']);
-
-                $productInfo = $this->getSelProdDataById($selprodId, $this->langId);               
-                
+                $productInfo = $this->getSelProdDataById($selprodId, $this->langId);
                 if (empty($productInfo)) {
-                    $this->error = Labels::getLabel('MSG_SELLER_PRODUCT_NOT_FOUND', $this->langId);
-                    return false;
+                    continue;
+                    /*
+                      $this->error = Labels::getLabel('MSG_SELLER_PRODUCT_NOT_FOUND', $this->langId);
+                      return false;
+                     * 
+                     */
                 }
+
+                $productCount += 1;
 
                 $productShippingData = array();
                 $productTaxChargesData = array();
 
-                $sduration_name = '';
                 $shippingDurationTitle = '';
                 $shippingDurationRow = array();
-                /*
-                  if ($productInfo['product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !empty($productSelectedShippingMethodsArr['product']) && isset($productSelectedShippingMethodsArr['product'][$productInfo['selprod_id']])) {
-                  $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$productInfo['selprod_id']];
-                  $productShippingData = array(
-                  'opshipping_code' => $shippingDurationRow['mshipapi_code'],
-                  'opshipping_level' => $shippingDurationRow['mshipapi_level'],
-                  'opshipping_label' => $shippingDurationRow['mshipapi_label'],
-                  'opshipping_by_seller_user_id' => $shippingDurationRow['shipped_by_seller']
-                  );
-                  if ($shippingDurationRow['mshipapi_type'] == Shipping::TYPE_MANUAL) {
-                  $productShippingData['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
-                  } else {
-                  $productShippingData['opshipping_service_code'] = $shippingDurationRow['mshipapi_id'];
-                  $productShippingData['opshipping_carrier_code'] = $shippingDurationRow['mshipapi_carrier'];
-                  }
-                  }
-                 * 
-                 */
 
                 $productPickUpData = array();
                 $productPickupAddress = array();
@@ -270,10 +244,10 @@ class DataMigration
                   }
                  */
 
-                $productTaxOption = array();                
+                $productTaxOption = array();
                 $op_product_tax_options = array();
 
-                foreach ($product['tax_lines'] as $taxLineId => $taxLine) {                 
+                foreach ($product['tax_lines'] as $taxLineId => $taxLine) {
                     $productTaxChargesData[$taxLineId] = array(
                         'opchargelog_type' => OrderProduct::CHARGE_TYPE_TAX,
                         'opchargelog_identifier' => $taxLine['title'],
@@ -289,30 +263,15 @@ class DataMigration
                     $op_product_tax_options[$taxLine['title']]['value'] = $taxLine['price'];
                     $op_product_tax_options[$taxLine['title']]['percentageValue'] = $taxLine['rate'];
                     $op_product_tax_options[$taxLine['title']]['inPercentage'] = 1;
-                }                
+                }
 
                 $productsLangData = array();
                 $productShippingLangData = array();
 
-                /*
-                if (!empty($shippingDurationRow)) {
-                    $langData = ShippingRate::getAttributesByLangId($shippingDurationRow['mshipapi_id'], $lang_id);
-                    $label = (isset($langData['shiprate_name']) && $langData['shiprate_name'] != '') ? $langData['shiprate_name'] : $shippingDurationRow['mshipapi_label'];
-                    $productShippingLangData[$lang_id] = array(
-                        'opshipping_title' => $label,
-                        'opshipping_duration' => '',
-                        'opshipping_duration_name' => $label . '-' . $shippingDurationRow['mshipapi_cost'],
-                        'opshippinglang_lang_id' => $lang_id
-                    );
-                }
-                 * 
-                 */
-
-                
 
                 /* stamping/locking of product options language based [ */
-                $op_selprod_options = '';                
-                $productOptionsRows = SellerProduct::getSellerProductOptions($selprodId, true, $this->langId);           
+                $op_selprod_options = '';
+                $productOptionsRows = SellerProduct::getSellerProductOptions($selprodId, true, $this->langId);
                 if (!empty($productOptionsRows)) {
                     $optionCounter = 1;
                     foreach ($productOptionsRows as $poLang) {
@@ -322,13 +281,13 @@ class DataMigration
                         }
                         $optionCounter++;
                     }
-                }              
+                }
                 /* ] */
 
                 $op_products_dimension_unit_name = ($productInfo['product_dimension_unit']) ? $lengthUnitsArr[$productInfo['product_dimension_unit']] : '';
                 $op_product_weight_unit_name = ($productInfo['product_weight_unit']) ? $weightUnitsArr[$productInfo['product_weight_unit']] : '';
 
-                
+
                 $productsLangData[$this->langId] = array(
                     'oplang_lang_id' => $this->langId,
                     'op_product_name' => $productInfo['product_name'],
@@ -336,14 +295,13 @@ class DataMigration
                     'op_selprod_options' => $op_selprod_options,
                     'op_brand_name' => !empty($productInfo['brand_name']) ? $productInfo['brand_name'] : '',
                     'op_shop_name' => $productInfo['shop_name'],
-                    'op_shipping_duration_name' => $sduration_name,
+                    'op_shipping_duration_name' => "",
                     'op_shipping_durations' => $shippingDurationTitle,
                     'op_products_dimension_unit_name' => $op_products_dimension_unit_name,
                     'op_product_weight_unit_name' => $op_product_weight_unit_name,
                     'op_product_tax_options' => json_encode($op_product_tax_options),
                 );
-                
-                $shippingCost = 0;      // need to check
+
 
                 $orderData['products'][$selprodId] = array(
                     'op_selprod_id' => $selprodId,
@@ -351,8 +309,8 @@ class DataMigration
                     'op_selprod_user_id' => $productInfo['selprod_user_id'],
                     'op_selprod_code' => $productInfo['selprod_code'],
                     'op_qty' => $product['quantity'],
-                    'op_unit_price' => $product['price'], // nned to check for multiple products
-                    'op_unit_cost' => $productInfo['selprod_cost'],// nned to check for multiple products
+                    'op_unit_price' => $product['price'],
+                    'op_unit_cost' => $productInfo['selprod_cost'],
                     'op_selprod_sku' => $productInfo['selprod_sku'],
                     'op_selprod_condition' => $productInfo['selprod_condition'],
                     'op_product_model' => $productInfo['product_model'],
@@ -375,41 +333,30 @@ class DataMigration
                     'op_commission_percentage' => 0,
                     'op_affiliate_commission_percentage' => 0,
                     'op_affiliate_commission_charged' => 0,
-                    'op_status_id' => FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"), //need to check
+                    'op_status_id' => $product['status'],
                     'productsLangData' => $productsLangData,
                     'productShippingData' => $productShippingData,
                     'productPickUpData' => $productPickUpData,
                     'productPickupAddress' => $productPickupAddress,
                     'productShippingLangData' => $productShippingLangData,
                     'productChargesLogData' => $productTaxChargesData,
-                    'op_actual_shipping_charges' => $shippingCost,
+                    'op_actual_shipping_charges' => $product['shipping_cost'],
+                    'op_refund_qty' => $product['refund_quantity'],
+                    'op_refund_amount' => $product['refund_amount'],
+                    'op_refund_shipping' => $product['refund_shipping'],
                     'op_tax_code' => "",
-                    'productSpecifics' => [
-//                        'op_selprod_return_age' => $productInfo['return_age'],
-//                        'op_selprod_cancellation_age' => $productInfo['cancellation_age'],
-//                        'op_product_warranty' => $productInfo['product_warranty']
-                    ],
                     'op_rounding_off' => 0,
                 );
 
 
-                $discount = 0; // need to check
-                $rewardPoints = 0;                
+                $discount = $product['total_discount'];
+                $rewardPoints = 0;
                 $usedRewardPoint = 0;
-                $volumeDiscount = 0 ;// need to check
-                
-                /*
-                $rewardPoints = $orderData['order_reward_point_value'];
-                if ($rewardPoints > 0) {
-                    $selProdAmount = ($cartProduct['quantity'] * $cartProduct['theprice']) + $shippingCost + $cartProduct['tax'] - $discount - $cartProduct['volume_discount_total'];
-                    $usedRewardPoint = round((($rewardPoints * $selProdAmount) / ($orderData['order_net_amount'] + $rewardPoints)), 2);
-                }
-                 * 
-                 */
+                $volumeDiscount = $product['volume_discount'];
 
                 $orderData['prodCharges'][$selprodId] = array(
                     OrderProduct::CHARGE_TYPE_SHIPPING => array(
-                        'amount' => $shippingCost 
+                        'amount' => $product['shipping_cost']
                     ),
                     OrderProduct::CHARGE_TYPE_TAX => array(
                         'amount' => 0 < count($product['tax_lines']) ? array_sum(array_column($product['tax_lines'], 'price')) : 0,
@@ -419,24 +366,28 @@ class DataMigration
                     ),
                     OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => array(
                         'amount' => -$usedRewardPoint
-                    ),        
+                    ),
                     OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT => array(
                         'amount' => -$volumeDiscount
                     ),
-                );               
-            }            
+                );
+            }
+
+            if (1 > $productCount) {
+                /* in shopify some product are not present in multivendor=> do not create order */
+                continue;
+            }
             $orderData['order_affiliate_user_id'] = 0;
             $orderData['order_affiliate_total_commission'] = 0;
-            
+
             $orderObj = new Orders();
-            if (!$orderObj->addUpdateOrder($orderData, $this->langId)) {                
-                $this->error = $orderObj->getError();               
-                $db->rollbackTransaction();
+            if (!$orderObj->addUpdateOrder($orderData, $this->langId)) {
+                $this->error = $orderObj->getError();
+                return false;
             }
-            
+
             $orderId = $orderObj->getOrderId();
-            var_dump($orderId);
-            
+
             if ($isNewOrder) {
                 $record = new TableRecord(Orders::DB_ORDER_TO_PLUGIN_ORDER);
                 $pluginToOrderArr = array(
@@ -446,13 +397,12 @@ class DataMigration
                 );
                 $record->assignValues($pluginToOrderArr);
                 if (!$record->addNew(array(), $pluginToOrderArr)) {
-                    $this->error = $orderObj->getError();               
-                    $db->rollbackTransaction();
+                    $this->error = $orderObj->getError();
+                    return false;
                 }
             }
         }
 
-        //$db->commitTransaction();
         return true;
     }
 
@@ -461,7 +411,7 @@ class DataMigration
         $db = FatApp::getDb();
         $db->startTransaction();
         foreach ($products as $product) {
-            
+
             $catalog = $product['catalog'];
             $isNewProduct = 1;
             $productId = Product::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $catalog['id']);
@@ -477,12 +427,14 @@ class DataMigration
 
             $catalog['product_added_by_admin_id'] = 1;
             if (!empty($catalog['user_id'])) {
-                $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'],User::USER_TYPE_SELLER);
+                var_dump($catalog['user_id']);
+                $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'], User::USER_TYPE_SELLER);
+                var_dump($userId);
                 if (0 < $userId) {
                     $catalog['product_seller_id'] = $userId;
                     $catalog['product_added_by_admin_id'] = 0;
                 }
-            }            
+            }
             $productObj = new Product($productId);
             if (!$productObj->saveProductData($catalog)) {
                 $this->error = $productObj->getError();
@@ -571,7 +523,7 @@ class DataMigration
                 }
                 $this->saveProductImage($productId, $optionValId, $prodImage['url']);
             }
-            
+
             foreach ($product['tags'] as $tag) {
                 $tagId = $this->getTagIdByName($tag, $this->langId);
                 $productObj->addUpdateProductTag($tagId);
@@ -588,7 +540,7 @@ class DataMigration
                 $sellerProduct['selprod_product_id'] = $productId;
 
                 if (!empty($sellerProduct['user_id'])) {
-                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id'],User::USER_TYPE_SELLER);
+                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id'], User::USER_TYPE_SELLER);
                     if (0 < $userId) {
                         $sellerProduct['selprod_user_id'] = $userId;
                     }
@@ -662,9 +614,9 @@ class DataMigration
 
     private function syncUsers()
     {
-        $users = $this->pluginObj->getUsers();   
+        $users = $this->pluginObj->getUsers();
         if (0 < count($users)) {
-            if (!$this->saveUsersData($users)) {                
+            if (!$this->saveUsersData($users)) {
                 print_r($this->getError());
                 return true;
             }
@@ -702,14 +654,14 @@ class DataMigration
             }
 
             $userId = $userObj->getMainTableRecordId();
-                        
+
             if (empty($user['credential_username'])) {
                 if (!empty($user['credential_email'])) {
                     $user['credential_username'] = $user['credential_email'];
-                }elseif(!empty($user['user_phone'])){
+                } elseif (!empty($user['user_phone'])) {
                     $user['credential_username'] = $user['user_phone'];
                 } else {
-                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/'))."_".$user['id'];
+                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/')) . "_" . $user['id'];
                 }
             }
 
@@ -746,7 +698,7 @@ class DataMigration
 
 
             if (!empty($user['id'])) {
-                if (!$userObj->updateUserMeta($pluginCode . "seller_id", $user['id'])) {
+                if (!$userObj->updateUserMeta($pluginCode . "_seller_id", $user['id'])) {
                     $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
@@ -761,8 +713,8 @@ class DataMigration
             $stateCode = $shop['shop_state_code'];
             $stateName = $shop['shop_state_name'];
 
-            $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName,$this->langId);
-            $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName ,$this->langId);
+            $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName, $this->langId);
+            $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName, $this->langId);
 
             $shop['shop_country_id'] = $countryId;
             $shop['shop_state_id'] = $stateId;
@@ -852,7 +804,7 @@ class DataMigration
         return true;
     }
 
-    private function getCountryIdByNameOrCode($countryCode, $countryName ,$langId)
+    private function getCountryIdByNameOrCode($countryCode, $countryName, $langId)
     {
         $countryId = 0;
         if (!empty($countryCode) || !empty($countryName)) {
@@ -887,7 +839,7 @@ class DataMigration
         return $countryId;
     }
 
-    private function getStateIdByNameOrCode($countryId, $stateCode, $stateName ,$landId)
+    private function getStateIdByNameOrCode($countryId, $stateCode, $stateName, $landId)
     {
         $stateId = 0;
         if (!empty($stateCode) || !empty($stateName)) {
@@ -907,7 +859,7 @@ class DataMigration
             if (empty($stateId) && !empty($stateName)) {
                 $stateNamekey = $countryId . "_" . $stateName;
                 if (!isset($this->stateIdArrByName[$stateNamekey])) {
-                    $stateId = States::getStateAttrByCountryIdAndName($countryId,$stateName,$landId,'state_id');
+                    $stateId = States::getStateAttrByCountryIdAndName($countryId, $stateName, $landId, 'state_id');
                     $this->stateIdArrByName[$stateNamekey] = $stateId;
                 } else {
                     $stateId = $this->stateIdArrByName[$stateNamekey];
@@ -998,17 +950,17 @@ class DataMigration
         $db = FatApp::getDb();
         $db->startTransaction();
         foreach ($users as $userkey => &$user) {
-                        
+
             if (empty($user['credential_username'])) {
                 if (!empty($user['credential_email'])) {
                     $user['credential_username'] = $user['credential_email'];
-                }elseif(!empty($user['user_phone'])){
+                } elseif (!empty($user['user_phone'])) {
                     $user['credential_username'] = $user['user_phone'];
                 } else {
-                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/'))."_".$user['id'];
+                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/')) . "_" . $user['id'];
                 }
             }
-            
+
             $userObj = new User();
             if (!empty($user['credential_email'])) {
                 $userArr = $userObj->checkUserByEmailOrUserName($user['credential_username'], $user['credential_email']);
@@ -1030,8 +982,8 @@ class DataMigration
                 if (!isset($user['user_password']) || empty($user['user_password'])) {
                     $user['user_password'] = CommonHelper::getRandomPassword(8);
                 }
-                
-                              
+
+
                 if (!$userObj->setLoginCredentials($user['credential_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
                     $this->error = $userObj->getError();
                     $db->rollbackTransaction();
@@ -1044,8 +996,8 @@ class DataMigration
                     $stateCode = $address['state_code'];
                     $stateName = $address['state_name'];
 
-                    $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName,$this->langId);
-                    $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName ,$this->langId);
+                    $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName, $this->langId);
+                    $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName, $this->langId);
 
                     $addressObj = new Address();
                     $addrDataToSave = $address;
@@ -1065,14 +1017,14 @@ class DataMigration
                 $userId = $userArr['user_id'];
                 $userObj = new User($userId);
             }
-            
+
             if (!$userObj->updateUserMeta($pluginCode . "_id", $user['id'])) {
                 $this->error = $userObj->getError();
                 $db->rollbackTransaction();
                 return false;
             }
         }
-        
+
         $db->commitTransaction();
 
         return true;
@@ -1251,7 +1203,6 @@ class DataMigration
         $srch = Tag::getSearchObject();
         $srch->addFld('tag_id');
         $cnd = $srch->addCondition('tag_identifier', "=", $name);
-        //$cnd->attachConditon('tag_name', "=", $name);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row)) {
@@ -1290,9 +1241,9 @@ class DataMigration
         AttachedFile::getImageName($url, $fileAttr);
     }
 
-    protected function getUserIdFromUserMeta($pluginCode, $pluginUserId ,$type = User::USER_TYPE_BUYER): int
+    protected function getUserIdFromUserMeta($pluginCode, $pluginUserId, $type = User::USER_TYPE_BUYER): int
     {
-        $key = $pluginCode . "_".$type."_" . $pluginUserId;
+        $key = $pluginCode . "_" . $type . "_" . $pluginUserId;
         if (isset($this->userIdByUserMetaArr[$key])) {
             return $this->userIdByUserMetaArr[$key];
         }
@@ -1300,9 +1251,9 @@ class DataMigration
         $srch = new SearchBase(User::DB_TBL_META);
         $srch->addFld('usermeta_user_id');
         $metaKey = $pluginCode . "_id";
-        if($type == User::USER_TYPE_SELLER){
-            $metaKey = $pluginCode . "seller_id";
-        }        
+        if ($type == User::USER_TYPE_SELLER) {
+            $metaKey = $pluginCode . "_seller_id";
+        }
         $srch->addCondition(User::DB_TBL_META_PREFIX . 'key', '=', $metaKey);
         $srch->addCondition(User::DB_TBL_META_PREFIX . 'value', '=', $pluginUserId);
         $rs = $srch->getResultSet();
@@ -1317,33 +1268,30 @@ class DataMigration
     {
         return $this->error;
     }
-    
+
     private function getSelProdDataById($selProdId, $langId)
     {
-        $srch = new ProductSearch($langId, null, null, false, false, false);        
-        $srch->joinSellerProducts(0, '', ['doNotJoinSpecialPrice'=>true], false);           
+        $srch = new ProductSearch($langId, null, null, false, false, false);
+        $srch->joinSellerProducts(0, '', ['doNotJoinSpecialPrice' => true], false);
         $srch->joinSellers();
         $srch->joinShops($langId, false, false);
         $srch->joinBrands($langId, false, false, false);
-        //$srch->joinShippingPackages(); 
-//        $srch->joinProductToCategory();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();       
+        $srch->doNotLimitRecords();
         $srch->addCondition('selprod_id', '=', $selProdId);
         $fields = array('IFNULL(product_name, product_identifier) as product_name',
             'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
             'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(shop_name, shop_identifier) as shop_name',
-            'product_dimension_unit',            'product_id', 'product_type', 'product_length', 'product_width',
-            'product_height','product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_model',
-            'selprod_user_id','selprod_code','selprod_sku','selprod_cost','selprod_condition','shop_id',
-            'selprod_max_download_times','selprod_download_validity_in_days','seller_user_cred.credential_email as shop_owner_email',
-            'seller_user_cred.credential_username as shop_owner_username','seller_user.user_name as shop_onwer_name'
-            );
-        
+            'product_dimension_unit', 'product_id', 'product_type', 'product_length', 'product_width',
+            'product_height', 'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_model',
+            'selprod_user_id', 'selprod_code', 'selprod_sku', 'selprod_cost', 'selprod_condition', 'shop_id',
+            'selprod_max_download_times', 'selprod_download_validity_in_days', 'seller_user_cred.credential_email as shop_owner_email',
+            'seller_user_cred.credential_username as shop_owner_username', 'seller_user.user_name as shop_onwer_name'
+        );
+
         $srch->addMultipleFields($fields);
-        $rs = $srch->getResultSet();    
+        $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
-    
 
 }
