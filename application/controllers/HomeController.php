@@ -1406,7 +1406,7 @@ class HomeController extends MyAppController
             );
 
             foreach ($iconsArr as $key => $val) {
-                $iconUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'appleTouchIcon', array($this->siteLangId, $val . '-' . $val)), CONF_IMG_CACHE_TIME, '.png');
+                $iconUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($this->siteLangId, $val . '-' . $val)), CONF_IMG_CACHE_TIME, '.png');
                 $icons = [
                     'src' => $iconUrl,
                     'sizes' => $val . 'x' . $val,
