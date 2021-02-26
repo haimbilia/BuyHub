@@ -13,7 +13,7 @@ class DataMigrationBase extends PluginBase
         $dataToSave = array('conf_name' => $confName, 'conf_val' => $data);
         
         FatApp::getDb()->insertFromArray(
-            Configurations::DB_TBL,
+            'tbl_configurations', /* Configurations::DB_TBL */
             $dataToSave,
             false,
             array(),

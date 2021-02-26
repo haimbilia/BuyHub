@@ -43,573 +43,52 @@ class DataMigration
                 return false;
             }
 
-//            if ($this->syncUsers()) {
-//                echo 'Users Synced';
-//                return 'Users Synced'; 
-//            }
-//
-//            /* mark some users as seller and create shop */
-//            if ($this->syncSellers()) {
-//                echo 'Sellers Synced';
-//                return 'Sellers Synced';                
-//            }
-//            if ($this->syncProducts()) {
-//                echo 'Products Synced';
-//                return 'Products Synced';
-//            }
+            try {
 
-            if ($this->syncOrders()) {
-                echo 'Orders Synced';
-                return 'Orders Synced';
-            }
-        }
-    }
-
-    private function syncSellers()
-    {
-        $sellers = $this->pluginObj->getSellers();
-        if (0 < count($sellers)) {
-            if (!$this->saveSellerData($sellers)) {
-                return true;
-            }
-        }
-        $this->pluginObj->savePaginationData(DataMigration::TYPE_SELLER);
-
-        return (0 < count($sellers));
-    }
-
-    private function syncProducts()
-    {
-        $products = $this->pluginObj->getProducts();
-        if (0 < count($products)) {
-            if (!$this->saveProductsData($products)) {
-                return true;
-            }
-        }
-        //$this->pluginObj->savePaginationData(DataMigration::TYPE_PRODUCT);
-
-        return (0 < count($products));
-    }
-
-    private function syncOrders()
-    {
-        $orders = $this->pluginObj->getOrders();
-        if (0 < count($orders)) {
-            if (!$this->saveOrdersData($orders)) {
-                print_r($this->getError());
-                return true;
-            }
-        }
-//        $this->pluginObj->savePaginationData(DataMigration::TYPE_ORDER);
-//
-//        return (0 < count($orders));
-    }
-
-    private function saveOrdersData($orders)
-    {
-
-        $currencyRow = Currency::getAttributesById($this->langId);
-        $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId);
-        $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId);
-
-        $db = FatApp::getDb();
-        //$db->startTransaction();
-        foreach ($orders as $order) {
-            $isNewOrder = 1;
-            $orderId = Orders::getOrderIdByPlugin($this->pluginObj->settings['plugin_id'], $order['id']);
-            if (0 < $orderId) {
-                $isNewOrder = 0;
-            }
-            $orderData['order_id'] = $orderId;
-            $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $order['buyer_id']);
-            $orderData['order_payment_status'] = $order['payment_status'];
-            $orderData['order_date_added'] = $order['created_at'];
-            $orderData['order_currency_id'] = $currencyRow['currency_id'];
-            $orderData['order_currency_code'] = $currencyRow['currency_code'];
-            $orderData['order_currency_value'] = $currencyRow['currency_value'];
-
-            $userAddresses = [];
-
-            if (0 < count($order['billingAddress'])) {
-                $userAddresses[] = array(
-                    'oua_order_id' => $orderId,
-                    'oua_type' => Orders::BILLING_ADDRESS_TYPE,
-                    'oua_name' => $order['billingAddress']['name'],
-                    'oua_address1' => $order['billingAddress']['address1'],
-                    'oua_address2' => $order['billingAddress']['address2'],
-                    'oua_city' => $order['billingAddress']['city'],
-                    'oua_state' => $order['billingAddress']['state'],
-                    'oua_country' => $order['billingAddress']['country'],
-                    'oua_country_code' => $order['billingAddress']['country_code'],
-                    'oua_country_code_alpha3' => "",
-                    'oua_state_code' => $order['billingAddress']['state_code'],
-                    'oua_phone' => $order['billingAddress']['phone'],
-                    'oua_zip' => $order['billingAddress']['zip'],
-                );
-            }
-
-            if (0 < count($order['shippingAddress'])) {
-                $userAddresses[] = array(
-                    'oua_order_id' => $orderId,
-                    'oua_type' => Orders::SHIPPING_ADDRESS_TYPE,
-                    'oua_name' => $order['shippingAddress']['name'],
-                    'oua_address1' => $order['shippingAddress']['address1'],
-                    'oua_address2' => $order['shippingAddress']['address2'],
-                    'oua_city' => $order['shippingAddress']['city'],
-                    'oua_state' => $order['shippingAddress']['state'],
-                    'oua_country' => $order['shippingAddress']['country'],
-                    'oua_country_code' => $order['shippingAddress']['country_code'],
-                    'oua_country_code_alpha3' => "",
-                    'oua_state_code' => $order['shippingAddress']['state_code'],
-                    'oua_phone' => $order['shippingAddress']['phone'],
-                    'oua_zip' => $order['shippingAddress']['zip'],
-                );
-            }
-
-            $orderData['userAddresses'] = $userAddresses;
-
-            $orderData['order_discount_coupon_code'] = $order['discount_coupon_code'];
-            $orderData['order_discount_type'] = DiscountCoupons::TYPE_SELLER_PACKAGE;
-            $orderData['order_discount_value'] = $order['discount_value'];
-            $orderData['order_discount_total'] = $order['discount_total'];
-            $orderData['order_discount_info'] = "";
-            // need to check again
-            $orderData['order_reward_point_used'] = 0;
-            $orderData['order_reward_point_value'] = 0;
-
-            $orderData['order_tax_charged'] = $order['total_tax'];
-            $orderData['order_site_commission'] = 0;
-            $orderData['order_volume_discount_total'] = 0;
-            $orderData['order_net_amount'] = $order['total_price'];
-            $orderData['order_is_wallet_selected'] = 0;
-            $orderData['order_wallet_amount_charge'] = 0;
-            $orderData['order_type'] = Orders::ORDER_PRODUCT;
-
-            $orderData['orderLangData'] = []; /* no use only using in  newOrderBuyerAdmin email */
-
-            $productCount = 0;
-            foreach ($order['products'] as $product) {
-                $selprodId = SellerProduct::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $product['id']);
-                $productInfo = $this->getSelProdDataById($selprodId, $this->langId);
-                if (empty($productInfo)) {
-                    continue;
-                    /*
-                      $this->error = Labels::getLabel('MSG_SELLER_PRODUCT_NOT_FOUND', $this->langId);
-                      return false;
-                     * 
-                     */
+                if ($this->syncUsers()) {
+                    echo 'Users Synced';
+                    return 'Users Synced';
                 }
 
-                $productCount += 1;
-
-                $productShippingData = array();
-                $productTaxChargesData = array();
-
-                $shippingDurationTitle = '';
-                $shippingDurationRow = array();
-
-                $productPickUpData = array();
-                $productPickupAddress = array();
-                /*
-                  if ($productInfo['product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !empty($productSelectedPickUpAddresses) && isset($productSelectedPickUpAddresses[$productInfo['selprod_id']])) {
-                  $pickUpDataRow = $productSelectedPickUpAddresses[$productInfo['selprod_id']];
-                  $productPickUpData = array(
-                  'opshipping_fulfillment_type' => Shipping::FULFILMENT_PICKUP,
-                  'opshipping_by_seller_user_id' => $pickUpDataRow['shipped_by_seller'],
-                  'opshipping_pickup_addr_id' => $pickUpDataRow['time_slot_addr_id'],
-                  'opshipping_date' => $pickUpDataRow['time_slot_date'],
-                  'opshipping_time_slot_from' => $pickUpDataRow['time_slot_from_time'],
-                  'opshipping_time_slot_to' => $pickUpDataRow['time_slot_to_time'],
-                  );
-
-                  $addressRecordId = Address::getAttributesById($pickUpDataRow['time_slot_addr_id'], 'addr_record_id');
-                  $addr = new Address($pickUpDataRow['time_slot_addr_id'], $this->siteLangId);
-                  $pickUpAddressArr = $addr->getData($pickUpDataRow['time_slot_type'], $addressRecordId);
-                  $productPickupAddress = array(
-                  'oua_order_id' => $order_id,
-                  'oua_op_id' => '',
-                  'oua_type' => Orders::PICKUP_ADDRESS_TYPE,
-                  'oua_name' => $pickUpAddressArr['addr_name'],
-                  'oua_address1' => $pickUpAddressArr['addr_address1'],
-                  'oua_address2' => $pickUpAddressArr['addr_address2'],
-                  'oua_city' => $pickUpAddressArr['addr_city'],
-                  'oua_state' => $pickUpAddressArr['state_name'],
-                  'oua_country' => $pickUpAddressArr['country_name'],
-                  'oua_country_code' => $pickUpAddressArr['country_code'],
-                  'oua_country_code_alpha3' => $pickUpAddressArr['country_code_alpha3'],
-                  'oua_state_code' => $pickUpAddressArr['state_code'],
-                  'oua_phone' => $pickUpAddressArr['addr_phone'],
-                  'oua_zip' => $pickUpAddressArr['addr_zip'],
-                  );
-                  }
-                 */
-
-                $productTaxOption = array();
-                $op_product_tax_options = array();
-
-                foreach ($product['tax_lines'] as $taxLineId => $taxLine) {
-                    $productTaxChargesData[$taxLineId] = array(
-                        'opchargelog_type' => OrderProduct::CHARGE_TYPE_TAX,
-                        'opchargelog_identifier' => $taxLine['title'],
-                        'opchargelog_value' => $taxLine['price'],
-                        'opchargelog_is_percent' => 1,
-                        'opchargelog_percentvalue' => $taxLine['rate']
-                    );
-                    $productTaxChargesData[$taxLineId]['langData'][$this->langId] = array(
-                        'opchargeloglang_lang_id' => $this->langId,
-                        'opchargelog_name' => $taxLine['title']
-                    );
-                    $op_product_tax_options[$taxLine['title']]['name'] = $taxLine['title'];
-                    $op_product_tax_options[$taxLine['title']]['value'] = $taxLine['price'];
-                    $op_product_tax_options[$taxLine['title']]['percentageValue'] = $taxLine['rate'];
-                    $op_product_tax_options[$taxLine['title']]['inPercentage'] = 1;
+                /* mark some users as seller and create shop */
+                if ($this->syncSellers()) {
+                    echo 'Sellers Synced';
+                    return 'Sellers Synced';
                 }
 
-                $productsLangData = array();
-                $productShippingLangData = array();
-
-
-                /* stamping/locking of product options language based [ */
-                $op_selprod_options = '';
-                $productOptionsRows = SellerProduct::getSellerProductOptions($selprodId, true, $this->langId);
-                if (!empty($productOptionsRows)) {
-                    $optionCounter = 1;
-                    foreach ($productOptionsRows as $poLang) {
-                        $op_selprod_options .= $poLang['option_name'] . ': ' . $poLang['optionvalue_name'];
-                        if ($optionCounter != count($productOptionsRows)) {
-                            $op_selprod_options .= ' | ';
-                        }
-                        $optionCounter++;
-                    }
+                if ($this->syncProducts()) {
+                    echo 'Products Synced';
+                    return 'Products Synced';
                 }
-                /* ] */
 
-                $op_products_dimension_unit_name = ($productInfo['product_dimension_unit']) ? $lengthUnitsArr[$productInfo['product_dimension_unit']] : '';
-                $op_product_weight_unit_name = ($productInfo['product_weight_unit']) ? $weightUnitsArr[$productInfo['product_weight_unit']] : '';
-
-
-                $productsLangData[$this->langId] = array(
-                    'oplang_lang_id' => $this->langId,
-                    'op_product_name' => $productInfo['product_name'],
-                    'op_selprod_title' => $productInfo['selprod_title'],
-                    'op_selprod_options' => $op_selprod_options,
-                    'op_brand_name' => !empty($productInfo['brand_name']) ? $productInfo['brand_name'] : '',
-                    'op_shop_name' => $productInfo['shop_name'],
-                    'op_shipping_duration_name' => "",
-                    'op_shipping_durations' => $shippingDurationTitle,
-                    'op_products_dimension_unit_name' => $op_products_dimension_unit_name,
-                    'op_product_weight_unit_name' => $op_product_weight_unit_name,
-                    'op_product_tax_options' => json_encode($op_product_tax_options),
-                );
-
-
-                $orderData['products'][$selprodId] = array(
-                    'op_selprod_id' => $selprodId,
-                    'op_is_batch' => 0,
-                    'op_selprod_user_id' => $productInfo['selprod_user_id'],
-                    'op_selprod_code' => $productInfo['selprod_code'],
-                    'op_qty' => $product['quantity'],
-                    'op_unit_price' => $product['price'],
-                    'op_unit_cost' => $productInfo['selprod_cost'],
-                    'op_selprod_sku' => $productInfo['selprod_sku'],
-                    'op_selprod_condition' => $productInfo['selprod_condition'],
-                    'op_product_model' => $productInfo['product_model'],
-                    'op_product_type' => $productInfo['product_type'],
-                    'op_product_length' => $productInfo['product_length'],
-                    'op_product_width' => $productInfo['product_width'],
-                    'op_product_height' => $productInfo['product_height'],
-                    'op_product_dimension_unit' => $productInfo['product_dimension_unit'],
-                    'op_product_weight' => $productInfo['product_weight'],
-                    'op_product_weight_unit' => $productInfo['product_weight_unit'],
-                    'op_shop_id' => $productInfo['shop_id'],
-                    'op_shop_owner_username' => $productInfo['shop_owner_username'],
-                    'op_shop_owner_name' => $productInfo['shop_onwer_name'],
-                    'op_shop_owner_email' => $productInfo['shop_owner_email'],
-                    'op_shop_owner_phone' => isset($productInfo['shop_owner_phone']) && !empty($productInfo['shop_owner_phone']) ? $productInfo['shop_owner_phone'] : '',
-                    'op_selprod_max_download_times' => ($productInfo['selprod_max_download_times'] != '-1') ? $product['quantity'] * $productInfo['selprod_max_download_times'] : $productInfo['selprod_max_download_times'],
-                    'op_selprod_download_validity_in_days' => $productInfo['selprod_download_validity_in_days'],
-                    'opshipping_rate_id' => 0, //need to check      
-                    'op_commission_charged' => 0,
-                    'op_commission_percentage' => 0,
-                    'op_affiliate_commission_percentage' => 0,
-                    'op_affiliate_commission_charged' => 0,
-                    'op_status_id' => $product['status'],
-                    'productsLangData' => $productsLangData,
-                    'productShippingData' => $productShippingData,
-                    'productPickUpData' => $productPickUpData,
-                    'productPickupAddress' => $productPickupAddress,
-                    'productShippingLangData' => $productShippingLangData,
-                    'productChargesLogData' => $productTaxChargesData,
-                    'op_actual_shipping_charges' => $product['shipping_cost'],
-                    'op_refund_qty' => $product['refund_quantity'],
-                    'op_refund_amount' => $product['refund_amount'],
-                    'op_refund_shipping' => $product['refund_shipping'],
-                    'op_tax_code' => "",
-                    'op_rounding_off' => 0,
-                );
-
-
-                $discount = $product['total_discount'];
-                $rewardPoints = 0;
-                $usedRewardPoint = 0;
-                $volumeDiscount = $product['volume_discount'];
-
-                $orderData['prodCharges'][$selprodId] = array(
-                    OrderProduct::CHARGE_TYPE_SHIPPING => array(
-                        'amount' => $product['shipping_cost']
-                    ),
-                    OrderProduct::CHARGE_TYPE_TAX => array(
-                        'amount' => 0 < count($product['tax_lines']) ? array_sum(array_column($product['tax_lines'], 'price')) : 0,
-                    ),
-                    OrderProduct::CHARGE_TYPE_DISCOUNT => array(
-                        'amount' => -$discount /* [Should be negative value] */
-                    ),
-                    OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => array(
-                        'amount' => -$usedRewardPoint
-                    ),
-                    OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT => array(
-                        'amount' => -$volumeDiscount
-                    ),
-                );
-            }
-
-            if (1 > $productCount) {
-                /* in shopify some product are not present in multivendor=> do not create order */
-                continue;
-            }
-            $orderData['order_affiliate_user_id'] = 0;
-            $orderData['order_affiliate_total_commission'] = 0;
-
-            $orderObj = new Orders();
-            if (!$orderObj->addUpdateOrder($orderData, $this->langId)) {
-                $this->error = $orderObj->getError();
+                if ($this->syncOrders()) {
+                    echo 'Orders Synced';
+                    return 'Orders Synced';
+                }
+            } catch (Exception $e) {
+                echo 'Message: ' . $e->getMessage();
                 return false;
             }
-
-            $orderId = $orderObj->getOrderId();
-
-            if ($isNewOrder) {
-                $record = new TableRecord(Orders::DB_ORDER_TO_PLUGIN_ORDER);
-                $pluginToOrderArr = array(
-                    'opo_order_id' => $orderId,
-                    'opo_plugin_id' => $this->pluginObj->settings['plugin_id'],
-                    'opo_plugin_order_id' => $order['id']
-                );
-                $record->assignValues($pluginToOrderArr);
-                if (!$record->addNew(array(), $pluginToOrderArr)) {
-                    $this->error = $orderObj->getError();
-                    return false;
-                }
-            }
         }
-
-        return true;
     }
 
-    private function saveProductsData($products)
+    /**
+     * getActivatedServiceId
+     *
+     * @return int
+     */
+    public function getActivatedServiceId(): int
     {
-        $db = FatApp::getDb();
-        $db->startTransaction();
-        foreach ($products as $product) {
-
-            $catalog = $product['catalog'];
-            $isNewProduct = 1;
-            $productId = Product::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $catalog['id']);
-            if (0 < $productId) {
-                $isNewProduct = 0;
-            }
-
-            if ($isNewProduct) {
-                $catalog['product_identifier'] = $this->getUniqueProductIdentifier($catalog['product_identifier']);
-            } else {
-                unset($catalog['product_identifier']);
-            }
-
-            $catalog['product_added_by_admin_id'] = 1;
-            if (!empty($catalog['user_id'])) {
-                var_dump($catalog['user_id']);
-                $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'], User::USER_TYPE_SELLER);
-                var_dump($userId);
-                if (0 < $userId) {
-                    $catalog['product_seller_id'] = $userId;
-                    $catalog['product_added_by_admin_id'] = 0;
-                }
-            }
-            $productObj = new Product($productId);
-            if (!$productObj->saveProductData($catalog)) {
-                $this->error = $productObj->getError();
-                $db->rollbackTransaction();
-                return false;
-            }
-            $productId = $productObj->getMainTableRecordId();
-
-            if ($isNewProduct) {
-                $record = new TableRecord(Product::DB_PRODUCT_TO_PLUGIN_PRODUCT);
-                $pluginToProductArr = array(
-                    'ptpp_product_id' => $productId,
-                    'ptpp_plugin_id' => $this->pluginObj->settings['plugin_id'],
-                    'ptpp_plugin_product_id' => $catalog['id']
-                );
-                $record->assignValues($pluginToProductArr);
-                if (!$record->addNew(array(), $pluginToProductArr)) {
-                    $this->error = $record->getError();
-                    return false;
-                }
-            }
-
-            $productLangData = array(
-                'product_name' => $catalog['product_name'],
-                'product_description' => $catalog['product_description'],
-                'product_youtube_video' => $catalog['product_youtube_video'],
-            );
-
-            if (!$productObj->updateLangData($this->langId, $productLangData)) {
-                $this->error = $productObj->getError();
-                $db->rollbackTransaction();
-                return false;
-            }
-
-            $catId = $this->getCategoryIdByName($catalog['category_name'], $this->langId);
-
-            Product::updateMinPrices($productId);
-
-            if (0 < $catId) {
-                if (!$productObj->saveProductCategory($catId)) {
-                    $this->error = $productObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-            }
-
-            foreach ($product['options'] as &$option) {
-                $option['option_identifier'] = $option['option_name'] . "_" . $catId;
-                $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'], $this->langId);
-                if (0 > $optionId) {
-                    $this->error = Labels::getLabel('MSG_UNABLE_TO_CREATE_OR_GET_OPTION', $this->langId);
-                    $db->rollbackTransaction();
-                    return false;
-                }
-
-                if (!$productObj->addUpdateProductOption($optionId)) {
-                    $this->error = $productObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-
-                foreach ($option['values'] as $opValName) {
-                    $optionValId = $this->getOptionValId($optionId, $opValName, $this->langId);
-                }
-            }
-            /* [ delete old product images */
-            if (0 < count($product['images'])) {
-                $db->deleteRecords(
-                        AttachedFile::DB_TBL,
-                        array(
-                            'smt' => 'afile_type = ? AND afile_record_id = ?',
-                            'vals' => array(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId)
-                        )
-                );
-            }
-            /*  delete old product images ] */
-
-            foreach ($product['images'] as $prodImage) {
-                $optionId = 0;
-                $optionValId = 0;
-                if (!empty($prodImage['option']) && !empty($prodImage['optionValue'])) {
-                    $optionId = $this->optionArr[$prodImage['option'] . "_" . $catId] ?? 0;
-                    if (0 < $optionId) {
-                        $optionValId = $this->optionValArr[$optionId . "_" . $prodImage['optionValue']] ?? 0;
-                    }
-                }
-                $this->saveProductImage($productId, $optionValId, $prodImage['url']);
-            }
-
-            foreach ($product['tags'] as $tag) {
-                $tagId = $this->getTagIdByName($tag, $this->langId);
-                $productObj->addUpdateProductTag($tagId);
-            }
-
-            foreach ($product['sellerProducts'] as &$sellerProduct) {
-
-                $isNewSelProd = 1;
-                $selprodId = SellerProduct::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $sellerProduct['id']);
-
-                if (0 < $selprodId) {
-                    $isNewSelProd = 0;
-                }
-                $sellerProduct['selprod_product_id'] = $productId;
-
-                if (!empty($sellerProduct['user_id'])) {
-                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id'], User::USER_TYPE_SELLER);
-                    if (0 < $userId) {
-                        $sellerProduct['selprod_user_id'] = $userId;
-                    }
-                }
-
-                $selProdOptions = [];
-                foreach ($sellerProduct['combination'] as $option => $optionVal) {
-                    $optionId = 0;
-                    $optionValId = 0;
-                    if (!empty($option) && !empty($optionVal)) {
-                        $optionId = $this->optionArr[$option . "_" . $catId] ?? 0;
-                        if (0 < $optionId) {
-                            $optionValId = $this->optionValArr[$optionId . "_" . $optionVal] ?? 0;
-                        }
-                    }
-                    $selProdOptions[$optionId] = $optionValId;
-                }
-                $selProdCode = $sellerProduct['selprod_product_id'] . '_' . implode('_', $selProdOptions);
-                $sellerProduct['selprod_code'] = $selProdCode;
-
-                $selProdObj = new SellerProduct($selprodId);
-                $selProdObj->assignValues($sellerProduct);
-                if (!$selProdObj->save()) {
-                    $this->error = $selProdObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-                $selprodId = $selProdObj->getMainTableRecordId();
-
-                if ($isNewSelProd) {
-                    $record = new TableRecord(SellerProduct::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
-                    $pluginToSelProdArr = array(
-                        'spps_selprod_id' => $selprodId,
-                        'spps_plugin_id' => $this->pluginObj->settings['plugin_id'],
-                        'spps_plugin_selprod_id' => $sellerProduct['id']
-                    );
-                    $record->assignValues($pluginToSelProdArr);
-                    if (!$record->addNew(array(), $pluginToSelProdArr)) {
-                        $this->error = $record->getError();
-                        $db->rollbackTransaction();
-                        return false;
-                    }
-                }
-
-                if (!$selProdObj->addUpdateSellerProductOptions($selprodId, $selProdOptions)) {
-                    $this->error = $selProdObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-
-                /* Add Url rewriting  [  ---- */
-                $selProdObj->rewriteUrlProduct($sellerProduct['selprod_url_keyword']);
-                $selProdObj->rewriteUrlReviews($sellerProduct['selprod_url_keyword']);
-                $selProdObj->rewriteUrlMoreSellers($sellerProduct['selprod_url_keyword']);
-                /* --------  ] */
-
-                $selProdLangData = array(
-                    'selprod_title' => $sellerProduct['selprod_title'],
-                    'selprod_comments' => $sellerProduct['selprod_comments'],
-                );
-                if (!$selProdObj->updateLangData($this->langId, $selProdLangData)) {
-                    $this->error = $selProdObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-            }
+        if (1 > $this->activedServiceId) {
+            $pluginObj = new Plugin();
+            $this->activedServiceId = (int) $pluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, 'plugin_id');
         }
-        $db->commitTransaction();
-        return true;
+        return $this->activedServiceId;
+    }
+
+    public function getError()
+    {
+        return $this->error;
     }
 
     private function syncUsers()
@@ -617,7 +96,7 @@ class DataMigration
         $users = $this->pluginObj->getUsers();
         if (0 < count($users)) {
             if (!$this->saveUsersData($users)) {
-                print_r($this->getError());
+                $this->logError();
                 return true;
             }
             $this->pluginObj->savePaginationData(DataMigration::TYPE_USER);
@@ -626,8 +105,108 @@ class DataMigration
         return (0 < count($users));
     }
 
+    private function saveUsersData($users)
+    {
+        $pluginCode = strtolower($this->pluginObj->settings['plugin_code']);
+
+        $db = FatApp::getDb();
+        $db->startTransaction();
+        foreach ($users as $userkey => &$user) {
+            if (empty($user['credential_username'])) {
+                if (!empty($user['credential_email'])) {
+                    $user['credential_username'] = $user['credential_email'];
+                } elseif (!empty($user['user_phone'])) {
+                    $user['credential_username'] = $user['user_phone'];
+                } else {
+                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/')) . "_" . $user['id'];
+                }
+            }
+
+            $userObj = new User();
+            if (!empty($user['credential_email'])) {
+                $userArr = $userObj->checkUserByEmailOrUserName($user['credential_username'], $user['credential_email']);
+            } else {
+                $userArr = $userObj->checkUserByPhoneOrUserName($user['credential_username'], $user['user_phone']);
+            }
+
+            if (empty($userArr)) {
+                $userObj->assignValues($user);
+                if (!$userObj->save()) {
+                    $this->error = $userObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+
+                $userId = $userObj->getMainTableRecordId();
+
+                if (!isset($user['user_password']) || empty($user['user_password'])) {
+                    $user['user_password'] = CommonHelper::getRandomPassword(8);
+                }
+
+                if (!$userObj->setLoginCredentials($user['credential_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
+                    $this->error = $userObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+                foreach ($user['addresses'] as $address) {
+                    $countryCode = $address['country_code'];
+                    $countryName = $address['country_name'];
+
+                    $stateCode = $address['state_code'];
+                    $stateName = $address['state_name'];
+
+                    $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName, $this->langId);
+                    $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName, $this->langId);
+
+                    $addressObj = new Address();
+                    $addrDataToSave = $address;
+                    $addrDataToSave['addr_country_id'] = $countryId;
+                    $addrDataToSave['addr_state_id'] = $stateId;
+                    $addrDataToSave['addr_record_id'] = $userId;
+                    $addrDataToSave['addr_type'] = Address::TYPE_USER;
+                    $addrDataToSave['addr_lang_id'] = $this->langId;
+                    $addressObj->assignValues($addrDataToSave, true);
+                    if (!$addressObj->save()) {
+                        $this->error = $addressObj->getError();
+                        $db->rollbackTransaction();
+                        return false;
+                    }
+                }
+            } else {
+                $userId = $userArr['user_id'];
+                $userObj = new User($userId);
+            }
+
+            if (!$userObj->updateUserMeta($pluginCode . "_id", $user['id'])) {
+                $this->error = $userObj->getError();
+                $db->rollbackTransaction();
+                return false;
+            }
+        }
+
+        $db->commitTransaction();
+
+        return true;
+    }
+
+    private function syncSellers()
+    {
+        $sellers = $this->pluginObj->getSellers();
+        
+        if (0 < count($sellers)) {
+            if (!$this->saveSellerData($sellers)) {
+                $this->logError();
+                return true;
+            }
+        }
+        $this->pluginObj->savePaginationData(DataMigration::TYPE_SELLER);
+
+        return (0 < count($sellers));
+    }
+
     private function saveSellerData($sellers)
     {
+        
         $pluginCode = strtolower($this->pluginObj->settings['plugin_code']);
 
         $db = FatApp::getDb();
@@ -665,7 +244,7 @@ class DataMigration
                 }
             }
 
-            if ($isNewUser) {
+            if ($this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $user['id'], User::USER_TYPE_SELLER)) {
                 if (!isset($user['user_password']) || empty($user['user_password'])) {
                     $user['user_password'] = CommonHelper::getRandomPassword(8);
                 }
@@ -804,6 +383,499 @@ class DataMigration
         return true;
     }
 
+    private function syncProducts()
+    {
+        $products = $this->pluginObj->getProducts();
+        if (0 < count($products)) {
+            if (!$this->saveProductsData($products)) {
+                $this->logError();
+                return true;
+            }
+        }
+        $this->pluginObj->savePaginationData(DataMigration::TYPE_PRODUCT);
+
+        return (0 < count($products));
+    }
+
+    private function saveProductsData($products)
+    {        
+        $db = FatApp::getDb();
+        $db->startTransaction();
+        foreach ($products as $product) {
+            $catalog = $product['catalog'];
+            $isNewProduct = 1;
+            $productId = Product::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $catalog['id']);
+            if (0 < $productId) {
+                $isNewProduct = 0;
+            }
+
+            if ($isNewProduct) {
+                $catalog['product_identifier'] = $this->getUniqueProductIdentifier($catalog['product_identifier']);
+            } else {
+                unset($catalog['product_identifier']);
+            }
+
+            $catalog['product_added_by_admin_id'] = 1;
+            if (!empty($catalog['user_id'])) {               
+                $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'], User::USER_TYPE_SELLER);
+                if (0 < $userId) {
+                    $catalog['product_seller_id'] = $userId;
+                    $catalog['product_added_by_admin_id'] = 0;
+                }
+            }
+            $productObj = new Product($productId);
+            if (!$productObj->saveProductData($catalog)) {
+                $this->error = $productObj->getError();
+                $db->rollbackTransaction();
+                return false;
+            }
+            $productId = $productObj->getMainTableRecordId();
+
+            if ($isNewProduct) {
+                $record = new TableRecord(Product::DB_PRODUCT_TO_PLUGIN_PRODUCT);
+                $pluginToProductArr = array(
+                    'ptpp_product_id' => $productId,
+                    'ptpp_plugin_id' => $this->pluginObj->settings['plugin_id'],
+                    'ptpp_plugin_product_id' => $catalog['id']
+                );
+                $record->assignValues($pluginToProductArr);
+                if (!$record->addNew(array(), $pluginToProductArr)) {
+                    $this->error = $record->getError();
+                    return false;
+                }
+            }
+
+            $productLangData = array(
+                'product_name' => $catalog['product_name'],
+                'product_description' => $catalog['product_description'],
+                'product_youtube_video' => $catalog['product_youtube_video'],
+            );
+
+            if (!$productObj->updateLangData($this->langId, $productLangData)) {
+                $this->error = $productObj->getError();
+                $db->rollbackTransaction();
+                return false;
+            }
+
+            $catId = $this->getCategoryIdByName($catalog['category_name'], $this->langId);
+
+            Product::updateMinPrices($productId);
+
+            if (0 < $catId) {
+                if (!$productObj->saveProductCategory($catId)) {
+                    $this->error = $productObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+            }
+           
+            foreach ($product['options'] as &$option) {
+                $option['option_identifier'] = $option['option_name'] . "_" . $catId;
+                $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'], $this->langId);
+                if (0 > $optionId) {
+                    $this->error = Labels::getLabel('MSG_UNABLE_TO_CREATE_OR_GET_OPTION', $this->langId);
+                    $db->rollbackTransaction();
+                    return false;
+                }
+
+                if (!$productObj->addUpdateProductOption($optionId)) {
+                    $this->error = $productObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+
+                foreach ($option['values'] as $opValName) {
+                    $optionValId = $this->getOptionValId($optionId, $opValName, $this->langId);
+                }
+            }
+            /* [ delete old product images */
+            if (0 < count($product['images'])) {
+                $db->deleteRecords(
+                        AttachedFile::DB_TBL,
+                        array(
+                            'smt' => 'afile_type = ? AND afile_record_id = ?',
+                            'vals' => array(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId)
+                        )
+                );
+            }
+            /*  delete old product images ] */
+
+            foreach ($product['images'] as $prodImage) {
+                $optionId = 0;
+                $optionValId = 0;
+                if (!empty($prodImage['option']) && !empty($prodImage['optionValue'])) {
+                    $optionId = $this->optionArr[$prodImage['option'] . "_" . $catId] ?? 0;
+                    if (0 < $optionId) {
+                        $optionValId = $this->optionValArr[$optionId . "_" . $prodImage['optionValue']] ?? 0;
+                    }
+                }
+                $this->saveProductImage($productId, $optionValId, $prodImage['url']);
+            }
+
+            foreach ($product['tags'] as $tag) {
+                $tagId = $this->getTagIdByName($tag, $this->langId);
+                $productObj->addUpdateProductTag($tagId);
+            }
+
+            foreach ($product['sellerProducts'] as &$sellerProduct) {
+                $isNewSelProd = 1;
+                $selprodId = SellerProduct::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $sellerProduct['id']);
+
+                if (0 < $selprodId) {
+                    $isNewSelProd = 0;
+                }
+                $sellerProduct['selprod_product_id'] = $productId;
+
+                if (!empty($sellerProduct['user_id'])) {
+                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id'], User::USER_TYPE_SELLER);
+                    if (0 < $userId) {
+                        $sellerProduct['selprod_user_id'] = $userId;
+                    }
+                }
+
+                $selProdOptions = [];
+                foreach ($sellerProduct['combination'] as $option => $optionVal) {
+                    $optionId = 0;
+                    $optionValId = 0;
+                    if (!empty($option) && !empty($optionVal)) {
+                        $optionId = $this->optionArr[$option . "_" . $catId] ?? 0;
+                        if (0 < $optionId) {
+                            $optionValId = $this->optionValArr[$optionId . "_" . $optionVal] ?? 0;
+                        }
+                    }
+                    $selProdOptions[$optionId] = $optionValId;
+                }
+                $selProdCode = $sellerProduct['selprod_product_id'] . '_' . implode('_', $selProdOptions);
+                $sellerProduct['selprod_code'] = $selProdCode;
+
+                $selProdObj = new SellerProduct($selprodId);
+                $selProdObj->assignValues($sellerProduct);
+                if (!$selProdObj->save()) {
+                    $this->error = $selProdObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+                $selprodId = $selProdObj->getMainTableRecordId();
+
+                if ($isNewSelProd) {
+                    $record = new TableRecord(SellerProduct::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
+                    $pluginToSelProdArr = array(
+                        'spps_selprod_id' => $selprodId,
+                        'spps_plugin_id' => $this->pluginObj->settings['plugin_id'],
+                        'spps_plugin_selprod_id' => $sellerProduct['id']
+                    );
+                    $record->assignValues($pluginToSelProdArr);
+                    if (!$record->addNew(array(), $pluginToSelProdArr)) {
+                        $this->error = $record->getError();
+                        $db->rollbackTransaction();
+                        return false;
+                    }
+                }
+
+                if (!$selProdObj->addUpdateSellerProductOptions($selprodId, $selProdOptions)) {
+                    $this->error = $selProdObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+
+                /* Add Url rewriting  [  ---- */
+                $selProdObj->rewriteUrlProduct($sellerProduct['selprod_url_keyword']);
+                $selProdObj->rewriteUrlReviews($sellerProduct['selprod_url_keyword']);
+                $selProdObj->rewriteUrlMoreSellers($sellerProduct['selprod_url_keyword']);
+                /* --------  ] */
+
+                $selProdLangData = array(
+                    'selprod_title' => $sellerProduct['selprod_title'],
+                    'selprod_comments' => $sellerProduct['selprod_comments'],
+                );
+                if (!$selProdObj->updateLangData($this->langId, $selProdLangData)) {
+                    $this->error = $selProdObj->getError();
+                    $db->rollbackTransaction();
+                    return false;
+                }
+            }
+        }
+        $db->commitTransaction();
+        return true;
+    }
+
+    private function syncOrders()
+    {
+        $orders = $this->pluginObj->getOrders();
+        if (0 < count($orders)) {
+            if (!$this->saveOrdersData($orders)) {
+                $this->logError();           
+                return true;
+            }
+        }
+        $this->pluginObj->savePaginationData(DataMigration::TYPE_ORDER);
+
+        return (0 < count($orders));
+    }
+
+    private function saveOrdersData($orders)
+    {
+        $currencyRow = Currency::getAttributesById($this->langId);
+        $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId);
+        $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId);
+        
+        foreach ($orders as $order) {
+            $isNewOrder = 1;
+            $orderId = Orders::getOrderIdByPlugin($this->pluginObj->settings['plugin_id'], $order['id']);
+            if (0 < $orderId) {
+                $isNewOrder = 0;
+            }
+            $orderData['order_id'] = $orderId;
+            $orderData['order_user_id'] = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $order['buyer_id']);
+            $orderData['order_payment_status'] = $order['payment_status'];
+            $orderData['order_date_added'] = $order['created_at'];
+            $orderData['order_currency_id'] = $currencyRow['currency_id'];
+            $orderData['order_currency_code'] = $currencyRow['currency_code'];
+            $orderData['order_currency_value'] = $currencyRow['currency_value'];
+
+            $userAddresses = [];
+
+            if (0 < count($order['billingAddress'])) {
+                $userAddresses[] = array(
+                    'oua_order_id' => $orderId,
+                    'oua_type' => Orders::BILLING_ADDRESS_TYPE,
+                    'oua_name' => $order['billingAddress']['name'],
+                    'oua_address1' => $order['billingAddress']['address1'],
+                    'oua_address2' => $order['billingAddress']['address2'],
+                    'oua_city' => $order['billingAddress']['city'],
+                    'oua_state' => $order['billingAddress']['state'],
+                    'oua_country' => $order['billingAddress']['country'],
+                    'oua_country_code' => $order['billingAddress']['country_code'],
+                    'oua_country_code_alpha3' => "",
+                    'oua_state_code' => $order['billingAddress']['state_code'],
+                    'oua_phone' => $order['billingAddress']['phone'],
+                    'oua_zip' => $order['billingAddress']['zip'],
+                );
+            }
+
+            if (0 < count($order['shippingAddress'])) {
+                $userAddresses[] = array(
+                    'oua_order_id' => $orderId,
+                    'oua_type' => Orders::SHIPPING_ADDRESS_TYPE,
+                    'oua_name' => $order['shippingAddress']['name'],
+                    'oua_address1' => $order['shippingAddress']['address1'],
+                    'oua_address2' => $order['shippingAddress']['address2'],
+                    'oua_city' => $order['shippingAddress']['city'],
+                    'oua_state' => $order['shippingAddress']['state'],
+                    'oua_country' => $order['shippingAddress']['country'],
+                    'oua_country_code' => $order['shippingAddress']['country_code'],
+                    'oua_country_code_alpha3' => "",
+                    'oua_state_code' => $order['shippingAddress']['state_code'],
+                    'oua_phone' => $order['shippingAddress']['phone'],
+                    'oua_zip' => $order['shippingAddress']['zip'],
+                );
+            }
+
+            $orderData['userAddresses'] = $userAddresses;
+
+            $orderData['order_discount_coupon_code'] = $order['discount_coupon_code'];
+            $orderData['order_discount_type'] = DiscountCoupons::TYPE_SELLER_PACKAGE;
+            $orderData['order_discount_value'] = $order['discount_value'];
+            $orderData['order_discount_total'] = $order['discount_total'];
+            $orderData['order_discount_info'] = "";
+            // need to check again
+            $orderData['order_reward_point_used'] = 0;
+            $orderData['order_reward_point_value'] = 0;
+
+            $orderData['order_tax_charged'] = $order['total_tax'];
+            $orderData['order_site_commission'] = 0;
+            $orderData['order_volume_discount_total'] = 0;
+            $orderData['order_net_amount'] = $order['total_price'];
+            $orderData['order_is_wallet_selected'] = 0;
+            $orderData['order_wallet_amount_charge'] = 0;
+            $orderData['order_type'] = Orders::ORDER_PRODUCT;
+
+            $orderData['orderLangData'] = []; /* no use only using in  newOrderBuyerAdmin email */
+
+            $productCount = 0;
+            foreach ($order['products'] as $product) {
+                $selprodId = SellerProduct::getProdIdByPlugin($this->pluginObj->settings['plugin_id'], $product['id']);
+                $productInfo = $this->getSelProdDataById($selprodId, $this->langId);
+                if (empty($productInfo)) {
+                    continue;
+                    /*
+                      $this->error = Labels::getLabel('MSG_SELLER_PRODUCT_NOT_FOUND', $this->langId);
+                      return false;
+                     *
+                     */
+                }
+
+                $productCount += 1;
+                $productShippingData = array();
+                $productTaxChargesData = array();
+
+                $shippingDurationTitle = '';
+                $shippingDurationRow = array();
+
+                $productPickUpData = array();
+                $productPickupAddress = array();
+
+                $productTaxOption = array();
+                $op_product_tax_options = array();
+
+                foreach ($product['tax_lines'] as $taxLineId => $taxLine) {
+                    $productTaxChargesData[$taxLineId] = array(
+                        'opchargelog_type' => OrderProduct::CHARGE_TYPE_TAX,
+                        'opchargelog_identifier' => $taxLine['title'],
+                        'opchargelog_value' => $taxLine['price'],
+                        'opchargelog_is_percent' => 1,
+                        'opchargelog_percentvalue' => $taxLine['rate']
+                    );
+                    $productTaxChargesData[$taxLineId]['langData'][$this->langId] = array(
+                        'opchargeloglang_lang_id' => $this->langId,
+                        'opchargelog_name' => $taxLine['title']
+                    );
+                    $op_product_tax_options[$taxLine['title']]['name'] = $taxLine['title'];
+                    $op_product_tax_options[$taxLine['title']]['value'] = $taxLine['price'];
+                    $op_product_tax_options[$taxLine['title']]['percentageValue'] = $taxLine['rate'];
+                    $op_product_tax_options[$taxLine['title']]['inPercentage'] = 1;
+                }
+
+                $productsLangData = array();
+                $productShippingLangData = array();
+
+                /* stamping/locking of product options language based [ */
+                $op_selprod_options = '';
+                $productOptionsRows = SellerProduct::getSellerProductOptions($selprodId, true, $this->langId);
+                if (!empty($productOptionsRows)) {
+                    $optionCounter = 1;
+                    foreach ($productOptionsRows as $poLang) {
+                        $op_selprod_options .= $poLang['option_name'] . ': ' . $poLang['optionvalue_name'];
+                        if ($optionCounter != count($productOptionsRows)) {
+                            $op_selprod_options .= ' | ';
+                        }
+                        $optionCounter++;
+                    }
+                }
+                /* ] */
+
+                $op_products_dimension_unit_name = ($productInfo['product_dimension_unit']) ? $lengthUnitsArr[$productInfo['product_dimension_unit']] : '';
+                $op_product_weight_unit_name = ($productInfo['product_weight_unit']) ? $weightUnitsArr[$productInfo['product_weight_unit']] : '';
+
+
+                $productsLangData[$this->langId] = array(
+                    'oplang_lang_id' => $this->langId,
+                    'op_product_name' => $productInfo['product_name'],
+                    'op_selprod_title' => $productInfo['selprod_title'],
+                    'op_selprod_options' => $op_selprod_options,
+                    'op_brand_name' => !empty($productInfo['brand_name']) ? $productInfo['brand_name'] : '',
+                    'op_shop_name' => $productInfo['shop_name'],
+                    'op_shipping_duration_name' => "",
+                    'op_shipping_durations' => $shippingDurationTitle,
+                    'op_products_dimension_unit_name' => $op_products_dimension_unit_name,
+                    'op_product_weight_unit_name' => $op_product_weight_unit_name,
+                    'op_product_tax_options' => json_encode($op_product_tax_options),
+                );
+
+
+                $orderData['products'][$selprodId] = array(
+                    'op_selprod_id' => $selprodId,
+                    'op_is_batch' => 0,
+                    'op_selprod_user_id' => $productInfo['selprod_user_id'],
+                    'op_selprod_code' => $productInfo['selprod_code'],
+                    'op_qty' => $product['quantity'],
+                    'op_unit_price' => $product['price'],
+                    'op_unit_cost' => $productInfo['selprod_cost'],
+                    'op_selprod_sku' => $productInfo['selprod_sku'],
+                    'op_selprod_condition' => $productInfo['selprod_condition'],
+                    'op_product_model' => $productInfo['product_model'],
+                    'op_product_type' => $productInfo['product_type'],
+                    'op_product_length' => $productInfo['product_length'],
+                    'op_product_width' => $productInfo['product_width'],
+                    'op_product_height' => $productInfo['product_height'],
+                    'op_product_dimension_unit' => $productInfo['product_dimension_unit'],
+                    'op_product_weight' => $productInfo['product_weight'],
+                    'op_product_weight_unit' => $productInfo['product_weight_unit'],
+                    'op_shop_id' => $productInfo['shop_id'],
+                    'op_shop_owner_username' => $productInfo['shop_owner_username'],
+                    'op_shop_owner_name' => $productInfo['shop_onwer_name'],
+                    'op_shop_owner_email' => $productInfo['shop_owner_email'],
+                    'op_shop_owner_phone' => isset($productInfo['shop_owner_phone']) && !empty($productInfo['shop_owner_phone']) ? $productInfo['shop_owner_phone'] : '',
+                    'op_selprod_max_download_times' => ($productInfo['selprod_max_download_times'] != '-1') ? $product['quantity'] * $productInfo['selprod_max_download_times'] : $productInfo['selprod_max_download_times'],
+                    'op_selprod_download_validity_in_days' => $productInfo['selprod_download_validity_in_days'],
+                    'opshipping_rate_id' => 0, //need to check
+                    'op_commission_charged' => 0,
+                    'op_commission_percentage' => 0,
+                    'op_affiliate_commission_percentage' => 0,
+                    'op_affiliate_commission_charged' => 0,
+                    'op_status_id' => $product['status'],
+                    'productsLangData' => $productsLangData,
+                    'productShippingData' => $productShippingData,
+                    'productPickUpData' => $productPickUpData,
+                    'productPickupAddress' => $productPickupAddress,
+                    'productShippingLangData' => $productShippingLangData,
+                    'productChargesLogData' => $productTaxChargesData,
+                    'op_actual_shipping_charges' => $product['shipping_cost'],
+                    'op_refund_qty' => $product['refund_quantity'],
+                    'op_refund_amount' => $product['refund_amount'],
+                    'op_refund_shipping' => $product['refund_shipping'],
+                    'op_tax_code' => "",
+                    'op_rounding_off' => 0,
+                );
+
+
+                $discount = $product['total_discount'];
+                $rewardPoints = 0;
+                $usedRewardPoint = 0;
+                $volumeDiscount = $product['volume_discount'];
+
+                $orderData['prodCharges'][$selprodId] = array(
+                    OrderProduct::CHARGE_TYPE_SHIPPING => array(
+                        'amount' => $product['shipping_cost']
+                    ),
+                    OrderProduct::CHARGE_TYPE_TAX => array(
+                        'amount' => 0 < count($product['tax_lines']) ? array_sum(array_column($product['tax_lines'], 'price')) : 0,
+                    ),
+                    OrderProduct::CHARGE_TYPE_DISCOUNT => array(
+                        'amount' => -$discount /* [Should be negative value] */
+                    ),
+                    OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => array(
+                        'amount' => -$usedRewardPoint
+                    ),
+                    OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT => array(
+                        'amount' => -$volumeDiscount
+                    ),
+                );
+            }
+
+            if (1 > $productCount) {
+                /* in shopify some product are not present in multivendor=> do not create order */
+                continue;
+            }
+            $orderData['order_affiliate_user_id'] = 0;
+            $orderData['order_affiliate_total_commission'] = 0;
+
+            $orderObj = new Orders();
+            if (!$orderObj->addUpdateOrder($orderData, $this->langId)) {
+                $this->error = $orderObj->getError();
+                return false;
+            }
+
+            $orderId = $orderObj->getOrderId();
+
+            if ($isNewOrder) {
+                $record = new TableRecord(Orders::DB_ORDER_TO_PLUGIN_ORDER);
+                $pluginToOrderArr = array(
+                    'opo_order_id' => $orderId,
+                    'opo_plugin_id' => $this->pluginObj->settings['plugin_id'],
+                    'opo_plugin_order_id' => $order['id']
+                );
+                $record->assignValues($pluginToOrderArr);
+                if (!$record->addNew(array(), $pluginToOrderArr)) {
+                    $this->error = $orderObj->getError();
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     private function getCountryIdByNameOrCode($countryCode, $countryName, $langId)
     {
         $countryId = 0;
@@ -887,7 +959,6 @@ class DataMigration
 
     private function getCategoryIdByName($categoryName, int $langId): int
     {
-
         if (empty($categoryName)) {
             return 0;
         }
@@ -943,94 +1014,7 @@ class DataMigration
         return true;
     }
 
-    private function saveUsersData($users)
-    {
-        $pluginCode = strtolower($this->pluginObj->settings['plugin_code']);
-
-        $db = FatApp::getDb();
-        $db->startTransaction();
-        foreach ($users as $userkey => &$user) {
-
-            if (empty($user['credential_username'])) {
-                if (!empty($user['credential_email'])) {
-                    $user['credential_username'] = $user['credential_email'];
-                } elseif (!empty($user['user_phone'])) {
-                    $user['credential_username'] = $user['user_phone'];
-                } else {
-                    $user['credential_username'] = preg_replace('/[^A-Za-z0-9-\/]+/', '_', ltrim($user['user_name'], '/')) . "_" . $user['id'];
-                }
-            }
-
-            $userObj = new User();
-            if (!empty($user['credential_email'])) {
-                $userArr = $userObj->checkUserByEmailOrUserName($user['credential_username'], $user['credential_email']);
-            } else {
-                $userArr = $userObj->checkUserByPhoneOrUserName($user['credential_username'], $user['user_phone']);
-            }
-
-            if (empty($userArr)) {
-                $userObj->assignValues($user);
-                if (!$userObj->save()) {
-                    $this->error = $userObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-
-                $userId = $userObj->getMainTableRecordId();
-
-
-                if (!isset($user['user_password']) || empty($user['user_password'])) {
-                    $user['user_password'] = CommonHelper::getRandomPassword(8);
-                }
-
-
-                if (!$userObj->setLoginCredentials($user['credential_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
-                    $this->error = $userObj->getError();
-                    $db->rollbackTransaction();
-                    return false;
-                }
-                foreach ($user['addresses'] as $address) {
-                    $countryCode = $address['country_code'];
-                    $countryName = $address['country_name'];
-
-                    $stateCode = $address['state_code'];
-                    $stateName = $address['state_name'];
-
-                    $countryId = $this->getCountryIdByNameOrCode($countryCode, $countryName, $this->langId);
-                    $stateId = $this->getStateIdByNameOrCode($countryId, $stateCode, $stateName, $this->langId);
-
-                    $addressObj = new Address();
-                    $addrDataToSave = $address;
-                    $addrDataToSave['addr_country_id'] = $countryId;
-                    $addrDataToSave['addr_state_id'] = $stateId;
-                    $addrDataToSave['addr_record_id'] = $userId;
-                    $addrDataToSave['addr_type'] = Address::TYPE_USER;
-                    $addrDataToSave['addr_lang_id'] = $this->langId;
-                    $addressObj->assignValues($addrDataToSave, true);
-                    if (!$addressObj->save()) {
-                        $this->error = $addressObj->getError();
-                        $db->rollbackTransaction();
-                        return false;
-                    }
-                }
-            } else {
-                $userId = $userArr['user_id'];
-                $userObj = new User($userId);
-            }
-
-            if (!$userObj->updateUserMeta($pluginCode . "_id", $user['id'])) {
-                $this->error = $userObj->getError();
-                $db->rollbackTransaction();
-                return false;
-            }
-        }
-
-        $db->commitTransaction();
-
-        return true;
-    }
-
-    public function createCountry($countryCode, $countryName, $langId)
+    private function createCountry($countryCode, $countryName, $langId)
     {
         $countryObj = new Countries();
         $countryDatatoSave = array(
@@ -1054,7 +1038,7 @@ class DataMigration
         return $countryId;
     }
 
-    public function createState($countryId, $stateCode, $stateName, $langId)
+    private function createState($countryId, $stateCode, $stateName, $langId)
     {
         $statesObj = new States();
         $stateDatatoSave = array(
@@ -1081,30 +1065,6 @@ class DataMigration
         return $stateId;
     }
 
-    /**
-     * getActivatedServiceId
-     *
-     * @return int
-     */
-    public function getActivatedServiceId(): int
-    {
-        if (1 > $this->activedServiceId) {
-            $pluginObj = new Plugin();
-            $this->activedServiceId = (int) $pluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, 'plugin_id');
-        }
-        return $this->activedServiceId;
-    }
-
-    public static function getSyncType($langId)
-    {
-        $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
-        return array(
-            self::TYPE_CATEGORIES => Labels::getLabel('LBL_CATEGORIES', $langId),
-            self::TYPE_PRODUCTS => Labels::getLabel('LBL_PRODUCTS', $langId),
-            self::TYPE_USER => Labels::getLabel('LBL_USERS', $langId),
-        );
-    }
-
     private function getUniqueProductIdentifier(string $identifier): string
     {
         $srchObj = Product::getSearchObject(0, false, false);
@@ -1123,9 +1083,8 @@ class DataMigration
         return $identifier;
     }
 
-    public function getOptionId(string $identifier, string $name, int $isColor, int $hasSeparateImages, int $displayInFilter, int $langId)
+    private function getOptionId(string $identifier, string $name, int $isColor, int $hasSeparateImages, int $displayInFilter, int $langId)
     {
-
         if (isset($this->optionArr[$identifier])) {
             return $this->optionArr[$identifier];
         }
@@ -1195,7 +1154,6 @@ class DataMigration
 
     private function getTagIdByName($name, $langId)
     {
-
         if (isset($this->tagArr[$name])) {
             return $this->tagArr[$name];
         }
@@ -1228,7 +1186,6 @@ class DataMigration
 
     private function saveProductImage($productId, $optionValId, $url)
     {
-
         $fileAttr = array(
             'afile_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE,
             'afile_record_id' => $productId,
@@ -1264,11 +1221,6 @@ class DataMigration
         return $this->userIdByUserMetaArr[$key] = $row['usermeta_user_id'];
     }
 
-    public function getError()
-    {
-        return $this->error;
-    }
-
     private function getSelProdDataById($selProdId, $langId)
     {
         $srch = new ProductSearch($langId, null, null, false, false, false);
@@ -1292,6 +1244,14 @@ class DataMigration
         $srch->addMultipleFields($fields);
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
+    }
+    
+    private function logError()
+    {
+        CommonHelper::logData("Error_" . $this->pluginObj->settings['plugin_code'] . ":" . $this->getError());
+        if (CONF_DEVELOPMENT_MODE) {
+            print_r($this->getError());
+        }
     }
 
 }

@@ -27,3 +27,5 @@ CREATE TABLE `tbl_orders_to_plugin_order` (
 
 ALTER TABLE `tbl_orders_to_plugin_order`
   ADD UNIQUE KEY `opo_order_id` (`opo_order_id`,`opo_plugin_id`,`opo_plugin_order_id`);
+
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Data Migrate', 'DataMigration/sync', '3', '1');

@@ -36,6 +36,133 @@ class Shopify extends DataMigrationBase
         return $this->validateSettings();
     }
 
+    public function getUsers()
+    {
+        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_USER);
+
+        $paginationParam = $this->getData($paginationSavedString);
+        if ($this->isSyncCompleted($paginationParam)) {
+            return [];
+        }
+
+        $paginationParam = $paginationParam === null ? ['limit' => 150] : $paginationParam;
+
+        $users = $this->fetchCustomers($paginationParam);
+        $mappedUsers = [];
+
+        foreach ($users as $key => $user) {
+            $mappedUser = array(
+                'user_name' => $user->first_name . " " . $user->last_name,
+                'user_phone' => $user->phone,
+                'credential_email' => $user->email,
+                'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD,
+                'user_registered_initially_for' => User::USER_TYPE_BUYER,
+                'user_verify' => 1,
+                'user_active' => 1,
+                'user_is_buyer' => 1,
+                'user_is_supplier' => 0,
+                'user_is_advertiser' => 0,
+                'credential_username' => '',
+                'id' => $user->id /* shopify customer id */
+            );
+            $mappedAddress = [];
+
+            foreach ($user->addresses as $address) {
+                $mappedAddress[] = array(
+                    'addr_title' => $address->name,
+                    'addr_name' => $address->name,
+                    'addr_address1' => $address->address1 ?? '',
+                    'addr_address2' => $address->address2 ?? '',
+                    'addr_city' => $address->city ?? '',
+                    'addr_zip' => $address->zip ?? '',
+                    'addr_phone' => $address->phone ?? '',
+                    'addr_is_default' => $user->default_address->id == $address->id ? 1 : 0,
+                    'country_code' => $address->country_code ?? '',
+                    'country_name' => $address->country_name ?? '',
+                    'state_code' => $address->province_code ?? '',
+                    'state_name' => $address->province ?? '',
+                );
+            }
+            $mappedUsers[] = $mappedUser + array('addresses' => $mappedAddress);
+        }
+
+        return $mappedUsers;
+    }
+
+    public function getSellers()
+    {
+        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_SELLER);
+        $paginationParam = $this->getData($paginationSavedString);
+        if ($this->isSyncCompleted($paginationParam)) {
+            return [];
+        }
+
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 50, 'sort_by' => 'date_add', 'sort_order' => 'asc'] : $paginationParam;
+
+        $sellers = $this->fetchSellers($paginationParam);
+        if (1 > count($sellers)) {
+            $this->nextLink = NULL;
+        }
+
+        $mappedSellers = [];
+
+        foreach ($sellers as $key => $seller) {
+            $mappedSeller = array(
+                'user_name' => $seller->full_name,
+                'user_phone' => '',
+                'credential_email' => $seller->email,
+                'user_preferred_dashboard' => User::USER_SELLER_DASHBOARD,
+                'user_registered_initially_for' => User::USER_TYPE_SELLER,
+                'user_verify' => 1,
+                'user_active' => 1,
+                'user_is_buyer' => 1,
+                'user_is_supplier' => 1,
+                'user_is_advertiser' => 1,
+                'credential_username' => '',
+                'profile_photo' => $seller->store_logo,
+                'id' => $seller->id, /* shopify multivendor customer id */
+            );
+
+            $shop = array(
+                'shop_identifier' => $seller->sp_store_name,
+                'shop_name' => $seller->sp_store_name,
+                'urlrewrite_custom' => $seller->store_name_handle,
+                'shop_contact_person' => $seller->contact ?? '',
+                'shop_phone' => '',
+                'shop_city' => $seller->city ?? '',
+                'shop_country_code' => '',
+                'shop_country_name' => '',
+                'shop_state_code' => '',
+                'shop_state_name' => '',
+                'shop_postalcode' => $seller->zipcode ?? '',
+                'shop_active' => 1,
+                'shop_cod_min_wallet_balance' => 0,
+                'shop_fulfillment_type' => Shipping::FULFILMENT_ALL,
+                'shop_return_age' => 0,
+                'shop_cancellation_age' => 0,
+                'shop_seller_info' => $seller->description ?? '',
+                'shop_description' => $seller->short_desc ?? '',
+                'shop_payment_policy' => $seller->policy ?? '',
+                'shop_banner' => $seller->store_banner,
+                'shop_logo' => $seller->shop_logo,
+            );
+
+            if (!empty($seller->id_country)) {
+                $shop['shop_country_code'] = $seller->id_country->iso_code;
+                $shop['shop_country_name'] = $seller->id_country->name;
+            }
+
+            if (!empty($seller->id_state)) {
+                $shop['shop_state_code'] = $seller->id_state->iso_code;
+                $shop['shop_state_name'] = $seller->id_state->name;
+            }
+
+            $mappedSellers[] = $mappedSeller + array('shop' => $shop);
+        }
+
+        return $mappedSellers;
+    }
+
     public function getProducts()
     {
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_PRODUCT);
@@ -44,7 +171,7 @@ class Shopify extends DataMigrationBase
         if ($this->isSyncCompleted($paginationParam)) {
             return [];
         }
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 40] : $paginationParam;
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 15] : $paginationParam;
         $products = $this->fetchProducts($paginationParam);
 
         $collectionsCache = FatCache::get('ShopifyCollectionsCache', CONF_IMG_CACHE_TIME, '.txt');
@@ -60,13 +187,22 @@ class Shopify extends DataMigrationBase
         }
 
         $mappedProducts = [];
-
+        
+        print_r($products);
+        
         foreach ($products as $product) {
+            $product_type = Product::PRODUCT_TYPE_DIGITAL;
+            foreach ($product->variants as $variant) {
+                if ($variant->requires_shipping == 1) {
+                    $product_type = Product::PRODUCT_TYPE_PHYSICAL;
+                    break;
+                }
+            }
 
             $catalog = [
                 'id' => $product->shopify_product_id,
                 'product_identifier' => $product->handle,
-                'product_type' => $product->variants[0]->requires_shipping ?? 0,
+                'product_type' => $product_type,
                 'brand_name' => '',
                 'category_name' => $product->product_type ?? '',
                 'product_min_selling_price' => 0,
@@ -92,9 +228,9 @@ class Shopify extends DataMigrationBase
             }
 
             $mappedOptions = [];
-
+            
             /* To get option except default one which is created by multivendor on every product, named Title  */
-            if (!(count($product->variants) == 1 && 1 == count($product->options) && isset($product->options[0]->name) && $product->options[0]->name == 'Title')) {
+            if (!(count((array) $product->variants) == 1 && 1 == count($product->options) && isset($product->options[0]->name) && $product->options[0]->name == 'Title')) {
                 foreach ($product->options as $option) {
                     $values = [];
                     foreach ($option->values as $value) {
@@ -103,6 +239,8 @@ class Shopify extends DataMigrationBase
                     $mappedOptions[$option->name] = array('option_name' => $option->name, 'option_is_color' => 0, 'option_is_separate_images' => 0, 'option_display_in_filter' => 1, 'values' => $values);
                 }
             }
+            
+            
             $sellerProducts = [];
             $productImages = [];
             foreach ($product->images as $image) {
@@ -152,7 +290,10 @@ class Shopify extends DataMigrationBase
                     } elseif (isset($combination['Color'])) {
                         $optionName = 'Color';
                         $optionValue = $combination['Color'];
-                        $mappedOptions[$optionName]['option_is_color'] = 1;
+                        if(0 < count($mappedOptions)){
+                            $mappedOptions[$optionName]['option_is_color'] = 1;  
+                        }
+                        
                     } elseif (count($combination) > 1) {
                         foreach ($combination as $key => $val) {
                             if ($key !== 'Size') {
@@ -162,7 +303,9 @@ class Shopify extends DataMigrationBase
                             }
                         }
                     }
-                    $mappedOptions[$optionName]['option_is_separate_images'] = 1;
+                    if(0 < count($mappedOptions)){
+                        $mappedOptions[$optionName]['option_is_separate_images'] = 1;
+                    }
                     $productImages[$variant->image_id]['option'] = $optionName;
                     $productImages[$variant->image_id]['optionValue'] = $optionValue;
                 }
@@ -174,21 +317,6 @@ class Shopify extends DataMigrationBase
         return $mappedProducts;
     }
 
-    private function fetchProducts($params = [])
-    {
-        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
-        //$url = 'https://mvmapi.webkul.com/api/v2/products.json?page=1&limit=50&sort_by=date_add&sort_order=desc&filter=%7B%22id%22%3A%223949571%22%7D';
-        $response = $this->sendMultiVendorGetRequest($url);
-        $products = $response->products;
-        $this->nextLink = '';
-        if (0 < count($products)) {
-            $params['page']++;
-            $this->nextLink = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
-        }
-
-        return $products;
-    }
-
     public function getOrders()
     {
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_ORDER);
@@ -197,7 +325,7 @@ class Shopify extends DataMigrationBase
         if ($this->isSyncCompleted($paginationParam)) {
             return [];
         }
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 2, 'status' => 'any'] : $paginationParam;
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 50, 'status' => 'any'] : $paginationParam;
         $orders = $this->fetchOrders($paginationParam);
         $mappedOrders = [];
 
@@ -392,148 +520,6 @@ class Shopify extends DataMigrationBase
         return $mappedOrders;
     }
 
-    private function fetchOrders($params = [])
-    {
-        $url = $this->generateUrl(DataMigration::TYPE_ORDER, $params);
-        //$url = 'https://thelocalswpg.myshopify.com/admin/api/2021-01/orders.json?ids=get&status=any';
-        $response = $this->sendGetRequest($url);
-        return $response->orders;
-    }
-
-    private function fetchCollections($params = [])
-    {
-        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT_TAG, $params);
-        $response = $this->sendMultiVendorGetRequest($url);
-        return $response->collections;
-    }
-
-    public function getUsers()
-    {
-        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_USER);
-
-        $paginationParam = $this->getData($paginationSavedString);
-        if ($this->isSyncCompleted($paginationParam)) {
-            return [];
-        }
-
-        $paginationParam = $paginationParam === null ? ['limit' => 50] : $paginationParam;
-
-        $users = $this->fetchCustomers($paginationParam);
-        $mappedUsers = [];
-
-        foreach ($users as $key => $user) {
-            $mappedUser = array(
-                'user_name' => $user->first_name . " " . $user->last_name,
-                'user_phone' => $user->phone,
-                'credential_email' => $user->email,
-                'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD,
-                'user_registered_initially_for' => User::USER_TYPE_BUYER,
-                'user_verify' => 1,
-                'user_active' => 1,
-                'user_is_buyer' => 1,
-                'user_is_supplier' => 0,
-                'user_is_advertiser' => 0,
-                'credential_username' => '',
-                'id' => $user->id /* shopify customer id */
-            );
-            $mappedAddress = [];
-
-            foreach ($user->addresses as $address) {
-                $mappedAddress[] = array(
-                    'addr_title' => $address->name,
-                    'addr_name' => $address->name,
-                    'addr_address1' => $address->address1 ?? '',
-                    'addr_address2' => $address->address2 ?? '',
-                    'addr_city' => $address->city ?? '',
-                    'addr_zip' => $address->zip ?? '',
-                    'addr_phone' => $address->phone ?? '',
-                    'addr_is_default' => $user->default_address->id == $address->id ? 1 : 0,
-                    'country_code' => $address->country_code ?? '',
-                    'country_name' => $address->country_name ?? '',
-                    'state_code' => $address->province_code ?? '',
-                    'state_name' => $address->province ?? '',
-                );
-            }
-            $mappedUsers[] = $mappedUser + array('addresses' => $mappedAddress);
-        }
-
-        return $mappedUsers;
-    }
-
-    public function getSellers()
-    {
-        $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_SELLER);
-        $paginationParam = $this->getData($paginationSavedString);
-        if ($this->isSyncCompleted($paginationParam)) {
-            return [];
-        }
-
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 25, 'sort_by' => 'date_add', 'sort_order' => 'asc'] : $paginationParam;
-
-        $sellers = $this->fetchSellers($paginationParam);
-        if (1 > count($sellers)) {
-            $this->nextLink = NULL;
-        }
-
-        $mappedSellers = [];
-
-        foreach ($sellers as $key => $seller) {
-            $mappedSeller = array(
-                'user_name' => $seller->full_name,
-                'user_phone' => '',
-                'credential_email' => $seller->email,
-                'user_preferred_dashboard' => User::USER_SELLER_DASHBOARD,
-                'user_registered_initially_for' => User::USER_TYPE_SELLER,
-                'user_verify' => 1,
-                'user_active' => 1,
-                'user_is_buyer' => 1,
-                'user_is_supplier' => 1,
-                'user_is_advertiser' => 1,
-                'credential_username' => '',
-                'profile_photo' => $seller->store_logo,
-                'id' => $seller->id, /* shopify multivendor customer id */
-            );
-
-            $shop = array(
-                'shop_identifier' => $seller->sp_store_name,
-                'shop_name' => $seller->sp_store_name,
-                'urlrewrite_custom' => $seller->store_name_handle,
-                'shop_contact_person' => $seller->contact ?? '',
-                'shop_phone' => '',
-                'shop_city' => $seller->city ?? '',
-                'shop_country_code' => '',
-                'shop_country_name' => '',
-                'shop_state_code' => '',
-                'shop_state_name' => '',
-                'shop_postalcode' => $seller->zipcode ?? '',
-                'shop_active' => 1,
-                'shop_cod_min_wallet_balance' => 0,
-                'shop_fulfillment_type' => Shipping::FULFILMENT_ALL,
-                'shop_return_age' => 0,
-                'shop_cancellation_age' => 0,
-                'shop_seller_info' => $seller->description ?? '',
-                'shop_description' => $seller->short_desc ?? '',
-                'shop_payment_policy' => $seller->policy ?? '',
-                'shop_banner' => $seller->store_banner,
-                'shop_logo' => $seller->shop_logo,
-            );
-
-            if (!empty($seller->id_country)) {
-                $shop['shop_country_code'] = $seller->id_country->iso_code;
-                $shop['shop_country_name'] = $seller->id_country->name;
-            }
-
-            if (!empty($seller->id_state)) {
-                $shop['shop_state_code'] = $seller->id_state->iso_code;
-                $shop['shop_state_name'] = $seller->id_state->name;
-            }
-
-            $mappedSellers[] = $mappedSeller + array('shop' => $shop);
-        }
-
-        return $mappedSellers;
-    }
-
     public function savePaginationData($type)
     {
         $paginationSavedString = $this->getPaginationStringName($type);
@@ -546,6 +532,15 @@ class Shopify extends DataMigrationBase
             return true;
         }
         return false;
+    }
+
+    private function fetchCustomers($params = [])
+    {
+        /* include both seller and buyer but no paramter to differentiate whether buyer is also a seller */
+        $url = $this->generateUrl(DataMigration::TYPE_USER, $params);
+        //$url ="https://thelocalswpg.myshopify.com/admin/api/2021-01/customers.json?limit=1&ids=4069103894572";
+        $response = $this->sendGetRequest($url);
+        return $response->customers;
     }
 
     private function fetchSellers($params = [])
@@ -562,12 +557,34 @@ class Shopify extends DataMigrationBase
         return $sellers;
     }
 
-    private function fetchCustomers($params = [])
+    private function fetchProducts($params = [])
     {
-        $url = $this->generateUrl(DataMigration::TYPE_USER, $params);
-        //$url ="https://thelocalswpg.myshopify.com/admin/api/2021-01/customers.json?limit=1&ids=4069103894572";
+        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
+        //$url ="https://mvmapi.webkul.com/api/v2/products.json?page=1&limit=50&sort_by=date_add&sort_order=desc&filter=%7B%22id%22%3A%224653091%22%7D";
+        $response = $this->sendMultiVendorGetRequest($url);
+        $products = $response->products;
+        $this->nextLink = '';
+        if (0 < count($products)) {
+            $params['page']++;
+            $this->nextLink = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
+        }
+
+        return $products;
+    }
+
+    private function fetchOrders($params = [])
+    {
+        $url = $this->generateUrl(DataMigration::TYPE_ORDER, $params);
+        //$url = 'https://thelocalswpg.myshopify.com/admin/api/2021-01/orders.json?ids=get&status=any';
         $response = $this->sendGetRequest($url);
-        return $response->customers;
+        return $response->orders;
+    }
+
+    private function fetchCollections($params = [])
+    {
+        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT_TAG, $params);
+        $response = $this->sendMultiVendorGetRequest($url);
+        return $response->collections;
     }
 
     private function sendGetRequest($url)
@@ -607,9 +624,22 @@ class Shopify extends DataMigrationBase
 
     private function castString($array)
     {
-        if (!is_object($array)) {
-            return (string) $array;
+        if ( ! is_array($array)) return (string) $array;
+
+        $string = '';
+        $i = 0;
+        foreach ($array as $key => $val) {
+            //Add values separated by comma
+            //prepend the key string, if it's an associative key
+            //Check if the value itself is another array to be converted to string
+            $string .= ($i === $key ? '' : "$key - ") . $this->castString($val) . ', ';
+            $i++;
         }
+
+        //Remove trailing comma and space
+        $string = rtrim($string, ', ');
+
+        return $string;
     }
 
     private function generateUrl($type, $urlParams = array())
@@ -665,7 +695,31 @@ class Shopify extends DataMigrationBase
         return null;
     }
 
-    protected function getUrlParams($url)
+    private function getPaginationStringName($type)
+    {
+        $stringName = 'PaginationParam';
+        switch ($type) {
+            case DataMigration::TYPE_PRODUCT:
+                $stringName = 'product' . $stringName;
+                break;
+            case DataMigration::TYPE_USER:
+                $stringName = 'user' . $stringName;
+                break;
+            case DataMigration::TYPE_SELLER:
+                $stringName = 'seller' . $stringName;
+                break;
+            case DataMigration::TYPE_PRODUCT_TAG:
+                $stringName = 'tags' . $stringName;
+                break;
+            case DataMigration::TYPE_ORDER:
+                $stringName = 'order' . $stringName;
+                break;
+        }
+
+        return $stringName;
+    }
+
+    private function getUrlParams($url)
     {
         if ($url) {
             $parts = parse_url($url);
@@ -696,24 +750,6 @@ class Shopify extends DataMigrationBase
     private function getNextLink()
     {
         return $this->nextLink;
-    }
-
-    protected function getPaginationStringName($type)
-    {
-        $stringName = 'PaginationParam';
-        switch ($type) {
-            case DataMigration::TYPE_PRODUCT:
-                $stringName = 'product' . $stringName;
-                break;
-            case DataMigration::TYPE_USER:
-                $stringName = 'user' . $stringName;
-                break;
-            case DataMigration::TYPE_SELLER:
-                $stringName = 'seller' . $stringName;
-                break;
-        }
-
-        return $stringName;
     }
 
 }

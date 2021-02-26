@@ -18,7 +18,7 @@ class ShopifySettingsController extends DataMigrationSettingsController
             ],            
             'multivendor_access_token' => [
                 'type' => PluginSetting::TYPE_STRING,
-                'required' => false,
+                'required' => true,
                 'label' => "Multivendor Access Token",
             ]
         ];
