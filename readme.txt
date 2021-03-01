@@ -39,6 +39,7 @@ Fixes:
     => 050137 - Apart from added components in combined tax,extra Duplicate entry is visible in tax details in ORDERS .(where we have the display of the tax components)
     => 049980 - issue with URL rewetting
     => 050289 - Order email table BG is not updating as per theme
+    => 050045 - Signup >> when we enter capital letter in username then it shows some errors. 
 
 Enhancements :
    => Make provision to made seller
