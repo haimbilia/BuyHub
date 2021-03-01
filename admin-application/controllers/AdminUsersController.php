@@ -20,8 +20,9 @@ class AdminUsersController extends AdminBaseController
         $db = FatApp::getDb();
         $con = $db->getConnectionObject();
         $queries = array(
-        "DROP FUNCTION IF EXISTS `GETBLOGCATCODE`",
-        "CREATE FUNCTION `GETBLOGCATCODE`(`id` INT) RETURNS varchar(255) CHARSET utf8
+            "SET GLOBAL log_bin_trust_function_creators = 1",
+            "DROP FUNCTION IF EXISTS `GETBLOGCATCODE`",
+            "CREATE FUNCTION `GETBLOGCATCODE`(`id` INT) RETURNS varchar(255) CHARSET utf8
 			BEGIN
 				DECLARE code VARCHAR(255);
 				DECLARE catid INT(11);
@@ -34,8 +35,8 @@ class AdminUsersController extends AdminBaseController
 				END WHILE;
 				RETURN code;
 			END",
-        "DROP FUNCTION IF EXISTS `GETCATCODE`",
-        "CREATE FUNCTION `GETCATCODE`(`id` INT) RETURNS varchar(255) CHARSET utf8
+            "DROP FUNCTION IF EXISTS `GETCATCODE`",
+            "CREATE FUNCTION `GETCATCODE`(`id` INT) RETURNS varchar(255) CHARSET utf8
 			BEGIN
 				DECLARE code VARCHAR(255);
 				DECLARE catid INT(11);
@@ -48,8 +49,8 @@ class AdminUsersController extends AdminBaseController
 				END WHILE;
 				RETURN code;
 			END",
-        "DROP FUNCTION IF EXISTS `GETCATORDERCODE`",
-        "CREATE FUNCTION `GETCATORDERCODE`(`id` INTEGER) RETURNS varchar(255) CHARSET utf8
+            "DROP FUNCTION IF EXISTS `GETCATORDERCODE`",
+            "CREATE FUNCTION `GETCATORDERCODE`(`id` INTEGER) RETURNS varchar(255) CHARSET utf8
 			BEGIN
 				DECLARE code VARCHAR(255);
 				DECLARE catid INT(11);
@@ -63,8 +64,8 @@ class AdminUsersController extends AdminBaseController
 				END WHILE;
 				RETURN code;
 			END",
-        "DROP FUNCTION IF EXISTS `GETBLOGCATORDERCODE`",
-        "CREATE FUNCTION `GETBLOGCATORDERCODE`(`id` INT) RETURNS varchar(500) CHARSET utf8
+            "DROP FUNCTION IF EXISTS `GETBLOGCATORDERCODE`",
+            "CREATE FUNCTION `GETBLOGCATORDERCODE`(`id` INT) RETURNS varchar(500) CHARSET utf8
 			BEGIN
 				DECLARE code VARCHAR(255);
 				DECLARE catid INT(11);
@@ -77,7 +78,50 @@ class AdminUsersController extends AdminBaseController
 					SET code = CONCAT(RIGHT(CONCAT('000000', myorder), 6), code);
 				END WHILE;
 				RETURN code;
-			END"
+			END",
+            "DROP PROCEDURE IF EXISTS UPDATECATEGORYRELATIONS",
+            "CREATE PROCEDURE UPDATECATEGORYRELATIONS(IN catId INT)
+            BEGIN
+               DECLARE levelCounter INT DEFAULT 0;
+               DECLARE maxLevel INT DEFAULT 20;
+               WHILE levelCounter <= maxLevel DO
+                    /**Sql statement**/
+                    IF 0 < catId THEN 
+                        DELETE FROM `tbl_product_category_relations` WHERE `pcr_prodcat_id` = catId;
+                    END IF;
+            
+                    IF 1 > levelCounter THEN 
+                        INSERT IGNORE INTO `tbl_product_category_relations`(`pcr_prodcat_id`, `pcr_parent_id`, `pcr_level`) 
+                        SELECT prodcat_id, prodcat_id, 0 FROM `tbl_product_categories` WHERE (CASE WHEN 0 < catId THEN prodcat_id = catId ELSE TRUE END) ORDER BY prodcat_id ASC;
+                        INSERT IGNORE INTO `tbl_product_category_relations`(`pcr_prodcat_id`, `pcr_parent_id`, `pcr_level`)
+                        SELECT prodcat_id, prodcat_parent, 1 FROM `tbl_product_categories` WHERE prodcat_parent > 0 AND (CASE WHEN 0 < catId THEN prodcat_id = catId ELSE TRUE END) ORDER BY prodcat_id ASC;
+                    END IF;
+            
+                    INSERT IGNORE INTO `tbl_product_category_relations`(`pcr_prodcat_id`, `pcr_parent_id`, `pcr_level`)
+                    SELECT prodcat_id, pcr_parent_id, (pcr_level+1) FROM `tbl_product_categories`
+                    INNER JOIN tbl_product_category_relations ON pcr_prodcat_id = prodcat_parent
+                    WHERE pcr_prodcat_id != pcr_parent_id 
+                    AND (CASE WHEN 0 < catId THEN prodcat_id = catId ELSE TRUE END) 
+                    ORDER BY prodcat_id ASC;
+            
+                    IF 0 < catId THEN 
+                        SET levelCounter = maxLevel;
+                    END IF;
+                    
+                    SET levelCounter = levelCounter + 1;
+               END WHILE;
+            END",
+            "DROP TRIGGER IF EXISTS `ADDNEWCATEGORY`",
+            "CREATE TRIGGER `ADDNEWCATEGORY`
+            AFTER INSERT ON `tbl_product_categories` 
+            FOR EACH ROW 
+            CALL UPDATECATEGORYRELATIONS(new.prodcat_id)",
+            "DROP TRIGGER IF EXISTS `UPDATECATEGORY`",
+            "CREATE TRIGGER `UPDATECATEGORY`
+            AFTER UPDATE ON `tbl_product_categories` 
+            FOR EACH ROW 
+            CALL UPDATECATEGORYRELATIONS(new.prodcat_id)",
+            "CALL updateCategoryRelations(0)",
         );
 
         foreach ($queries as $qry) {
@@ -156,19 +200,19 @@ class AdminUsersController extends AdminBaseController
         }
         unset($post['admin_id']);
         $record = new AdminUsers($adminId);
-		
-		if (0 < $adminId) {
+
+        if (0 < $adminId) {
             $data = AdminUsers::getAttributesById($adminId);
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
-			$post['admin_username'] = $data['admin_username'];
+            $post['admin_username'] = $data['admin_username'];
         } else {
-			$password = $post['password'];
+            $password = $post['password'];
             $encryptedPassword = UserAuthentication::encryptPassword($password);
             $post['admin_password'] = $encryptedPassword;
-		}
-		
+        }
+
 
         $record->assignValues($post);
 
@@ -289,7 +333,7 @@ class AdminUsersController extends AdminBaseController
     }
 
     private function updateAdminUserStatus($adminId, $status)
-    { 
+    {
         $status = FatUtility::int($status);
         $adminId = FatUtility::int($adminId);
         if (1 > $adminId || -1 == $status) {
@@ -365,9 +409,9 @@ class AdminUsersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $data = array(
-        'admperm_admin_id' => $adminId,
-        'admperm_section_id' => $moduleId,
-        'admperm_value' => $permission,
+            'admperm_admin_id' => $adminId,
+            'admperm_section_id' => $moduleId,
+            'admperm_value' => $permission,
         );
         $obj = new AdminUsers();
         if ($moduleId == 0) {

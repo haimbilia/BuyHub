@@ -8,10 +8,9 @@ class CategoryController extends MyAppController
     }
 
     public function index()
-    {
-        /* $categoriesArr = ProductCategory::getTreeArr($this->siteLangId, 0, true, false, true); */
+    {        
 		$productCategory = ProductCategory::getSearchObject(false, $this->siteLangId, true);
-                $productCategory->addOrder('m.prodcat_active', 'DESC');
+        $productCategory->addOrder('m.prodcat_active', 'DESC');
 		$productCategory->addCondition('prodcat_parent', '=', 0);
 		$productCategory->addCondition('prodcat_deleted', '=', 0);
 		$productCategory->addOrder('prodcat_ordercode');

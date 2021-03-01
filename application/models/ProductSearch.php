@@ -629,7 +629,7 @@ class ProductSearch extends SearchBase
         $this->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $langId, 'tb_l');
     }
 
-    public function joinProductToCategory($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true)
+    public function joinProductToCategory($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true, $useRelationTable = false)
     {
         $langId = FatUtility::int($langId);
         if ($this->langId && 1 > $langId) {
@@ -652,11 +652,21 @@ class ProductSearch extends SearchBase
 
         $this->addCondition('c.prodcat_status', '=', ProductCategory::REQUEST_APPROVED);
 
-        $this->joinTable(ProductCategory::DB_TBL, $join, 'c.prodcat_id = ptc.ptc_prodcat_id ' . $categoryActiveCondition . ' ' . $categoryDeletedCondition, 'c');
+        if (true == $useRelationTable) {
+            $this->joinProductToCategoryRelation();
+            $this->joinTable(ProductCategory::DB_TBL, $join, 'c.prodcat_id = cr.pcr_parent_id ' . $categoryActiveCondition . ' ' . $categoryDeletedCondition, 'c');
+        } else {
+            $this->joinTable(ProductCategory::DB_TBL, $join, 'c.prodcat_id = ptc.ptc_prodcat_id ' . $categoryActiveCondition . ' ' . $categoryDeletedCondition, 'c');
+        }
 
         if ($langId) {
             $this->joinProductToCategoryLang($langId);
         }
+    }
+
+    public function joinProductToCategoryRelation()
+    {
+        $this->joinTable(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id', 'cr');
     }
 
     public function joinProductToCategoryLang($langId)
@@ -757,7 +767,7 @@ class ProductSearch extends SearchBase
                 foreach ($arr_keywords as $value) {
                     $cnd->attachCondition('product_tags_string', 'LIKE', '%' . $value . '%');
                     $cnd->attachCondition('selprod_title', 'LIKE', '%' . $value . '%');
-                   /*  $cnd->attachCondition('product_name', 'LIKE', '%' . $value . '%'); */
+                    /*  $cnd->attachCondition('product_name', 'LIKE', '%' . $value . '%'); */
                     $cnd->attachCondition('brand_name', 'LIKE', '%' . $value . '%');
                     $cnd->attachCondition('prodcat_name', 'LIKE', '%' . $value . '%');
                 }
