@@ -115,7 +115,6 @@ $(document).ready(function () {
 				fcom.displayErrorMessage(ans.msg);
 			}
 		});
-		$.systemMessage.close();
 	};
 
 	goToProduct = function (prodCatId) {

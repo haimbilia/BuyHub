@@ -37,7 +37,7 @@
                                     
                                     ?>
                                     <label class="statustab statustab-sm">
-                                        <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['prodcat_id']; ?>" value="<?php echo $row['prodcat_id']; ?>" onclick="<?php echo $statusAct; ?>" data-childcount="<?php echo $row['child_count']; ?>" data-hasparent="<?php echo $hasParent; ?>" class="switch-labels" />
+                                        <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['prodcat_id']; ?>" value="<?php echo $row['prodcat_id']; ?>" onclick="<?php echo $statusAct; ?>" data-childcount="<?php echo $row['subcategory_count']; ?>" data-hasparent="<?php echo $hasParent; ?>" class="switch-labels" />
                                         <i class="switch-handles <?php echo $statusClass; ?> clickable"></i>
                                     </label>
                                     <?php if ($canEdit) { ?>
