@@ -162,6 +162,8 @@ class MyAppController extends FatController
                 'changePickup' => Labels::getLabel('LBL_CHANGE_PICKUP', $this->siteLangId),
                 'selectProduct' => Labels::getLabel('LBL_PLEASE_SELECT_PRODUCT', $this->siteLangId),
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
+                'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
+                'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

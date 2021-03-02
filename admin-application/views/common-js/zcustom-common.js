@@ -139,17 +139,19 @@ $(document).ready(function () {
     });
 
     $.systemMessage = function(data, cls, autoClose = true) {
-		if ("" == data) {
+		if ("" == data || typeof data == 'undefined') {
 			return;
 		}
 		
         if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
             autoClose = false;
         }
+
         initialize();
         $.systemMessage.loading();
         $.systemMessage.fillSysMessage(data, cls, autoClose);
     }
+
     $.extend($.systemMessage, {
         settings: {
             closeimage: siteConstants.webroot + 'images/facebox/close.gif',
@@ -165,7 +167,7 @@ $(document).ready(function () {
             if (cls) $('.system_message').addClass(cls);
             $('.system_message .content').html(data);
             $('.system_message').fadeIn();
-            if (autoClose && CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
+            if (true == autoClose && CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
                 var time = CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 2000;
                 setTimeout(function() {
                     $.systemMessage.close();

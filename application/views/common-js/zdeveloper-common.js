@@ -774,16 +774,15 @@ function defaultSetUpLogin(frm, v) {
         $('#facebox .content').addClass('fbminwidth');
     });
 
-    $.systemMessage = function(data, cls, autoClose) {
-		if ("" == data) {
+    $.systemMessage = function(data, cls, autoClose){
+        if ("" == data || typeof data == 'undefined') {
 			return;
 		}
-		
-        if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
-            autoClose = false;
-        } else {
-            autoClose = true;
-        }
+
+		if(typeof autoClose == 'undefined' || autoClose == 'undefined'){
+			autoClose = true;
+		}
+
         initialize();
         $.systemMessage.loading();
         $.systemMessage.fillSysMessage(data, cls, autoClose);
@@ -807,7 +806,7 @@ function defaultSetUpLogin(frm, v) {
             $('.system_message .content').html(data);
             $('.system_message').fadeIn();
 
-            if (!autoClose && CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
+            if (true == autoClose && CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
                 var time = CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 1000;
                 setTimeout(function() {
                     $.systemMessage.close();
