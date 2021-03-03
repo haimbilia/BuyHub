@@ -2354,7 +2354,7 @@ class Orders extends MyAppModel
         $websiteName = FatApp::getConfig('CONF_WEBSITE_NAME_'.$defaultSiteLangid);
         $order_id = strtoupper(substr( $websiteName, 0, 1)); */
         $order_id = 'O';
-        $order_id .= time();
+        $order_id .= mt_rand(1000000000,9999999999);
         if ($this->checkUniqueOrderId($order_id)) {
             return $order_id;
         } else {

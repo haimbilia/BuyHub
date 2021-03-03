@@ -192,7 +192,7 @@ class DataMigration
     private function syncSellers()
     {
         $sellers = $this->pluginObj->getSellers();
-        
+
         if (0 < count($sellers)) {
             if (!$this->saveSellerData($sellers)) {
                 $this->logError();
@@ -206,7 +206,7 @@ class DataMigration
 
     private function saveSellerData($sellers)
     {
-        
+
         $pluginCode = strtolower($this->pluginObj->settings['plugin_code']);
 
         $db = FatApp::getDb();
@@ -398,7 +398,7 @@ class DataMigration
     }
 
     private function saveProductsData($products)
-    {        
+    {
         $db = FatApp::getDb();
         $db->startTransaction();
         foreach ($products as $product) {
@@ -416,7 +416,7 @@ class DataMigration
             }
 
             $catalog['product_added_by_admin_id'] = 1;
-            if (!empty($catalog['user_id'])) {               
+            if (!empty($catalog['user_id'])) {
                 $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'], User::USER_TYPE_SELLER);
                 if (0 < $userId) {
                     $catalog['product_seller_id'] = $userId;
@@ -468,7 +468,7 @@ class DataMigration
                     return false;
                 }
             }
-           
+
             foreach ($product['options'] as &$option) {
                 $option['option_identifier'] = $option['option_name'] . "_" . $catId;
                 $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'], $this->langId);
@@ -604,7 +604,7 @@ class DataMigration
         $orders = $this->pluginObj->getOrders();
         if (0 < count($orders)) {
             if (!$this->saveOrdersData($orders)) {
-                $this->logError();           
+                $this->logError();
                 return true;
             }
         }
@@ -618,7 +618,7 @@ class DataMigration
         $currencyRow = Currency::getAttributesById($this->langId);
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId);
         $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId);
-        
+
         foreach ($orders as $order) {
             $isNewOrder = 1;
             $orderId = Orders::getOrderIdByPlugin($this->pluginObj->settings['plugin_id'], $order['id']);
@@ -677,7 +677,7 @@ class DataMigration
             $orderData['order_discount_type'] = DiscountCoupons::TYPE_SELLER_PACKAGE;
             $orderData['order_discount_value'] = $order['discount_value'];
             $orderData['order_discount_total'] = $order['discount_total'];
-            $orderData['order_discount_info'] = "";
+            //$orderData['order_discount_info'] = "";
             // need to check again
             $orderData['order_reward_point_used'] = 0;
             $orderData['order_reward_point_value'] = 0;
@@ -815,6 +815,11 @@ class DataMigration
                     'op_refund_amount' => $product['refund_amount'],
                     'op_refund_shipping' => $product['refund_shipping'],
                     'op_tax_code' => "",
+                    'productSpecifics' => [
+                        'op_selprod_return_age' => $productInfo['return_age'],
+                        'op_selprod_cancellation_age' => $productInfo['cancellation_age'],
+                        'op_product_warranty' => $productInfo['product_warranty']
+                    ],
                     'op_rounding_off' => 0,
                 );
 
@@ -1228,6 +1233,10 @@ class DataMigration
         $srch->joinSellers();
         $srch->joinShops($langId, false, false);
         $srch->joinBrands($langId, false, false, false);
+        $srch->joinShopSpecifics();
+        $srch->joinSellerProductSpecifics();
+        $srch->joinProductSpecifics();
+
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('selprod_id', '=', $selProdId);
@@ -1238,14 +1247,15 @@ class DataMigration
             'product_height', 'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_model',
             'selprod_user_id', 'selprod_code', 'selprod_sku', 'selprod_cost', 'selprod_condition', 'shop_id',
             'selprod_max_download_times', 'selprod_download_validity_in_days', 'seller_user_cred.credential_email as shop_owner_email',
-            'seller_user_cred.credential_username as shop_owner_username', 'seller_user.user_name as shop_onwer_name'
+            'seller_user_cred.credential_username as shop_owner_username', 'seller_user.user_name as shop_onwer_name',
+            'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age'
         );
 
         $srch->addMultipleFields($fields);
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
-    
+
     private function logError()
     {
         CommonHelper::logData("Error_" . $this->pluginObj->settings['plugin_code'] . ":" . $this->getError());

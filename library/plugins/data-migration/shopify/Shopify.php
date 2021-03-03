@@ -187,9 +187,9 @@ class Shopify extends DataMigrationBase
         }
 
         $mappedProducts = [];
-        
+
         print_r($products);
-        
+
         foreach ($products as $product) {
             $product_type = Product::PRODUCT_TYPE_DIGITAL;
             foreach ($product->variants as $variant) {
@@ -228,7 +228,7 @@ class Shopify extends DataMigrationBase
             }
 
             $mappedOptions = [];
-            
+
             /* To get option except default one which is created by multivendor on every product, named Title  */
             if (!(count((array) $product->variants) == 1 && 1 == count($product->options) && isset($product->options[0]->name) && $product->options[0]->name == 'Title')) {
                 foreach ($product->options as $option) {
@@ -239,8 +239,8 @@ class Shopify extends DataMigrationBase
                     $mappedOptions[$option->name] = array('option_name' => $option->name, 'option_is_color' => 0, 'option_is_separate_images' => 0, 'option_display_in_filter' => 1, 'values' => $values);
                 }
             }
-            
-            
+
+
             $sellerProducts = [];
             $productImages = [];
             foreach ($product->images as $image) {
@@ -290,10 +290,9 @@ class Shopify extends DataMigrationBase
                     } elseif (isset($combination['Color'])) {
                         $optionName = 'Color';
                         $optionValue = $combination['Color'];
-                        if(0 < count($mappedOptions)){
-                            $mappedOptions[$optionName]['option_is_color'] = 1;  
+                        if (0 < count($mappedOptions)) {
+                            $mappedOptions[$optionName]['option_is_color'] = 1;
                         }
-                        
                     } elseif (count($combination) > 1) {
                         foreach ($combination as $key => $val) {
                             if ($key !== 'Size') {
@@ -303,7 +302,7 @@ class Shopify extends DataMigrationBase
                             }
                         }
                     }
-                    if(0 < count($mappedOptions)){
+                    if (0 < count($mappedOptions)) {
                         $mappedOptions[$optionName]['option_is_separate_images'] = 1;
                     }
                     $productImages[$variant->image_id]['option'] = $optionName;
@@ -325,7 +324,7 @@ class Shopify extends DataMigrationBase
         if ($this->isSyncCompleted($paginationParam)) {
             return [];
         }
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 50, 'status' => 'any'] : $paginationParam;
+        $paginationParam = $paginationParam === null ? ['limit' => 100, 'status' => 'any'] : $paginationParam;
         $orders = $this->fetchOrders($paginationParam);
         $mappedOrders = [];
 
@@ -336,8 +335,12 @@ class Shopify extends DataMigrationBase
             if (0 < $order->total_discounts && count($order->discount_codes)) {
                 foreach ($order->discount_applications as $disApp) {
                     $discountValue += $disApp->value;
-                    $discountCouponCode .= $disApp->code + ", ";
+                    $discountCouponCode .= $disApp->code . ", ";
                 }
+            }
+            
+            if(!isset($order->customer)){
+                continue;
             }
 
             $mappedOrder = [
@@ -363,9 +366,9 @@ class Shopify extends DataMigrationBase
                 $billingAddress = array(
                     "name" => $order->billing_address->name,
                     "address1" => $order->billing_address->address1,
-                    "address2" => $order->billing_address->address2,
-                    "phone" => $order->billing_address->phone,
-                    "city" => $order->billing_address->city,
+                    "address2" => $order->billing_address->address2 ?? '',
+                    "phone" => $order->billing_address->phone ?? '',
+                    "city" => $order->billing_address->city ?? '',
                     "zip" => $order->billing_address->zip,
                     "state" => $order->billing_address->province,
                     "country" => $order->billing_address->country,
@@ -396,8 +399,8 @@ class Shopify extends DataMigrationBase
 
             $tProdAmt = 0;
             $tProdAmtEligibleForShip = 0;
-            $lastShipEligibleProductId;
-            $lastProductId;
+            $lastShipEligibleProductId = 0;
+            $lastProductId = 0;
             foreach ($order->line_items as $lineItem) {
                 if ($lineItem->requires_shipping) {
                     $tProdAmtEligibleForShip += $lineItem->price;
@@ -442,7 +445,7 @@ class Shopify extends DataMigrationBase
                 }
 
                 $products[$lineItem->variant_id] = array(
-                    'id' => $lineItem->variant_id,
+                    'id' => $lineItem->variant_id ?? 0,
                     'title' => $lineItem->title,
                     'quantity' => $lineItem->quantity,
                     'price' => $lineItem->price,
@@ -624,7 +627,8 @@ class Shopify extends DataMigrationBase
 
     private function castString($array)
     {
-        if ( ! is_array($array)) return (string) $array;
+        if (!is_object($array))
+            return (string) $array;
 
         $string = '';
         $i = 0;
