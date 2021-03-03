@@ -232,10 +232,10 @@ class Navigation
     public static function getNavigation($type = 0, $includeCategories = true)
     {
         $siteLangId = CommonHelper::getLangId();
-        /* $headerNavCache = FatCache::get('headerNavCache' . $siteLangId . '-' . $type, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $headerNavCache = FatCache::get('headerNavCache' . $siteLangId . '-' . $type, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if ($headerNavCache) {
             return  unserialize($headerNavCache);
-        } */
+        }
 
         if ($includeCategories) {
             /* Category have products[ */
