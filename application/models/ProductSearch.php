@@ -178,8 +178,7 @@ class ProductSearch extends SearchBase
         }
         // $this->joinBasedOnPriceCondition($splPriceForDate, $criteria, $checkAvailableFrom);
     }
-
-
+   
     public function joinBasedOnPriceCondition($splPriceForDate = '', $criteria = array(), $checkAvailableFrom = true)
     {
         $now = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');
@@ -653,8 +652,8 @@ class ProductSearch extends SearchBase
         $this->addCondition('c.prodcat_status', '=', ProductCategory::REQUEST_APPROVED);
 
         if (true == $useRelationTable) {
-            $this->joinProductToCategoryRelation();
-            $this->joinTable(ProductCategory::DB_TBL, $join, 'c.prodcat_id = cr.pcr_parent_id ' . $categoryActiveCondition . ' ' . $categoryDeletedCondition, 'c');
+            $this->joinCategoryRelationWithParent();
+            $this->joinTable(ProductCategory::DB_TBL, $join, 'c.prodcat_id = cr.pcr_prodcat_id ' . $categoryActiveCondition . ' ' . $categoryDeletedCondition, 'c');
         } else {
             $this->joinTable(ProductCategory::DB_TBL, $join, 'c.prodcat_id = ptc.ptc_prodcat_id ' . $categoryActiveCondition . ' ' . $categoryDeletedCondition, 'c');
         }
@@ -664,9 +663,29 @@ class ProductSearch extends SearchBase
         }
     }
 
-    public function joinProductToCategoryRelation()
+    /**
+     * joinCategoryRelationWithParent
+     * Used to find all the childrens of category
+     * @return void
+     */
+    public function joinCategoryRelationWithParent()
     {
-        $this->joinTable(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id', 'cr');
+        $this->joinTable(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'ptc.ptc_prodcat_id = cr.pcr_parent_id', 'cr');
+    }
+
+    /**
+     * joinCategoryRelationWithChild
+     * Used to find all the parents of category
+     * @return void
+     */
+    public function joinCategoryRelationWithChild($parentId = 0)
+    {
+        $parentId = FatUtility::int($parentId);
+        $cond = '';
+        if (0 < $parentId) {
+            $cond ='and cr.pcr_parent_id = ' . $parentId; 
+        }
+        $this->joinTable(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id '. $cond, 'cr');
     }
 
     public function joinProductToCategoryLang($langId)

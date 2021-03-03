@@ -3,7 +3,7 @@
 class HomeController extends MyAppController
 {
     public function index()
-    {
+    { 
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);

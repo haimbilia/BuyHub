@@ -232,38 +232,47 @@ class Navigation
     public static function getNavigation($type = 0, $includeCategories = true)
     {
         $siteLangId = CommonHelper::getLangId();
-        $headerNavCache = FatCache::get('headerNavCache' . $siteLangId . '-' . $type, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        /* $headerNavCache = FatCache::get('headerNavCache' . $siteLangId . '-' . $type, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if ($headerNavCache) {
             return  unserialize($headerNavCache);
-        }
+        } */
 
         if ($includeCategories) {
-            /* SubQuery, Category have products[ */
+            /* Category have products[ */
+            $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, true);
+
+            /* $catSrch = new SearchBase(ProductCategory::DB_TBL, 'c');
+            $catSrch->addCondition('prodcat_status', '=', ProductCategory::REQUEST_APPROVED);
+            $catSrch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
+            $catSrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+
             $prodSrchObj = new ProductSearch();
+            $prodSrchObj->addMultipleFields(array('DISTINCT(c.prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
             $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
-            $prodSrchObj->joinProductToCategory($siteLangId);
+            $prodSrchObj->joinSellerSubscription(0, true);
+            $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->doNotLimitRecords();
-            $prodSrchObj->joinSellerSubscription($siteLangId, true);
-            $prodSrchObj->addSubscriptionValidCondition();
-            $prodSrchObj->addGroupBy('prodcat_id');
-            $prodSrchObj->addMultipleFields(array('prodcat_code AS prodrootcat_code', 'count(selprod_id) as productCounts', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_parent'));
-            $prodSrchObj->addOrder('prodcat_display_order', 'asc');
+            $prodSrchObj->joinProductToCategory();
+            $prodSrchObj->joinCategoryRelationWithChild();
+            $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO); */
+
             $navigationCatCache = FatCache::get('navigationCatCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
             if ($navigationCatCache) {
                 $categoriesMainRootArr = unserialize($navigationCatCache);
             } else {
-                $rs = $prodSrchObj->getResultSet();
-                $productRows = FatApp::getDb()->fetchAll($rs);
-                $categoriesMainRootArr = array_column($productRows, 'prodrootcat_code');
-                array_walk(
-                    $categoriesMainRootArr,
-                    function (&$n) {
-                        $n = FatUtility::int(substr($n, 0, 6));
-                    }
-                );
-                $categoriesMainRootArr = array_unique($categoriesMainRootArr);
-                array_flip($categoriesMainRootArr);
+                /*  $parentCatSrch = clone $catSrch;
+                $parentCatSrch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = c.prodcat_id', 'qryProducts');
+                $parentCatSrch->addCondition('c.prodcat_parent', '=', 0);
+                $parentCatSrch->addMultipleFields(array('c.prodcat_id'));
+                $parentCatSrch->addCondition('prodcat_parent', '=', 0);
+                $parentCatSrch->addGroupBy('c.prodcat_id');
+                $parentCatSrch->doNotCalculateRecords();
+                $parentCatSrch->doNotLimitRecords();
+
+                $rs = $parentCatSrch->getResultSet();
+                $categoriesMainRootArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id'); */
+                $categoriesMainRootArr = array_keys($rootCatArr);
                 FatCache::set('navigationCatCache' . $siteLangId, serialize($categoriesMainRootArr), '.txt');
             }
 
@@ -271,17 +280,15 @@ class Navigation
             if ($categoriesMainRootArr) {
                 $catWithProductConditoon = " and nlink_category_id in(" . implode(",", $categoriesMainRootArr) . ")";
             }
-
             /* ] */
         }
 
         $srch = new NavigationLinkSearch($siteLangId);
         if ($includeCategories) {
-            $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'LEFT OUTER JOIN', 'qryProducts.prodcat_id = nlink_category_id', 'qryProducts');
-            $srch->joinProductCategory();
+            $srch->joinProductCategory($siteLangId);
             $srch->addMultipleFields(array(
                 'nav_id', 'IFNULL( nav_name, nav_identifier ) as nav_name',
-                'IFNULL( nlink_caption, nlink_identifier ) as nlink_caption', 'nlink_type', 'nlink_cpage_id', 'nlink_category_id', 'IFNULL( prodcat_active, ' . applicationConstants::ACTIVE . ' ) as filtered_prodcat_active', 'IFNULL(prodcat_deleted, ' . applicationConstants::NO . ') as filtered_prodcat_deleted', 'IFNULL( cpage_deleted, ' . applicationConstants::NO . ' ) as filtered_cpage_deleted', 'nlink_target', 'nlink_url', 'nlink_login_protected', '(qryProducts.productCounts) as totProductCounts'
+                'IFNULL( nlink_caption, nlink_identifier ) as nlink_caption', 'nlink_type', 'nlink_cpage_id', 'nlink_category_id', 'IFNULL( prodcat_active, ' . applicationConstants::ACTIVE . ' ) as filtered_prodcat_active', 'IFNULL(prodcat_deleted, ' . applicationConstants::NO . ') as filtered_prodcat_deleted', 'IFNULL( cpage_deleted, ' . applicationConstants::NO . ' ) as filtered_cpage_deleted', 'nlink_target', 'nlink_url', 'nlink_login_protected'
             ));
             $srch->addDirectCondition("((nlink_type = " . NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE . " AND nlink_category_id > 0 $catWithProductConditoon ) OR (nlink_type = " . NavigationLinks::NAVLINK_TYPE_CMS . " AND nlink_cpage_id > 0 ) OR  ( nlink_type = " . NavigationLinks::NAVLINK_TYPE_EXTERNAL_PAGE . " ))");
             $srch->addHaving('filtered_prodcat_active', '=', applicationConstants::ACTIVE);
@@ -320,12 +327,17 @@ class Navigation
         }
         $srch->addGroupBy('nav_id');
         $srch->addGroupBy('nlink_id');
+
         $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs);
+
+
         $navigation = array();
         $previous_nav_id = 0;
-        $productCategory = new productCategory();
+
         if ($rows) {
+            $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, true);
+
             foreach ($rows as $key => $row) {
                 if ($key == 0 || $previous_nav_id != $row['nav_id']) {
                     $previous_nav_id = $row['nav_id'];
@@ -335,15 +347,16 @@ class Navigation
 
                 $childrenCats = array();
                 if ($includeCategories && $row['nlink_category_id'] > 0) {
-                    $catObj = clone $prodSrchObj;
-                    $catObj->addCategoryCondition($row['nlink_category_id']);
-                    $categoriesDataArr = ProductCategory::getProdCatParentChildWiseArr($siteLangId, $row['nlink_category_id'], false, false, false, $catObj, false);
-                    $childrenCats = $productCategory->getCategoryTreeArr($siteLangId, $categoriesDataArr);
-                    $childrenCats = ($childrenCats) ? $childrenCats[$row['nlink_category_id']]['children'] : array();
+                    if (array_key_exists($row['nlink_category_id'], $rootCatArr)) {
+                        $childrenCats = $rootCatArr[$row['nlink_category_id']]['children'];
+                    } else {
+                        $childrenCats = ProductCategory::getArray($siteLangId, $row['nlink_category_id'], false, true, false, true);
+                    }
                 }
-                $navigation[$previous_nav_id]['pages'][$key]['children'] = $childrenCats;
+                $navigation[$previous_nav_id]['pages'][$key]['children'] = isset($childrenCats) ? $childrenCats : [];
             }
         }
+
         FatCache::set('headerNavCache' . $siteLangId . '-' . $type, serialize($navigation), '.txt');
         return $navigation;
     }

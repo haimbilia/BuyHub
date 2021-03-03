@@ -4,26 +4,21 @@ class DummyController extends AdminBaseController
 {
     public function index()
     {
-       /*  $langId = 1;
-        $type = 1;
-        $srch = Labels::getSearchObject($langId, ['LEFT(label_key, 3) as keyfilename']);
-        $srch->addCondition('label_type', '=', $type);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addGroupBy('keyfilename');
-        $rs = $srch->getResultSet();
-        echo $srch->getQuery(); exit; */
 
-       CommonHelper::printArray( ProductCategory::getTreeArr(1, 10));
+        
+
+        CommonHelper::printArray(ProductCategory::getArray(0, 1, false, true));
+        exit;
 
         $blogPostCategoryObj = new BlogPostCategory();
-        echo "d".$blogPostCategoryObj->getParentTreeStructure(9, 0, 'test');
+        echo "d" . $blogPostCategoryObj->getParentTreeStructure(9, 0, 'test');
         die;
-         
+
 
         $orderObj = new Orders();
         $orderDetail = $orderObj->getOrderById('O1605086396', 1);
-        CommonHelper::printArray($orderDetail, true); exit;
+        CommonHelper::printArray($orderDetail, true);
+        exit;
 
         $countryId = '223';
         $stateId = '2998';

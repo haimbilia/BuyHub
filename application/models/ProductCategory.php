@@ -233,7 +233,77 @@ class ProductCategory extends MyAppModel
         return 1;
     }
 
-    public static function getTreeArr($langId, $parentId = 0, $sortByName = false, $prodCatSrchObj = false, $excludeCatHavingNoProducts = false, $keywords = false)
+    public static function getArray($langId, $parentId = 0, $sortByName = false, $excludeCatHavingNoProducts = false, $keywords = false, $useCache = false)
+    {
+        if (true == $useCache) {
+            $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords;
+            $categoryArrCache = FatCache::get('categoryArrCache' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+            if ($categoryArrCache) {
+                return unserialize($categoryArrCache);
+            }
+        }
+        $srch = new SearchBase(self::DB_TBL_PROD_CAT_RELATIONS, 'cr');
+        if ($excludeCatHavingNoProducts) {
+            $prodSrchObj = new ProductSearch();
+            // $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'c.prodcat_id as qryProducts_prodcat_id'));
+            $prodSrchObj->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
+            $prodSrchObj->joinSellerSubscription(0, true);
+            $prodSrchObj->addSubscriptionValidCondition();
+            $prodSrchObj->doNotCalculateRecords();
+            $prodSrchObj->doNotLimitRecords();
+            $prodSrchObj->joinProductToCategory();
+            $prodSrchObj->joinCategoryRelationWithChild();
+            $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
+            if (0 < $parentId) {
+                $prodSrchObj->addCondition('prodcat_code', 'like', str_pad($parentId, 6, 0, STR_PAD_LEFT) . '%');
+            }
+            $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
+        }
+        $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'c.prodcat_id = cr.pcr_prodcat_id', 'c');
+        $srch->joinTable(
+            ProductCategory::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'prodcatlang_prodcat_id = c.prodcat_id
+            AND prodcatlang_lang_id = ' . $langId,
+            'c_l'
+        );
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        // $srch->addMultipleFields(['cr.pcr_prodcat_id', 'cr.pcr_parent_id']);
+        $srch->addGroupBy('cr.pcr_prodcat_id');
+        $srch->addMultipleFields(array('c.prodcat_id', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier ) as prodcat_name', 'substr(c.prodcat_code,1,6) AS prodrootcat_code',  'c_l.prodcat_content_block', 'c.prodcat_active', 'c.prodcat_parent', 'c.prodcat_code', 'c.prodcat_ordercode'));
+
+        if ($sortByName) {
+            $srch->addOrder('prodcat_name');
+            $srch->addOrder('prodcat_identifier');
+        } else {
+            $srch->addOrder('prodcat_ordercode');
+        }
+
+        if (!empty($keywords)) {
+            $cnd = $srch->addCondition('prodcat_identifier', 'like', '%' . $keywords . '%');
+            $cnd->attachCondition('prodcat_name', 'like', '%' . $keywords . '%');
+        }
+
+        if (0 < $parentId) {
+            $srch->addCondition('cr.pcr_parent_id', '=', $parentId);
+        }
+        $srch->addCondition('prodcat_status', '=', self::REQUEST_APPROVED);
+        $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+
+        $rs = $srch->getResultSet();
+
+        $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
+        $categoriesArr = static::parseTree($categoriesArr, $parentId);
+        if (true == $useCache) {
+            FatCache::set('categoryArrCache' . $cacheKey, serialize($categoriesArr), '.txt');
+        }
+        return $categoriesArr;
+    }
+
+    public static function getTreeArr($langId, $parentId = 0, $sortByName = false, $prodCatSrch = false, $excludeCatHavingNoProducts = false, $keywords = false)
     {
         $parentId = FatUtility::int($parentId);
         $langId = FatUtility::int($langId);
@@ -241,65 +311,9 @@ class ProductCategory extends MyAppModel
             trigger_error("Language not specified", E_USER_ERROR);
         }
 
-        if (!is_object($prodCatSrchObj)) {
-            $srch = new SearchBase(self::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-            $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'c.prodcat_id = cr.pcr_parent_id', 'c');
-            $srch->joinTable(
-                ProductCategory::DB_TBL_LANG,
-                'LEFT OUTER JOIN',
-                'prodcatlang_prodcat_id = c.prodcat_id
-            AND prodcatlang_lang_id = ' . $langId,
-                'c_l'
-            );
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
-            $srch->addMultipleFields(['cr.pcr_prodcat_id', 'cr.pcr_parent_id']);
-            $srch->addGroupBy('cr.pcr_parent_id');
-            $srch->addMultipleFields(array('c.prodcat_id', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier ) as prodcat_name', 'substr(c.prodcat_code,1,6) AS prodrootcat_code',  'c_l.prodcat_content_block', 'c.prodcat_active', 'c.prodcat_parent', 'c.prodcat_code', 'c.prodcat_ordercode'));
-
-            if ($sortByName) {
-                $srch->addOrder('prodcat_name');
-                $srch->addOrder('prodcat_identifier');
-            } else {
-                $srch->addOrder('prodcat_ordercode');
-            }
-
-            if (!empty($keywords)) {
-                $cnd = $srch->addCondition('prodcat_identifier', 'like', '%' . $keywords . '%');
-                $cnd->attachCondition('prodcat_name', 'like', '%' . $keywords . '%');
-            }
-
-            if ($excludeCatHavingNoProducts) {
-                $prodSrchObj = new ProductSearch();
-                $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'c.prodcat_id as qryProducts_prodcat_id'));
-                $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
-                $prodSrchObj->joinSellerSubscription(0, true);
-                $prodSrchObj->addSubscriptionValidCondition();
-                $prodSrchObj->doNotCalculateRecords();
-                $prodSrchObj->doNotLimitRecords();
-                $prodSrchObj->joinProductToCategory(0, true, true, true, true);
-                if (0 < $parentId) {
-                    $prodSrchObj->addCondition('cr.pcr_prodcat_id', '=', $parentId);
-                }
-                $prodSrchObj->addGroupBy('c.prodcat_id');
-                $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
-                $prodSrchObj->addHaving('productCounts', '>', 0);
-                $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = c.prodcat_id', 'qryProducts');
-                $srch->addFld('qryProducts.productCounts as productCounts');
-            }
-
-            if (0 < $parentId) {
-                $srch->addCondition('cr.pcr_prodcat_id', '=', $parentId);
-            }
-
-            $rs = $srch->getResultSet();
-            $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');            
-            $categoriesArr = static::parseTree($categoriesArr, $parentId);
-            return $categoriesArr;
-            // $prodCatSrch = new ProductCategorySearch($langId, true, true, false);
+        if (false == $prodCatSrch) {
+            return self::getArray($langId, $parentId, $sortByName, $excludeCatHavingNoProducts, $keywords);
         }
-
-        $prodCatSrch = clone $prodCatSrchObj;
 
         if (!empty($keywords)) {
             $cnd = $prodCatSrch->addCondition('prodcat_identifier', 'like', '%' . $keywords . '%');
@@ -333,18 +347,20 @@ class ProductCategory extends MyAppModel
 
         if ($excludeCatHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
-            $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'c.prodcat_id as qryProducts_prodcat_id'));
+            // $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'c.prodcat_id as qryProducts_prodcat_id'));
+            $prodSrchObj->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
             $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
             $prodSrchObj->joinSellerSubscription(0, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->doNotLimitRecords();
-            $prodSrchObj->joinProductToCategory(0, true, true, true, true);
-            $prodSrchObj->addGroupBy('c.prodcat_id');
+            $prodSrchObj->joinProductToCategory();
+            $prodSrchObj->joinCategoryRelationWithChild();
             $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
-            $prodSrchObj->addHaving('productCounts', '>', 0);
-            $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = c.prodcat_id', 'qryProducts');
-            $srch->addFld('qryProducts.productCounts as productCounts');
+            if (0 < $parentId) {
+                $prodSrchObj->addCondition('prodcat_code', 'like', str_pad($parentId, 6, 0, STR_PAD_LEFT) . '%');
+            }
+            $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
         }
         if ($sortByName) {
             $srch->addOrder('prodcat_name');
