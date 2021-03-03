@@ -1643,6 +1643,7 @@ END,   special_price_found ) as special_price_found'
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription(0, false, true);
         $srch->addSubscriptionValidCondition();
+        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_available_from', '<=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
         $srch->addMultipleFields(array('product_id', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
@@ -1660,8 +1661,8 @@ END,   special_price_found ) as special_price_found'
         $tmpQry = $srch->getQuery();
 
         $qry = "INSERT INTO " . static::DB_PRODUCT_MIN_PRICE . " (pmp_product_id, pmp_selprod_id, pmp_min_price, pmp_splprice_id) SELECT * FROM (" . $tmpQry . ") AS t ON DUPLICATE KEY UPDATE pmp_selprod_id = t.selprod_id, pmp_min_price = t.theprice, pmp_splprice_id = t.splprice_id";
-
         FatApp::getDb()->query($qry);
+
         $query = "DELETE m FROM " . static::DB_PRODUCT_MIN_PRICE . " m LEFT OUTER JOIN (" . $tmpQry . ") ON pmp_product_id = selprod_product_id WHERE m.pmp_product_id IS NULL";
         FatApp::getDb()->query($query);
     }
