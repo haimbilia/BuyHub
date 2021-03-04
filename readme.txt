@@ -6,6 +6,9 @@ Multivendor - Released Version : RV-9.3.0
 Tasks : 
     => 82248 : DPO Payment Gateway Integration
 
+Enhancements:
+ => Performance Optimization
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
 

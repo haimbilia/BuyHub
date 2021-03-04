@@ -5,8 +5,8 @@ class DummyController extends AdminBaseController
     public function index()
     {
 
-        
-
+        echo  $productId = SellerProduct::getAttributesById(1, 'selprod_product_id');exit;
+        Product::updateMinPrices(0,0,0,0,1280); exit;
         CommonHelper::printArray(ProductCategory::getArray(0, 4, false, true, false, false));
         exit;
 

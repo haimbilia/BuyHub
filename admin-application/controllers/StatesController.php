@@ -152,7 +152,7 @@ class StatesController extends AdminBaseController
             $stateId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        Product::updateMinPrices();
+        Product::updateMinPrices(0, 0, 0, 0, $stateId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('stateId', $stateId);
         $this->set('langId', $newTabLangId);
@@ -307,7 +307,7 @@ class StatesController extends AdminBaseController
         $status = ($data['state_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
         $this->updateStatesStatus($stateId, $status);
-        Product::updateMinPrices();
+        Product::updateMinPrices(0, 0, 0, 0, $stateId);
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
     public function toggleBulkStatuses()

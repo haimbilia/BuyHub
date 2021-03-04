@@ -1616,27 +1616,22 @@ END,   special_price_found ) as special_price_found'
         return false;
     }
 
-    public static function updateMinPrices($productId = 0, $shopId = 0, $brandId = 0)
+    public static function updateMinPrices($productId = 0, $shopId = 0, $brandId = 0, $countryId = 0, $stateId = 0)
     {
         $criteria = array();
         $shopId = FatUtility::int($shopId);
         $brandId = FatUtility::int($brandId);
         $productId = FatUtility::int($productId);
+        $countryId = FatUtility::int($countryId);
 
-        if (0 < $shopId) {
-            $criteria = array('shop_id' => $shopId);
-        }/* else {
-            $shop = Shop::getAttributesByUserId($sellerId);
-            if (!empty($shop) && array_key_exists('shop_id', $shop)) {
-                $criteria = array('shop_id'=>$shop['shop_id'] );
-            }
-        }*/
-
-        if (0 < $brandId) {
-            $criteria = array('brand_id' => $brandId);
-        }
-
-        $criteria = array('max_price' => true);
+        $criteria = array(
+            'max_price' => true,
+            'product_id' => $productId,
+            'brand_id' => $brandId,
+            'country_id' => $countryId,
+            'shop_id' => $shopId,
+            'state_id' => $stateId,
+        );
 
         $srch = new ProductSearch();
         $srch->setDefinedCriteria(1, 0, $criteria, true, false);
@@ -1646,16 +1641,28 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_active', '=', applicationConstants::YES);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_available_from', '<=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
-        $srch->addMultipleFields(array('product_id', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
+        $srch->addMultipleFields(array('DISTINCT(product_id)', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
-        $srch->addGroupBy('product_id');
-        if (!empty($shop) && array_key_exists('shop_id', $shop)) {
-            $srch->addCondition('shop_id', '=', $shop['shop_id']);
-        }
+        // $srch->addGroupBy('product_id');
 
         if (0 < $productId) {
             $srch->addCondition('product_id', '=', $productId);
+        }
+
+        if (0 < $brandId) {
+            $srch->addCondition('brand_id', '=', $brandId);
+        }
+
+        if (0 < $shopId) {
+            $srch->addCondition('shop_id', '=', $shopId);
+        }
+
+        if (0 < $countryId) {
+            $srch->addCondition('country_id', '=', $countryId);
+        }
+        if (0 < $stateId) {
+            $srch->addCondition('state_id', '=', $stateId);
         }
 
         $tmpQry = $srch->getQuery();

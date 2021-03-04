@@ -454,7 +454,7 @@ class ProductCategory extends MyAppModel
         $rs = $srch->getResultSet();
         while ($categories = FatApp::getDb()->fetch($rs)) {
             $category_tree_array[] = $categories;
-            $category_tree_array = self::getCategoryStructure($categories['prodcat_parent'], $category_tree_array, $langId);
+            $category_tree_array = $this->getCategoryStructure($categories['prodcat_parent'], $category_tree_array, $langId);
         }
 
         return $category_tree_array;
@@ -524,7 +524,7 @@ class ProductCategory extends MyAppModel
         if ($records) {
             $name = strip_tags($records['prodcat_identifier']) . $seprator . $name_suffix;
             if ($records['prodcat_parent'] > 0) {
-                $name = self::getParentTreeStructure($records['prodcat_parent'], $level + 1, $name, $langId);
+                $name = $this->getParentTreeStructure($records['prodcat_parent'], $level + 1, $name, $langId);
             }
         }
         return $name;
@@ -574,7 +574,7 @@ class ProductCategory extends MyAppModel
                 break;
             }
             if ($row['prodcat_parent'] > 0) {
-                $return[$row['prodcat_id']] = self::getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
+                $return[$row['prodcat_id']] = $this->getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
             } else {
                 $return[$row['prodcat_id']] = $row['prodcat_identifier'];
             }
@@ -704,7 +704,7 @@ class ProductCategory extends MyAppModel
         foreach ($records as $prodcat_id => $prodcat_identifier) {
             $name = $name_prefix . $seprator . $prodcat_identifier;
             $return[$prodcat_id] = $name;
-            $return += self::getProdCatTreeStructure($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
+            $return += $this->getProdCatTreeStructure($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
         }
         return $return;
     }
@@ -758,7 +758,7 @@ class ProductCategory extends MyAppModel
             } else {
                 $return[$prodcat_id] = $name;
             }
-            $return += self::getProdCatTreeStructureSearch($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
+            $return += $this->getProdCatTreeStructureSearch($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
             //print_r($return); die;
         }
         return $return;
@@ -1021,7 +1021,7 @@ class ProductCategory extends MyAppModel
             }
             //$globalCatTree[$catId]['prodcat_id']['children'] = '';
             if (count($remainingCatCods) > 0) {
-                self::getCategoryTreeForSearch($siteLangId, $remainingCatCods, $globalCatTree[$catId]['children'], $attr);
+                $this->getCategoryTreeForSearch($siteLangId, $remainingCatCods, $globalCatTree[$catId]['children'], $attr);
             }
         }
     }
@@ -1063,7 +1063,7 @@ class ProductCategory extends MyAppModel
             if (!isset($this->categoryTreeArr[$parentId]['children'])) {
                 $this->categoryTreeArr[$parentId]['children'] = array();
             }
-            productCategory::getCategoryTreeForSearch($siteLangId, $remaingCategories, $this->categoryTreeArr[$parentId]['children'], $attr);
+            $this->getCategoryTreeForSearch($siteLangId, $remaingCategories, $this->categoryTreeArr[$parentId]['children'], $attr);
         }
         return $this->categoryTreeArr;
     }
@@ -1097,7 +1097,7 @@ class ProductCategory extends MyAppModel
         if ($returnWithChildArr) {
             foreach ($records as $row) {
                 if ($row['prodcat_parent'] > 0) {
-                    $return[$row['prodrootcat_code']][$row['prodcat_id']]['structure'] = self::getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
+                    $return[$row['prodrootcat_code']][$row['prodcat_id']]['structure'] = $this->getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
                     $return[$row['prodrootcat_code']][$row['prodcat_id']]['prodcat_name'] = $row['prodcat_name'];
                 }
             }
