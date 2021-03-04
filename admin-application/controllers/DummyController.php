@@ -7,7 +7,7 @@ class DummyController extends AdminBaseController
 
         
 
-        CommonHelper::printArray(ProductCategory::getArray(0, 1, false, true));
+        CommonHelper::printArray(ProductCategory::getArray(0, 4, false, true, false, false));
         exit;
 
         $blogPostCategoryObj = new BlogPostCategory();

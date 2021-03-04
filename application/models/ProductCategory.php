@@ -242,6 +242,11 @@ class ProductCategory extends MyAppModel
                 return unserialize($categoryArrCache);
             }
         }
+
+        if (0 < $parentId) {
+            $catCode = static::getAttributesById($parentId, 'prodcat_code');
+        }
+
         $srch = new SearchBase(self::DB_TBL_PROD_CAT_RELATIONS, 'cr');
         if ($excludeCatHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
@@ -256,7 +261,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->joinCategoryRelationWithChild();
             $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
             if (0 < $parentId) {
-                $prodSrchObj->addCondition('prodcat_code', 'like', str_pad($parentId, 6, 0, STR_PAD_LEFT) . '%');
+                $prodSrchObj->addCondition('prodcat_code', 'like', $catCode . '%');
             }
             $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
         }
@@ -288,13 +293,13 @@ class ProductCategory extends MyAppModel
 
         if (0 < $parentId) {
             $srch->addCondition('cr.pcr_parent_id', '=', $parentId);
+            // $srch->addCondition('c.prodcat_code', 'like', $catCode . '%');
         }
         $srch->addCondition('prodcat_status', '=', self::REQUEST_APPROVED);
         $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
 
         $rs = $srch->getResultSet();
-
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         $categoriesArr = static::parseTree($categoriesArr, $parentId);
         if (true == $useCache) {
@@ -326,7 +331,7 @@ class ProductCategory extends MyAppModel
 
         if (0 < $parentId) {
             $catCode = static::getAttributesById($parentId, 'prodcat_code');
-            $prodCatSrch->addCondition('prodcat_code', 'like', $catCode . '%');
+            // $prodCatSrch->addCondition('prodcat_code', 'like', $catCode . '%');
         }
 
         $srch = new SearchBase(self::DB_TBL_PROD_CAT_RELATIONS, 'cr');
@@ -358,7 +363,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->joinCategoryRelationWithChild();
             $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
             if (0 < $parentId) {
-                $prodSrchObj->addCondition('prodcat_code', 'like', str_pad($parentId, 6, 0, STR_PAD_LEFT) . '%');
+                $prodSrchObj->addCondition('prodcat_code', 'like', $catCode . '%');
             }
             $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
         }
@@ -369,7 +374,6 @@ class ProductCategory extends MyAppModel
             //$prodCatSrch->addOrder('prodrootcat_code');
             $srch->addOrder('prodcat_ordercode');
         }
-
         $rs = $srch->getResultSet();
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         // static::addMissingParentDetails($categoriesArr, $langId);

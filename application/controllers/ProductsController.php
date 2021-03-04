@@ -201,15 +201,21 @@ class ProductsController extends MyAppController
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $headerFormParamsAssocArr);
 
         $headerFormParamsAssocArr['doNotJoinSpecialPrice'] = true;
-        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
-        $prodSrchObj->doNotCalculateRecords();
 
-        /* Categories Data[ */
+        /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
         $categoriesArr = array();
         if (empty($keyword)) {
-            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $prodSrchObj, $cacheKey);
+            $catCriteria = $headerFormParamsAssocArr;
+            $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
+
+            $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
+            $catProdSrchObj->doNotCalculateRecords();
+            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
         }
         /* ] */
+
+        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
+        $prodSrchObj->doNotCalculateRecords();
 
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
