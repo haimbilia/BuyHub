@@ -244,7 +244,7 @@ class DataMigration
                 }
             }
 
-            if ($this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $user['id'], User::USER_TYPE_SELLER)) {
+            if (1 > $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $user['id'], User::USER_TYPE_SELLER)) {
                 if (!isset($user['user_password']) || empty($user['user_password'])) {
                     $user['user_password'] = CommonHelper::getRandomPassword(8);
                 }

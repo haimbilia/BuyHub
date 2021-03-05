@@ -145,6 +145,7 @@ class Shopify extends DataMigrationBase
                 'shop_payment_policy' => $seller->policy ?? '',
                 'shop_banner' => $seller->store_banner,
                 'shop_logo' => $seller->shop_logo,
+                'shop_supplier_display_status' => 1
             );
 
             if (!empty($seller->id_country)) {
@@ -338,8 +339,8 @@ class Shopify extends DataMigrationBase
                     $discountCouponCode .= $disApp->code . ", ";
                 }
             }
-            
-            if(!isset($order->customer)){
+
+            if (!isset($order->customer)) {
                 continue;
             }
 
@@ -369,13 +370,13 @@ class Shopify extends DataMigrationBase
                     "address2" => $order->billing_address->address2 ?? '',
                     "phone" => $order->billing_address->phone ?? '',
                     "city" => $order->billing_address->city ?? '',
-                    "zip" => $order->billing_address->zip,
-                    "state" => $order->billing_address->province,
-                    "country" => $order->billing_address->country,
-                    "country_code" => $order->billing_address->country_code,
-                    "state_code" => $order->billing_address->province_code,
-                    "latitude" => $order->billing_address->latitude,
-                    "longitude" => $order->billing_address->longitude,
+                    "zip" => $order->billing_address->zip ?? '',
+                    "state" => $order->billing_address->province ?? '',
+                    "country" => $order->billing_address->country ?? '',
+                    "country_code" => $order->billing_address->country_code ?? '',
+                    "state_code" => $order->billing_address->province_code ?? '',
+                    "latitude" => $order->billing_address->latitude ?? '',
+                    "longitude" => $order->billing_address->longitude ?? '',
                 );
             }
 
@@ -387,13 +388,13 @@ class Shopify extends DataMigrationBase
                     "address2" => $order->shipping_address->address2 ?? '',
                     "phone" => $order->shipping_address->phone ?? '',
                     "city" => $order->shipping_address->city ?? '',
-                    "zip" => $order->shipping_address->zip,
-                    "state" => $order->shipping_address->province,
-                    "country" => $order->shipping_address->country,
-                    "country_code" => $order->shipping_address->country_code,
-                    "state_code" => $order->shipping_address->province_code,
-                    "latitude" => $order->shipping_address->latitude,
-                    "longitude" => $order->shipping_address->longitude,
+                    "zip" => $order->shipping_address->zip ?? '',
+                    "state" => $order->shipping_address->province ?? '',
+                    "country" => $order->shipping_address->country ?? '',
+                    "country_code" => $order->shipping_address->country_code ?? '',
+                    "state_code" => $order->shipping_address->province_code ?? '',
+                    "latitude" => $order->shipping_address->latitude ?? '',
+                    "longitude" => $order->shipping_address->longitude ?? '',
                 );
             }
 
