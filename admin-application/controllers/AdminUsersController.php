@@ -15,12 +15,20 @@ class AdminUsersController extends AdminBaseController
         $this->set("canEdit", $this->canEdit);
     }
 
+    public function setProcedurePermission(){
+        $db = FatApp::getDb();
+        $con = $db->getConnectionObject();
+        if (!$con->query("SET GLOBAL log_bin_trust_function_creators = 1")) {
+            die($con->error);
+        }
+        echo "Done";
+    }
+
     public function createProcedures()
     {
         $db = FatApp::getDb();
         $con = $db->getConnectionObject();
-        $queries = array(
-            "SET GLOBAL log_bin_trust_function_creators = 1",
+        $queries = array(            
             "DROP FUNCTION IF EXISTS `GETBLOGCATCODE`",
             "CREATE FUNCTION `GETBLOGCATCODE`(`id` INT) RETURNS varchar(255) CHARSET utf8
 			BEGIN
