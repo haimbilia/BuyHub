@@ -6,6 +6,7 @@ class PluginSetting
     private $pluginId;
     private $pluginKey;
     private $langId;
+    protected $recordId;
 
     public const DB_TBL = 'tbl_plugin_settings';
     public const DB_TBL_PREFIX = 'pluginsetting_';
@@ -15,11 +16,12 @@ class PluginSetting
     public const TYPE_FLOAT = 3;
     public const TYPE_BOOL = 4;
 
-    public function __construct($id, $pluginKey = '')
+    public function __construct($id, $pluginKey = '', $recordId = 0)
     {
         $this->pluginId = empty($pluginKey) ? $id : Plugin::getAttributesByCode($pluginKey, 'plugin_id');
         $this->pluginKey = $pluginKey;
         $this->langId = CommonHelper::getLangId();
+        $this->recordId = $recordId;
     }
 
     public function getError()
@@ -34,9 +36,10 @@ class PluginSetting
             return false;
         }
         $statement = [
-            'smt' => static::DB_TBL_PREFIX . 'plugin_id = ?',
+            'smt' => static::DB_TBL_PREFIX . 'plugin_id = ? and '.static::DB_TBL_PREFIX .'record_id = ?',
             'vals' => [
-                $this->pluginId
+                $this->pluginId,
+                $this->recordId
             ]
         ];
         if (!FatApp::getDb()->deleteRecords(static::DB_TBL, $statement)) {
@@ -55,7 +58,10 @@ class PluginSetting
 
         $srch = new SearchBase(static::DB_TBL, 'tps');
         $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'plugin_id', '=', $this->pluginId);
-        $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));
+        if(0 < $this->recordId){
+            $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'record_id', '=', $this->recordId);   
+        }
+        $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));        
         $rs = $srch->getResultSet();
         if (!$rs) {
             $this->error = $srch->getError();
@@ -90,6 +96,7 @@ class PluginSetting
         foreach ($data as $key => $val) {
             $updateData = [
                 'pluginsetting_plugin_id' => $this->pluginId,
+                'pluginsetting_record_id' => $this->recordId,
                 'pluginsetting_key' => $key,
                 'pluginsetting_value' => is_array($val) ? serialize($val) : $val,
             ];
@@ -131,7 +138,7 @@ class PluginSetting
                 $fld->requirements()->setRequired(true);
             }
         }
-
+       
         $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
