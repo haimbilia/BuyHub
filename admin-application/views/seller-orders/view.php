@@ -92,7 +92,7 @@ if (!empty($order['opship_tracking_url'])) {
                                     ];
                                 }
 
-                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opship_response']) || 'EasyPost' == $keyName)) {
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opship_response']) || 'EasyPost' == $keyName) && empty($order['opship_tracking_number'])) {
                                     if ('EasyPost' == $keyName) {
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
                                     } else {

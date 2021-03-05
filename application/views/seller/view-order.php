@@ -65,7 +65,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                 <?php } elseif (!empty($orderDetail['opship_response']) && 'EasyPost' != $keyName) { ?>
                                     <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
                                 <?php }
-                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opship_response']) || 'EasyPost' == $keyName)) { 
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opship_response']) || 'EasyPost' == $keyName) && empty($orderDetail['opship_tracking_number'])) { 
                                     if ('EasyPost' == $keyName) {
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                     } else {
