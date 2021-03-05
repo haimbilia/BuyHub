@@ -10,7 +10,7 @@ class ValidateElement extends FatUtility
     public const CITY_NAME_REGEX = '^([^0-9]*)$';
     public const PASSWORD_REGEX = '^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%-_]{8,15}$';
     public const USERNAME_REGEX = '^[a-zA-Z0-9]{3,30}$';
-    public const FATBIT_USERNAME_REGEX = '^[a-z][a-z_\.0-9]{3,19}$';
+    public const FATBIT_USERNAME_REGEX = '^[a-zA-Z][a-zA-Z_\.0-9]{3,19}$';
     public const VISA_REGEX = '^4';
     public const MASTER_REGEX = '^5[1-5]';
     public const AMEX_REGEX = '^3[47]';

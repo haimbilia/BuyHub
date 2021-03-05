@@ -66,6 +66,7 @@ foreach ($collections as $collectionIndex => $collectionData) {
     } elseif (array_key_exists('shops', $collectionData)) {
         foreach ($collectionData['shops'] as $index => $shop) {
             $shopId = isset($shop['shopData']['shop_id']) ? $shop['shopData']['shop_id'] : $shop['shop_id'];
+            $collections[$collectionIndex]['shops'][$index]['shop_id'] = $shopId;
             $collections[$collectionIndex]['shops'][$index]['shop_logo'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopLogo', array($shopId, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
             $collections[$collectionIndex]['shops'][$index]['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($shopId, $siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
         }

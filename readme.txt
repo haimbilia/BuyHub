@@ -3,12 +3,56 @@ Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
     => System API version : 2.3
 
-Tasks : 
+New Feature : 
     => 82248 : DPO Payment Gateway Integration
 
-Enhancements:
- => Performance Optimization
-
+Fixes:
+    => 047746 - Get current location not working
+    => 046939 - Add product tag giving error
+    => 047306 - On shop collection while linking product remove icon not coming
+    => 047899 - Default lang url issue when we enable language specific url
+    => 048292 - Handled case insenstive for Admin url.
+    => 047929 - When uploading file for 3rd party APIs Google webmaster and Bing, file name is not saved
+    => 047992 - on product search page product coming with wrong option while search
+    => 048123 - On Buyer Review Status Updated Notification wrong email template passed
+    => 048408 - Admin - While creating a new category catcode not updated
+    => 048194 - Unable to add alt tag for image with different options
+    => 048604 - Fatal error in View Order API.
+    => 048534 - Design issue of blank li tag adding in header if single language and single currency 
+    => 048605 - getting error while creating shipping profile IN ADMIN
+    => 048634 - Users are unable to see products in the favourite list if brand is not selected for the product
+    => 048649 - whenever seller/admin edits the catalog/inventory then on updating it updates the url and changes it to id
+    => 048457 - on seller credit page unable to edit label BL_Add_Wallet_Credits_[ Br]
+    => 049052 - Category icon not displayed in Android and iOS mobile applications
+    => 049066 - when admin product is available for pickup only then on buyer end it's listing- price 0 and getting problem on further step
+    => 049147 - Digital product details page >> Available for shipping and pickup should be removed.
+    => 049029 - when hamburger menu is selected for categories then on web- all categories are listing while on app only categories containing data are listing
+    => 049317 - Mpesa Payment Gateway argument type Issue reported with live credentials
+    => 049365 - When you order more than one item with only one allowing for COD, it completes the order as so with all the items, even the ones that don’t have COD option eligible 
+    => 049364 - About Us image is not getting updated in cms due to cache.
+    => 049390 - Shipping is listing twice on front end when cart products from multiple sellers and admin shipping only enabled.
+    => 049439 - payment status is not getting updated through paypal
+    => 049425 - Seller >> shop >> pickup address tab >> if we click on "pickup address " tab before adding shop details then blank page gets displayed
+    => 049682 - unable to save seller inventory if quantity is zero
+    => 049811 - While uploading user profile image profile link is wrong in response
+    => 049777 - The - button (QUANTITY reducer) is not functional when we order a product through pickup
+    => 049919 - labels missing in system
+    => 049995 - If order is placed with digital product then unable to cancel the order even if it is allow from admin
+    => 049981 - seller/admin> attribute tab> some UI issue while adding product
+    => 050083 - On admin dashboard under statistics tab subscription earning data is wrong
+    => 050137 - Apart from added components in combined tax,extra Duplicate entry is visible in tax details in ORDERS .(where we have the display of the tax components)
+    => 049980 - issue with URL rewetting
+    => 050289 - Order email table BG is not updating as per theme
+    => 050045 - Signup >> when we enter capital letter in username then it shows some errors. 
+    => 050397 - When seller click on "shipping package " then some error gets displayed
+    
+Enhancements :
+   => Make provision to made seller
+   => At shop level  pickup interval option given
+   => Tracking order with Google Analytics ecommerce 
+   => W3c validator.
+   => Performance optimization
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
 

@@ -625,6 +625,21 @@ class Product extends MyAppModel
         }
         return $data;
     }
+    
+    public static function getSeparateImageOptions($product_id, $lang_id)
+    {
+        $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $lang_id));
+        $productOptions = Product::getProductOptions($product_id, $lang_id, true, 1);
+
+        foreach ($productOptions as $val) {
+            if (!empty($val['optionValues'])) {
+                foreach ($val['optionValues'] as $k => $v) {
+                    $imgTypesArr[$k] = $v;
+                }
+            }
+        }
+        return $imgTypesArr;
+    }
 
     public static function getProductSpecifications($product_id, $lang_id)
     {
@@ -1564,8 +1579,7 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
-        $srch->addGroupBy('product_id');
-        // echo $srch->getQuery();
+        $srch->addGroupBy('product_id');        
         if (!empty($keyword)) {
             $srch->addGroupBy('keywordmatched');
             $srch->addOrder('keywordmatched', 'desc');

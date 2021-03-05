@@ -122,6 +122,7 @@ $(document).ready(function () {
 	};
 
 	displaySubCategories = function (obj, catId = 0, data, callable = '') {
+		$(obj).removeClass('clickable');
 		if (catId > 0) {
 			var prodCatId = catId;
 		} else {

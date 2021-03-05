@@ -904,42 +904,67 @@ class SellerProduct extends MyAppModel
         $srch->addOrder('voldiscount_min_qty', 'ASC');
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
-    }
-
+    }   
+    
     private function rewriteUrl($keyword, $type = 'product')
     {
         if ($this->mainTableRecordId < 1) {
             return false;
+        }        
+        
+        $originalUrl = $this->getRewriteOriginalUrl($type);        
+        $seoUrl = $this->sanitizeSeoUrl($keyword,$type);        
+        
+        $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl);
+        return UrlRewrite::update($originalUrl, $customUrl);
+    }    
+    
+    private function getRewriteOriginalUrl($type = 'product')
+    {
+        if ($this->mainTableRecordId < 1) {
+            return false;
         }
-
-        $keyword = preg_replace('/-' . $this->mainTableRecordId . '$/', '', $keyword);
-        $seoUrl = CommonHelper::seoUrl($keyword);
-
+        
         switch (strtolower($type)) {
             case 'reviews':
                 $originalUrl = Product::PRODUCT_REVIEWS_ORGINAL_URL . $this->mainTableRecordId;
-                $seoUrl = preg_replace('/-reviews$/', '', $seoUrl);
-                $seoUrl .= '-reviews';
                 break;
             case 'moresellers':
                 $originalUrl = Product::PRODUCT_MORE_SELLERS_ORGINAL_URL . $this->mainTableRecordId;
-                $seoUrl = preg_replace('/-sellers$/', '', $seoUrl);
-                $seoUrl .= '-sellers';
                 break;
             default:
                 $originalUrl = Product::PRODUCT_VIEW_ORGINAL_URL . $this->mainTableRecordId;
                 break;
         }
+        return $originalUrl;
+    }
 
-        $seoUrl .= '-' . $this->mainTableRecordId;
-
-        $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl);
-        return UrlRewrite::update($originalUrl, $customUrl);
+    public function sanitizeSeoUrl($keyword, $type = 'product')
+    {
+        $seoUrl = CommonHelper::seoUrl($keyword);
+        switch (strtolower($type)) {
+            case 'reviews':
+                $seoUrl = preg_replace('/-reviews$/', '', $seoUrl);
+                $seoUrl .= '-reviews';
+                break;
+            case 'moresellers':
+                $seoUrl = preg_replace('/-sellers$/', '', $seoUrl);
+                $seoUrl .= '-sellers';
+                break;
+            default:
+                break;
+        }
+        return $seoUrl;
     }
 
     public function rewriteUrlProduct($keyword)
     {
         return $this->rewriteUrl($keyword, 'product');
+    }
+    
+    public function getRewriteProductOriginalUrl()
+    {
+        return $this->getRewriteOriginalUrl('product');
     }
 
     public function rewriteUrlReviews($keyword)

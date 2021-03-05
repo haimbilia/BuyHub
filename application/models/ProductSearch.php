@@ -684,9 +684,15 @@ class ProductSearch extends SearchBase
         }
     }
 
-    public function joinBrandsLang($langId)
+    public function joinBrandsLang($langId, $keyword = '')
     {
-        $this->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $langId, 'tb_l');
+        $joinCondition = '';
+        $joinBy = 'LEFT OUTER JOIN';
+        if (!empty($keyword)) {
+            $joinBy = 'INNER JOIN';
+            $joinCondition = ' and tb_l.brand_name like ' . FatApp::getDb()->quoteVariable($keyword);
+        }
+        $this->joinTable(Brand::DB_TBL_LANG, $joinBy, 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $langId . $joinCondition, 'tb_l');
     }
 
     public function joinProductToCategory($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true, $useRelationTable = false)
@@ -935,7 +941,7 @@ class ProductSearch extends SearchBase
                 if (1 > FatUtility::int($val)) {
                     continue;
                 }
-                $str .= $orCnd . " " . $alias . "selprod_code like '%_" . $val . "_%' or " . $alias . "selprod_code like '%_" . $val . "'";
+                $str .= $orCnd . " " . $alias . "selprod_code like '%\_" . $val . "\_%' or " . $alias . "selprod_code like '%\_" . $val . "'";
                 $orCnd = ' or';
                 //$andCnd = ") and (";
             }
@@ -949,7 +955,7 @@ class ProductSearch extends SearchBase
             }
 
             $opVal = FatUtility::int($opVal);
-            $obj->addDirectCondition(" (" . $alias . "selprod_code like '%_" . $opVal . "_%' or " . $alias . "selprod_code like '%_" . $opVal . "') ");
+            $obj->addDirectCondition(" (" . $alias . "selprod_code like '%\_" . $opVal . "\_%' or " . $alias . "selprod_code like '%\_" . $opVal . "') ");
         } else {
             $optionValueArr = explode(",", $optionValue);
             sort($optionValueArr);
@@ -967,7 +973,7 @@ class ProductSearch extends SearchBase
                     if (1 > FatUtility::int($val)) {
                         continue;
                     }
-                    $str .= $orCnd . " " . $alias . "selprod_code like '%_" . $val . "_%' or " . $alias . "selprod_code like '%_" . $val . "'";
+                    $str .= $orCnd . " " . $alias . "selprod_code like '%\_" . $val . "\_%' or " . $alias . "selprod_code like '%\_" . $val . "'";
                     $orCnd = 'or';
                 }
                 $orCnd = "";

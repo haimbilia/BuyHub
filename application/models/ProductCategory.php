@@ -378,7 +378,6 @@ class ProductCategory extends MyAppModel
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         // static::addMissingParentDetails($categoriesArr, $langId);
         $categoriesArr = static::parseTree($categoriesArr, $parentId);
-
         return $categoriesArr;
     }
 
@@ -891,7 +890,7 @@ class ProductCategory extends MyAppModel
         if (true === $includeChildCat && $categoriesArr) {
             foreach ($categoriesArr as $key => $cat) {
                 $categoriesArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($cat['prodcat_id'], $langId, 'COLLECTION_PAGE'));
-                $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id']);
+                $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id'], $includeChildCat, $forSelectBox, $sortByName, $prodCatSrchObj, $excludeCategoriesHavingNoProducts);
             }
         }
         return $categoriesArr;
