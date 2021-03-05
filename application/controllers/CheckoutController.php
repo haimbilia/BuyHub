@@ -592,6 +592,9 @@ class CheckoutController extends MyAppController
         $this->cartObj->removeProductPickUpAddresses();
         $post = FatApp::getPostedData();
 
+        $shippingServices = isset($post['shipping_services']) ? $post['shipping_services'] : [];
+        $this->cartObj->setselectedShipping($shippingServices);
+
         $cartProducts = $this->cartObj->getProducts($this->siteLangId);
         $shippingRates = $this->cartObj->getShippingRates();
         if (false == $shippingRates) {
@@ -603,7 +606,7 @@ class CheckoutController extends MyAppController
         $shipProducts = [];
 
         $basketProducts = $this->cartObj->getBasketProducts($this->siteLangId);
-        $shippingServices = isset($post['shipping_services']) ? $post['shipping_services'] : [];
+        
         foreach ($shippingServices as $prodIdCobination => $rateId) {
             if (empty($rateId)) {
                 $message = Labels::getLabel('MSG_Shipping_Method_is_not_selected_on_products_in_cart', $this->siteLangId);

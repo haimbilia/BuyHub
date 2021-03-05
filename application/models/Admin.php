@@ -29,7 +29,7 @@ class Admin extends MyAppModel
         
        return $adminAddress = [
             'line1' => FatApp::getConfig('CONF_ADDRESS_' . $langId, FatUtility::VAR_STRING, ''),
-            'line2' => '',
+            'line2' => FatApp::getConfig('CONF_ADDRESS_LINE_2_' . $langId, FatUtility::VAR_STRING, ''),
             'city' =>FatApp::getConfig('CONF_CITY_' . $langId, FatUtility::VAR_STRING, ''),
             'state' => $stateName,
             'stateCode' => $stateCode,

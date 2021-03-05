@@ -56,15 +56,23 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             </a>
                             <?php if ($shippedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
                                 $opId = $orderDetail['op_id'];
-                                if (empty($orderDetail['opship_response']) && empty($orderDetail['opship_tracking_number'])) {
+                                $plugin = new Plugin();
+                                $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+
+                                if (empty($orderDetail['opship_response']) && empty($orderDetail['opship_tracking_number']) && 'EasyPost' != $keyName) {
                                     $orderId = $orderDetail['order_id']; ?>
                                     <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
-                                <?php } elseif (!empty($orderDetail['opship_response'])) { ?>
+                                <?php } elseif (!empty($orderDetail['opship_response']) && 'EasyPost' != $keyName) { ?>
                                     <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
                                 <?php }
-
-                                if (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opship_response'])) { ?>
-                                    <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $siteLangId); ?>"><i class="fas fa-shipping-fast"></i></a>
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opship_response']) || 'EasyPost' == $keyName)) { 
+                                    if ('EasyPost' == $keyName) {
+                                        $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
+                                    } else {
+                                        $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $siteLangId);
+                                    }
+                                    ?>
+                                    <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo $label; ?>"><i class="fas fa-shipping-fast"></i></a>
                             <?php }
                             } ?>
                         </div>

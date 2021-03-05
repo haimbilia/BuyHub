@@ -33,7 +33,7 @@ trait ShippingServices
     }
     
     /**
-     * generateLabel
+     * generateLabel - Used for shipstation only.
      *
      * @param  int $opId
      * @return void
@@ -96,7 +96,7 @@ trait ShippingServices
         $this->shipmentResponse = json_decode($orderProductShipmentDetail['opship_response'], true);
         $this->trackingNumber = $orderProductShipmentDetail['opship_tracking_number'];
         $this->filename = "label-" . $this->trackingNumber . ".pdf";
-        $this->labelData = $this->shipmentResponse['labelData'];
+        $this->labelData = array_key_exists('labelData', $this->shipmentResponse) ? $this->shipmentResponse['labelData'] : $this->shipmentResponse;
         return true;
     }
 
@@ -147,29 +147,38 @@ trait ShippingServices
         $opSrch->addCondition('op.op_id', '=', $opId);
 
         $opSrch->addMultipleFields(
-            array('opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code')
+            array('opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code')
         );
 
         $opRs = $opSrch->getResultSet();
         $data = $db->fetch($opRs);
-
-        if (empty($data["opship_orderid"])) {
+        
+        if (empty($data["opship_orderid"]) && 'ShipStationShipping' == $this->keyName) {
             $msg = Labels::getLabel("MSG_MUST_GENERATE_LABEL_BEFORE_SHIPMENT", $this->langId);
             LibHelper::dieJsonError($msg);
         }
 
-        if (false === $this->shippingService->loadOrder($data["opship_orderid"])) {
+        if ('ShipStationShipping' == $this->keyName) {
+            $opshipmentId = $data["opship_orderid"];
+        } else {
+            $opshipmentId = $data["opshipping_service_code"];
+        }
+
+        if (false === $this->shippingService->loadOrder($opshipmentId)) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
         $shipmentData = $this->shippingService->getResponse();
-        
-        if ('shipped' == strtolower($shipmentData['orderStatus'])) {
-            $msg = Labels::getLabel("LBL_ALREADY_SHIPPED", $this->langId);
+        if (array_key_exists('orderStatus', $shipmentData) && ('shipped' == strtolower($shipmentData['orderStatus']) || 'unknown' != strtolower($shipmentData['orderStatus']))) {
+            $status = ucwords($shipmentData['orderStatus']);
+            $msg = Labels::getLabel("LBL_ALREADY_{STATUS}", $this->langId);
+            $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
             LibHelper::dieJsonError($msg);
         }
-
+        
         $requestParam = [
             "orderId" => $data['opship_orderid'],
+            "op_id" => $opId,
+            "opshipmentId" => $opshipmentId,
             "carrierCode" => $data['opshipping_carrier_code'],
             "shipDate" => date('Y-m-d'),
             "trackingNumber" => $data['opship_tracking_number'],
@@ -182,17 +191,27 @@ trait ShippingServices
         }
 
         $orderInfo = $this->shippingService->getResponse();
+        $trackingNumber = ('ShipStationShipping' == $this->keyName) ? $data['opship_tracking_number'] : $orderInfo['tracking_code'];
         $updateData = [
             'opship_op_id' => $opId,
             'opship_order_number' => $orderInfo['orderNumber'],
-            "opship_tracking_number" => $data['opship_tracking_number'],
+            "opship_tracking_number" => $trackingNumber,
         ];
 
+        if ('ShipStationShipping' != $this->keyName) {
+            $updateData["opship_tracking_url"] = $orderInfo['tracking_url'];
+            $updateData["opship_response"] = json_encode($orderInfo);
+        }
        
         if (!$db->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
             LibHelper::dieJsonError($db->getError());
         }
+
+        $json = [
+            'msg' => Labels::getLabel('LBL_SUCCESS', $this->langId),
+            'tracking_number' => $trackingNumber
+        ];
   
-        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
+        LibHelper::dieJsonSuccess($json);
     }
 }

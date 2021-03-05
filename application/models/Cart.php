@@ -11,6 +11,7 @@ class Cart extends FatModel
     private $includeTax = true;
     private $pageType = 0;
     private $discounts = 0;
+    private $selectedShippingService = [];
 
     public const DB_TBL = 'tbl_user_cart';
     public const DB_TBL_PREFIX = 'usercart_';
@@ -1841,6 +1842,11 @@ class Cart extends FatModel
         return $product_rates;
     }
 
+    public function setselectedShipping(array $selectedShippingService)
+    {
+        $this->selectedShippingService = $selectedShippingService; /* Selected Shipping Service */
+    }
+
     public function getShippingRates()
     {
         $shippingOptions = $this->getShippingOptions();
@@ -1947,6 +1953,10 @@ class Cart extends FatModel
             $shippingAddressDetail =  $address->getData(Address::TYPE_USER, $this->cart_user_id);
 
             $shipping = new Shipping($this->cart_lang_id);
+            if (is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
+                $shipping->setSelectedShipping($this->selectedShippingService);
+            }
+
             $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo);
             $shippedByArr = $response['data'];
         }
