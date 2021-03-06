@@ -133,7 +133,7 @@ class CountriesController extends AdminBaseController
             $countryId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        Product::updateMinPrices();
+        Product::updateMinPrices(0, 0, 0, $countryId);
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
         $this->set('countryId', $countryId);
         $this->set('langId', $newTabLangId);
@@ -242,10 +242,10 @@ class CountriesController extends AdminBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
 
         $zoneArr = Zone::getAllZones($this->adminLangId, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Zone', $this->adminLangId), 'country_zone_id', $zoneArr);
+        $frm->addSelectBox(Labels::getLabel('LBL_Zone', $this->adminLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
         $currencyArr = Currency::getCurrencyNameWithCode($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Currency', $this->adminLangId), 'country_currency_id', $currencyArr);
+        $frm->addSelectBox(Labels::getLabel('LBL_Currency', $this->adminLangId), 'country_currency_id', $currencyArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
         $languageArr = Language::getAllNames();
         $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'country_language_id', array(0 => 'Site Default') + $languageArr, '', array(), '');
@@ -294,7 +294,7 @@ class CountriesController extends AdminBaseController
         $status = ($data['country_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
         $this->updateCountryStatus($countryId, $status);
-        Product::updateMinPrices();
+        Product::updateMinPrices(0, 0, 0, $countryId);
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
 

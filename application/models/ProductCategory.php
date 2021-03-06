@@ -242,6 +242,11 @@ class ProductCategory extends MyAppModel
                 return unserialize($categoryArrCache);
             }
         }
+
+        if (0 < $parentId) {
+            $catCode = static::getAttributesById($parentId, 'prodcat_code');
+        }
+
         $srch = new SearchBase(self::DB_TBL_PROD_CAT_RELATIONS, 'cr');
         if ($excludeCatHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
@@ -256,7 +261,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->joinCategoryRelationWithChild();
             $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
             if (0 < $parentId) {
-                $prodSrchObj->addCondition('prodcat_code', 'like', str_pad($parentId, 6, 0, STR_PAD_LEFT) . '%');
+                $prodSrchObj->addCondition('prodcat_code', 'like', $catCode . '%');
             }
             $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
         }
@@ -288,13 +293,13 @@ class ProductCategory extends MyAppModel
 
         if (0 < $parentId) {
             $srch->addCondition('cr.pcr_parent_id', '=', $parentId);
+            // $srch->addCondition('c.prodcat_code', 'like', $catCode . '%');
         }
         $srch->addCondition('prodcat_status', '=', self::REQUEST_APPROVED);
         $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
 
         $rs = $srch->getResultSet();
-
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         $categoriesArr = static::parseTree($categoriesArr, $parentId);
         if (true == $useCache) {
@@ -326,7 +331,7 @@ class ProductCategory extends MyAppModel
 
         if (0 < $parentId) {
             $catCode = static::getAttributesById($parentId, 'prodcat_code');
-            $prodCatSrch->addCondition('prodcat_code', 'like', $catCode . '%');
+            // $prodCatSrch->addCondition('prodcat_code', 'like', $catCode . '%');
         }
 
         $srch = new SearchBase(self::DB_TBL_PROD_CAT_RELATIONS, 'cr');
@@ -358,7 +363,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->joinCategoryRelationWithChild();
             $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
             if (0 < $parentId) {
-                $prodSrchObj->addCondition('prodcat_code', 'like', str_pad($parentId, 6, 0, STR_PAD_LEFT) . '%');
+                $prodSrchObj->addCondition('prodcat_code', 'like', $catCode . '%');
             }
             $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
         }
@@ -369,12 +374,10 @@ class ProductCategory extends MyAppModel
             //$prodCatSrch->addOrder('prodrootcat_code');
             $srch->addOrder('prodcat_ordercode');
         }
-
         $rs = $srch->getResultSet();
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         // static::addMissingParentDetails($categoriesArr, $langId);
         $categoriesArr = static::parseTree($categoriesArr, $parentId);
-
         return $categoriesArr;
     }
 
@@ -450,7 +453,7 @@ class ProductCategory extends MyAppModel
         $rs = $srch->getResultSet();
         while ($categories = FatApp::getDb()->fetch($rs)) {
             $category_tree_array[] = $categories;
-            $category_tree_array = self::getCategoryStructure($categories['prodcat_parent'], $category_tree_array, $langId);
+            $category_tree_array = $this->getCategoryStructure($categories['prodcat_parent'], $category_tree_array, $langId);
         }
 
         return $category_tree_array;
@@ -520,7 +523,7 @@ class ProductCategory extends MyAppModel
         if ($records) {
             $name = strip_tags($records['prodcat_identifier']) . $seprator . $name_suffix;
             if ($records['prodcat_parent'] > 0) {
-                $name = self::getParentTreeStructure($records['prodcat_parent'], $level + 1, $name, $langId);
+                $name = $this->getParentTreeStructure($records['prodcat_parent'], $level + 1, $name, $langId);
             }
         }
         return $name;
@@ -570,7 +573,7 @@ class ProductCategory extends MyAppModel
                 break;
             }
             if ($row['prodcat_parent'] > 0) {
-                $return[$row['prodcat_id']] = self::getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
+                $return[$row['prodcat_id']] = $this->getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
             } else {
                 $return[$row['prodcat_id']] = $row['prodcat_identifier'];
             }
@@ -700,7 +703,7 @@ class ProductCategory extends MyAppModel
         foreach ($records as $prodcat_id => $prodcat_identifier) {
             $name = $name_prefix . $seprator . $prodcat_identifier;
             $return[$prodcat_id] = $name;
-            $return += self::getProdCatTreeStructure($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
+            $return += $this->getProdCatTreeStructure($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
         }
         return $return;
     }
@@ -754,7 +757,7 @@ class ProductCategory extends MyAppModel
             } else {
                 $return[$prodcat_id] = $name;
             }
-            $return += self::getProdCatTreeStructureSearch($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
+            $return += $this->getProdCatTreeStructureSearch($prodcat_id, $langId, $keywords, $level + 1, $name, $isActive, $isDeleted, $isForCsv);
             //print_r($return); die;
         }
         return $return;
@@ -887,7 +890,7 @@ class ProductCategory extends MyAppModel
         if (true === $includeChildCat && $categoriesArr) {
             foreach ($categoriesArr as $key => $cat) {
                 $categoriesArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($cat['prodcat_id'], $langId, 'COLLECTION_PAGE'));
-                $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id']);
+                $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id'], $includeChildCat, $forSelectBox, $sortByName, $prodCatSrchObj, $excludeCategoriesHavingNoProducts);
             }
         }
         return $categoriesArr;
@@ -1017,7 +1020,7 @@ class ProductCategory extends MyAppModel
             }
             //$globalCatTree[$catId]['prodcat_id']['children'] = '';
             if (count($remainingCatCods) > 0) {
-                self::getCategoryTreeForSearch($siteLangId, $remainingCatCods, $globalCatTree[$catId]['children'], $attr);
+                $this->getCategoryTreeForSearch($siteLangId, $remainingCatCods, $globalCatTree[$catId]['children'], $attr);
             }
         }
     }
@@ -1059,7 +1062,7 @@ class ProductCategory extends MyAppModel
             if (!isset($this->categoryTreeArr[$parentId]['children'])) {
                 $this->categoryTreeArr[$parentId]['children'] = array();
             }
-            productCategory::getCategoryTreeForSearch($siteLangId, $remaingCategories, $this->categoryTreeArr[$parentId]['children'], $attr);
+            $this->getCategoryTreeForSearch($siteLangId, $remaingCategories, $this->categoryTreeArr[$parentId]['children'], $attr);
         }
         return $this->categoryTreeArr;
     }
@@ -1093,7 +1096,7 @@ class ProductCategory extends MyAppModel
         if ($returnWithChildArr) {
             foreach ($records as $row) {
                 if ($row['prodcat_parent'] > 0) {
-                    $return[$row['prodrootcat_code']][$row['prodcat_id']]['structure'] = self::getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
+                    $return[$row['prodrootcat_code']][$row['prodcat_id']]['structure'] = $this->getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
                     $return[$row['prodrootcat_code']][$row['prodcat_id']]['prodcat_name'] = $row['prodcat_name'];
                 }
             }

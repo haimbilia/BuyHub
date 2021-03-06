@@ -44,7 +44,7 @@ $cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main" role="main">
+<main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
         <div class="content-header row">
             <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?> <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?></h2>
@@ -95,7 +95,10 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                                     <div class="col-lg-6">
                                         <div class="replaced amount-added-box border h-100 rounded text-center p-3">
                                             <h6 class="card-title mb-4">
-                                                <?php echo Labels::getLabel('LBL_Add_Wallet_Credits' . '_[' . CommonHelper::getDefaultCurrencySymbol() . ']', $siteLangId); ?></h6>
+                                                <?php 
+                                                $str = Labels::getLabel('LBL_Add_Wallet_Credits_[{CURRENCY-SYMBOL}]', $siteLangId);
+                                                echo CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => CommonHelper::getDefaultCurrencySymbol()]); ?>
+                                            </h6>
                                             <div id="rechargeWalletDiv" class="cellright nopadding--bottom">
                                                 <?php
                                                 $frmRechargeWallet->setFormTagAttribute('onSubmit', 'setUpWalletRecharge(this); return false;');

@@ -52,7 +52,7 @@ class Navigation
             if ($headerCategoriesCache) {
                 $headerCategories = unserialize($headerCategoriesCache);
             } else {
-                $headerCategories = ProductCategory::getTreeArr($siteLangId);
+                $headerCategories = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
                 FatCache::set('headerCategories_' . $siteLangId, serialize($headerCategories), '.txt');
             }
         }
@@ -239,7 +239,7 @@ class Navigation
 
         if ($includeCategories) {
             /* Category have products[ */
-            $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, true);
+            $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
 
             /* $catSrch = new SearchBase(ProductCategory::DB_TBL, 'c');
             $catSrch->addCondition('prodcat_status', '=', ProductCategory::REQUEST_APPROVED);
@@ -336,7 +336,7 @@ class Navigation
         $previous_nav_id = 0;
 
         if ($rows) {
-            $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, true);
+            $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
 
             foreach ($rows as $key => $row) {
                 if ($key == 0 || $previous_nav_id != $row['nav_id']) {
@@ -350,7 +350,7 @@ class Navigation
                     if (array_key_exists($row['nlink_category_id'], $rootCatArr)) {
                         $childrenCats = $rootCatArr[$row['nlink_category_id']]['children'];
                     } else {
-                        $childrenCats = ProductCategory::getArray($siteLangId, $row['nlink_category_id'], false, true, false, true);
+                        $childrenCats = ProductCategory::getArray($siteLangId, $row['nlink_category_id'], false, true, false, CONF_USE_FAT_CACHE);
                     }
                 }
                 $navigation[$previous_nav_id]['pages'][$key]['children'] = isset($childrenCats) ? $childrenCats : [];

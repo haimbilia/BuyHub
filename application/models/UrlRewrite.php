@@ -97,4 +97,10 @@ class UrlRewrite extends MyAppModel
 
         return $slug;
     }
+    
+    public static function isCustomUrlUnique($customUrl)
+    {
+        return 1 > count(static::getDataByCustomUrl($customUrl));
+    }
+
 }

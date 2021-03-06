@@ -117,6 +117,14 @@ class ShippingProfile extends MyAppModel
 
         return $shipProZoneId;
     }
+    
+    public static function getShippingZoneArr(int $userId): array
+    {
+        $shippingZoneSrch = ShippingZone::getSearchObject();
+        $shippingZoneSrch->addCondition('shipzone_user_id', '=', $userId);
+        $rs = $shippingZoneSrch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
+    }
 
     public static function setDefaultRates($shipProZoneId, $shippingProfileId)
     {
@@ -185,7 +193,8 @@ class ShippingProfile extends MyAppModel
             self::setDefaultRates($shipProZoneId, $shippingProfileId);
         }
 
-        if ($shippingProfileId && true == $createDefaultShipProfile) {
+        
+        if (0 < $shippingProfileId && true == $createDefaultShipProfile) {
             $srch = new ProductSearch(CommonHelper::getLangId(), null, null, false, false);
             $srch->joinProductShippedBySeller($userId);
             if (User::canAddCustomProduct()) {

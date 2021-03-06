@@ -32,7 +32,7 @@ class StatesController extends AdminBaseController
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country', $countriesArr);
+        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
@@ -152,7 +152,7 @@ class StatesController extends AdminBaseController
             $stateId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        Product::updateMinPrices();
+        Product::updateMinPrices(0, 0, 0, 0, $stateId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('stateId', $stateId);
         $this->set('langId', $newTabLangId);
@@ -307,7 +307,7 @@ class StatesController extends AdminBaseController
         $status = ($data['state_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
         $this->updateStatesStatus($stateId, $status);
-        Product::updateMinPrices();
+        Product::updateMinPrices(0, 0, 0, 0, $stateId);
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
     public function toggleBulkStatuses()

@@ -38,7 +38,7 @@ class ProductsController extends MyAppController
         $keyword = '';
         if (array_key_exists('keyword', $get)) {
             $includeKeywordRelevancy = true;
-            $keyword = $get['keyword'];
+            $keyword = trim($get['keyword']);
         }
 
         if ($validateBrand && array_key_exists('keyword', $get)) {
@@ -49,14 +49,15 @@ class ProductsController extends MyAppController
             $prodSrchObj->setGeoAddress();
             $prodSrchObj->joinShops();
             $prodSrchObj->validateAndJoinDeliveryLocation();
-            $prodSrchObj->joinBrands($this->siteLangId);
+            $prodSrchObj->joinBrands();
+            $prodSrchObj->joinBrandsLang($this->siteLangId, $keyword);
             $prodSrchObj->joinProductToCategory();
             $prodSrchObj->joinSellerSubscription(0, false, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->setPageSize(1);
             $prodSrchObj->doNotCalculateRecords();
-            $prodSrchObj->addHaving('brand_name', 'like', trim($get['keyword']));
+            $prodSrchObj->addHaving('brand_name', 'like', $keyword);
             $brandRs = $prodSrchObj->getResultSet();
             $brandArr = FatApp::getDb()->fetchAllAssoc($brandRs);
             if (!empty($brandArr)) {
@@ -201,15 +202,21 @@ class ProductsController extends MyAppController
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $headerFormParamsAssocArr);
 
         $headerFormParamsAssocArr['doNotJoinSpecialPrice'] = true;
-        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
-        $prodSrchObj->doNotCalculateRecords();
 
-        /* Categories Data[ */
+        /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
         $categoriesArr = array();
         if (empty($keyword)) {
-            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $prodSrchObj, $cacheKey);
+            $catCriteria = $headerFormParamsAssocArr;
+            $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
+
+            $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
+            $catProdSrchObj->doNotCalculateRecords();
+            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
         }
         /* ] */
+
+        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
+        $prodSrchObj->doNotCalculateRecords();
 
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
@@ -424,7 +431,7 @@ class ProductsController extends MyAppController
                 'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age', 'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type'
             )
         );
-
+        
         $productRs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($productRs);
         /* ] */
@@ -517,7 +524,8 @@ class ProductsController extends MyAppController
 
         //abled and Get Shipping Rates [*/
         $codEnabled = false;
-        if (Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id'])) {
+        $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
+        if ($isProductShippedBySeller) {
             $walletBalance = User::getUserBalance($product['selprod_user_id']);
             if ($product['selprod_cod_enabled']) {
                 $codEnabled = true;
@@ -546,7 +554,7 @@ class ProductsController extends MyAppController
             $shippingRates = array();
             $shippingDetails = array();
         }
-        $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
+        // $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
         $fulfillmentType = $product['selprod_fulfillment_type'];
         if (true == $isProductShippedBySeller) {
             if ($product['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
@@ -811,6 +819,7 @@ class ProductsController extends MyAppController
         $moreSellerSrch->addHaving('in_stock', '>', 0);
         $moreSellerSrch->addOrder('theprice');
         $moreSellerSrch->addGroupBy('selprod_id');
+        // echo $moreSellerSrch->getQuery(); exit;
         $moreSellerRs = $moreSellerSrch->getResultSet();
         return FatApp::getDb()->fetchAll($moreSellerRs);
     }
@@ -1847,7 +1856,7 @@ class ProductsController extends MyAppController
             if ($pageSize) {
                 $srch->setPageSize($pageSize);
             }
-            //echo $srch->getQuery();exit;
+            
             $rs = $srch->getResultSet();
             $db = FatApp::getDb();
             $products = $db->fetchAll($rs);

@@ -131,7 +131,7 @@
                                     if (0 < count($link['children'])) {
                                         $href = 'javascript:void(0)';
                                         $navchild = 'navchild';
-                                        $target = '';
+                                        $target = '_self';
                                     }
                     ?>
                                     <li class=" <?php echo $navchild; ?>">
@@ -145,7 +145,6 @@
                                                             <ul class="sublinks">
                                                                 <?php $subyChild = 0;
                                                                 foreach ($link['children'] as $children) {
-
                                                                     $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
                                                                     $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
                                                                 ?>

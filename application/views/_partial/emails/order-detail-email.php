@@ -4,7 +4,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                 <td>
                     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="text-align:left">
                         <tr>
-                            <td style="background-color: #ff3a59;padding: 10px 25px;">
+                            <td style="background-color: #' . FatApp::getConfig('CONF_EMAIL_TEMPLATE_COLOR_CODE' . $siteLangId, FatUtility::VAR_STRING, 'ff3a59') . ';padding: 10px 25px;">
                                 <table width="100%" border="0" cellpadding="0" cellspacing="0">                                                             
                                     <tr>
                                         <td style="font-size: 14px;font-weight: 700;color: #fff;">' . Labels::getLabel('Lbl_Order_No.', $siteLangId) . ' ' . $orderInfo['order_id'] . '</td>
@@ -164,7 +164,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                             </td>
                         </tr>';
                 $str .= '<tr>
-                            <td style="background-color: #ffdee3;padding: 20px 25px;">
+                            <td style="background-color: #f2f2f2;padding: 20px 25px;">
                                 <table width="100%" cellspacing="0" cellpadding="0" border="0">
                                     <tr>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('L_CART_TOTAL_(_QTY_*_Product_price_)', $siteLangId) . '</td>

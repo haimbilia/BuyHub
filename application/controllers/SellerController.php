@@ -282,7 +282,7 @@ class SellerController extends SellerBaseController
         $srch->setPageSize($pagesize);
 
         $srch->addMultipleFields(
-            array('order_id', 'order_status', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type')
+            array('order_id', 'order_status', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type', 'opshipping_carrier_code', 'opshipping_service_code')
         );
 
         $keyword = FatApp::getPostedData('keyword', null, '');
@@ -321,7 +321,7 @@ class SellerController extends SellerBaseController
 
         $rs = $srch->getResultSet();
         $orders = FatApp::getDb()->fetchAll($rs);
-
+        // CommonHelper::printArray($orders);
         $oObj = new Orders();
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id']);
@@ -2250,7 +2250,8 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage($shopObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-
+        $shop_id = $shopObj->getMainTableRecordId();
+        
         $post['ss_shop_id'] = $shop_id;
         $shopSpecificsObj = new ShopSpecifics($shop_id);
         $shopSpecificsObj->assignValues($post);
@@ -2259,8 +2260,6 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage($shopSpecificsObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-
-        $shop_id = $shopObj->getMainTableRecordId();
 
         /* $userObj = new User( $userId );
           $vendorReturnAddress = $userObj->getUserReturnAddress( $this->siteLangId );
@@ -2417,6 +2416,28 @@ class SellerController extends SellerBaseController
         $this->set('langId', $newTabLangId);
         $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
+    }
+    
+    public function isShopRewriteUrlUnique()
+    {
+        $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $urlKeyword = FatApp::getPostedData('url_keyword');
+        $shopObj = new Shop($shop_id);
+        $seoUrl = $shopObj->sanitizeSeoUrl($urlKeyword);
+        if (1 > $shop_id) {
+            $isUnique = UrlRewrite::isCustomUrlUnique($seoUrl);
+            if ($isUnique) {
+                FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+            }
+            FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId));
+        }
+
+        $originalUrl = $shopObj->getRewriteShopOriginalUrl();
+        $customUrlData = UrlRewrite::getDataByCustomUrl($seoUrl, $originalUrl);
+        if (empty($customUrlData)) {
+            FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+        }
+        FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId));
     }
 
     public function uploadShopImages()
@@ -3570,6 +3591,10 @@ class SellerController extends SellerBaseController
         $fld->requirements()->setPositive();
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_CANCELLATION_AGE', $this->siteLangId), 'shop_cancellation_age');
+        $fld->requirements()->setInt();
+        $fld->requirements()->setPositive();
+        
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $this->siteLangId) . ' [' . Labels::getLabel('LBL_Hours', $this->siteLangId) . ']', 'shop_pickup_interval');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
 
@@ -4935,7 +4960,9 @@ class SellerController extends SellerBaseController
             'msg' => Labels::getLabel('LBL_Special_Price_Setup_Successful', $this->siteLangId),
             'data' => $this->_template->render(false, false, 'seller/update-special-price-row.php', true)
         );
-        Product::updateMinPrices();
+
+        $productId = SellerProduct::getAttributesById($data['splprice_selprod_id'], 'selprod_product_id');
+        Product::updateMinPrices($productId);
         FatUtility::dieJsonSuccess($json);
     }
 
@@ -5627,5 +5654,6 @@ class SellerController extends SellerBaseController
 
         $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
+    }    
+    
 }
