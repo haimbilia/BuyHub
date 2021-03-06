@@ -117,10 +117,10 @@ class AdminUsersController extends AdminBaseController
             FOR EACH ROW 
             CALL UPDATECATEGORYRELATIONS(new.prodcat_id)",
             "DROP TRIGGER IF EXISTS `UPDATECATEGORY`",
-            "CREATE TRIGGER `UPDATECATEGORY`
-            AFTER UPDATE ON `tbl_product_categories` 
-            FOR EACH ROW 
-            CALL UPDATECATEGORYRELATIONS(new.prodcat_id)",
+            "CREATE TRIGGER `UPDATECATEGORY` AFTER UPDATE ON `tbl_product_categories`
+            FOR EACH ROW IF new.prodcat_parent != old.prodcat_parent THEN 
+               CALL UPDATECATEGORYRELATIONS(new.prodcat_id);
+            END IF",
             "CALL updateCategoryRelations(0)",
         );
 

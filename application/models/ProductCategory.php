@@ -1210,6 +1210,15 @@ class ProductCategory extends MyAppModel
             $this->updateCatCode();
         }
 
+        $childrens = $this->getChildrens();
+        $db = FatApp::getDb();
+        foreach($childrens as $catId => $notInUse) {
+            if (!$db->query('CALL updateCategoryRelations(' . $catId . ')')) {
+                $this->error = $db->getError();
+                return false;
+            }
+        }
+
         if (array_key_exists('prodcat_active', $post)) {
             if (applicationConstants::INACTIVE == $post['prodcat_active']) {
                 $this->disableChildCategories();
@@ -1415,7 +1424,15 @@ class ProductCategory extends MyAppModel
             return false;
         }
         $parentCatId = FatUtility::int($parentCatId);
-        FatApp::getDb()->updateFromArray(static::DB_TBL, array(static::DB_TBL_PREFIX . 'parent' => $parentCatId), array('smt' => static::DB_TBL_PREFIX . 'id = ?', 'vals' => array($this->mainTableRecordId)));
+        $childrens = $this->getChildrens();
+        $db = FatApp::getDb();
+        $db->updateFromArray(static::DB_TBL, array(static::DB_TBL_PREFIX . 'parent' => $parentCatId), array('smt' => static::DB_TBL_PREFIX . 'id = ?', 'vals' => array($this->mainTableRecordId)));
+        foreach($childrens as $catId => $notInUse) {
+            if (!$db->query('CALL updateCategoryRelations(' . $catId . ')')) {
+                $this->error = $db->getError();
+                return false;
+            }
+        }
         return true;
     }
 
@@ -1546,5 +1563,30 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs, 'pcr_parent_id');
+    }
+
+    /**
+     * getChildrens
+     *
+     * @param  array $attr
+     * @return array
+     */
+    public function getChildrens(array $attr = []): array
+    {
+        $catId = $this->getMainTableRecordId();
+        $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
+        $srch->addCondition('pcr_parent_id', '=', $catId);
+        $srch->addOrder('pcr_level', 'DESC');
+        if (!empty($attr)) {
+            $attr = in_array('pcr_prodcat_id', $attr) ? $attr : array_merge($attr, ['pcr_prodcat_id']);
+            $srch->addMultipleFields($attr);
+        } else {
+            $srch->addFld('pcr_prodcat_id');
+        }
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs, 'pcr_prodcat_id');
     }
 }
