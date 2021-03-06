@@ -46,12 +46,12 @@ class SellerPlugin extends PluginCommon
 
         return $srch;
     }
-    
-     private static function pluginTypeSrchObj(int $userId, int $typeId, int $langId, bool $customCols = true, bool $active = false)
+
+    private static function pluginTypeSrchObj(int $userId, int $typeId, int $langId, bool $customCols = true, bool $active = false)
     {
 
         $srch = static::getSearchObject($userId, $langId, $active);
-        if (false === $customCols) {
+        if (false === $customCols && 0 < $langId) {
             $srch->addMultipleFields(self::ATTRS);
         }
 
@@ -86,79 +86,82 @@ class SellerPlugin extends PluginCommon
 
         return $db->fetchAll($rs, static::DB_TBL_PREFIX . 'id');
     }
+
     /*
 
-    public static function isActive(string $code): bool
-    {
-        return (0 < static::getAttributesByCode($code, self::DB_TBL_PREFIX . 'active') ? true : false);
-    }
+      public static function isActive(string $code): bool
+      {
+      return (0 < static::getAttributesByCode($code, self::DB_TBL_PREFIX . 'active') ? true : false);
+      }
 
-    public static function isActiveByType(string $type): bool
-    {
-        $srch = new SearchBase(static::DB_TBL, 'plg');
-        $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'type', '=', $type);
-        $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row)) {
-            return true;
-        }
-        return false;
-    }
+      public static function isActiveByType(string $type): bool
+      {
+      $srch = new SearchBase(static::DB_TBL, 'plg');
+      $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'type', '=', $type);
+      $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
+      $rs = $srch->getResultSet();
+      $row = FatApp::getDb()->fetch($rs);
+      if (!empty($row)) {
+      return true;
+      }
+      return false;
+      }
 
-    public static function getAttributesByCode(string $code, $attr = '', int $langId = 0)
-    {
-        $srch = new SearchBase(static::DB_TBL, 'plg');
-        $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'code', '=', $code);
+      public static function getAttributesByCode(string $code, $attr = '', int $langId = 0)
+      {
+      $srch = new SearchBase(static::DB_TBL, 'plg');
+      $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'code', '=', $code);
 
-        if (0 < $langId) {
-            $srch->joinTable(self::DB_TBL_LANG, 'LEFT JOIN', self::DB_TBL_LANG_PREFIX . static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'id and ' . self::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'plg_l');
-        }
+      if (0 < $langId) {
+      $srch->joinTable(self::DB_TBL_LANG, 'LEFT JOIN', self::DB_TBL_LANG_PREFIX . static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'id and ' . self::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'plg_l');
+      }
 
-        if ('' != $attr) {
-            if (is_array($attr)) {
-                $srch->addMultipleFields($attr);
-            } elseif (is_string($attr)) {
-                $srch->addFld($attr);
-            }
-        }
+      if ('' != $attr) {
+      if (is_array($attr)) {
+      $srch->addMultipleFields($attr);
+      } elseif (is_string($attr)) {
+      $srch->addFld($attr);
+      }
+      }
 
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (empty($row) || !is_array($row)) {
-            return false;
-        }
+      $rs = $srch->getResultSet();
+      $row = FatApp::getDb()->fetch($rs);
+      if (empty($row) || !is_array($row)) {
+      return false;
+      }
 
-        if (!empty($attr) && is_string($attr)) {
-            return $row[$attr];
-        }
-        return $row;
-    }   
+      if (!empty($attr) && is_string($attr)) {
+      return $row[$attr];
+      }
+      return $row;
+      }
 
-    public static function getNamesByType(int $typeId, int $langId)
-    {
-        $typeId = FatUtility::int($typeId);
-        $langId = FatUtility::int($langId);
-        if (1 > $typeId && 1 > $langId) {
-            return false;
-        }
-        return static::getDataByType($typeId, $langId, true);
-    }
+      public static function getNamesByType(int $typeId, int $langId)
+      {
+      $typeId = FatUtility::int($typeId);
+      $langId = FatUtility::int($langId);
+      if (1 > $typeId && 1 > $langId) {
+      return false;
+      }
+      return static::getDataByType($typeId, $langId, true);
+      }
 
-    public static function getNamesWithCode(int $typeId, int $langId)
-    {
-        $typeId = FatUtility::int($typeId);
-        $langId = FatUtility::int($langId);
-        if (1 > $typeId && 1 > $langId) {
-            return false;
-        }
-        $arr = [];
-        $pluginsTypeArr = static::getDataByType($typeId, $langId);
-        array_walk($pluginsTypeArr, function (&$value, &$key) use (&$arr) {
-            $arr[$value['plugin_code']] = $value['plugin_name'];
-        });
-        return $arr;
-    }
+      public static function getNamesWithCode(int $typeId, int $langId)
+      {
+      $typeId = FatUtility::int($typeId);
+      $langId = FatUtility::int($langId);
+      if (1 > $typeId && 1 > $langId) {
+      return false;
+      }
+      $arr = [];
+      $pluginsTypeArr = static::getDataByType($typeId, $langId);
+      array_walk($pluginsTypeArr, function (&$value, &$key) use (&$arr) {
+      $arr[$value['plugin_code']] = $value['plugin_name'];
+      });
+      return $arr;
+      }
+     * 
+     */
 
     public function getDefaultPluginKeyName(int $typeId)
     {
@@ -171,42 +174,32 @@ class SellerPlugin extends PluginCommon
             $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
             return false;
         }
-        $kingPin = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $typeId, FatUtility::VAR_INT, 0);
-        if (1 > $kingPin) {
-            $this->error = Labels::getLabel('MSG_PLUGIN_NOT_FOUND', CommonHelper::getLangId());
-            return false;
-        }
 
-        if (0 < $langId) {
-            $customCols = !empty($attr) ? true : false;
-            $srch = static::pluginTypeSrchObj($typeId, $langId, $customCols, true);
+        $customCols = !empty($attr) ? true : false;
+        $srch = static::pluginTypeSrchObj($this->userId, $typeId, $langId, $customCols, true);
 
-            if (!empty($attr)) {
-                switch ($attr) {
-                    case is_string($attr):
-                        if ('plugin_name' == $attr) {
-                            $attr = 'COALESCE(plg_l.' . static::DB_TBL_PREFIX . 'name, plg.' . static::DB_TBL_PREFIX . 'identifier) as plugin_name';
-                        }
-                        $srch->addFld($attr);
-                        break;
+        if (!empty($attr)) {
+            switch ($attr) {
+                case is_string($attr):
+                    if ('plugin_name' == $attr) {
+                        $attr = 'COALESCE(plg_l.' . static::DB_TBL_PREFIX . 'name, plg.' . static::DB_TBL_PREFIX . 'identifier) as plugin_name';
+                    }
+                    $srch->addFld($attr);
+                    break;
 
-                    default:
-                        $srch->addMultipleFields($attr);
-                        break;
-                }
+                default:
+                    $srch->addMultipleFields($attr);
+                    break;
             }
-
-            $rs = $srch->getResultSet();
-            $result = FatApp::getDb()->fetch($rs);
-            if (is_string($attr)) {
-                return $result[$attr];
-            }
-            return $result;
         }
-        return Plugin::getAttributesById($kingPin, $attr);
+        echo $srch->getQuery();
+        $rs = $srch->getResultSet();
+        $result = FatApp::getDb()->fetch($rs);
+        if (is_string($attr)) {
+            return $result[$attr];
+        }
+        return $result;
     }
-     * 
-     */
 
     public static function getDefaultPluginId(int $userId, int $type): int
     {
@@ -271,26 +264,35 @@ class SellerPlugin extends PluginCommon
             }
         }
 
+
         if (0 < $activationLimit && $activationLimit <= count($plugins) && self::ACTIVE == $status) {
             $msg = Labels::getLabel("MSG_MAXIMUM_OF_{LIMIT}_{PLUGIN-TYPE}_CAN_BE_ACTIVATED_SIMULTANEOUSLY.", $langId) . $msg;
             $this->error = CommonHelper::replaceStringData($msg, ['{LIMIT}' => $activationLimit, '{PLUGIN-TYPE}' => $pluginTypesArr[$typeId]]);
             return false;
         }
 
-        $max = in_array($typeId, self::HAVING_KINGPIN) && applicationConstants::ACTIVE == $status ? 2 : 1;
-
-        for ($i = 0; $i < $max; $i++) {
-            
-            $condition = ['smt' => self::DB_TBL_PREFIX . 'type = ?', 'vals' => [$typeId]];
-            
-            $operator = (0 < $i ? '!=' : '=');
-            $condition = ['smt' => self::DB_TBL_PLUGIN_TO_USER_PREFIX . 'user_id = ? AND ' . self::DB_TBL_PLUGIN_TO_USER_PREFIX . 'plugin_id ' . $operator . ' ?', 'vals' => [$this->userId, $this->mainTableRecordId]];
-
-            if (!$db->updateFromArray(self::DB_TBL_PLUGIN_TO_USER, [self::DB_TBL_PLUGIN_TO_USER_PREFIX . 'active' => (0 < $i ? self::INACTIVE : $status)], $condition)) {
+        if ($status == applicationConstants::YES) {
+            $dataToSave = array(
+                'ps_plugin_id' => $this->mainTableRecordId,
+                'ps_user_id' => $this->userId,
+                'ps_active' => $status
+            );
+            if (!FatApp::getDb()->insertFromArray(self::DB_TBL_PLUGIN_TO_USER, $dataToSave, false, array(), $dataToSave)) {
+                $this->error = $db->getError();
+                return false;
+            }
+        } else {           
+            if (!$db->deleteRecords(self::DB_TBL_PLUGIN_TO_USER, array('smt' => 'ps_plugin_id = ? AND ps_user_id = ?', 'vals' => array($this->mainTableRecordId, $this->userId)))) {
                 $this->error = $db->getError();
                 return false;
             }
         }
+
+        if ($status == applicationConstants::YES && in_array($typeId, self::HAVING_KINGPIN)) {
+            $deleteQuery = "delete pu FROM tbl_plugin_to_user as pu inner join tbl_plugins on ps_plugin_id = plugin_id and ps_user_id =" . $this->userId . " where plugin_type = " . $typeId . " and ps_plugin_id !=" . $this->mainTableRecordId;
+            FatApp::getDb()->query($deleteQuery);
+        }
+
         return true;
     }
 

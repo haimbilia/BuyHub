@@ -19,7 +19,7 @@ class PluginCommon extends MyAppModel
 
     public const ACTIVE  = 1;
     public const INACTIVE  = 0;
-
+    
     public const TYPE_CURRENCY_CONVERTER = 1;
     public const TYPE_SOCIAL_LOGIN = 2;
     public const TYPE_PUSH_NOTIFICATION = 3;
@@ -185,5 +185,7 @@ class PluginCommon extends MyAppModel
             self::ENV_PRODUCTION => Labels::getLabel('LBL_PRODUCTION', $langId),
         ];
     }
+    
+    
     
 }

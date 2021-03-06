@@ -9,7 +9,11 @@ class DataMigration
     public const TYPE_SELLER = 4;
     public const TYPE_PRODUCT_TAG = 5;
     public const TYPE_ORDER = 6;
-
+    
+    
+    public const SINGLE_VENDOR = 1;
+    public const MULTIVENDOR_VENDOR = 2;
+    
     public $activedServiceId = 0;
     private $langId;
     private $pluginObj;
@@ -30,10 +34,22 @@ class DataMigration
 
     public function sync()
     {
-        $activatedTaxServiceId = $this->getActivatedServiceId();
-        if (1 < $activatedTaxServiceId) {
-            $pluginKey = Plugin::getAttributesById($activatedTaxServiceId, 'plugin_code');
+//        if($response = $this->adminSideSync()  !== true){
+//            return $response;
+//        }
+        if ($response = $this->sellerSideSync() !== true) {
+            return $response;
+        }
+    }
+
+    protected function adminSideSync()
+    {
+        $pluginObj = new Plugin();
+        $pluginKey = $pluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION,'plugin_code');
+
+        if (!empty($pluginKey)) {
             $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId], $error, $this->langId);
+            $this->pluginObj->setVendorType(self::MULTIVENDOR_VENDOR);
             if (false === $this->pluginObj) {
                 $this->error = $error;
                 return false;
@@ -69,21 +85,43 @@ class DataMigration
                 echo 'Message: ' . $e->getMessage();
                 return false;
             }
+            return true;
         }
     }
 
-    /**
-     * getActivatedServiceId
-     *
-     * @return int
-     */
-    public function getActivatedServiceId(): int
+    protected function sellerSideSync()
     {
-        if (1 > $this->activedServiceId) {
-            $pluginObj = new Plugin();
-            $this->activedServiceId = (int) $pluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, 'plugin_id');
+        echo 111;
+
+        $userId = UserAuthentication::getLoggedUserId();
+        $sellerPluginObj = new SellerPlugin(0, $userId);
+        echo $pluginKey = $sellerPluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION,'plugin_code');
+
+        if (!empty($pluginKey)) {
+            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId , self::SINGLE_VENDOR], $error, $this->langId);
+            $this->pluginObj->setUserId($userId);
+            if (false === $this->pluginObj) {
+                $this->error = $error;
+                return false;
+            }
+            if (false === $this->pluginObj->init()) {
+                $this->error = $this->pluginObj->getError();
+                return false;
+            }
+
+            try {
+
+                if ($this->syncProducts()) {
+                    echo 'Products Synced';
+                    return 'Products Synced';
+                }
+
+            } catch (Exception $e) {
+                echo 'Message: ' . $e->getMessage();
+                return false;
+            }
         }
-        return $this->activedServiceId;
+        return true;
     }
 
     public function getError()
@@ -98,9 +136,10 @@ class DataMigration
             if (!$this->saveUsersData($users)) {
                 $this->logError();
                 return true;
-            }
-            $this->pluginObj->savePaginationData(DataMigration::TYPE_USER);
+            }            
         }
+        
+        $this->pluginObj->savePaginationData(DataMigration::TYPE_USER);
 
         return (0 < count($users));
     }

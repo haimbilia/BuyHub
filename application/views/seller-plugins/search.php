@@ -60,7 +60,7 @@ foreach ($arr_listing as $sn => $row) {
                 if (applicationConstants::ACTIVE == $row['ps_active']) {
                     $active = 'checked';
                 }
-                $str = '<label class="toggle-switch" for="switch' . $row['plugin_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['plugin_id'] . '" id="switch' . $row['plugin_id'] . '" onclick="toggleStatus(this,' . ($row['plugin_active'] > 0 ? 0 : 1) . ')"/><div class="slider round"></div></label>';
+                $str = '<label class="toggle-switch" for="switch' . $row['plugin_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['plugin_id'] . '" id="switch' . $row['plugin_id'] . '" onclick="toggleStatus(this,' . ($row['ps_active'] > 0 ? 0 : 1) . ')"/><div class="slider round"></div></label>';
 
                 $td->appendElement('plaintext', array(), $str, true);
                 break;

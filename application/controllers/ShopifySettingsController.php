@@ -2,18 +2,18 @@
 
 class ShopifySettingsController extends DataMigrationSettingsController
 {
-    public static function getConfigurationKeys()
+    public static function getConfigurationKeys($langId)
     {
         return [
             'shop_url' => [
                 'type' => PluginSetting::TYPE_STRING,
                 'required' => true,
-                'label' => "Shop Url",
+                'label' => Labels::getLabel('LBL_SHOP_URL', $langId),
             ],           
             'password' => [
                 'type' => PluginSetting::TYPE_STRING,
                 'required' => true,
-                'label' => "Password",
+                'label' => Labels::getLabel('LBL_PASSWORD', $langId),
             ],
         ];
     }

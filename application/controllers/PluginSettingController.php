@@ -40,7 +40,7 @@ class PluginSettingController extends LoggedUserController
     public function index()
     {
         $this->setFormObj();
-        $pluginSetting = new PluginSetting(0, $this->keyName);
+        $pluginSetting = new PluginSetting(0, $this->keyName, UserAuthentication::getLoggedUserId());
         $settings = $pluginSetting->get();
         if (false === $settings) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId));
@@ -60,12 +60,12 @@ class PluginSettingController extends LoggedUserController
             FatUtility::dieJsonError(current($this->frmObj->getValidationErrors()));
         }
 
-        $pluginSetting = new PluginSetting($post["plugin_id"]);
+        $pluginSetting = new PluginSetting($post["plugin_id"], NULL, UserAuthentication::getLoggedUserId());
         if (!$pluginSetting->save($post)) {
             FatUtility::dieWithError($pluginSetting->getError());
         }
 
-        $this->set('msg', $this->str_setup_successful);
+        $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -73,7 +73,7 @@ class PluginSettingController extends LoggedUserController
     {
         $class = get_called_class();
         try {
-            $requirements = $class::getConfigurationKeys();
+            $requirements = $class::getConfigurationKeys($this->siteLangId);
         } catch (\Error $e) {
             if (false == method_exists($class, 'form')) {
                 FatUtility::dieJsonError($e->getMessage());
