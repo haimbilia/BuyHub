@@ -151,45 +151,6 @@ class ProductCategory extends MyAppModel
         return true;
     }
 
-    /* public function updateCatCode()
-    {
-        $categoryId = $this->mainTableRecordId;
-        if (1 > $categoryId) {
-            return false;
-        }
-
-        $categoryArray = array($categoryId);
-        $parentCatData = ProductCategory::getAttributesById($categoryId, array('prodcat_parent'));
-        if (array_key_exists('prodcat_parent', $parentCatData) && $parentCatData['prodcat_parent'] > 0) {
-            array_push($categoryArray, $parentCatData['prodcat_parent']);
-        }
-
-        foreach ($categoryArray as $categoryId) {
-            $srch = ProductCategory::getSearchObject(false, 0, false, -1);
-            $srch->addOrder('m.prodcat_active', 'DESC');
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
-            $srch->addMultipleFields(array('prodcat_id', 'GETCATCODE(`prodcat_id`) as prodcat_code', 'GETCATORDERCODE(`prodcat_id`) as prodcat_ordercode'));
-            $srch->addCondition('GETCATCODE(`prodcat_id`)', 'LIKE', '%' . str_pad($categoryId, 6, '0', STR_PAD_LEFT) . '%', 'AND', true);
-            $rs = $srch->getResultSet();
-            $catCode = FatApp::getDb()->fetchAll($rs);
-            foreach ($catCode as $row) {
-                $record = new ProductCategory($row['prodcat_id']);
-                $data = array('prodcat_code' => $row['prodcat_code'], 'prodcat_ordercode' => $row['prodcat_ordercode']);
-                $record->assignValues($data);
-                if (!$record->save()) {
-                    Message::addErrorMessage($record->getError());
-                    return false;
-                }
-
-                // Updating Category Relations
-                self::updateCategoryRelations($row['prodcat_id'], $row['prodcat_code']);
-                // Updating Category Relations
-            }
-        }
-        return true;
-    } */
-
     public static function updateCatOrderCode($prodCatId = 0)
     {
         $prodCatId = FatUtility::int($prodCatId);
@@ -458,21 +419,6 @@ class ProductCategory extends MyAppModel
 
         return $category_tree_array;
     }
-
-    /* public function getProdCat($prodcat_id,$lang_id=0){
-        $srch =$this->getSearchObject();
-        $srch->addCondition('m.prodcat_id','=',$prodcat_id);
-        if($lang_id>0){
-            $srch->joinTable(static::DB_TBL_LANG, 'LEFT JOIN', 'plang.prodcatlang_prodcat_id = m.prodcat_id', 'plang');
-            $srch->addFld('plang.*');
-        }
-        $srch->addFld('m.*');
-        $record = FatApp::getDb()->fetch($srch->getResultSet());
-        //var_dump($record); exit;
-        $lang_record=array();
-        return  array_merge($record,$lang_record);
-
-    } */
 
     public function addUpdateProdCatLang($data, $lang_id, $prodcat_id)
     {
@@ -932,16 +878,7 @@ class ProductCategory extends MyAppModel
         }
         return false;
     }
-    /* function getSubCategory(){
-        $srch = new SearchBase(static::DB_TBL, 'prodSubCate');
-        $srch->addCondition('prodSubCate.prodcat_deleted', '=',0);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addGroupBy('prodSubCate.prodcat_parent');
-        $srch->addMultipleFields(array('prodSubCate.prodcat_parent',"COUNT(prodSubCate.prodcat_id) AS total_sub_cats"));
-        return $srch;
-    } */
-
+    
     public static function recordCategoryWeightage($categoryId)
     {
         /* $categoryId =  FatUtility::int($categoryId);
@@ -1316,36 +1253,8 @@ class ProductCategory extends MyAppModel
         return $translatedData;
     }
 
-    /* public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true, $includeChildCount = false)
-    {
-        $srch = static::getSearchObject($includeChildCount, $this->commonLangId, false);
-        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
-        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', $this->mainTableRecordId);
-        if ($includeProductCount === true) {
-            $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'm.' . static::DB_TBL_PREFIX . 'id = ' . Product::DB_TBL_PRODUCT_TO_CATEGORY_PREFIX . 'prodcat_id', 'ptc');
-            $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . Product::DB_TBL_PRODUCT_TO_CATEGORY_PREFIX . 'product_id', 'p');
-            $cnd = $srch->addDirectCondition(Product::DB_TBL_PREFIX . 'deleted IS NULL');
-            $cnd->attachCondition(Product::DB_TBL_PREFIX . 'deleted', '=', 0);
-            $srch->addMultipleFields(array('COUNT(' . Product::DB_TBL_PRODUCT_TO_CATEGORY_PREFIX . 'product_id) as category_products'));
-            $srch->addGroupBy('m.' . static::DB_TBL_PREFIX . 'id');
-        }
-        $srch->addOrder(static::DB_TBL_PREFIX . 'display_order', 'asc');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addMultipleFields(array('m.*', 'COALESCE(prodcat_name,m.prodcat_identifier ) as prodcat_name'));
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        if ($includeSubCategoriesCount === true) {
-            foreach ($records as $key => $data) {
-                $records[$key]['subcategory_count'] = $this->getSubCategoriesCount($data[static::DB_TBL_PREFIX . 'id']);
-            }
-        }
-        return $records;
-    } */
-
     public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true)
-    {
+    {   
         $attr = [
             'm.*',
             'COALESCE(prodcat_name,m.prodcat_identifier ) as prodcat_name'
