@@ -278,7 +278,7 @@ class ProductCategory extends MyAppModel
         }
 
         if (false == $prodCatSrch) {
-            return self::getArray($langId, $parentId, $sortByName, $excludeCatHavingNoProducts, $keywords);
+            return self::getArray($langId, $parentId, $sortByName, $excludeCatHavingNoProducts, $keywords, CONF_USE_FAT_CACHE);
         }
 
         if (!empty($keywords)) {
