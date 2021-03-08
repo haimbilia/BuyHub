@@ -41,6 +41,8 @@ Fixes:
     => 050289 - Order email table BG is not updating as per theme
     => 050045 - Signup >> when we enter capital letter in username then it shows some errors. 
     => 050397 - When seller click on "shipping package " then some error gets displayed
+    => 050680 - Phone number should allow special symbols like + - (Contact Us and Footer - Site Phone)
+    => 050654 - Wrong error message "Cart is empty" is displayed if we increase/decrease quantity of a product available only for pickup and then proceed.
     
 Enhancements :
    => Make provision to made seller

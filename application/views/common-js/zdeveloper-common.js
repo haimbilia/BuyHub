@@ -1152,6 +1152,9 @@ $(document).ready(function() {
 
     $(document).on("click", '.increase-js', function() {
         var type = $('input[name="fulfillment_type"]:checked').val();
+        if ($(this).hasClass('not-allowed')) {
+            return false;
+        }
         $(this).siblings('.not-allowed').removeClass('not-allowed');
         var rval = $(this).parent().parent('div').find('input').val();
         if (isNaN(rval)) {
