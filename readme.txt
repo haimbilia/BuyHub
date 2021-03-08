@@ -5,6 +5,7 @@ Multivendor - Released Version : RV-9.3.0
 
 Tasks : 
     => 82248 : DPO Payment Gateway Integration
+    => 82892 : Easypost Shipping API Integration
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
