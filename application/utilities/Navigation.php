@@ -6,13 +6,13 @@ class Navigation
     {
         $siteLangId = CommonHelper::getLangId();
 
-        $headerTopNavigationCache = FatCache::get('headerTopNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $headerTopNavigation = FatCache::get('headerTopNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
 
-        if ($headerTopNavigationCache) {
-            $headerTopNavigation = unserialize($headerTopNavigationCache);
+        if ($headerTopNavigation) {
+            $headerTopNavigation = unserialize($headerTopNavigation);
         } else {
             $headerTopNavigation = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
-            FatCache::set('headerTopNavigationCache_' . $siteLangId, serialize($headerTopNavigation), '.txt');
+            FatCache::set('headerTopNavigation_' . $siteLangId, serialize($headerTopNavigation), '.txt');
         }
         $template->set('top_header_navigation', $headerTopNavigation);
     }
@@ -25,9 +25,9 @@ class Navigation
         $layout = FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1);
         $includeCategories = ($layout == Navigations::LAYOUT_MEGA_MENU) ? false : true;
 
-        $headerNavigationCache = FatCache::get('headerNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-        if ($headerNavigationCache) {
-            $headerNavigation = unserialize($headerNavigationCache);
+        $headerNavigation = FatCache::get('headerNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        if ($headerNavigation) {
+            $headerNavigation = unserialize($headerNavigation);
         } else {
             $headerNavigation = self::getNavigation(Navigations::NAVTYPE_HEADER, $includeCategories);
             FatCache::set('headerNavigation_' . $siteLangId, serialize($headerNavigation), '.txt');
@@ -38,19 +38,19 @@ class Navigation
             $template->set('userName', ucfirst(CommonHelper::getUserFirstName(UserAuthentication::getLoggedUserAttribute('user_name'))));
         }
 
-        $headerTopNavigationCache = FatCache::get('headerTopNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $headerTopNavigation = FatCache::get('headerTopNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
 
-        if ($headerTopNavigationCache) {
-            $headerTopNavigation = unserialize($headerTopNavigationCache);
+        if ($headerTopNavigation) {
+            $headerTopNavigation = unserialize($headerTopNavigation);
         } else {
             $headerTopNavigation = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
             FatCache::set('headerTopNavigation_' . $siteLangId, serialize($headerTopNavigation), '.txt');
         }
         $headerCategories = [];
         if ($layout == Navigations::LAYOUT_MEGA_MENU) {
-            $headerCategoriesCache = FatCache::get('headerCategories_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-            if ($headerCategoriesCache) {
-                $headerCategories = unserialize($headerCategoriesCache);
+            $headerCategories = FatCache::get('headerCategories_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+            if ($headerCategories) {
+                $headerCategories = unserialize($headerCategories);
             } else {
                 $headerCategories = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
                 FatCache::set('headerCategories_' . $siteLangId, serialize($headerCategories), '.txt');
@@ -257,9 +257,9 @@ class Navigation
             $prodSrchObj->joinCategoryRelationWithChild();
             $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO); */
 
-            $navigationCatCache = FatCache::get('navigationCatCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-            if ($navigationCatCache) {
-                $categoriesMainRootArr = unserialize($navigationCatCache);
+            $categoriesMainRootArr = FatCache::get('navigationCatCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+            if ($categoriesMainRootArr) {
+                $categoriesMainRootArr = unserialize($categoriesMainRootArr);
             } else {
                 /*  $parentCatSrch = clone $catSrch;
                 $parentCatSrch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = c.prodcat_id', 'qryProducts');
@@ -365,9 +365,9 @@ class Navigation
     {
         $db = FatApp::getDb();
         $siteLangId = CommonHelper::getLangId();
-        $footerNavigationCache = FatCache::get('footerNavigation' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-        if ($footerNavigationCache) {
-            $footerNavigation = unserialize($footerNavigationCache);
+        $footerNavigation = FatCache::get('footerNavigationCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        if ($footerNavigation) {
+            $footerNavigation = unserialize($footerNavigation);
         } else {
             $footerNavigation = self::getNavigation(Navigations::NAVTYPE_FOOTER);
             FatCache::set('footerNavigationCache' . $siteLangId, serialize($footerNavigation), '.txt');
