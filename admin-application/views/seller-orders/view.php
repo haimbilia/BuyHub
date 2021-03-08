@@ -69,7 +69,10 @@ if (!empty($order['opship_tracking_url'])) {
                             ];
 
                             if (!$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
-                                if (empty($order['opship_response']) && empty($order['opship_tracking_number'])) {
+                                $plugin = new Plugin();
+                                $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+
+                                if (empty($order['opship_response']) && empty($order['opship_tracking_number']) && 'EasyPost' != $keyName) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -78,7 +81,7 @@ if (!empty($order['opship_tracking_url'])) {
                                         ],
                                         'label' => '<i class="fas fa-file-download"></i>'
                                     ];
-                                } elseif (!empty($order['opship_response'])) {
+                                } elseif (!empty($order['opship_response']) && 'EasyPost' != $keyName) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$order['op_id']]),
@@ -89,12 +92,17 @@ if (!empty($order['opship_tracking_url'])) {
                                     ];
                                 }
 
-                                if (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opship_response'])) {
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opship_response']) || 'EasyPost' == $keyName) && empty($order['opship_tracking_number'])) {
+                                    if ('EasyPost' == $keyName) {
+                                        $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
+                                    } else {
+                                        $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId);
+                                    }
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
                                             'onclick' => 'proceedToShipment(' . $order['op_id'] . ')',
-                                            'title' => Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId)
+                                            'title' => $label
                                         ],
                                         'label' => '<i class="fas fa-shipping-fast"></i>'
                                     ];

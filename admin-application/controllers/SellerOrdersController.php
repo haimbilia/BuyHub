@@ -606,10 +606,17 @@ class SellerOrdersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        $plugin = new Plugin();
+        $this->keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+        $pluginValidation = true;
+        if (!empty($this->keyName) && in_array($this->keyName, ['EasyPost'])) {
+            $pluginValidation = false;
+        }
+
         $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
-        if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping) {
+        if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && $pluginValidation) {
             Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -628,6 +635,7 @@ class SellerOrdersController extends AdminBaseController
         $orderObj = new Orders();
 
         $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch->joinOrderProductShipment();
         $srch->joinPaymentMethod();
         $srch->joinShippingUsers();
         //$srch->joinSellerProducts();
@@ -639,7 +647,7 @@ class SellerOrdersController extends AdminBaseController
         if ($rs) {
             $orderDetail = FatApp::getDb()->fetch($rs);
         }
-
+        
         if (empty($orderDetail)) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
@@ -654,12 +662,12 @@ class SellerOrdersController extends AdminBaseController
         }
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
         $post = $frm->getFormDataFromArray($post);
-
+        
         if (!false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
-
+        
         $restrictOrderStatusChange = array_merge(
             (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"),
             (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"),
@@ -670,11 +678,11 @@ class SellerOrdersController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-
+        
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
 
-            if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED) {
+            if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && $pluginValidation) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],

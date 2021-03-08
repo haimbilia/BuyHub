@@ -25,4 +25,25 @@ class ShippingServicesBase extends PluginBase
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetch($rs);
     }
+    
+    /**
+     * addOrder - Used if child class not required this function.
+     *
+     * @param  mixed $opId
+     * @return bool
+     */
+    public function addOrder(int $opId): bool
+    {
+        return true;
+    }
+
+    /**
+     * bindLabel - Used if child class not required this function.
+     *
+     * @return bool
+     */
+    public function bindLabel(array $requestParam): bool
+    {
+        return true;
+    }
 }

@@ -1660,6 +1660,7 @@ class ConfigurationsController extends AdminBaseController
                 break;
             case Configurations::FORM_LOCAL:
                 $frm->addTextarea(Labels::getLabel("LBL_Address", $this->adminLangId), 'CONF_ADDRESS_' . $langId);
+                $frm->addTextarea(Labels::getLabel("LBL_ADDRESS_LINE_2", $this->adminLangId), 'CONF_ADDRESS_LINE_2_' . $langId);
                 $frm->addTextBox(Labels::getLabel("LBL_City", $this->adminLangId), 'CONF_CITY_' . $langId);
                 break;
             case Configurations::FORM_EMAIL:
