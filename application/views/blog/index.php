@@ -135,8 +135,7 @@
             </div>
         </div>
         <?php } ?>
-    </div>
-    </div>
+    </div>    
 </section>
 <?php } ?>
 
@@ -150,7 +149,7 @@
                     </h4>
                     <p><?php echo Labels::getLabel('LBL_Subscribe_to_our_weekly_newsletter', $siteLangId)?>
                     </p>
-                    <?php $this->includeTemplate('_partial/footerNewsLetterForm.php', array('blogPage'=>true)); ?>
+                    <?php $this->includeTemplate('_partial/footerNewsLetterForm.php', array('blogPage'=>true,'formId' => 'blogFrmNewsletter' )); ?>
                 </div>
             </div>
         </div>
