@@ -9,12 +9,9 @@ class DataMigration
     public const TYPE_SELLER = 4;
     public const TYPE_PRODUCT_TAG = 5;
     public const TYPE_ORDER = 6;
-    
-    
     public const SINGLE_VENDOR = 1;
     public const MULTIVENDOR_VENDOR = 2;
-    
-    public $activedServiceId = 0;
+
     private $langId;
     private $pluginObj;
     protected $error;
@@ -45,7 +42,7 @@ class DataMigration
     protected function adminSideSync()
     {
         $pluginObj = new Plugin();
-        $pluginKey = $pluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION,'plugin_code');
+        $pluginKey = $pluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION, 'plugin_code');
 
         if (!empty($pluginKey)) {
             $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId], $error, $this->langId);
@@ -91,31 +88,31 @@ class DataMigration
 
     protected function sellerSideSync()
     {
-        echo 111;
-
         $userId = UserAuthentication::getLoggedUserId();
         $sellerPluginObj = new SellerPlugin(0, $userId);
-        echo $pluginKey = $sellerPluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION,'plugin_code');
+        $pluginKey = $sellerPluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION, 'plugin_code');
 
         if (!empty($pluginKey)) {
-            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId , self::SINGLE_VENDOR], $error, $this->langId);
+            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId, self::SINGLE_VENDOR], $error, $this->langId);
+            $this->pluginObj->setVendorType(self::SINGLE_VENDOR);            
             $this->pluginObj->setUserId($userId);
+            $this->pluginObj->setRecordId($userId); /* to fetch setting by record id */
             if (false === $this->pluginObj) {
                 $this->error = $error;
                 return false;
             }
+           
             if (false === $this->pluginObj->init()) {
                 $this->error = $this->pluginObj->getError();
                 return false;
-            }
-
+            }            
+            
             try {
 
                 if ($this->syncProducts()) {
                     echo 'Products Synced';
                     return 'Products Synced';
                 }
-
             } catch (Exception $e) {
                 echo 'Message: ' . $e->getMessage();
                 return false;
@@ -136,9 +133,9 @@ class DataMigration
             if (!$this->saveUsersData($users)) {
                 $this->logError();
                 return true;
-            }            
+            }
         }
-        
+
         $this->pluginObj->savePaginationData(DataMigration::TYPE_USER);
 
         return (0 < count($users));

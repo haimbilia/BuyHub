@@ -22,6 +22,8 @@
     </div>
 </main>
 <script>
-    searchPlugin(<?php echo $type;?>);
+    
+    var type = <?php echo $type;?>;
+    searchPlugin(type);
 
 </script>

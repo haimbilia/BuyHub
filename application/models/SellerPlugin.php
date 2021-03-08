@@ -107,35 +107,7 @@ class SellerPlugin extends PluginCommon
       return false;
       }
 
-      public static function getAttributesByCode(string $code, $attr = '', int $langId = 0)
-      {
-      $srch = new SearchBase(static::DB_TBL, 'plg');
-      $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'code', '=', $code);
-
-      if (0 < $langId) {
-      $srch->joinTable(self::DB_TBL_LANG, 'LEFT JOIN', self::DB_TBL_LANG_PREFIX . static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'id and ' . self::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'plg_l');
-      }
-
-      if ('' != $attr) {
-      if (is_array($attr)) {
-      $srch->addMultipleFields($attr);
-      } elseif (is_string($attr)) {
-      $srch->addFld($attr);
-      }
-      }
-
-      $rs = $srch->getResultSet();
-      $row = FatApp::getDb()->fetch($rs);
-      if (empty($row) || !is_array($row)) {
-      return false;
-      }
-
-      if (!empty($attr) && is_string($attr)) {
-      return $row[$attr];
-      }
-      return $row;
-      }
-
+    
       public static function getNamesByType(int $typeId, int $langId)
       {
       $typeId = FatUtility::int($typeId);
@@ -162,6 +134,30 @@ class SellerPlugin extends PluginCommon
       }
      * 
      */
+
+    public static function getAttributesByCode(int $userId ,string $code, $attr = '', int $langId = 0)
+    {   
+        $srch = self::getSearchObject($userId,$langId,false);
+
+        if ('' != $attr) {
+            if (is_array($attr)) {
+                $srch->addMultipleFields($attr);
+            } elseif (is_string($attr)) {
+                $srch->addFld($attr);
+            }
+        }
+
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (empty($row) || !is_array($row)) {
+            return false;
+        }
+
+        if (!empty($attr) && is_string($attr)) {
+            return $row[$attr];
+        }
+        return $row;
+    }
 
     public function getDefaultPluginKeyName(int $typeId)
     {
@@ -192,7 +188,8 @@ class SellerPlugin extends PluginCommon
                     break;
             }
         }
-        echo $srch->getQuery();
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $result = FatApp::getDb()->fetch($rs);
         if (is_string($attr)) {

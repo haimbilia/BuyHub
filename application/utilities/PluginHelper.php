@@ -6,6 +6,7 @@ trait PluginHelper
     public $settings = [];
     public $langId = 0;
     public $keyName;
+    protected $recordId = 0;
 
     /**
      * getError
@@ -29,7 +30,7 @@ trait PluginHelper
     {
         $this->keyName = !empty($this->keyName) ? $this->keyName : static::KEY_NAME;
         $this->langId = 0 < $this->langId ? $this->langId : CommonHelper::getLangId();
-        $this->pluginSetting = new PluginSetting(0, $this->keyName);
+        $this->pluginSetting = new PluginSetting(0, $this->keyName, $this->recordId);
     }
 
     /**
@@ -80,20 +81,20 @@ trait PluginHelper
     public function validateSettings(int $langId = 0): bool
     {
         $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
-        $this->settings = $this->getSettings();
-        if (Plugin::INACTIVE == $this->settings['plugin_active']) {
+        $this->settings = $this->getSettings();        
+        if (Plugin::INACTIVE == $this->settings['ps_active']) {
             $this->error = static::KEY_NAME . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
             return false;
         }
-
         if (isset($this->requiredKeys) && !empty($this->requiredKeys) && is_array($this->requiredKeys)) {
-            foreach ($this->requiredKeys as $key) {
+            foreach ($this->requiredKeys as $key) {               
                 if (!array_key_exists($key, $this->settings) || '' == $this->settings[$key]) {
                     $this->error = static::KEY_NAME . ' : ' . ' "' . $key . '" ' . Labels::getLabel('MSG_SETTINGS_NOT_CONFIGURED', $langId);
                     return false;
                 }
             }
         }
+      
         return true;
     }
 
@@ -176,4 +177,19 @@ trait PluginHelper
         $reflect  = new ReflectionClass($keyName);
         return $reflect->newInstanceArgs($args);
     }
+    
+    /**
+     * 
+     * @param int $recordId
+     */
+    public function setRecordId(int $recordId)
+    {
+        $this->recordId = $recordId;
+    }
+
+    public function getRecordId()
+    {
+        return $this->recordId;
+    }
+
 }

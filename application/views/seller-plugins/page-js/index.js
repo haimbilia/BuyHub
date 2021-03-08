@@ -24,7 +24,8 @@
                 $.mbsmessage(ans.msg, true, 'alert--success');
             } else {
                 $.mbsmessage(ans.msg, true, 'alert--danger');
-            }
+            }            
+            searchPlugin(type);
         });
     };
 
@@ -49,7 +50,7 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         var keyName = frm.keyName.value;
-        fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) { 
             $(document).trigger('close.facebox');
         });
     };
