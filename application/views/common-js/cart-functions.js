@@ -1,3 +1,4 @@
+var isAjaxRunning = false;
 var cart = {
     add: function (selprod_id, quantity, isRedirectToCart) {
         isRedirectToCart = (typeof (isRedirectToCart) != 'undefined') ? true : false;
@@ -57,9 +58,15 @@ var cart = {
         }
     },
 
-    update: function (key, loadDiv, fulfilmentType = 0) {
+    update: function (key, loadDiv, fulfilmentType = 0) {    
+        if(true === isAjaxRunning){
+            return false;
+        }
+        isAjaxRunning = true;
+
         var data = 'key=' + key + '&quantity=' + $("input[name='qty_" + key + "']").val();
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'update'), data, function (ans) {
+            isAjaxRunning = false;
             if (ans.status) {
                 if (loadDiv != undefined) {
                     loadFinancialSummary();

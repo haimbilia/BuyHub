@@ -1,5 +1,5 @@
 
-            <sidebar class="collection-sidebar" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
+            <aside class="collection-sidebar" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
                 <?php if (isset($shop)) { ?>
                 <div class="shop-information"> 
                     <div class="shop-logo">
@@ -134,6 +134,6 @@
                 <div class="filters">
                     <div class="filters__ele productFilters-js"></div>
                 </div>
-            </sidebar>
+            </aside>
             
     

@@ -12,8 +12,8 @@ class SearchItem extends MyAppModel
         $keyword = str_replace('mysql_func_', 'mysql_func ', $data['keyword']);
 
         $assign_fields = array(
-        'searchitem_keyword' => $keyword,
-        'searchitem_date' => date('Y-m-d'),
+            'searchitem_keyword' => $keyword,
+            'searchitem_date' => date('Y-m-d'),
         );
         $onDuplicateKeyUpdate = array_merge($assign_fields, array('searchitem_count' => 'mysql_func_searchitem_count+1'));
         $this->db->insertFromArray('tbl_search_items', $assign_fields, true, array(), $onDuplicateKeyUpdate);
@@ -118,13 +118,14 @@ class SearchItem extends MyAppModel
                         }
                         break;
                     default:
+                        if (empty($keyString)) {
+                            break;
+                        }
                         $arr_url_params[$keyString] = $valueString;
                         break;
                 }
             }
         }
-
         return $arr_url_params;
     }
-    
 }

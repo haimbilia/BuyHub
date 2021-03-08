@@ -71,6 +71,26 @@ class StripeConnect extends PaymentMethodBase
     public function __construct(int $langId)
     {
         $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
+        $this->requiredKeys();
+    }
+
+    /**
+     * requiredKeys
+     *
+     * @return void
+     */
+    public function requiredKeys()
+    {
+        $this->env = FatUtility::int($this->getKey('env'));
+        if (0 < $this->env) {
+            $this->liveMode = "live_";
+            $this->requiredKeys = [
+                'env',
+                $this->liveMode . 'client_id',
+                $this->liveMode . 'publishable_key',
+                $this->liveMode . 'secret_key'
+            ];
+        }
     }
 
     /**
@@ -79,20 +99,10 @@ class StripeConnect extends PaymentMethodBase
      * @param int $userId
      * @return void
      */
-    public function init(int $userId = 0, bool $isSeller = false)
+    public function init(int $userId = 0)
     {
         if (false == $this->validateSettings()) {
             return false;
-        }
-
-        if (isset($this->settings['env']) && Plugin::ENV_PRODUCTION == $this->settings['env']) {
-            $this->liveMode = "live_";
-            $this->requiredKeys = [
-                'env',
-                $this->liveMode . 'client_id',
-                $this->liveMode . 'publishable_key',
-                $this->liveMode . 'secret_key'
-            ];
         }
 
         if (0 < $userId) {

@@ -90,7 +90,7 @@ class CategoryController extends MyAppController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-
+        
         $data = array(
             'frmProductSearch' => $frm,
             'category' => $category,
@@ -120,7 +120,7 @@ class CategoryController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-
+        
         $this->set('data', $data);
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();

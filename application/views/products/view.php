@@ -4,7 +4,7 @@ $buyQuantity = $frmBuyProduct->getField('quantity');
 $buyQuantity->addFieldTagAttribute('class', 'qty-input cartQtyTextBox productQty-js');
 $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 ?>
-<div id="body" class="body detail-page"   >
+<div id="body" class="body detail-page">
     <section class="">
         <div class="container">
             <div class="py-4">
@@ -27,13 +27,13 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
                                             $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
                                             $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>
-                                            <img class="xzoom active" id="xzoom-default" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
+                                            <img alt="" class="xzoom active" id="xzoom-default" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
                                         <?php break;
                                         } ?>
                                     <?php } else {
                                         $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'MEDIUM', 0)), CONF_IMG_CACHE_TIME, '.jpg');
                                         $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'ORIGINAL', 0)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
-                                        <img class="xzoom" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
+                                        <img alt="" class="xzoom" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
                                     <?php } ?>
                                 </div>
                                 <?php if ($productImagesArr) { ?>
@@ -42,7 +42,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
                                             $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
                                             /* $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id']) ), CONF_IMG_CACHE_TIME, '.jpg'); */ ?>
-                                            <div class="thumb"><a href="<?php echo $originalImgUrl; ?>"><img class="xzoom-gallery" width="80" src="<?php echo $mainImgUrl; ?>"></a>
+                                            <div class="thumb"><a href="<?php echo $originalImgUrl; ?>"><img alt="" class="xzoom-gallery" width="80" src="<?php echo $mainImgUrl; ?>"></a>
                                             </div>
                                         <?php } ?>
                                     </div>
@@ -194,15 +194,15 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                                                                 echo (!$optionUrl) ? ' is-disabled' : '';
                                                                                                 echo (!$isAvailable) ? 'not--available' : ''; ?>">
                                                                             <?php if ($option['option_is_color'] && $opVal['optionvalue_color_code'] != '') { ?>
-                                                                                <a optionValueId="<?php echo $opVal['optionvalue_id']; ?>" selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
-                                                                                                                                                                                                                            echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (!$option['option_is_color']) ? 'selector__link' : '';
-                                                                                                                                                                                                                                                                                                                                                        echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' ' : ' ';
-                                                                                                                                                                                                                                                                                                                                                        echo (!$optionUrl) ? ' is-disabled' : ''; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
+                                                                                <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
+                                                                                                                                                                                                                                    echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (!$option['option_is_color']) ? 'selector__link' : '';
+                                                                                                                                                                                                                                                                                                                                                                echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' ' : ' ';
+                                                                                                                                                                                                                                                                                                                                                                echo (!$optionUrl) ? ' is-disabled' : ''; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
                                                                                     <span class="colors" style="background-color:#<?php echo $opVal['optionvalue_color_code']; ?>;"></span><?php echo $opVal['optionvalue_name']; ?></a>
                                                                             <?php } else { ?>
-                                                                                <a optionValueId="<?php echo $opVal['optionvalue_id']; ?>" selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
-                                                                                                                                                                                                                            echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? '' : ' ';
-                                                                                                                                                                                                                                                                                                                                                        echo (!$optionUrl) ? ' is-disabled' : ''; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
+                                                                                <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
+                                                                                                                                                                                                                                    echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? '' : ' ';
+                                                                                                                                                                                                                                                                                                                                                                echo (!$optionUrl) ? ' is-disabled' : ''; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
                                                                                     <?php echo $opVal['optionvalue_name'];  ?> </a>
                                                                             <?php } ?>
                                                                         </li>
@@ -387,7 +387,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                 </div>
                                             <?php } ?>
                                         </div>
-                                        <script type="text/javascript">
+                                        <script>
                                             $("document").ready(function() {
                                                 $('.js--discount-slider').slick(getSlickSliderSettings(2, 1, langLbl
                                                     .layoutDirection, false, {
@@ -454,26 +454,25 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 <div class="gap"></div>
                                 <div class="sold-by bg-gray p-4 rounded">
                                     <div class="row align-items-center justify-content-between">
-                                        <div class="col-xl-6 col-lg-6 col-md-5">
-                                            <div class="h6 m-0 -color-light">
+                                        <div class="col">
+                                            <div class="m-0 -color-light">
                                                 <?php echo Labels::getLabel('LBL_Seller', $siteLangId); ?></div>
-                                            <h6 class="m-0">
+                                            <h6 class="h6">
                                                 <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name']; ?></a>
-                                                <div class="products__rating -display-inline m-0">
-                                                    <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-                                                        - <i class="icn">
-                                                            <svg class="svg">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate"><?php echo round($shop_rating, 1), '', '', '';
-                                                                            if ($shopTotalReviews) { ?>
-                                                            <?php } ?> </span>
-                                                    <?php } ?>
-                                                </div>
-
                                             </h6>
+                                            <div class="products__rating -display-inline m-0">
+                                                <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+                                                    <i class="icn">
+                                                        <svg class="svg">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                            </use>
+                                                        </svg>
+                                                    </i>
+                                                    <span class="rate"><?php echo round($shop_rating, 1), '', '', '';
+                                                                        if ($shopTotalReviews) { ?>
+                                                        <?php } ?> </span>
+                                                <?php } ?>
+                                            </div>
 
 
                                             <?php /*if ($shop_rating>0) { ?>
@@ -685,7 +684,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
     <?php } ?>
     <div id="recentlyViewedProductsDiv"></div>
 </div>
-<script type="text/javascript">
+<script>
     var mainSelprodId = <?php echo $product['selprod_id']; ?>;
     var layout = '<?php echo CommonHelper::getLayoutDirection(); ?>';
 
