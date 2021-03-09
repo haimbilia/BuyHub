@@ -4,7 +4,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'listserial' => '#',   
     'plugin_identifier' => Labels::getLabel('LBL_PLUGIN', $siteLangId),
-    'ps_active' => Labels::getLabel('LBL_Status', $siteLangId),
+    'pu_active' => Labels::getLabel('LBL_Status', $siteLangId),
 );
 if ($canEdit) {
     $arr_flds = array_merge($arr_flds, array('action' => ''));
@@ -55,12 +55,12 @@ foreach ($arr_listing as $sn => $row) {
                     $td->appendElement('plaintext', array(), $row[$key] . $htm, true);
                 }
                 break;
-            case 'ps_active':
+            case 'pu_active':
                 $active = "";
-                if (applicationConstants::ACTIVE == $row['ps_active']) {
+                if (applicationConstants::ACTIVE == $row['pu_active']) {
                     $active = 'checked';
                 }
-                $str = '<label class="toggle-switch" for="switch' . $row['plugin_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['plugin_id'] . '" id="switch' . $row['plugin_id'] . '" onclick="toggleStatus(this,' . ($row['ps_active'] > 0 ? 0 : 1) . ')"/><div class="slider round"></div></label>';
+                $str = '<label class="toggle-switch" for="switch' . $row['plugin_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['plugin_id'] . '" id="switch' . $row['plugin_id'] . '" onclick="toggleStatus(this,' . ($row['pu_active'] > 0 ? 0 : 1) . ')"/><div class="slider round"></div></label>';
 
                 $td->appendElement('plaintext', array(), $str, true);
                 break;

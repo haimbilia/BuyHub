@@ -9,7 +9,7 @@ class PluginCommon extends MyAppModel
     public const DB_TBL_LANG_PREFIX = 'pluginlang_';
     
     public const DB_TBL_PLUGIN_TO_USER = 'tbl_plugin_to_user';
-    public const DB_TBL_PLUGIN_TO_USER_PREFIX = 'ps_';
+    public const DB_TBL_PLUGIN_TO_USER_PREFIX = 'pu_';
 
     public const RETURN_FALSE  = 0;
     public const RETURN_TRUE  = 1;

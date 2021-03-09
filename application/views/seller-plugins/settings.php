@@ -4,7 +4,7 @@ $frm->setFormTagAttribute('id', 'frmPlugins');
 $frm->setFormTagAttribute('class', 'form form_horizontal');
 $frm->setFormTagAttribute('onsubmit', 'setupPluginsSettings(this); return(false);');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 6;
+$frm->developerTags['fld_default_col'] = 12;
 
 $btnSubmit = $frm->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");

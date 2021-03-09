@@ -78,7 +78,7 @@ class PluginSettingController extends LoggedUserController
             if (false == method_exists($class, 'form')) {
                 FatUtility::dieJsonError($e->getMessage());
             }
-            $frm = $class::form($this->adminLangId);
+            $frm = $class::form($this->siteLangId);
         }
 
         if ((empty($requirements) || !is_array($requirements)) && !isset($frm)) {

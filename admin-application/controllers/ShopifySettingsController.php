@@ -3,25 +3,15 @@
 class ShopifySettingsController extends DataMigrationSettingsController
 {
 
-    public static function getConfigurationKeys()
+    public static function form($langId)
     {
-        return [
-            'shop_url' => [
-                'type' => PluginSetting::TYPE_STRING,
-                'required' => true,
-                'label' => "Shop Url",
-            ],           
-            'password' => [
-                'type' => PluginSetting::TYPE_STRING,
-                'required' => true,
-                'label' => "Password",
-            ],            
-            'multivendor_access_token' => [
-                'type' => PluginSetting::TYPE_STRING,
-                'required' => true,
-                'label' => "Multivendor Access Token",
-            ]
-        ];
+        $frm = new Form('frmPaymentMethods');
+        $frm->addRequiredField(Labels::getLabel('LBL_SHOP_URL', $langId), 'shop_url');
+        $frm->addRequiredField(Labels::getLabel('LBL_PASSWORD', $langId), 'password');
+        $frm->addRequiredField(Labels::getLabel('LBL_MULTIVENDOR_ACCESS_TOKEN', $langId), 'multivendor_access_token');
+        $frm->addHtml('info', 'info', '<span class="form-txt text-muted">' . Labels::getLabel('MSG_NOTE:_NEED_USER,_SELLER,_PRODUCT,_ORDER_READ_ACCESS', $langId) . '</span><br><br>');
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        return $frm;
     }
 
 }

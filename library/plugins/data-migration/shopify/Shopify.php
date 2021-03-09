@@ -7,7 +7,7 @@ class Shopify extends DataMigrationBase
 
     public const KEY_NAME = __CLASS__;
 
-    public $requiredKeys = ['shop_url', 'password', 'multivendor_access_token'];
+    public $requiredKeys;
 
     private const API_VERSION = '2021-01';
 
@@ -23,9 +23,11 @@ class Shopify extends DataMigrationBase
      *
      * @return void
      */
-    public function __construct(int $langId)
+    public function __construct(int $langId, int $userId = 0)
     {
-        $this->langId = FatUtility::int($langId);
+
+        $this->langId = $langId;
+        $this->userId = $userId;
         if (1 > $this->langId) {
             $this->langId = CommonHelper::getLangId();
         }
@@ -33,6 +35,15 @@ class Shopify extends DataMigrationBase
 
     public function init()
     {
+        if ($this->vendorType === DataMigration::SINGLE_VENDOR && 1 > $this->userId) {
+            $this->error = 'User id is not set';
+            return false;
+        }
+        $this->requiredKeys = ['shop_url', 'password', 'multivendor_access_token'];
+        if ($this->vendorType === DataMigration::SINGLE_VENDOR) {
+            $this->requiredKeys = ['shop_url', 'password'];
+        }
+
         return $this->validateSettings();
     }
 
@@ -166,155 +177,23 @@ class Shopify extends DataMigrationBase
 
     public function getProducts()
     {
+
         $paginationSavedString = $this->getPaginationStringName(DataMigration::TYPE_PRODUCT);
         $paginationParam = $this->getData($paginationSavedString);
 
         if ($this->isSyncCompleted($paginationParam)) {
             return [];
         }
-        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 15] : $paginationParam;
-        $products = $this->fetchProducts($paginationParam);
 
-        $collectionsCache = FatCache::get('ShopifyCollectionsCache', CONF_IMG_CACHE_TIME, '.txt');
-        if ($collectionsCache) {
-            $collectionArr = json_decode($collectionsCache, true);
-        } else {
-            $collectionArr = [];
-            $collections = $this->fetchCollections();
-            foreach ($collections as $collection) {
-                $collectionArr[$collection->main_id_category] = $collection->category_name;
-            }
-            FatCache::set('ShopifyCollectionsCache', json_encode($collectionArr), '.txt');
+        if ($this->vendorType == DataMigration::SINGLE_VENDOR) {
+            $paginationParam = $paginationParam === null ? ['limit' => 30] : $paginationParam;
+            $products = $this->fetchSingleVendorProducts($paginationParam);
+            return $this->mappedProducts($products);
         }
 
-        $mappedProducts = [];
-
-        print_r($products);
-
-        foreach ($products as $product) {
-            $product_type = Product::PRODUCT_TYPE_DIGITAL;
-            foreach ($product->variants as $variant) {
-                if ($variant->requires_shipping == 1) {
-                    $product_type = Product::PRODUCT_TYPE_PHYSICAL;
-                    break;
-                }
-            }
-
-            $catalog = [
-                'id' => $product->shopify_product_id,
-                'product_identifier' => $product->handle,
-                'product_type' => $product_type,
-                'brand_name' => '',
-                'category_name' => $product->product_type ?? '',
-                'product_min_selling_price' => 0,
-                'product_approved' => 1,
-                'product_active' => $product->active,
-                'product_fulfillment_type' => '',
-                'product_name' => $product->product_name ?? '',
-                'product_description' => $product->product_description ?? '',
-                'product_category' => $product->product_type,
-                'user_id' => $product->seller_id, /* shopify user id */
-                'product_weight_unit' => 0,
-                'product_weight' => 0, /* shopify has different weight for each variants */
-                'product_youtube_video' => ''
-            ];
-
-            $tags = json_decode($product->product_tag, true);
-            if (empty($tags)) {
-                $tags = [];
-            }
-
-            foreach ($product->collections as $collection) {
-                $tags[] = (string) $collectionArr[$collection->shopify_category_id];
-            }
-
-            $mappedOptions = [];
-
-            /* To get option except default one which is created by multivendor on every product, named Title  */
-            if (!(count((array) $product->variants) == 1 && 1 == count($product->options) && isset($product->options[0]->name) && $product->options[0]->name == 'Title')) {
-                foreach ($product->options as $option) {
-                    $values = [];
-                    foreach ($option->values as $value) {
-                        $values[] = $value->value;
-                    }
-                    $mappedOptions[$option->name] = array('option_name' => $option->name, 'option_is_color' => 0, 'option_is_separate_images' => 0, 'option_display_in_filter' => 1, 'values' => $values);
-                }
-            }
-
-
-            $sellerProducts = [];
-            $productImages = [];
-            foreach ($product->images as $image) {
-                $productImages[$image->id] = ['url' => $image->img_url, 'option' => '', 'optionValue' => ''];
-            }
-
-
-            foreach ($product->variants as $variant) {
-                $inventory = [
-                    'id' => $variant->shopify_variant_id,
-                    'selprod_title' => $product->product_name ?? '',
-                    'selprod_url_keyword' => $product->handle ?? '',
-                    'selprod_subtract_stock' => $variant->track_inventory,
-                    'selprod_active' => $product->active,
-                    'selprod_available_from' => date('Y-m-d'),
-                    'selprod_condition' => Product::CONDITION_NEW,
-                    'selprod_fulfillment_type' => 0,
-                    'selprod_cost' => $variant->price,
-                    'selprod_price' => $variant->price,
-                    'selprod_stock' => $variant->quantity ?? 0,
-                    'selprod_sku' => $variant->sku ?? '',
-                    'selprod_min_order_qty' => 1,
-                    'selprod_comments' => '',
-                    'user_id' => $product->seller_id, /* shopify user id */
-                ];
-                $combination = [];
-                if (0 < count($mappedOptions)) {
-                    foreach ($product->options as $key => $option) {
-                        $optionValue = $variant->combinations[$key]->option_value;
-                        $combination[$option->name] = $optionValue;
-
-                        /* issue in mutivendor api some option values are not present in $product->options */
-                        if (isset($mappedOptions[$option->name]['values'])) {
-                            if (!in_array($optionValue, $mappedOptions[$option->name]['values'])) {
-                                $mappedOptions[$option->name]['values'][] = $optionValue;
-                            }
-                        }
-                    }
-                }
-
-                if (isset($productImages[$variant->image_id])) {
-                    $optionName = '';
-                    $optionValue = '';
-                    if (count($combination) == 1) {
-                        $optionName = array_key_first($combination);
-                        $optionValue = current($combination);
-                    } elseif (isset($combination['Color'])) {
-                        $optionName = 'Color';
-                        $optionValue = $combination['Color'];
-                        if (0 < count($mappedOptions)) {
-                            $mappedOptions[$optionName]['option_is_color'] = 1;
-                        }
-                    } elseif (count($combination) > 1) {
-                        foreach ($combination as $key => $val) {
-                            if ($key !== 'Size') {
-                                $optionName = $key;
-                                $optionValue = $val;
-                                break;
-                            }
-                        }
-                    }
-                    if (0 < count($mappedOptions)) {
-                        $mappedOptions[$optionName]['option_is_separate_images'] = 1;
-                    }
-                    $productImages[$variant->image_id]['option'] = $optionName;
-                    $productImages[$variant->image_id]['optionValue'] = $optionValue;
-                }
-                $sellerProducts[] = $inventory + ['combination' => $combination];
-            }
-            $mappedProducts[] = ['catalog' => $catalog, 'options' => $mappedOptions, 'images' => $productImages, 'sellerProducts' => $sellerProducts, 'tags' => $tags];
-        }
-
-        return $mappedProducts;
+        $paginationParam = $paginationParam === null ? ['page' => 1, 'limit' => 30] : $paginationParam;
+        $products = $this->fetchMultiVendorProducts($paginationParam);
+        return $this->mappedProducts($products);
     }
 
     public function getOrders()
@@ -524,10 +403,10 @@ class Shopify extends DataMigrationBase
         return $mappedOrders;
     }
 
-    public function savePaginationData($type)
+    public function savePaginationData($type, $userId = 0)
     {
         $paginationSavedString = $this->getPaginationStringName($type);
-        $this->saveData([$paginationSavedString => $this->getNextPageParams()]);
+        $this->saveData([$paginationSavedString => $this->getNextPageParams()], $userId);
     }
 
     public function isSyncCompleted($paginationParam)
@@ -542,8 +421,7 @@ class Shopify extends DataMigrationBase
     {
         /* include both seller and buyer but no paramter to differentiate whether buyer is also a seller */
         $url = $this->generateUrl(DataMigration::TYPE_USER, $params);
-        //$url ="https://thelocalswpg.myshopify.com/admin/api/2021-01/customers.json?limit=1&ids=4069103894572";
-        $response = $this->sendGetRequest($url);
+        $response = $this->sendSingleVendorGetRequest($url);
         return $response->customers;
     }
 
@@ -561,10 +439,9 @@ class Shopify extends DataMigrationBase
         return $sellers;
     }
 
-    private function fetchProducts($params = [])
+    private function fetchMultiVendorProducts($params = [])
     {
         $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
-        //$url ="https://mvmapi.webkul.com/api/v2/products.json?page=1&limit=50&sort_by=date_add&sort_order=desc&filter=%7B%22id%22%3A%224653091%22%7D";
         $response = $this->sendMultiVendorGetRequest($url);
         $products = $response->products;
         $this->nextLink = '';
@@ -576,11 +453,233 @@ class Shopify extends DataMigrationBase
         return $products;
     }
 
+    private function fetchSingleVendorProducts($params = [])
+    {
+        $url = $this->generateUrl(DataMigration::TYPE_PRODUCT, $params);
+        $response = $this->sendSingleVendorGetRequest($url);
+
+        return $response->products;
+    }
+
+    private function mappedProducts($products)
+    {
+
+        $isSingleVendor = $this->vendorType === DataMigration::SINGLE_VENDOR;
+        $collectionArr = [];
+        if (!$isSingleVendor) {
+            $collectionsCache = FatCache::get('ShopifyCollectionsCache', CONF_IMG_CACHE_TIME, '.txt');
+            if ($collectionsCache) {
+                $collectionArr = json_decode($collectionsCache, true);
+            } else {
+                $collectionArr = [];
+                $collections = $this->fetchCollections();
+                foreach ($collections as $collection) {
+                    $collectionArr[$collection->main_id_category] = $collection->category_name;
+                }
+                FatCache::set('ShopifyCollectionsCache', json_encode($collectionArr), '.txt');
+            }
+        }
+
+
+        $mappedProducts = [];
+
+        foreach ($products as $product) {
+            $product_type = Product::PRODUCT_TYPE_DIGITAL;
+            foreach ($product->variants as $variant) {
+                if ($variant->requires_shipping == 1) {
+                    $product_type = Product::PRODUCT_TYPE_PHYSICAL;
+                    break;
+                }
+            }
+            $weightUnit = 0;
+            $weight = 0;
+            if ($isSingleVendor) {
+                $firstVariant = current($product->variants);
+                if (!empty($firstVariant)) {
+                    $weight = $firstVariant->weight;
+                    switch ($firstVariant->weight_unit) {
+                        case 'kg':
+                            $weightUnit = applicationConstants::WEIGHT_KILOGRAM;
+                            break;
+                        case 'lb':
+                            $weightUnit = applicationConstants::WEIGHT_POUND;
+                            break;
+                        case 'oz':
+                            $weightUnit = applicationConstants::WEIGHT_GRAM;
+                            $weight = $weight * 28.3495;
+                            break;
+                        case 'g':
+                            $weightUnit = applicationConstants::WEIGHT_GRAM;
+                            break;
+                    }
+                }
+            }
+
+            $catalog = [
+                'id' => $isSingleVendor ? $product->id : $product->shopify_product_id,
+                'product_identifier' => $product->handle,
+                'product_type' => $product_type,
+                'brand_name' => '',
+                'category_name' => $product->product_type ?? '',
+                'product_min_selling_price' => 0,
+                'product_approved' => 1,
+                'product_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $product->active),
+                'product_fulfillment_type' => '',
+                'product_name' => ($isSingleVendor ? $product->title : $product->product_name) ?? '',
+                'product_description' => ($isSingleVendor ? $product->body_html : $product->product_description) ?? '',
+                'product_category' => $product->product_type,
+                'user_id' => ($isSingleVendor ? $this->userId : $product->seller_id),
+                'product_weight_unit' => $weightUnit,
+                'product_weight' => $weight, /* shopify has different weight for each variants */
+                'product_youtube_video' => ''
+            ];
+
+
+            if ($isSingleVendor) {
+                $tags = explode(", ", $product->tags);
+            } else {
+                $tags = json_decode($product->product_tag, true);
+            }
+
+            if (empty($tags)) {
+                $tags = [];
+            }
+            if (!$isSingleVendor) {
+                foreach ($product->collections as $collection) {
+                    $tags[] = (string) $collectionArr[$collection->shopify_category_id];
+                }
+            }
+
+            $mappedOptions = [];
+
+            /* To get option except default one which is created by on every product, named Title  */
+            if (!(count((array) $product->variants) == 1 && 1 == count($product->options) && isset($product->options[0]->name) && $product->options[0]->name == 'Title')) {
+                foreach ($product->options as $option) {
+                    $values = [];
+                    if ($isSingleVendor) {
+                        $values = $option->values;
+                    } else {
+                        foreach ($option->values as $value) {
+                            $values[] = $value->value;
+                        }
+                    }
+                    $mappedOptions[$option->name] = array('option_name' => $option->name, 'option_is_color' => 0, 'option_is_separate_images' => 0, 'option_display_in_filter' => 1, 'values' => $values);
+                }
+            }
+
+
+            $sellerProducts = [];
+            $productImages = [];
+
+            if (!$isSingleVendor) {
+                foreach ($product->images as $image) {
+                    $productImages[$image->id] = ['url' => $image->img_url, 'option' => '', 'optionValue' => ''];
+                }
+            }
+
+            foreach ($product->variants as $variant) {
+                $inventory = [
+                    'id' => $isSingleVendor ? $variant->id : $variant->shopify_variant_id,
+                    'selprod_title' => $product->product_name ?? '',
+                    'selprod_url_keyword' => $product->handle ?? '',
+                    'selprod_subtract_stock' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $variant->track_inventory),
+                    'selprod_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $product->active),
+                    'selprod_available_from' => date('Y-m-d'),
+                    'selprod_condition' => Product::CONDITION_NEW,
+                    'selprod_fulfillment_type' => 0,
+                    'selprod_cost' => $variant->price,
+                    'selprod_price' => $variant->price,
+                    'selprod_stock' => ($isSingleVendor ? $variant->inventory_quantity : $variant->quantity) ?? 0,
+                    'selprod_sku' => $variant->sku ?? '',
+                    'selprod_min_order_qty' => 1,
+                    'selprod_comments' => '',
+                    'user_id' => ($isSingleVendor ? $this->userId : $product->seller_id), /* shopify user id */
+                ];
+                $combination = [];
+                if (0 < count($mappedOptions)) {
+                    foreach ($product->options as $key => $option) {
+                        if ($isSingleVendor) {
+                            $optionValue = $variant->{"option" . ($key + 1)};
+                        } else {
+                            $optionValue = $variant->combinations[$key]->option_value;
+                        }
+
+                        $combination[$option->name] = $optionValue;
+
+                        /* issue in mutivendor api some option values are not present in $product->options */
+                        if (isset($mappedOptions[$option->name]['values'])) {
+                            if (!in_array($optionValue, $mappedOptions[$option->name]['values'])) {
+                                $mappedOptions[$option->name]['values'][] = $optionValue;
+                            }
+                        }
+                    }
+                }
+
+                if (!$isSingleVendor) {
+                    if (isset($productImages[$variant->image_id])) {
+                        $optionName = '';
+                        $optionValue = '';
+                        if (count($combination) == 1) {
+                            $optionName = array_key_first($combination);
+                            $optionValue = current($combination);
+                        } elseif (isset($combination['Color'])) {
+                            $optionName = 'Color';
+                            $optionValue = $combination['Color'];
+                            if (0 < count($mappedOptions)) {
+                                $mappedOptions[$optionName]['option_is_color'] = 1;
+                            }
+                        } elseif (count($combination) > 1) {
+                            foreach ($combination as $key => $val) {
+                                if ($key !== 'Size') {
+                                    $optionName = $key;
+                                    $optionValue = $val;
+                                    break;
+                                }
+                            }
+                        }
+                        if (0 < count($mappedOptions)) {
+                            $mappedOptions[$optionName]['option_is_separate_images'] = 1;
+                        }
+                        $productImages[$variant->image_id]['option'] = $optionName;
+                        $productImages[$variant->image_id]['optionValue'] = $optionValue;
+                    }
+                }
+                $sellerProducts[$inventory['id']] = $inventory + ['combination' => $combination];
+            }
+
+            if ($isSingleVendor) {
+                foreach ($product->images as $image) {
+                    $productImage = ['url' => $image->src, 'option' => '', 'optionValue' => ''];
+                    $optionName = '';
+                    $optionValue = '';
+                    foreach ($mappedOptions as $op => $opV) {
+                        if (0 < count($image->variant_ids)) {
+                            $optionName = $op;
+                            $sellerProduct = $sellerProducts[current($image->variant_ids)];
+
+                            $sellerProdCombination = $sellerProduct['combination'];
+                            $optionValue = $sellerProdCombination[$op];
+                            if ($op == 'Color') {
+                                break;
+                            }
+                        }
+                    }
+                    $productImage['option'] = $optionName;
+                    $productImage['optionValue'] = $optionValue;
+                    $productImages[] = $productImage;
+                }
+            }
+
+            $mappedProducts[] = ['catalog' => $catalog, 'options' => $mappedOptions, 'images' => $productImages, 'sellerProducts' => $sellerProducts, 'tags' => $tags];
+        }
+
+        return $mappedProducts;
+    }
+
     private function fetchOrders($params = [])
     {
         $url = $this->generateUrl(DataMigration::TYPE_ORDER, $params);
-        //$url = 'https://thelocalswpg.myshopify.com/admin/api/2021-01/orders.json?ids=get&status=any';
-        $response = $this->sendGetRequest($url);
+        $response = $this->sendSingleVendorGetRequest($url);
         return $response->orders;
     }
 
@@ -591,7 +690,7 @@ class Shopify extends DataMigrationBase
         return $response->collections;
     }
 
-    private function sendGetRequest($url)
+    private function sendSingleVendorGetRequest($url)
     {
         $curl = new Curl();
         $curl->setHeader('X-Shopify-Access-Token', $this->settings['password']);
@@ -667,7 +766,7 @@ class Shopify extends DataMigrationBase
                 break;
         }
 
-        if (in_array($type, [DataMigration::TYPE_SELLER, DataMigration::TYPE_PRODUCT, DataMigration::TYPE_PRODUCT_TAG])) {
+        if ($this->vendorType === DataMigration::MULTIVENDOR_VENDOR && in_array($type, [DataMigration::TYPE_SELLER, DataMigration::TYPE_PRODUCT, DataMigration::TYPE_PRODUCT_TAG])) {
             return self::MULTIVENDOR_API_URL . DIRECTORY_SEPARATOR . 'api/' . self::MULTIVENDOR_API_VERSION . DIRECTORY_SEPARATOR . $urlType . '.json' . (!empty($urlParams) ? '?' . http_build_query($urlParams) : '');
         }
 

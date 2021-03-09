@@ -58,9 +58,7 @@ class PluginSetting
 
         $srch = new SearchBase(static::DB_TBL, 'tps');
         $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'plugin_id', '=', $this->pluginId);
-        if(0 < $this->recordId){
-            $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'record_id', '=', $this->recordId);   
-        }
+        $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'record_id', '=', $this->recordId);
         $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));        
         $rs = $srch->getResultSet();
         if (!$rs) {
@@ -70,15 +68,15 @@ class PluginSetting
         $row =  FatApp::getDb()->fetchAllAssoc($rs);
         
         if(0 < $this->recordId){
-            $settingsData = SellerPlugin::getAttributesByCode($this->recordId, $this->pluginKey, '', $langId);
+            $settingsData = SellerPlugin::getAttributesByCode($this->recordId, $this->pluginKey, '', $langId ,false);
         }else{
             $settingsData = Plugin::getAttributesByCode($this->pluginKey, '', $langId);
-        }     
+        }      
         
         if (0 < $langId) {
             $settingsData['plugin_name'] = !empty($settingsData['plugin_name']) ? $settingsData['plugin_name'] : $settingsData['plugin_identifier'];
         }
-        $settings = array_merge($row, $settingsData);
+        $settings = array_merge($row, $settingsData);  
 
         if (!empty($column) && is_string($column)) {
             return array_key_exists($column, $settings) ? $settings[$column] : '';
@@ -105,8 +103,8 @@ class PluginSetting
                 'pluginsetting_key' => $key,
                 'pluginsetting_value' => is_array($val) ? serialize($val) : $val,
             ];
-
-            if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $updateData, false, ['IGNORE'])) {
+          
+            if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $updateData, false, [], $updateData)) {
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }

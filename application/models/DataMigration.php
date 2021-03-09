@@ -31,10 +31,10 @@ class DataMigration
 
     public function sync()
     {
-//        if($response = $this->adminSideSync()  !== true){
-//            return $response;
-//        }
-        if ($response = $this->sellerSideSync() !== true) {
+        if ($response = $this->adminSideSync() !== false) {
+            return $response;
+        }
+        if ($response = $this->sellerSideSync() !== false) {
             return $response;
         }
     }
@@ -42,83 +42,114 @@ class DataMigration
     protected function adminSideSync()
     {
         $pluginObj = new Plugin();
-        $pluginKey = $pluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION, 'plugin_code');
+        $pluginData = $pluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, ['plugin_code', 'plugin_id', 'plugin_type']);
 
-        if (!empty($pluginKey)) {
-            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId], $error, $this->langId);
-            $this->pluginObj->setVendorType(self::MULTIVENDOR_VENDOR);
-            if (false === $this->pluginObj) {
-                $this->error = $error;
-                return false;
-            }
-            if (false === $this->pluginObj->init()) {
-                $this->error = $this->pluginObj->getError();
-                return false;
-            }
-
-            try {
-
-                if ($this->syncUsers()) {
-                    echo 'Users Synced';
-                    return 'Users Synced';
-                }
-
-                /* mark some users as seller and create shop */
-                if ($this->syncSellers()) {
-                    echo 'Sellers Synced';
-                    return 'Sellers Synced';
-                }
-
-                if ($this->syncProducts()) {
-                    echo 'Products Synced';
-                    return 'Products Synced';
-                }
-
-                if ($this->syncOrders()) {
-                    echo 'Orders Synced';
-                    return 'Orders Synced';
-                }
-            } catch (Exception $e) {
-                echo 'Message: ' . $e->getMessage();
-                return false;
-            }
-            return true;
+        if (empty($pluginData)) {
+            return false;
         }
+
+        $this->pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId);
+        $this->pluginObj->setVendorType(self::MULTIVENDOR_VENDOR);
+        if (false === $this->pluginObj) {
+            $this->error = $error;
+            return false;
+        }
+
+        if (false === $this->pluginObj->init()) {
+            $this->error = $this->pluginObj->getError();
+            return false;
+        }
+
+        try {
+
+            if ($this->syncUsers()) {
+                echo $str = 'Admin Side Users Synced';
+                return $str;
+            }
+
+            /* mark some users as seller and create shop*/
+            if ($this->syncSellers()) {
+                echo $str = 'Admin Side Sellers Synced';
+                return $str;
+            }
+
+            if ($this->syncProducts()) {
+                echo $str = 'Admin Side Products Synced';
+                return $str;
+            }
+
+            if ($this->syncOrders()) {
+                echo $str = 'Admin Side Orders Synced';
+                return $str;
+            }
+        } catch (Exception $e) {
+            /* deactive  plugin is exception comes so that it doesnt hamper other users */
+            Plugin::updateStatus($pluginData['plugin_type'], Plugin::INACTIVE, $pluginData['plugin_id']);
+            echo 'Message: ' . $e->getMessage();
+            return false;
+        }
+        /* deactive  plugin after sync completed  */
+        Plugin::updateStatus($pluginData['plugin_type'], Plugin::INACTIVE, $pluginData['plugin_id']);
     }
 
     protected function sellerSideSync()
     {
-        $userId = UserAuthentication::getLoggedUserId();
-        $sellerPluginObj = new SellerPlugin(0, $userId);
-        $pluginKey = $sellerPluginObj->getDefaultPluginKeyName(Plugin::TYPE_DATA_MIGRATION, 'plugin_code');
 
-        if (!empty($pluginKey)) {
-            $this->pluginObj = PluginHelper::callPlugin($pluginKey, [$this->langId, self::SINGLE_VENDOR], $error, $this->langId);
-            $this->pluginObj->setVendorType(self::SINGLE_VENDOR);            
-            $this->pluginObj->setUserId($userId);
-            $this->pluginObj->setRecordId($userId); /* to fetch setting by record id */
-            if (false === $this->pluginObj) {
-                $this->error = $error;
-                return false;
-            }
-           
-            if (false === $this->pluginObj->init()) {
-                $this->error = $this->pluginObj->getError();
-                return false;
-            }            
-            
-            try {
-
-                if ($this->syncProducts()) {
-                    echo 'Products Synced';
-                    return 'Products Synced';
-                }
-            } catch (Exception $e) {
-                echo 'Message: ' . $e->getMessage();
-                return false;
-            }
+        $srch = Plugin::getSearchObject(0, false, false);
+        $srch->joinTable(
+                Plugin::DB_TBL_PLUGIN_TO_USER,
+                'INNER JOIN',
+                'plgu.' . Plugin::DB_TBL_PLUGIN_TO_USER_PREFIX . Plugin::tblFld('id') . ' = plg.' . Plugin::tblFld('id') . ' and plg.' . Plugin::tblFld('type') . '=' . Plugin::TYPE_DATA_MIGRATION,
+                'plgu'
+        );
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'seller_user.user_id = plgu.pu_user_id AND seller_user.user_deleted = ' . applicationConstants::NO, 'seller_user');
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = seller_user.user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES, 'seller_user_cred');
+        $srch->addOrder(Plugin::DB_TBL_PLUGIN_TO_USER_PREFIX . 'created_at', 'ASC');
+        $srch->addFld('pu_user_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $result = FatApp::getDb()->fetch($rs);
+        if (empty($result)) {
+            return false;
         }
-        return true;
+
+        $userId = $result['pu_user_id'];
+        $sellerPluginObj = new SellerPlugin(0, $userId);
+        $pluginData = $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_DATA_MIGRATION, ['plugin_code', 'plugin_id', 'plugin_type']);
+        if (empty($pluginData)) {
+            return;
+        }
+        $this->pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId, self::SINGLE_VENDOR], $error, $this->langId, false);
+        $this->pluginObj->setVendorType(self::SINGLE_VENDOR);
+        $this->pluginObj->setUserId($userId);
+        $this->pluginObj->setRecordId($userId); /* to fetch setting by record id */
+        if (false === $this->pluginObj) {
+            $this->error = $error;
+            return false;
+        }
+
+        if (false === $this->pluginObj->init()) {
+            $this->error = $this->pluginObj->getError();
+            return false;
+        }
+
+        try {
+            if ($this->syncProducts()) {
+                echo 'Products Synced';
+                return 'Products Synced';
+            }
+        } catch (Exception $e) {
+            /* deactive  plugin is exception comes so that it doesnt hamper other users */
+            $sellerPluginObj = new SellerPlugin($pluginData['plugin_id'], $userId);
+            $sellerPluginObj->updateStatus(Plugin::INACTIVE);
+            echo 'Message: ' . $e->getMessage();
+            return false;
+        }
+
+        /* deactive user plugin after sync completed  */
+        $sellerPluginObj = new SellerPlugin($pluginData['plugin_id'], $userId);
+        $sellerPluginObj->updateStatus(Plugin::INACTIVE);
     }
 
     public function getError()
@@ -242,7 +273,6 @@ class DataMigration
 
     private function saveSellerData($sellers)
     {
-
         $pluginCode = strtolower($this->pluginObj->settings['plugin_code']);
 
         $db = FatApp::getDb();
@@ -263,6 +293,7 @@ class DataMigration
             /* not adding/updating data with empty values */
             $userObj->assignValues(array_filter($user));
             if (!$userObj->save()) {
+                echo 1;
                 $this->error = $userObj->getError();
                 $db->rollbackTransaction();
                 return false;
@@ -286,11 +317,13 @@ class DataMigration
                 }
 
                 if (!$userObj->setLoginCredentials($user['credential_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
+                    echo 2;
                     $db->rollbackTransaction();
                     return false;
                 }
 
                 if (!$this->createSellerApprovalRequest($userId)) {
+                    echo 3;
                     $db->rollbackTransaction();
                     return false;
                 }
@@ -314,6 +347,7 @@ class DataMigration
 
             if (!empty($user['id'])) {
                 if (!$userObj->updateUserMeta($pluginCode . "_seller_id", $user['id'])) {
+                    echo 4;
                     $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
@@ -344,6 +378,7 @@ class DataMigration
 
             $shopObj->assignValues($shop);
             if (!$shopObj->save()) {
+                echo 5;
                 $this->error = $shopObj->getError();
                 $db->rollbackTransaction();
                 return false;
@@ -385,7 +420,9 @@ class DataMigration
                 $db->rollbackTransaction();
             }
 
+
             if ($isNewShop) {
+
                 if (!empty($shop['shop_logo'])) {
                     $fileAttr = array(
                         'afile_type' => AttachedFile::FILETYPE_SHOP_LOGO,
@@ -413,7 +450,6 @@ class DataMigration
                 }
             }
         }
-
         $db->commitTransaction();
 
         return true;
@@ -437,6 +473,7 @@ class DataMigration
     {
         $db = FatApp::getDb();
         $db->startTransaction();
+
         foreach ($products as $product) {
             $catalog = $product['catalog'];
             $isNewProduct = 1;
@@ -452,12 +489,18 @@ class DataMigration
             }
 
             $catalog['product_added_by_admin_id'] = 1;
+
             if (!empty($catalog['user_id'])) {
-                $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'], User::USER_TYPE_SELLER);
-                if (0 < $userId) {
-                    $catalog['product_seller_id'] = $userId;
-                    $catalog['product_added_by_admin_id'] = 0;
+                if ($this->pluginObj->getVendorType() == self::SINGLE_VENDOR) {
+                    $userId = $catalog['user_id'];
+                } else {
+                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $catalog['user_id'], User::USER_TYPE_SELLER);
                 }
+            }
+
+            if (0 < $userId) {
+                $catalog['product_seller_id'] = $userId;
+                $catalog['product_added_by_admin_id'] = 0;
             }
             $productObj = new Product($productId);
             if (!$productObj->saveProductData($catalog)) {
@@ -563,10 +606,15 @@ class DataMigration
                 $sellerProduct['selprod_product_id'] = $productId;
 
                 if (!empty($sellerProduct['user_id'])) {
-                    $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id'], User::USER_TYPE_SELLER);
-                    if (0 < $userId) {
-                        $sellerProduct['selprod_user_id'] = $userId;
+                    if ($this->pluginObj->getVendorType() == self::SINGLE_VENDOR) {
+                        $userId = $sellerProduct['user_id'];
+                    } else {
+                        $userId = $this->getUserIdFromUserMeta($this->pluginObj->settings['plugin_code'], $sellerProduct['user_id'], User::USER_TYPE_SELLER);
                     }
+                }
+
+                if (0 < $userId) {
+                    $sellerProduct['selprod_user_id'] = $userId;
                 }
 
                 $selProdOptions = [];

@@ -81,11 +81,19 @@ trait PluginHelper
     public function validateSettings(int $langId = 0): bool
     {
         $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
-        $this->settings = $this->getSettings();        
-        if (Plugin::INACTIVE == $this->settings['ps_active']) {
-            $this->error = static::KEY_NAME . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
-            return false;
+        $this->settings = $this->getSettings();
+        if (0 < $this->recordId) {
+            if (Plugin::INACTIVE == $this->settings['pu_active']) {
+                $this->error = static::KEY_NAME . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
+                return false;
+            }
+        } else {
+            if (Plugin::INACTIVE == $this->settings['plugin_active']) {
+                $this->error = static::KEY_NAME . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
+                return false;
+            }
         }
+
         if (isset($this->requiredKeys) && !empty($this->requiredKeys) && is_array($this->requiredKeys)) {
             foreach ($this->requiredKeys as $key) {               
                 if (!array_key_exists($key, $this->settings) || '' == $this->settings[$key]) {
