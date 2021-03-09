@@ -376,12 +376,12 @@ class ProductsController extends MyAppController
         }
 
         $prodSrchObj = new ProductSearch($this->siteLangId);
-
+        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id');
         /* fetch requested product[ */
         $prodSrch = clone $prodSrchObj;
         $prodSrch->setLocationBasedInnerJoin(false);
         $prodSrch->setGeoAddress();
-        $prodSrch->setDefinedCriteria(0, 0, array(), false);
+        $prodSrch->setDefinedCriteria(0, 0, array('product_id' => $productId), false);
         $prodSrch->joinProductToCategory();
         $prodSrch->joinShopSpecifics();
         $prodSrch->joinProductSpecifics();
@@ -431,7 +431,6 @@ class ProductsController extends MyAppController
                 'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age', 'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type'
             )
         );
-        
         $productRs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($productRs);
         /* ] */
@@ -1856,7 +1855,7 @@ class ProductsController extends MyAppController
             if ($pageSize) {
                 $srch->setPageSize($pageSize);
             }
-            
+
             $rs = $srch->getResultSet();
             $db = FatApp::getDb();
             $products = $db->fetchAll($rs);
