@@ -4,7 +4,7 @@
     <div class="blog-subscribers-inner text-center rounded p-4 mb-4">
         <h3><?php echo Labels::getLabel('LBL_Get_Weekly_Insights', $siteLangId)?></h3>
         <p><?php echo Labels::getLabel('LBL_Subscribe_to_our_weekly_newsletter', $siteLangId)?></p>
-        <?php $this->includeTemplate('_partial/footerNewsLetterForm.php', array('blogPage'=>true)); ?>
+        <?php $this->includeTemplate('_partial/footerNewsLetterForm.php', array('blogPage'=>true,'formId' => 'newsletter')); ?>
     </div>
     <?php } ?>
     <?php if (!empty($popularPostList) || (!empty($featuredPostList))) { ?>

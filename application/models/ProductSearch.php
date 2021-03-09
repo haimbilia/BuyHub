@@ -407,9 +407,16 @@ class ProductSearch extends SearchBase
 
             $srch->doNotLimitRecords();
             $srch->doNotCalculateRecords();
+            if (isset($criteria['product_id']) && 0 < $criteria['product_id']) {
+                $srch->addCondition('selprod_product_id', '=', $criteria['product_id']);
+            }
             $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = pricetbl.selprod_product_id', 'pricetbl');
         } else {
-            $this->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'p.product_id = sprods.selprod_product_id and selprod_active = ' . applicationConstants::ACTIVE . ' and selprod_deleted = ' . applicationConstants::NO, 'sprods');
+            $joinCondition = '';
+            if (isset($criteria['product_id']) && 0 < $criteria['product_id']) {
+                $joinCondition = ' and sprods.selprod_product_id = ' . $criteria['product_id'];
+            }
+            $this->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'p.product_id = sprods.selprod_product_id ' . $joinCondition . ' and selprod_active = ' . applicationConstants::ACTIVE . ' and selprod_deleted = ' . applicationConstants::NO, 'sprods');
             if ($this->langId) {
                 $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sprods.selprod_id = sprods_l.selprodlang_selprod_id AND sprods_l.selprodlang_lang_id = ' . $this->langId, 'sprods_l');
             }

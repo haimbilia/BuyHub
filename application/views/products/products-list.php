@@ -63,7 +63,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             }
 
             $postedData['page'] = (isset($page)) ? $page : 1;
-            $postedData['recordDisplayCount'] = $recordCount;
+           $postedData['recordDisplayCount'] = $recordCount;           
             echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
             $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
             $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
