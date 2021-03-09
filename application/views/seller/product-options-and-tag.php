@@ -90,24 +90,25 @@ $("document").ready(function() {
         var tag_name = e.detail.tag.title;   
         if(tag_id == ''){
             var data = 'tag_id=0&tag_identifier='+tag_name
-            fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupTag'), data, function(t) {           
+            fcom.ajax(fcom.makeUrl('Seller', 'setupTag'), data, function(t) {           
                 var dataLang = 'tag_id='+t.tagId+'&tag_name='+tag_name+'&lang_id=0';
-                fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagLangSetup'), dataLang, function(t2) { 
-                    fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) { 
+                fcom.ajax(fcom.makeUrl('Seller', 'tagLangSetup'), dataLang, function(t2) { 
+                    fcom.ajax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) { 
                          var tagifyId = e.detail.tag.__tagifyId;
                          $('[__tagifyid='+tagifyId+']').attr('id', t.tagId);
                      });
                 });
             });
         }else{
-            fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) { });
-        }        
+            fcom.ajax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) {});
+        }   
+        tagifyProducts();
     }
 
     removeTagData = function(e){ 
         var tag_id = e.detail.tag.id;
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'removeProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) {
-        });
+        fcom.ajax(fcom.makeUrl('Seller', 'removeProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) {});
+        tagifyProducts();
     }
     
     getTagsAutoComplete = function(e){
@@ -127,11 +128,16 @@ $("document").ready(function() {
         });       
     }
     
-    tagify = new Tagify(document.querySelector('input[name=tag_name]'), {
+    tagifyProducts = function() {
+        var element = 'input[name=tag_name]';
+        $(element).siblings( ".tagify" ).remove();
+        tagify = new Tagify(document.querySelector('input[name=tag_name]'), {
            whitelist : [],
            delimiters : "#",
            editTags : false,
-        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete); 
+        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);  
+    };
+    tagifyProducts();
          
     addOption = function(e){ 
         var option_id = e.detail.tag.id; 
@@ -140,12 +146,14 @@ $("document").ready(function() {
              $('[__tagifyid='+tagifyId+']').remove();
         }else{
             updateProductOption(product_id, option_id, e);
-        }        
+        } 
+        tagifyTheOptions();       
     }
 
     removeOption = function(e){ 
         var option_id = e.detail.tag.id;
         removeProductOption( product_id,option_id);
+        tagifyTheOptions();
     }
     
     getOptionsAutoComplete = function(e){
@@ -161,16 +169,19 @@ $("document").ready(function() {
                 });
             }            
             tagifyOption.settings.whitelist = listOptions;
-            tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);            
-        });
-        
+            tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
+        });    
     };     
-    
-    tagifyOption = new Tagify(document.querySelector('input[name=option_groups]'), {
-           whitelist : [],
-           delimiters : "#",
-           editTags : false, 
-        }).on('add', addOption).on('remove', removeOption).on('input', getOptionsAutoComplete);         
 
+    tagifyTheOptions = function() {
+        var element = 'input[name=option_groups]';
+        $(element).siblings( ".tagify" ).remove();
+        tagifyOption = new Tagify(document.querySelector(element), {
+            whitelist : [],
+            delimiters : "#",
+            editTags : false, 
+        }).on('add', addOption).on('remove', removeOption).on('input', getOptionsAutoComplete); 
+    };
+    tagifyTheOptions();
 });
 </script>
