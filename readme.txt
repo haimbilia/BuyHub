@@ -44,6 +44,7 @@ Fixes:
     => 050680 - Phone number should allow special symbols like + - (Contact Us and Footer - Site Phone)
     => 050654 - Wrong error message "Cart is empty" is displayed if we increase/decrease quantity of a product available only for pickup and then proceed.
     => 050831 - while adding option to catalog> it got stuck randomly
+    => 050810 - issue with price filter when there is single item on seeking bar product disappears and can't reset again
     
 Enhancements :
    => Make provision to made seller
