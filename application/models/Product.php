@@ -1489,9 +1489,9 @@ END,   special_price_found ) as special_price_found'
 
         $minPriceRange = '';
         if (array_key_exists('price-min-range', $criteria)) {
-            $minPriceRange = floor($criteria['price-min-range']);
+            $minPriceRange = $criteria['price-min-range'];
         } elseif (array_key_exists('min_price_range', $criteria)) {
-            $minPriceRange = floor($criteria['min_price_range']);
+            $minPriceRange = $criteria['min_price_range'];
         }
         //currency_id
         if (!empty($minPriceRange)) {
@@ -1503,9 +1503,9 @@ END,   special_price_found ) as special_price_found'
 
         $maxPriceRange = '';
         if (array_key_exists('price-max-range', $criteria)) {
-            $maxPriceRange = ceil($criteria['price-max-range']);
+            $maxPriceRange = $criteria['price-max-range'];
         } elseif (array_key_exists('max_price_range', $criteria)) {
-            $maxPriceRange = ceil($criteria['max_price_range']);
+            $maxPriceRange = $criteria['max_price_range'];
         }
 
         if (!empty($maxPriceRange)) {

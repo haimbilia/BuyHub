@@ -429,11 +429,13 @@
     }
 
     updateProductOption = function (product_id, option_id, e) {
+        $.systemMessage(langLbl.processing,'alert--process');
         fcom.ajax(fcom.makeUrl('Seller', 'updateProductOption'), 'product_id=' + product_id + '&option_id=' + option_id, function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 1) {
                 upcListing(product_id);
-                $.systemMessage(ans.msg, 'alert--success');
+                // $.systemMessage(ans.msg, 'alert--success');
+                $.systemMessage.close();
             } else {
                 var tagifyId = e.detail.tag.__tagifyId;
                 $('[__tagifyid=' + tagifyId + ']').remove();
@@ -443,6 +445,7 @@
     }
 
     removeProductOption = function (product_id, option_id) {
+        $.systemMessage(langLbl.processing,'alert--process');
         fcom.ajax(fcom.makeUrl('Seller', 'checkOptionLinkedToInventory'), 'product_id=' + product_id + '&option_id=' + option_id, function (t) {
             ans = jQuery.parseJSON(t);
             if (ans.status != true) {
@@ -453,7 +456,8 @@
                 var ans = $.parseJSON(t);
                 if (ans.status == 1) {
                     upcListing(product_id);
-                    $.mbsmessage(ans.msg, true, 'alert--success');
+                    $.systemMessage.close();
+                    // $.systemMessage(ans.msg, 'alert--success');
                     //reloadProductOptions(product_id);
                 }
 
