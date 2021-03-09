@@ -78,7 +78,7 @@ if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn--social btn--<?php echo $plugin['plugin_code'];?>">
                         <i class="icn">
-                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                            <img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
                         </i>
                     </a>
                 </li>

@@ -27,7 +27,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
     <!-- favicon ================================================== -->
     <meta name="theme-color" content="#<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="<?php echo UrlHelper::generateUrl('Image', 'appleTouchIcon', array($siteLangId, '144-144')); ?>">
+    <meta name="msapplication-TileImage" content="<?php echo UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '144-144')); ?>">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="msapplication-navbutton-color" content="#<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>">
