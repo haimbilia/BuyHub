@@ -292,8 +292,7 @@ class DataMigration
             }
             /* not adding/updating data with empty values */
             $userObj->assignValues(array_filter($user));
-            if (!$userObj->save()) {
-                echo 1;
+            if (!$userObj->save()) {                
                 $this->error = $userObj->getError();
                 $db->rollbackTransaction();
                 return false;
@@ -317,13 +316,11 @@ class DataMigration
                 }
 
                 if (!$userObj->setLoginCredentials($user['credential_username'], $user['credential_email'], $user['user_password'], $user['user_active'], $user['user_verify'])) {
-                    echo 2;
                     $db->rollbackTransaction();
                     return false;
                 }
 
-                if (!$this->createSellerApprovalRequest($userId)) {
-                    echo 3;
+                if (!$this->createSellerApprovalRequest($userId)) {                    
                     $db->rollbackTransaction();
                     return false;
                 }
@@ -346,8 +343,7 @@ class DataMigration
 
 
             if (!empty($user['id'])) {
-                if (!$userObj->updateUserMeta($pluginCode . "_seller_id", $user['id'])) {
-                    echo 4;
+                if (!$userObj->updateUserMeta($pluginCode . "_seller_id", $user['id'])) {                   
                     $this->error = $userObj->getError();
                     $db->rollbackTransaction();
                     return false;
@@ -377,8 +373,7 @@ class DataMigration
             }
 
             $shopObj->assignValues($shop);
-            if (!$shopObj->save()) {
-                echo 5;
+            if (!$shopObj->save()) {            
                 $this->error = $shopObj->getError();
                 $db->rollbackTransaction();
                 return false;
