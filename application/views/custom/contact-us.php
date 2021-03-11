@@ -81,11 +81,11 @@ $fld->developerTags['col'] = 12;
             </div>
         </div>
     </section>
-    <section class="g-map">
-        <?php if (FatApp::getConfig('CONF_MAP_IFRAME_CODE', FatUtility::VAR_STRING, '') != '') {
-    echo FatApp::getConfig('CONF_MAP_IFRAME_CODE', FatUtility::VAR_STRING);
-} ?>
+    <?php  if (FatApp::getConfig('CONF_MAP_IFRAME_CODE', FatUtility::VAR_STRING, '') != '') { ?>
+    <section class="g-map">        
+    <?php echo FatApp::getConfig('CONF_MAP_IFRAME_CODE', FatUtility::VAR_STRING); ?>
     </section>
+    <?php } ?>
 </div>
 <?php 
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
