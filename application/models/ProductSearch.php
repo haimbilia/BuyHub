@@ -241,9 +241,13 @@ class ProductSearch extends SearchBase
 
         $minPriceRange = 0;
         if (array_key_exists('price-min-range', $criteria)) {
-            $minPriceRange = floor($criteria['price-min-range']);
+            $currCurrencyId = isset($criteria['currency_id']) ? $criteria['currency_id'] : FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+            $minPriceRange = CommonHelper::convertExistingToOtherCurrency($currCurrencyId, $criteria['price-min-range'], FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1), false);
+//            $minPriceRange = floor($criteria['price-min-range']);
         } elseif (array_key_exists('min_price_range', $criteria)) {
-            $minPriceRange = floor($criteria['min_price_range']);
+            $currCurrencyId = isset($criteria['currency_id']) ? $criteria['currency_id'] : FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+            $minPriceRange = CommonHelper::convertExistingToOtherCurrency($currCurrencyId, $criteria['min_price_range'], FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1), false);
+//            $minPriceRange = floor($criteria['min_price_range']);
         }
         if (0 < $minPriceRange) {
             $srch->addDirectCondition('COALESCE(tsp.splprice_price, sprods.selprod_price) >= ' . $minPriceRange);

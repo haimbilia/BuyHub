@@ -240,7 +240,10 @@ class ProductsController extends MyAppController
                 //$conditionSrch->addFld('count(selprod_condition) as totalProducts');
                 /* ] */
                 $conditionRs = $conditionSrch->getResultSet();
-                $conditionsArr[] = $db->fetch($conditionRs);
+                $conditionArr = $db->fetch($conditionRs);
+                if(!empty($conditionArr)){
+                    $conditionsArr[] = $db->fetch($conditionRs);
+                }                
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
         } else {

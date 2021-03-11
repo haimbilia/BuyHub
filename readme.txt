@@ -46,6 +46,8 @@ Fixes:
     => 050831 - while adding option to catalog> it got stuck randomly
     => 050810 - issue with price filter when there is single item on seeking bar product disappears and can't reset again
     => 050972 - while placing order with guest order error coming email sending
+    => 051054 - If only one product is there then condition list not should not come in filter 
+    => 051003 - banner image getting repeated as width increases
     
 Enhancements :
    => Make provision to made seller
