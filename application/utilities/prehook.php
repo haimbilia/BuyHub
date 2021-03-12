@@ -14,11 +14,11 @@ $innova_settings = array('width' => '730', 'height' => '400', 'arrStyle' => '[["
     'fileBrowser' => '"' . CONF_WEBROOT_URL . 'innova/assetmanager/asset.php"');
 
 FatApp::setViewDataProvider('_partial/buyerDashboardNavigation.php', array('Navigation', 'buyerDashboardNavigation'));
-FatApp::setViewDataProvider('_partial/buyerDashboardMobileNavigation.php', array('Navigation', 'buyerDashboardNavigation'));
+// FatApp::setViewDataProvider('_partial/buyerDashboardMobileNavigation.php', array('Navigation', 'buyerDashboardNavigation'));
 FatApp::setViewDataProvider('_partial/advertiser/advertiserDashboardNavigation.php', array('Navigation', 'advertiserDashboardNavigation'));
-FatApp::setViewDataProvider('_partial/advertiser/advertiserDashboardMobileNavigation.php', array('Navigation', 'advertiserDashboardNavigation'));
+// FatApp::setViewDataProvider('_partial/advertiser/advertiserDashboardMobileNavigation.php', array('Navigation', 'advertiserDashboardNavigation'));
 FatApp::setViewDataProvider('_partial/seller/sellerDashboardNavigation.php', array('Navigation', 'sellerDashboardNavigation'));
-FatApp::setViewDataProvider('_partial/seller/sellerDashboardMobileNavigation.php', array('Navigation', 'sellerDashboardNavigation'));
+// FatApp::setViewDataProvider('_partial/seller/sellerDashboardMobileNavigation.php', array('Navigation', 'sellerDashboardNavigation'));
 FatApp::setViewDataProvider('_partial/affiliate/affiliateDashboardNavigation.php', array('Navigation', 'affiliateDashboardNavigation'));
 FatApp::setViewDataProvider('_partial/topHeaderDashboard.php', array('Navigation', 'topHeaderDashboard'));
 
@@ -29,8 +29,8 @@ FatApp::setViewDataProvider('_partial/headerSearchFormArea.php', array('Common',
 FatApp::setViewDataProvider('_partial/headerLanguageArea.php', array('Common', 'headerLanguageArea'));
 FatApp::setViewDataProvider('_partial/dashboardLanguageArea.php', array('Common', 'headerLanguageArea'));
 
-FatApp::setViewDataProvider('_partial/loginPageRight.php', array('Block', 'loginPageRight'));
-FatApp::setViewDataProvider('_partial/customPageLeft.php', array('Navigation', 'customPageLeft'));
+// FatApp::setViewDataProvider('_partial/loginPageRight.php', array('Block', 'loginPageRight'));
+// FatApp::setViewDataProvider('_partial/customPageLeft.php', array('Navigation', 'customPageLeft'));
 FatApp::setViewDataProvider('_partial/dashboardTop.php', array('Navigation', 'dashboardTop'));
 
 FatApp::setViewDataProvider('_partial/custom/header-breadcrumb.php', array('Common', 'setHeaderBreadCrumb'));
@@ -39,7 +39,7 @@ FatApp::setViewDataProvider('_partial/footerNewsLetterForm.php', array('Common',
 FatApp::setViewDataProvider('_partial/headerTopNavigation.php', array('Navigation', 'headerTopNavigation'));
 FatApp::setViewDataProvider('_partial/footerNavigation.php', array('Navigation', 'footerNavigation'));
 FatApp::setViewDataProvider('_partial/seller/sellerNavigationLeft.php', array('Navigation', 'sellerNavigationLeft'));
-FatApp::setViewDataProvider('_partial/seller/sellerNavigationRight.php', array('Navigation', 'sellerNavigationRight'));
+// FatApp::setViewDataProvider('_partial/seller/sellerNavigationRight.php', array('Navigation', 'sellerNavigationRight'));
 FatApp::setViewDataProvider('_partial/footerSocialMedia.php', array('Common', 'footerSocialMedia'));
 // FatApp::setViewDataProvider('_partial/footerTopBrands.php', array('Common', 'footerTopBrands'));
 // FatApp::setViewDataProvider('_partial/footerTopCategories.php', array('Common', 'footerTopCategories'));
@@ -50,5 +50,5 @@ FatApp::setViewDataProvider('_partial/seller/sellerSalesGraph.php', array('Stati
 // FatApp::setViewDataProvider('_partial/faq-list.php', array('Common', 'faqList'));
 
 FatApp::setViewDataProvider('_partial/blogSidePanel.php', array('Common', 'blogSidePanelArea'));
-FatApp::setViewDataProvider('_partial/blogTopFeaturedCategories.php', array('Common', 'blogTopFeaturedCategories'));
+// FatApp::setViewDataProvider('_partial/blogTopFeaturedCategories.php', array('Common', 'blogTopFeaturedCategories'));
 //FatApp::setViewDataProvider('_partial/poll-form.php', array('Common', 'pollForm'));

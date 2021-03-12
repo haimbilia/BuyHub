@@ -1,29 +1,29 @@
 <?php
-require_once('paygate.payweb3.php');
+
 /**
- * Dpo - API's reference https://docs.paygate.co.za/
+ * Dpo - API's Documentation https://directpayonline.atlassian.net/wiki/spaces/API/overview.
  */
 class Dpo extends PaymentMethodBase
 {
     public const KEY_NAME = __CLASS__;
 
+    public const SANDBOX_URL = 'https://secure1.sandbox.directpay.online/API/v6/';
+    public const PRODUCTION_URL = 'https://secure.3gdirectpay.com/API/v6/';
+
+    public const SANDBOX_PAY_URL = 'https://secure1.sandbox.directpay.online/payv2.php';
+    public const PRODUCTION_PAY_URL = 'https://secure.3gdirectpay.com/payv2.php';
+
     public $requiredKeys = [
-        'paygate_id',
-        'encryption_key',
+        'company_token',
+        'service_type',
     ];
     private $env = Plugin::ENV_SANDBOX;
-    private $paygateId = '';
-    private $encryptionKey = '';
-    private $payWeb3;
+    private $companyToken = '';
+    private $serviceType = '';
+    private $actionUrl = '';
+    private $actionPayUrl = '';
     private $response = '';
-
-    private const TXN_STATUS_NOT_DONE = 0;
-    private const TXN_STATUS_APPROVED = 1;
-    private const TXN_STATUS_DECLINED = 2;
-    private const TXN_STATUS_CANCELLED = 3;
-    private const TXN_STATUS_USER_CANCELLED = 4;
-    private const TXN_STATUS_RECEIVED_BY_PAYGATE = 5;
-    private const TXN_STATUS_SETTLEMENT_VOIDED = 7;
+    private $tokenResponse = [];
 
     /**
      * __construct
@@ -47,8 +47,8 @@ class Dpo extends PaymentMethodBase
         $this->env = FatUtility::int($this->getKey('env'));
         if (0 < $this->env) {
             $this->requiredKeys = [
-                'live_paygate_id',
-                'live_encryption_key',
+                'live_company_token',
+                'live_service_type',
             ];
         }
     }
@@ -75,10 +75,10 @@ class Dpo extends PaymentMethodBase
             }
         }
 
-        $this->paygateId = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_paygate_id'] : $this->settings['paygate_id'];
-        $this->encryptionKey = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_encryption_key'] : $this->settings['encryption_key'];
-        $this->payWeb3 = new PayGate_PayWeb3();
-        $this->payWeb3->setEncryptionKey($this->encryptionKey);
+        $this->companyToken = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_company_token'] : $this->settings['company_token'];
+        $this->serviceType = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_service_type'] : $this->settings['service_type'];
+        $this->actionUrl = Plugin::ENV_PRODUCTION == $this->settings['env'] ? self::PRODUCTION_URL : self::SANDBOX_URL;
+        $this->actionPayUrl = Plugin::ENV_PRODUCTION == $this->settings['env'] ? self::PRODUCTION_PAY_URL : self::SANDBOX_PAY_URL;
         return true;
     }
 
@@ -93,6 +93,105 @@ class Dpo extends PaymentMethodBase
     }
 
     /**
+     * getCancelUrl
+     *
+     * @return string
+     */
+    public function getCancelUrl(): string
+    {
+        return CommonHelper::getPaymentCancelPageUrl();
+    }
+
+    /**
+     * getReturnUrl
+     *
+     * @param  mixed $orderId
+     * @return string
+     */
+    public function getReturnUrl(string $orderId): string
+    {
+        return UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', "callback", [$orderId]);
+    }
+
+    /**
+     * getPaymenUrl
+     *
+     * @return string
+     */
+    public function getPaymenUrl(): string
+    {
+        return $this->actionPayUrl . "?ID=" . $this->getResponse()->TransToken[0];
+    }
+
+    /**
+     * getTxnRequestBody
+     *
+     * @param  string $orderId
+     * @return string
+     */
+    private function getTxnRequestBody(string $orderId): string
+    {
+        $orderPaymentObj = new OrderPayment($orderId, $this->langId);
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+        $txn = '<Transaction>
+                    <PaymentAmount>' . $paymentAmount . '</PaymentAmount>
+                    <PaymentCurrency>' . $this->systemCurrencyCode . '</PaymentCurrency>
+                    <CompanyRef>' . $orderId . '</CompanyRef>
+                    <RedirectURL>' . $this->getReturnUrl($orderId) . '</RedirectURL>
+                    <BackURL>' . $this->getCancelUrl() . '</BackURL>';
+        if (0 < count(array_filter($this->userData))) {
+            $txn .= '<customerFirstName>' . $this->userData['user_name'] . '</customerFirstName>
+                            <customerPhone>' . $this->userData['addr_phone'] . '</customerPhone>
+                            <customerEmail>' . $this->userData['credential_email'] . '</customerEmail>
+                            <customerAddress>' . $this->userData['addr_address1'] . '</customerAddress>
+                            <customerCity>' . $this->userData['addr_city'] . '</customerCity>
+                            <customerZip>' . $this->userData['addr_zip'] . '</customerZip>
+                            <customerCountry>' . $this->userData['country_code'] . '</customerCountry>';
+        }
+        $txn .= '</Transaction>';
+
+        return $txn;
+    }
+
+    /**
+     * getServiceRequestBody
+     *
+     * @param  string $orderId
+     * @return string
+     */
+    private function getServiceRequestBody(string $orderId): string
+    {
+        $websiteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
+        $description = !empty($websiteName) ? $websiteName . ' : #' . $orderId : '#' . $orderId;
+        $description .= ' ' . Labels::getLabel('LBL_ORDER_PAYMENT', $this->langId);
+        return '<Services>
+                    <Service>
+                        <ServiceType>' . $this->serviceType . '</ServiceType>
+                        <ServiceDescription>' . $description . '</ServiceDescription>
+                        <ServiceDate>' . date('Y/m/d H:i') . '</ServiceDate>
+                        <ServiceRef>' . $orderId . '</ServiceRef>
+                    </Service>
+                </Services>';
+    }
+
+    /**
+     * buildRequestBody
+     *
+     * @param  string $orderId
+     * @return string
+     */
+    private function buildRequestBody(string $orderId): string
+    {
+        return '<?xml version="1.0" encoding="UTF-8"?>
+                    <API3G>
+                        <CompanyToken>' . $this->companyToken . '</CompanyToken>
+                        <Request>createToken</Request>'
+            . $this->getTxnRequestBody($orderId)
+            . $this->getServiceRequestBody($orderId) .
+            '</API3G>';
+    }
+
+    /**
      * initiateRequest
      *
      * @param  string $orderId
@@ -102,157 +201,143 @@ class Dpo extends PaymentMethodBase
     public function initiateRequest(string $orderId): bool
     {
         /*
-        * Set the array of fields to be posted to PayGate
+        * Create Request Body
         */
-        //=== Create Request Body
         $body = $this->buildRequestBody($orderId);
-        $this->payWeb3->setInitiateRequest($body);
-
+        
         /*
-        * Do the curl post to PayGate
+        * Do the curl post to Dpo
         */
-        if (false === $this->payWeb3->doInitiate()) {
-            $lastError = isset($this->payWeb3->lastError) ? $this->payWeb3->lastError : Labels::getLabel('MSG_API_ERROR', $this->langId);
-            $msg = Labels::getLabel('MSG_{LAST-ERROR}_:_SOMETHING_WENT_WRONG!!', $this->langId);
-            $this->error = CommonHelper::replaceStringData($msg, ['{LAST-ERROR}' => $lastError]);
+        if (false === $this->doRequest($body)) {
             return false;
         }
-        $this->response = $this->payWeb3;
+
+        /*
+        * Validate Xml Response
+        */
+        if (false === $this->isValidXml($this->getResponse())) {
+            return false;
+        }
+
+        /*
+        * Convert Xml to Array
+        */
+        return $this->formatResponse();
+    }
+
+    /**
+     * isValidXml
+     *
+     * Check if XML is valid and correct
+     */
+    private function isValidXml($xml)
+    {
+        $doc = @simplexml_load_string($xml);
+        if (false == $doc) {
+            $this->error = CommonHelper::stripAllTags($xml);
+            return false; // this is not valid
+        }
+        return true; // this is valid
+    }
+
+    /**
+     * formatResponse - Convert the XML result into array
+     *
+     * @return bool
+     */
+    private function formatResponse(): bool
+    {
+        $xml = new SimpleXMLElement($this->getResponse());
+
+        if ($xml->Result[0] != '000') {
+            $msg = Labels::getLabel('LBL_PAYMENT_ERROR_CODE:_{ERROR_CODE},_{ERROR_DESCRIPTION}.', $this->langId);
+            $this->error = CommonHelper::replaceStringData($msg, ['{ERROR_CODE}' => $xml->Result[0], '{ERROR_DESCRIPTION}' => $xml->ResultExplanation[0]]);
+            return false;
+        }
+
+        $this->response = $xml;
         return true;
     }
 
     /**
-     * buildRequestBody
+     * validateResponse - Verify DPO Group response    
      *
-     * @param  string $orderId
-     * @return array
-     */
-    private function buildRequestBody(string $orderId): array
-    {
-        $orderPaymentObj = new OrderPayment($orderId, $this->langId);
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-        if ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
-            $countryAlpha3Code = $this->userData['country_code_alpha3'];
-        } else {
-            $orderObj = new Orders();
-            $orderAddresses = $orderObj->getOrderAddresses($orderId);
-            $billingAddress = isset($orderAddresses[Orders::BILLING_ADDRESS_TYPE]) ? $orderAddresses[Orders::BILLING_ADDRESS_TYPE] : [];
-            $countryAlpha3Code = $billingAddress['oua_country_code_alpha3'];
-        }
-
-        $langData = current(Language::getAllNames(false, $this->langId));
-        $locale = strtolower($langData['language_code'] . '-' . $langData['language_country_code']);
-
-        $customerEmail = !isset($orderInfo['customer_email']) || empty($orderInfo['customer_email']) ? $this->userData['credential_email'] : $orderInfo['customer_email'];
-
-        return [
-            'PAYGATE_ID'        => filter_var($this->paygateId, FILTER_SANITIZE_STRING),
-            'REFERENCE'         => filter_var($orderId, FILTER_SANITIZE_STRING),
-            'AMOUNT'            => filter_var($paymentAmount * 100, FILTER_SANITIZE_NUMBER_INT),
-            'CURRENCY'          => filter_var($this->systemCurrencyCode, FILTER_SANITIZE_STRING),
-            'RETURN_URL'        => filter_var(UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', "callback", [$orderId]), FILTER_SANITIZE_URL),
-            'TRANSACTION_DATE'  => filter_var(date('Y-m-d H:i:s'), FILTER_SANITIZE_STRING),
-            'LOCALE'            => filter_var($locale, FILTER_SANITIZE_STRING),
-            'COUNTRY'           => filter_var($countryAlpha3Code, FILTER_SANITIZE_STRING),
-            'EMAIL'             => filter_var($customerEmail, FILTER_SANITIZE_EMAIL),
-        ];
-    }
-
-    /**
-     * validateResponse
-     *
-     * @param  string $orderId
      * @param  array $response
      * @return bool
      */
-    public function validateResponse(string $orderId, array $response): bool
+    public function validateResponse(array $response): bool
     {
-        $payRequestId = isset($response['PAY_REQUEST_ID']) ? $response['PAY_REQUEST_ID'] : '';
-        $transactionStatus = isset($response['TRANSACTION_STATUS']) ? $response['TRANSACTION_STATUS'] : '';
-        $checksum = isset($response['CHECKSUM']) ? $response['CHECKSUM'] : '';
-        if (empty($payRequestId) || empty($transactionStatus) || empty($checksum)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+        $transactionToken  = $response['TransactionToken'];
+
+        // Get verify token response from DPO Group
+        if (false === $this->verifytoken($transactionToken)) {
             return false;
         }
 
-        $checksumData = array(
-            'PAYGATE_ID'         => $this->paygateId,
-            'PAY_REQUEST_ID'     => $payRequestId,
-            'TRANSACTION_STATUS' => $transactionStatus,
-            'REFERENCE'          => $orderId,
-            'CHECKSUM'           => $checksum
-        );
-
-        /*
-        * Check that the checksum returned matches the checksum we generate
-        */
-        if (false === $this->payWeb3->validateChecksum($checksumData)) {
-            $this->error = Labels::getLabel('MSG_INVALID_CHECKSUM', $this->langId);
+        $tokenResponse = $this->getResponse();
+        // Check selected order status workflow
+        if ($tokenResponse->Result[0] != '000') {
+            $errorCode = $tokenResponse->Result[0];
+            $errorDesc = $tokenResponse->ResultExplanation[0];
+            $msg = Labels::getLabel('LBL_PAYMENT_ERROR_CODE:_{ERROR_CODE},_{ERROR_DESCRIPTION}.', $this->langId);
+            $this->error = CommonHelper::replaceStringData($msg, ['{ERROR_CODE}' => $errorCode, '{ERROR_DESCRIPTION}' => $errorDesc]);
             return false;
         }
 
-        $queryData = array(
-            'PAYGATE_ID'     => $this->paygateId,
-            'PAY_REQUEST_ID' => $payRequestId,
-            'REFERENCE'      => $orderId
-        );
-        /*
-         * Set the array of fields to be posted to PayGate
-         */
-        $this->payWeb3->setQueryRequest($queryData);
-
-        /*
-         * Do the curl post to PayGate
-         */
-        if (false === $this->payWeb3->doQuery()) {
-            $this->error = Labels::getLabel('MSG_REQUEST_QUERY_MISMATCH', $this->langId);
-            return false;
-        }
-
-        if (isset($this->payWeb3->lastError) && !empty($this->payWeb3->lastError)) {
-            $this->error = $this->payWeb3->lastError;
-        }
-
-        if (!isset($this->payWeb3->queryResponse)) {
-            $this->error = Labels::getLabel('MSG_NO_QUERY_RESPONSE', $this->langId);
-            return false;
-        }
-
-        $this->response = $this->payWeb3->queryResponse;
+        $this->response = $tokenResponse;
         return true;
     }
-    
+
     /**
-     * transactionStatues
+     * verifytoken - VerifyToken response from DPO Group
      *
-     * @return array
+     * @param  mixed $transactionToken
+     * @return void
      */
-    public static function transactionStatues(): array
+    private function verifytoken(string $transactionToken): bool
     {
-        return [
-            self::TXN_STATUS_NOT_DONE => "Not Done",
-            self::TXN_STATUS_APPROVED => "Approved",
-            self::TXN_STATUS_DECLINED => "Declined",
-            self::TXN_STATUS_CANCELLED => "Cancelled",
-            self::TXN_STATUS_USER_CANCELLED => "User Cancelled",
-            self::TXN_STATUS_RECEIVED_BY_PAYGATE => "Received by PayGate",
-            self::TXN_STATUS_SETTLEMENT_VOIDED => "Settlement Voided",
-        ];
+        $inputXml = '<?xml version="1.0" encoding="utf-8"?>
+                        <API3G>
+                            <CompanyToken>' . $this->companyToken . '</CompanyToken>
+                            <Request>verifyToken</Request>
+                            <TransactionToken>' . $transactionToken . '</TransactionToken>
+                        </API3G>';
+
+        if (false === $this->doRequest($inputXml)) {
+            return false;
+        }
+
+        // Convert the XML result into array
+        $this->response = new SimpleXMLElement($this->getResponse());
+        return true;
     }
-    
+
     /**
-     * validateTxnStatus
+     * doRequest
      *
-     * @param  int $status
+     * @param  string $inputXml
      * @return bool
      */
-    public function validateTxnStatus(int $status): bool
+    private function doRequest(string $inputXml): bool
     {
-        if (self::TXN_STATUS_APPROVED == $status) {
-            return true;
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->actionUrl);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSLVERSION, 6);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $inputXml);
+
+        if (!$this->response = curl_exec($ch)) {
+            $this->error = curl_error($ch);
+            if (empty($this->error)) {
+                $this->error = Labels::getLabel('MSG_VERIFICATION_ERROR:_UNABLE_TO_CONNECT_TO_THE_PAYMENT_GATEWAY.', $this->langId);
+            }
+            return false;
         }
-        $this->error = self::transactionStatues()[$status];
-        return false;
+        return true;
     }
 }

@@ -28,10 +28,7 @@ class AppleLogin extends SocialMediaAuthBase
      */
     public function init(): bool
     {
-        if (false == $this->validateSettings($this->langId)) {
-            return false;
-        }
-        return true;
+        return $this->validateSettings($this->langId);
     }
     
     /**
@@ -41,6 +38,10 @@ class AppleLogin extends SocialMediaAuthBase
      */
     public function getRequestUri(): string
     {
+        if (1 > $this->settings['plugin_active']) {
+            return "";
+        }
+        
         return static::PRODUCTION_URL . 'authorize?' . http_build_query([
             'response_type' => 'code id_token',
             'response_mode' => 'form_post',

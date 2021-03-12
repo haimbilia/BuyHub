@@ -73,7 +73,7 @@ if (!empty($order['opship_tracking_url'])) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
-                                            'onclick' => 'generateLabel("' . $order['order_id'] . '", ' . $order['op_id'] . ')',
+                                            'onclick' => 'generateLabel(' . $order['op_id'] . ')',
                                             'title' => Labels::getLabel('LBL_GENERATE_LABEL', $adminLangId)
                                         ],
                                         'label' => '<i class="fas fa-file-download"></i>'

@@ -4960,7 +4960,9 @@ class SellerController extends SellerBaseController
             'msg' => Labels::getLabel('LBL_Special_Price_Setup_Successful', $this->siteLangId),
             'data' => $this->_template->render(false, false, 'seller/update-special-price-row.php', true)
         );
-        Product::updateMinPrices();
+
+        $productId = SellerProduct::getAttributesById($data['splprice_selprod_id'], 'selprod_product_id');
+        Product::updateMinPrices($productId);
         FatUtility::dieJsonSuccess($json);
     }
 

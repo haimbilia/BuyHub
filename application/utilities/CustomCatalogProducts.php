@@ -1038,7 +1038,7 @@ trait CustomCatalogProducts
         $this->set('productType', $productType);
         $this->set('preqId', $preqId);
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
-        
+
         $this->set('includeEditor', true);
         $this->_template->render();
     }
@@ -1057,6 +1057,7 @@ trait CustomCatalogProducts
             }
 
             $prodcatId = $productReqRow['preq_prodcat_id'];
+            $prodcatId = FatUtility::int($prodcatId);
             $productData = json_decode($productReqRow['preq_content'], true);
             unset($productReqRow['preq_content']);
             $productReqRow = array_merge($productReqRow, $productData, array('preq_prodcat_id' => $prodcatId));
@@ -1472,7 +1473,7 @@ trait CustomCatalogProducts
             $rs = $srch->getResultSet();
             $productTags = FatApp::getDb()->fetchAll($rs);
         }
-        
+
         $this->set('productOptions', $productOptions);
         $this->set('productTags', $productTags);
         $this->set('preqId', $preqId);

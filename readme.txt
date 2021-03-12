@@ -1,6 +1,10 @@
+
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
     => System API version : 2.3
+
+New Feature : 
+    => 82248 : DPO Payment Gateway Integration
 
 Fixes:
     => 047746 - Get current location not working
@@ -57,6 +61,7 @@ Enhancements :
    => Performance optimization
     
 Known Issues and Problems :
+    => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
 
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin

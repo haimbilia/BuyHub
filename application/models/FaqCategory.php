@@ -52,7 +52,7 @@ class FaqCategory extends MyAppModel
         );
     }
 
-    public function getCategoryStructure()
+    public function getCategoryStructure(): array
     {
         $srch = static::getSearchObject();
         $srch->addCondition('fc.faqcat_deleted', '=', applicationConstants::NO);

@@ -36,7 +36,7 @@ if (null != $btn) {
                 return false;
             }
             $("#paymentFormElement-js").replaceWith(json.html);
-            $("form#paymentForm-js").submit();            
+            window.location.href = $("form#paymentForm-js").attr('action');
         });
     }
 </script>

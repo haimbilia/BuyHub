@@ -2607,6 +2607,8 @@ trait SellerProducts
             Message::addErrorMessage($sellerProdObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+        $productId = SellerProduct::getAttributesById($selprodId, 'selprod_product_id', false);
+        Product::updateMinPrices($productId);
     }
 
     public function volumeDiscount($selProd_id = 0)

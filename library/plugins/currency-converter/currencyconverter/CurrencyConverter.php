@@ -163,9 +163,9 @@ class CurrencyConverter extends CurrencyConverterBase
         $status = Plugin::RETURN_TRUE;
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
 
-        if (!empty($data->error)) {
+        if (!empty($response->error)) {
             $status = Plugin::RETURN_FALSE;
-            $msg = $data->error;
+            $msg = $response->error;
         }
 
         $data = [];

@@ -205,7 +205,7 @@ class BlogPostsController extends AdminBaseController
         $postObj = new BlogPost();
         $post_categories = $postObj->getPostCategories($post_id);
         $selectedCats = array();
-        if (!$post_categories) {
+        if (empty($post_categories)) {
             $this->set('openLinksForm', true);
         }
         $this->set('msg', Labels::getLabel('MSG_Blog_Post_Setup_Successful', $this->adminLangId));
@@ -577,7 +577,7 @@ class BlogPostsController extends AdminBaseController
         $postObj = new BlogPost();
         $post_categories = $postObj->getPostCategories($post_id);
         $selectedCats = array();
-        if ($post_categories) {
+        if (!empty($post_categories)) {
             foreach ($post_categories as $cat) {
                 $selectedCats[] = $cat['bpcategory_id'];
             }

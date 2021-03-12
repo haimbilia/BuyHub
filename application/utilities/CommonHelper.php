@@ -967,7 +967,7 @@ class CommonHelper extends FatUtility
     }
 
     public static function getRandomPassword($n)
-    {          
+    {
         $pass = '';
         if ($n > 4) {
             $n = $n - 4;
@@ -1339,7 +1339,7 @@ class CommonHelper extends FatUtility
         if (1 > $originalPrice) {
             return 0;
         }
-        
+
         $specialPrice = $product['theprice'];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
         return $disVal = round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
@@ -2031,5 +2031,25 @@ class CommonHelper extends FatUtility
             return CommonHelper::displayMoneyFormat($childOrder['op_rounding_off']);
         }
         return false;
+    }
+    
+    /**
+     * stripAllTags - This differs from strip_tags() because it removes the contents of the <script> and <style> tags. 
+     * E.g. strip_tags( '<script>something</script>' ) will return ‘something’. stripAllTags will return ”
+     *
+     * @param  string $string
+     * @param  bool $remove_breaks
+     * @return void
+     */
+    public static function stripAllTags(string $string, bool $remove_breaks = false): string
+    {
+        $string = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $string);
+        $string = strip_tags($string);
+
+        if ($remove_breaks) {
+            $string = preg_replace('/[\r\n\t ]+/', ' ', $string);
+        }
+
+        return trim($string);
     }
 }

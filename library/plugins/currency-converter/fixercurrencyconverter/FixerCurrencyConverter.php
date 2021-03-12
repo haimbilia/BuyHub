@@ -130,6 +130,7 @@ class FixerCurrencyConverter extends CurrencyConverterBase
 
         $queryString = empty($this->toCurrencies) ? '' : '&symbols=' . implode(',', $this->toCurrencies);
         $this->bindQueryString($queryString);
+
         $curl = new Curl();
         $curl->get($this->getActionUri());
 
