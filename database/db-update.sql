@@ -9,3 +9,9 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 -- --- Easypost Shipping API--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('EasyPost', '8', 'EasyPost', '0', '2');
 -- --- Easypost Shipping API--- --
+
+
+-- --- Tax Module Update --- --
+ALTER TABLE `tbl_tax_rule_locations` CHANGE `taxruleloc_country_id` `taxruleloc_from_country_id` INT NOT NULL, CHANGE `taxruleloc_state_id` `taxruleloc_from_state_id` INT NOT NULL;
+ALTER TABLE `tbl_tax_rule_locations` ADD `taxruleloc_to_country_id` INT NOT NULL AFTER `taxruleloc_from_state_id`, ADD `taxruleloc_to_state_id` INT NOT NULL AFTER `taxruleloc_to_country_id`;
+-- --- Tax Module Update--- --

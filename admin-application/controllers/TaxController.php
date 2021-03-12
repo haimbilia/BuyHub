@@ -479,6 +479,10 @@ class TaxController extends AdminBaseController
         }
         die(json_encode($json));
     }
+    
+    public function ruleList($taxCatId){
+        
+    }
 
     public function ruleForm($taxCatId = 0)
     {
