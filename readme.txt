@@ -46,6 +46,7 @@ Fixes:
     => 050831 - while adding option to catalog> it got stuck randomly
     => 050810 - issue with price filter when there is single item on seeking bar product disappears and can't reset again
     => 051065 - Fatal error: Uncaught Error: Class 'Libhelper' not found
+    => 051068 - Google Shopping Feed > Unable to bind products
     
 Enhancements :
    => Make provision to made seller
