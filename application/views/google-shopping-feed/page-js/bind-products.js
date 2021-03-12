@@ -16,7 +16,7 @@ $(document).on('keyup', "input[name='product_name']", function(){
         			dataType: 'json',
         			type: 'post',
         			success: function(json) {
-        				response($.map(json, function(item) {
+        				response($.map(json.products, function(item) {
         					return { label: item['name'], value: item['name'], id: item['id'] };
         				}));
         			},
