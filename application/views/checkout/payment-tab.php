@@ -36,7 +36,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                     $maskedPhoneNumber = LibHelper::phoneNumberMasking($phone);
                     $msg =  CommonHelper::replaceStringData($msg, ['{PHONE}' => '<br><strong>' . $userDialCode . ' - ' . $maskedPhoneNumber . '</strong>']);
                 }
-                $maskedEmail = Libhelper::emailAddressMasking($userData['credential_email']);
+                $maskedEmail = LibHelper::emailAddressMasking($userData['credential_email']);
                 echo CommonHelper::replaceStringData($msg, ['{EMAIL}' => '<strong>' . $maskedEmail . '</strong>']);
                 ?>
             </p>
