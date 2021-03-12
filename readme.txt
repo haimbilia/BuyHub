@@ -79,7 +79,9 @@ Installation steps:
 	• Update basic configuration as per your system requirements under {document root}/conf directory.
 
 Notes:
-    
+    Procedures : 
+        Execute "{siteurl}/admin/admin-users/create-procedures" is mandatory.
+        
     Composer :
 
         => Composer should be installed on server to run the stripe connect module: composer.json on root of the project has details to download the required libraries in root's vendor folder.
