@@ -739,7 +739,7 @@ class EmailHandler extends FatModel
             $addresses = $orderObj->getOrderAddresses($orderInfo["order_id"]);
 
             $userObj = new User($orderInfo["order_user_id"]);
-            $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'));
+            $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'), true, false);
 
             $billingArr = array();
             if (!empty($addresses[Orders::BILLING_ADDRESS_TYPE])) {
@@ -851,7 +851,7 @@ class EmailHandler extends FatModel
         //CommonHelper::printArray($childOrderInfo, true);
         if ($childOrderInfo) {
             $userObj = new User($OrderInfo["order_user_id"]);
-            $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'));
+            $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'), true, false);
             $tpl = new FatTemplate('', '');
             $tpl->set('orderInfo', $OrderInfo);
             $tpl->set('orderProducts', $childOrderInfo);
@@ -877,7 +877,7 @@ class EmailHandler extends FatModel
         $orderDetail = $orderObj->getOrderById($orderId);
 
         $userObj = new User($orderDetail["order_user_id"]);
-        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'));
+        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'), true, false);
 
         $payementStatusArr = Orders::getOrderPaymentStatusArr($langId);
 
@@ -927,7 +927,7 @@ class EmailHandler extends FatModel
         }
 
         $userObj = new User($orderDetail["order_user_id"]);
-        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'));
+        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'), true, false);
         // $payementStatusArr = Orders::getOrderPaymentStatusArr($langId);
 
         if ($orderDetail) {
@@ -959,7 +959,7 @@ class EmailHandler extends FatModel
         }
 
         $userObj = new User($orderDetail["order_user_id"]);
-        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'));
+        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'), true, false);
 
         $payementStatusArr = Orders::getOrderPaymentStatusArr($langId);
 
@@ -1079,7 +1079,7 @@ class EmailHandler extends FatModel
                 $tpl->set('shippingAddress', $shippingArr);
                 $orderItemsTableFormatHtml = $tpl->render(false, false, '_partial/emails/child-order-detail-email-seller.php', true);
                 $userObj = new User($orderDetail["order_user_id"]);
-                $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'));
+                $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_dial_code', 'user_phone'), true, false);
                 $arrReplacements = array(
                     '{vendor_name}' => trim($val['op_shop_owner_name']),
                     '{order_items_table_format}' => $orderItemsTableFormatHtml,
