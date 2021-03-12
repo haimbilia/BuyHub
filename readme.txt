@@ -50,6 +50,7 @@ Fixes:
     => 050972 - while placing order with guest order error coming email sending
     => 051054 - If only one product is there then condition list not should not come in filter 
     => 051003 - banner image getting repeated as width increases
+    => 051091 - on the category page, google is undefined error coming in browser console
     
 Enhancements :
    => Make provision to made seller
