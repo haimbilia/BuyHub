@@ -156,7 +156,7 @@ class OrderReturnRequest extends MyAppModel
         return true;
     }
 
-    public function approveRequest($orrequest_id, $user_id, $langId, $moveRefundInWallet = true, $adminComment = '')
+    public function approveRequest($orrequest_id, $user_id, $langId, $moveRefundInWallet = true, $adminComment = '', $thirdPartyResponse = '')
     {
         $orrequest_id = FatUtility::int($orrequest_id);
         $langId = FatUtility::int($langId);
@@ -193,7 +193,11 @@ class OrderReturnRequest extends MyAppModel
         $orderLangId = $requestRow['order_language_id'];
 
         $db->startTransaction();
-        $dataToUpdate = array( 'orrequest_status' => static::RETURN_REQUEST_STATUS_REFUNDED, 'orrequest_refund_in_wallet' => $moveRefundInWallet, 'orrequest_admin_comment' => $adminComment);
+        $dataToUpdate = array( 
+            'orrequest_status' => static::RETURN_REQUEST_STATUS_REFUNDED, 
+            'orrequest_refund_in_wallet' => $moveRefundInWallet, 
+            'orrequest_admin_comment' => $adminComment,
+        );
         $whereArr = array( 'smt' => 'orrequest_id = ?', 'vals' => array( $requestRow['orrequest_id'] ) );
         if (!$db->updateFromArray(static::DB_TBL, $dataToUpdate, $whereArr)) {
             $this->error = $db->getError();
@@ -205,13 +209,14 @@ class OrderReturnRequest extends MyAppModel
         if (!$user_id && AdminAuthentication::isAdminLogged()) {
             $approved_by_person_name = FatApp::getConfig('CONF_WEBSITE_NAME_' . $orderLangId);
         }
+
         $orrmsg_msg = str_replace("{approved_by_person_name}", $approved_by_person_name, Labels::getLabel('LBL_Return_Request_Approved_By', $orderLangId));
         $dataToSave = array(
-        'orrmsg_orrequest_id' => $orrequest_id,
-        'orrmsg_from_user_id' => $user_id,
-        'orrmsg_msg' => $orrmsg_msg,
-        'orrmsg_date' => date('Y-m-d H:i:s'),
-        'orrmsg_deleted' => 0,
+            'orrmsg_orrequest_id' => $orrequest_id,
+            'orrmsg_from_user_id' => $user_id,
+            'orrmsg_msg' => $orrmsg_msg,
+            'orrmsg_date' => date('Y-m-d H:i:s'),
+            'orrmsg_deleted' => 0,
         );
 
         if (!$user_id && AdminAuthentication::isAdminLogged()) {
@@ -286,7 +291,7 @@ class OrderReturnRequest extends MyAppModel
         return true;
     }
 
-    public static function getReturnRequestById($opId, $attr = null)
+    public static function getReturnRequestById($opId, $attr = null, $joinOrderProduct = false)
     {
         $opId = FatUtility::convertToType($opId, FatUtility::VAR_INT);
         if (1 > $opId) {
@@ -296,6 +301,10 @@ class OrderReturnRequest extends MyAppModel
         $db = FatApp::getDb();
 
         $srch = new SearchBase(static::DB_TBL);
+        $srch->joinTable(OrderProduct::DB_TBL_RESPONSE, 'LEFT JOIN', 'opr_op_id = orrequest_op_id AND opr_type = ' . OrderProduct::RESPONSE_TYPE_RETURN, 'opr');
+        if (true === $joinOrderProduct) {
+            $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS, 'LEFT OUTER JOIN', 'op.op_id = orrequest_op_id', 'op');
+        }
         $srch->addCondition('orrequest_op_id', '=', $opId);
 
         if (null != $attr) {

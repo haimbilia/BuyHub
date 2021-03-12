@@ -198,6 +198,9 @@ class ShipStationShipping extends ShippingServicesBase
     public function downloadLabel(string $labelData, string $filename = "label.pdf", bool $preview = false)
     {
         $disposition = (true === $preview ? 'inline' : 'attachment');
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $filename = empty($ext) ? trim($filename) . '.pdf' : $filename;
+        
         header("Pragma: public");
         header("Expires: 0");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");

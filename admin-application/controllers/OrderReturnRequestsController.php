@@ -2,6 +2,8 @@
 
 class OrderReturnRequestsController extends AdminBaseController
 {
+    use ShippingServices;
+
     public function __construct($action)
     {
         $ajaxCallArray = array();
@@ -367,10 +369,10 @@ class OrderReturnRequestsController extends AdminBaseController
         $cnd->attachCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addMultipleFields(array('orrequest_id', 'op_id', 'order_language_id', 'orrequest_user_id', 'order_pmethod_id'));
+        $srch->addMultipleFields(array('orrequest_id', 'op_id', 'orrequest_qty', 'order_language_id', 'orrequest_user_id', 'order_pmethod_id'));
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
-
+        
         if (!$row) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_or_Status_is_already_Approved_or_Declined!', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -394,6 +396,14 @@ class OrderReturnRequestsController extends AdminBaseController
                     /*Message::addErrorMessage($orrObj->getError());
                     FatApp::redirectUser(UrlHelper::generateUrl('orderReturnRequests'));*/
                 }
+
+                /* Update To Shipping Service */
+                $this->langId = $this->adminLangId;
+                if (false !== $this->init(true)) {
+                    $this->returnShipment($row['op_id'], $row['orrequest_qty']);
+                }
+                /* Update To Shipping Service */
+
                 $successMsg = Labels::getLabel('LBL_Return_request_has_been_refunded_successfully.', $this->adminLangId);
                 break;
                 

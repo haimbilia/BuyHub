@@ -113,10 +113,40 @@ class LibHelper extends FatUtility
         return $bytes;
     }
 
-    public static function isJson($string): bool
+    public static function isJson($string, &$error = ''): bool
     {
         json_decode($string);
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                $error = Labels::getLabel('MSG_NO_ERRORS', CommonHelper::getLangId());
+                break;
+            case JSON_ERROR_DEPTH:
+                $error = Labels::getLabel('MSG_MAXIMUM_STACK_DEPTH_EXCEEDED', CommonHelper::getLangId());
+                break;
+            case JSON_ERROR_STATE_MISMATCH:
+                $error = Labels::getLabel('MSG_UNDERFLOW_OR_THE_MODES_MISMATCH', CommonHelper::getLangId());
+                break;
+            case JSON_ERROR_CTRL_CHAR:
+                $error = Labels::getLabel('MSG_UNEXPECTED_CONTROL_CHARACTER_FOUND', CommonHelper::getLangId());
+                break;
+            case JSON_ERROR_SYNTAX:
+                $error = Labels::getLabel('MSG_SYNTAX_ERROR,_MALFORMED_JSON', CommonHelper::getLangId());
+                break;
+            case JSON_ERROR_UTF8:
+                $error = Labels::getLabel('MSG_MALFORMED_UTF-8_CHARACTERS,_POSSIBLY_INCORRECTLY_ENCODED', CommonHelper::getLangId());
+                break;
+            default:
+                $error = Labels::getLabel('MSG_UNKNOWN_ERROR', CommonHelper::getLangId());
+                break;
+        }
         return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    public static function remove_utf8_bom($text)
+    {
+        $bom = pack('H*', 'EFBBBF');
+        $text = preg_replace("/^$bom/", '', $text);
+        return $text;
     }
 
     public static function emailAddressMasking(string $email): string
@@ -132,6 +162,6 @@ class LibHelper extends FatUtility
 
     public static function phoneNumberMasking(string $phone): string
     {
-        return substr($phone, 0, 1) . str_repeat('*',(strlen($phone) - 2)) . substr($phone, -1);
+        return substr($phone, 0, 1) . str_repeat('*', (strlen($phone) - 2)) . substr($phone, -1);
     }
 }

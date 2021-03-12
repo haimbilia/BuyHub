@@ -262,9 +262,10 @@ class Shipping
         
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
-
+        
         foreach ($this->selProdShipRates as $rateId => $rates) {
             $product = $productInfo[$rates['selprod_id']];
+            
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
@@ -277,12 +278,16 @@ class Shipping
                 $this->shippingApiObj->setFromAddress($shopAddress['shop_name'], $shopAddress['line1'], $shopAddress['line2'], $shopAddress['city'], $shopAddress['state'], $shopAddress['postalCode'], $shopAddress['countryCode'], $shopAddress['phone']);
             }
 
+            if (method_exists($this->shippingApiObj, 'setQuantity')) {
+                $this->shippingApiObj->setQuantity($product['quantity']);
+            }
+
             /* Retrieve Selected Shipping Service Detail. */
             if (method_exists($this->shippingApiObj, 'setSelectedShipping') && is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
                 $this->shippingApiObj->setSelectedShipping($this->selectedShippingService[$rates['selprod_id']]);
             }
             /* Retrieve Selected Shipping Service Detail. */
-
+            
             $shippingLevel = self::LEVEL_PRODUCT;
 
             $shippedBy = -1; /*admin shipping */
