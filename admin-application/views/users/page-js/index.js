@@ -420,5 +420,13 @@ $(document).ready(function() {
         }
         $("#frmUsersListing").attr("action",fcom.makeUrl('Users','deleteSelected')).submit();
     };
+    
+    displayCookiesPerferences = function(id) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('Users', 'cookiesPreferencesForm', [id]), '', function(t) {
+            fcom.updateFaceboxContent(t);
+        });
+
+    };
 
 })();
