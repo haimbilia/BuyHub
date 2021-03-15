@@ -1582,9 +1582,8 @@ class CheckoutController extends MyAppController
         if (in_array(strtolower($methodCode), ['cashondelivery', 'payatstore']) && isset($paymentMethod["otp_verification"]) && 0 < $paymentMethod["otp_verification"]) {
             $userObj = new User($user_id);
             $userData = $userObj->getUserInfo([], false, false);
-            $userDialCode = $userData['user_dial_code'];
             $phoneNumber = $userData['user_phone'];
-            $canSendSms = (!empty($phoneNumber) && !empty($userDialCode) && SmsArchive::canSendSms(SmsTemplate::COD_OTP_VERIFICATION));
+            $canSendSms = (!empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::COD_OTP_VERIFICATION));
 
             $this->set('canSendSms', $canSendSms);
             $this->set('userData', $userData);
@@ -2323,10 +2322,9 @@ class CheckoutController extends MyAppController
         $userId = UserAuthentication::getLoggedUserId();
         $userObj = new User($userId);
         $userData = $userObj->getUserInfo([], false, false);
-        $userDialCode = $userData['user_dial_code'];
         $phoneNumber = $userData['user_phone'];
 
-        $canSendSms = (!empty($phoneNumber) && !empty($userDialCode) && SmsArchive::canSendSms(SmsTemplate::COD_OTP_VERIFICATION));
+        $canSendSms = (!empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::COD_OTP_VERIFICATION));
 
         $otp = '';
         if (true == $canSendSms) {
@@ -2367,10 +2365,9 @@ class CheckoutController extends MyAppController
         $user_id = UserAuthentication::getLoggedUserId();
         $userObj = new User($user_id);
         $userData = $userObj->getUserInfo([], false, false);
-        $userDialCode = $userData['user_dial_code'];
         $phoneNumber = $userData['user_phone'];
 
-        $canSendSms = (!empty($phoneNumber) && !empty($userDialCode) && SmsArchive::canSendSms(SmsTemplate::COD_OTP_VERIFICATION));
+        $canSendSms = (!empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::COD_OTP_VERIFICATION));
 
         $verified = false;
         if (true == $canSendSms) {

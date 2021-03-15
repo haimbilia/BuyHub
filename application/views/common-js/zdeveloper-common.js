@@ -5,6 +5,7 @@ $(document).ready(function() {
 			let scrollElement = document.getElementById('scrollElement-js').SimpleBar.getScrollElement();
 			scrollElement.scrollTop = ($('.menu__item.is-active').position().top - (($(window).height() / 2) - 100));
 		}
+        stylePhoneNumberFld('.phone-js');
     }, 1000);
 
     $(document).on("click", ".selectItem--js", function() {
@@ -1346,27 +1347,25 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
 			var clone = input.cloneNode(true);
 			$('.iti').replaceWith(clone);
         } else {
+            if ($(input).hasClass('hasFlag-js')) {
+                return;
+            }
+            $(input).addClass('hasFlag-js');
             var iti = window.intlTelInput(input, {
-                separateDialCode: true,
                 initialCountry: country,
-                // utilsScript: "/intlTelInput/intlTelInput-utils.js"
             });
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'user_dial_code',
-                value: "+" + iti.getSelectedCountryData().dialCode
-            }).insertAfter(input);
 
+            var elementName = ($(input).attr('name') + '_dial_code');
             $('<input>').attr({
                 type: 'hidden',
-                name: 'user_country_iso',
-                value: iti.getSelectedCountryData().iso2
+                name: elementName,
+                value: "+" + iti.getSelectedCountryData().dialCode
             }).insertAfter(input);
 
             input.addEventListener('countrychange', function(e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
-                    input.closest('form').user_dial_code.value = "+" + iti.getSelectedCountryData().dialCode;
-                    input.closest('form').user_country_iso.value = iti.getSelectedCountryData().iso2;
+                    var parent = $(input).parent();
+                    parent.find('input[name="' + elementName + '"]').val("+" + iti.getSelectedCountryData().dialCode);
                 }
             });
         }
@@ -1608,6 +1607,7 @@ $(document).ready(function() {
     });
 });
 $(document).ajaxComplete(function() {
+    stylePhoneNumberFld('.phone-js');
     new ScrollHint('.js-scrollable:not(.scroll-hint)', {
         i18n: {
             scrollable: langLbl.scrollable

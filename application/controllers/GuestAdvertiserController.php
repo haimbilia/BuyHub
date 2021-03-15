@@ -58,6 +58,7 @@ class GuestAdvertiserController extends MyAppController
     {
         $frm = $this->getAdvertiserRegistrationForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        
         if ($post == false) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
@@ -70,10 +71,8 @@ class GuestAdvertiserController extends MyAppController
 
         $approvalFrm = $this->getCompanyDetailsForm();
         
-        $post['user_country_iso'] = FatApp::getPostedData('user_country_iso', FatUtility::VAR_STRING, '');
-        $post['user_dial_code'] = FatApp::getPostedData('user_dial_code', FatUtility::VAR_STRING, '');
-        
         unset($post['btn_submit']);
+        $post['user_phone_dial_code'] = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
         $approvalFrm->fill($post);
 
         $this->set('siteLangId', $this->siteLangId);
@@ -85,7 +84,7 @@ class GuestAdvertiserController extends MyAppController
     public function validateDetails()
     {
         $post = FatApp::getPostedData();
-        if ($post == false) {
+        if (empty($post)) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -124,6 +123,12 @@ class GuestAdvertiserController extends MyAppController
         $post['user_is_advertiser'] = 1;
         $post['user_registered_initially_for'] = User::USER_TYPE_ADVERTISER;
         $post['user_preferred_dashboard'] = User::USER_ADVERTISER_DASHBOARD;
+
+        $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($post['user_phone'], $dialCode)) {
+            $post['user_phone'] = trim($dialCode) . trim($post['user_phone']);
+        }
+
         $userObj->assignValues($post);
 
         if (!$userObj->save()) {
@@ -151,8 +156,6 @@ class GuestAdvertiserController extends MyAppController
         }
         
         $userObj->setUpRewardEntry($userObj->getMainTableRecordId(), $this->siteLangId, $referrerCodeSignup, $affiliateReferrerCodeSignup);
-
-
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$userObj->notifyAdminRegistration($post, $this->siteLangId)) {
@@ -377,12 +380,11 @@ class GuestAdvertiserController extends MyAppController
         $fld = $frm->addTextArea(Labels::getLabel('LBL_Products/services_you_wish_to_advertise?', $this->siteLangId), 'user_products_services', '');
         $frm->addHiddenField('', 'user_name');
         $frm->addHiddenField('', 'user_phone');
+        $frm->addHiddenField('', 'user_phone_dial_code');
         $frm->addHiddenField('', 'user_username');
         $frm->addHiddenField('', 'user_email');
         $frm->addHiddenField('', 'user_password');
         $frm->addHiddenField('', 'password1');
-        $frm->addHiddenField('', 'user_dial_code');
-        $frm->addHiddenField('', 'user_country_iso');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
         return $frm;
     }

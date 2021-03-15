@@ -479,7 +479,7 @@ class MyAppController extends FatController
 
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        // $phnFld->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addHiddenField('', 'addr_id');
@@ -780,13 +780,8 @@ class MyAppController extends FatController
 
         if (0 < $updateToDb) {
             $userObj = clone $obj;
-            $userObj->assignValues(['user_dial_code' => $resp['upv_dial_code'], 'user_phone' => $resp['upv_phone']]);
+            $userObj->assignValues(['user_phone' => $resp['upv_phone']]);
             if (!$userObj->save()) {
-                LibHelper::dieJsonError($userObj->getError());
-            }
-
-            $userObj = clone $obj;
-            if (false === $userObj->updateUserMeta('user_country_iso', $resp['upv_country_iso'])) {
                 LibHelper::dieJsonError($userObj->getError());
             }
             $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));

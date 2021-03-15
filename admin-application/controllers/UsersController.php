@@ -162,6 +162,11 @@ class UsersController extends AdminBaseController
         $post = $frm->getFormDataFromArray($post);
         $post['user_state_id'] = $user_state_id;
 
+        $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($post['user_phone'], $dialCode)) {
+            $post['user_phone'] = trim($dialCode) . trim($post['user_phone']);
+        }
+
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());

@@ -247,8 +247,8 @@ class UserAuthentication extends FatModel
 
         if (FatApp::getConfig('CONF_WELCOME_EMAIL_REGISTRATION', FatUtility::VAR_INT, 1)) {
 
-            $uData = User::getAttributesById($userId, ['user_dial_code', 'user_phone']);
-            $data['user_phone'] = !empty($uData['user_phone']) ? $uData['user_dial_code'] . $uData['user_phone'] : '';
+            $uData = User::getAttributesById($userId, ['user_phone']);
+            $data['user_phone'] = !empty($uData['user_phone']) ? $uData['user_phone'] : '';
 
             if (!$userObj->guestUserWelcomeEmail($data, $this->commonLangId)) {
                 $this->error = Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
@@ -305,7 +305,7 @@ class UserAuthentication extends FatModel
         $srch = User::getSearchObject(true, 0, false);
         $condition = $srch->addCondition('credential_username', '=', $username);
         $condition->attachCondition('credential_email', '=', $username, 'OR');
-        $condition->attachCondition('mysql_func_CONCAT(user_dial_code, user_phone)', '=', $username, 'OR', true);
+        $condition->attachCondition('user_phone', '=', $username, 'OR');
         $srch->addCondition('credential_password', '=', $password);
         if (0 < $userType) {
             switch ($userType) {
@@ -328,6 +328,7 @@ class UserAuthentication extends FatModel
         }
 
         $rs = $srch->getResultSet();
+        
         if (!$row = $db->fetch($rs)) {
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
             if ($withPhone) {
@@ -348,7 +349,7 @@ class UserAuthentication extends FatModel
             return false;
         }
 
-        if ((!(strtolower($row['credential_username']) === strtolower($username) || strtolower($row['credential_email']) === strtolower($username) || ($row['user_dial_code'] . $row['user_phone']) === $username)) || $row['credential_password'] !== $password) {
+        if ((!(strtolower($row['credential_username']) === strtolower($username) || strtolower($row['credential_email']) === strtolower($username) || $row['user_phone'] === $username)) || $row['credential_password'] !== $password) {
             $this->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
             return false;
@@ -365,7 +366,7 @@ class UserAuthentication extends FatModel
 
                 if (strtolower($row['credential_email']) === strtolower($username)) {
                     $this->error = $emailErrorMsg;
-                } else if (($row['user_dial_code'] . $row['user_phone']) === $username) {
+                } else if ($row['user_phone'] === $username) {
                     $json['userId'] = FatUtility::convertToType($row['user_id'], FatUtility::VAR_STRING);
                     $this->error = $phoneErrorMsg;
                 } else {
@@ -708,7 +709,7 @@ class UserAuthentication extends FatModel
     {
         $db = FatApp::getDb();
         $srch = $this->validateUserObj($phoneNumber, $isActive, $isVerfied, $addDeletedCheck, true);
-        $srch->addCondition('mysql_func_CONCAT(user_dial_code, user_phone)', '=', $phoneNumber, 'AND', true);
+        $srch->addCondition('user_phone', '=', $phoneNumber, 'AND', true);
 
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs, User::tblFld('id'))) {

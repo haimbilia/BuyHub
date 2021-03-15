@@ -73,6 +73,11 @@ class GuestAffiliateController extends MyAppController
                 $post['user_preferred_dashboard'] = User::USER_AFFILIATE_DASHBOARD;
                 $post['user_affiliate_commission'] = FatApp::getConfig('CONF_AFFILIATE_SIGNUP_COMMISSION', FatUtility::VAR_FLOAT, 0);
 
+                $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
+                if (!empty($dialCode) && false === strpos($post['user_phone'], $dialCode)) {
+                    $post['user_phone'] = trim($dialCode) . trim($post['user_phone']);
+                }
+
                 $userObj->assignValues($post);
                 if (!$userObj->save()) {
                     $db->rollbackTransaction();

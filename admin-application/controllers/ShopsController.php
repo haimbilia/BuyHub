@@ -217,6 +217,11 @@ class ShopsController extends AdminBaseController
         $stateData = States::getStateByCountryAndCode($post['shop_country_id'], $stateCode);
         $post['shop_state_id'] = $stateData['state_id'];
 
+        $dialCode = FatApp::getPostedData('shop_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($post['shop_phone'], $dialCode)) {
+            $post['shop_phone'] = trim($dialCode) . trim($post['shop_phone']);
+        }
+
         $shop = new Shop($shop_id);
         $shop->assignValues($post);
 

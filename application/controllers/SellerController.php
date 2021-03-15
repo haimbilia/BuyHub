@@ -2243,6 +2243,11 @@ class SellerController extends SellerBaseController
             $post['shop_created_on'] = date('Y-m-d H:i:s');
         }
 
+        $dialCode = FatApp::getPostedData('shop_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($post['shop_phone'], $dialCode)) {
+            $post['shop_phone'] = trim($dialCode) . trim($post['shop_phone']);
+        }
+
         $shopObj = new Shop($shop_id);
         $shopObj->assignValues($post);
 
@@ -3564,7 +3569,7 @@ class SellerController extends SellerBaseController
 
         $phnFld = $frm->addTextBox(Labels::getLabel('Lbl_phone', $this->siteLangId), 'shop_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        // $phnFld->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $countryObj = new Countries();
@@ -3828,7 +3833,7 @@ class SellerController extends SellerBaseController
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);
             } else {
                 $trackUrlFld = $frm->addTextBox(Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId), 'opship_tracking_url', '', $attr);
-                $trackUrlFld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_ENTER_THE_URL_TO_TRACK_THE_SHIPMENT.', $this->siteLangId) . '</small>';
+                $trackUrlFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_ENTER_THE_URL_TO_TRACK_THE_SHIPMENT.', $this->siteLangId) . '</span>';
 
                 $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId));
                 $trackingUrlUnReqObj->setRequired(false);
@@ -4173,7 +4178,7 @@ class SellerController extends SellerBaseController
         $langId = $this->siteLangId;
         $frm = new Form('frmCustomProduct');
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $langId), 'product_identifier');
-        $fld->htmlAfterField = '<br/><small class="text--small">' . Labels::getLabel('LBL_Product_Identifier_can_be_same_as_of_Product_Name', $langId) . '</small>';
+        $fld->htmlAfterField = '<br/><span class="note">' . Labels::getLabel('LBL_Product_Identifier_can_be_same_as_of_Product_Name', $langId) . '</span>';
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $langId), 'product_type', Product::getProductTypes($langId), '', array('id' => 'product_type'), '');
 
         $fld_model = $frm->addTextBox(Labels::getLabel('LBL_Model', $langId), 'product_model');
@@ -4294,7 +4299,7 @@ class SellerController extends SellerBaseController
         $paymentMethod = new PaymentMethods();
         if (!$paymentMethod->cashOnDeliveryIsActive()) {
             $codFld->addFieldTagAttribute('disabled', 'disabled');
-            $codFld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $langId) . '</small>';
+            $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $langId) . '</span>';
         }
 
         $fld = $frm->addCheckBox(Labels::getLabel('LBL_Free_Shipping', $langId), 'ps_free', 1);
@@ -4372,10 +4377,10 @@ class SellerController extends SellerBaseController
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $fld = $frm->addIntegerField(Labels::getLabel('LBL_Max_Download_Times', $this->siteLangId), 'selprod_max_download_times');
-            $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_-1_for_unlimited', $this->siteLangId) . '</small>';
+            $fld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_-1_for_unlimited', $this->siteLangId) . '</span>';
 
             $fld1 = $frm->addIntegerField(Labels::getLabel('LBL_Validity_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
-            $fld1->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_-1_for_unlimited', $this->siteLangId) . '</small>';
+            $fld1->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_-1_for_unlimited', $this->siteLangId) . '</span>';
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
         } else {
             $fld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Condition', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), $defaultProductCond, array(), Labels::getLabel('LBL_Select_Condition', $this->siteLangId));
@@ -4424,9 +4429,9 @@ class SellerController extends SellerBaseController
             if (!$paymentMethod->cashOnDeliveryIsActive() || $productData['product_cod_enabled'] != applicationConstants::YES) {
                 $codFld->addFieldTagAttribute('disabled', 'disabled');
                 if ($productData['product_cod_enabled'] != applicationConstants::YES) {
-                    $codFld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_COD_option_is_disabled_in_Product', $this->siteLangId) . '</small>';
+                    $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_COD_option_is_disabled_in_Product', $this->siteLangId) . '</span>';
                 } else {
-                    $codFld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->siteLangId) . '</small>';
+                    $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->siteLangId) . '</span>';
                 }
             }
 
@@ -4500,7 +4505,7 @@ class SellerController extends SellerBaseController
                     $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
                     // $fld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Minimum_selling_price_for_this_product_is', $this->siteLangId).' '.CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
 
-                    /* $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $this->siteLangId) . '</small> <small class="text--small">' . Labels::getLabel('LBL_Min_Selling_price', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true) . '</small>'; */
+                    /* $fld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $this->siteLangId) . '</span> <span class="note">' . Labels::getLabel('LBL_Min_Selling_price', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true) . '</small>'; */
                 }
 
                 $fld = $frm->addIntegerField(Labels::getLabel('LBL_Quantity', $this->siteLangId), 'selprod_stock');
@@ -4509,7 +4514,7 @@ class SellerController extends SellerBaseController
                 if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
                     $fld_sku->requirements()->setRequired();
                 }
-                /* $fld_sku->htmlAfterField = '<br/><small class="text--small">' . Labels::getLabel('LBL_Stock_Keeping_Unit', $this->siteLangId) . '</small>'; */
+                /* $fld_sku->htmlAfterField = '<br/><span class="note">' . Labels::getLabel('LBL_Stock_Keeping_Unit', $this->siteLangId) . '</span>'; */
             }
         }
         $frm->addTextArea(Labels::getLabel('LBL_Any_Extra_Comment_for_buyer', $this->siteLangId), 'selprod_comments' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
@@ -4644,6 +4649,11 @@ class SellerController extends SellerBaseController
         $ura_state_id = FatUtility::int($post['ura_state_id']);
         $frm = $this->getReturnAddressForm();
         $post = $frm->getFormDataFromArray($post);
+
+        $dialCode = FatApp::getPostedData('ura_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($post['ura_phone'], $dialCode)) {
+            $post['ura_phone'] = trim($dialCode) . trim($post['ura_phone']);
+        }
 
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
@@ -4794,7 +4804,7 @@ class SellerController extends SellerBaseController
 
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'ura_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        // $phnFld->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
 
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
@@ -5556,7 +5566,12 @@ class SellerController extends SellerBaseController
 
         $post = FatApp::getPostedData();
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
-        $post['addr_phone'] = !empty($post['addr_phone']) ? ValidateElement::convertPhone($post['addr_phone']) : '';
+        
+        $dialCode = FatApp::getPostedData('addr_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($post['addr_phone'], $dialCode)) {
+            $post['addr_phone'] = trim($dialCode) . trim($post['addr_phone']);
+        }
+
         $addrStateId = FatUtility::int($post['addr_state_id']);
 
         $slotFromAll = '';

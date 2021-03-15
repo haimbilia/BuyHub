@@ -30,11 +30,10 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                 <?php
                 $msg = Labels::getLabel('LBL_VERIFICATION_CODE_SENT_TO_{EMAIL}', $siteLangId);
                 if (true == $canSendSms) {
-                    $userDialCode = $userData['user_dial_code'];
                     $phone = $userData['user_phone'];
                     $msg = Labels::getLabel('LBL_VERIFICATION_CODE_SENT_TO_{PHONE}_AND_{EMAIL}', $siteLangId);
                     $maskedPhoneNumber = LibHelper::phoneNumberMasking($phone);
-                    $msg =  CommonHelper::replaceStringData($msg, ['{PHONE}' => '<br><strong>' . $userDialCode . ' - ' . $maskedPhoneNumber . '</strong>']);
+                    $msg =  CommonHelper::replaceStringData($msg, ['{PHONE}' => '<br><strong>' . $maskedPhoneNumber . '</strong>']);
                 }
                 $maskedEmail = LibHelper::emailAddressMasking($userData['credential_email']);
                 echo CommonHelper::replaceStringData($msg, ['{EMAIL}' => '<strong>' . $maskedEmail . '</strong>']);

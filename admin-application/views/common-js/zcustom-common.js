@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    setTimeout(function() {
+        stylePhoneNumberFld('.phone-js');
+    }, 1000);
+
 	$(document).on('keypress', 'input.zip-js', function (e) {
         var regex = new RegExp("^[a-zA-Z0-9]+$");
         var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -10,6 +14,10 @@ $(document).ready(function () {
         return false;
     });
 	$('[data-toggle="tooltip"]').tooltip();
+
+    $(document).ajaxComplete(function() {
+        stylePhoneNumberFld('.phone-js');
+    });
 });
 
 (function($) {
@@ -665,4 +673,39 @@ function geocodeSetData(results) {
 			}
 		});
 	}
+}
+
+function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = false) {
+    var inputList = document.querySelectorAll(element);
+    var country = '' == langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode;
+    inputList.forEach(function(input) {
+        if (true == destroy) {
+			$(input).removeAttr('style');
+			var clone = input.cloneNode(true);
+			$('.iti').replaceWith(clone);
+        } else {
+            if ($(input).hasClass('hasFlag-js')) {
+                return;
+            }
+            $(input).addClass('hasFlag-js');
+
+            var iti = window.intlTelInput(input, {
+                initialCountry: country,
+            });
+
+            var elementName = ($(input).attr('name') + '_dial_code');
+            $('<input>').attr({
+                type: 'hidden',
+                name: elementName,
+                value: "+" + iti.getSelectedCountryData().dialCode
+            }).insertAfter(input);
+
+            input.addEventListener('countrychange', function(e) {
+                if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
+                    var parent = $(input).parent();
+                    parent.find('input[name="' + elementName + '"]').val("+" + iti.getSelectedCountryData().dialCode);
+                }
+            });
+        }
+    });
 }

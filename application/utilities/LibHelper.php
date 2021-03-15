@@ -132,6 +132,6 @@ class LibHelper extends FatUtility
 
     public static function phoneNumberMasking(string $phone): string
     {
-        return substr($phone, 0, 1) . str_repeat('*',(strlen($phone) - 2)) . substr($phone, -1);
+        return substr($phone, 0, 4) . str_repeat('*',(strlen($phone) - 5)) . substr($phone, -1);
     }
 }

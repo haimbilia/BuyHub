@@ -762,7 +762,7 @@ class Cronjob extends FatModel
         $srch = new SearchBase('tbl_user_cart', 'uc');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = usercart_user_id', 'u');
         $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'ucr.' . Credential::DB_TBL_PREFIX . 'user_id = u.user_id', 'ucr');
-        $srch->addMultipleFields(array('uc.*', 'user_name', 'user_dial_code', 'user_phone', 'credential_email'));
+        $srch->addMultipleFields(array('uc.*', 'user_name', 'user_phone', 'credential_email'));
         $srch->addCondition('ucr.credential_active', '=', applicationConstants::YES);
         $srch->addCondition('ucr.credential_verified', '=', applicationConstants::YES);
         $srch->addCondition('u.user_is_buyer', '=', applicationConstants::YES);
@@ -782,7 +782,7 @@ class Cronjob extends FatModel
             if (is_array($cartDetails) && count($cartDetails) == 0) {
                 continue;
             }
-            $phone = !empty($val['user_phone']) ? $val['user_dial_code'] . $val['user_phone'] : '';
+            $phone = array_key_exists('user_phone', $val) ? $val['user_phone'] : '';
             $data = array("user_id" => $val['usercart_user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Checkout'), 'user_phone' => $phone);
 
             $email = new EmailHandler();
@@ -813,7 +813,7 @@ class Cronjob extends FatModel
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), true);
         $srch->addSubscriptionValidCondition();
-        $srch->addMultipleFields(array('uwlp.*', 'u.user_id', 'u.user_name', 'u.user_dial_code', 'u.user_phone', 'ucr.credential_email'));
+        $srch->addMultipleFields(array('uwlp.*', 'u.user_id', 'u.user_name', 'u.user_phone', 'ucr.credential_email'));
         $srch->addCondition('ucr.credential_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('ucr.credential_verified', '=', applicationConstants::YES);
         $srch->addCondition('u.user_is_buyer', '=', applicationConstants::YES);
@@ -828,7 +828,7 @@ class Cronjob extends FatModel
         }
 
         foreach ($row as $val) {
-            $phone = !empty($row['user_phone']) ? $row['user_dial_code'] . $row['user_phone'] : '';
+            $phone = !empty($row['user_phone']) ? $row['user_phone'] : '';
             $data = array("user_id" => $val['user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Account', 'wishlist'), 'user_phone' => $phone);
 
             $email = new EmailHandler();

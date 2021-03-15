@@ -160,11 +160,11 @@ trait SellerUsers
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $dialCode = FatApp::getPostedData('user_dial_code', FatUtility::VAR_STRING, '');
-        $countryIso = FatApp::getPostedData('user_country_iso', FatUtility::VAR_STRING, '');
+        $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($post['user_phone'], $dialCode)) {
+            $post['user_phone'] = $dialCode . trim($post['user_phone']);
+        }
 
-        $post['user_dial_code'] = $dialCode;
-        $post['user_phone'] = isset($post['user_phone']) ? FatUtility::int(str_replace($post['user_dial_code'], "", $post['user_phone'])) : null;
         $post['user_parent'] = UserAuthentication::getLoggedUserId();
         $post['user_state_id'] = $user_state_id;
         if (0 < $userId) {
@@ -196,10 +196,6 @@ trait SellerUsers
 
         $db->commitTransaction();
 
-        if (false === $userObj->updateUserMeta('user_country_iso', $countryIso)) {
-            $message = Labels::getLabel($userObj->getError(), $this->siteLangId);
-            FatUtility::dieWithError($message);
-        }
         $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

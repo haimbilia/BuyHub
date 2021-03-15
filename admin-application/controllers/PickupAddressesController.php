@@ -125,7 +125,13 @@ class PickupAddressesController extends AdminBaseController
         $this->objPrivilege->canEditPickupAddresses();
         $post = FatApp::getPostedData();
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
-        $post['addr_phone'] = !empty($post['addr_phone']) ? ValidateElement::convertPhone($post['addr_phone']) : '';
+                
+        $phone = FatApp::getPostedData('addr_phone', FatUtility::VAR_STRING, '');
+        $dialCode = FatApp::getPostedData('addr_phone_dial_code', FatUtility::VAR_STRING, '');
+        if (!empty($dialCode) && false === strpos($phone, $dialCode)) {
+            $post['addr_phone'] = trim($dialCode) . trim($phone);
+        }
+
         $addrStateId = FatUtility::int($post['addr_state_id']);
 
         $slotFromAll = '';
