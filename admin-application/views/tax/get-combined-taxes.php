@@ -8,15 +8,16 @@ if (!empty($combTaxes) && count($combTaxes) > 0) { ?>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($combTaxes as $val) { ?>
+            <?php foreach ($combTaxes as $key => $val) { ?>
                 <tr class="rule-detail-row--js rule-detail-row0">
                     <td scope="row">
-                        <input type="hidden" name="taxstr_id[]" value="<?php echo $val['taxstr_id']; ?>">
-                        <input type="hidden" name="taxruledet_id[]" value="<?php echo $val['taxruledet_id']; ?>">
-                        <input title="<?php echo Labels::getLabel('LBL_Name', $adminLangId) ?>" type="text" name="taxstr_name[<?php echo $val['taxstr_id']; ?>][]" value="<?php echo $val['taxstr_name']; ?>" readonly>
+                        <input type="hidden" name="combinedTaxDetails[<?php echo $key; ?>][taxruledet_id]" value="<?php echo $val['taxruledet_id']; ?>">
+                        <input type="hidden" name="combinedTaxDetails[<?php echo $key; ?>][taxruledet_taxstr_id]" value="<?php echo $val['taxstr_id']; ?>">
+                     
+                        <input title="<?php echo Labels::getLabel('LBL_Name', $adminLangId) ?>" type="text" name="combinedTaxDetails[<?php echo $key; ?>][taxstr_name]" value="<?php echo $val['taxstr_name']; ?>" readonly>
                     </td>
                     <td>
-                        <input title="<?php echo Labels::getLabel('LBL_Tax_Rate(%)', $adminLangId) ?>" type="text" name="taxruledet_rate[]" class='combinetaxvalue--js' value="<?php echo ($val['taxruledet_rate']) ? $val['taxruledet_rate'] : 0; ?>">
+                        <input title="<?php echo Labels::getLabel('LBL_Tax_Rate(%)', $adminLangId) ?>" type="text" name="combinedTaxDetails[<?php echo $key; ?>][taxruledet_rate]" class='combinetaxvalue--js' value="<?php echo ($val['taxruledet_rate']) ? $val['taxruledet_rate'] : 0; ?>">
                     </td>
                 </tr>
             <?php } ?>

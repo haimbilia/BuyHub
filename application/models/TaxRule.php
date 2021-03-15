@@ -128,26 +128,47 @@ class TaxRule extends MyAppModel
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $langId));
         return $frm;
     }
-
     /**
-    * getRules
-    *
-    * @param  int $taxCatId
-    * @param  int $langId
-    * @return array
-    */
-    public function getRules(int $taxCatId, int $langId): array
+     * 
+     * @param int $taxCatId
+     * @param int $langId
+     * @return array
+     */
+    public function getRule(int $taxCatId = 0, int $langId): array
     {
         $srch = TaxRule::getSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$langId);
-        $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);
+        if(0 < $taxCatId ){
+            $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);  
+        }        
+        $srch->addCondition('taxrule_id', '=', $this->getMainTableRecordId());
         $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'taxrule_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
-        $res = $srch->getResultSet();
-        $rulesData = FatApp::getDb()->fetchAll($res);
-        return $rulesData;
+        return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
 
+    
+    /**
+     * 
+     * @param int $taxCatId
+     * @param int $langId
+     * @return array
+     */
+    /*
+    public function getRules(int $taxCatId = 0, int $langId): array
+    {
+        $srch = TaxRule::getSearchObject();
+        $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$langId);
+        if(0 < $taxCatId ){
+            $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);  
+        }        
+        $srch->addCondition('taxrule_id', '=', $this->getMainTableRecordId());
+        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'taxrule_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+     * 
+     */
     /**
     * getCombinedRuleDetails
     *
@@ -169,31 +190,30 @@ class TaxRule extends MyAppModel
         $rs = $srch->getResultSet();
         $combinedData = FatApp::getDb()->fetchAll($rs);
         return self::groupDataByKey($combinedData, 'taxruledet_taxrule_id');
-    }
-
-    /**
-    * getLocations
-    *
-    * @param  int $taxCatId
-    * @return array
-    */
-    public function getLocations(int $taxCatId, bool $joinCountryState = false, $langId = 0): array
+    } 
+      
+    public function getLocations(int $taxCatId = 0,  bool $joinCountryState = false, $langId = 0): array
     {
         $srch = TaxRuleLocation::getSearchObject();
-        $srch->addCondition('taxruleloc_taxcat_id', '=', $taxCatId);
-        if ($joinCountryState) {
-            $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'taxruleloc_state_id = s.state_id', 's');
-            $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND statelang_lang_id = ' . $langId, 's_l');
-
-            $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'taxruleloc_country_id = c.country_id', 'c');
-            $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c.country_id = c_l.countrylang_country_id AND countrylang_lang_id = ' . $langId, 'c_l');
-
-            $srch->addMultipleFields(array('taxruleloc_taxcat_id', 'taxruleloc_taxrule_id', 'taxruleloc_country_id', 'taxruleloc_state_id', 'taxruleloc_type', 'taxruleloc_unique', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
-        }
-        $res = $srch->getResultSet();
-        $locationsData = FatApp::getDb()->fetchAll($res);
-        return self::groupDataByKey($locationsData, 'taxruleloc_taxrule_id');
+        
+        if(0 < $taxCatId ){
+           $srch->addCondition('taxruleloc_taxcat_id', '=', $taxCatId); 
+        }        
+        $srch->addCondition('taxruleloc_taxrule_id', '=', $this->getMainTableRecordId());
+//        if ($joinCountryState) {
+//            $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'taxruleloc_state_id = s.state_id', 's');
+//            $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND statelang_lang_id = ' . $langId, 's_l');
+//
+//            $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'taxruleloc_country_id = c.country_id', 'c');
+//            $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c.country_id = c_l.countrylang_country_id AND countrylang_lang_id = ' . $langId, 'c_l');
+//
+//            $srch->addMultipleFields(array('taxruleloc_taxcat_id', 'taxruleloc_taxrule_id', 'taxruleloc_country_id', 'taxruleloc_state_id', 'taxruleloc_type', 'taxruleloc_unique', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
+//        }     
+        $locationsData = FatApp::getDb()->fetchAll($srch->getResultSet());
+        return $locationsData;
+        //return self::groupDataByKey($locationsData, 'taxruleloc_taxrule_id');
     }
+    
 
     /**
     * groupDataByKey
