@@ -21,4 +21,23 @@ class TaxRuleCombined extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'taxCom');
         return $srch;
     }
+    /**
+     * 
+     * @param int $taxRuleId
+     * @return bool
+     */
+    public function deletecombinedTaxes(int $taxRuleId): bool
+    {
+        if(!FatApp::getDb()->deleteRecords(
+            self::DB_TBL,
+            array(
+                'smt'=> self::DB_TBL_PREFIX .'taxrule_id=? ',
+                'vals'=>array($taxRuleId)
+            )
+        )) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
 }

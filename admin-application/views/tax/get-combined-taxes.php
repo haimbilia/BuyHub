@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (!empty($combTaxes) && count($combTaxes) > 0) { ?>
-    <table class="table table-bordered table-hover table-edited my-4">
+    <table class="table table-bordered table-hover table-edited mt-4">
         <thead>
             <tr>
                 <th width="60%"><?php echo Labels::getLabel('LBL_Name', $adminLangId) ?></th>

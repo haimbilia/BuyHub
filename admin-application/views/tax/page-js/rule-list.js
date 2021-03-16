@@ -1,8 +1,22 @@
 $(document).ready(function () {
     searchRuleList(document.frmRuleListSearch);
+    $('body').on('change', 'select[name="taxruleloc_type"]', function() {           
+            var dv = '.selectpicker';
+            if ($(this).val() == -1) {
+                    $(dv).selectpicker('val', -1);
+                    $(dv).attr('disabled', true);
+                    $(dv + " option[value='-1']").show();
+            } else {
+                    $(dv).removeAttr('disabled');
+                    $(dv).selectpicker('val', "");
+                    $(dv + " option[value='-1']").hide();
+            }
+            $(dv).selectpicker('refresh');
+    });    
 });
 
 (function () {
+    
     var currentPage = 1;
     var runningAjaxReq = false;
     var dv = '#taxListing';
@@ -11,14 +25,13 @@ $(document).ready(function () {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        var frm = document.frmTaxSearchPaging;
+        var frm = document.frmRuleSearchPaging;
         $(frm.page).val(page);
         searchRuleList(frm);
     };
 
     reloadList = function () {
-        var frm = document.frmTaxSearchPaging;
-        searchRuleList(frm);
+        searchRuleList(document.frmRuleListSearch);
     };
 
     searchRuleList = function (form) {
@@ -33,29 +46,22 @@ $(document).ready(function () {
     };
 
     ruleForm = function (taxcatId, id = 0) {
-        fcom.displayProcessing();
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Tax', 'ruleForm1', [taxcatId, id]), '', function (t) {
-                fcom.updateFaceboxContent(t);
-            });
+        $(dv).html(fcom.getLoader());      
+        fcom.ajax(fcom.makeUrl('Tax', 'ruleForm', [taxcatId, id]), '', function (t) {               
+            $(dv).html(t);
         });
+       
     };
-
 
     setupTaxRule = function (frm) {
         if (!$(frm).validate()) {
             return;
         }
         var data = fcom.frmData(frm);
-
-        fcom.updateWithAjax(fcom.makeUrl('tax', 'setupTaxRule1'), data, function (t) {
-//            if (t.status == 1) {
-//                if (taxCatId <= 0) {
-//                    window.location.replace(fcom.makeUrl('tax', 'ruleForm', [taxCatId]));
-//                } else {
-//                    window.location.reload();
-//                }
-//            }
+        fcom.updateWithAjax(fcom.makeUrl('tax', 'setupTaxRule'), data, function (t) {
+            if (t.status == 1) {
+                searchRuleList(document.frmRuleListSearch);               
+            }
         });
     };
     deleteRecord = function (id) {
@@ -63,7 +69,7 @@ $(document).ready(function () {
             return;
         }
         data = 'id=' + id;
-        fcom.updateWithAjax(fcom.makeUrl('Tax', 'deleteRecord'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Tax', 'deleteRule'), data, function (res) {
             reloadList();
         });
     };
@@ -72,7 +78,6 @@ $(document).ready(function () {
         document.frmTaxSearch.reset();
         searchRuleList(document.frmTaxSearch);
     };
-
 
 })();
 
@@ -115,7 +120,8 @@ function getCombinedTaxes(self, taxStrId) {
 getCountryStates = function (countryId, stateId, dv) {
     fcom.ajax(fcom.makeUrl('Tax', 'getStates', [countryId, stateId]), '', function (res) {
         $(dv).empty();
-        $(dv).append(res);
+        $(dv).append(res);        
+        $(dv).find("option:first").text('All');        
     });
 };
 

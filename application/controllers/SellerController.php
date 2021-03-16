@@ -1737,8 +1737,9 @@ class SellerController extends SellerBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
 
-        $srch = Tax::getSearchObject($this->siteLangId);
-        $srch->joinTable(TaxRule::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_taxcat_id = taxcat_id', 'taxRule');
+        $srch = Tax::getSearchObject($this->siteLangId);      
+        $srch->joinTable(TaxRule::DB_TBL, 'LEFT OUTER JOIN', 'taxRule.taxrule_taxcat_id = taxcat_id', 'taxRule');
+        $srch->joinTable(TaxRule::DB_RATES_TBL, 'LEFT OUTER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('t.taxcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('t_l.taxcat_name', 'like', '%' . $post['keyword'] . '%');
@@ -1747,12 +1748,12 @@ class SellerController extends SellerBaseController
         $activatedTaxServiceId = Tax::getActivatedServiceId();
         $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
 
-        $srch->addMultipleFields(array('taxcat_id', 'IFNULL(taxcat_name, taxcat_identifier) as taxcat_name', 'taxcat_code', 'taxrule_rate'));
+        $srch->addMultipleFields(array('taxcat_id', 'IFNULL(taxcat_name, taxcat_identifier) as taxcat_name', 'taxcat_code', 'trr_rate'));
         $srch->addCondition('taxcat_deleted', '=', 0);
         $srch->addGroupBy('taxcat_id');
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->addOrder('taxcat_name', 'ASC');
+        $srch->addOrder('taxcat_name', 'ASC');    
         $rs = $srch->getResultSet();
         $taxCatData = FatApp::getDb()->fetchAll($rs, 'taxcat_id');
         $this->set('canEdit', $this->userPrivilege->canEditTaxCategory(UserAuthentication::getLoggedUserId(), true));
@@ -1784,13 +1785,13 @@ class SellerController extends SellerBaseController
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         $taxObj = new TaxRule();
-        $rulesData = $taxObj->getRules($taxCatId, $this->siteLangId);
+        $rulesData = TaxRule::getRulesByCatId($taxCatId, $this->siteLangId);
         $combinedRulesDetails = [];
         $ruleLocations = [];
         if (!empty($rulesData)) {
             $rulesIds = array_column($rulesData, 'taxrule_id');
             $combinedRulesDetails = $taxObj->getCombinedRuleDetails($rulesIds, $this->siteLangId);
-            $ruleLocations = $taxObj->getLocations($taxCatId, true, $this->siteLangId);
+            $ruleLocations = TaxRule::getLocationsByCatId($taxCatId, true, $this->siteLangId);
         }
         $this->set("combinedRulesDetails", $combinedRulesDetails);
         $this->set('taxCategory', $data['taxcat_name']);

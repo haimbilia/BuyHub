@@ -45,21 +45,11 @@ foreach ($arr_listing as $sn => $row) {
 if (count($arr_listing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
-
-
-$frm = new Form('frmTaxListing', array('id' => 'frmTaxListing'));
-$frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
-$frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
-$frm->setFormTagAttribute('action', UrlHelper::generateUrl('Tax', 'toggleBulkStatuses'));
-$frm->addHiddenField('', 'status');
-
-echo $frm->getFormTag();
-echo $frm->getFieldHtml('status');
 echo $tbl->getHtml(); ?>
 </form>
 <?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
-    'name' => 'frmTaxSearchPaging'
+    'name' => 'frmRuleSearchPaging'
 ));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

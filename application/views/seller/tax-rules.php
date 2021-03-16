@@ -22,7 +22,7 @@
                 <?php if (!empty($rulesData)) { ?>
                     <div class="tax-rules">
                         <ul>
-                            <?php
+                            <?php                       
                             foreach($rulesData as $rule) {
                                 $combinedData = [];
                                 if (!empty($combinedRulesDetails) && isset($combinedRulesDetails[$rule['taxrule_id']])) {
@@ -34,9 +34,9 @@
                                 $stateIds = [];
                                 $typeIds = [];
                                 if (!empty($locations)) {
-                                    $countryNames = array_column($locations, 'country_name');
+                                    $countryNames = array_column($locations, 'to_country_name');
                                     $countryNames = array_unique($countryNames);
-                                    $stateNames = array_column($locations, 'state_name');
+                                    $stateNames = array_column($locations, 'to_state_name');
                                     $stateNames = array_unique($stateNames);
                                     $typeIds = array_column($locations, 'taxruleloc_type');
                                     $typeIds = array_unique($typeIds);
@@ -45,7 +45,7 @@
                             <li>
                                 <h5 class="title"><?php echo Labels::getLabel('LBL_Rule', $siteLangId); ?>:
                                     <?php echo $rule['taxrule_name'];?>
-                                    <span class=""><?php echo Labels::getLabel('LBL_Tax_Rate(%)', $siteLangId); ?>: <?php echo $rule['taxrule_rate'];?>
+                                    <span class=""><?php echo Labels::getLabel('LBL_Tax_Rate(%)', $siteLangId); ?>: <?php echo $rule['trr_rate'];?>
                                                 </span></h5>
                                 <ul class="tax-rules__states">
                                     <li>
