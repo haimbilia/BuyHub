@@ -10,7 +10,9 @@ delete from tbl_extra_pages_lang where epagelang_epage_id = 44;
 /* Bind all phone number fields with flag field. */
 ALTER TABLE `tbl_users` CHANGE `user_phone` `user_phone` VARCHAR(50) NULL DEFAULT NULL;
 UPDATE tbl_users SET user_phone = CONCAT(user_dial_code, user_phone);
+ALTER TABLE `tbl_users` DROP INDEX `user_dial_code`;
 ALTER TABLE `tbl_users` DROP `user_dial_code`;
+ALTER TABLE `tbl_users` ADD UNIQUE KEY `user_phone` (`user_phone`);
 ALTER TABLE `tbl_user_phone_verification`
   DROP `upv_country_iso`,
   DROP `upv_dial_code`;
