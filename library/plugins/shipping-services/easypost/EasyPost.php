@@ -101,11 +101,8 @@ class EasyPost extends ShippingServicesBase
             return [];
         }
 
-        if (false === $this->doRequest(self::SETUP_API_KEY, $this->settings['live_api_key'])) {
-            return false;
-        }
-
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
+            echo $this->error;
             return [];
         }
 
@@ -142,7 +139,6 @@ class EasyPost extends ShippingServicesBase
         ];
 
         if (false === $this->doRequest(self::REQUEST_CREATE_ADDRESS, $address, false)) {
-            echo $this->error;
             return false;
         }
         $this->resp = $address;
@@ -336,7 +332,7 @@ class EasyPost extends ShippingServicesBase
 
             $shipment = $this->getResponse();
             if (empty($shipment) || 0 == count($shipment['rates'])) {
-                echo $this->error = Labels::getLabel('MSG_UNABLE_TO_CALCULATE_RATES_FOR_GIVEN_ADDRESSES', $this->langId);
+                $this->error = Labels::getLabel('MSG_UNABLE_TO_CALCULATE_RATES_FOR_GIVEN_ADDRESSES', $this->langId);
                 return [];
             }
             $rates = $shipment['rates'];
@@ -411,6 +407,27 @@ class EasyPost extends ShippingServicesBase
         $this->shipment['orderStatus'] = $this->shipment['status'];
         $this->resp = $this->shipment;
         return true;
+    }
+    
+    /**
+     * getShipment : Currently used in test cases
+     *
+     * @return array|object
+     */
+    public function getShipment()
+    {
+        return $this->shipment;
+    }
+
+    /**
+     * setShipment : Currently used in test cases
+     *
+     * @param  array|object $shipment
+     * @return void
+     */
+    public function setShipment($shipment)
+    {
+        $this->shipment = $shipment;
     }
 
     /**
@@ -684,7 +701,7 @@ class EasyPost extends ShippingServicesBase
                     \EasyPost\EasyPost::setApiKey($requestParam);
                     break;
                 case self::REQUEST_CARRIER_LIST:
-                    $this->resp = \EasyPost\CarrierAccount::all();
+                    $this->resp = \EasyPost\CarrierAccount::all(null, $this->settings['live_api_key']);
                     break;
                 case self::REQUEST_CREATE_ADDRESS:
                     $this->resp = \EasyPost\Address::create_and_verify($requestParam, $this->apiKey);

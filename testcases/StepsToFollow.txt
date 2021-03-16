@@ -40,3 +40,4 @@ Execute Unit test cases :
 1) ./vendor/bin/phpunit --bootstrap ./testcases/bootstrap.php ./testcases/plugins/FixerCurrencyConverterTest.php
 2) ./vendor/bin/phpunit --bootstrap ./testcases/bootstrap.php ./testcases/models/ShopTest.php
 3) ./vendor/bin/phpunit --bootstrap ./testcases/bootstrap.php ./testcases/models/. [Will execute all test files inside models]
+4) ./vendor/bin/phpunit --bootstrap ./testcases/bootstrap.php --filter pluginInit ./testcases/plugins/EasyPostTest.php
