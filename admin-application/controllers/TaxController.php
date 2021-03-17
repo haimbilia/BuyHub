@@ -553,13 +553,12 @@ class TaxController extends AdminBaseController
 
         $taxObj = new TaxRule($taxRuleId);
         $ruleLocations = [];
-        $ruleData = $taxObj->getRule($taxCatId, $this->adminLangId);
+        $ruleData = $taxObj->getRule($this->adminLangId);
         if (!empty($ruleData)) {          
             $frm->fill($ruleData);
             $ruleLocations = $taxObj->getLocations($taxCatId);         
         }
-        $this->set('ruleLocations', $ruleLocations);
-        
+        $this->set('ruleLocations', $ruleLocations);        
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -574,6 +573,8 @@ class TaxController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }        
         $post['taxruleloc_to_state_id'] = FatApp::getPostedData('taxruleloc_to_state_id');
+        $post['taxruleloc_from_state_id'] = FatApp::getPostedData('taxruleloc_from_state_id');
+       
         $combinedTaxDetails = (isset($post['combinedTaxDetails'])) ? $post['combinedTaxDetails'] : [];
 
         if (!empty($combinedTaxDetails)) {
@@ -601,13 +602,13 @@ class TaxController extends AdminBaseController
         }
         
         /* [ update location data */
-        if (!$this->updateLocationData($ruleId, $post)) {    
+        if (!$this->addUpdateLocationData($ruleId, $post)) {    
             FatUtility::dieJsonError(Labels::getLabel('LBL_Unable_to_Update_Location_Data', $this->adminLangId));
         }
         /* ] */
 
         /* [ UPDATE COMBINED TAX DETAILS */
-        if (!$this->updateCombinedData($combinedTaxDetails, $ruleId)) {       
+        if (!$this->addUpdateCombinedData($combinedTaxDetails, $ruleId)) {       
             FatUtility::dieJsonError(Labels::getLabel('LBL_Unable_to_Update_Combined_Tax_Data', $this->adminLangId));
         }
         /* ] */
@@ -659,7 +660,7 @@ class TaxController extends AdminBaseController
 
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_FROM_COUNTRY', $this->adminLangId), 'taxruleloc_from_country_id', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $this->adminLangId));
         $fld->requirements()->setRequired();
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FROM_STATE', $this->adminLangId), 'taxruleloc_from_state_id', array(), '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FROM_STATE', $this->adminLangId), 'taxruleloc_from_state_id[]', array(), '', array(), '');
         $fld->requirements()->setRequired();
 
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_TO_COUNTRY', $this->adminLangId), 'taxruleloc_to_country_id', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $this->adminLangId));
@@ -682,51 +683,49 @@ class TaxController extends AdminBaseController
         return $frm;
     }
     
-    private function updateLocationData($ruleId, $post)
+    private function addUpdateLocationData($ruleId, $post)
     {
         $locObj = new TaxRuleLocation();
         if (!$locObj->deleteLocations($ruleId)) {
             return false;
         }
+        foreach ($post['taxruleloc_from_state_id'] as $fromState) {
+            foreach ($post['taxruleloc_to_state_id'] as $tostate) {
+                $isUnique = 1;
+                if ($post['taxruleloc_type'] == TaxRule::TYPE_EXCLUDE_STATES) {
+                    $isUnique = null;
+                }
+                $data = array(
+                    'taxruleloc_taxcat_id' => $post['taxrule_taxcat_id'],
+                    'taxruleloc_taxrule_id' => $ruleId,
+                    'taxruleloc_from_country_id' => $post['taxruleloc_from_country_id'],
+                    'taxruleloc_from_state_id' => $fromState,
+                    'taxruleloc_to_country_id' => $post['taxruleloc_to_country_id'],
+                    'taxruleloc_to_state_id' => $tostate,
+                    'taxruleloc_type' => $post['taxruleloc_type'],
+                    'taxruleloc_unique' => $isUnique
+                );
 
-        foreach ($post['taxruleloc_to_state_id'] as $state) {
-            $isUnique = 1;
-            if ($post['taxruleloc_type'] == TaxRule::TYPE_EXCLUDE_STATES) {
-                $isUnique = null;
-            }
-            $data = array(
-                'taxruleloc_taxcat_id' => $post['taxrule_taxcat_id'],
-                'taxruleloc_taxrule_id' => $ruleId,
-                'taxruleloc_from_country_id' => $post['taxruleloc_from_country_id'],
-                'taxruleloc_from_state_id' => $post['taxruleloc_from_state_id'],
-                'taxruleloc_to_country_id' => $post['taxruleloc_to_country_id'],
-                'taxruleloc_to_state_id' => $state,
-                'taxruleloc_type' => $post['taxruleloc_type'],
-                'taxruleloc_unique' => $isUnique
-            );
-
-            if (!$locObj->updateLocations($data)) {
-                return false;
+                if (!$locObj->updateLocations($data)) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
-    private function updateCombinedData($combinedTaxes, $ruleId)
+    private function addUpdateCombinedData($combinedTaxes, $ruleId)
     {
-        if (!empty($combinedTaxes)) {
-            $taxRuleComObj = new TaxRuleCombined();
-            if (!$taxRuleComObj->deletecombinedTaxes($ruleId)) {
+        if (!empty($combinedTaxes)) {          
+            $taxRuleObj = new TaxRule($ruleId);
+            if (!$taxRuleObj->deleteCombinedTaxes()) {             
                 return false;
             }
             foreach ($combinedTaxes as $combinedTax) {
-                $comTaxId = (int) $combinedTax['taxruledet_id'];
-                $combinedTax['taxruledet_taxrule_id'] = $ruleId;
-                $taxRuleComObj = new TaxRuleCombined();
-                $taxRuleComObj->assignValues($combinedTax);
-                if (!$taxRuleComObj->save()) {
+                if(!$taxRuleObj->addUpdateCombinedTax($combinedTax)){
+                    echo $taxRuleObj->getError();
                     return false;
-                }
+                } 
             }
         }
         return true;

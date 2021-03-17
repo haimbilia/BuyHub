@@ -6,6 +6,9 @@ class TaxRule extends MyAppModel
     
     const DB_RATES_TBL = 'tbl_tax_rule_rates';
     const DB_RATES_TBL_PREFIX = 'trr_';
+    
+    const DB_DETAIL_TBL = 'tbl_tax_rule_details';
+    const DB_DETAIL_TBL_PREFIX = 'taxruledet_';
 
     const TYPE_ALL_STATES = -1;
     const TYPE_INCLUDE_STATES = 1;
@@ -27,6 +30,16 @@ class TaxRule extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'taxRule');        
         return $srch;
     }
+    
+    /**
+     * 
+     * @return object
+     */
+    public static function getCombinedTaxSearchObject(): object
+    {
+        $srch = new SearchBase(static::DB_DETAIL_TBL, 'tc');        
+        return $srch;
+    }
 
     /**
     * getTypeOptions
@@ -41,43 +54,27 @@ class TaxRule extends MyAppModel
             self::TYPE_INCLUDE_STATES => Labels::getLabel('LBL_INCLUDE_STATES', $langId),
             self::TYPE_EXCLUDE_STATES => Labels::getLabel('LBL_EXCLUDE_STATES', $langId),
         );
-    }
-
-    /**
-    * deleteRules
-    *
-    * @param  int $taxCatId
-    * @return bool
-    */
-    public function deleteRules(int $taxCatId): bool
-    {
-        if(!FatApp::getDb()->query('DELETE rules, ruleDetails FROM '. self::DB_TBL .' rules LEFT JOIN '. TaxRuleCombined::DB_TBL .' ruleDetails ON ruleDetails.taxruledet_taxrule_id  = rules.taxrule_id WHERE rules.taxrule_taxcat_id = '. $taxCatId)) {
-            $this->error = FatApp::getDb()->getError();
-            return false;
-        }
-        return true;
-    }    
+    } 
+    
     /**
      * 
-     * @param int $taxCatId
      * @param int $langId
      * @return array
      */
-    public function getRule(int $taxCatId = 0, int $langId): array
+    public function getRule(int $langId, int $userId = 0): array
     {
         $srch = TaxRule::getSearchObject();
-        $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
+        $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id'));
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
-        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$langId);
-        if(0 < $taxCatId ){
-            $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);  
-        }        
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
         $srch->addCondition('taxrule_id', '=', $this->getMainTableRecordId());
+        if (0 < $userId) {
+            $srch->addCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', $userId);
+        }
         $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'trr_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
         return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
-    
-    
+
     public function deleteRelatedRecord(): bool
     {
 
@@ -114,9 +111,14 @@ class TaxRule extends MyAppModel
             return false;
         }
 
-        $ruleComObj = new TaxRuleCombined();
-        if (!$ruleComObj->deletecombinedTaxes($this->getMainTableRecordId())) {
-            $this->error = $locObj->getError();
+        if (!FatApp::getDb()->deleteRecords(
+                        self::DB_DETAIL_TBL,
+                        array(
+                            'smt' => self::DB_DETAIL_TBL_PREFIX . 'taxrule_id = ?',
+                            'vals' => array($this->getMainTableRecordId())
+                        )
+                )) {
+            $this->error = FatApp::getDb()->getError();
             return false;
         }
 
@@ -147,11 +149,11 @@ class TaxRule extends MyAppModel
         if (empty($rulesIds)) {
             return [];
         }
-        $srch = TaxRuleCombined::getSearchObject();
+        $srch = TaxRule::getCombinedTaxSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$langId);
         $srch->addCondition('taxruledet_taxrule_id', 'IN', $rulesIds);
-        $srch->addMultipleFields(array('taxstr_id', 'taxruledet_taxrule_id', 'taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent'));
+        $srch->addMultipleFields(array('taxstr_id', 'taxruledet_taxrule_id','taxruledet_user_id','taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent'));
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $combinedData = FatApp::getDb()->fetchAll($rs);
@@ -211,7 +213,6 @@ class TaxRule extends MyAppModel
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
-
         $dataToSave = [
             'trr_taxrule_id' => $this->getMainTableRecordId(),
             'trr_rate' => $rate,
@@ -244,4 +245,57 @@ class TaxRule extends MyAppModel
         return $groupedData;
     }
     
+    
+    /**
+     * 
+     * @param int $userId
+     * @return bool
+     */  
+    public function deleteCombinedTaxes(int $userId = 0): bool
+    {
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            return false;
+        }
+
+        if (!FatApp::getDb()->deleteRecords(
+                        self::DB_DETAIL_TBL,
+                        array(
+                            'smt' => self::DB_DETAIL_TBL_PREFIX . 'taxrule_id = ? and ' . self::DB_DETAIL_TBL_PREFIX . 'user_id = ?',
+                            'vals' => array($this->getMainTableRecordId(), $userId)
+                        )
+                )) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * 
+     * @param array $data
+     * @param int $userId
+     * @return bool
+     */
+    public function addUpdateCombinedTax(array $data, int $userId = 0): bool
+    {
+        if (1 > $this->mainTableRecordId || !isset($data['taxruledet_taxstr_id']) || !isset($data['taxruledet_rate']) || 1 > $data['taxruledet_taxstr_id']) {
+            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            return false;
+        }
+
+        $dataToSave = [
+            'taxruledet_taxrule_id' => $this->mainTableRecordId,
+            'taxruledet_taxstr_id' => $data['taxruledet_taxstr_id'],
+            'taxruledet_rate' => $data['taxruledet_rate'],
+            'taxruledet_user_id' => $userId,
+        ];
+
+        if (!FatApp::getDb()->insertFromArray(self::DB_DETAIL_TBL, $dataToSave, true, array(), $dataToSave)) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
+
 }

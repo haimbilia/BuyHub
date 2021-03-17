@@ -217,15 +217,15 @@ class Tax extends MyAppModel
         if (0 == $activatedTaxServiceId) {
             $srch->joinTable(TaxRuleLocation::DB_TBL, 'LEFT JOIN', 'taxLoc.taxruleloc_taxcat_id = ptt_taxcat_id', 'taxLoc');
             $srch->joinTable(TaxRule::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_id = taxLoc.taxruleloc_taxrule_id', 'taxRule');
-
+            $srch->joinTable(TaxRule::DB_RATES_TBL, 'LEFT JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
             if ($userCountry > 0 && $userState <= 0) {
-                $cond = $srch->addCondition('taxruleloc_country_id', '=', $userCountry, 'AND');
-                $cond->attachCondition('taxruleloc_country_id', '=', -1, 'OR');
+                $cond = $srch->addCondition('taxruleloc_to_country_id', '=', $userCountry, 'AND');
+                $cond->attachCondition('taxruleloc_to_country_id', '=', -1, 'OR');
             }
             if ($userState > 0) {
-                $srch->addDirectCondition('(taxruleloc_country_id = -1 or (taxruleloc_country_id = ' . $userCountry . ' and ((taxruleloc_type = ' . TaxRule::TYPE_INCLUDE_STATES . ' AND taxruleloc_state_id = ' . $userState . ') OR (taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' AND taxruleloc_state_id = -1) OR (taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' AND taxruleloc_state_id != ' . $userState . ' and (select count(*) from ' . TaxRuleLocation::DB_TBL . ' where taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' and taxruleloc_state_id = ' . $userState . ' and taxruleloc_taxcat_id = ptt.ptt_taxcat_id) = 0))))', 'AND');
+                $srch->addDirectCondition('(taxruleloc_to_country_id = -1 or (taxruleloc_to_country_id = ' . $userCountry . ' and ((taxruleloc_type = ' . TaxRule::TYPE_INCLUDE_STATES . ' AND taxruleloc_to_state_id = ' . $userState . ') OR (taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' AND taxruleloc_to_state_id = -1) OR (taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' AND taxruleloc_to_state_id != ' . $userState . ' and (select count(*) from ' . TaxRuleLocation::DB_TBL . ' where taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' and taxruleloc_to_state_id = ' . $userState . ' and taxruleloc_taxcat_id = ptt.ptt_taxcat_id) = 0))))', 'AND');
             }
-            $srch->addMultipleFields(array('*', '(CASE WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_country_id = -1 THEN 99 WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_country_id = ' . $userCountry . ' THEN 98 ELSE taxruleloc_type END) AS displayOrder'));
+            $srch->addMultipleFields(array('*', '(CASE WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = -1 THEN 99 WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = ' . $userCountry . ' THEN 98 ELSE taxruleloc_type END) AS displayOrder'));
             $srch->addGroupBy('taxrule_id');
             $srch->addOrder('displayOrder', 'ASC');
         }
@@ -521,32 +521,40 @@ class Tax extends MyAppModel
                 'options' => []
             ];
         }
-        $tax = round((($prodPrice * $qty) * $taxCategoryRow['taxrule_rate']) / 100, 2);
+        $tax = round((($prodPrice * $qty) * $taxCategoryRow['trr_rate']) / 100, 2);
 
         $data['tax'] = $tax;
-        $data['rate'] = $taxCategoryRow['taxrule_rate'];
+        $data['rate'] = $taxCategoryRow['trr_rate'];
         $data['optionsSum'] = $tax;
         $optionsSum = 0;
         $data['taxCode'] = $taxCategoryRow['taxcat_code'];
 
-        $srch = TaxRuleCombined::getSearchObject();
+        $srch = TaxRule::getCombinedTaxSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL, 'INNER JOIN', 'taxruledet_taxstr_id = taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
         $srch->addCondition('taxruledet_taxrule_id', '=', $taxCategoryRow['taxrule_id']);
-        $srch->addMultipleFields(array('taxstr_id', 'taxruledet_id', 'taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
+        $srch->addMultipleFields(array('taxstr_id', 'taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $combinedData = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         if (!empty($combinedData)) {
-            foreach ($combinedData as $comData) {
+            foreach ($combinedData as $dataKey=> $comData) {
                 $taxval = round((($prodPrice * $qty) * $comData['taxruledet_rate']) / 100, 2);
                 $optionsSum += $taxval;
-                $data['options'][$comData['taxruledet_id']]['taxstr_id'] = $comData['taxstr_id'];
-                $data['options'][$comData['taxruledet_id']]['name'] = isset($comData['taxstr_name']) ? $comData['taxstr_name'] : $defaultTaxName;
-                $data['options'][$comData['taxruledet_id']]['percentageValue'] = $comData['taxruledet_rate'];
-                $data['options'][$comData['taxruledet_id']]['inPercentage'] = 1;
-                $data['options'][$comData['taxruledet_id']]['value'] = $taxval;
+//                $data['options'][$comData['taxruledet_id']]['taxstr_id'] = $comData['taxstr_id'];
+//                $data['options'][$comData['taxruledet_id']]['name'] = isset($comData['taxstr_name']) ? $comData['taxstr_name'] : $defaultTaxName;
+//                $data['options'][$comData['taxruledet_id']]['percentageValue'] = $comData['taxruledet_rate'];
+//                $data['options'][$comData['taxruledet_id']]['inPercentage'] = 1;
+//                $data['options'][$comData['taxruledet_id']]['value'] = $taxval;
+                
+                
+                
+                $data['options'][$dataKey]['taxstr_id'] = $comData['taxstr_id'];
+                $data['options'][$dataKey]['name'] = isset($comData['taxstr_name']) ? $comData['taxstr_name'] : $defaultTaxName;
+                $data['options'][$dataKey]['percentageValue'] = $comData['taxruledet_rate'];
+                $data['options'][$dataKey]['inPercentage'] = 1;
+                $data['options'][$dataKey]['value'] = $taxval;
             }
         }
         $data['optionsSum'] = $optionsSum;

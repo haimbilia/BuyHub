@@ -1,7 +1,7 @@
 $(document).ready(function () {
     searchRuleList(document.frmRuleListSearch);
     $('body').on('change', 'select[name="taxruleloc_type"]', function() {           
-            var dv = '.selectpicker';
+            var dv = '#taxruleloc_to_state_id';
             if ($(this).val() == -1) {
                     $(dv).selectpicker('val', -1);
                     $(dv).attr('disabled', true);
@@ -83,15 +83,15 @@ $(document).ready(function () {
 
 
 
-function checkToStatesDefault(countryId, stateIds) {
-    var dv = '.selectpicker';
+function checkStatesDefault(countryId, stateIds ,dv ) {
+    
     fcom.ajax(fcom.makeUrl('Users', 'getStates', [countryId, 0]), '', function (res) {
         $(dv).empty();
         var firstChild = '<option value = "-1" >All</option>';
         $(dv).append(firstChild);
         $(dv).append(res);
         $(dv).find("option[value='-1']:eq(1)").remove();
-        $(dv).selectpicker('val', stateIds);
+        $(dv).selectpicker('val', stateIds);     
         if (stateIds.indexOf("-1") > -1) {
             $(dv).attr('disabled', true);
         }
@@ -118,16 +118,23 @@ function getCombinedTaxes(self, taxStrId) {
 }
 
 getCountryStates = function (countryId, stateId, dv) {
+       
     fcom.ajax(fcom.makeUrl('Tax', 'getStates', [countryId, stateId]), '', function (res) {
         $(dv).empty();
         $(dv).append(res);        
-        $(dv).find("option:first").text('All');        
+        $(dv).find("option:first").text('All');
+        $(dv).val(-1);
+        if(countryId == -1 ){
+            
+        }
+        $(dv).selectpicker('refresh');
+        
     });
 };
 
 getCountryStatesTaxInTaxForm = function(self, countryId, stateId) {    
 
-    var dv = '.selectpicker';	
+    var dv = '#taxruleloc_to_state_id';	
     $(dv).empty();
     var firstChild = '<option value = "-1" >All</option>';
     $(dv).append(firstChild);

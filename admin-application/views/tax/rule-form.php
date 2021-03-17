@@ -39,17 +39,17 @@ $frm->developerTags['fld_default_col'] = 12;
                             </div>                                               
                             <?php
                             $fromCountryId = 0;
-                            $fromStateId = 0;
+                            $fromStateIds = 0;
                             $toCountryId = 0;
                             $toStateIds = [];
                             $typeId = 0;
                             if (!empty($ruleLocations)) {
-                                $fromCountryId = current(array_unique(array_column($ruleLocations, 'taxruleloc_from_country_id')));
-                                $fromStateId = current(array_unique(array_column($ruleLocations, 'taxruleloc_from_state_id')));
+                                $fromCountryId = current(array_column($ruleLocations, 'taxruleloc_from_country_id'));
+                                $fromStateIds = array_values(array_column($ruleLocations, 'taxruleloc_from_state_id'));
 
-                                $toCountryId = current(array_unique(array_column($ruleLocations, 'taxruleloc_to_country_id')));
-                                $toStateIds = array_unique(array_column($ruleLocations, 'taxruleloc_to_state_id'));
-                                $typeId = current(array_unique(array_column($ruleLocations, 'taxruleloc_type')));
+                                $toCountryId = current(array_column($ruleLocations, 'taxruleloc_to_country_id'));
+                                $toStateIds = array_values(array_column($ruleLocations, 'taxruleloc_to_state_id'));                               
+                                $typeId = current(array_column($ruleLocations, 'taxruleloc_type'));
                             }
                             ?>
 
@@ -61,19 +61,21 @@ $frm->developerTags['fld_default_col'] = 12;
                         $countryFld->value = $fromCountryId;
                         $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,0,\'#taxruleloc_from_state_id\')');
 
-                        $stateFld = $frm->getField('taxruleloc_from_state_id');
+                        $stateFld = $frm->getField('taxruleloc_from_state_id[]');
+                        $stateFld->addFieldTagAttribute('multiple', 'true');
+                        $stateFld->addFieldTagAttribute('class', 'selectpicker');
                         $stateFld->setFieldTagAttribute("id", "taxruleloc_from_state_id");
-                        $stateFld->value = $fromStateId;
+                        $stateFld->value = $fromStateIds;                     
                         ?>
 
                         <div class="border rounded p-4  h-100">
                             <div class="form-group">
                                 <label for="example-text-input" class=""><?php echo $countryFld->getCaption(); ?></label>
-                                <?php echo $countryFld->getHtml('taxruleloc_from_state_id'); ?>
+                                <?php echo $countryFld->getHtml(); ?>
                             </div>
                             <div class="form-group">
                                 <label for="example-text-input" class=""><?php echo $stateFld->getCaption(); ?></label>
-                                <?php echo $frm->getFieldHtml('taxruleloc_from_state_id'); ?>
+                                <?php echo $stateFld->getHtml(); ?>
                             </div>
 
                         </div>
@@ -94,6 +96,7 @@ $frm->developerTags['fld_default_col'] = 12;
                         $stateFld = $frm->getField('taxruleloc_to_state_id[]');
                         $stateFld->addFieldTagAttribute('multiple', 'true');
                         $stateFld->addFieldTagAttribute('class', 'selectpicker');
+                        $stateFld->setFieldTagAttribute("id", "taxruleloc_to_state_id");
                         $stateFld->addFieldTagAttribute('data-style', 'bg-white rounded-pill px-4 py-2 shadow-sm');
                         ?>
 
@@ -101,7 +104,7 @@ $frm->developerTags['fld_default_col'] = 12;
 
                             <div class="form-group">
                                 <label for="example-text-input" class=""><?php echo $countryFld->getCaption(); ?></label>
-                                <?php echo $frm->getFieldHtml('taxruleloc_to_country_id'); ?>
+                                <?php echo $countryFld->getHtml(); ?>
                             </div>
                             <div class="form-group">
                                 <label for="example-text-input" class=""><?php echo $typeFld->getCaption(); ?></label>
@@ -110,7 +113,7 @@ $frm->developerTags['fld_default_col'] = 12;
 
                             <div class="form-group">
                                 <label for="example-text-input" class=""><?php echo $stateFld->getCaption(); ?></label>
-                                <?php echo $frm->getFieldHtml('taxruleloc_to_state_id[]'); ?>
+                                <?php echo $stateFld->getHtml(); ?>
                             </div>                                                
                         </div>
                     </div>                                                     
@@ -138,8 +141,8 @@ $frm->developerTags['fld_default_col'] = 12;
 <script>
     $(function () {
         $('.selectpicker').selectpicker();
-        checkToStatesDefault(<?php echo $toCountryId; ?>, <?php echo json_encode($toStateIds); ?>);
-        getCountryStates(<?php echo $fromCountryId; ?>,<?php echo $fromStateId; ?>, '#taxruleloc_from_state_id')
+        checkStatesDefault(<?php echo $fromCountryId; ?>, <?php echo json_encode($fromStateIds); ?> ,'#taxruleloc_from_state_id');
+        checkStatesDefault(<?php echo $toCountryId; ?>, <?php echo json_encode($toStateIds); ?> ,'#taxruleloc_to_state_id');
         $('#taxrule_taxstr_id').trigger('change');
     });
 

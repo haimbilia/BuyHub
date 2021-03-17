@@ -27,4 +27,7 @@ ALTER TABLE `tbl_tax_rule_rates`
 
 INSERT INTO tbl_tax_rule_rates (trr_taxrule_id, trr_rate ,trr_user_id) SELECT taxrule_id, taxrule_rate,0 FROM tbl_tax_rules;
 ALTER TABLE tbl_tax_rules DROP taxrule_rate;
+ALTER TABLE `tbl_tax_rule_details` ADD `taxruledet_user_id` INT NOT NULL AFTER `taxruledet_rate`;
+ALTER TABLE `tbl_tax_rule_details` ADD UNIQUE( `taxruledet_taxrule_id`, `taxruledet_taxstr_id`, `taxruledet_user_id`);
+ALTER TABLE `tbl_tax_rule_details` DROP `taxruledet_id`;
 -- --- Tax Module Update--- --
