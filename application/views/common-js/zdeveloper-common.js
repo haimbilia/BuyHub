@@ -229,6 +229,9 @@ function formAction(frm, callback) {
 }
 
 function initialize() {
+    if(typeof google == 'undefined'){
+        return;
+    }
     geocoder = new google.maps.Geocoder();
 }
 
