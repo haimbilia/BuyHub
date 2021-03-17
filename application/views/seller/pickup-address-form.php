@@ -203,7 +203,10 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                             </div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_phone'); ?>
+                                    <?php 
+                                        echo $frm->getFieldHtml('addr_phone'); 
+                                        echo $frm->getFieldHtml('addr_phone_dcode'); 
+                                    ?>
                                 </div>
                             </div>
                         </div>

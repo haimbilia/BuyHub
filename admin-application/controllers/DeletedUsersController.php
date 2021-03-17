@@ -97,7 +97,7 @@ class DeletedUsersController extends AdminBaseController
 
         $srch->addMultipleFields(array('user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for'));
 
-        /* $srch->addMultipleFields( array('user_id', 'user_name', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'credential_username', 'credential_email', 'credential_active', 'credential_verified') ); */
+        /* $srch->addMultipleFields( array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'credential_username', 'credential_email', 'credential_active', 'credential_verified') ); */
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);

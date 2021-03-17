@@ -217,10 +217,7 @@ class ShopsController extends AdminBaseController
         $stateData = States::getStateByCountryAndCode($post['shop_country_id'], $stateCode);
         $post['shop_state_id'] = $stateData['state_id'];
 
-        $dialCode = FatApp::getPostedData('shop_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (!empty($dialCode) && false === strpos($post['shop_phone'], $dialCode)) {
-            $post['shop_phone'] = trim($dialCode) . trim($post['shop_phone']);
-        }
+        $post['shop_phone_dcode'] = FatApp::getPostedData('shop_phone_dcode', FatUtility::VAR_STRING, '');
 
         $shop = new Shop($shop_id);
         $shop->assignValues($post);
@@ -578,6 +575,7 @@ class ShopsController extends AdminBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_Shop_Identifier', $this->adminLangId), 'shop_identifier');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Shop_SEO_Friendly_URL', $this->adminLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
+        $frm->addHiddenField('', 'shop_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'shop_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $countryObj = new Countries();

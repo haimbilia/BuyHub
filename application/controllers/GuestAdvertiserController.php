@@ -72,7 +72,6 @@ class GuestAdvertiserController extends MyAppController
         $approvalFrm = $this->getCompanyDetailsForm();
         
         unset($post['btn_submit']);
-        $post['user_phone_dial_code'] = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
         $approvalFrm->fill($post);
 
         $this->set('siteLangId', $this->siteLangId);
@@ -124,10 +123,7 @@ class GuestAdvertiserController extends MyAppController
         $post['user_registered_initially_for'] = User::USER_TYPE_ADVERTISER;
         $post['user_preferred_dashboard'] = User::USER_ADVERTISER_DASHBOARD;
 
-        $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (!empty($dialCode) && false === strpos($post['user_phone'], $dialCode)) {
-            $post['user_phone'] = trim($dialCode) . trim($post['user_phone']);
-        }
+        $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
 
         $userObj->assignValues($post);
 
@@ -350,7 +346,7 @@ class GuestAdvertiserController extends MyAppController
         $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
 
         $frm->addRequiredField(Labels::getLabel('LBL_NAME', $this->siteLangId), 'user_name');
-
+        $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->setUnique('tbl_users', 'user_phone', 'user_id', 'user_id', 'user_id');
@@ -379,8 +375,8 @@ class GuestAdvertiserController extends MyAppController
         $fld->htmlAfterField = '<br/><small class="text--small">' . Labels::getLabel('MSG_Please_tell_us_something_about_yourself', $this->siteLangId) . '</small>';
         $fld = $frm->addTextArea(Labels::getLabel('LBL_Products/services_you_wish_to_advertise?', $this->siteLangId), 'user_products_services', '');
         $frm->addHiddenField('', 'user_name');
+        $frm->addHiddenField('', 'user_phone_dcode');
         $frm->addHiddenField('', 'user_phone');
-        $frm->addHiddenField('', 'user_phone_dial_code');
         $frm->addHiddenField('', 'user_username');
         $frm->addHiddenField('', 'user_email');
         $frm->addHiddenField('', 'user_password');

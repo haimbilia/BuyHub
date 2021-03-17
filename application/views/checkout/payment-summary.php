@@ -26,8 +26,10 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                             <?php } ?>
                         </p>
                         <p><?php echo $address['addr_city'] . ", " . $address['state_name'] . ", " . $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                        <?php if (strlen($address['addr_phone']) > 0) { ?>
-                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $address['addr_phone']; ?></p>
+                        <?php if (strlen($address['addr_phone']) > 0) { 
+                            $addrPhone = $address['addr_phone_dcode'] . $address['addr_phone'];
+                            ?>
+                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                         <?php } ?>
                     </div>
                 </div>
@@ -59,7 +61,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                 </p>
                                 <p><?php echo $address['oua_city'] . ", " . $address['oua_state'] . ", " . $address['oua_country'] . ", " . $address['oua_zip']; ?></p>
                                 <?php if (strlen($address['oua_phone']) > 0) { ?>
-                                    <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $address['oua_phone']; ?></p>
+                                    <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $address['oua_phone_dcode'] . $address['oua_phone']; ?></p>
                                 <?php } ?>
 
                                 <?php
@@ -133,8 +135,10 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                         </p>
                         <p><?php echo $billingAddressArr['addr_city'] . ", " . $billingAddressArr['state_name']; ?></p>
                         <p><?php echo $billingAddressArr['country_name'] . ", " . $billingAddressArr['addr_zip']; ?></p>
-                        <?php if (strlen($billingAddressArr['addr_phone']) > 0) { ?>
-                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $billingAddressArr['addr_phone']; ?></p>
+                        <?php if (strlen($billingAddressArr['addr_phone']) > 0) { 
+                            $addrPhone = $billingAddressArr['addr_phone_dcode'] . $billingAddressArr['addr_phone'];
+                            ?>
+                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                         <?php } ?>
                     </div>
                     <div class="review-block__link" role="cell">

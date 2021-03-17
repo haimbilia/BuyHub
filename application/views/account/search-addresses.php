@@ -29,7 +29,12 @@ if (!empty($addresses)) {
                         </p>
                         <p class="phone-txt">
                             <i class="fas fa-mobile-alt"></i>
-                            <?php echo (strlen($address['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $address['addr_phone'] . '<br>' : ''; ?>
+                            <?php 
+                            $addrPhone = (strlen($address['addr_phone']) > 0) ? $address['addr_phone'] : '';
+                            if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $address)) {
+                                $addrPhone = $address['addr_phone_dcode'] . $addrPhone;
+                            }
+                            echo (!empty($addrPhone)) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>' : ''; ?>
                         </p>
                     </address>
                 </div>

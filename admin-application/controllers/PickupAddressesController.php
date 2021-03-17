@@ -98,6 +98,7 @@ class PickupAddressesController extends AdminBaseController
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
         $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $langId)); */
 
+        $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $langId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $langId));
@@ -125,15 +126,7 @@ class PickupAddressesController extends AdminBaseController
         $this->objPrivilege->canEditPickupAddresses();
         $post = FatApp::getPostedData();
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
-                
-        $phone = FatApp::getPostedData('addr_phone', FatUtility::VAR_STRING, '');
-        $dialCode = FatApp::getPostedData('addr_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (!empty($dialCode) && false === strpos($phone, $dialCode)) {
-            $post['addr_phone'] = trim($dialCode) . trim($phone);
-        }
-
         $addrStateId = FatUtility::int($post['addr_state_id']);
-
         $slotFromAll = '';
         $slotToAll = '';
         $slotDays = [];

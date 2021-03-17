@@ -239,7 +239,7 @@ class StripeConnect extends PaymentMethodBase
                 'name' => $this->userData['shop_name'],
                 'url' => UrlHelper::generateFullUrl('shops', 'view', [$this->userData['shop_id']]),
                 'support_url' => UrlHelper::generateFullUrl('shops', 'view', [$this->userData['shop_id']]),
-                'support_phone' => $this->userData['shop_phone'],
+                'support_phone' => $this->userData['shop_phone_dcode'] . $this->userData['shop_phone'],
                 'support_email' => $this->userData['credential_email'],
                 'support_address' => [
                     'city' => $this->userData['shop_city'],

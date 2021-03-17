@@ -170,7 +170,8 @@ if ($order['order_reward_point_used'] > 0) {
                                         $txt .= '<br/><strong>' . Labels::getLabel('LBL_Shop_Detail', $adminLangId) . ':</strong><br/>' . Labels::getLabel('LBL_Shop_Name', $adminLangId) . ': ' . $op['op_shop_name'];
                                         $txt .= '<br/>' . Labels::getLabel('LBL_Seller_Name', $adminLangId) . ': ' . $op['op_shop_owner_name'] . ' <br/>' . Labels::getLabel('LBL_Seller_Email_Id', $adminLangId) . ': ' . $op['op_shop_owner_email'];
                                         if ($op['op_shop_owner_phone'] != '') {
-                                            $txt .= '<br/>' . Labels::getLabel('LBL_Seller_Phone', $adminLangId) . ': ' . $op['op_shop_owner_phone'];
+                                            $phone = $op['op_shop_owner_phone_dcode'] . $op['op_shop_owner_phone'];
+                                            $txt .= '<br/>' . Labels::getLabel('LBL_Seller_Phone', $adminLangId) . ': ' . $phone;
                                         }
                                         echo $txt; ?>
                                     </td>
@@ -348,7 +349,7 @@ if ($order['order_reward_point_used'] > 0) {
                                     <p><strong><?php echo Labels::getLabel('LBL_Name', $adminLangId); ?>:
                                         </strong><?php echo $order["buyer_user_name"] ?><br><strong><?php echo Labels::getLabel('LBL_Email', $adminLangId); ?>:
                                         </strong><?php echo $order['buyer_email']; ?><br><strong><?php echo Labels::getLabel('LBL_Phone_Number', $adminLangId); ?>:</strong>
-                                        <?php echo CommonHelper::displayNotApplicable($adminLangId, $order['buyer_phone']); ?>
+                                        <?php echo CommonHelper::displayNotApplicable($adminLangId, $order['buyer_phone_dcode'] . $order['buyer_phone']); ?>
                                     </p>
                                 </div>
                             </div>
@@ -388,7 +389,7 @@ if ($order['order_reward_point_used'] > 0) {
                                         }
 
                                         if ($order['billingAddress']['oua_phone'] != '') {
-                                            $billingAddress .= '<br>Phone: ' . $order['billingAddress']['oua_phone'];
+                                            $billingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . $order['billingAddress']['oua_phone_dcode'] . $order['billingAddress']['oua_phone'];
                                         }
                                         echo $billingAddress;
                                         ?>
@@ -422,7 +423,7 @@ if ($order['order_reward_point_used'] > 0) {
                                             }
 
                                             if ($order['shippingAddress']['oua_phone'] != '') {
-                                                $shippingAddress .= '<br>Phone: ' . $order['shippingAddress']['oua_phone'];
+                                                $shippingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . $order['shippingAddress']['oua_phone_dcode'] . $order['shippingAddress']['oua_phone'];
                                             }
 
                                             echo $shippingAddress; ?>

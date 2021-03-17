@@ -53,7 +53,7 @@ $fld->developerTags['col'] = 12;
                             <div class="border rounded p-4 h-100">
                                 <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId);?>
                                 </h6>
-                                <p class=""><?php echo FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, '');?>
+                                <p class=""><?php echo FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');?>
                                     <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId);?>
                                 </p>
 

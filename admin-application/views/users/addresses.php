@@ -41,8 +41,13 @@
                                 $address .= (!empty($row['addr_city'])) ? $row['addr_city'] . ',' : '';
                                 $address .= (!empty($row['state_name'])) ? $row['state_name'] . '<br>' : '';
                                 $address .= (!empty($row['country_name'])) ? $row['country_name'] . '<br>' : '';
-                                $address .= (!empty($row['addr_zip'])) ? 'Postal Code: ' . $row['addr_zip'] . '<br>' : '';
-                                $address .= (!empty($row['addr_phone'])) ? 'Phone: ' . $row['addr_phone'] . '<br>' : '';
+                                $address .= (!empty($row['addr_zip'])) ? Labels::getLabel('LBL_Zip:', $adminLangId) . $row['addr_zip'] . '<br>' : '';
+                                $addrPhone = (!empty($row['addr_phone'])) ? $row['addr_phone'] : '';
+                                if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
+                                    $addrPhone = $row['addr_phone_dcode'] . $addrPhone;
+                                }
+                                $addrPhone = Labels::getLabel('LBL_Phone:', $adminLangId) . $addrPhone . '<br>';
+                                $address .= $addrPhone;
 
                                 $td->appendElement('plaintext', array(), $address, true);
                                 break;

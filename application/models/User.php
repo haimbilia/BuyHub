@@ -95,6 +95,7 @@ class User extends MyAppModel
     public const USER_INFO_ATTR = [
         'user_id',
         'user_name',
+        'user_phone_dcode',
         'user_phone',
         'credential_email',
         'user_registered_initially_for',
@@ -740,6 +741,7 @@ class User extends MyAppModel
         /* Update User information [ */
         $data = array(
             'user_name' => '',
+            'user_phone_dcode' => '',
             'user_phone' => '',
             'user_dob' => '',
             'user_city' => '',
@@ -868,6 +870,7 @@ class User extends MyAppModel
             'ura_state_id' => $data['ura_state_id'],
             'ura_country_id' => $data['ura_country_id'],
             'ura_zip' => $data['ura_zip'],
+            'ura_phone_dcode' => $data['ura_phone_dcode'],
             'ura_phone' => $data['ura_phone']
         );
         if (!FatApp::getDb()->insertFromArray(static::DB_TBL_USR_RETURN_ADDR, $assignValues, false, array(), $assignValues)) {
@@ -1559,7 +1562,7 @@ class User extends MyAppModel
         }
     }
 
-    public function prepareUserPhoneOtp($phone)
+    public function prepareUserPhoneOtp($dialCode, $phone)
     {
         if (($this->mainTableRecordId < 1)) {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST.', $this->commonLangId);
@@ -1582,6 +1585,7 @@ class User extends MyAppModel
         $data = [
             static::DB_TBL_UPV_PREFIX . 'user_id' => $this->mainTableRecordId,
             static::DB_TBL_UPV_PREFIX . 'otp' => $otp,
+            static::DB_TBL_UPV_PREFIX . 'phone_dcode' => trim($dialCode),
             static::DB_TBL_UPV_PREFIX . 'phone' => trim($phone),
             static::DB_TBL_UPV_PREFIX . 'expired_on' => date('Y-m-d H:i:s', strtotime("+" . self::OTP_AGE . " minutes", time())),
         ];
@@ -1641,6 +1645,7 @@ class User extends MyAppModel
 
         $attr = [
             static::DB_TBL_UPV_PREFIX . 'user_id',
+            static::DB_TBL_UPV_PREFIX . 'phone_dcode',
             static::DB_TBL_UPV_PREFIX . 'phone',
             static::DB_TBL_UPV_PREFIX . 'expired_on',
             static::DB_TBL_UPV_PREFIX . 'otp'
@@ -1708,10 +1713,12 @@ class User extends MyAppModel
     {
         $userType = isset($data['user_registered_initially_for']) ? $data['user_registered_initially_for'] : '';
         $phone = !empty($data['user_phone']) ? $data['user_phone'] : '';
+        $dialCode = !empty($data['user_phone_dcode']) ? $data['user_phone_dcode'] : '';
         $data = array(
             'user_name' => $data['user_name'],
             'user_username' => $data['user_username'],
             'user_email' => isset($data['user_email']) ? $data['user_email'] : '',
+            'user_phone_dcode' => $dialCode,
             'user_phone' => $phone,
             'user_type' => $userType,
         );
@@ -1744,13 +1751,14 @@ class User extends MyAppModel
     public function userPhoneVerification($data, $langId)
     {
         $phone = !empty($data['user_phone']) ? trim($data['user_phone']) : '';
+        $dialCode = !empty($data['user_phone_dcode']) ? trim($data['user_phone_dcode']) : '';
         $user_name = !empty($data['user_name']) ? $data['user_name'] : Labels::getLabel('LBL_USER', $langId);
 
-        $otp = $this->prepareUserPhoneOtp($phone);
+        $otp = $this->prepareUserPhoneOtp($dialCode, $phone);
         if (false === $otp) {
             return false;
         }
-        return $this->sendOtp($phone, $user_name, $otp, $langId);
+        return $this->sendOtp($dialCode . $phone, $user_name, $otp, $langId);
     }
 
     public function sendOtp($phone, $user_name, $otp, $langId, $tpl = SmsTemplate::LOGIN)
@@ -1786,7 +1794,7 @@ class User extends MyAppModel
             return false;
         }
 
-        $attr = ['user_name', 'user_phone'];
+        $attr = ['user_name', 'user_phone_dcode', 'user_phone'];
         $userData = $this->getUserInfo($attr, false, false);
         return $this->userPhoneVerification($userData, $this->commonLangId);
     }
@@ -1795,9 +1803,11 @@ class User extends MyAppModel
     {
         $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
         $phone = !empty($data['user_phone']) ? $data['user_phone'] : '';
+        $dialCode = !empty($data['user_phone_dcode']) ? $data['user_phone_dcode'] : '';
         $data = array(
             'user_name' => $data['user_name'],
             'user_email' => $data['user_email'],
+            'user_phone_dcode' => $dialCode,
             'user_phone' => $phone,
             'link' => $link,
         );
@@ -1814,11 +1824,13 @@ class User extends MyAppModel
 
     public function userWelcomeEmailRegistration($data, $link, $langId)
     {
+        $dialCode = (array_key_exists('user_phone_dcode', $data) ? $data['user_phone_dcode'] : '');
         $phone = (array_key_exists('user_phone', $data) ? $data['user_phone'] : '');
 
         $data = array(
             'user_name' => $data['user_name'],
             'user_email' => $data['user_email'],
+            'user_phone_dcode' => $dialCode,
             'user_phone' => $phone,
             'link' => $link,
         );
@@ -2528,7 +2540,7 @@ class User extends MyAppModel
 
     public function checkUserByPhoneOrUserName($userName, $userPhone)
     {
-        $srch = $this->getUserSearchObj(array('user_id', 'user_phone', 'credential_username', 'credential_verified'));
+        $srch = $this->getUserSearchObj(array('user_id', 'user_phone_dcode', 'user_phone', 'credential_username', 'credential_verified'));
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('user_phone', '=', $userPhone, 'OR');
         $rs = $srch->getResultSet();
@@ -2752,7 +2764,7 @@ class User extends MyAppModel
         $userData['user_username'] = $username;
         $userData['user_email'] = $email;
 
-        $uData = self::getAttributesById($userId, ['user_phone']);
+        $uData = self::getAttributesById($userId, ['user_phone_dcode', 'user_phone']);
         $userData = array_merge($userData, $uData);
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
@@ -2868,7 +2880,7 @@ class User extends MyAppModel
                 $srch->addFld($attr);
             }
         } else {
-            $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone', 'credential_email'));
+            $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
         }
 
         $rs = $srch->getResultSet();
@@ -2883,7 +2895,7 @@ class User extends MyAppModel
         $bccEmails = array();
         foreach ($usersArr as $user) {
             if ($userPrivilege->$privilegeFunction($user['user_id'], true)) {
-                $phoneNumbers[] = !empty($user['user_phone']) ? $user['user_phone'] : '';
+                $phoneNumbers[] = !empty($user['user_phone']) ? $user['user_phone_dcode'] . $user['user_phone'] : '';
                 $bccEmails[$user['credential_email']] = $user['user_name'];
             }
         }

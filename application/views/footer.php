@@ -56,7 +56,7 @@ if (CommonHelper::demoUrl()) { ?>
 							<?php $this->includeTemplate('_partial/footerNewsLetterForm.php');
 						} ?>
                         <ul class="contact-info">
-                            <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, '');
+                            <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                                 if ($site_conatct) { ?>
                             <li><i class="icn"><img src="<?php echo CONF_WEBROOT_URL; ?>images/icn-mobile.png" alt="<?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?>"></i><?php echo $site_conatct;?></li>
                             <?php } ?>

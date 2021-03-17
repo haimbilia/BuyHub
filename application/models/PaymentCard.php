@@ -186,7 +186,7 @@ class PaymentCard
         $requestParam = [
             'email' => $userData['credential_email'],
             'name' => $userData['user_name'],
-            'phone' => $userData['user_phone']
+            'phone' => $userData['user_phone_dcode'] . $userData['user_phone']
         ];
 
         if (false === $this->paymentPlugin->bindCustomer($requestParam)) {

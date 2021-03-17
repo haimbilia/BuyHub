@@ -60,6 +60,7 @@ $(document).ready(function () {
             var resendOtpElement = lastFormElement + " .resendOtp-js";
             $(lastFormElement + ' [name="btn_submit"]').closest("div.row").remove();
             var phoneNumber = $(lastFormElement + " input[name='user_phone']").val();
+            var dialCode = $(lastFormElement + " input[name='user_phone_dcode']").val();
 
             $(lastFormElement).after(t.html);
             $('.formTitle-js').remove();
@@ -68,7 +69,7 @@ $(document).ready(function () {
             if (0 < updateToDbFrm) {
                 $(phoneNumberdv + " form").attr('onsubmit', 'return validateOtp(this, 0);');
                 var resendOtpElement = lastFormElement + " .resendOtp-js";
-                resendFunction = 'resendOtp("' + phoneNumber + '")';
+                resendFunction = 'resendOtp("' + phoneNumber + '", "' + dialCode + '")';
             }
             $(resendOtpElement).removeAttr('onclick').attr('onclick', resendFunction);
             startOtpInterval();
@@ -76,8 +77,8 @@ $(document).ready(function () {
         return false;
     };
 
-    resendOtp = function (phone = '') {
-        var postparam = (1 == phone) ? '' : "user_phone=" + phone;
+    resendOtp = function (phone = '', dialCode = '') {
+        var postparam = (1 == phone) ? '' : "user_phone=" + phone + "&user_phone_dcode=" + dialCode;
         $.systemMessage(langLbl.processing, 'alert--process', false);
         fcom.ajax(fcom.makeUrl('Account', 'resendOtp'), postparam, function (t) {
             t = $.parseJSON(t);

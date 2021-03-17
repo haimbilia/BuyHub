@@ -4,7 +4,7 @@ class ValidateElement extends FatUtility
 {
     public const PHONE_NO_FORMAT = '';
     public const PHONE_NO_LENGTH = 15;
-    public const PHONE_REGEX = '^\+?\d+$';
+    public const PHONE_REGEX = '^[0-9]{1,15}$';
     public const ZIP_REGEX = '^[a-zA-Z0-9]+$';
     public const CITY_NAME_REGEX = '^([^0-9]*)$';
     public const PASSWORD_REGEX = '^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%-_]{8,15}$';
@@ -19,7 +19,7 @@ class ValidateElement extends FatUtility
     public const TIME_REGEX = '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$';
     public const URL_REGEX = '^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$';
     public const PHONE_FORMATS = [
-        '+919876543210',
+        '98XXXXXX89',
     ];
 
 

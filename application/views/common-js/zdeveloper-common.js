@@ -1351,16 +1351,26 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                 return;
             }
             $(input).addClass('hasFlag-js');
+
+            var elementName = ($(input).attr('name') + '_dcode');
+            var dialCodeElement = $('input[name="' + elementName + '"]');
+            if (0 < dialCodeElement.length && '' != dialCodeElement.val()) {
+                country = getCountryIso2CodeFromDialCode(parseInt(dialCodeElement.val()));
+            }
+
             var iti = window.intlTelInput(input, {
                 initialCountry: country,
             });
 
-            var elementName = ($(input).attr('name') + '_dial_code');
-            $('<input>').attr({
-                type: 'hidden',
-                name: elementName,
-                value: "+" + iti.getSelectedCountryData().dialCode
-            }).insertAfter(input);
+            if (0 < dialCodeElement.length) {
+                dialCodeElement.insertAfter(input);
+            } else {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: elementName,
+                    value: "+" + iti.getSelectedCountryData().dialCode
+                }).insertAfter(input);
+            }
 
             input.addEventListener('countrychange', function(e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {

@@ -44,7 +44,12 @@ echo $registerFrm->getFormTag();
         <div class="col-md-12">
             <div class="field-set">
                 <div class="field-wraper">
-                    <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_phone'); ?></div>
+                    <div class="field_cover">
+                    <?php 
+                    echo $registerFrm->getFieldHtml('user_phone'); 
+                    echo $registerFrm->getFieldHtml('user_phone_dcode'); 
+                    ?>
+                    </div>
                 </div>
             </div>
         </div>

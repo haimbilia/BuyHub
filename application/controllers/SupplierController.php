@@ -332,10 +332,22 @@ class SupplierController extends MyAppController
 
         $frm = $this->getSupplierForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $phoneKey = $dialCode = '';
+        foreach($post as $key => $val) {
+            if (false !== strpos($key, '_dcode')) {
+                $phoneKey = str_replace('_dcode', '', $key);
+                $dialCode = $val;
+                break;
+            }
+        }
+
+        if (!empty($phoneKey)) {
+            $post[$phoneKey] = $dialCode . $post[$phoneKey];
         }
 
         $userObj = new User($userId);
@@ -707,6 +719,7 @@ class SupplierController extends MyAppController
                     break;
 
                 case User::USER_FIELD_TYPE_PHONE:
+				    $frm->addHiddenField('', $fieldName . '_dcode');
                     $fld = $frm->addTextBox($field['sformfield_caption'], $fieldName, '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                     $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                     break;

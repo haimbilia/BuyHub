@@ -32,6 +32,7 @@ class PaymentMethodBase extends PluginBase
         $srch->addMultipleFields([
             'user_id',
             'user_name',
+            'shop_phone_dcode',
             'shop_phone',
             'shop_id',
             'credential_email',

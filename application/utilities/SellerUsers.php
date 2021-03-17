@@ -67,6 +67,7 @@ trait SellerUsers
         $fld->requirements()->setUsername();
         $fld = $frm->addEmailField(Labels::getLabel('LBL_User_Email', $this->siteLangId), 'user_email', '');
         $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
+        $frm->addHiddenField('', 'user_phone_dcode');
         $phoneFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone');
         $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
@@ -103,7 +104,7 @@ trait SellerUsers
         $stateId = 0;
         if (0 < $userId) {
             $srch = User::getSearchObject(true, UserAuthentication::getLoggedUserId());
-            $srch->addMultipleFields(array('user_id', 'user_parent', 'user_name', 'user_phone', 'user_country_id', 'user_state_id', 'user_city', 'credential_username', 'credential_email', 'credential_active'));
+            $srch->addMultipleFields(array('user_id', 'user_parent', 'user_name', 'user_phone_dcode', 'user_phone', 'user_country_id', 'user_state_id', 'user_city', 'credential_username', 'credential_email', 'credential_active'));
             $srch->addCondition('user_id', '=', $userId);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
@@ -160,11 +161,7 @@ trait SellerUsers
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (!empty($dialCode) && false === strpos($post['user_phone'], $dialCode)) {
-            $post['user_phone'] = $dialCode . trim($post['user_phone']);
-        }
-
+        $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $post['user_parent'] = UserAuthentication::getLoggedUserId();
         $post['user_state_id'] = $user_state_id;
         if (0 < $userId) {

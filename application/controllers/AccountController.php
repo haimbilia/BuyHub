@@ -1094,13 +1094,10 @@ class AccountController extends LoggedUserController
         }
 
 
-        $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (array_key_exists('user_phone', $post) && !empty($dialCode) && false === strpos($post['user_phone'], $dialCode) &&  false == SmsArchive::canSendSms()) {
-            $post['user_phone'] = trim($dialCode) . trim($post['user_phone']);
-        }
+        $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
 
         if (isset($post['user_phone']) && true == SmsArchive::canSendSms()) {
-            unset($post['user_phone']);
+            unset($post['user_phone'], $post['user_phone_dcode']);
         }
 
         if ($post['user_dob'] == "0000-00-00" || $post['user_dob'] == "" || strtotime($post['user_dob']) == 0) {
@@ -1287,7 +1284,7 @@ class AccountController extends LoggedUserController
         }
 
         $userObj = new User(UserAuthentication::getLoggedUserId());
-        $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_email', 'user_name', 'user_phone'));
+        $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_email', 'user_name', 'user_phone_dcode', 'user_phone'));
         $rs = $srch->getResultSet();
 
         if (!$rs) {
@@ -1308,8 +1305,10 @@ class AccountController extends LoggedUserController
         }
         
         $phone = array_key_exists('user_phone', $data) ? $data['user_phone'] : '';
+        $dialCode = array_key_exists('user_phone_dcode', $data) ? $data['user_phone_dcode'] : '';
         $arr = array(
             'user_name' => $data['user_name'],
+            'user_phone_dcode' => $dialCode,
             'user_phone' => $phone,
             'user_email' => $data['credential_email'],
             'user_new_email' => $post['new_email']
@@ -2796,6 +2795,7 @@ class AccountController extends LoggedUserController
         $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
         $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addHiddenField('', 'user_phone_dcode');
         $phoneFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
@@ -3610,17 +3610,17 @@ class AccountController extends LoggedUserController
         FatUtility::dieJsonSuccess($json);
     }
 
-    private function sendOtp(int $userId, int $phone)
+    private function sendOtp(int $userId, int $dialCode, int $phone)
     {
         $userObj = new User($userId);
-        $otp = $userObj->prepareUserPhoneOtp($phone);
+        $otp = $userObj->prepareUserPhoneOtp($dialCode, $phone);
         if (false == $otp) {
             LibHelper::dieJsonError($userObj->getError());
         }
 
         $userData = $userObj->getUserInfo('user_name', false, false);
         $obj = clone $userObj;
-        if (false === $obj->sendOtp($phone, $userData['user_name'], $otp, $this->siteLangId)) {
+        if (false === $obj->sendOtp($dialCode . $phone, $userData['user_name'], $otp, $this->siteLangId)) {
             LibHelper::dieJsonError($obj->getError());
         }
         return true;
@@ -3635,15 +3635,11 @@ class AccountController extends LoggedUserController
             LibHelper::dieJsonError(current($frm->getValidationErrors()));
         }
 
-        $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_STRING, '');
-        $dialCode = FatApp::getPostedData('user_phone_dial_code', FatUtility::VAR_STRING, '');
+        $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
+        $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         if (empty($phoneNumber) || empty($dialCode)) {
             $message = Labels::getLabel("MSG_INVALID_PHONE_NUMBER_FORMAT", $this->siteLangId);
             LibHelper::dieJsonError($message);
-        }
-
-        if (false === strpos($phoneNumber, $dialCode)) {
-            $phoneNumber = trim($dialCode) . trim($phoneNumber);
         }
 
         $userId = UserAuthentication::getLoggedUserId();
@@ -3663,7 +3659,7 @@ class AccountController extends LoggedUserController
             }
         }
 
-        $this->sendOtp($userId, $phoneNumber);
+        $this->sendOtp($userId, $dialCode,  $phoneNumber);
 
         $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
@@ -3693,10 +3689,11 @@ class AccountController extends LoggedUserController
     public function resendOtp()
     {
         $userId = UserAuthentication::getLoggedUserId();
+        $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phone = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, 0);
 
         if (!empty($phone)) {
-            $this->sendOtp($userId, $phone);
+            $this->sendOtp($userId, $dialCode, $phone);
         } else {
             $userObj = new User($userId);
             if (false == $userObj->resendOtp()) {

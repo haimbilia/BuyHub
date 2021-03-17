@@ -408,6 +408,7 @@ class MyAppController extends FatController
 
         if (0 < $signUpWithPhone) {
             $frm->addHiddenField('', 'signUpWithPhone', 1);
+            $frm->addHiddenField('', 'user_phone_dcode');
             $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId)));
         } else {
             $fld = $frm->addEmailField(Labels::getLabel('LBL_EMAIL', $siteLangId), 'user_email', '', array('placeholder' => Labels::getLabel('LBL_EMAIL', $siteLangId)));
@@ -476,7 +477,8 @@ class MyAppController extends FatController
         $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
         $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
-
+        
+        $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
@@ -624,12 +626,14 @@ class MyAppController extends FatController
             'user_name' => $data['user_name'],
             'link' => $link,
             'user_new_email' => $data['user_email'],
+            'user_phone_dcode' => $data['user_phone_dcode'],
             'user_phone' => $data['user_phone'],
         );
 
         if (!$configureEmail) {
             $dataArr = array(
                 'user_name' => $data['user_name'],
+                'user_phone_dcode' => $data['user_phone_dcode'],
                 'user_phone' => $data['user_phone'],
                 'link' => $link,
                 'user_new_email' => $data['user_new_email'],
@@ -730,6 +734,7 @@ class MyAppController extends FatController
     protected function getPhoneNumberForm()
     {
         $frm = new Form('phoneNumberFrm');
+        $frm->addHiddenField('', 'user_phone_dcode');
         $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId)));
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_GET_OTP', $this->siteLangId));
@@ -780,7 +785,7 @@ class MyAppController extends FatController
 
         if (0 < $updateToDb) {
             $userObj = clone $obj;
-            $userObj->assignValues(['user_phone' => $resp['upv_phone']]);
+            $userObj->assignValues(['user_phone_dcode' => $resp['upv_phone_dcode'], 'user_phone' => $resp['upv_phone']]);
             if (!$userObj->save()) {
                 LibHelper::dieJsonError($userObj->getError());
             }
@@ -794,7 +799,7 @@ class MyAppController extends FatController
                     LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
                 }
 
-                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone', 'credential_email'), true, true, true);
+                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);
                 $data = array_merge(['token' => $token], $userInfo);
                 $this->set('data', $data);
             }

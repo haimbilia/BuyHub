@@ -13,8 +13,10 @@
                         <?php } ?>
                     </p>
                     <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?></p>
-                    <?php if (strlen($addresses['addr_phone']) > 0) { ?>
-                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addresses['addr_phone']; ?></p>
+                    <?php if (strlen($addresses['addr_phone']) > 0) { 
+                        $addrPhone = $addresses['addr_phone_dcode'] . $addresses['addr_phone'];
+                        ?>
+                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                     <?php } ?>
                 </div>
                 <div class="review-block__link" role="cell">
@@ -66,8 +68,10 @@
                                     </p>
                                     <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                     <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                                    <?php if (strlen($address['addr_phone']) > 0) { ?>
-                                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $address['addr_phone']; ?></p>
+                                    <?php if (strlen($address['addr_phone']) > 0) { 
+                                        $addrPhone = $address['addr_phone_dcode'] . $address['addr_phone'];
+                                        ?>
+                                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                     <?php } ?>
                                     <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?></p>
                                 <?php } ?>
@@ -121,8 +125,10 @@
                                                 </p>
                                                 <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                                 <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                                                <?php if (strlen($address['addr_phone']) > 0) { ?>
-                                                    <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $address['addr_phone']; ?></p>
+                                                <?php if (strlen($address['addr_phone']) > 0) { 
+                                                    $addrPhone = $address['addr_phone_dcode'] . $address['addr_phone'];
+                                                    ?>
+                                                    <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                                 <?php } ?>
                                                 <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?></p>
                                             <?php } ?>

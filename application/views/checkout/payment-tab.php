@@ -32,7 +32,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                 if (true == $canSendSms) {
                     $phone = $userData['user_phone'];
                     $msg = Labels::getLabel('LBL_VERIFICATION_CODE_SENT_TO_{PHONE}_AND_{EMAIL}', $siteLangId);
-                    $maskedPhoneNumber = LibHelper::phoneNumberMasking($phone);
+                    $maskedPhoneNumber = LibHelper::phoneNumberMasking($userData['user_phone_dcode'] . $phone);
                     $msg =  CommonHelper::replaceStringData($msg, ['{PHONE}' => '<br><strong>' . $maskedPhoneNumber . '</strong>']);
                 }
                 $maskedEmail = LibHelper::emailAddressMasking($userData['credential_email']);

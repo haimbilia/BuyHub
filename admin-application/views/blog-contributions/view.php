@@ -20,7 +20,7 @@
 			</dl>
 			<dl class="list">
 				<dt><?php echo Labels::getLabel('LBL_Phone',$adminLangId); ?></dt>
-				<dd><?php echo $data['bcontributions_author_phone'];?></dd>
+				<dd><?php echo $data['bcontributions_author_phone_dcode'] . $data['bcontributions_author_phone'];?></dd>
 			</dl>
 			<dl class="list">
 				<dt><?php echo Labels::getLabel('LBL_Posted_On',$adminLangId); ?></dt>

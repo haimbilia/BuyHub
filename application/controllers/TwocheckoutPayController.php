@@ -149,7 +149,7 @@ class TwocheckoutPayController extends PaymentController
                     "zipCode" => FatUtility::decodeHtmlEntities($orderInfo['customer_billing_postcode'], ENT_QUOTES, 'UTF-8'),
                     "country" => FatUtility::decodeHtmlEntities($orderInfo['customer_billing_country'], ENT_QUOTES, 'UTF-8'),
                     "email" => $orderInfo['customer_email'],
-                    "phoneNumber" => $orderInfo['customer_phone']
+                    "phoneNumber" => $orderInfo['customer_phone_dcode'] . $orderInfo['customer_phone']
                 ),
                 "shippingAddr" => array(
                     "name" => FatUtility::decodeHtmlEntities($orderInfo['customer_shipping_name'], ENT_QUOTES, 'UTF-8'),
@@ -159,7 +159,7 @@ class TwocheckoutPayController extends PaymentController
                     "zipCode" => FatUtility::decodeHtmlEntities($orderInfo['customer_shipping_postcode'], ENT_QUOTES, 'UTF-8'),
                     "country" => FatUtility::decodeHtmlEntities($orderInfo['customer_shipping_country'], ENT_QUOTES, 'UTF-8'),
                     "email" => $orderInfo['customer_email'],
-                    "phoneNumber" => $orderInfo['customer_phone']
+                    "phoneNumber" => $orderInfo['customer_phone_dcode'] . $orderInfo['customer_phone']
                 )
             );
 

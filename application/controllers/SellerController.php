@@ -2243,10 +2243,7 @@ class SellerController extends SellerBaseController
             $post['shop_created_on'] = date('Y-m-d H:i:s');
         }
 
-        $dialCode = FatApp::getPostedData('shop_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (!empty($dialCode) && false === strpos($post['shop_phone'], $dialCode)) {
-            $post['shop_phone'] = trim($dialCode) . trim($post['shop_phone']);
-        }
+        $post['shop_phone_dcode'] = FatApp::getPostedData('shop_phone_dcode', FatUtility::VAR_STRING, '');
 
         $shopObj = new Shop($shop_id);
         $shopObj->assignValues($post);
@@ -2274,6 +2271,7 @@ class SellerController extends SellerBaseController
           'ura_country_id'=>$post['shop_country_id'],
           'ura_state_id'=> $state_id,
           'ura_zip'=>$post['shop_postalcode'],
+          'ura_phone_dcode'=>$post['shop_phone_dcode'],
           'ura_phone'=>$post['shop_phone'],
           );
           if ( !$userObj->updateUserReturnAddress($dataToSave) ) {
@@ -3567,6 +3565,7 @@ class SellerController extends SellerBaseController
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Shop_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
 
+        $frm->addHiddenField('', 'shop_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('Lbl_phone', $this->siteLangId), 'shop_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
@@ -4649,17 +4648,13 @@ class SellerController extends SellerBaseController
         $ura_state_id = FatUtility::int($post['ura_state_id']);
         $frm = $this->getReturnAddressForm();
         $post = $frm->getFormDataFromArray($post);
-
-        $dialCode = FatApp::getPostedData('ura_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (!empty($dialCode) && false === strpos($post['ura_phone'], $dialCode)) {
-            $post['ura_phone'] = trim($dialCode) . trim($post['ura_phone']);
-        }
-
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
+        
         $post['ura_state_id'] = $ura_state_id;
+        $post['ura_phone_dcode'] = FatApp::getPostedData('ura_phone_dcode', FatUtility::VAR_STRING, '');
 
         $userObj = new User($userId);
         if (!$userObj->updateUserReturnAddress($post)) {
@@ -4801,7 +4796,7 @@ class SellerController extends SellerBaseController
         $zipFld = $frm->addTextBox(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'ura_zip');
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
         $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
-
+        $frm->addHiddenField('', 'ura_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'ura_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
@@ -5535,6 +5530,7 @@ class SellerController extends SellerBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_City', $this->siteLangId), 'addr_city');
 
         $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
+        $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
@@ -5567,11 +5563,6 @@ class SellerController extends SellerBaseController
         $post = FatApp::getPostedData();
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
         
-        $dialCode = FatApp::getPostedData('addr_phone_dial_code', FatUtility::VAR_STRING, '');
-        if (!empty($dialCode) && false === strpos($post['addr_phone'], $dialCode)) {
-            $post['addr_phone'] = trim($dialCode) . trim($post['addr_phone']);
-        }
-
         $addrStateId = FatUtility::int($post['addr_state_id']);
 
         $slotFromAll = '';

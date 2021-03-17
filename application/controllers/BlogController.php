@@ -412,6 +412,7 @@ class BlogController extends MyAppController
             $frm->getField('bcontributions_author_first_name')->value = $firstName;
             $frm->getField('bcontributions_author_last_name')->value = $lastName;
             $frm->getField('bcontributions_author_email')->value = $userInfo['credential_email'];
+            $frm->getField('bcontributions_author_phone_dcode')->value = $userInfo['user_phone_dcode'];
             $frm->getField('bcontributions_author_phone')->value = $userInfo['user_phone'];
         }
         if ($post = FatApp::getPostedData()) {
@@ -510,6 +511,7 @@ class BlogController extends MyAppController
         $frm->addRequiredField(Labels::getLabel('LBL_First_Name', $this->siteLangId), 'bcontributions_author_first_name', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Last_Name', $this->siteLangId), 'bcontributions_author_last_name', '');
         $frm->addEmailField(Labels::getLabel('LBL_Email_Address', $this->siteLangId), 'bcontributions_author_email', '');
+        $frm->addHiddenField('', 'bcontributions_author_phone_dcode');
         $fld_phn = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $this->siteLangId), 'bcontributions_author_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $fld_phn->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $fld_phn->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
