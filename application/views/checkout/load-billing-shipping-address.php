@@ -14,7 +14,7 @@
 			<?php 
 			$addrPhone = $defaultAddress['addr_phone'];
 			if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $defaultAddress)) {
-				$addrPhone = $defaultAddress['addr_phone_dcode'] . $addrPhone;
+				$addrPhone = ValidateElement::formatDialCode($defaultAddress['addr_phone_dcode']) . $addrPhone;
 			}
 			echo (strlen($addrPhone)>0) ? Labels::getLabel('LBL_Phone:', $siteLangId).$addrPhone.'<br>':'';
 			?></div>

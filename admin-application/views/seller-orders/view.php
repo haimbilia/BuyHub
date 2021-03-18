@@ -245,7 +245,7 @@ if (!empty($order['opship_tracking_url'])) {
                                         }
 
                                         if ($order['billingAddress']['oua_phone'] != '') {
-                                            $billingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . $order['billingAddress']['oua_phone_dcode'] . $order['billingAddress']['oua_phone'];
+                                            $billingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['billingAddress']['oua_phone_dcode']) . $order['billingAddress']['oua_phone'];
                                         }
                                         echo $billingAddress;
                                         ?><br>
@@ -280,7 +280,7 @@ if (!empty($order['opship_tracking_url'])) {
                                             }
 
                                             if ($order['shippingAddress']['oua_phone'] != '') {
-                                                $shippingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . $order['shippingAddress']['oua_phone_dcode'] . $order['shippingAddress']['oua_phone'];
+                                                $shippingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['shippingAddress']['oua_phone_dcode']) . $order['shippingAddress']['oua_phone'];
                                             }
 
                                             echo $shippingAddress;
@@ -320,7 +320,7 @@ if (!empty($order['opship_tracking_url'])) {
                                             }
 
                                             if ($order['pickupAddress']['oua_phone'] != '') {
-                                                $pickupAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . $order['pickupAddress']['oua_phone_dcode'] . $order['pickupAddress']['oua_phone'];
+                                                $pickupAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['pickupAddress']['oua_phone_dcode']) . $order['pickupAddress']['oua_phone'];
                                             }
                                             echo $pickupAddress;
                                         } ?>

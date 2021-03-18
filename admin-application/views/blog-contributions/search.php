@@ -44,7 +44,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $row[$key], true);
                 break;
             case 'bcontributions_author_phone':
-                $phone = $row['bcontributions_author_phone_dcode'] . $row[$key];
+                $phone = ValidateElement::formatDialCode($row['bcontributions_author_phone_dcode']) . $row[$key];
                 $td->appendElement('plaintext', array(), $phone, true);
                 break;
             case 'bcontributions_status':

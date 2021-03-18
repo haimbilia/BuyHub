@@ -1830,7 +1830,7 @@ class UsersController extends AdminBaseController
             'mail_subject' => trim($post['mail_subject']),
             'mail_message' => nl2br($post["mail_message"]),
             'credential_email' => $user['credential_email'],
-            'user_phone_dcode' => $user['user_phone_dcode'],
+            'user_phone_dcode' => ValidateElement::formatDialCode($user['user_phone_dcode']),
             'user_phone' => $user['user_phone']
         );
         

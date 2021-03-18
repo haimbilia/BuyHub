@@ -1713,7 +1713,7 @@ class User extends MyAppModel
     {
         $userType = isset($data['user_registered_initially_for']) ? $data['user_registered_initially_for'] : '';
         $phone = !empty($data['user_phone']) ? $data['user_phone'] : '';
-        $dialCode = !empty($data['user_phone_dcode']) ? $data['user_phone_dcode'] : '';
+        $dialCode = !empty($data['user_phone_dcode']) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $data = array(
             'user_name' => $data['user_name'],
             'user_username' => $data['user_username'],
@@ -1751,7 +1751,7 @@ class User extends MyAppModel
     public function userPhoneVerification($data, $langId)
     {
         $phone = !empty($data['user_phone']) ? trim($data['user_phone']) : '';
-        $dialCode = !empty($data['user_phone_dcode']) ? trim($data['user_phone_dcode']) : '';
+        $dialCode = !empty($data['user_phone_dcode']) ? ValidateElement::formatDialCode(trim($data['user_phone_dcode'])) : '';
         $user_name = !empty($data['user_name']) ? $data['user_name'] : Labels::getLabel('LBL_USER', $langId);
 
         $otp = $this->prepareUserPhoneOtp($dialCode, $phone);
@@ -1803,7 +1803,7 @@ class User extends MyAppModel
     {
         $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
         $phone = !empty($data['user_phone']) ? $data['user_phone'] : '';
-        $dialCode = !empty($data['user_phone_dcode']) ? $data['user_phone_dcode'] : '';
+        $dialCode = !empty($data['user_phone_dcode']) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $data = array(
             'user_name' => $data['user_name'],
             'user_email' => $data['user_email'],
@@ -1824,7 +1824,7 @@ class User extends MyAppModel
 
     public function userWelcomeEmailRegistration($data, $link, $langId)
     {
-        $dialCode = (array_key_exists('user_phone_dcode', $data) ? $data['user_phone_dcode'] : '');
+        $dialCode = (array_key_exists('user_phone_dcode', $data) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '');
         $phone = (array_key_exists('user_phone', $data) ? $data['user_phone'] : '');
 
         $data = array(
@@ -2388,7 +2388,7 @@ class User extends MyAppModel
         $db = FatApp::getDb();
         $db->startTransaction();
 
-        $userPhone = isset($postedData['user_phone']) && !empty($postedData['user_phone']) ? $postedData['user_phone'] : '';
+        $userPhone = array_key_exists('user_phone', $postedData) ? $postedData['user_phone_dcode'] . $postedData['user_phone'] : '';
 
         if (empty($userPhone) && !filter_var($postedData['user_email'], FILTER_VALIDATE_EMAIL)) {
             $this->error = Labels::getLabel("LBL_Invalid_email_address", $this->commonLangId);
@@ -2519,7 +2519,7 @@ class User extends MyAppModel
         if (empty($userPhone) && $row['credential_email'] == $userEmail) {
             $this->error = Labels::getLabel('MSG_DUPLICATE_EMAIL', $this->commonLangId);
             return false;
-        } elseif (!empty($userPhone) && $row['user_phone'] == $userPhone) {
+        } elseif (!empty($userPhone) && $row['user_phone_dcode'] . $row['user_phone'] == $userPhone) {
             $this->error = Labels::getLabel('MSG_DUPLICATE_PHONE.', $this->commonLangId);
             if ($row['credential_verified'] == applicationConstants::NO) {
                 $this->error .= ' ' . Labels::getLabel('MSG_THIS_PHONE_NUMBER_IS_NOT_VERIFIED_YET._DO_YOU_WANT_TO_CONTINUE?_{CONTINUE-BTN}', $this->commonLangId);
@@ -2542,7 +2542,7 @@ class User extends MyAppModel
     {
         $srch = $this->getUserSearchObj(array('user_id', 'user_phone_dcode', 'user_phone', 'credential_username', 'credential_verified'));
         $condition = $srch->addCondition('credential_username', '=', $userName);
-        $condition->attachCondition('user_phone', '=', $userPhone, 'OR');
+        $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $userPhone, 'OR', true);
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
@@ -2895,7 +2895,7 @@ class User extends MyAppModel
         $bccEmails = array();
         foreach ($usersArr as $user) {
             if ($userPrivilege->$privilegeFunction($user['user_id'], true)) {
-                $phoneNumbers[] = !empty($user['user_phone']) ? $user['user_phone_dcode'] . $user['user_phone'] : '';
+                $phoneNumbers[] = !empty($user['user_phone']) ? ValidateElement::formatDialCode($user['user_phone_dcode']) . $user['user_phone'] : '';
                 $bccEmails[$user['credential_email']] = $user['user_name'];
             }
         }

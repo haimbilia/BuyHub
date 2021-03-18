@@ -32,7 +32,7 @@ foreach ($arr_listing as $sn => $row) {
                 $addrZip = (strlen($row['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $adminLangId) . $row['addr_zip'] : '';
                 $addrPhone = (strlen($row['addr_phone']) > 0) ? $row['addr_phone'] : '';
                 if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
-                    $addrPhone = $row['addr_phone_dcode'] . $addrPhone;
+                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
                 }
                 $addrPhone = ', ' . Labels::getLabel('LBL_Phone:', $adminLangId) . $addrPhone;
                 $address = "<address>

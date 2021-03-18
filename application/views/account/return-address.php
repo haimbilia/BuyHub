@@ -6,7 +6,7 @@
 	 <?php if($info['ura_phone']!=''){?>
 	 <tr>
 		 <th><?php echo Labels::getLabel('LBL_Phone',$siteLangId);?></th>
-		 <td><?php echo $info['ura_phone_dcode'] . $info['ura_phone'];?></td>
+		 <td><?php echo ValidateElement::formatDialCode($info['ura_phone_dcode']) . $info['ura_phone'];?></td>
 	 </tr>	
 	 <?php }?>
 		<tr>

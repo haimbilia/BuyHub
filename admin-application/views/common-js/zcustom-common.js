@@ -691,28 +691,39 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
             var elementName = ($(input).attr('name') + '_dcode');
             var dialCodeElement = $('input[name="' + elementName + '"]');
             if (0 < dialCodeElement.length && '' != dialCodeElement.val()) {
-                country = getCountryIso2CodeFromDialCode(parseInt(dialCodeElement.val()));
+                var elementVal = dialCodeElement.val();
+                var countryCodePos = elementVal.indexOf('-');
+                if (0 < countryCodePos) {
+                    country = elementVal.substring((countryCodePos + 1), elementVal.length);
+                } else {
+                    country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+                }
             }
 
             var iti = window.intlTelInput(input, {
+                separateDialCode: true,
                 initialCountry: country,
             });
 
+            var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2; 
             if (0 < dialCodeElement.length) {
                 dialCodeElement.insertAfter(input);
+                if ('' == dialCodeElement.val()) {
+                    dialCodeElement.val(dCode);
+                }
             } else {
                 $('<input>').attr({
                     type: 'hidden',
                     name: elementName,
-                    value: "+" + iti.getSelectedCountryData().dialCode
+                    value: dCode
                 }).insertAfter(input);
             }
 
             input.addEventListener('countrychange', function(e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
+                    var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2; 
                     var parent = $(input).parent();
-                    console.log(parent);
-                    parent.find('input[name="' + elementName + '"]').val("+" + iti.getSelectedCountryData().dialCode);
+                    parent.find('input[name="' + elementName + '"]').val(dCode);
                 }
             });
         }

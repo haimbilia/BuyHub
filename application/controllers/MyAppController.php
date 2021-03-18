@@ -409,7 +409,7 @@ class MyAppController extends FatController
         if (0 < $signUpWithPhone) {
             $frm->addHiddenField('', 'signUpWithPhone', 1);
             $frm->addHiddenField('', 'user_phone_dcode');
-            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId)));
+            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'class' => 'phone-js'));
         } else {
             $fld = $frm->addEmailField(Labels::getLabel('LBL_EMAIL', $siteLangId), 'user_email', '', array('placeholder' => Labels::getLabel('LBL_EMAIL', $siteLangId)));
             if (false === MOBILE_APP_API_CALL) {
@@ -626,14 +626,14 @@ class MyAppController extends FatController
             'user_name' => $data['user_name'],
             'link' => $link,
             'user_new_email' => $data['user_email'],
-            'user_phone_dcode' => $data['user_phone_dcode'],
+            'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
             'user_phone' => $data['user_phone'],
         );
 
         if (!$configureEmail) {
             $dataArr = array(
                 'user_name' => $data['user_name'],
-                'user_phone_dcode' => $data['user_phone_dcode'],
+                'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
                 'user_phone' => $data['user_phone'],
                 'link' => $link,
                 'user_new_email' => $data['user_new_email'],

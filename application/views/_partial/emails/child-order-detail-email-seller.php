@@ -182,7 +182,7 @@ if ($orderProducts['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
     }
 
     if ($billingAddress['oua_phone'] != '') {
-        $billingInfo .= '<br>' . $billingAddress['oua_phone_dcode'] . $billingAddress['oua_phone'];
+        $billingInfo .= '<br>' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'];
     }
 
     $str .= '</table><br/><br/><table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #ddd; border-collapse:collapse;"><tr><td style="padding:10px;background:#eee;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;"  bgcolor="#f0f0f0"><strong>' . Labels::getLabel('LBL_Order_Billing_Details', $siteLangId) . '</strong></td>';
@@ -217,7 +217,7 @@ if ($orderProducts['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
         }
 
         if ($shippingAddress['oua_phone'] != '') {
-            $shippingInfo .= '<br>' . $shippingAddress['oua_phone_dcode'] . $shippingAddress['oua_phone'];
+            $shippingInfo .= '<br>' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'];
         }
         $str .= '<td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;">' . $shippingInfo . '</td>';
     }
@@ -245,7 +245,7 @@ if ($orderProducts['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
         }
 
         if ($orderProducts['pickupAddress']['oua_phone'] != '') {
-            $pickUpAddressInfo .= '<br>' . $orderProducts['pickupAddress']['oua_phone_dcode'] . $orderProducts['pickupAddress']['oua_phone'];
+            $pickUpAddressInfo .= '<br>' . ValidateElement::formatDialCode($orderProducts['pickupAddress']['oua_phone_dcode']) . $orderProducts['pickupAddress']['oua_phone'];
         }
         $str .= '<td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;">' . $pickUpAddressInfo . '</td>';
     }

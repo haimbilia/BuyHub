@@ -38,7 +38,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                                     <i class="fas fa-mobile-alt"></i>
                                     <?php 
                                         if (strlen($address['addr_phone']) > 0) {
-                                            $addrPhone = $address['addr_phone_dcode'] . $address['addr_phone'];
+                                            $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                             echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
                                         }
                                     ?>

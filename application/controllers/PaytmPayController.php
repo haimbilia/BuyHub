@@ -180,7 +180,7 @@ class PaytmPayController extends PaymentController
                 "CHANNEL_ID" => $this->settings['merchant_channel_id'],
                 "INDUSTRY_TYPE_ID" => $this->settings['merchant_industry_type'],
                 "WEBSITE" => $this->settings['merchant_website'],
-                "MOBILE_NO" => $orderInfo['customer_phone_dcode'] . $orderInfo['customer_phone'],
+                "MOBILE_NO" => ValidateElement::formatDialCode($orderInfo['customer_phone_dcode']) . $orderInfo['customer_phone'],
                 "EMAIL" => $orderInfo['customer_email'],
                 "CALLBACK_URL" => UrlHelper::generateFullUrl('PaytmPay', 'callback'),
                 "ORDER_DETAILS" => $orderPaymentGatewayDescription,

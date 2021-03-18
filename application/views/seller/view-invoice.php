@@ -80,7 +80,7 @@
                                                                     }
 
                                                                     if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                                                        $billingAddress  .= '<br/>' . $orderDetail['billingAddress']['oua_phone_dcode'] . $orderDetail['billingAddress']['oua_phone'];
+                                                                        $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
                                                                     }
                                                                     ?>
                                                                     <?php echo $billingAddress; ?>
@@ -116,7 +116,7 @@
                                                                         }
 
                                                                         if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-                                                                            $shippingAddress .= '<br/>' . $orderDetail['shippingAddress']['oua_phone_dcode'] . $orderDetail['shippingAddress']['oua_phone'];
+                                                                            $shippingAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
                                                                         } ?>
                                                                         <?php echo $shippingAddress; ?>
                                                                     </p>
@@ -148,7 +148,7 @@
                                                                         }
 
                                                                         if ($orderDetail['pickupAddress']['oua_phone'] != '') {
-                                                                            $pickUpAddress .= '<br/>' . $orderDetail['pickupAddress']['oua_phone_dcode'] . $orderDetail['pickupAddress']['oua_phone'];
+                                                                            $pickUpAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'];
                                                                         } ?>
                                                                         <?php echo $pickUpAddress; ?>
                                                                     </p>

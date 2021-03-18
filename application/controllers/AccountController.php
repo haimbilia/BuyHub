@@ -1305,7 +1305,7 @@ class AccountController extends LoggedUserController
         }
         
         $phone = array_key_exists('user_phone', $data) ? $data['user_phone'] : '';
-        $dialCode = array_key_exists('user_phone_dcode', $data) ? $data['user_phone_dcode'] : '';
+        $dialCode = array_key_exists('user_phone_dcode', $data) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $arr = array(
             'user_name' => $data['user_name'],
             'user_phone_dcode' => $dialCode,

@@ -2271,7 +2271,7 @@ class SellerController extends SellerBaseController
           'ura_country_id'=>$post['shop_country_id'],
           'ura_state_id'=> $state_id,
           'ura_zip'=>$post['shop_postalcode'],
-          'ura_phone_dcode'=>$post['shop_phone_dcode'],
+          'ura_phone_dcode'=>ValidateElement::formatDialCode($post['shop_phone_dcode']),
           'ura_phone'=>$post['shop_phone'],
           );
           if ( !$userObj->updateUserReturnAddress($dataToSave) ) {

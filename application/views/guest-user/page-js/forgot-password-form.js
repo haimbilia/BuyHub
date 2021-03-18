@@ -17,9 +17,6 @@
         fcom.ajax(fcom.makeUrl( 'GuestUser', 'forgotPasswordForm', [withPhone, 0]), '', function(t) {
             $.systemMessage.close();
             $('.forgotPwForm').html(t);
-            if (0 < withPhone) {
-                stylePhoneNumberFld();
-            }
 		});
     };
 

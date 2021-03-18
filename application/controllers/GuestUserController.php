@@ -348,9 +348,9 @@ class GuestUserController extends MyAppController
             LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)));
         }
-
+        
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
-        $phoneNumber = isset($post['user_phone']) ? FatUtility::int($post['user_phone']) : '';
+        $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
         if ((0 < $signUpWithPhone && empty($phoneNumber)) && empty($dialCode)) {
             $message = Labels::getLabel("MSG_INVALID_PHONE_NUMBER", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
@@ -372,12 +372,14 @@ class GuestUserController extends MyAppController
         if (!$userId = $userObj->saveUserData($post, false, $returnUserId)) {
             $message = Labels::getLabel($userObj->getError(), $this->siteLangId);
             if (0 < $signUpWithPhone) {
-                $row = $userObj->checkUserByPhoneOrUserName($post['user_username'], $post['user_phone']);
-                $userId = $row['user_id'];
-                $replacements = [
-                    '{CONTINUE-BTN}' => '<a class="btn btn-outline-white" href="javascript:void(0);" onclick="resendOtp(' . $userId . ')">' . Labels::getLabel('MSG_PROCEED', $this->siteLangId) . '</a>'
-                ];
-                $message = CommonHelper::replaceStringData($message, $replacements);
+                $row = (array) $userObj->checkUserByPhoneOrUserName($post['user_username'], $dialCode . $phoneNumber);
+                if (0 < count($row)) {
+                    $userId = $row['user_id'];
+                    $replacements = [
+                        '{CONTINUE-BTN}' => '<a class="btn btn-outline-white" href="javascript:void(0);" onclick="resendOtp(' . $userId . ')">' . Labels::getLabel('MSG_PROCEED', $this->siteLangId) . '</a>'
+                    ];
+                    $message = CommonHelper::replaceStringData($message, $replacements);
+                }
             }
 
             LibHelper::exitWithError($message, false, true);
@@ -595,7 +597,7 @@ class GuestUserController extends MyAppController
         $email = new EmailHandler();
         $currentEmail = $data['credential_email'];
         $phone = $data['user_phone'];
-        $dialCode = $data['user_phone_dcode'];
+        $dialCode = ValidateElement::formatDialCode($data['user_phone_dcode']);
         if (!empty($currentEmail) && !$email->sendEmailChangedNotification($this->siteLangId, array('user_name' => $data['user_name'], 'user_email' => $data['credential_email'], 'user_new_email' => $newUserEmail, 'user_phone_dcode' => $dialCode, 'user_phone' => $phone))) {
             Message::addErrorMessage(Labels::getLabel("MSG_UNABLE_TO_SEND_EMAIL_CHANGE_NOTIFICATION", $this->siteLangId) . $userObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
@@ -739,7 +741,7 @@ class GuestUserController extends MyAppController
         if ($checkVerificationRow['credential_verified'] == applicationConstants::NO) {
             $error = false;
             if (0 < $withPhone) {
-                $row['user_phone_dcode'] = $post['user_phone_dcode'];
+                $row['user_phone_dcode'] = ValidateElement::formatDialCode($post['user_phone_dcode']);
                 $row['user_phone'] = $post['user_phone'];
                 if (!$userObj->userPhoneVerification($row, $this->siteLangId)) {
                     $message = !empty($userObj->getError()) ? $userObj->getError() : Labels::getLabel("ERR_ERROR_IN_SENDING_VERFICATION_SMS", $this->siteLangId);
@@ -1044,7 +1046,7 @@ class GuestUserController extends MyAppController
         Message::addErrorMessage(Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED',$this->siteLangId));
         FatUtility::dieJsonError( Message::getHtml() );
         } */
-        $dialCode = array_key_exists('user_phone_dcode', $data) ? $data['user_phone_dcode'] : '';
+        $dialCode = array_key_exists('user_phone_dcode', $data) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $phone = array_key_exists('user_phone', $data) ? $data['user_phone'] : '';
         $arr = array(
             'user_name' => $data['user_name'],
@@ -1095,7 +1097,9 @@ class GuestUserController extends MyAppController
             $frm->addRequiredField(Labels::getLabel('LBL_Username_or_email', $this->siteLangId), 'user_email_username');
         } else {
             $frm->addHiddenField('', 'user_phone_dcode');
-            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId)));
+            $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'class' => 'phone-js'));
+            $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+            $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
         }
 
         CommonHelper::addCaptchaField($frm);

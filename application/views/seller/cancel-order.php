@@ -134,7 +134,7 @@
                                         }
 
                                         if ($orderDetail['billingAddress']['oua_phone']!='') {
-                                            $billingAddress.= '<br>'.$orderDetail['billingAddress']['oua_phone_dcode'] . $orderDetail['billingAddress']['oua_phone'];
+                                            $billingAddress.= '<br>'.ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
                                         }
                                     ?>
                                     <p><?php echo $billingAddress;?></p>
@@ -170,7 +170,7 @@
                                             }
 
                                             if ($orderDetail['shippingAddress']['oua_phone']!='') {
-                                                $shippingAddress.= '<br>'.$orderDetail['shippingAddress']['oua_phone_dcode'] . $orderDetail['shippingAddress']['oua_phone'];
+                                                $shippingAddress.= '<br>'.ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
                                             }
                                         ?>
                                         <p><?php echo $shippingAddress;?></p>
@@ -214,7 +214,7 @@
                                                 }
 
                                                 if ($orderDetail['pickupAddress']['oua_phone'] != '') {
-                                                    $pickupAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $siteLangId) . ': ' . $orderDetail['pickupAddress']['oua_phone_dcode'] . $orderDetail['pickupAddress']['oua_phone'];
+                                                    $pickupAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $siteLangId) . ': ' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'];
                                                 }
                                                 echo $pickupAddress; ?>
                                     </div>

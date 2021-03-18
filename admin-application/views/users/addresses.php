@@ -44,7 +44,7 @@
                                 $address .= (!empty($row['addr_zip'])) ? Labels::getLabel('LBL_Zip:', $adminLangId) . $row['addr_zip'] . '<br>' : '';
                                 $addrPhone = (!empty($row['addr_phone'])) ? $row['addr_phone'] : '';
                                 if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
-                                    $addrPhone = $row['addr_phone_dcode'] . $addrPhone;
+                                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
                                 }
                                 $addrPhone = Labels::getLabel('LBL_Phone:', $adminLangId) . $addrPhone . '<br>';
                                 $address .= $addrPhone;

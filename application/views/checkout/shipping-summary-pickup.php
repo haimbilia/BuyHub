@@ -14,7 +14,7 @@
                     </p>
                     <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?></p>
                     <?php if (strlen($addresses['addr_phone']) > 0) { 
-                        $addrPhone = $addresses['addr_phone_dcode'] . $addresses['addr_phone'];
+                        $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
                         ?>
                         <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                     <?php } ?>
@@ -69,7 +69,7 @@
                                     <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                     <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
                                     <?php if (strlen($address['addr_phone']) > 0) { 
-                                        $addrPhone = $address['addr_phone_dcode'] . $address['addr_phone'];
+                                        $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                         ?>
                                         <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                     <?php } ?>
@@ -126,7 +126,7 @@
                                                 <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                                 <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
                                                 <?php if (strlen($address['addr_phone']) > 0) { 
-                                                    $addrPhone = $address['addr_phone_dcode'] . $address['addr_phone'];
+                                                    $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                                     ?>
                                                     <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                                 <?php } ?>

@@ -32,7 +32,7 @@ if (!empty($addresses)) {
                             <?php 
                             $addrPhone = (strlen($address['addr_phone']) > 0) ? $address['addr_phone'] : '';
                             if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $address)) {
-                                $addrPhone = $address['addr_phone_dcode'] . $addrPhone;
+                                $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $addrPhone;
                             }
                             echo (!empty($addrPhone)) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>' : ''; ?>
                         </p>

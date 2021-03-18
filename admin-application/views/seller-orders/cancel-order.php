@@ -122,7 +122,7 @@
                                     }
 
                                     if ($order['billingAddress']['oua_phone']!='') {
-                                        $billingAddress.= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': '.$order['billingAddress']['oua_phone_dcode'] . $order['billingAddress']['oua_phone'];
+                                        $billingAddress.= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': '.ValidateElement::formatDialCode($order['billingAddress']['oua_phone_dcode']) . $order['billingAddress']['oua_phone'];
                                     }
                                     echo $billingAddress;
                                     ?> </p>
@@ -154,7 +154,7 @@
                                     }
 
                                     if ($order['shippingAddress']['oua_phone']!='') {
-                                        $shippingAddress.= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': '.$order['shippingAddress']['oua_phone_dcode'] . $order['shippingAddress']['oua_phone'];
+                                        $shippingAddress.= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': '.ValidateElement::formatDialCode($order['shippingAddress']['oua_phone_dcode']) . $order['shippingAddress']['oua_phone'];
                                     }
 
                                     echo $shippingAddress; ?></p>

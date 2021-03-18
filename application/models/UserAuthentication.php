@@ -248,7 +248,7 @@ class UserAuthentication extends FatModel
         if (FatApp::getConfig('CONF_WELCOME_EMAIL_REGISTRATION', FatUtility::VAR_INT, 1)) {
 
             $uData = User::getAttributesById($userId, ['user_phone_dcode', 'user_phone']);
-            $data['user_phone_dcode'] = !empty($uData['user_phone_dcode']) ? $uData['user_phone_dcode'] : '';
+            $data['user_phone_dcode'] = !empty($uData['user_phone_dcode']) ? ValidateElement::formatDialCode($uData['user_phone_dcode']) : '';
             $data['user_phone'] = !empty($uData['user_phone']) ? $uData['user_phone'] : '';
 
             if (!$userObj->guestUserWelcomeEmail($data, $this->commonLangId)) {

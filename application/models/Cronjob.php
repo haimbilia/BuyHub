@@ -782,7 +782,7 @@ class Cronjob extends FatModel
             if (is_array($cartDetails) && count($cartDetails) == 0) {
                 continue;
             }
-            $dialCode = array_key_exists('user_phone_dcode', $val) ? $val['user_phone_dcode'] : '';
+            $dialCode = array_key_exists('user_phone_dcode', $val) ? ValidateElement::formatDialCode($val['user_phone_dcode']) : '';
             $phone = array_key_exists('user_phone', $val) ? $val['user_phone'] : '';
             $data = array("user_id" => $val['usercart_user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Checkout'), 'user_phone_dcode' => $dialCode, 'user_phone' => $phone);
 
@@ -829,7 +829,7 @@ class Cronjob extends FatModel
         }
 
         foreach ($row as $val) {
-            $dialCode = !empty($row['user_phone_dcode']) ? $row['user_phone_dcode'] : '';
+            $dialCode = !empty($row['user_phone_dcode']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) : '';
             $phone = !empty($row['user_phone']) ? $row['user_phone'] : '';
             $data = array("user_id" => $val['user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Account', 'wishlist'), 'user_phone_dcode' => $dialCode, 'user_phone' => $phone);
 

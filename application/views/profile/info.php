@@ -8,7 +8,7 @@
 <b><?php echo $data['user_name'] ?></b><br>
 <?php echo Labels::getLabel('LBL_DOB', $siteLangId) . ': ' . FatDate::format($data['user_dob']); ?><br>
 <?php echo Labels::getLabel('LBL_MEMBER_SINCE', $siteLangId) . ': ' . FatDate::format($data['user_regdate']); ?><br>
-<?php echo Labels::getLabel('LBL_PHONE', $siteLangId) . ': ' . $data['user_phone_dcode'] . $data['user_phone']; ?><br>
+<?php echo Labels::getLabel('LBL_PHONE', $siteLangId) . ': ' . ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone']; ?><br>
 <p><?php echo nl2br($data['user_profile_info']); ?>
 </p>
 <a href="<?php echo UrlHelper::generateUrl('profile','edit-form');?>"><?php echo Labels::getLabel('LBL_EDIT', $siteLangId) ?></a>

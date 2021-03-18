@@ -107,7 +107,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                         }
                                         echo '<br>' . $shippingAddress['oua_city'] . ', ' . $shippingAddress['oua_state'];
                                         echo '<br>' . $shippingAddress['oua_country'] . '(' . $shippingAddress['oua_zip'] . ')';
-                                        echo '<br>' . $shippingAddress['oua_phone_dcode'] . $shippingAddress['oua_phone'];
+                                        echo '<br>' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'];
                                         ?>
                                     </p>
                                 </li>
@@ -147,7 +147,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                 $zip = !empty($orderAddDet['addr_zip']) ? '(' . $orderAddDet['addr_zip'] . ')' : '';
                                                 $phone = !empty($orderAddDet['addr_phone']) ? $orderAddDet['addr_phone'] : '';
                                                 if (!empty($phone) && array_key_exists('addr_phone_dcode', $orderAddDet)) {
-                                                    $phone = $orderAddDet['addr_phone_dcode'] . $phone;
+                                                    $phone = ValidateElement::formatDialCode($orderAddDet['addr_phone_dcode']) . $phone;
                                                 }
                                                 $phone = '<br>' . $phone;
                                                 echo $address1 . $address2 . $city . $state . $country . $zip . $phone;
@@ -188,7 +188,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             }
                                             echo '<br>' . $billingAddress['oua_city'] . ', ' . $billingAddress['oua_state'];
                                             echo '<br>' . $billingAddress['oua_country'] . '(' . $billingAddress['oua_zip'] . ')';
-                                            echo '<br>' . $billingAddress['oua_phone_dcode'] . $billingAddress['oua_phone'];
+                                            echo '<br>' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'];
                                             ?>
                                         </p>
                                     </li>
