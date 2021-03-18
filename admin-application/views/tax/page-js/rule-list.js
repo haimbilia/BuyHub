@@ -1,26 +1,22 @@
 $(document).ready(function () {
     searchRuleList(document.frmRuleListSearch);
-    $('body').on('change', 'select[name="taxruleloc_type"]', function() {           
-            var dv = '#taxruleloc_to_state_id';
-            if ($(this).val() == -1) {
-                    $(dv).selectpicker('val', -1);
-                    $(dv).attr('disabled', true);
-                    $(dv + " option[value='-1']").show();
-            } else {
-                    $(dv).removeAttr('disabled');
-                    $(dv).selectpicker('val', "");
-                    $(dv + " option[value='-1']").hide();
-            }
-            $(dv).selectpicker('refresh');
-    });    
+    $('body').on('change', 'select[name="taxruleloc_type"]', function () {
+        var dv = '#taxruleloc_to_state_id';
+        if ($(this).val() == -1) {
+            $(dv).selectpicker('val', -1);
+            $(dv).attr('disabled', true);
+            $(dv + " option[value='-1']").show();
+        } else {
+            $(dv).removeAttr('disabled');
+            $(dv).selectpicker('val', "");
+            $(dv + " option[value='-1']").hide();
+        }
+        $(dv).selectpicker('refresh');
+    });
 });
 
 (function () {
-    
-    var currentPage = 1;
-    var runningAjaxReq = false;
     var dv = '#taxListing';
-
     goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
@@ -46,11 +42,11 @@ $(document).ready(function () {
     };
 
     ruleForm = function (taxcatId, id = 0) {
-        $(dv).html(fcom.getLoader());      
-        fcom.ajax(fcom.makeUrl('Tax', 'ruleForm', [taxcatId, id]), '', function (t) {               
+        $(dv).html(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('Tax', 'ruleForm', [taxcatId, id]), '', function (t) {
             $(dv).html(t);
         });
-       
+
     };
 
     setupTaxRule = function (frm) {
@@ -60,7 +56,7 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('tax', 'setupTaxRule'), data, function (t) {
             if (t.status == 1) {
-                searchRuleList(document.frmRuleListSearch);               
+                searchRuleList(document.frmRuleListSearch);
             }
         });
     };
@@ -75,26 +71,27 @@ $(document).ready(function () {
     };
 
     clearSearch = function () {
-        document.frmTaxSearch.reset();
-        searchRuleList(document.frmTaxSearch);
+        document.frmRuleListSearch.reset();
+        reloadList();
     };
 
 })();
 
+function checkStatesDefault(countryId, stateIds, dv) {
 
-
-function checkStatesDefault(countryId, stateIds ,dv ) {
-    
     fcom.ajax(fcom.makeUrl('Users', 'getStates', [countryId, 0]), '', function (res) {
         $(dv).empty();
         var firstChild = '<option value = "-1" >All</option>';
         $(dv).append(firstChild);
         $(dv).append(res);
         $(dv).find("option[value='-1']:eq(1)").remove();
-        $(dv).selectpicker('val', stateIds);     
-        if (stateIds.indexOf("-1") > -1) {
-            $(dv).attr('disabled', true);
+        $(dv).selectpicker('val', stateIds);
+        if(dv == '#taxruleloc_to_state_id'){
+            if (stateIds.indexOf("-1") > -1) {
+                $(dv).attr('disabled', true);
+            }
         }
+        
         $(dv).selectpicker('refresh');
     });
 }
@@ -118,51 +115,51 @@ function getCombinedTaxes(self, taxStrId) {
 }
 
 getCountryStates = function (countryId, stateId, dv) {
-       
+
     fcom.ajax(fcom.makeUrl('Tax', 'getStates', [countryId, stateId]), '', function (res) {
         $(dv).empty();
-        $(dv).append(res);        
+        $(dv).append(res);
         $(dv).find("option:first").text('All');
         $(dv).val(-1);
-        if(countryId == -1 ){
-            
+        if (countryId == -1) {
+
         }
         $(dv).selectpicker('refresh');
-        
+
     });
 };
 
-getCountryStatesTaxInTaxForm = function(self, countryId, stateId) {    
+getCountryStatesTaxInTaxForm = function (self, countryId, stateId) {
 
-    var dv = '#taxruleloc_to_state_id';	
+    var dv = '#taxruleloc_to_state_id';
     $(dv).empty();
     var firstChild = '<option value = "-1" >All</option>';
     $(dv).append(firstChild);
-    if(countryId == -1) {       
+    if (countryId == -1) {
         $(dv).attr('disabled', true);
-        $(self).closest('form').find(' select[name="taxruleloc_type"]').val(-1).attr('disabled', true);     
-     
+        $(self).closest('form').find(' select[name="taxruleloc_type"]').val(-1).attr('disabled', true);
+
         $(dv).val(-1);
         $(dv).selectpicker('refresh');
         return;
     }
-    fcom.displayProcessing();    
-    fcom.ajax(fcom.makeUrl('Users', 'getStates', [countryId, stateId]), '', function(res) {
-		var locationFld = $(self).closest('form').find(' select[name="taxruleloc_type"]');
-		$(dv).removeAttr('disabled');
-		$(locationFld).removeAttr('disabled');
-		$(dv).append(res);
-                $(dv).find("option[value='-1']:eq(1)").remove();
-		$(dv).selectpicker('refresh');
-		if ('' == countryId) {
-			$(locationFld).val($(locationFld + " option:first").val()).attr('disabled', 'disabled');
-		} else if ('' == $(locationFld).val()) {
-			$(locationFld).val($(locationFld + " option:eq(1)").val()); 
-                        $(locationFld).trigger('change');                        
-		}else if(-1 == $(locationFld).val()){
-                    $(locationFld).trigger('change');
-                }
-                
+    fcom.displayProcessing();
+    fcom.ajax(fcom.makeUrl('Users', 'getStates', [countryId, stateId]), '', function (res) {
+        var locationFld = $(self).closest('form').find(' select[name="taxruleloc_type"]');
+        $(dv).removeAttr('disabled');
+        $(locationFld).removeAttr('disabled');
+        $(dv).append(res);
+        $(dv).find("option[value='-1']:eq(1)").remove();
+        $(dv).selectpicker('refresh');
+        if ('' == countryId) {
+            $(locationFld).val($(locationFld + " option:first").val()).attr('disabled', 'disabled');
+        } else if ('' == $(locationFld).val()) {
+            $(locationFld).val($(locationFld + " option:eq(1)").val());
+            $(locationFld).trigger('change');
+        } else if (-1 == $(locationFld).val()) {
+            $(locationFld).trigger('change');
+        }
+
     });
     $.systemMessage.close();
 };

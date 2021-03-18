@@ -12,10 +12,12 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 
 
 -- --- Tax Module Update --- --
-ALTER TABLE `tbl_tax_rule_locations` CHANGE `taxruleloc_country_id` `taxruleloc_from_country_id` INT NOT NULL, CHANGE `taxruleloc_state_id` `taxruleloc_from_state_id` INT NOT NULL;
-ALTER TABLE `tbl_tax_rule_locations` ADD `taxruleloc_to_country_id` INT NOT NULL AFTER `taxruleloc_from_state_id`, ADD `taxruleloc_to_state_id` INT NOT NULL AFTER `taxruleloc_to_country_id`;
+ALTER TABLE `tbl_tax_rule_locations` CHANGE `taxruleloc_country_id` `taxruleloc_to_country_id` INT NOT NULL, CHANGE `taxruleloc_state_id` `taxruleloc_to_state_id` INT NOT NULL;
+ALTER TABLE `tbl_tax_rule_locations` ADD `taxruleloc_from_country_id` INT NOT NULL AFTER `taxruleloc_taxcat_id`, ADD `taxruleloc_from_state_id` INT NOT NULL AFTER `taxruleloc_from_country_id`;
 ALTER TABLE `tbl_tax_rule_locations` DROP INDEX `taxruleloc_taxcat_id`;
 ALTER TABLE `tbl_tax_rule_locations` ADD UNIQUE( `taxruleloc_taxcat_id`, `taxruleloc_from_country_id`, `taxruleloc_from_state_id`, `taxruleloc_to_country_id`, `taxruleloc_to_state_id`, `taxruleloc_type`, `taxruleloc_unique`);
+UPDATE `tbl_tax_rule_locations` SET `taxruleloc_from_country_id` = '-1'  and `taxruleloc_from_state_id` = '-1';
+
 CREATE TABLE `tbl_tax_rule_rates` (
   `trr_taxrule_id` int NOT NULL,
   `trr_rate` decimal(10,2) NOT NULL,
@@ -30,4 +32,5 @@ ALTER TABLE tbl_tax_rules DROP taxrule_rate;
 ALTER TABLE `tbl_tax_rule_details` ADD `taxruledet_user_id` INT NOT NULL AFTER `taxruledet_rate`;
 ALTER TABLE `tbl_tax_rule_details` ADD UNIQUE( `taxruledet_taxrule_id`, `taxruledet_taxstr_id`, `taxruledet_user_id`);
 ALTER TABLE `tbl_tax_rule_details` DROP `taxruledet_id`;
+SELECT * FROM `tbl_language_labels` WHERE `label_key` LIKE 'LBL_Invalid_Combination_of_Country,_Type,_State'
 -- --- Tax Module Update--- --

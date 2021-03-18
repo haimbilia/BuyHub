@@ -2,6 +2,8 @@
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'taxrule_name' => Labels::getLabel('LBL_Rule_Name', $adminLangId),
+    'trr_rate' => Labels::getLabel('LBL_Tax_Rate(%)', $adminLangId),
+    'taxstr_name' => Labels::getLabel('LBL_Tax_Structure_Name', $adminLangId),
 );
 
 $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);

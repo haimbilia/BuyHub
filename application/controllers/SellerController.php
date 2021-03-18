@@ -1784,20 +1784,98 @@ class SellerController extends SellerBaseController
         if (empty($data)) {
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        $taxObj = new TaxRule();
-        $rulesData = TaxRule::getRulesByCatId($taxCatId, $this->siteLangId);
-        $combinedRulesDetails = [];
-        $ruleLocations = [];
-        if (!empty($rulesData)) {
-            $rulesIds = array_column($rulesData, 'taxrule_id');
-            $combinedRulesDetails = $taxObj->getCombinedRuleDetails($rulesIds, $this->siteLangId);
-            $ruleLocations = TaxRule::getLocationsByCatId($taxCatId, true, $this->siteLangId);
-        }
-        $this->set("combinedRulesDetails", $combinedRulesDetails);
-        $this->set('taxCategory', $data['taxcat_name']);
-        $this->set("rulesData", $rulesData);
-        $this->set('ruleLocations', $ruleLocations);
+        
+        $frmSearch = $this->getTaxRulesSearchForm($taxCatId);
+        $this->set('frmSearch', $frmSearch);      
+        $this->set('taxCategory', $data['taxcat_name']);        
         $this->_template->render(true, true);
+    }
+    
+    public function taxRulesSearch()
+    {      
+        $userId = UserAuthentication::getLoggedUserId();
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);              
+        $taxCatId = FatApp::getPostedData('taxCatId', FatUtility::VAR_INT, 0);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
+        if (1 > $page) {
+            $page = 1;
+        }
+        
+        $userSpecificRateSrch = TaxRule::getSearchObject();
+        $userSpecificRateSrch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = '.$userId); 
+        $userSpecificRateSrch->doNotCalculateRecords();
+        $userSpecificRateSrch->doNotLimitRecords();
+        $userSpecificRateSrch->addMultipleFields(array('trr_rate as user_rule_rate','taxrule_id'));
+        $userSpecificSubQuery = $userSpecificRateSrch->getQuery(); 
+        
+        $srch = TaxRule::getSearchObject();
+        $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', "taxRule.".TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
+        $srch->joinTable('(' . $userSpecificSubQuery . ')', 'LEFT OUTER JOIN', 'user_specific_rule_rate.taxrule_id = taxRule.taxrule_id', 'user_specific_rule_rate');
+        $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_taxstr_id = taxstr_id');
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$this->siteLangId);
+        $srch->joinTable(TaxRuleLocation::DB_TBL, 'LEFT JOIN', TaxRuleLocation::tblFld('taxrule_id') . '= taxRule.' . TaxRule::tblFld('id'),'trloc');
+        
+        $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'from_st.state_id = trloc.taxruleloc_from_state_id', 'from_st');
+        $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'from_st_l.statelang_state_id = from_st.state_id  AND from_st_l.statelang_lang_id = ' . $this->siteLangId, 'from_st_l');
+
+        $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'from_c.country_id = trloc.taxruleloc_from_country_id', 'from_c');
+        $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'from_c_l.countrylang_country_id = from_c.country_id  AND from_c_l.countrylang_lang_id = ' . $this->siteLangId, 'from_c_l');
+        
+        $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'to_st.state_id = trloc.taxruleloc_to_state_id', 'to_st');
+        $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'to_st_l.statelang_state_id=to_st.state_id AND to_st_l.statelang_lang_id = ' . $this->siteLangId, 'to_st_l');
+
+        $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'to_c.country_id = trloc.taxruleloc_to_country_id', 'to_c');
+        $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'to_c_l.countrylang_country_id = to_c.country_id AND to_c_l.countrylang_lang_id = ' . $this->siteLangId, 'to_c_l');
+        
+        $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);
+       
+        $srch->addMultipleFields(array('taxRule.taxrule_id', 'taxstr_name','taxstr_is_combined','taxrule_name', 'trr_rate','taxrule_taxcat_id','taxruleloc_type','IFNULL(from_c_l.country_name, from_c.country_code) as from_country', 'GROUP_CONCAT(DISTINCT IFNULL(from_st_l.state_name, from_st.state_identifier)) as from_state','IFNULL(to_c_l.country_name, to_c.country_code) as to_country', 'GROUP_CONCAT(DISTINCT IFNULL(to_st_l.state_name, to_st.state_identifier)) as to_state','user_specific_rule_rate.user_rule_rate'));
+        $srch->addGroupBy("taxRule.".TaxRule::tblFld('id'));
+               
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $srch->addOrder('taxrule_name', 'ASC');
+        
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+       
+        $rulesIds = array_column($records, 'taxrule_id');      
+        $combinedData = [];
+        
+        if(!empty($rulesIds)){
+            $userSpecificCombiRateSrch = TaxRule::getCombinedTaxSearchObject();
+            $userSpecificCombiRateSrch->addCondition('taxruledet_user_id', '=', $userId);
+            $userSpecificCombiRateSrch->addCondition('taxruledet_taxrule_id', 'IN', $rulesIds);
+            $userSpecificCombiRateSrch->doNotCalculateRecords();
+            $userSpecificCombiRateSrch->doNotLimitRecords();
+            $userSpecificCombiRateSrch->addMultipleFields(array('taxruledet_rate as user_rate','taxruledet_taxrule_id','taxruledet_taxstr_id'));
+            $userSpecificCombiSubQuery = $userSpecificCombiRateSrch->getQuery();       
+
+            $combinedTaxSrch = TaxRule::getCombinedTaxSearchObject();
+            $combinedTaxSrch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'tc.taxruledet_taxstr_id = taxstr_id');
+            $combinedTaxSrch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$this->siteLangId);
+            $combinedTaxSrch->addCondition('tc.taxruledet_taxrule_id', 'IN', $rulesIds);
+            $combinedTaxSrch->addCondition('tc.taxruledet_user_id', '=', 0);
+            $combinedTaxSrch->joinTable('(' . $userSpecificCombiSubQuery . ')', 'LEFT OUTER JOIN', 'user_specific_rate.taxruledet_taxrule_id = tc.taxruledet_taxrule_id and user_specific_rate.taxruledet_taxstr_id = tc.taxruledet_taxstr_id', 'user_specific_rate');
+            $combinedTaxSrch->addMultipleFields(array('taxstr_id','taxstr_is_combined','taxruledet_rate','tc.taxruledet_taxrule_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name','user_specific_rate.user_rate'));
+            $combinedTaxSrch->getQuery();        
+            $combinedData = TaxRule::groupDataByKey(FatApp::getDb()->fetchAll($combinedTaxSrch->getResultSet()),'taxruledet_taxrule_id');             
+        }     
+        
+        $this->set("arr_listing", $records);
+        $this->set("combinedData", $combinedData);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', FatApp::getPostedData());     
+        $this->_template->render(false, false);
+    }
+    
+    private function getTaxRulesSearchForm($taxCatId)
+    {
+        $frm = new Form('frmSearchTaxRules');
+        $frm->addHiddenField('', 'taxCatId', $taxCatId);
+        return $frm;
     }
     
     public function editTaxRuleForm($taxRuleId)
