@@ -13,7 +13,12 @@ class Tax extends MyAppModel
 
     private const TAX_RATE_CACHE_KEY_NAME = "taxRateCache_";
 
-    private $db;
+    private $fromCountryId = 0;
+    private $fromStateId  = 0;
+    private $toCountryId  = 0;
+    private $toStateId  = 0;
+
+    private $adminAddress = [];
 
     public const TYPE_PERCENTAGE = 1;
     public const TYPE_FIXED = 0;
@@ -200,12 +205,10 @@ class Tax extends MyAppModel
      *
      * @param  int $productId
      * @param  int $userId
-     * @param  int $langId
-     * @param  int $userCountry
-     * @param  int $userState
+     * @param  int $langId   
      * @return array
      */
-    public function getTaxRates(int $productId, int $userId, int $langId, int $userCountry = 0, int $userState = 0): array
+    public function getTaxRates(int $productId, int $userId, int $langId): array
     {
         $productId = Fatutility::int($productId);
         $userId = Fatutility::int($userId);
@@ -214,22 +217,32 @@ class Tax extends MyAppModel
         $taxRates = array();
         $srch = self::getTaxCatObjByProductId($productId, $langId);
         $srch->addCondition('ptt_product_id', '=', $productId, 'AND');
+
         if (0 == $activatedTaxServiceId) {
             $srch->joinTable(TaxRuleLocation::DB_TBL, 'LEFT JOIN', 'taxLoc.taxruleloc_taxcat_id = ptt_taxcat_id', 'taxLoc');
             $srch->joinTable(TaxRule::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_id = taxLoc.taxruleloc_taxrule_id', 'taxRule');
             $srch->joinTable(TaxRule::DB_RATES_TBL, 'LEFT JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
-            if ($userCountry > 0 && $userState <= 0) {
-                $cond = $srch->addCondition('taxruleloc_to_country_id', '=', $userCountry, 'AND');
+
+            if ($this->fromCountryId > 0 && $this->fromStateId <= 0) {
+                $cond = $srch->addCondition('taxruleloc_from_country_id', '=', $this->fromCountryId, 'AND');
+                $cond->attachCondition('taxruleloc_from_country_id', '=', -1, 'OR');
+            }
+
+            if ($this->fromStateId > 0) {
+                $srch->addDirectCondition('(taxruleloc_from_country_id = -1 or (taxruleloc_from_country_id = ' . $this->fromCountryId . ' and taxruleloc_from_state_id = ' . $this->fromStateId . ') OR (taxruleloc_from_country_id = ' . $this->fromCountryId . ' and taxruleloc_from_state_id = -1))', 'AND');
+            }
+            if ($this->toCountryId > 0 && $this->toStateId <= 0) {
+                $cond = $srch->addCondition('taxruleloc_to_country_id', '=', $this->toCountryId, 'AND');
                 $cond->attachCondition('taxruleloc_to_country_id', '=', -1, 'OR');
             }
-            if ($userState > 0) {
-                $srch->addDirectCondition('(taxruleloc_to_country_id = -1 or (taxruleloc_to_country_id = ' . $userCountry . ' and ((taxruleloc_type = ' . TaxRule::TYPE_INCLUDE_STATES . ' AND taxruleloc_to_state_id = ' . $userState . ') OR (taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' AND taxruleloc_to_state_id = -1) OR (taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' AND taxruleloc_to_state_id != ' . $userState . ' and (select count(*) from ' . TaxRuleLocation::DB_TBL . ' where taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' and taxruleloc_to_state_id = ' . $userState . ' and taxruleloc_taxcat_id = ptt.ptt_taxcat_id) = 0))))', 'AND');
+            if ($this->toStateId > 0) {
+                $srch->addDirectCondition('(taxruleloc_to_country_id = -1 or (taxruleloc_to_country_id = ' . $this->toCountryId . ' and ((taxruleloc_type = ' . TaxRule::TYPE_INCLUDE_STATES . ' AND taxruleloc_to_state_id = ' . $this->toStateId . ') OR (taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' AND taxruleloc_to_state_id = -1) OR (taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' AND taxruleloc_to_state_id != ' . $this->toStateId . ' and (select count(*) from ' . TaxRuleLocation::DB_TBL . ' where taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' and taxruleloc_to_state_id = ' . $this->toStateId . ' and taxruleloc_taxcat_id = ptt.ptt_taxcat_id) = 0))))', 'AND');
             }
-            $srch->addMultipleFields(array('*', '(CASE WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = -1 THEN 99 WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = ' . $userCountry . ' THEN 98 ELSE taxruleloc_type END) AS displayOrder'));
+            $srch->addMultipleFields(array('*', '(CASE WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = -1 THEN 99 WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = ' . $this->toCountryId . ' THEN 98 ELSE taxruleloc_type END) AS displayOrder'));
             $srch->addGroupBy('taxrule_id');
             $srch->addOrder('displayOrder', 'ASC');
         }
-        //echo $srch->getQuery();
+
         $srch->setPageSize(1);
         $res = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($res);
@@ -326,6 +339,7 @@ class Tax extends MyAppModel
 
         $activatedTaxServiceId = static::getActivatedServiceId();
 
+        $shipFromCountryId = 0;
         $shipFromStateId = 0;
         $shipToStateId = 0;
         $shipToCountryId = 0;
@@ -339,11 +353,26 @@ class Tax extends MyAppModel
         }
 
         if (array_key_exists('shippingAddress', $extraInfo)) {
-            $shopInfo = Shop::getAttributesByUserId($sellerId, array('shop_state_id', 'shop_id', 'shop_identifier'));
+            $shopInfo = Shop::getAttributesByUserId($sellerId, array('shop_state_id', 'shop_country_id', 'shop_id', 'shop_identifier'));
             $shipFromStateId = $shopInfo['shop_state_id'];
+            $shipFromCountryId = $shopInfo['shop_country_id'];
         }
 
-        $taxCategoryRow = $this->getTaxRates($productId, $sellerId, $langId, $shipToCountryId, $shipToStateId);
+        $fromAddress = [];
+        if (!$extraInfo['shippedBySeller']) {
+            $fromAddress = $this->adminAddress;
+            if (empty($fromAddress)) {
+                $fromAddress = $this->adminAddress = Admin::getAddress($langId);
+            }
+            $shipFromCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
+            $shipFromStateId = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 0);
+        }
+
+        $this->setFromCountryId($shipFromCountryId);
+        $this->setFromStateId($shipFromStateId);
+        $this->setToCountryId($shipToCountryId);
+        $this->setToStateId($shipToStateId);
+        $taxCategoryRow = $this->getTaxRates($productId, $sellerId, $langId);
 
         if (empty($taxCategoryRow)) {
             $message = Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId);
@@ -417,10 +446,10 @@ class Tax extends MyAppModel
                 $fields = array('shop_postalcode', 'shop_address_line_1', 'shop_address_line_2', 'shop_city', 'state_name', 'state_code', 'country_code');
                 $address = Shop::getShopAddress($shopInfo['shop_id'], true, $langId, $fields);
                 $fromAddress = $this->formatAddress($address, 'shop');
-            } else {
+            } /* else {
                 $fromAddress = Admin::getAddress($langId);
                 $shipFromStateId = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 0);
-            }
+            } */
             $toAddress = $this->formatAddress($extraInfo['shippingAddress']);
 
             $itemsArr = [];
@@ -539,17 +568,17 @@ class Tax extends MyAppModel
         $combinedData = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         if (!empty($combinedData)) {
-            foreach ($combinedData as $dataKey=> $comData) {
+            foreach ($combinedData as $dataKey => $comData) {
                 $taxval = round((($prodPrice * $qty) * $comData['taxruledet_rate']) / 100, 2);
                 $optionsSum += $taxval;
-//                $data['options'][$comData['taxruledet_id']]['taxstr_id'] = $comData['taxstr_id'];
-//                $data['options'][$comData['taxruledet_id']]['name'] = isset($comData['taxstr_name']) ? $comData['taxstr_name'] : $defaultTaxName;
-//                $data['options'][$comData['taxruledet_id']]['percentageValue'] = $comData['taxruledet_rate'];
-//                $data['options'][$comData['taxruledet_id']]['inPercentage'] = 1;
-//                $data['options'][$comData['taxruledet_id']]['value'] = $taxval;
-                
-                
-                
+                //                $data['options'][$comData['taxruledet_id']]['taxstr_id'] = $comData['taxstr_id'];
+                //                $data['options'][$comData['taxruledet_id']]['name'] = isset($comData['taxstr_name']) ? $comData['taxstr_name'] : $defaultTaxName;
+                //                $data['options'][$comData['taxruledet_id']]['percentageValue'] = $comData['taxruledet_rate'];
+                //                $data['options'][$comData['taxruledet_id']]['inPercentage'] = 1;
+                //                $data['options'][$comData['taxruledet_id']]['value'] = $taxval;
+
+
+
                 $data['options'][$dataKey]['taxstr_id'] = $comData['taxstr_id'];
                 $data['options'][$dataKey]['name'] = isset($comData['taxstr_name']) ? $comData['taxstr_name'] : $defaultTaxName;
                 $data['options'][$dataKey]['percentageValue'] = $comData['taxruledet_rate'];
@@ -707,6 +736,52 @@ class Tax extends MyAppModel
         $pluginObj = new Plugin();
         return (int) $pluginObj->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_id');
     }
+
+
+    /**
+     * setFromCountryId
+     *
+     * @param  mixed $countryId
+     * @return int
+     */
+    public function setFromCountryId(int $countryId): void
+    {
+        $this->fromCountryId  = $countryId;
+    }
+
+    /**
+     * setFromStateId
+     *
+     * @param  mixed $stateId
+     * @return void
+     */
+    public function setFromStateId(int $stateId): void
+    {
+        $this->fromStateId  = $stateId;
+    }
+
+    /**
+     * setToCountryId
+     *
+     * @param  mixed $countryId
+     * @return int
+     */
+    public function setToCountryId(int $countryId): void
+    {
+        $this->toCountryId  = $countryId;
+    }
+
+    /**
+     * setToStateId
+     *
+     * @param  mixed $stateId
+     * @return void
+     */
+    public function setToStateId(int $stateId = 0): void
+    {
+        $this->toStateId  = $stateId;
+    }
+
 
     /**
      * getAttributesByCode
