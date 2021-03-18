@@ -4,7 +4,7 @@ class DummyController extends AdminBaseController
 {
     public function index()
     {
-       /*  $langId = 1;
+        /*  $langId = 1;
         $type = 1;
         $srch = Labels::getSearchObject($langId, ['LEFT(label_key, 3) as keyfilename']);
         $srch->addCondition('label_type', '=', $type);
@@ -14,16 +14,35 @@ class DummyController extends AdminBaseController
         $rs = $srch->getResultSet();
         echo $srch->getQuery(); exit; */
 
+        $productId = 1;
+        $sellerId = 3;
+        $langId = 1;
+
+        $shipFromCountryId = 99;
+        $shipFromStateId = 1486;
+        $shipToStateId = 99;
+        $shipToCountryId = 1486;
+
+        $taxObj = new Tax();
+        $taxObj->setFromCountryId($shipFromCountryId);
+        $taxObj->setFromStateId($shipFromStateId);
+        $taxObj->setToCountryId($shipToCountryId);
+        $taxObj->setToStateId($shipToStateId);
+        $taxCategoryRow = $taxObj->getTaxRates($productId, $sellerId, $langId);
+
+        CommonHelper::printArray($taxCategoryRow);
+        exit;
 
 
         $blogPostCategoryObj = new BlogPostCategory();
-        echo "d".$blogPostCategoryObj->getParentTreeStructure(9, 0, 'test');
+        echo "d" . $blogPostCategoryObj->getParentTreeStructure(9, 0, 'test');
         die;
-         
+
 
         $orderObj = new Orders();
         $orderDetail = $orderObj->getOrderById('O1605086396', 1);
-        CommonHelper::printArray($orderDetail, true); exit;
+        CommonHelper::printArray($orderDetail, true);
+        exit;
 
         $countryId = '223';
         $stateId = '2998';

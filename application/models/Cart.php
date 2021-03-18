@@ -643,7 +643,9 @@ class Cart extends FatModel
 
         if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && $this->includeTax == true) {
             $tax = new Tax();
-            $taxCategoryRow = $tax->getTaxRates($sellerProductRow['product_id'], $sellerProductRow['selprod_user_id'], $siteLangId, $shipToCountryId, $shipToStateId);
+            $tax->setToCountryId($shipToCountryId);
+            $tax->setToStateId($shipToStateId);
+            $taxCategoryRow = $tax->getTaxRates($sellerProductRow['product_id'], $sellerProductRow['selprod_user_id'], $siteLangId);
             if (array_key_exists('trr_rate', $taxCategoryRow) && 0 == Tax::getActivatedServiceId()) {
                 $sellerProductRow['theprice'] = round($sellerProductRow['theprice'] / (1 + ($taxCategoryRow['trr_rate'] / 100)), 2);
             } else {
@@ -2130,5 +2132,5 @@ class Cart extends FatModel
     public function excludeTax()
     {
         $this->includeTax = false;
-    }
+    }    
 }
