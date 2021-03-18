@@ -117,11 +117,11 @@ $(document).ready(function(){
 		if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         $(frm.btn_submit).attr('disabled', 'disabled');
-        $.systemMessage(langLbl.processing,'alert--process', false);
+        $.systemMessage(langLbl.processing,'alert--process', true);
 		fcom.ajax(fcom.makeUrl( 'Account', 'validateOtp', [updateToDbFrm]), data, function(t) {
             t = $.parseJSON(t);
             if(1 > t.status){
-                $.systemMessage(t.msg,'alert--danger', false);
+                $.systemMessage(t.msg,'alert--danger', true);
                 invalidOtpField();
                 $(frm.btn_submit).removeAttr('disabled');
                 return false;
@@ -132,7 +132,7 @@ $(document).ready(function(){
                 $(lastFormElement).after(t.html);
                 stylePhoneNumberFld();
             } else {
-                $.systemMessage(t.msg,'alert--success', false);
+                $.systemMessage(t.msg,'alert--success', true);
                 changePhoneNumberForm();
             }
         });

@@ -203,6 +203,7 @@ validateOtp = function(frm) {
         if (1 == t.status) {
             window.location.href = t.redirectUrl;
         } else {
+            $.systemMessage(t.msg, 'alert--danger', true);
             invalidOtpField();
         }
     });

@@ -51,6 +51,7 @@ Fixes:
     => 051054 - If only one product is there then condition list not should not come in filter 
     => 051003 - banner image getting repeated as width increases
     => 051070 - admin> cms> import instructions> identifiers are not manageable
+    => 051206 - Signup with otp >> verify your number >> enter wrong otp>> some error message should be there 
     
 Enhancements :
    => Make provision to made seller

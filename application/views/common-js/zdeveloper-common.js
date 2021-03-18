@@ -780,16 +780,15 @@ function defaultSetUpLogin(frm, v) {
         $('#facebox .content').addClass('fbminwidth');
     });
 
-    $.systemMessage = function (data, cls, autoClose) {
+    $.systemMessage = function (data, cls, autoClose = true) {
         if ("" == data) {
             return;
         }
 
         if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
             autoClose = false;
-        } else {
-            autoClose = true;
         }
+        
         initialize();
         $.systemMessage.loading();
         $.systemMessage.fillSysMessage(data, cls, autoClose);
