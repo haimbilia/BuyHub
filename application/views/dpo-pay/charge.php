@@ -50,7 +50,7 @@ if (null != $btn) {
             }
             $("#paymentFormElement-js").replaceWith(json.html);
             $("#paymentFormElement-js").removeClass('text-center');
-            $("form#paymentForm-js").submit();
+            window.location.href = $("form#paymentForm-js").attr('action');
         });
     }
 </script>

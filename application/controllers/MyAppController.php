@@ -124,7 +124,6 @@ class MyAppController extends FatController
                 'AddProductToFavourite' => Labels::getLabel('LBL_Add_Product_To_favourite_list', $this->siteLangId),
                 'MovedSuccessfully' => Labels::getLabel('LBL_Moved_Successfully', $this->siteLangId),
                 'RemovedSuccessfully' => Labels::getLabel('LBL_Removed_Successfully', $this->siteLangId),
-                'siteCurrencyId' => $this->siteCurrencyId,
                 'controllerName' => $controllerName,
                 'confirmDeletePersonalInformation' => Labels::getLabel('LBL_Do_you_really_want_to_remove_all_your_personal_information', $this->siteLangId),
                 'preferredDimensions' => Labels::getLabel('LBL_Preferred_Dimensions_%s', $this->siteLangId),
@@ -172,6 +171,8 @@ class MyAppController extends FatController
         } else {
             $jsVariables =  unserialize($jsVariablesCache);
         }
+        
+        $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
 
         $themeId = FatApp::getConfig('CONF_FRONT_THEME', FatUtility::VAR_INT, 1);
 

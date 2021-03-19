@@ -202,15 +202,21 @@ class ProductsController extends MyAppController
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $headerFormParamsAssocArr);
 
         $headerFormParamsAssocArr['doNotJoinSpecialPrice'] = true;
-        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
-        $prodSrchObj->doNotCalculateRecords();
 
-        /* Categories Data[ */
+        /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
         $categoriesArr = array();
         if (empty($keyword)) {
-            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $prodSrchObj, $cacheKey);
+            $catCriteria = $headerFormParamsAssocArr;
+            $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
+
+            $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
+            $catProdSrchObj->doNotCalculateRecords();
+            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
         }
         /* ] */
+
+        $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
+        $prodSrchObj->doNotCalculateRecords();
 
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
@@ -376,12 +382,12 @@ class ProductsController extends MyAppController
         }
 
         $prodSrchObj = new ProductSearch($this->siteLangId);
-
+        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id');
         /* fetch requested product[ */
         $prodSrch = clone $prodSrchObj;
         $prodSrch->setLocationBasedInnerJoin(false);
         $prodSrch->setGeoAddress();
-        $prodSrch->setDefinedCriteria(0, 0, array(), false);
+        $prodSrch->setDefinedCriteria(0, 0, array('product_id' => $productId), false);
         $prodSrch->joinProductToCategory();
         $prodSrch->joinShopSpecifics();
         $prodSrch->joinProductSpecifics();
@@ -431,7 +437,6 @@ class ProductsController extends MyAppController
                 'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age', 'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type'
             )
         );
-        
         $productRs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($productRs);
         /* ] */
@@ -1326,7 +1331,7 @@ class ProductsController extends MyAppController
         // $frm->addSubmitButton(null, 'btnProductBuy', Labels::getLabel('LBL_Buy_Now', $formLangId ), array( 'id' => 'btnProductBuy' ) );
         //$frm->addSubmitButton(null, 'btnAddToCart', Labels::getLabel('LBL_Add_to_Cart', $formLangId), array( 'id' => 'btnAddToCart' ));
         // $frm->addHTML(null, 'btnProductBuy', '<button name="btnProductBuy" type="submit" id="btnProductBuy" class="btn btn-brand block-on-mobile add-to-cart--js btnBuyNow"> ' . Labels::getLabel('LBL_Buy_Now', $formLangId) . '</button>');
-        $frm->addHTML(null, 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('LBL_Add_to_Cart', $formLangId) . '</button>');
+        $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('LBL_Add_to_Cart', $formLangId) . '</button>');
         $frm->addHiddenField('', 'selprod_id');
         return $frm;
     }
@@ -1448,7 +1453,7 @@ class ProductsController extends MyAppController
                 'pclick_session_id' => session_id(),
             );
 
-            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, '', $promotionClickData);
+            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, [], $promotionClickData);
             $clickId = FatApp::getDb()->getInsertId();
 
             $promotionClickChargesData = array(
@@ -1856,8 +1861,7 @@ class ProductsController extends MyAppController
             if ($pageSize) {
                 $srch->setPageSize($pageSize);
             }
-            /* echo $srch->getQuery();
-            exit; */
+
             $rs = $srch->getResultSet();
             $db = FatApp::getDb();
             $products = $db->fetchAll($rs);

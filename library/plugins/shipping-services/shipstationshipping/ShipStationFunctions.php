@@ -15,6 +15,16 @@ trait ShipStationFunctions
         }
         return (true === $decodeJson ? json_decode($this->resp, true) : $this->resp);
     }
+    
+    /**
+     * unsetResponse
+     *
+     * @return void
+     */
+    public function unsetResponse(): void
+    {
+        $this->resp = null;
+    }
 
     /**
      * formatError

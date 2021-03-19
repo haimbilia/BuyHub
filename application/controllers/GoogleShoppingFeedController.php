@@ -36,7 +36,8 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
      */
     private function init()
     {
-        $this->googleShoppingFeed = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $userId = UserAuthentication::getLoggedUserId();
+        $this->googleShoppingFeed = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $userId], $error, $this->siteLangId);
         if (false === $this->googleShoppingFeed) {
             $this->setError($error, 'Seller');
         }
@@ -625,11 +626,12 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             'currency_code' => strtoupper(Currency::getAttributesById($this->siteCurrencyId, 'currency_code')),
             'data' => $productData
         ];
+
         $response = $this->googleShoppingFeed->publishBatch($data);
-        if (false === $response['status']) {
+        if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status'] ) {
             LibHelper::dieJsonError($this->googleShoppingFeed->getError());
         }
-
+        
         $dataToUpdate = [
             'adsbatch_status' => AdsBatch::STATUS_PUBLISHED,
             'adsbatch_synced_on' => date('Y-m-d H:i:s')

@@ -106,7 +106,9 @@ class StripeConnect extends PaymentMethodBase
         }
 
         if (0 < $userId) {
-            if (false === $this->loadLoggedUserInfo($userId)) {
+            if (false === $isSeller && false === $this->loadLoggedUserInfo($userId)) {
+                return false;
+            } else if (false === $this->loadSellerInfo($userId)) {
                 return false;
             }
         }

@@ -3,7 +3,7 @@ class DpoPayController extends PaymentController
 {
     public const KEY_NAME = "Dpo";
     private $userId = 0;
-    private $payWeb3;
+    private $orderPaymentObj;
 
     /**
      * __construct
@@ -38,10 +38,6 @@ class DpoPayController extends PaymentController
         if (false === $this->plugin->init($this->userId)) {
             $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
         }
-
-        $this->settings = $this->plugin->getSettings();
-        $this->paygateId = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_paygate_id'] : $this->settings['paygate_id'];
-        $this->encryptionKey = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_encryption_key'] : $this->settings['encryption_key'];
     }
 
     /**
@@ -68,19 +64,8 @@ class DpoPayController extends PaymentController
                 $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
             }
 
-            $this->payWeb3 = $this->plugin->getResponse();
-            if (isset($this->payWeb3->lastError) && !empty($this->payWeb3->lastError)) {
-                $this->setErrorAndRedirect($this->payWeb3->lastError, FatUtility::isAjaxCall());
-            }
-
-            if (isset($this->payWeb3->processRequest)) {
-                $isValid = $this->payWeb3->validateChecksum($this->payWeb3->initiateResponse);
-                if (false == $isValid) {
-                    $this->setErrorAndRedirect(Labels::getLabel('MSG_INVALID_CHECKSUM', $this->siteLangId), FatUtility::isAjaxCall());
-                }
-                $frm = $this->getPaymentForm($orderId, true);
-                $processRequest = true;
-            }
+            $frm = $this->getPaymentForm($orderId, true);
+            $processRequest = true;
         }
 
         $frm->fill(['orderId' => $orderId]);
@@ -102,6 +87,26 @@ class DpoPayController extends PaymentController
         }
         $this->_template->render(true, false);
     }
+    
+    /**
+     * paymentFailedAndRedirect
+     *
+     * @param  mixed $orderId
+     * @param  mixed $msg
+     * @param  mixed $response
+     * @return void
+     */
+    public function paymentFailedAndRedirect(string $orderId, string $msg, array $response)
+    {
+        $log = [
+            'msg' => $msg,
+            'response' => $response,
+        ];
+        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($log));
+        $this->orderPaymentObj->addOrderPaymentComments($msg);
+        Message::addErrorMessage($msg);
+        FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+    }
 
     /**
      * callback
@@ -111,38 +116,40 @@ class DpoPayController extends PaymentController
      */
     public function callback(string $orderId)
     {
-        $response = FatApp::getPostedData();
-        $orderPaymentObj = new OrderPayment($orderId);
-        if (false === $this->plugin->validateResponse($orderId, $response)) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+        $response = FatApp::getQueryStringData();
 
+        $this->orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
+        if ($response['PnrID'] != $response['CompanyRef'] || $orderId != $response['CompanyRef']) {
+            $msg = Labels::getLabel('LBL_INVALID_PAYMENT.', $this->siteLangId);
+            $this->paymentFailedAndRedirect($orderId, $msg, $response);
+        }
+
+        $orderInfo = $this->orderPaymentObj->getOrderPrimaryinfo();
+        if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
+            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->paymentFailedAndRedirect($orderId, $msg, $response);
+        }
+
+        if (false === $this->plugin->validateResponse($response)) {
             $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
-
-            $orderPaymentObj->addOrderPaymentComments($msg);
-            Message::addErrorMessage($msg);
-            FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+            $this->paymentFailedAndRedirect($orderId, $msg, $response);
         }
 
-        $this->queryResponse = $this->plugin->getResponse();
-        if (false === $this->plugin->validateTxnStatus($this->queryResponse['TRANSACTION_STATUS'])) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($this->queryResponse));
+        $paymentAmount = $this->orderPaymentObj->getOrderPaymentGatewayAmount();
+        $queryResponse = $this->plugin->getResponse();
+        $logResponse = [
+            'callbackResponse' => $response,
+            'queryResponse' => $queryResponse,
+        ];
 
-            $desc = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
-            $desc = isset($this->queryResponse['RESULT_DESC']) ? $this->queryResponse['RESULT_DESC'] : $desc;
-
-            $msg = Labels::getLabel("MSG_TXN_STATUS_{STATUS}._{DESC}", $this->siteLangId);
-            $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $this->plugin->getError(), '{DESC}' => $desc]);
-
-            $orderPaymentObj->addOrderPaymentComments($msg);
-            Message::addErrorMessage($msg);
-            FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+        if ($paymentAmount != $queryResponse->TransactionFinalAmount || $this->systemCurrencyCode != $queryResponse->TransactionFinalCurrency) {
+            $msg = Labels::getLabel('LBL_PAYMENT_MISMATCHED.', $this->langId);
+            $this->paymentFailedAndRedirect($orderId, $msg, $logResponse);
         }
-
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
         /* Recording Payment in DB */
-        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $this->queryResponse['TRANSACTION_ID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($this->queryResponse));
+        $this->orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['TransID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($logResponse));
         /* End Recording Payment in DB */
         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }
@@ -156,18 +163,11 @@ class DpoPayController extends PaymentController
      */
     private function getPaymentForm(string $orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('DpoPay', 'charge', array($orderId)) : $this->payWeb3::$process_url;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('DpoPay', 'charge', array($orderId)) : $this->plugin->getPaymenUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
-        if (true === $processRequest && isset($this->payWeb3->processRequest)) {
-            /*
-            * If the checksums match loop through the returned fields and create the redirect from
-            */
-            foreach ($this->payWeb3->processRequest as $name => $value) {
-                $frm->addHiddenField('', $name, $value);
-            }
-        } else {
+        if (false === $processRequest) {
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
         }
 
