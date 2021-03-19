@@ -56,6 +56,7 @@ Fixes:
     => 051003 - banner image getting repeated as width increases
     => 051070 - admin> cms> import instructions> identifiers are not manageable
     => 051091 - on the category page, google is undefined error coming in browser console
+    => 051261 - issue with editor> long text is not accepting and some formatting issue
     
 Enhancements :
    => Make provision to made seller
