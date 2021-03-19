@@ -747,6 +747,11 @@ class UsersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        /* Restrict to change password for demo user on demo URL. */
+        if (CommonHelper::demoUrl() && 4 == $user_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->adminLangId));
+        }
+
         $userObj = new User($user_id);
         $srch = $userObj->getUserSearchObj(array('user_id'));
         $rs = $srch->getResultSet();

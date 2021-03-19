@@ -887,6 +887,12 @@ class GuestUserController extends MyAppController
         if ($userId < 1 && strlen(trim($token)) < 20) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_REQUEST_IS_INVALID_OR_EXPIRED', $this->siteLangId));
         }
+
+        /* Restrict to change password for demo user on demo URL. */
+        if (CommonHelper::demoUrl() && 4 == $userId) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId));
+        }
+
         $frm = $this->getResetPwdForm($userId, $token);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 

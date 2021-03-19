@@ -289,7 +289,13 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        $userObj = new User(UserAuthentication::getLoggedUserId());
+        $userId = UserAuthentication::getLoggedUserId();
+        /* Restrict to change password for demo user on demo URL. */
+        if (CommonHelper::demoUrl() && 4 == $userId) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId));
+        }
+
+        $userObj = new User($userId);
         $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password'));
         $rs = $srch->getResultSet();
 
