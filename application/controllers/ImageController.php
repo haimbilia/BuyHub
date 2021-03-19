@@ -602,15 +602,16 @@ class ImageController extends FatController
         $default_image = '';
 
         switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
+            case 'THUMB':                
+                $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 120);
+                $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 68);
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
             default:
-                $h = 37;
-                $w = 168;
-                AttachedFile::displayOriginalImage($image_name, $default_image);
+                $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 120);
+                $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 68);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                // AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
         }
     }
