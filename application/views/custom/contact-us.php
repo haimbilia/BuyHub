@@ -53,7 +53,11 @@ $fld->developerTags['col'] = 12;
                             <div class="border rounded p-4 h-100">
                                 <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId);?>
                                 </h6>
-                                <p class=""><?php echo FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');?>
+                                <p class="">
+                                    <?php 
+                                        $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                                        echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                                    ?>
                                     <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId);?>
                                 </p>
 
@@ -61,7 +65,10 @@ $fld->developerTags['col'] = 12;
 
                                 <h6><?php echo Labels::getLabel('LBL_Fax', $siteLangId);?>
                                 </h6>
-                                <p class=""><?php echo FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, '');?>
+                                <p class="">
+                                    <?php 
+                                    $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
+                                    echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, '');?>
                                     <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId);?>
                                 </p>
 

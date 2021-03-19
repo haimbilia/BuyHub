@@ -52,6 +52,7 @@ Fixes:
     => 051003 - banner image getting repeated as width increases
     => 051070 - admin> cms> import instructions> identifiers are not manageable
     => 051206 - Signup with otp >> verify your number >> enter wrong otp>> some error message should be there 
+    => 051404 - On Contact us & Footer country code should be there with mobile number
     
 Enhancements :
    => Make provision to made seller
