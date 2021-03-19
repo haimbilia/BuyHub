@@ -229,12 +229,14 @@ class Tax extends MyAppModel
             }
 
             if ($this->fromStateId > 0) {
-                $srch->addDirectCondition('(taxruleloc_from_country_id = -1 or (taxruleloc_from_country_id = ' . $this->fromCountryId . ' and taxruleloc_from_state_id = ' . $this->fromStateId . ') OR (taxruleloc_from_country_id = ' . $this->fromCountryId . ' and taxruleloc_from_state_id = -1))', 'AND');
+                $srch->addDirectCondition('(taxruleloc_from_country_id = -1 or (taxruleloc_from_country_id = ' . $this->fromCountryId . ' and (taxruleloc_from_state_id = ' . $this->fromStateId . ' OR taxruleloc_from_state_id = -1)))', 'AND');
             }
+
             if ($this->toCountryId > 0 && $this->toStateId <= 0) {
                 $cond = $srch->addCondition('taxruleloc_to_country_id', '=', $this->toCountryId, 'AND');
                 $cond->attachCondition('taxruleloc_to_country_id', '=', -1, 'OR');
             }
+
             if ($this->toStateId > 0) {
                 $srch->addDirectCondition('(taxruleloc_to_country_id = -1 or (taxruleloc_to_country_id = ' . $this->toCountryId . ' and ((taxruleloc_type = ' . TaxRule::TYPE_INCLUDE_STATES . ' AND taxruleloc_to_state_id = ' . $this->toStateId . ') OR (taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' AND taxruleloc_to_state_id = -1) OR (taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' AND taxruleloc_to_state_id != ' . $this->toStateId . ' and (select count(*) from ' . TaxRuleLocation::DB_TBL . ' where taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' and taxruleloc_to_state_id = ' . $this->toStateId . ' and taxruleloc_taxcat_id = ptt.ptt_taxcat_id) = 0))))', 'AND');
             }
@@ -244,6 +246,7 @@ class Tax extends MyAppModel
         }
 
         $srch->setPageSize(1);
+        // echo $srch->getQuery().'<br>'; 
         $res = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($res);
         if (!is_array($row)) {
@@ -359,7 +362,7 @@ class Tax extends MyAppModel
         }
 
         $fromAddress = [];
-        if (!$extraInfo['shippedBySeller']) {
+        if (array_key_exists('shippedBySeller', $extraInfo) && !$extraInfo['shippedBySeller']) {
             $fromAddress = $this->adminAddress;
             if (empty($fromAddress)) {
                 $fromAddress = $this->adminAddress = Admin::getAddress($langId);
@@ -559,7 +562,7 @@ class Tax extends MyAppModel
         $data['taxCode'] = $taxCategoryRow['taxcat_code'];
 
         $srch = TaxRule::getCombinedTaxSearchObject();
-        $srch->joinTable(TaxStructure::DB_TBL, 'INNER JOIN', 'taxruledet_taxstr_id = taxstr_id');
+        $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
         $srch->addCondition('taxruledet_taxrule_id', '=', $taxCategoryRow['taxrule_id']);
         $srch->addMultipleFields(array('taxstr_id', 'taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
