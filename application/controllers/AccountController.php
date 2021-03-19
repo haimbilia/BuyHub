@@ -3591,12 +3591,12 @@ class AccountController extends LoggedUserController
     public function changePhoneForm($updatePhnFrm = 0)
     {
         $userId = UserAuthentication::getLoggedUserId();
-        $phData = User::getAttributesById($userId, ['user_phone', 'user_country_id']);
+        $phData = User::getAttributesById($userId, ['user_phone_dcode', 'user_phone', 'user_country_id']);
         $updatePhnFrm = empty($updatePhnFrm) ? (empty($phData['user_phone']) ? 1 : 0) : $updatePhnFrm;
 
         $frm = $this->getPhoneNumberForm();
         if (1 > $updatePhnFrm && !empty($phData['user_phone'])) {
-            $frm->fill(['user_phone' => $phData['user_phone']]);
+            $frm->fill($phData);
             $phnFld = $frm->getField('user_phone');
             $phnFld->setFieldTagAttribute('readonly', 'readonly');
         }
@@ -3610,9 +3610,10 @@ class AccountController extends LoggedUserController
         FatUtility::dieJsonSuccess($json);
     }
 
-    private function sendOtp(int $userId, int $dialCode, int $phone)
+    private function sendOtp(int $userId, string $dialCode, int $phone)
     {
         $userObj = new User($userId);
+        $dialCode = ValidateElement::formatDialCode(trim($dialCode));
         $otp = $userObj->prepareUserPhoneOtp($dialCode, $phone);
         if (false == $otp) {
             LibHelper::dieJsonError($userObj->getError());

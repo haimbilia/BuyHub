@@ -129,7 +129,7 @@ $(document).ready(function(){
                 $.systemMessage.close();
                 $(phoneNumberdv + " .otpForm-js").remove();
                 var lastFormElement = phoneNumberdv + ' form:last';
-                $(lastFormElement).after(t.html);
+                $(lastFormElement).html(t.html);
                 stylePhoneNumberFld();
             } else {
                 $.systemMessage(t.msg,'alert--success', true);

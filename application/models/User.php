@@ -1585,7 +1585,7 @@ class User extends MyAppModel
         $data = [
             static::DB_TBL_UPV_PREFIX . 'user_id' => $this->mainTableRecordId,
             static::DB_TBL_UPV_PREFIX . 'otp' => $otp,
-            static::DB_TBL_UPV_PREFIX . 'phone_dcode' => trim($dialCode),
+            static::DB_TBL_UPV_PREFIX . 'phone_dcode' => ValidateElement::formatDialCode(trim($dialCode)),
             static::DB_TBL_UPV_PREFIX . 'phone' => trim($phone),
             static::DB_TBL_UPV_PREFIX . 'expired_on' => date('Y-m-d H:i:s', strtotime("+" . self::OTP_AGE . " minutes", time())),
         ];
