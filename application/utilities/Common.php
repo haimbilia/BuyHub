@@ -100,64 +100,8 @@ class Common
         $headerSrchFrm->fill($paramsAssocArr);
         /* ] */
 
-        $headerRootCatArr = FatCache::get('headerRootCatArr' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-        if ($headerRootCatArr) {
-            $categoriesArr = unserialize($headerRootCatArr);
-        } else {
-            /* SubQuery, Category have products[ */
-            $prodSrchObj = new ProductSearch();
-            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
-            $prodSrchObj->joinProductToCategory($siteLangId);
-            $prodSrchObj->doNotCalculateRecords();
-            $prodSrchObj->doNotLimitRecords();
-            $prodSrchObj->joinSellerSubscription($siteLangId, true);
-            $prodSrchObj->addSubscriptionValidCondition();
-            $prodSrchObj->addGroupBy('prodcat_id');
-            $prodSrchObj->addMultipleFields(array('prodcat_code AS prodrootcat_code', 'count(selprod_id) as productCounts', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_parent'));
-
-            $rs = $prodSrchObj->getResultSet();
-
-            $productRows = FatApp::getDb()->fetchAll($rs);
-
-            $mainRootCategories = FatUtility::int(array_column($productRows, 'prodrootcat_code'));
-
-            $categoriesMainRootArr = array();
-
-            if ($productRows) {
-                $categoriesMainRootArr = array_unique($mainRootCategories);
-                array_flip($categoriesMainRootArr);
-            }
-            /* ] */
-
-            $catSrch = ProductCategory::getSearchObject(false, $siteLangId);
-            $catSrch->addOrder('m.prodcat_active', 'DESC');
-            $catSrch->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as category_name'));
-            $catSrch->addOrder('category_name');
-            $catSrch->doNotCalculateRecords();
-            $catSrch->addCondition('prodcat_active', '=', applicationConstants::YES);
-            $catSrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
-            if ($categoriesMainRootArr) {
-                $catSrch->addCondition('prodcat_id', 'in', $categoriesMainRootArr);
-            }
-            $catSrch->setPageSize(25);
-            $catRs = $catSrch->getResultSet();
-            $categoriesArr = [];
-            while ($row = FatApp::getDb()->fetch($catRs)) {
-                $categoriesArr[$row['prodcat_id']] = strip_tags($row['category_name']);
-            }
-        }
-
-        FatCache::set('headerRootCatArr' . $siteLangId, serialize($categoriesArr), '.txt');
-
-        $template->set('categoriesArr', $categoriesArr);
         $template->set('headerSrchFrm', $headerSrchFrm);
         $template->set('siteLangId', $siteLangId);
-        //$productRootCategoriesArr = $prodCatObj->getCategoriesForSelectBox($siteLangId, 0, true); */
-        //ProductCategory::getRootProdCatAssocArr($siteLangId, 0);
-        /* ob_end_clean();
-        CommonHelper::printArray($data);
-        die(); */
-        //$template->set( 'productRootCategoriesArr', $productRootCategoriesArr );
     }
 
     public static function getSiteSearchForm()

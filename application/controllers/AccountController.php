@@ -967,7 +967,9 @@ class AccountController extends LoggedUserController
         if ($file_row != false) {
             $mode = 'Edit';
         }
-        $this->set('countryIso', User::getUserMeta($userId, 'user_country_iso'));
+
+        $countryIso = Countries::getCountryById($data['user_country_id'], $this->siteLangId, 'country_code');
+        $this->set('countryIso', $countryIso);
         $this->set('data', $data);
         $this->set('frm', $frm);
         $this->set('imgFrm', $imgFrm);
@@ -1043,10 +1045,10 @@ class AccountController extends LoggedUserController
         }
 
         if (false === MOBILE_APP_API_CALL) {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array($userId, 'croped', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array($userId, 'croped', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         } else {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, 'mini', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, 'mini', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         }
         $this->set('file', $profileImg);
@@ -1091,8 +1093,11 @@ class AccountController extends LoggedUserController
             unset($post['user_id']);
         }
 
+
+        $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
+
         if (isset($post['user_phone']) && true == SmsArchive::canSendSms()) {
-            unset($post['user_phone']);
+            unset($post['user_phone'], $post['user_phone_dcode']);
         }
 
         if ($post['user_dob'] == "0000-00-00" || $post['user_dob'] == "" || strtotime($post['user_dob']) == 0) {
@@ -1125,23 +1130,11 @@ class AccountController extends LoggedUserController
         }
         /* ] */
 
-        if (false == SmsArchive::canSendSms()) {
-            $post['user_dial_code'] = FatApp::getPostedData('user_dial_code', FatUtility::VAR_STRING, '');
-            $countryIso = FatApp::getPostedData('user_country_iso', FatUtility::VAR_STRING, '');
-        }
-
         $userObj = new User($userId);
         $userObj->assignValues($post);
         if (!$userObj->save()) {
             $message = Labels::getLabel($userObj->getError(), $this->siteLangId);
             FatUtility::dieJsonError($message);
-        }
-
-        if (false == SmsArchive::canSendSms() && !empty($countryIso)) {
-            $user = clone $userObj;
-            if (false === $user->updateUserMeta('user_country_iso', $countryIso)) {
-                LibHelper::dieJsonError($user->getError());
-            }
         }
 
         $postUserName = isset($post['user_name']) ? $post['user_name'] : '';
@@ -1291,7 +1284,7 @@ class AccountController extends LoggedUserController
         }
 
         $userObj = new User(UserAuthentication::getLoggedUserId());
-        $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_email', 'user_name', 'user_dial_code', 'user_phone'));
+        $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_email', 'user_name', 'user_phone_dcode', 'user_phone'));
         $rs = $srch->getResultSet();
 
         if (!$rs) {
@@ -1310,9 +1303,12 @@ class AccountController extends LoggedUserController
             $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
-        $phone = !empty($data['user_phone']) ? $data['user_dial_code'] . $data['user_phone'] : '';
+        
+        $phone = array_key_exists('user_phone', $data) ? $data['user_phone'] : '';
+        $dialCode = array_key_exists('user_phone_dcode', $data) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $arr = array(
             'user_name' => $data['user_name'],
+            'user_phone_dcode' => $dialCode,
             'user_phone' => $phone,
             'user_email' => $data['credential_email'],
             'user_new_email' => $post['new_email']
@@ -2799,10 +2795,11 @@ class AccountController extends LoggedUserController
         $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
         $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addHiddenField('', 'user_phone_dcode');
         $phoneFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
-        // $phoneFld->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+        $phoneFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
 
         if (User::isAffiliate()) {
             $frm->addTextBox(Labels::getLabel('LBL_Company', $this->siteLangId), 'uextra_company_name');
@@ -3594,18 +3591,18 @@ class AccountController extends LoggedUserController
     public function changePhoneForm($updatePhnFrm = 0)
     {
         $userId = UserAuthentication::getLoggedUserId();
-        $phData = User::getAttributesById($userId, ['user_dial_code', 'user_phone']);
-        $updatePhnFrm = empty($updatePhnFrm) ? empty($phData['user_phone']) ? 1 : 0 : $updatePhnFrm;
+        $phData = User::getAttributesById($userId, ['user_phone_dcode', 'user_phone', 'user_country_id']);
+        $updatePhnFrm = empty($updatePhnFrm) ? (empty($phData['user_phone']) ? 1 : 0) : $updatePhnFrm;
 
         $frm = $this->getPhoneNumberForm();
         if (1 > $updatePhnFrm && !empty($phData['user_phone'])) {
-            $frm->fill(['user_phone' => $phData['user_phone']]);
+            $frm->fill($phData);
             $phnFld = $frm->getField('user_phone');
             $phnFld->setFieldTagAttribute('readonly', 'readonly');
         }
-        $dialCode = isset($phData['user_dial_code']) && !empty($phData['user_dial_code']) ? $phData['user_dial_code'] : '';
-        $this->set('dialCode', $dialCode);
-        $this->set('countryIso', User::getUserMeta($userId, 'user_country_iso'));
+
+        $countryIso = Countries::getCountryById($phData['user_country_id'], $this->siteLangId, 'country_code');
+        $this->set('countryIso', $countryIso);
         $this->set('frm', $frm);
         $this->set('updatePhnFrm', $updatePhnFrm);
         $this->set('siteLangId', $this->siteLangId);
@@ -3613,23 +3610,23 @@ class AccountController extends LoggedUserController
         FatUtility::dieJsonSuccess($json);
     }
 
-    private function sendOtp(int $userId, string $countryIso, string $dialCode, int $phone)
+    private function sendOtp(int $userId, string $dialCode, int $phone)
     {
         $userObj = new User($userId);
-        $dialCode = !empty($dialCode) & '+' != $dialCode[0] ? '+' . $dialCode : $dialCode;
-        $otp = $userObj->prepareUserPhoneOtp($countryIso, $dialCode, $phone);
+        $dialCode = ValidateElement::formatDialCode(trim($dialCode));
+        $otp = $userObj->prepareUserPhoneOtp($dialCode, $phone);
         if (false == $otp) {
             LibHelper::dieJsonError($userObj->getError());
         }
 
         $userData = $userObj->getUserInfo('user_name', false, false);
-        $phone = $dialCode . $phone;
         $obj = clone $userObj;
-        if (false === $obj->sendOtp($phone, $userData['user_name'], $otp, $this->siteLangId)) {
+        if (false === $obj->sendOtp($dialCode . $phone, $userData['user_name'], $otp, $this->siteLangId)) {
             LibHelper::dieJsonError($obj->getError());
         }
         return true;
     }
+
     public function getOtp($updatePhnFrm = 0)
     {
         $frm = $this->getPhoneNumberForm();
@@ -3639,10 +3636,9 @@ class AccountController extends LoggedUserController
             LibHelper::dieJsonError(current($frm->getValidationErrors()));
         }
 
-        $dialCode = FatApp::getPostedData('user_dial_code', FatUtility::VAR_STRING, '');
-        $countryIso = FatApp::getPostedData('user_country_iso', FatUtility::VAR_STRING, '');
-        $phoneNumber = FatUtility::int($post['user_phone']);
-        if (empty($phoneNumber) || (!empty($phoneNumber) && empty($dialCode))) {
+        $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
+        $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
+        if (empty($phoneNumber) || empty($dialCode)) {
             $message = Labels::getLabel("MSG_INVALID_PHONE_NUMBER_FORMAT", $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
@@ -3664,7 +3660,7 @@ class AccountController extends LoggedUserController
             }
         }
 
-        $this->sendOtp($userId, trim($countryIso), trim($dialCode), $phoneNumber);
+        $this->sendOtp($userId, $dialCode,  $phoneNumber);
 
         $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
@@ -3694,12 +3690,11 @@ class AccountController extends LoggedUserController
     public function resendOtp()
     {
         $userId = UserAuthentication::getLoggedUserId();
-        $dialCode = FatApp::getPostedData('user_dial_code', FatUtility::VAR_STRING, '');
-        $countryIso = FatApp::getPostedData('user_country_iso', FatUtility::VAR_STRING, '');
+        $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phone = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, 0);
 
         if (!empty($phone)) {
-            $this->sendOtp($userId, $countryIso, $dialCode, $phone);
+            $this->sendOtp($userId, $dialCode, $phone);
         } else {
             $userObj = new User($userId);
             if (false == $userObj->resendOtp()) {

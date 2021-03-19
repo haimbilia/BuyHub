@@ -483,5 +483,20 @@ $(document).ready(function(){
 		$("#frmSelProdListing").attr({'action': fcom.makeUrl('SellerProducts','volumeDiscount'), 'target':"_blank"}).removeAttr('onsubmit').submit();
 		searchProducts(document.frmSearch);
 		showActionsBtns();
-	};
+	};        
+        getUniqueSlugUrl = function(obj,str,recordId){
+            if(str == ''){
+                return;
+            }
+            var data = {url_keyword:str,recordId:recordId}
+            fcom.ajax(fcom.makeUrl('SellerProducts', 'isProductRewriteUrlUnique'), data, function(t) { 
+                var ans = $.parseJSON(t);
+                $(obj).next().html(ans.msg);
+                if(ans.status == 0){
+                    $(obj).next().addClass('text-danger');
+                }else{
+                    $(obj).next().removeClass('text-danger');
+                }
+            });
+        };
 })();

@@ -66,7 +66,7 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case 'blocation_promotion_cost':
             case 'banner_promotion_cost':
-                $cost = Promotion::getPromotionCostPerClick($row['promotion_type'], $row['blocation_id']);
+                $cost = Promotion::getPromotionCostPerClick(FatUtility::int($row['promotion_type']), FatUtility::int($row['blocation_id']));
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($cost, true, true));
                 break;
             case 'promotion_budget':

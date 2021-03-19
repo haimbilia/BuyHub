@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="step active" role="step:2">
+<div class="step active">
     <form class="form ">
         <div class="step__section">
             <div class="step__section__head">
@@ -47,8 +47,10 @@
 										<?php } ?>
 										</p>   
 										<p><?php echo $address['addr_city'].", ".$address['state_name'].", ".$address['country_name'].", ".$address['addr_zip'] ;?></p>       
-										<?php if(strlen($address['addr_phone']) > 0) { ?>
-										<p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $address['addr_phone'] ;?></p>    
+										<?php if(strlen($address['addr_phone']) > 0) { 
+                                            $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                            ?>
+										<p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone ;?></p>    
 										<?php } ?>
                                     </div>
                                 </div>

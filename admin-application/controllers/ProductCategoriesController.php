@@ -19,10 +19,10 @@ class ProductCategoriesController extends AdminBaseController
 
     public function search()
     {
-        $records = array();
         $prodCat = new ProductCategory();
-        $records = $prodCat->getCategories();
+        $records = (array) $prodCat->getCategories(true, true);
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
+        
         $this->set("arr_listing", $records);
         $this->set("canEdit", $canEdit);
         $this->_template->render(false, false);
@@ -45,7 +45,7 @@ class ProductCategoriesController extends AdminBaseController
         $prodCatId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
         $level = FatApp::getPostedData('level', FatUtility::VAR_INT, 0);
         $prodCat = new ProductCategory($prodCatId);
-        $childCategories = $prodCat->getCategories();
+        $childCategories = $prodCat->getCategories(true, true);
         $this->set("childCategories", $childCategories);
         $this->set("level", $level);
         $this->set("canEdit", $canEdit);
@@ -72,6 +72,13 @@ class ProductCategoriesController extends AdminBaseController
         }
         ProductCategory::updateCatOrderCode();
 
+        $changeStatus = ProductCategory::getAttributesById($prodCatId, 'prodcat_active');
+        if (applicationConstants::INACTIVE == $changeStatus) {
+            $prodCat->disableChildCategories();
+        } else {
+            $prodCat->enableParentCategories();
+        }
+
         $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -83,7 +90,7 @@ class ProductCategoriesController extends AdminBaseController
         $prodCatId = FatUtility::int($prodCatId);
         $prodCatFrm = $this->getCategoryForm($prodCatId, $productReq);
         $prodCat = new ProductCategory();
-        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $prodCatId);
+        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $prodCatId, [], false);
         $categories =  array(0 => Labels::getLabel('LBL_Root_Category', $this->adminLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $data = array('parent_category_name' => $categories[0]);
         if (0 < $prodCatId) {
@@ -197,7 +204,7 @@ class ProductCategoriesController extends AdminBaseController
             Message::addErrorMessage($productCategory->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-
+        $productCategory->updateCatCode();
         $this->set('msg', Labels::getLabel('LBL_SETUP_SUCCESSFUL', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -318,6 +325,7 @@ class ProductCategoriesController extends AdminBaseController
     {
         $this->objPrivilege->canEditProductCategories();
         $prodCatId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
+        $changeStatus = FatApp::getPostedData('prodcat_active', FatUtility::VAR_INT, 0);
         if ($prodCatId < 1) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
@@ -328,11 +336,11 @@ class ProductCategoriesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $status = ($catData['prodcat_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-        $prodCat = new ProductCategory($prodCatId);
-        if (!$prodCat->changeStatus($status)) {
-            Message::addErrorMessage($prodCat->getError());
-            FatUtility::dieWithError(Message::getHtml());
+        $prodCatObj = new ProductCategory($prodCatId);
+        if (applicationConstants::INACTIVE == $changeStatus) {
+            $prodCatObj->disableChildCategories();
+        } else {
+            $prodCatObj->enableParentCategories();
         }
 
         Product::updateMinPrices();
@@ -525,5 +533,12 @@ class ProductCategoriesController extends AdminBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->_template->render(false, false);
+    }
+
+    public function getParentIds(int $catId)
+    {
+        $obj = new ProductCategory($catId);
+        $json['data'] = array_keys($obj->getParents());
+        CommonHelper::dieJsonSuccess($json);
     }
 }

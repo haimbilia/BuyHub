@@ -211,7 +211,10 @@ $toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
                                     </div>
                                     <div class="field-wraper">
                                         <div class="field_cover">
-                                            <?php echo $frm->getFieldHtml('addr_phone'); ?>
+                                            <?php 
+                                                echo $frm->getFieldHtml('addr_phone'); 
+                                                echo $frm->getFieldHtml('addr_phone_dcode');
+                                            ?>
                                         </div>
                                     </div>
                                 </div>

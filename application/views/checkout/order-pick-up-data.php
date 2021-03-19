@@ -8,7 +8,7 @@ if(!empty($orderPickUpData)){
                      <div class="review-block__label">
                          <strong><?php echo ($address['opshipping_by_seller_user_id'] > 0) ? $address['op_shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?></strong>
                      </div>
-                    <div class="review-block__content" role="cell">  
+                    <div class="review-block__content">  
                         <div class="delivery-address"> 
 							<?php echo $address['oua_name']; ?>
 							<p><?php echo $address['oua_address1'] ;?> 
@@ -19,7 +19,7 @@ if(!empty($orderPickUpData)){
 							<p><?php echo $address['oua_city'].", ".$address['oua_state'] ;?></p>    
 							<p><?php echo $address['oua_country'].", ".$address['oua_zip'] ;?></p>    
 							<?php if(strlen($address['oua_phone']) > 0) { ?>
-							<p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $address['oua_phone'] ;?></p>    
+							<p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone'] ;?></p>    
 							<?php } ?>
                         </div>
                     </div>

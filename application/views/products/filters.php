@@ -383,7 +383,7 @@ if (isset($prodcat_code)) {
                     var $to = $('input[name="priceFilterMaxValue"]');
                     var range,
                         min = Math.floor( <?php echo $filterDefaultMinValue; ?> ),
-                        max = Math.floor( <?php echo $filterDefaultMaxValue; ?> ),
+                        max = Math.ceil( <?php echo $filterDefaultMaxValue; ?> ),
                         from,
                         to;
 
