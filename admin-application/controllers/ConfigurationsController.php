@@ -38,7 +38,6 @@ class ConfigurationsController extends AdminBaseController
         }
 
         $record = Configurations::getConfigurations();
-
         $arrayValues = array();
         foreach ($this->serializeArrayValues as $val) {
             if (array_key_exists($val, $record)) {
@@ -68,6 +67,16 @@ class ConfigurationsController extends AdminBaseController
         break;
         } */
         $frm = $this->getForm($frmType, $arrayValues);
+        if (array_key_exists('CONF_SITE_FAX_DCODE', $record)) {
+            $record['CONF_SITE_FAX_dcode'] = $record['CONF_SITE_FAX_DCODE'];
+            unset($record['CONF_SITE_FAX_DCODE']);
+        }
+
+        if (array_key_exists('CONF_SITE_PHONE_DCODE', $record)) {
+            $record['CONF_SITE_PHONE_dcode'] = $record['CONF_SITE_PHONE_DCODE'];
+            unset($record['CONF_SITE_PHONE_DCODE']);
+        }
+
         $frm->fill($record);
 
         $this->set('frm', $frm);
@@ -229,7 +238,7 @@ class ConfigurationsController extends AdminBaseController
                 FatUtility::dieJsonError(Message::getHtml());
             }
         }
-
+        
         if (!$record->update($post)) {
             Message::addErrorMessage($record->getError());
             FatUtility::dieJsonError(Message::getHtml());
@@ -560,14 +569,16 @@ class ConfigurationsController extends AdminBaseController
         switch ($type) {
             case Configurations::FORM_GENERAL:
                 $frm->addEmailField(Labels::getLabel('LBL_Store_Owner_Email', $this->adminLangId), 'CONF_SITE_OWNER_EMAIL');
+                $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
                 $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Telephone', $this->adminLangId), 'CONF_SITE_PHONE', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
-                // $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                // $phnFld->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+                $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+                $phnFld->htmlAfterField='<small>'.Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
                 $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_format.', $this->adminLangId));
 
+                $frm->addHiddenField('', 'CONF_SITE_FAX_dcode');
                 $faxFld = $frm->addTextBox(Labels::getLabel('LBL_Fax', $this->adminLangId), 'CONF_SITE_FAX', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                // $faxFld->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+                $faxFld->htmlAfterField='<small>'.Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
                 $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_format.', $this->adminLangId));
 
                 $cpagesArr = ContentPage::getPagesForSelectBox($this->adminLangId);

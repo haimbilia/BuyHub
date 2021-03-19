@@ -57,6 +57,9 @@ Fixes:
     => 051070 - admin> cms> import instructions> identifiers are not manageable
     => 051091 - on the category page, google is undefined error coming in browser console
     => 051261 - issue with editor> long text is not accepting and some formatting issue
+    => 051206 - Signup with otp >> verify your number >> enter wrong otp>> some error message should be there 
+    => 051404 - On Contact us & Footer country code should be there with mobile number
+    => 051407 - Advertiser account >> update credentials >> selected country code while signup should get displayed on update credentials instead of default country of system
     
 Enhancements :
    => Make provision to made seller

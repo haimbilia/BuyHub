@@ -33,14 +33,14 @@ foreach ($arrListing as $sn=>$row){
 				$txt = '<strong>'.Labels::getLabel('LBL_N',$adminLangId).':  </strong>'.$row['buyer_name'];
 				$txt .= '<br/><strong>'.Labels::getLabel('LBL_U',$adminLangId).':  </strong>'.$row['buyer_username'];
 				$txt .= '<br/><strong>'.Labels::getLabel('LBL_E',$adminLangId).':  </strong>'.$row['buyer_email'];
-				$txt .= '<br/><strong>'.Labels::getLabel('LBL_P',$adminLangId).':  </strong>'.$row['buyer_phone'];
+				$txt .= '<br/><strong>'.Labels::getLabel('LBL_P',$adminLangId).':  </strong>'.ValidateElement::formatDialCode($row['buyer_phone_dcode']) . $row['buyer_phone'];
 				$td->appendElement('plaintext', array(), $txt, true);
 			break;
 			case 'vendor_detail':
 				$txt = '<strong>'.Labels::getLabel('LBL_N',$adminLangId).':  </strong>'.$row['seller_name'];
 				$txt .= '<br/><strong>'.Labels::getLabel('LBL_U',$adminLangId).':  </strong>'.$row['seller_username'];
 				$txt .= '<br/><strong>'.Labels::getLabel('LBL_E',$adminLangId).':  </strong>'.$row['seller_email'];
-				$txt .= '<br/><strong>'.Labels::getLabel('LBL_P',$adminLangId).':  </strong>'.$row['seller_phone'];
+				$txt .= '<br/><strong>'.Labels::getLabel('LBL_P',$adminLangId).':  </strong>'.ValidateElement::formatDialCode($row['seller_phone_dcode']) . $row['seller_phone'];
 				$td->appendElement('plaintext', array(), $txt, true);
 			break;
 			case 'product':

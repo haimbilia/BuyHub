@@ -327,3 +327,7 @@ select {
     right: auto;
     left: 15px;
 }
+
+.iti--allow-dropdown .iti__flag-container, .iti--separate-dial-code .iti__flag-container {
+    left: auto;
+    right: 0; }

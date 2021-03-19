@@ -80,7 +80,7 @@
                                                                     }
 
                                                                     if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                                                        $billingAddress  .= '<br/>' . $orderDetail['billingAddress']['oua_phone'];
+                                                                        $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
                                                                     }
                                                                     ?>
                                                                     <?php echo $billingAddress; ?>
@@ -116,7 +116,7 @@
                                                                         }
 
                                                                         if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-                                                                            $shippingAddress .= '<br/>' . $orderDetail['shippingAddress']['oua_phone'];
+                                                                            $shippingAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
                                                                         } ?>
                                                                         <?php echo $shippingAddress; ?>
                                                                     </p>
@@ -148,7 +148,7 @@
                                                                         }
 
                                                                         if ($orderDetail['pickupAddress']['oua_phone'] != '') {
-                                                                            $pickUpAddress .= '<br/>' . $orderDetail['pickupAddress']['oua_phone'];
+                                                                            $pickUpAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'];
                                                                         } ?>
                                                                         <?php echo $pickUpAddress; ?>
                                                                     </p>
@@ -409,7 +409,7 @@
                                         <tr>
                                             <td style="padding:20px 15px;border-top:1px solid #ddd">
                                                 <p><strong><?php echo Labels::getLabel('LBL_Regd._office', $siteLangId); ?>:</strong><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?></p>
-                                                <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, '');
+                                                <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                                                 $email_id = FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
                                                 if ($site_conatct || $email_id) { ?>
                                                     <p><strong><?php echo Labels::getLabel('LBL_Contact', $siteLangId) ?>:</strong>

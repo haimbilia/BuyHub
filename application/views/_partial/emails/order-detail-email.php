@@ -135,7 +135,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                     }
 
                                                     if ($orderProducts['pickupAddress']['oua_phone'] != '') {
-                                                        $pickUpAddressInfo .= ', ' . $orderProducts['pickupAddress']['oua_phone'];
+                                                        $pickUpAddressInfo .= ', ' . ValidateElement::formatDialCode($orderProducts['pickupAddress']['oua_phone_dcode']) . $orderProducts['pickupAddress']['oua_phone'];
                                                     }
 
                                                     $pickupHtml .= '<table width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -255,7 +255,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
             }
 
             if ($billingAddress['oua_phone'] != '') {
-                $billingInfo .= '<br>' . $billingAddress['oua_phone'];
+                $billingInfo .= '<br>' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'];
             }
 
             $shippingInfo = '';
@@ -282,7 +282,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                 }
 
                 if ($shippingAddress['oua_phone'] != '') {
-                    $shippingInfo .= '<br>' . $shippingAddress['oua_phone'];
+                    $shippingInfo .= '<br>' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'];
                 }
             }
 

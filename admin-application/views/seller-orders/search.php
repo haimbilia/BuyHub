@@ -36,7 +36,7 @@ foreach ($vendorOrdersList as $sn => $row) {
                 $txt = '<br/><strong>' . Labels::getLabel('LBL_Shop', $adminLangId) . ':  </strong>' . $row['op_shop_name'];
                 $txt .= '<br/><strong>' . Labels::getLabel('LBL_User_Name', $adminLangId) . ':  </strong>' . $row['op_shop_owner_username'];
                 $txt .= '<br/><strong>' . Labels::getLabel('LBL_Email', $adminLangId) . ':   </strong><a href="mailto:' . $row['op_shop_owner_email'] . '">' . $row['op_shop_owner_email'] . '</a>';
-                /* $txt .= '<br/><strong>'.Labels::getLabel('LBL_Phone',$adminLangId).':   </strong>'.$row['op_shop_owner_phone']; */
+                /* $txt .= '<br/><strong>'.Labels::getLabel('LBL_Phone',$adminLangId).':   </strong>'.ValidateElement::formatDialCode($row['op_shop_owner_phone_dcode']) . $row['op_shop_owner_phone']; */
                 $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'buyer_name':
@@ -48,7 +48,7 @@ foreach ($vendorOrdersList as $sn => $row) {
                 }
                 $txt = '<br/><strong>' . Labels::getLabel('LBL_User_Name', $adminLangId) . ':  </strong>' . $row['buyer_username'];
                 $txt .= '<br/><strong>' . Labels::getLabel('LBL_Email', $adminLangId) . ':  </strong><a href="mailto:' . $row['buyer_email'] . '">' . $row['buyer_email'] . '</a>';
-                $txt .= '<br/><strong>' . Labels::getLabel('LBL_Phone', $adminLangId) . ':  </strong>' . $row['buyer_phone'];
+                $txt .= '<br/><strong>' . Labels::getLabel('LBL_Phone', $adminLangId) . ':  </strong>' . ValidateElement::formatDialCode($row['buyer_phone_dcode']) . $row['buyer_phone'];
                 $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'order_net_amount':

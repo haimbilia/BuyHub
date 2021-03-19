@@ -114,7 +114,7 @@ class UsersController extends AdminBaseController
 
         $srch->addFld(array('user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for'));
 
-        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -160,12 +160,13 @@ class UsersController extends AdminBaseController
         $post = FatApp::getPostedData();
         $user_state_id = FatUtility::int($post['user_state_id']);
         $post = $frm->getFormDataFromArray($post);
-        $post['user_state_id'] = $user_state_id;
-
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
+        $post['user_state_id'] = $user_state_id;
+
+        $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
 
         $user_id = FatUtility::int($post['user_id']);
         unset($post['user_id']);
@@ -1829,6 +1830,7 @@ class UsersController extends AdminBaseController
             'mail_subject' => trim($post['mail_subject']),
             'mail_message' => nl2br($post["mail_message"]),
             'credential_email' => $user['credential_email'],
+            'user_phone_dcode' => ValidateElement::formatDialCode($user['user_phone_dcode']),
             'user_phone' => $user['user_phone']
         );
         
@@ -2007,7 +2009,7 @@ class UsersController extends AdminBaseController
         $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'credential_username', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->adminLangId), 'user_name');
         $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->adminLangId), 'user_dob', '', array('readonly' => 'readonly'));
-
+        $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
@@ -2150,6 +2152,7 @@ class UsersController extends AdminBaseController
 
         $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'addr_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
         $frm->addTextBox(Labels::getLabel('LBL_Postal_Code', $this->adminLangId), 'addr_zip');
+        $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $frm->addHiddenField('', 'addr_record_id');
