@@ -658,7 +658,7 @@ class EasyPost extends ShippingServicesBase
 
         $trackingCodes = [];
         foreach ($shipments as $shipment) {
-            /* Request to refund for old shipment on which return request generated. */
+            /* Request to refund for shipment on which cancel request generated. */
             $trackingCodes[] = $shipment['tracking_code'];
             /* ---------------------------------------------- */
         }
