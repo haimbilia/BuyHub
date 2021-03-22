@@ -4,6 +4,7 @@ class DummyController extends AdminBaseController
 {
     public function index()
     {
+      
        $prodSrchObj = new ProductSearch();
        $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
        $prodSrchObj->joinProductToCategory();

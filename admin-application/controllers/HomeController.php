@@ -397,7 +397,7 @@ class HomeController extends AdminBaseController
             $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->adminLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this - adminLangId));
+        Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this->adminLangId));
         FatUtility::dieWithError(Message::getHtml());
     }
 }
