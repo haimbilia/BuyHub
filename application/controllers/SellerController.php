@@ -1801,13 +1801,16 @@ class SellerController extends SellerBaseController
             $page = 1;
         }
         
-        $userSpecificRateSrch = TaxRule::getSearchObject();
-        $userSpecificRateSrch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = '.$userId); 
+        $srch = TaxRule::getSearchObject();
+        $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);
+
+        $userSpecificRateSrch = clone $srch;
+        $userSpecificRateSrch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = ' . $userId);
         $userSpecificRateSrch->doNotCalculateRecords();
         $userSpecificRateSrch->doNotLimitRecords();
-        $userSpecificRateSrch->addMultipleFields(array('trr_rate as user_rule_rate','taxrule_id'));
-        $userSpecificSubQuery = $userSpecificRateSrch->getQuery(); 
-        
+        $userSpecificRateSrch->addMultipleFields(array('trr_rate as user_rule_rate', 'taxrule_id'));
+        $userSpecificSubQuery = $userSpecificRateSrch->getQuery();
+
         $srch = TaxRule::getSearchObject();
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', "taxRule.".TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         $srch->joinTable('(' . $userSpecificSubQuery . ')', 'LEFT OUTER JOIN', 'user_specific_rule_rate.taxrule_id = taxRule.taxrule_id', 'user_specific_rule_rate');

@@ -65,8 +65,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 $(function() {
     var reqValidstr = $('form[name="frmTaxRule"] input[name="trr_rate"]').attr('data-fatreq');
 
-    $('.combinationInput--js').each(function(){
-        console.log('ff');
+    $('.combinationInput--js').each(function(){ 
         $(this).attr('data-fatreq',reqValidstr);
     })
 });

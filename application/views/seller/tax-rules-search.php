@@ -5,7 +5,9 @@
                     $ruleSpecificCombinedData = $combinedData[$row['taxrule_id']] ?? [];
                 
                 ?>
-                <li onclick="editRule(<?php echo $row['taxrule_id']; ?>)">
+                <li>                    
+                    <div class="actions float-right"><a onclick="editRule(<?php echo $row['taxrule_id']; ?>)" href="javascript:void(0);" title="Edit"><i class="fa fa-edit"></i></a></div>
+                    
                     <h5  class="title"><?php echo Labels::getLabel('LBL_Rule', $siteLangId); ?>:
                         <?php echo $row['taxrule_name']; ?>
                         <span class=""><?php echo Labels::getLabel('LBL_Tax_Rate(%)', $siteLangId); ?>: <?php echo !empty($row['user_rule_rate']) ? "<del>".$row['trr_rate']."</del>" : $row['trr_rate']; ?></del>&nbsp; <?php echo $row['user_rule_rate']; ?>
