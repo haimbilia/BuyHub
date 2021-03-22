@@ -500,15 +500,14 @@ class TaxController extends AdminBaseController
     {
         $this->objPrivilege->canViewTax();
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getRuleListSearchForm();
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);  
+        $searchForm = $this->getRuleListSearchForm();           
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
-        }
+        }       
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
 
         $srch = TaxRule::getSearchObject();
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
@@ -541,6 +540,7 @@ class TaxController extends AdminBaseController
     {
         $frm = new Form('frmRuleListSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'taxrule_taxcat_id', $taxCatId);
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
@@ -633,7 +633,7 @@ class TaxController extends AdminBaseController
         $combination = [];
         foreach ($catLocations as $location) {
             if ($post['taxrule_id'] != $location['taxruleloc_taxrule_id']) {
-                $combination[] = $location['taxruleloc_from_country_id'] . "-" . $location['taxruleloc_from_state_id'] . "-" . $location['taxruleloc_to_country_id'] . "-" . $location['taxruleloc_to_state_id'] . "-" . $location['taxruleloc_type'] . "-" . $location['taxruleloc_unique'];
+                $combination[] = $location['taxruleloc_from_country_id'] . "-" . $location['taxruleloc_from_state_id'] . "-" . $location['taxruleloc_to_country_id'] . "-" . $location['taxruleloc_to_state_id'] . "-" . $location['taxruleloc_type'];
             }
         }
         foreach ($post['taxruleloc_from_state_id'] as $fromState) {
@@ -754,7 +754,7 @@ class TaxController extends AdminBaseController
                     'taxruleloc_to_country_id' => $post['taxruleloc_to_country_id'],
                     'taxruleloc_to_state_id' => $toState,
                     'taxruleloc_type' => $post['taxruleloc_type'],
-                    'taxruleloc_unique' => $isUnique
+                    /*'taxruleloc_unique' => $isUnique*/
                 );
 
                 if (!$locObj->updateLocations($data)) {

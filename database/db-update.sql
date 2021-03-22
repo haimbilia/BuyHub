@@ -32,4 +32,5 @@ ALTER TABLE tbl_tax_rules DROP taxrule_rate;
 ALTER TABLE `tbl_tax_rule_details` ADD `taxruledet_user_id` INT NOT NULL AFTER `taxruledet_rate`;
 ALTER TABLE `tbl_tax_rule_details` ADD UNIQUE( `taxruledet_taxrule_id`, `taxruledet_taxstr_id`, `taxruledet_user_id`);
 ALTER TABLE `tbl_tax_rule_details` DROP `taxruledet_id`;
+ALTER TABLE `tbl_tax_rule_locations` DROP `taxruleloc_unique`;
 -- --- Tax Module Update--- --

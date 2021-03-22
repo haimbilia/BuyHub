@@ -25,12 +25,3 @@
         </div>
     </div>
 </main>
-<script>
-
-
-$(function() {
-    taxRulesSearch(<?php echo $taxCatId; ?>);
-});
-
-
-</script>

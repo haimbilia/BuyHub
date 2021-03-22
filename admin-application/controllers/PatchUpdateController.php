@@ -84,7 +84,7 @@ class PatchUpdateController extends AdminBaseController
                     'taxruleloc_to_country_id' => $countryId,
                     'taxruleloc_to_state_id' => $stateId,
                     'taxruleloc_type' => TaxRule::TYPE_ALL_STATES,
-                    'taxruleloc_unique' => 1
+                    /*'taxruleloc_unique' => 1*/
                 );
                 $locObj = new TaxRuleLocation();
                 if (!$locObj->updateLocations($locData)) {
