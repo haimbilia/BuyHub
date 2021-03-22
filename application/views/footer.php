@@ -56,9 +56,11 @@ if (CommonHelper::demoUrl()) { ?>
 							<?php $this->includeTemplate('_partial/footerNewsLetterForm.php');
 						} ?>
                         <ul class="contact-info">
-                            <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, '');
+                            <?php 
+                                $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                                $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                                 if ($site_conatct) { ?>
-                            <li><i class="icn"><img src="<?php echo CONF_WEBROOT_URL; ?>images/icn-mobile.png" alt="<?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?>"></i><?php echo $site_conatct;?></li>
+                            <li><i class="icn"><img src="<?php echo CONF_WEBROOT_URL; ?>images/icn-mobile.png" alt="<?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?>"></i><?php echo ValidateElement::formatDialCode($dialCode) . $site_conatct;?></li>
                             <?php } ?>
                             <?php $email_id = FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
                                 if ($email_id) { ?>

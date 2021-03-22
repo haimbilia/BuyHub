@@ -54,8 +54,15 @@ Fixes:
     => 050972 - while placing order with guest order error coming email sending
     => 051054 - If only one product is there then condition list not should not come in filter 
     => 051003 - banner image getting repeated as width increases
+    => 051070 - admin> cms> import instructions> identifiers are not manageable
     => 051091 - on the category page, google is undefined error coming in browser console
     => 051329 - Tax api isue to fetch tax categories.
+    => 051261 - issue with editor> long text is not accepting and some formatting issue
+    => 051206 - Signup with otp >> verify your number >> enter wrong otp>> some error message should be there 
+    => 051404 - On Contact us & Footer country code should be there with mobile number
+    => 051407 - Advertiser account >> update credentials >> selected country code while signup should get displayed on update credentials instead of default country of system
+    => 051474 - Invalid Currency & Language symbol displays in pdf
+    => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
     
 Enhancements :
    => Make provision to made seller

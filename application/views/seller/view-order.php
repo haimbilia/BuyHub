@@ -313,7 +313,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             }
 
                             if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                $billingAddress .= '<br>' . $orderDetail['billingAddress']['oua_phone'];
+                                $billingAddress .= '<br>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
                             }
                             ?>
                             <div class="info--order">
@@ -349,7 +349,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                 }
 
                                 if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-                                    $shippingAddress .= '<br>' . $orderDetail['shippingAddress']['oua_phone'];
+                                    $shippingAddress .= '<br>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
                                 } ?>
                                 <div class="info--order">
                                     <p><?php echo $shippingAddress; ?></p>

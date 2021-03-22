@@ -24,8 +24,7 @@ strong {
     text-align: left !important;
 }
 
-.text-right {
-    text-align: right !important;
+.text-right {text-align: right !important;
 }
 
 .text-center {
@@ -72,6 +71,8 @@ strong {
 .clearfix:after {
     clear: both;
 }
+
+.iti{display: block;}
 
 .gap {
     height: 15px;

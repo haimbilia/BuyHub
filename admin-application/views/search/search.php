@@ -35,6 +35,10 @@ foreach ($data as $row) {
             case 'credential_verified':
                 $tr->appendElement('td', array(), (($row[$fld] == 1) ? Labels::getLabel('LBL_Yes', $adminLangId) : Labels::getLabel('LBL_No', $adminLangId)));
                 break;
+            case 'user_phone':
+                $phone = ValidateElement::formatDialCode($row['user_phone_dcode']) . $row[$fld];
+                $tr->appendElement('td', array(), $phone);
+                break;
             case 'action':
                 $td = $tr->appendElement('td');
                 if ($canVerify) {

@@ -5,6 +5,7 @@ $(document).ready(function () {
             let scrollElement = document.getElementById('scrollElement-js').SimpleBar.getScrollElement();
             scrollElement.scrollTop = ($('.menu__item.is-active').position().top - (($(window).height() / 2) - 100));
         }
+        stylePhoneNumberFld('.phone-js');
     }, 1000);
 
     $(document).on("click", ".selectItem--js", function () {
@@ -146,7 +147,7 @@ startOtpInterval = function (parent = '', callback = '', params = []) {
             clearInterval(otpIntervalObj);
             $(parent + '.resendOtp-js').removeClass('d-none');
             element.parent().parent().hide();
-            if (eval("typeof " + callback) == 'function') {
+            if ('' != callback && eval("typeof " + callback) == 'function') {
                 window[callback](params);
             }
         }
@@ -622,7 +623,6 @@ function codeLatLng(lat, lng, callback) {
         'latLng': latlng
     }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-            // console.log(results)
             if (results[1]) {
                 var lat = results[0]['geometry']['location'].lat();
                 var lng = results[0]['geometry']['location'].lng();
@@ -650,10 +650,10 @@ function codeLatLng(lat, lng, callback) {
                 var data = { country: country, country_code: country_code, state: state, state_code: state_code, city: city, lat: lat, lng: lng, postal_code: postal_code };
                 callback(data);
             } else {
-                Console.log("Geocoder No results found");
+                console.log("Geocoder No results found");
             }
         } else {
-            Console.log("Geocoder failed due to: " + status);
+            console.log("Geocoder failed due to: " + status);
         }
     });
 }
@@ -783,16 +783,15 @@ function defaultSetUpLogin(frm, v) {
         $('#facebox .content').addClass('fbminwidth');
     });
 
-    $.systemMessage = function (data, cls, autoClose) {
+    $.systemMessage = function (data, cls, autoClose = true) {
         if ("" == data) {
             return;
         }
 
         if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
             autoClose = false;
-        } else {
-            autoClose = true;
         }
+        
         initialize();
         $.systemMessage.loading();
         $.systemMessage.fillSysMessage(data, cls, autoClose);
@@ -1139,6 +1138,9 @@ $(document).ready(function () {
         inputElement.val("").attr({ 'placeholder': altPlaceHolder, 'data-alt-placeholder': placeHolder });
         var objLbl = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
         $(obj).attr('onclick', 'signInWithPhone(this, ' + (!flag) + ')').text(objLbl)
+        if (false === flag) {
+            inputElement.removeClass('hasFlag-js');
+        }
         stylePhoneNumberFld(formElement + " input[name='username']", (!flag));
     };
 
@@ -1355,27 +1357,47 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
             var clone = input.cloneNode(true);
             $('.iti').replaceWith(clone);
         } else {
+            if ($(input).hasClass('hasFlag-js')) {
+                return;
+            }
+            $(input).addClass('hasFlag-js');
+
+            var elementName = ($(input).attr('name') + '_dcode');
+            var dialCodeElement = $('input[name="' + elementName + '"]');
+            if (0 < dialCodeElement.length && '' != dialCodeElement.val()) {
+                var elementVal = dialCodeElement.val();
+                var countryCodePos = elementVal.indexOf('-');
+                if (0 < countryCodePos) {
+                    country = elementVal.substring((countryCodePos + 1), elementVal.length);
+                } else {
+                    country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+                }
+            }
+
             var iti = window.intlTelInput(input, {
                 separateDialCode: true,
                 initialCountry: country,
-                // utilsScript: "/intlTelInput/intlTelInput-utils.js"
             });
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'user_dial_code',
-                value: "+" + iti.getSelectedCountryData().dialCode
-            }).insertAfter(input);
 
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'user_country_iso',
-                value: iti.getSelectedCountryData().iso2
-            }).insertAfter(input);
+            var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
+            if (0 < dialCodeElement.length) {
+                dialCodeElement.insertAfter(input);
+                if ('' == dialCodeElement.val()) {
+                    dialCodeElement.val(dCode);
+                }
+            } else {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: elementName,
+                    value: dCode
+                }).insertAfter(input);
+            }
 
             input.addEventListener('countrychange', function (e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
-                    input.closest('form').user_dial_code.value = "+" + iti.getSelectedCountryData().dialCode;
-                    input.closest('form').user_country_iso.value = iti.getSelectedCountryData().iso2;
+                    var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
+                    var parent = $(input).parent();
+                    parent.find('input[name="' + elementName + '"]').val(dCode);
                 }
             });
         }
@@ -1617,6 +1639,7 @@ $(document).ready(function () {
     });
 });
 $(document).ajaxComplete(function () {
+    stylePhoneNumberFld('.phone-js');
     new ScrollHint('.js-scrollable:not(.scroll-hint)', {
         i18n: {
             scrollable: langLbl.scrollable

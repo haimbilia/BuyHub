@@ -13,10 +13,8 @@ class CustomController extends MyAppController
     public function contactSubmit()
     {
         $frm = $this->contactUsForm();
-        $post = FatApp::getPostedData();
-        $post['phone'] = !empty($post['phone']) ? ValidateElement::convertPhone($post['phone']) : '';
-        $post = $frm->getFormDataFromArray($post);
-
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        
         if (false === $post) {
             $message = $frm->getValidationErrors();
             if (true === MOBILE_APP_API_CALL) {
@@ -745,9 +743,10 @@ class CustomController extends MyAppController
         $frm->addRequiredField(Labels::getLabel('LBL_Your_Name', $this->siteLangId), 'name', '');
         $frm->addEmailField(Labels::getLabel('LBL_Your_Email', $this->siteLangId), 'email', '');
 
+        $frm->addHiddenField('', 'phone_dcode');
         $fld_phn = $frm->addRequiredField(Labels::getLabel('LBL_Your_Phone', $this->siteLangId), 'phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $fld_phn->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        // $fld_phn->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+        $fld_phn->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
         $fld_phn->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addTextArea(Labels::getLabel('LBL_Your_Message', $this->siteLangId), 'message', '')->requirements()->setRequired();

@@ -43,6 +43,10 @@ foreach ($arr_listing as $sn => $row) {
             case 'author_name':
                 $td->appendElement('plaintext', array(), $row[$key], true);
                 break;
+            case 'bcontributions_author_phone':
+                $phone = ValidateElement::formatDialCode($row['bcontributions_author_phone_dcode']) . $row[$key];
+                $td->appendElement('plaintext', array(), $phone, true);
+                break;
             case 'bcontributions_status':
                 $statusArr = applicationConstants::getBlogContributionStatusArr($adminLangId);
                 $td->appendElement('plaintext', array(), $statusArr[$row[$key]], true);

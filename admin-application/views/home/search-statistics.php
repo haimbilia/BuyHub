@@ -269,7 +269,7 @@ case 'signups': ?>
 			<td><?php echo $user["credential_username"]; ?></td>
 			<td><?php echo $user["credential_email"]; ?></td>
 			<td><?php echo $userTypeStr; ?></td>
-			<td><?php echo CommonHelper::displayText($user["user_phone"]); ?></td>
+			<td><?php echo CommonHelper::displayText($user["user_phone_dcode"] . $user["user_phone"]); ?></td>
 			<td><?php echo FatDate::format($user['user_regdate']); ?></td>
 		</tr>
 		<?php } ?>
@@ -298,7 +298,7 @@ case 'advertisers': ?>
 			<td><?php echo $user["user_name"]; ?></td>
 			<td><?php echo $user["credential_username"]; ?></td>
 			<td><?php echo $user["credential_email"]; ?></td>
-			<td><?php echo CommonHelper::displayText($user["user_phone"]); ?></td>
+			<td><?php echo CommonHelper::displayText($user["user_phone_dcode"] . $user["user_phone"]); ?></td>
 			<td><?php echo FatDate::format($user['user_regdate']); ?></td>
 		</tr>
 		<?php } ?>
@@ -327,7 +327,7 @@ case 'affiliates': ?>
 				<td><?php echo $user["user_name"]; ?></td>
 				<td><?php echo $user["credential_username"]; ?></td>
 				<td><?php echo $user["credential_email"]; ?></td>
-				<td><?php echo CommonHelper::displayText($user["user_phone"]); ?></td>
+				<td><?php echo CommonHelper::displayText($user["user_phone_dcode"] . $user["user_phone"]); ?></td>
 				<td><?php echo FatDate::format($user['user_regdate']); ?></td>
 			</tr>
 			<?php } ?>

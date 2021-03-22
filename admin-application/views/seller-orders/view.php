@@ -194,7 +194,7 @@ if (!empty($order['opship_tracking_url'])) {
                                     <h5><?php echo Labels::getLabel('LBL_Seller_Details', $adminLangId); ?></h5>
                                     <p><strong><?php echo Labels::getLabel('LBL_Shop_Name', $adminLangId); ?> : </strong><?php echo $order["op_shop_name"] ?><br><strong><?php echo Labels::getLabel('LBL_Name', $adminLangId); ?>:
                                         </strong><?php echo $order["op_shop_owner_name"] ?><br><strong><?php echo Labels::getLabel('LBL_Email_ID', $adminLangId); ?> : </strong>
-                                        <?php echo $order["op_shop_owner_email"] ?><br><strong><?php echo Labels::getLabel('LBL_Phone', $adminLangId); ?> : </strong> <?php echo $order["op_shop_owner_phone"] ?></p>
+                                        <?php echo $order["op_shop_owner_email"] ?><br><strong><?php echo Labels::getLabel('LBL_Phone', $adminLangId); ?> : </strong> <?php echo $order["op_shop_owner_phone_dcode"] . $order["op_shop_owner_phone"]; ?></p>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12">
                                     <h5><?php echo Labels::getLabel('LBL_Customer_Details', $adminLangId); ?></h5>
@@ -245,7 +245,7 @@ if (!empty($order['opship_tracking_url'])) {
                                         }
 
                                         if ($order['billingAddress']['oua_phone'] != '') {
-                                            $billingAddress .= '<br>Phone: ' . $order['billingAddress']['oua_phone'];
+                                            $billingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['billingAddress']['oua_phone_dcode']) . $order['billingAddress']['oua_phone'];
                                         }
                                         echo $billingAddress;
                                         ?><br>
@@ -280,7 +280,7 @@ if (!empty($order['opship_tracking_url'])) {
                                             }
 
                                             if ($order['shippingAddress']['oua_phone'] != '') {
-                                                $shippingAddress .= '<br>Phone: ' . $order['shippingAddress']['oua_phone'];
+                                                $shippingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['shippingAddress']['oua_phone_dcode']) . $order['shippingAddress']['oua_phone'];
                                             }
 
                                             echo $shippingAddress;
@@ -320,7 +320,7 @@ if (!empty($order['opship_tracking_url'])) {
                                             }
 
                                             if ($order['pickupAddress']['oua_phone'] != '') {
-                                                $pickupAddress .= '<br>Phone: ' . $order['pickupAddress']['oua_phone'];
+                                                $pickupAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['pickupAddress']['oua_phone_dcode']) . $order['pickupAddress']['oua_phone'];
                                             }
                                             echo $pickupAddress;
                                         } ?>
