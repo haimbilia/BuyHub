@@ -1,4 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php
+
+use function GuzzleHttp\json_decode;
+
+defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (!$print) {
     $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <?php
@@ -59,13 +63,17 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                 $plugin = new Plugin();
                                 $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
 
-                                if (empty($orderDetail['opship_response']) && empty($orderDetail['opship_tracking_number']) && 'EasyPost' != $keyName) {
+                                if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && 'EasyPost' != $keyName) {
                                     $orderId = $orderDetail['order_id']; ?>
                                     <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
-                                <?php } elseif (!empty($orderDetail['opship_response']) && 'EasyPost' != $keyName) { ?>
-                                    <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                <?php } elseif (!empty($orderDetail['opr_response']) && (!empty($orderDetail['opship_tracking_url']) || 'EasyPost' != $keyName)) {
+                                    if (OrderStatus::ORDER_REFUNDED == $orderDetail["op_status_id"]) { ?>
+                                        <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                    <?php } else { ?>
+                                        <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                    <?php } ?>
                                 <?php }
-                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opship_response']) || 'EasyPost' == $keyName) && empty($orderDetail['opship_tracking_number'])) { 
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || 'EasyPost' == $keyName) && empty($orderDetail['opship_tracking_number'])) { 
                                     if ('EasyPost' == $keyName) {
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                     } else {
@@ -440,17 +448,22 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                                 echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
                                                 if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                     if (empty($row['oshistory_courier'])) {
-                                                        $str = !empty($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $siteLangId) . ' ' . $row['oshistory_tracking_number'] : '';
-                                                        if (empty($orderDetail['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
+                                                        $str = !empty($orderDetail['opship_tracking_number']) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . '( ' . $orderDetail['opship_tracking_number'] . ' )' : '';
+                                                        if (empty($orderDetail['opship_tracking_url']) && !empty($orderDetail['opship_tracking_number'])) {
                                                             $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $orderDetail["opshipping_label"]) . "</em>";
-                                                        } elseif (!empty($orderDetail['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
-                                                            $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $orderDetail['opship_tracking_url'] . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
+                                                        } elseif (!empty($orderDetail['opship_tracking_url']) && !empty($orderDetail['opship_tracking_number'])) {
+                                                            $trackingUrls = (array) explode(', ', $orderDetail['opship_tracking_url']);
+                                                            $str .= '<br>';
+                                                            foreach ($trackingUrls as $url) {
+                                                                $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $url . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
+                                                            }
                                                         }
                                                         echo $str;
                                                     } else {
                                                         echo ($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $siteLangId) : '';
                                                         $trackingNumber = $row['oshistory_tracking_number'];
-                                                        $carrier = $row['oshistory_courier']; ?>
+                                                        $carrier = $row['oshistory_courier']; 
+                                                        ?>
                                                         <a href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onClick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $orderDetail['op_invoice_number']; ?>')">
                                                             <?php echo $trackingNumber; ?>
                                                         </a>

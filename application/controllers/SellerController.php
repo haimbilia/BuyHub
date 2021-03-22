@@ -9,6 +9,7 @@ class SellerController extends SellerBaseController
     use SellerCollections;
     use CustomCatalogProducts;
     use SellerUsers;
+    use ShippingServices;
 
     private $shippingService;
     private $trackingService;
@@ -282,7 +283,7 @@ class SellerController extends SellerBaseController
         $srch->setPageSize($pagesize);
 
         $srch->addMultipleFields(
-            array('order_id', 'order_status', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type', 'opshipping_carrier_code', 'opshipping_service_code')
+            array('order_id', 'order_status', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opr_response', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type', 'op_status_id', 'opshipping_carrier_code', 'opshipping_service_code')
         );
 
         $keyword = FatApp::getPostedData('keyword', null, '');
@@ -477,12 +478,20 @@ class SellerController extends SellerBaseController
         $srch->joinShippingCharges();
         $srch->joinAddress();
         $srch->addOrderProductCharges();
+        $srch->addMultipleFields(
+            array(
+                'ops.*', 'order_id', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
+                'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
+                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off'
+            )
+        );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
         $srch->addCondition('op_id', '=', $op_id);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $rs = $srch->getResultSet();
         $orderDetail = FatApp::getDb()->fetch($rs);
 
+        // CommonHelper::printArray($orderDetail, true);
         if (!$orderDetail) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             CommonHelper::redirectUserReferer();
@@ -576,7 +585,7 @@ class SellerController extends SellerBaseController
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
         }
-
+        // CommonHelper::printArray($orderDetail);
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
         $this->set('shippedBySeller', $shippedBySeller);
@@ -1022,7 +1031,7 @@ class SellerController extends SellerBaseController
         $srch->addCondition('op_id', '=', $op_id);
         $rs = $srch->getResultSet();
 
-        $orderDetail = FatApp::getDb()->fetch($rs);
+        $orderDetail = (array) FatApp::getDb()->fetch($rs);
         if (empty($orderDetail)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -1040,6 +1049,15 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
+
+        /* Update To Shipping Service */
+        if (OrderStatus::ORDER_SHIPPED == $orderDetail["op_status_id"]) {
+            $this->langId = $this->siteLangId;
+            if (false !== $this->init(true)) {
+                $this->refundShipment($op_id);
+            }
+        }
+        /* Update To Shipping Service */
 
         $pluginKey = Plugin::getAttributesById($orderDetail['order_pmethod_id'], 'plugin_code');
 
@@ -3065,7 +3083,7 @@ class SellerController extends SellerBaseController
 
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addMultipleFields(array('orrequest_id', 'order_pmethod_id'));
+        $srch->addMultipleFields(array('orrequest_id', 'order_pmethod_id', 'op_id', 'orrequest_qty'));
 
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
@@ -3088,6 +3106,13 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel($orrObj->getError(), $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         }
+
+        /* Update To Shipping Service */
+        $this->langId = $this->siteLangId;
+        if (false !== $this->init(true)) {
+            $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty']);
+        }
+        /* Update To Shipping Service */
 
         /* email notification handling[ */
         $emailNotificationObj = new EmailHandler();

@@ -42,8 +42,14 @@ $keys = [
         'api_key' => 'a603e21c-339c-4496-9c19-7da8d8457ab7'
     ],
     'ShipStationShipping' => [
+        'environment' => PLUGIN::ENV_SANDBOX,
         'api_key' => '366da0dfeea246d0926798bc10ac60c8',
         'api_secret_key' => '60e27c9440d44c92a9387f7cdfebb773'
+    ],
+    'EasyPost' => [
+        'env' => PLUGIN::ENV_SANDBOX,
+        'api_key' => 'EZTKb5258b08c21a4753b46a47ddee97a993TaJ0Hxak0ZODrCrUsbdH0g',
+        'live_api_key' => 'EZAKb5258b08c21a4753b46a47ddee97a993ulau3dnh4A139LHWyapcxA'
     ],
 ];
 

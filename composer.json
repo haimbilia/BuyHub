@@ -16,7 +16,7 @@
         "phpunit/phpunit": "9.5.0",
         "khipu/khipu-api-client": "2.9.1",
         "paypal/paypal-checkout-sdk": "1.0.1",
-        "easypost/easypost-php": "3.4.5"
+        "easypost/easypost-php": "dev-master"
     },
     "config": {
         "platform": {

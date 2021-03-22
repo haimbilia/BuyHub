@@ -62,13 +62,12 @@ class PluginSetting
             return false;
         }
         $row =  FatApp::getDb()->fetchAllAssoc($rs);
-
+        
         $settingsData = Plugin::getAttributesByCode($this->pluginKey, '', $langId);
-        if (0 < $langId) {
+        if (0 < $langId && empty($column)) {
             $settingsData['plugin_name'] = !empty($settingsData['plugin_name']) ? $settingsData['plugin_name'] : $settingsData['plugin_identifier'];
         }
         $settings = array_merge($row, $settingsData);
-
         if (!empty($column) && is_string($column)) {
             return array_key_exists($column, $settings) ? $settings[$column] : '';
         }

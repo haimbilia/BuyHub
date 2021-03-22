@@ -1,5 +1,7 @@
 <?php
 
+use Stripe\Order;
+
 class OrderProductSearch extends SearchBase
 {
     private $langId;
@@ -456,5 +458,6 @@ class OrderProductSearch extends SearchBase
     public function joinOrderProductShipment()
     {
         $this->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', OrderProductShipment::DB_TBL_PREFIX . 'op_id = op.op_id', 'opship');
+        $this->joinTable(OrderProduct::DB_TBL_RESPONSE, 'LEFT JOIN', 'opr_op_id = opship.opship_op_id AND opr_type = ' . OrderProduct::RESPONSE_TYPE_SHIPMENT, 'opr');
     }
 }

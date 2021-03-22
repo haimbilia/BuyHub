@@ -65,7 +65,7 @@ class YkAppTest extends TestCase
                 require 'pluginConf.php';
             }
 
-            if (method_exists($this, 'init') && false === $this->init()) {
+            if (method_exists($this, 'init') && false === $this->init($method)) {
                 $this->error = $reflectionClass->getError();
                 return $this->returnResponse();
             }
