@@ -467,8 +467,13 @@ class SellerOrdersController extends AdminBaseController
         $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->adminLangId));
         $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->adminLangId));
 
+        // set LTR direction for english translation
+        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->adminLangId)));
+        // set font
+        $pdf->SetFont('dejavusans');
+
         $templatePath = "seller-orders/view-invoice.php";
-        $html = $template->render(false, false, $templatePath, true, true);
+        $html = addslashes($template->render(false, false, $templatePath, true, true));
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
 

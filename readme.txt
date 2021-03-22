@@ -60,6 +60,7 @@ Fixes:
     => 051206 - Signup with otp >> verify your number >> enter wrong otp>> some error message should be there 
     => 051404 - On Contact us & Footer country code should be there with mobile number
     => 051407 - Advertiser account >> update credentials >> selected country code while signup should get displayed on update credentials instead of default country of system
+    => 051474 - Invalid Currency & Language symbol displays in pdf
     
 Enhancements :
    => Make provision to made seller
