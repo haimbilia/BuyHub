@@ -61,6 +61,7 @@ Fixes:
     => 051404 - On Contact us & Footer country code should be there with mobile number
     => 051407 - Advertiser account >> update credentials >> selected country code while signup should get displayed on update credentials instead of default country of system
     => 051474 - Invalid Currency & Language symbol displays in pdf
+    => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
     
 Enhancements :
    => Make provision to made seller
