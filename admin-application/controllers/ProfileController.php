@@ -240,6 +240,12 @@ class ProfileController extends AdminBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
         }
 
+        /* Restrict to change password for admin on demo URL. */
+        if (CommonHelper::demoUrl() && 1 == $this->_adminId) {
+            Message::addErrorMessage(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->adminLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
+        }
+
         if (!$curDbPassword = AdminUsers::getAttributesById($this->_adminId, 'admin_password')) {
             Message::addErrorMessage($this->_adminProfileObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));

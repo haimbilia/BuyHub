@@ -12,7 +12,7 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
             <div class="row">
                 <div class="col-xl-7 col-lg-6">
                     <div class="seller-slogan">
-                        <div class="seller-slogan-txt"> <?php echo FatUtility::decodeHtmlEntities(nl2br($slogan['epage_content']));?> </div>
+                        <div class="seller-slogan-txt"> <?php echo FatUtility::decodeHtmlEntities($slogan['epage_content']);?> </div>
                     </div>
                 </div>
                 <div class="col-xl-5 col-lg-6">

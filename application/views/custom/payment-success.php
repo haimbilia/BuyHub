@@ -107,7 +107,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                         }
                                         echo '<br>' . $shippingAddress['oua_city'] . ', ' . $shippingAddress['oua_state'];
                                         echo '<br>' . $shippingAddress['oua_country'] . '(' . $shippingAddress['oua_zip'] . ')';
-                                        echo '<br>' . $shippingAddress['oua_phone'];
+                                        echo '<br>' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'];
                                         ?>
                                     </p>
                                 </li>
@@ -145,8 +145,11 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                 $state = !empty($orderAddDet['state_name']) ? ', ' . $orderAddDet['state_name'] : '';
                                                 $country = !empty($orderAddDet['country_name']) ? ', ' . $orderAddDet['country_name'] : '';
                                                 $zip = !empty($orderAddDet['addr_zip']) ? '(' . $orderAddDet['addr_zip'] . ')' : '';
-                                                $phone = !empty($orderAddDet['addr_phone']) ? '<br>' . $orderAddDet['addr_phone'] : '';
-
+                                                $phone = !empty($orderAddDet['addr_phone']) ? $orderAddDet['addr_phone'] : '';
+                                                if (!empty($phone) && array_key_exists('addr_phone_dcode', $orderAddDet)) {
+                                                    $phone = ValidateElement::formatDialCode($orderAddDet['addr_phone_dcode']) . $phone;
+                                                }
+                                                $phone = '<br>' . $phone;
                                                 echo $address1 . $address2 . $city . $state . $country . $zip . $phone;
                                                 ?>
                                             </p>
@@ -185,7 +188,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             }
                                             echo '<br>' . $billingAddress['oua_city'] . ', ' . $billingAddress['oua_state'];
                                             echo '<br>' . $billingAddress['oua_country'] . '(' . $billingAddress['oua_zip'] . ')';
-                                            echo '<br>' . $billingAddress['oua_phone'];
+                                            echo '<br>' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'];
                                             ?>
                                         </p>
                                     </li>
@@ -331,6 +334,36 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
             window.onafterprint = function() {
                 location.href = history.back();
             }
+        });
+    </script>
+<?php } 
+
+
+ if (Orders::ORDER_PRODUCT == $orderInfo['order_type'] && !empty(FatApp::getConfig("CONF_ANALYTICS_ID"))) {
+    ?>
+    <script>
+        $(document).ready(function() {
+            ga('require', 'ecommerce');
+            <?php
+            echo EcommerceTrackingHelper::getTransactionJs([
+                'id' => $orderInfo['order_id'],
+                'shipping' => $shippingCharges,
+                'tax' => $orderInfo['order_tax_charged'],
+                'affiliation' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId),
+                'currency' => $orderInfo['order_currency_code'],
+                'revenue' => $orderInfo['order_net_amount']
+            ]);
+            foreach ($products as $product) {
+                $productTitle = ($product['op_selprod_title']) ? $product['op_selprod_title'] : $product['op_product_name'];
+                echo EcommerceTrackingHelper::getItemJs($orderInfo['order_id'], [
+                    'name' => $productTitle,
+                    'sku' => $product['op_selprod_sku'],
+                    'price' => $product["op_unit_price"],
+                    'quantity' => $product['op_qty']
+                ]);
+            }
+            ?>
+            ga('ecommerce:send');
         });
     </script>
 <?php } ?>

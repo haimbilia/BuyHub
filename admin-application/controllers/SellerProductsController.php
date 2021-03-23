@@ -191,6 +191,18 @@ class SellerProductsController extends AdminBaseController
             if (!$sellerProductRow) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
             }
+            $urlSrch = UrlRewrite::getSearchObject();
+            $urlSrch->doNotCalculateRecords();
+            $urlSrch->doNotLimitRecords();
+            $urlSrch->addFld('urlrewrite_custom');
+            $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selprod_id);
+            $rs = $urlSrch->getResultSet();
+            $urlRow = FatApp::getDb()->fetch($rs);
+            if ($urlRow) {
+                $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+            }
+            $customUrl = explode("/", $urlRow['urlrewrite_custom']);
+            $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
         } else {
             $sellerProductRow['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($productLangRow['product_url_keyword']));
         }
@@ -292,12 +304,12 @@ class SellerProductsController extends AdminBaseController
             $post['selprod_threshold_stock_level'] = 0;
         }
 
-        if ($selprod_threshold_stock_level >= $selprod_stock) {
+        if ($post['selprod_threshold_stock_level'] == 1 && $selprod_threshold_stock_level >= $selprod_stock) {
             Message::addErrorMessage(Labels::getLabel('MSG_Alert_stock_level_should_be_less_than_stock_quantity.', $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        if ($selprod_min_order_qty > $selprod_stock || 1 > $selprod_min_order_qty) {
+        if ($post['selprod_threshold_stock_level'] == 1 && ($selprod_min_order_qty > $selprod_stock || 1 > $selprod_min_order_qty)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Minimum_quantity_should_be_less_than_equal_to_stock_quantity.', $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -309,13 +321,7 @@ class SellerProductsController extends AdminBaseController
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieWithError(Message::getHtml());
-        }
-        //Validate product belongs to current logged seller[
-        if ($selprod_id) {
-            $sellerProductRow = SellerProduct::getAttributesById($selprod_id, array('selprod_user_id'));
-        }
-        //]
-        $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($post['selprod_url_keyword']));
+        }       
 
         unset($post['selprod_id']);
         $sellerProdObj = new SellerProduct($selprod_id);
@@ -3219,4 +3225,27 @@ class SellerProductsController extends AdminBaseController
         $this->set('msg', Labels::getLabel('LBL_Record_Deleted', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+    
+    public function isProductRewriteUrlUnique()
+    {
+        $selprod_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $urlKeyword = FatApp::getPostedData('url_keyword');
+        $sellerProdObj = new SellerProduct($selprod_id);
+        $seoUrl = $sellerProdObj->sanitizeSeoUrl($urlKeyword);
+        if (1 > $selprod_id) {
+            $isUnique = UrlRewrite::isCustomUrlUnique($seoUrl);
+            if ($isUnique) {
+                FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+            }
+            FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->adminLangId));
+        }
+
+        $originalUrl = $sellerProdObj->getRewriteProductOriginalUrl();
+        $customUrlData = UrlRewrite::getDataByCustomUrl($seoUrl, $originalUrl);
+        if (empty($customUrlData)) {
+            FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
+        }
+        FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->adminLangId));
+    }
+
 }

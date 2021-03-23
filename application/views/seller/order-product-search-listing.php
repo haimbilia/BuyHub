@@ -106,9 +106,9 @@
                             true
                         );
                     }
-
+                    
                     $shipBySeller = CommonHelper::canAvailShippingChargesBySeller($order['op_selprod_user_id'], $order['opshipping_by_seller_user_id']);
-                    if ($order['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && $shipBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
+                    if ($order['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && $shipBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status']) && !empty($order['opshipping_carrier_code']) && !empty($order['opshipping_service_code'])) {
                         $li = $ul->appendElement("li");
                         if (empty($order['opship_response']) && empty($order['opship_tracking_number'])) {
                             if ('EasyPost' != $keyName) {

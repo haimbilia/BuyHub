@@ -43,8 +43,10 @@ foreach ($arr_listing as $sn => $row) {
             case 'epage_identifier':
                 if ($row['epage_label'] != '') {
                     $td->appendElement('plaintext', array(), $row['epage_label'], true);
-                    $td->appendElement('br', array());
-                    $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
+                    if ($row['epage_content_for'] != Extrapage::CONTENT_IMPORT_INSTRUCTION) {
+                        $td->appendElement('br', array());
+                        $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
+                    }
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }

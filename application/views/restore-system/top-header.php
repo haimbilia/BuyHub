@@ -4,8 +4,7 @@
 
             <p class="restore__content">Database Restores in</p>
             <div class="restore__progress">
-                <div class="restore__progress-bar" role="progressbar" style="width:25%" aria-valuenow="25"
-                    aria-valuemin="0" aria-valuemax="100">
+                <div class="restore__progress-bar" style="width:25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                 </div>
             </div>
             <span class="restore__counter" id="restoreCounter">00:00:00</span>
@@ -84,7 +83,10 @@
             </a>
         </li>
     </ul>
+   
+    
     <div class="demo-cta">
+    <div class="version-num animate-flicker">  <a target="_blank" rel="noopener" href="https://www.yo-kart.com/blog/yokart-releases-v9-3-0-to-personalize-shopping-experiences-automate-payouts-taxes-shipping/?q=demov9.3 ">Learn about <?php echo str_replace('RV-', 'V', CONF_WEB_APP_VERSION);?></a></div>
         <a target="_blank" href="https://www.yo-kart.com/multivendor-ecommerce-marketplace-platform.html"
             class=" btn btn-brand btn-sm ripplelink" rel="noopener">Start Your Marketplace</a> &nbsp;
         <a href="https://www.yo-kart.com/request-demo.html" class="request-demo btn btn-outline-brand btn-sm  ripplelink" rel="noopener">

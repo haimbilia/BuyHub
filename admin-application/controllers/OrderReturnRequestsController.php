@@ -50,8 +50,8 @@ class OrderReturnRequestsController extends AdminBaseController
         $srch->addMultipleFields(
             array( 'orrequest_id', 'orrequest_qty', 'orrequest_type', 'orrequest_returnreason_id',
             'orrequest_date', 'orrequest_status', 'orrequest_reference', 'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username',
-            'buyer_cred.credential_email as buyer_email', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
-            'seller.user_phone as seller_phone', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email',
+            'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
+            'seller.user_phone_dcode as seller_phone_dcode', 'seller.user_phone as seller_phone', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email',
             'op_product_name', 'op_selprod_title', 'op_selprod_options', 'op_brand_name', 'op_shop_name',  'op_qty', 'op_unit_price', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping' )
         );
         $srch->addOrder('orrequest_date', 'DESC');
@@ -167,8 +167,8 @@ class OrderReturnRequestsController extends AdminBaseController
         $srch->addMultipleFields(
             array( 'orrequest_id', 'orrequest_op_id', 'orrequest_qty', 'orrequest_type', 'orrequest_returnreason_id',
             'orrequest_date', 'orrequest_status', 'orrequest_reference', 'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username',
-            'buyer_cred.credential_email as buyer_email', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
-            'seller.user_phone as seller_phone', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email',
+            'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
+            'seller.user_phone_dcode as seller_phone_dcode', 'seller.user_phone as seller_phone', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email',
             'op_product_name', 'op_selprod_title', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_qty', 'op_unit_price',  
             'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'order_tax_charged', 'op_other_charges', 
             'op_refund_shipping', 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 
@@ -526,10 +526,10 @@ class OrderReturnRequestsController extends AdminBaseController
         $frm->addTextBox(Labels::getLabel('LBL_Reference_No.', $this->adminLangId), 'ref_no');
         $frm->addTextBox(Labels::getLabel('LBL_Vender_Details', $this->adminLangId), 'seller');
         $frm->addTextBox(Labels::getLabel('LBL_Product', $this->adminLangId), 'product');
-        $frm->addSelectBox(Labels::getLabel('LBL_Request_Status', $this->adminLangId), 'orrequest_status', OrderReturnRequest::getRequestStatusArr($langId), '', array(), 'All Request Status');
+        $frm->addSelectBox(Labels::getLabel('LBL_Request_Status', $this->adminLangId), 'orrequest_status', OrderReturnRequest::getRequestStatusArr($langId), '', array(), Labels::getLabel('LBL_All_Request_Status', $this->adminLangId));
         $requestType = OrderReturnRequest::getRequestTypeArr($langId);
         if (count($requestType) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->adminLangId), 'orrequest_type', OrderReturnRequest::getRequestTypeArr($langId), '', array(), 'All Request Types');
+            $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->adminLangId), 'orrequest_type', OrderReturnRequest::getRequestTypeArr($langId), '', array(), Labels::getLabel('LBL_All_Request_Type', $this->adminLangId));
         }
         $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly'));
         $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly'));

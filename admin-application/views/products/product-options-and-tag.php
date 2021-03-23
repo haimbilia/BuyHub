@@ -90,47 +90,54 @@ $("document").ready(function() {
         var tag_name = e.detail.tag.title;   
         if(tag_id == ''){
             var data = 'tag_id=0&tag_identifier='+tag_name
-            fcom.updateWithAjax(fcom.makeUrl('Tags', 'setup'), data, function(t) {
-                tagify.settings.whitelist.push({'id':t.tagId,value:tag_name});
+            fcom.ajax(fcom.makeUrl('Tags', 'setup'), data, function(t) {         
                 var dataLang = 'tag_id='+t.tagId+'&tag_name='+tag_name+'&lang_id=0';
-                fcom.updateWithAjax(fcom.makeUrl('Tags', 'langSetup'), dataLang, function(t2) { 
-                    fcom.updateWithAjax(fcom.makeUrl('Products', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) { 
+                fcom.ajax(fcom.makeUrl('Tags', 'langSetup'), dataLang, function(t2) { 
+                    fcom.ajax(fcom.makeUrl('Products', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) { 
                          var tagifyId = e.detail.tag.__tagifyId;
                          $('[__tagifyid='+tagifyId+']').attr('id', t.tagId);
                      });
                 });
             });
         }else{
-            fcom.updateWithAjax(fcom.makeUrl('Products', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) { });
-        }        
+            fcom.ajax(fcom.makeUrl('Products', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) { });
+        }  
+        tagifyProducts();      
     }
 
     removeTagData = function(e){ 
-        var tag_id = e.detail.tag.id;
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) {
-        });
+        var tag_id = e.detail.tag.id;      
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) {});
+        tagifyProducts();
     }
     
-    getTagsAutoComplete = function(){
+    getTagsAutoComplete = function(e){
+        var keyword = e.detail.value;
+        //tagify.loading(true).dropdown.hide.call(tagify)
         var list = [];
-        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), '', function(t) {          
+        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), {keyword:keyword}, function(t) {          
             var ans = $.parseJSON(t);
             for (i = 0; i < ans.length; i++) {            
                 list.push({
                     "id" : ans[i].id,
                     "value" : ans[i].tag_identifier, 
                 });
-            }           
-        });
-        return list;
+            }
+            tagify.settings.whitelist = list;
+            tagify.loading(false).dropdown.show.call(tagify, keyword);
+        });        
     }
     
-    tagify = new Tagify(document.querySelector('input[name=tag_name]'), {
-           whitelist : getTagsAutoComplete(),
+    tagifyProducts = function() {
+        var element = 'input[name=tag_name]';
+        $(element).siblings( ".tagify" ).remove();
+        tagify = new Tagify(document.querySelector('input[name=tag_name]'), {
+           whitelist : [],
            delimiters : "#",
            editTags : false,
-        }).on('add', addTagData).on('remove', removeTagData); 
-
+        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);  
+    };
+    tagifyProducts();
         
             
     addOption = function(e){ 
@@ -150,37 +157,44 @@ $("document").ready(function() {
                     $.systemMessage(rsp.msg,'alert--danger');
                 } 
             });            
-        }        
+        }   
+        tagifyTheOptions();     
     }
 
     removeOption = function(e){ 
         var option_id = e.detail.tag.id; 
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductOption'), 'product_id='+product_id+'&option_id='+option_id, function(t) {
+        fcom.ajax(fcom.makeUrl('Products', 'removeProductOption'), 'product_id='+product_id+'&option_id='+option_id, function(t) {
             upcListing(product_id);
         });
+        tagifyTheOptions();
     }
     
-    getOptionsAutoComplete = function(){
-        var listOptions = [];
-        fcom.ajax(fcom.makeUrl('Options', 'autoComplete'), '', function(t) {           
+    getOptionsAutoComplete = function(e){
+        var keyword = e.detail.value;
+        var listOptions = [];        
+        fcom.ajax(fcom.makeUrl('Options', 'autoComplete'), {keyword:keyword}, function(t) {           
             var ans = $.parseJSON(t);
             for (i = 0; i < ans.length; i++) {            
                 listOptions.push({
                     "id" : ans[i].id,
                     "value" : ans[i].name+'('+ans[i].option_identifier+')',
                 });
-            }           
-        });
-        return listOptions;
-    };
-     
+            }
+            tagifyOption.settings.whitelist = listOptions;
+            tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
+        });       
+    };     
     
-    tagifyOption = new Tagify(document.querySelector('input[name=option_groups]'), {
-          // enforceWhitelist : true,
-           whitelist : getOptionsAutoComplete(),
-           delimiters : "#",
-           editTags : false, 
-        }).on('add', addOption).on('remove', removeOption);         
+    tagifyTheOptions = function() {
+        var element = 'input[name=option_groups]';
+        $(element).siblings( ".tagify" ).remove();
+        tagifyOption = new Tagify(document.querySelector(element), {
+            whitelist : [],
+            delimiters : "#",
+            editTags : false, 
+        }).on('add', addOption).on('remove', removeOption).on('input', getOptionsAutoComplete); 
+    };
+    tagifyTheOptions();
 
 });
 </script>

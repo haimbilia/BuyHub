@@ -27,7 +27,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
     <!-- favicon ================================================== -->
     <meta name="theme-color" content="#<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="<?php echo UrlHelper::generateUrl('Image', 'appleTouchIcon', array($siteLangId, '144-144')); ?>">
+    <meta name="msapplication-TileImage" content="<?php echo UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '144-144')); ?>">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="msapplication-navbutton-color" content="#<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>">
@@ -69,7 +69,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
         <meta property="og:description" content="<?php echo $description; ?> " />
         <meta property="og:image" content="<?php echo $image; ?>" />
         <?php if (!empty(FatApp::getConfig("CONF_TWITTER_USERNAME", FatUtility::VAR_STRING, ''))) { ?>
-            <meta name="twitter:card" content="website">
+            <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:site" content="@<?php echo FatApp::getConfig("CONF_TWITTER_USERNAME", FatUtility::VAR_STRING, ''); ?>">
             <meta name="twitter:title" content="<?php echo $title; ?>">
             <meta name="twitter:description" content="<?php echo $description; ?>">

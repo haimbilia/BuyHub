@@ -73,6 +73,8 @@ class GuestAffiliateController extends MyAppController
                 $post['user_preferred_dashboard'] = User::USER_AFFILIATE_DASHBOARD;
                 $post['user_affiliate_commission'] = FatApp::getConfig('CONF_AFFILIATE_SIGNUP_COMMISSION', FatUtility::VAR_FLOAT, 0);
 
+                $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
+
                 $userObj->assignValues($post);
                 if (!$userObj->save()) {
                     $db->rollbackTransaction();
@@ -317,7 +319,7 @@ class GuestAffiliateController extends MyAppController
                 $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
 
                 $frm->addRequiredField(Labels::getLabel('LBL_NAME', $siteLangId), 'user_name');
-
+                $frm->addHiddenField('', 'user_phone_dcode');
                 $phoneFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
@@ -354,7 +356,7 @@ class GuestAffiliateController extends MyAppController
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('LBL_Select', $siteLangId));
                 $fld->requirement->setRequired(true);
 
-                $frm->addSelectBox(Labels::getLabel('LBL_State', $siteLangId), 'user_state_id', array())->requirement->setRequired(true);
+                $frm->addSelectBox(Labels::getLabel('LBL_State', $siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
                 $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
                 $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $siteLangId), 'user_zip');
 

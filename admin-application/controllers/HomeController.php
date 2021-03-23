@@ -235,7 +235,7 @@ class HomeController extends AdminBaseController
                 $cnd->attachCondition('u.user_is_buyer', '=', 1);
                 $srch->addMultipleFields(
                     array(
-                        'user_name', 'credential_username', 'credential_email', 'user_phone',
+                        'user_name', 'credential_username', 'credential_email', 'user_phone_dcode', 'user_phone',
                         'user_regdate', 'user_is_buyer', 'user_is_supplier'
                     )
                 );
@@ -252,7 +252,7 @@ class HomeController extends AdminBaseController
                 $srch->addOrder('u.user_id', 'DESC');
                 $srch->addCondition('u.user_is_advertiser', '=', 1);
                 $srch->addCondition('u.user_parent', '=', 0);
-                $srch->addMultipleFields(array('user_name', 'credential_username', 'credential_email', 'user_phone', 'user_regdate'));
+                $srch->addMultipleFields(array('user_name', 'credential_username', 'credential_email', 'user_phone_dcode', 'user_phone', 'user_regdate'));
                 $srch->setPageNumber(1);
                 $srch->setPageSize(10);
                 $rs = $srch->getResultSet();
@@ -265,7 +265,7 @@ class HomeController extends AdminBaseController
                 $srch->doNotCalculateRecords();
                 $srch->addOrder('u.user_id', 'DESC');
                 $srch->addCondition('u.user_is_affiliate', '=', 1);
-                $srch->addMultipleFields(array('user_name', 'credential_username', 'credential_email', 'user_phone', 'user_regdate'));
+                $srch->addMultipleFields(array('user_name', 'credential_username', 'credential_email', 'user_phone_dcode', 'user_phone', 'user_regdate'));
                 $srch->setPageNumber(1);
                 $srch->setPageSize(10);
                 $rs = $srch->getResultSet();
@@ -397,7 +397,7 @@ class HomeController extends AdminBaseController
             $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->adminLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this - adminLangId));
+        Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this->adminLangId));
         FatUtility::dieWithError(Message::getHtml());
     }
 }

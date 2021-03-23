@@ -10,8 +10,8 @@ if (empty($products)) {
 
 $frmProductSearch->setFormTagAttribute('onSubmit', 'searchProducts(this); return(false);');
 $keywordFld = $frmProductSearch->getField('keyword');
-$keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search', $siteLangId));
-$keywordFld = $frmProductSearch->getField('keyword');
+// $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search', $siteLangId));
+// $keywordFld = $frmProductSearch->getField('keyword');
 $keywordFld->overrideFldType("hidden");
 
 $sortByFld = $frmProductSearch->getField('sortBy');
@@ -49,10 +49,10 @@ if (!empty($category['banner'])) {
     <section class="bg-shop">
         <div class="shop-banner">
             <picture>
-                <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-                <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-                <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-                <img data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
+                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
+                <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
+                <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
             </picture>
         </div>
         <?php /* if (!empty($category['prodcat_description']) && array_key_exists('prodcat_description', $category)) { ?>
@@ -119,37 +119,37 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
     </section>
 <?php } ?>
 <?php $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
-<section class="section">
+<div class="section">
     <div class="container">
-    <div class="collection-listing <?php echo FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP ? 'filter-top': 'filter-left';?>">
+        <div class="collection-listing <?php echo FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP ? 'filter-top' : 'filter-left'; ?>">
 
             <?php
-                /*
+            /*
                 if (FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP) {
                     require_once('filters-layout-top.php');
                 } else {
                     require_once('filters-layout-left.php');
                 } 
                 */
-                require_once('filters-layout.php');
-            
+            require_once('filters-layout.php');
+
             ?>
 
             <main class="collection-content">
-			    <button  class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar"><i class="icn">
-                                            <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#filter" href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#filter"></use>
-                                            </svg>
-                                        </i></button>
+                <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar"><i class="icn">
+                        <svg class="svg">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
+                        </svg>
+                    </i></button>
                 <div class="row align-items-center justify-content-between flex-column flex-md-row page-sort-wrap">
                     <div class="col mb-3 mb-md-0">
                         <div class="total-products">
                             <h4>
-                                <?php echo isset($scollection_name) && !empty($scollection_name) ? $scollection_name : '';?>
+                                <?php echo isset($scollection_name) && !empty($scollection_name) ? $scollection_name : ''; ?>
                                 <span class="hide_on_no_product">
                                     <small class="text-muted">
-										<span id="total_records"><?php echo $recordCount; ?></span> <?php echo Labels::getLabel('LBL_ITEM(S)', $siteLangId);?>
-									</small>
+                                        <span id="total_records"><?php echo $recordCount; ?></span> <?php echo Labels::getLabel('LBL_ITEM(S)', $siteLangId); ?>
+                                    </small>
                                 </span>
                             </h4>
                         </div>
@@ -159,15 +159,15 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <ul>
                                 <li class="list__item">
                                     <?php if (!(UserAuthentication::isUserLogged()) || (UserAuthentication::isUserLogged() && (User::isBuyer()))) { ?>
-                                    <a href="javascript:void(0)" onclick="saveProductSearch()" class="btn btn-brand btn--filters-control saveSearch-js">
-                                    <i class="icn fas fa-file-download d-md-none"></i><span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></a>
+                                        <a href="javascript:void(0)" onclick="saveProductSearch()" class="btn btn-brand btn--filters-control saveSearch-js">
+                                            <i class="icn fas fa-file-download d-md-none"></i><span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></a>
                                     <?php } ?>
                                 </li>
                                 <li>
                                     <?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
                                 <li>
                                     <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?></li>
-                                   
+
                                 <li class="d-none d-md-block">
                                     <div class="list-grid-toggle switch--link-js">
                                         <div class="icon">
@@ -182,7 +182,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     </div>
                 </div>
                 <div class="listing-products -listing-products ">
-                    <?php 
+                    <?php
                     $productsData = array(
                         'products' => $products,
                         'page' => $page,
@@ -192,13 +192,13 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                         'siteLangId' => $siteLangId,
                         'colMdVal' => 4
                     );
-                    $this->includeTemplate('products/products-list.php', $productsData, false); ?> 
+                    $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                 </div>
             </main>
 
         </div>
     </div>
-</section>
+</div>
 <section>
     <div class="container">
         <div class="row">
@@ -212,7 +212,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
     </div>
 </section>
 <div class="gap"></div>
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
         $currentPageUrl = '<?php echo html_entity_decode($canonicalUrl, ENT_QUOTES, 'utf-8'); ?>';
         $productSearchPageType = '<?php echo $productSearchPageType; ?>';

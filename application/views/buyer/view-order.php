@@ -23,7 +23,7 @@ $orderStatusArr = Orders::getOrderPaymentStatusArr($siteLangId);
 if (!$print) { ?>
     <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php } ?>
-<main id="main-area" class="main" role="main">
+<main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
         <?php if (!$print) { ?>
             <div class="content-header row">
@@ -599,7 +599,7 @@ if (!$print) { ?>
                                 }
 
                                 if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                    $billingAddress  .= '<br>' . $orderDetail['billingAddress']['oua_phone'];
+                                    $billingAddress  .= '<br>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
                                 }
                                 ?>
                                 <div class="info--order">
@@ -641,7 +641,7 @@ if (!$print) { ?>
                                     }
 
                                     if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-                                        $shippingAddress .= '<br>' . $orderDetail['shippingAddress']['oua_phone'];
+                                        $shippingAddress .= '<br>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
                                     } ?>
                                     <div class="info--order">
                                         <p>

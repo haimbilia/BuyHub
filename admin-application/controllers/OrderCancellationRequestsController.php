@@ -55,7 +55,7 @@ class OrderCancellationRequestsController extends AdminBaseController
         $srch->addMultipleFields(
             array(
                 'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
-                'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'seller.user_phone as seller_phone', 'op_invoice_number',
+                'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'seller.user_phone_dcode as seller_phone_dcode', 'seller.user_phone as seller_phone', 'op_invoice_number',
                 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price', 'order_tax_charged', 'op_other_charges', 'op_rounding_off'
             )
         );
@@ -266,10 +266,10 @@ class OrderCancellationRequestsController extends AdminBaseController
         $frm = new Form('frmRequestSearch');
         $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Request_Status', $this->adminLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', array(), 'All Request Status');
+        $frm->addSelectBox(Labels::getLabel('LBL_Request_Status', $this->adminLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', array(), Labels::getLabel('LBL_All_Request_Status', $this->adminLangId));
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Order_Payment_Status', $this->adminLangId), 'op_status_id', Orders::getOrderProductStatusArr($langId), '', array(), 'All Order Payment Status');
-        $frm->addSelectBox(Labels::getLabel('LBL_Cancel_Reason', $this->adminLangId), 'ocrequest_ocreason_id', OrderCancelReason::getOrderCancelReasonArr($langId), '', array(), 'All Order Cancel Reason');
+        $frm->addSelectBox(Labels::getLabel('LBL_Order_Payment_Status', $this->adminLangId), 'op_status_id', Orders::getOrderProductStatusArr($langId), '', array(), Labels::getLabel('LBL_All_Order_Payment_Status', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Cancel_Reason', $this->adminLangId), 'ocrequest_ocreason_id', OrderCancelReason::getOrderCancelReasonArr($langId), '', array(), Labels::getLabel('LBL_All_Order_Cancel_Reason', $this->adminLangId));
         $frm->addTextBox(Labels::getLabel('LBL_Buyer_Details', $this->adminLangId), 'buyer');
         $frm->addTextBox(Labels::getLabel('LBL_Seller_Details', $this->adminLangId), 'seller');
         $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly'));

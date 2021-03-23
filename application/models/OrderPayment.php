@@ -35,7 +35,7 @@ class OrderPayment extends Orders
         $arrOrder = array();
         $orderInfo = $this->attributes;
         $userObj = new User($orderInfo["order_user_id"]);
-        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_phone'));
+        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone'));
         $addresses = $this->getOrderAddresses($orderInfo["order_id"]);
         $currencyArr = Currency::getCurrencyAssoc($this->orderLangId);
         $orderCurrencyCode = !empty($currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)]) ? $currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)] : '';
@@ -70,6 +70,7 @@ class OrderPayment extends Orders
             "customer_id" => $orderInfo["order_user_id"],
             "customer_name" => isset($userInfo["user_name"]) ? $userInfo["user_name"] : '',
             "customer_email" => isset($userInfo["credential_email"]) ? $userInfo["credential_email"] : '',
+            "customer_phone_dcode" => isset($userInfo["user_phone_dcode"]) ? $userInfo["user_phone_dcode"] : '',
             "customer_phone" => isset($userInfo["user_phone"]) ? $userInfo["user_phone"] : '',
             "order_currency_code" => $orderCurrencyCode,
             "order_type" => $orderInfo['order_type'],
@@ -101,7 +102,7 @@ class OrderPayment extends Orders
                 "customer_billing_state_code" => $addresses[Orders::BILLING_ADDRESS_TYPE]["oua_state_code"],
                 "customer_billing_country" => $addresses[Orders::BILLING_ADDRESS_TYPE]["oua_country"],
                 "customer_billing_country_code" => $addresses[Orders::BILLING_ADDRESS_TYPE]["oua_country_code"],
-                "customer_billing_phone" => $addresses[Orders::BILLING_ADDRESS_TYPE]["oua_phone"],
+                "customer_billing_phone" => $addresses[Orders::BILLING_ADDRESS_TYPE]["oua_phone_dcode"] . $addresses[Orders::BILLING_ADDRESS_TYPE]["oua_phone"],
             );
         }
 
@@ -116,7 +117,7 @@ class OrderPayment extends Orders
                 "customer_shipping_postcode" => $addresses[Orders::SHIPPING_ADDRESS_TYPE]["oua_zip"],
                 "customer_shipping_country" => $addresses[Orders::SHIPPING_ADDRESS_TYPE]["oua_country"],
                 "customer_shipping_country_code" => $addresses[Orders::SHIPPING_ADDRESS_TYPE]["oua_country_code"],
-                "customer_shipping_phone" => $addresses[Orders::SHIPPING_ADDRESS_TYPE]["oua_phone"],
+                "customer_shipping_phone" => $addresses[Orders::SHIPPING_ADDRESS_TYPE]["oua_phone_dcode"] . $addresses[Orders::SHIPPING_ADDRESS_TYPE]["oua_phone"],
             );
         } else {
             //$shippingArr = $billingArr;

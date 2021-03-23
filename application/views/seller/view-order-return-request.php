@@ -7,7 +7,7 @@ if (null != $btn) {
   $btn->addFieldTagAttribute('class', 'btn btn-brand');
 }
 ?>
-<main id="main-area" class="main" role="main">
+<main id="main-area" class="main"   >
   <div class="content-wrapper content-space">
     <div class="content-header row">
       <div class="col">
@@ -46,7 +46,7 @@ if (null != $btn) {
                   <?php echo (strlen($vendorReturnAddress['state_name']) > 0) ? $vendorReturnAddress['state_name'] . '<br>' : ''; ?>
                   <?php echo (strlen($vendorReturnAddress['country_name']) > 0) ? $vendorReturnAddress['country_name'] . '<br>' : ''; ?>
                   <?php echo (strlen($vendorReturnAddress['ura_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $vendorReturnAddress['ura_zip'] . '<br>' : ''; ?>
-                  <?php echo (strlen($vendorReturnAddress['ura_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $vendorReturnAddress['ura_phone'] . '<br>' : ''; ?>
+                  <?php echo (strlen($vendorReturnAddress['ura_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . ValidateElement::formatDialCode($vendorReturnAddress['ura_phone_dcode']) . $vendorReturnAddress['ura_phone'] . '<br>' : ''; ?>
                 </p>
               </div>
             </div>

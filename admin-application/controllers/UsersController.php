@@ -114,7 +114,7 @@ class UsersController extends AdminBaseController
 
         $srch->addFld(array('user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for'));
 
-        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -160,12 +160,13 @@ class UsersController extends AdminBaseController
         $post = FatApp::getPostedData();
         $user_state_id = FatUtility::int($post['user_state_id']);
         $post = $frm->getFormDataFromArray($post);
-        $post['user_state_id'] = $user_state_id;
-
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
+        $post['user_state_id'] = $user_state_id;
+
+        $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
 
         $user_id = FatUtility::int($post['user_id']);
         unset($post['user_id']);
@@ -744,6 +745,11 @@ class UsersController extends AdminBaseController
         if ($user_id < 1) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        /* Restrict to change password for demo user on demo URL. */
+        if (CommonHelper::demoUrl() && 4 == $user_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->adminLangId));
         }
 
         $userObj = new User($user_id);
@@ -1829,6 +1835,7 @@ class UsersController extends AdminBaseController
             'mail_subject' => trim($post['mail_subject']),
             'mail_message' => nl2br($post["mail_message"]),
             'credential_email' => $user['credential_email'],
+            'user_phone_dcode' => ValidateElement::formatDialCode($user['user_phone_dcode']),
             'user_phone' => $user['user_phone']
         );
         
@@ -1839,6 +1846,30 @@ class UsersController extends AdminBaseController
         }
         
         $this->set('msg', Labels::getLabel('LBL_Your_Message_Sent_To', $this->adminLangId) . ' - ' . $user["credential_email"]);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+    
+    public function markSellerAsBuyer()
+    {
+        $this->objPrivilege->canEditUsers();
+        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+        if (1 > $userId) {
+            Message::addErrorMessage($this->str_invalid_request_id);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $userObj = new User($userId);
+        $user = $userObj->getUserInfo(null, false, false);
+        if (!$user) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        $userObj->assignValues(['user_is_buyer' => User::USER_TYPE_BUYER]);
+        if (!$userObj->save()) {
+            Message::addErrorMessage($userObj->getError());
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1884,7 +1915,7 @@ class UsersController extends AdminBaseController
 
         $statusArr = User::getSupplierReqStatusArr($this->adminLangId);
         unset($statusArr[User::SUPPLIER_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'requestId', 0);
         $frm->addTextArea('', 'comments', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
@@ -1983,7 +2014,7 @@ class UsersController extends AdminBaseController
         $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'credential_username', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->adminLangId), 'user_name');
         $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->adminLangId), 'user_dob', '', array('readonly' => 'readonly'));
-
+        $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
@@ -1991,10 +2022,10 @@ class UsersController extends AdminBaseController
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array())->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
         $frm->addTextBox(Labels::getLabel('LBL_City', $this->adminLangId), 'user_city');
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
@@ -2063,7 +2094,7 @@ class UsersController extends AdminBaseController
 
         $statusArr = User::getCatalogReqStatusArr($this->adminLangId);
         unset($statusArr[User::CATALOG_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'requestId', 0);
         $frm->addTextArea('', 'comments', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
@@ -2088,7 +2119,7 @@ class UsersController extends AdminBaseController
         $frm = new Form('frmUserTransaction');
         $frm->addHiddenField('', 'user_id');
         $typeArr = Transactions::getCreditDebitTypeArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'type', $typeArr)->requirements()->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'type', $typeArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
         $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->adminLangId), 'amount')->requirements()->setFloatPositive();
         $frm->addTextArea(Labels::getLabel('LBL_Description', $this->adminLangId), 'description')->requirements()->setRequired();
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
@@ -2121,11 +2152,12 @@ class UsersController extends AdminBaseController
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($langId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'addr_state_id', array())->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'addr_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
         $frm->addTextBox(Labels::getLabel('LBL_Postal_Code', $this->adminLangId), 'addr_zip');
+        $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $frm->addHiddenField('', 'addr_record_id');

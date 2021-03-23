@@ -23,7 +23,6 @@ class CommonHelper extends FatUtility
         self::$_user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         self::$_lang_id = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
         self::$_currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-        self::$_currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
 
         if (!$isAdmin) {
             if (true === MOBILE_APP_API_CALL) {
@@ -76,7 +75,7 @@ class CommonHelper extends FatUtility
             self::$_currency_id,
             array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
         );
-
+        
         self::$_lang_code = Language::getAttributesById(
             self::$_lang_id,
             'language_code'
@@ -1812,10 +1811,7 @@ class CommonHelper extends FatUtility
 
     public static function demoUrl()
     {
-        if (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false) {
-            return true;
-        }
-        return false;
+        return (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false);
     }
 
     public static function jsonEncodeUnicode($data, $convertToType = false)
@@ -1931,7 +1927,6 @@ class CommonHelper extends FatUtility
 
 
         $arr = array_values(array_filter(explode('/', $url)));
-
         $controller = (isset($arr[0])) ? $arr[0] : '';
         array_shift($arr);
         $action = (isset($arr[0])) ? $arr[0] : '';
@@ -1981,6 +1976,12 @@ class CommonHelper extends FatUtility
                 break;
             case 'blog/post-detail':
                 $urlType = applicationConstants::URL_TYPE_BLOG;
+                break;
+            case 'home/referral':
+                $urlType = applicationConstants::URL_TYPE_REGISTER;
+                $extra = [
+                    'referralToken' => $recordId
+                ];
                 break;
             default:
                 $recordId = applicationConstants::NO;

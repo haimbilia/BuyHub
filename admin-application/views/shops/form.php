@@ -18,8 +18,8 @@ $fld = $frmShop->getField('shop_featured');
 $fld->htmlAfterField = '<small><br>' . Labels::getLabel('LBL_Featured_Shops_will_be_listed_on_Featured_Shops_Page._Featured_Shops_will_get_priority,', $adminLangId) . '</small>';
 $urlFld = $frmShop->getField('urlrewrite_custom');
 $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
-$urlFld->htmlAfterField = "<br><small class='text--small'>" . UrlHelper::generateFullUrl('shops', 'View', array($shop_id), CONF_WEBROOT_FRONT_URL) . '</small>';
-$urlFld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value,'')");
+$urlFld->htmlAfterField = "<small class='text--small'>" . UrlHelper::generateFullUrl('shops', 'View', array($shop_id), CONF_WEBROOT_FRONT_URL) . '</small>';
+$urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$shop_id)");
 
 $postalCode = $frmShop->getField('shop_postalcode');
 $postalCode->setFieldTagAttribute('id', "postal_code");
