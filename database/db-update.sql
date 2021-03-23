@@ -290,6 +290,7 @@ ALTER TABLE `tbl_countries` DROP `country_dial_code`;
 /* Bind all phone number fields with flag field. */
 -- --- Easypost Shipping API--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('EasyPost', '8', 'EasyPost', '0', '2');
+
 ALTER TABLE `tbl_order_product_shipment` CHANGE `opship_tracking_number` `opship_tracking_number` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL, CHANGE `opship_tracking_url` `opship_tracking_url` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
 
 CREATE TABLE `tbl_order_product_responses` (
@@ -309,3 +310,29 @@ INNER JOIN tbl_order_products op ON op.op_id = ops.opship_op_id;
 ALTER TABLE `tbl_order_product_shipment` DROP `opship_response`;
 /* For Shipment Responses */
 -- --- Easypost Shipping API--- --
+
+
+-- --- Tax Module Update --- --
+ALTER TABLE `tbl_tax_rule_locations` CHANGE `taxruleloc_country_id` `taxruleloc_to_country_id` INT NOT NULL, CHANGE `taxruleloc_state_id` `taxruleloc_to_state_id` INT NOT NULL;
+ALTER TABLE `tbl_tax_rule_locations` ADD `taxruleloc_from_country_id` INT NOT NULL AFTER `taxruleloc_taxcat_id`, ADD `taxruleloc_from_state_id` INT NOT NULL AFTER `taxruleloc_from_country_id`;
+ALTER TABLE `tbl_tax_rule_locations` DROP INDEX `taxruleloc_taxcat_id`;
+ALTER TABLE `tbl_tax_rule_locations` ADD UNIQUE( `taxruleloc_taxcat_id`, `taxruleloc_from_country_id`, `taxruleloc_from_state_id`, `taxruleloc_to_country_id`, `taxruleloc_to_state_id`, `taxruleloc_type`, `taxruleloc_unique`);
+UPDATE `tbl_tax_rule_locations` SET `taxruleloc_from_country_id` = '-1'  and `taxruleloc_from_state_id` = '-1';
+
+CREATE TABLE `tbl_tax_rule_rates` (
+  `trr_taxrule_id` int NOT NULL,
+  `trr_rate` decimal(10,2) NOT NULL,
+  `trr_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_tax_rule_rates`
+  ADD PRIMARY KEY (`trr_taxrule_id`,`trr_user_id`);
+
+INSERT INTO tbl_tax_rule_rates (trr_taxrule_id, trr_rate ,trr_user_id) SELECT taxrule_id, taxrule_rate,0 FROM tbl_tax_rules;
+ALTER TABLE tbl_tax_rules DROP taxrule_rate;
+ALTER TABLE `tbl_tax_rule_details` ADD `taxruledet_user_id` INT NOT NULL AFTER `taxruledet_rate`;
+ALTER TABLE `tbl_tax_rule_details` ADD UNIQUE( `taxruledet_taxrule_id`, `taxruledet_taxstr_id`, `taxruledet_user_id`);
+ALTER TABLE `tbl_tax_rule_details` DROP `taxruledet_id`;
+ALTER TABLE `tbl_tax_rule_locations` DROP `taxruleloc_unique`;
+-- --- Tax Module Update--- --
+
