@@ -1549,7 +1549,7 @@ END,   special_price_found ) as special_price_found'
 
             switch ($sortBy) {
                 case 'keyword':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('keyword_relevancy', 'DESC');
@@ -1558,7 +1558,7 @@ END,   special_price_found ) as special_price_found'
                     $srch->addOrder('theprice', $sortOrder);
                     break;
                 case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)&& FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('selprod_sold_count', $sortOrder);
