@@ -13,6 +13,9 @@ class OrderProduct extends MyAppModel
     public const DB_TBL_SETTINGS = 'tbl_order_product_settings';
     public const DB_TBL_SETTINGS_PREFIX = 'opsetting_';
 
+    public const DB_TBL_RESPONSE = 'tbl_order_product_responses';
+    public const DB_TBL_RESPONSE_PREFIX = 'opr_';
+
     public const CHARGE_TYPE_TAX = 1;
     public const CHARGE_TYPE_DISCOUNT = 2;
     public const CHARGE_TYPE_SHIPPING = 3;
@@ -20,6 +23,10 @@ class OrderProduct extends MyAppModel
     public const CHARGE_TYPE_REWARD_POINT_DISCOUNT = 5;
     public const CHARGE_TYPE_VOLUME_DISCOUNT = 6;
     public const CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE = 7;
+
+    public const RESPONSE_TYPE_SHIPMENT = 1;
+    public const RESPONSE_TYPE_RETURN = 2;
+    public const RESPONSE_TYPE_REFUND = 3;
 
     public function __construct($id = 0)
     {
@@ -117,5 +124,122 @@ class OrderProduct extends MyAppModel
         $srch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_order_id', 'selprod_title', 'selprod_product_id', 'order_id', 'order_user_id', 'op_qty', 'op_unit_price', 'op_selprod_options'));
         $rows = FatApp::getDb()->fetchAll($srch->getResultSet());
         return $rows;
+    }
+    
+    /**
+     * getResponseTypes
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public static function getResponseTypes(int $langId): array
+    {
+        return [
+            self::RESPONSE_TYPE_SHIPMENT => Labels::getLabel('LBL_SHIPMENT', $langId),
+            self::RESPONSE_TYPE_RETURN => Labels::getLabel('LBL_RETURN', $langId),
+            self::RESPONSE_TYPE_REFUND => Labels::getLabel('LBL_REFUND', $langId),
+        ];
+    }
+    
+    /**
+     * isValidResponseType
+     *
+     * @param  int $type
+     * @return bool
+     */
+    public static function isValidResponseType(int $type): bool
+    {
+        return array_key_exists($type, self::getResponseTypes(0));
+    }
+    
+    /**
+     * bindResponse
+     *
+     * @param  int $type
+     * @param  string $response
+     * @return bool
+     */
+    public function bindResponse(int $type, string $response): bool
+    {
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PRODUCT_ID', 0);
+            return false;
+        }
+
+        if (false === self::isValidResponseType($type)) {
+            $this->error = Labels::getLabel('MSG_INVALID_RESPONSE_TYPE', 0);
+            return false;
+        }
+
+        $dataToInsert = [
+            'opr_op_id' => $this->mainTableRecordId,
+            'opr_type' => $type
+        ];
+
+        $updateOnDuplicate = [
+            'opr_response' => $response,
+            'opr_added_on' => date('Y-m-d H:i:s')
+        ];
+        
+        $dataToInsert = array_merge($dataToInsert, $updateOnDuplicate);
+
+        $db = FatApp::getDb();
+        if (!$db->insertFromArray(static::DB_TBL_RESPONSE, $dataToInsert, false, [], $updateOnDuplicate)) {
+            $this->error = $db->getError();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * getResponse : Belongs to third party response
+     *
+     * @param  int $type
+     * @param  int $joinTypeTables
+     * @param  int $attr
+     * @param  int $langId
+     * @return array
+     */
+    public function getResponse(int $type = 0, bool $joinTypeTables = false, array $attr = [], int $langId = 0): array
+    {
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PRODUCT_ID', $langId);
+            return [];
+        }
+
+        if (0 < $type && false === self::isValidResponseType($type)) {
+            $this->error = Labels::getLabel('MSG_INVALID_RESPONSE_TYPE', $langId);
+            return [];
+        }
+
+        $srch = new SearchBase(static::DB_TBL_RESPONSE, 'opr');
+
+        if (empty($attr)) {
+            $attr = ['opr_response'];
+        }
+
+        $attr = !in_array('opr_response', $attr) ? array_merge($attr, ['opr_response']) : $attr;
+        $attr = (1 > $type) ? array_merge($attr, ['opr_type']) : $attr;
+
+        $srch->addMultipleFields($attr);
+        $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'op.op_id = opr.opr_op_id', 'op');
+        $srch->addCondition('opr.' . static::DB_TBL_RESPONSE_PREFIX . 'op_id', '=', $this->mainTableRecordId);
+        if (0 < $type) {
+            $srch->addCondition('opr.' . static::DB_TBL_RESPONSE_PREFIX . 'type', '=', $type);
+            if (true === $joinTypeTables) {
+                switch ($type) {
+                    case self::RESPONSE_TYPE_REFUND:
+                    case self::RESPONSE_TYPE_SHIPMENT:
+                        $srch->joinTable(OrderProductShipment::DB_TBL, 'INNER JOIN', 'ops.opship_op_id = opr.opr_op_id', 'ops');
+                        break;
+                    case self::RESPONSE_TYPE_RETURN:
+                        $srch->joinTable(OrderReturnRequest::DB_TBL, 'INNER JOIN', 'orr.orrequest_op_id = opr.opr_op_id', 'orr');
+                        break;
+                }
+            }
+        }
+
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs);
     }
 }

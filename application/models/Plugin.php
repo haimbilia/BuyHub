@@ -274,14 +274,17 @@ class Plugin extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (empty($row) || !is_array($row)) {
+        
+        $db = FatApp::getDb();
+        $row = (array) $db->fetch($rs);
+        if (empty($row)) {
             return false;
         }
 
-        if (!empty($attr) && is_string($attr)) {
+        if (!empty($attr) && is_string($attr) && array_key_exists($attr, $row)) {
             return $row[$attr];
         }
         return $row;

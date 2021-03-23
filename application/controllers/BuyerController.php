@@ -183,7 +183,6 @@ class BuyerController extends BuyerBaseController
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '=', $orderId);
 
-
         if (0 < $opId) {
             if (true === MOBILE_APP_API_CALL) {
                 $srch->joinTable(SelProdReview::DB_TBL, 'LEFT OUTER JOIN', 'o.order_id = spr.spreview_order_id and op.op_selprod_id = spr.spreview_selprod_id', 'spr');
@@ -214,6 +213,7 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
 
         $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
+        
         foreach ($childOrderDetail as $op_id => $val) {
             $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
 
