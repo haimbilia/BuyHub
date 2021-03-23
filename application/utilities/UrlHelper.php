@@ -46,6 +46,10 @@ class UrlHelper extends FatUtility
             return $url;
         }
 
+        if (UrlHelper::staticContentProvider($controller, $action) == true) {
+            return $url;
+        }
+
         $urlForString = FatUtility::generateUrl($controller, $action, $queryData, $useRootUrl, $url_rewriting);
         $urlString = trim(ltrim($urlForString, CONF_WEBROOT_FRONTEND), '/');
         $srch = UrlRewrite::getSearchObject();
