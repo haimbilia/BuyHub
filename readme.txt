@@ -63,9 +63,10 @@ Fixes:
     => 051407 - Advertiser account >> update credentials >> selected country code while signup should get displayed on update credentials instead of default country of system
     => 051474 - Invalid Currency & Language symbol displays in pdf
     => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
-    => 051573 - Product search is not working when we Activate Geo Location and shipping plugin
+    => 051573 - Product search is not working when we Activate Geo Location and shipping plugin.
+    => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
     => 051651 - Top - header menu are not aligned properly
-    => 051594 - non verified user (*deleted) is proceeding for checkout and getting error - session expire 
+    => 051594 - non verified user (*deleted) is proceeding for checkout and getting error - session expire
     
 Enhancements :
    => Make provision to made seller
