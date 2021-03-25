@@ -64,6 +64,7 @@ Fixes:
     => 051474 - Invalid Currency & Language symbol displays in pdf
     => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
     => 051573 - Product search is not working when we Activate Geo Location and shipping plugin
+    => 051651 - Top - header menu are not aligned properly
     
 Enhancements :
    => Make provision to made seller
