@@ -65,6 +65,7 @@ Fixes:
     => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
     => 051573 - Product search is not working when we Activate Geo Location and shipping plugin
     => 051651 - Top - header menu are not aligned properly
+    => 051594 - non verified user (*deleted) is proceeding for checkout and getting error - session expire 
     
 Enhancements :
    => Make provision to made seller

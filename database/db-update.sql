@@ -288,3 +288,5 @@ ALTER TABLE `tbl_users` CHANGE `user_dial_code` `user_phone_dcode` VARCHAR(50) C
 ALTER TABLE `tbl_countries` DROP `country_dial_code`;
 
 /* Bind all phone number fields with flag field. */
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'ERR_USER_INACTIVE_OR_DELTED';
