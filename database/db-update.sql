@@ -291,7 +291,7 @@ ALTER TABLE `tbl_countries` DROP `country_dial_code`;
 -- --- Easypost Shipping API--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('EasyPost', '8', 'EasyPost', '0', '2');
 
-ALTER TABLE `tbl_order_product_shipment` CHANGE `opship_tracking_number` `opship_tracking_number` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL, CHANGE `opship_tracking_url` `opship_tracking_url` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL;
+ALTER TABLE `tbl_order_product_shipment` CHANGE `opship_tracking_number` `opship_tracking_number` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL, CHANGE `opship_tracking_url` `opship_tracking_url` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 
 CREATE TABLE `tbl_order_product_responses` (
   `opr_op_id` bigint NOT NULL,
