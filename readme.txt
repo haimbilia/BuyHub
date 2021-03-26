@@ -67,6 +67,7 @@ Fixes:
     => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
     => 051651 - Top - header menu are not aligned properly
     => 051594 - non verified user (*deleted) is proceeding for checkout and getting error - session expire
+    => 051691 - on stripe connect unable to load form loading coming on seller end
     
 Enhancements :
    => Make provision to made seller
