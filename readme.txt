@@ -68,7 +68,8 @@ Fixes:
     => 051651 - Top - header menu are not aligned properly
     => 051594 - non verified user (*deleted) is proceeding for checkout and getting error - session expire
     => 051691 - on stripe connect unable to load form loading coming on seller end
-    =>051694 - Loader image coming on product images even after it fully loaded
+    => 051694 - Loader image coming on product images even after it fully loaded
+    => 051716 - Shipping by admin - seller is able to change order status
     
 Enhancements :
    => Make provision to made seller
