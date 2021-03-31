@@ -47,23 +47,23 @@
 @-webkit-keyframes heartbit {
     0% {
         -webkit-transform: scale(0);
-        opacity: 0
+        opacity: 0;
     }
     25% {
-        -webkit-transform: scale(.1);
-        opacity: .1
+        -webkit-transform: scale(0.1);
+        opacity: 0.1;
     }
     50% {
-        -webkit-transform: scale(.5);
-        opacity: .3
+        -webkit-transform: scale(0.5);
+        opacity: 0.3;
     }
     75% {
-        -webkit-transform: scale(.8);
-        opacity: .5
+        -webkit-transform: scale(0.8);
+        opacity: 0.5;
     }
     100% {
         -webkit-transform: scale(1);
-        opacity: 0
+        opacity: 0;
     }
 }
 
@@ -273,7 +273,7 @@
             justify-content: flex-end;
             color: #fff;
             margin-#{$start-direction}: auto;
-            .short-links>ul>li:after {
+            .short-links > ul > li:after {
                 content: normal;
             }
         }
@@ -389,8 +389,8 @@
             #{$start-direction}: 0;
             top: 110%;
             background: #fff;
-            -webkit-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.20);
-            box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.20);
+            -webkit-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
             position: absolute;
             -webkit-transform: scaleY(0);
             transform: scaleY(0);
@@ -554,13 +554,13 @@
             border: 1px solid transparent;
             cursor: pointer;
             width: 2.5rem;
-            & [class*='bar-'] {
+            & [class*="bar-"] {
                 display: block;
                 background: #102c58;
                 -webkit-transform: rotate(0deg);
                 transform: rotate(0deg);
-                -webkit-transition: .2s ease all;
-                transition: .2s ease all;
+                -webkit-transition: 0.2s ease all;
+                transition: 0.2s ease all;
                 border-radius: $radius2;
                 height: 2px;
                 width: 24px;
@@ -574,7 +574,7 @@
                 }
             }
             &.is-opened {
-                & [class*='bar-'] {
+                & [class*="bar-"] {
                     background: #000;
                 }
                 .bar-top {
@@ -785,10 +785,10 @@
         padding-#{$start-direction}: 280px;
     }
     .menu-head {
-        #{$start-direction}: 0!important;
-        opacity: 1!important;
-        visibility: visible!important;
-        display: block!important;
+        #{$start-direction}: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
     }
     .menu-item__title {
         #{$start-direction}: 0 !important;
@@ -804,7 +804,7 @@
     }
 }
 
-@media only screen and (max-width:1080px) {
+@media only screen and (max-width: 1080px) {
     .sidebar-is-expanded .header-dashboard {
         padding-#{$start-direction}: 20px;
     }
@@ -993,7 +993,7 @@
 .stats-number {
     ul li {
         border-top: $border;
-        border-color: lighten( $border-color, 05);
+        border-color: lighten($border-color, 05);
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -1155,7 +1155,7 @@
     color: $secondary-color-inverse;
     padding: 5px 0 5px 10px;
     border-radius: $radius4;
-    >a {
+    > a {
         display: block;
         position: relative;
         top: -5px;
@@ -1517,7 +1517,7 @@
             padding: 10px;
             background: #fff;
             &:before {
-                font-family: 'Font Awesome 5 Free';
+                font-family: "Font Awesome 5 Free";
                 font-size: 1.3em;
                 color: rgba(0, 0, 0, 0.1);
                 content: "\f111";
@@ -1534,7 +1534,7 @@
                 color: $brand-color-inverse;
                 &:before {
                     content: "\f058";
-                    color: $brand-color-inverse
+                    color: $brand-color-inverse;
                 }
             }
         }
@@ -1701,7 +1701,7 @@
             margin: 0;
             border-bottom: $border;
             font-size: 0.9em;
-            >a {
+            > a {
                 color: $body-color;
                 padding: 10px;
                 display: block;
@@ -1712,8 +1712,8 @@
             &.is-active {
                 background: $brand-color;
                 color: $brand-color-inverse;
-                >a {
-                    color: $brand-color-inverse
+                > a {
+                    color: $brand-color-inverse;
                 }
             }
         }
@@ -1730,7 +1730,7 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.10);
+        background-color: rgba(0, 0, 0, 0.1);
         width: 2.5rem;
         height: 100%;
         border-radius: $radius2;
@@ -1929,18 +1929,18 @@ input.sp-input {
 }
 
 .tax-rules {
-    >ul {
+    > ul {
         font-size: 0.85rem;
         display: grid;
         grid-gap: 1rem;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        >li {
+        > li {
             height: 100%;
             border: $border;
             border-radius: $radius4;
             padding: 1rem;
-            .actions{
-                a{
+            .actions {
+                a {
                     padding: 5px;
                     width: 30px;
                     height: 30px;
@@ -1951,10 +1951,10 @@ input.sp-input {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    &:hover{
-                            background: $brand-color;
-                            color:$brand-color-inverse;
-                            border-color: $brand-color;;
+                    &:hover {
+                        background: $brand-color;
+                        color: $brand-color-inverse;
+                        border-color: $brand-color;
                     }
                 }
             }
@@ -1996,7 +1996,7 @@ input.sp-input {
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    >li {
+    > li {
         border: $border;
         border-radius: $radius4;
         display: flex;
@@ -2102,6 +2102,60 @@ input.sp-input {
         .item__title {
             white-space: normal;
             margin-#{$end-direction}: 22px;
+        }
+    }
+}
+
+.v-tabs {
+    display: flex;
+
+    &-list {
+        flex: 0 0 30%;
+        max-width: 30%;
+        margin-#{$end-direction}: 20px;
+        li {
+            background-color: $gray-light;
+            border-radius: 5px;
+            display: block;
+            margin-bottom: 15px;
+            padding: 0 1rem;
+            line-height: 50px;
+            font-size: 0.85rem;
+            position: relative;
+            &.is-active {
+                background-color: $brand-color;
+                color: $brand-color-inverse;
+                a {
+                    color: currentColor;
+                }
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    top: 50%;
+                    width: 0;
+                    height: 0;
+                    border: 8px solid transparent;
+                    border-#{$start-direction}-color: $brand-color;
+                    border-#{$end-direction}: 0;
+                    margin-top: -8px;
+                    margin-#{$end-direction}: -8px;
+                }
+            }
+            a {
+                display: block;
+            }
+        }
+    }
+    &-data {
+        display: none;
+        flex: 1;
+        padding: 0 1rem;
+        font-size: 0.8rem;
+        color: $txt-gray;
+        &.is-active {
+            display: block;
         }
     }
 }
