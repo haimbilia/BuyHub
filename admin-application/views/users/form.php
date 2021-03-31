@@ -17,6 +17,8 @@ $frmUser->setFormTagAttribute('onsubmit', 'setupUsers(this); return(false);');
 $dobFld = $frmUser->getField('user_dob');
 $dobFld->setFieldTagAttribute('class','user_dob_js');
 
+$fld = $frmUser->getField('user_id');
+$fld->setFieldTagAttribute('id','user_id');
 
 $countryFld = $frmUser->getField('user_country_id');
 $countryFld->setFieldTagAttribute('id','user_country_id');
@@ -32,13 +34,15 @@ $stateFld->setFieldTagAttribute('id','user_state_id');
 	</div>
 	<div class="sectionbody space">      
 		<div class="tabs_nav_container responsive flat">
-			<ul class="tabs_nav">
-				<li><a class="active" href="javascript:void(0)" onclick="userForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_General',$adminLangId); ?></a></li>
-				<?php if($userParent == 0) { ?>
-					<li><a href="javascript:void(0)" onclick="addBankInfoForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Bank_Info',$adminLangId); ?></a></li>
-					<li><a href="javascript:void(0)" onclick="addUserAddress(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Addresses',$adminLangId); ?></a></li>
-				<?php }?>							
-			</ul>
+                        <?php if($user_id > 0){ ?>
+                            <ul class="tabs_nav">
+                                    <li><a class="active" href="javascript:void(0)" onclick="userForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_General',$adminLangId); ?></a></li>
+                                    <?php if($userParent == 0) { ?>
+                                            <li><a href="javascript:void(0)" onclick="addBankInfoForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Bank_Info',$adminLangId); ?></a></li>
+                                            <li><a href="javascript:void(0)" onclick="addUserAddress(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Addresses',$adminLangId); ?></a></li>
+                                    <?php }?>							
+                            </ul>
+                        <?php }?>
 			<div class="tabs_panel_wrap">
 				<div class="tabs_panel">
 					<?php echo $frmUser->getFormHtml(); ?>

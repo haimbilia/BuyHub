@@ -1733,7 +1733,7 @@ class User extends MyAppModel
     public function userEmailVerification($data, $langId)
     {
         $verificationCode = $this->prepareUserVerificationCode();
-        $link = UrlHelper::generateFullUrl('GuestUser', 'userCheckEmailVerification', array('verify' => $verificationCode));
+        $link = UrlHelper::generateFullUrl('GuestUser', 'userCheckEmailVerification', array('verify' => $verificationCode), CONF_WEBROOT_FRONT_URL);
         $data = array(
             'user_name' => $data['user_name'],
             'link' => $link,

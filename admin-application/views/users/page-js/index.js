@@ -316,11 +316,8 @@ $(document).ready(function() {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Users', 'setup'), data, function(t) {
-            if (t.userId > 0) {
-                addBankInfoForm(t.userId);
-                return false;
-            }
             $(document).trigger('close.facebox');
+            reloadUserList();
         });
     };
 
