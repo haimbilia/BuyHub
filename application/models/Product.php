@@ -44,6 +44,9 @@ class Product extends MyAppModel
 
     public const DB_PRODUCT_EXTERNAL_RELATIONS = 'tbl_product_external_relations';
     public const DB_PRODUCT_EXTERNAL_RELATIONS_PREFIX = 'perel_';
+    
+    public const DB_PRODUCT_TO_PLUGIN_PRODUCT = 'tbl_products_to_plugin_product';
+    public const DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX = 'ptpp_';
 
     public const PRODUCT_TYPE_PHYSICAL = 1;
     public const PRODUCT_TYPE_DIGITAL = 2;
@@ -1960,5 +1963,20 @@ END,   special_price_found ) as special_price_found'
     public static function setProductFulfillmentType(int $productId, int $loggedUserId, int $fulfillmentType): int
     {
         return $fulfillmentType;
+    }    
+    
+    public static function getProdIdByPlugin(int $pluginId, int $pluginProdId): int
+    {
+        $srch = new SearchBase(static::DB_PRODUCT_TO_PLUGIN_PRODUCT);
+        $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_id', '=', $pluginId);
+        $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_product_id', '=', $pluginProdId);
+        $srch->addFld('ptpp_product_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs); 
+        if (!$records) {
+            return 0;
+        }
+        return $records['ptpp_product_id'];
     }
+
 }
