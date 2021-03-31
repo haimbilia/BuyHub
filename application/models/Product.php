@@ -1523,7 +1523,7 @@ END,   special_price_found ) as special_price_found'
         }
 
         //var_dump($criteria); exit;
-        $srch->addOrder('in_stock', 'DESC');
+        //$srch->addOrder('in_stock', 'DESC');
 
         if (array_key_exists('sortBy', $criteria)) {
             $sortBy = $criteria['sortBy'];

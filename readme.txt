@@ -6,6 +6,9 @@ Multivendor - Released Version : RV-9.3.0
 New Feature : 
     => 82248 : DPO Payment Gateway Integration
 
+Updates : 
+    => 83842 : Out of stock fixes
+
 Fixes:
     => 047746 - Get current location not working
     => 046939 - Add product tag giving error
