@@ -1,7 +1,8 @@
 <?php
 
-class Report extends MyAppModel
+class Report extends SearchBase
 {
+
     public static function salesReportObject($langId = 0, $joinSeller = false, $attr = array())
     {
         $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
