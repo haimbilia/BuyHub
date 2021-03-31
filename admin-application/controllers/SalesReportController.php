@@ -39,35 +39,43 @@ class SalesReportController extends AdminBaseController
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        $srch = Report::salesReportObject();
-        if (empty($orderDate)) {
-            $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
-            if (!empty($date_from)) {
-                $srch->addCondition('o.order_date_added', '>=', $date_from . ' 00:00:00');
-            }
 
-            $date_to = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
-            if (!empty($date_to)) {
-                $srch->addCondition('o.order_date_added', '<=', $date_to . ' 23:59:59');
-            }
-            $srch->addGroupBy('DATE(o.order_date_added)');
+        $fields = ['orderDate', 'totOrders', 'totQtys', 'totRefundedQtys', 'netSoldQty','grossSales', 'transactionAmount','inventoryValue', 'taxTotal', 'shippingTotal', 'discountTotal', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'orderNetAmount'];
+        $srch = new Report(0, $fields);
+        $srch->joinOrders();
+        $srch->joinPaymentMethod();
+        $srch->joinOtherCharges(true);
+        $srch->joinOrderProductTaxCharges();
+        $srch->joinOrderProductShipCharges();
+        $srch->joinOrderProductDicountCharges();
+        $srch->joinOrderProductVolumeCharges();
+        $srch->joinOrderProductRewardCharges();
+        $srch->setPaymentStatusCondition();
+        $srch->setCompletedOrdersCondition();
+        $srch->excludeDeletedOrdersCondition();
+        $srch->addTotalOrdersCount('order_date_added');
+
+        $fromDate = $toDate = $orderDate;
+        if (empty($orderDate)) {
+            $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
+            $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
+            $srch->setGroupBy('orderDate');
         } else {
             $this->set('orderDate', $orderDate);
-            $srch->addGroupBy('op_invoice_number');
-            $srch->addCondition('o.order_date_added', '>=', $orderDate . ' 00:00:00');
-            $srch->addCondition('o.order_date_added', '<=', $orderDate . ' 23:59:59');
-            $srch->addFld(array('op_invoice_number'));
+            $srch->setGroupBy('op_invoice_number');
+            $srch->addFld('op_invoice_number');
         }
 
-        /* $srch->addMultipleFields(array('DATE(order_date_added) as order_date','count(op_id) as totOrders','SUM(op_qty) as totQtys','SUM(op_refund_qty) as totRefundedQtys','SUM(op_qty - op_refund_qty) as netSoldQty','sum((op_commission_charged - op_refund_commission)) as totalSalesEarnings','sum(op_refund_amount) as totalRefundedAmount','op.op_qty','op.op_unit_price','op_other_charges','sum(( op_unit_price * op_qty ) + op_other_charges - op_refund_amount) as orderNetAmount','(SUM(optax.opcharge_amount)) as taxTotal','(SUM(opship.opcharge_amount)) as shippingTotal')); */
-
+        $srch->setDateCondition($fromDate, $toDate);
         $srch->addOrder('order_date', 'desc');
+
+        // echo $srch->getQuery(); exit;
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
         $arr_listing = $db->fetchAll($rs);
-        
+
         $this->set("arr_listing", $arr_listing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -152,7 +160,7 @@ class SalesReportController extends AdminBaseController
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
         if (empty($orderDate)) {
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
+            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
             $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
             $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
             $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearSearch();'));

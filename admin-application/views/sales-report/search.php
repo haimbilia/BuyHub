@@ -3,22 +3,31 @@
 $arrFlds1 = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'order_date' => Labels::getLabel('LBL_Date', $adminLangId),
-    'totOrders' => Labels::getLabel('LBL_No._of_Orders', $adminLangId),
-    'orderNetAmount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId),
+    'totOrders' => Labels::getLabel('LBL_Order_Placed', $adminLangId),
+    /*  'orderNetAmount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId), */
 );
 $arrFlds2  = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'op_invoice_number' => Labels::getLabel('LBL_Invoice_Number', $adminLangId),
-    'order_net_amount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId),
+    /* 'order_net_amount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId), */
 );
 $arr = array(
-    'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $adminLangId),
-    'totQtys' => Labels::getLabel('LBL_No._of_Qty', $adminLangId),
+    'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $adminLangId),
     'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $adminLangId),
+    'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $adminLangId),
+    'grossSales' => Labels::getLabel('LBL_Gross_Sale', $adminLangId),
+    'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $adminLangId),
+    'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $adminLangId),
+
     'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $adminLangId),
-    'shippingTotal' => Labels::getLabel('LBL_Shipping_Charges', $adminLangId),
-    'totalRefundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $adminLangId),
-    'totalSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $adminLangId)
+    'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $adminLangId),
+    'discountTotal' => Labels::getLabel('LBL_Coupon_Discount', $adminLangId),
+    'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $adminLangId),
+    'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $adminLangId),
+
+    'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $adminLangId),
+    'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $adminLangId),
+    'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $adminLangId)
 );
 if (empty($orderDate)) {
     $arr_flds = array_merge($arrFlds1, $arr);
@@ -54,12 +63,18 @@ foreach ($arr_listing as $sn => $row) {
                 $amt = CommonHelper::orderProductAmount($row);
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($amt, true, true));
                 break;
-            case 'totalSalesEarnings':
-            case 'totalRefundedAmount':
+            case 'grossSales':
+            case 'transactionAmount':
             case 'inventoryValue':
-            case 'orderNetAmount':
+            case 'inventoryValue':
             case 'taxTotal':
             case 'shippingTotal':
+            case 'discountTotal':
+            case 'volumeDiscount':
+            case 'rewardDiscount':
+            case 'refundedAmount':
+            case 'orderNetAmount':
+            case 'adminSalesEarnings':
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
             default:
