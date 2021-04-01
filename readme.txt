@@ -1,5 +1,10 @@
+
 Updates:
     => Tax Module update
+
+Features:
+
+    - Shopify sync module for SV seller
 
 
 Multivendor - Released Version : RV-9.3.0
