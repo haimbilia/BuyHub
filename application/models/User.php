@@ -1833,11 +1833,40 @@ class User extends MyAppModel
             'user_phone_dcode' => $dialCode,
             'user_phone' => $phone,
             'link' => $link,
+            'user_is_affiliate' => $data['user_is_affiliate'] ?? 0
         );
 
         $email = new EmailHandler();
         if (!$email->sendWelcomeEmail($langId, $data)) {
             Message::addMessage(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $langId));
+            return false;
+        }
+        return true;
+    }
+    
+    public function sendAdminNewUserCreationEmail($userData, $langId)
+    {
+        $userAuthObj = new UserAuthentication();
+        $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20));
+
+        $data = array(
+            'user_name' => $userData['user_name'],
+            'user_id' => $userData['user_id'],
+            'user_email' => $userData['user_email'],
+            'account_type' => $userData['account_type'],
+            'link' => UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($userData['user_id'], $token), CONF_WEBROOT_FRONT_URL),
+            'token' => $token,
+            'days' => 7,
+        );
+
+        if (!$userAuthObj->addPasswordResetRequest($data)) {
+            $this->error = $userAuthObj->getError();
+            return false;
+        }
+
+        $email = new EmailHandler();
+        if (!$email->sendAdminNewUserCreationEmail($langId, $data)) {
+            $this->error = $email->getError();
             return false;
         }
         return true;

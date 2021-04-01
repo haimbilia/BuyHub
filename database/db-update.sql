@@ -386,3 +386,4 @@ CREATE TABLE `tbl_plugin_to_user` (
 ALTER TABLE `tbl_plugin_to_user`
   ADD PRIMARY KEY (`pu_plugin_id`,`pu_user_id`);
 -- --- Shopify --- --
+INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, 'LBL_SET_PASSWORD_MSG', '1', 'To set your password enter a new password below', '1');

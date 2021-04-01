@@ -790,7 +790,7 @@ class UserAuthentication extends FatModel
             array(
                 static::DB_TBL_UPR_PREFIX . 'user_id' => intval($data['user_id']),
                 static::DB_TBL_UPR_PREFIX . 'token' => $data['token'],
-                static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+1 DAY"))
+                static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+".($data['days'] ?? 1)." DAY"))
             )
         )) {
             $db->deleteRecords(

@@ -174,7 +174,8 @@ class UsersController extends AdminBaseController
             unset($post['credential_username']);  
             unset($post['credential_email']);
         }
-        /*   [ new user    */        
+        
+        /* [ new user    */        
         if (1 > $user_id) {
             $post['user_verify'] = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
             if ($post['user_type'] == User::USER_TYPE_BUYER) {
@@ -191,7 +192,7 @@ class UsersController extends AdminBaseController
                 if (FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
                     $post['user_is_buyer'] = 0;
                 }
-            } elseif ($post['user_type'] == User::USER_TYPE_ADVERTISER) {
+            } elseif ($post['user_type'] == User::USER_TYPE_AFFILIATE) {
                 $post['user_is_affiliate'] = 1;
                 $post['user_registered_initially_for'] = User::USER_TYPE_AFFILIATE;
                 $post['user_preferred_dashboard'] = User::USER_AFFILIATE_DASHBOARD;
@@ -201,7 +202,7 @@ class UsersController extends AdminBaseController
                 $post['user_preferred_dashboard'] = User::USER_ADVERTISER_DASHBOARD;
             }
         }
-        /*    new user ]   */
+        /* new user ]   */
         
         $db = FatApp::getDb();
         $db->startTransaction();
@@ -212,31 +213,26 @@ class UsersController extends AdminBaseController
             Message::addErrorMessage($userObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        /*   [ new user    */
+        /* [ new user    */
         if (1 > $user_id) {
-            if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], CommonHelper::getRandomPassword(8), applicationConstants::ACTIVE)) {
+            if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE)) {
                 $db->rollbackTransaction();
                 return false;
             }
-
-            $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONT_URL);
+            
             $userData = [
                 'user_name' => $post['user_name'],
                 'user_email' => $post['credential_email'],
                 'user_id' => $userObj->getMainTableRecordId(),
+                'account_type' => User::getUserTypesArr($this->adminLangId)[$post['user_type']]
             ];
-            if (!$userObj->userWelcomeEmailRegistration($userData, $link, $this->admin_id)) {
+            
+            if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
                 $db->rollbackTransaction();
                 $message = Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id);
                 return false;
             }
-            if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
-                if (!$userObj->userEmailVerification($userData, $this->admin_id)) {
-                    $db->rollbackTransaction();
-                    $this->error = Labels::getLabel("ERR_ERROR_IN_SENDING_VERFICATION_EMAIL", $this->admin_id);
-                    return false;
-                }
-            }
+            
         }
         /*  new user ] */
         

@@ -868,7 +868,14 @@ class GuestUserController extends MyAppController
             Message::addErrorMessage($userAuthObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
         }
-
+        $userObj = new User($userId);
+        $user = $userObj->getUserInfo(array('credential_password','credential_username'), false, false);
+        if (!$user) {
+            Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }        
+        $this->set('user_password', $user['credential_password']);
+        $this->set('credential_username', $user['credential_username']);
         $frm = $this->getResetPwdForm($userId, trim($token));
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::RESET_PAGE_RIGHT_BLOCK, $this->siteLangId);
@@ -915,6 +922,11 @@ class GuestUserController extends MyAppController
 
         if (!$userAuthObj->resetUserPassword($userId, $newPwd)) {
             FatUtility::dieJsonError($userAuthObj->getError());
+        }
+        
+        $userObj = new User($userId);
+        if(!$userObj->verifyAccount()){
+            FatUtility::dieJsonError($userObj->getError());
         }
 
         $email = new EmailHandler();
@@ -1117,6 +1129,7 @@ class GuestUserController extends MyAppController
     private function getResetPwdForm($uId, $token)
     {
         $frm = new Form('frmResetPwd');
+        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'user_name');
         $fld_np = $frm->addPasswordField(Labels::getLabel('LBL_NEW_PASSWORD', $this->siteLangId), 'new_pwd');
         $fld_np->htmlAfterField = '<p class="note">' . sprintf(Labels::getLabel('LBL_Example_password', $this->siteLangId), 'User@123') . '</p>';
         $fld_np->requirements()->setRequired();
