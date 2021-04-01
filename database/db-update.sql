@@ -386,3 +386,5 @@ CREATE TABLE `tbl_plugin_to_user` (
 ALTER TABLE `tbl_plugin_to_user`
   ADD PRIMARY KEY (`pu_plugin_id`,`pu_user_id`);
 -- --- Shopify --- --
+
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_DEFAULT_CURRENCY_SEPARATOR', '.', '0');
