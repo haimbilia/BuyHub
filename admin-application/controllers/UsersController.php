@@ -159,6 +159,12 @@ class UsersController extends AdminBaseController
 
         $post = FatApp::getPostedData();
         $user_state_id = FatUtility::int($post['user_state_id']);
+        if(CommonHelper::isFieldEncrypted($post['user_dob']) == true){
+            unset($post['user_dob']);
+        }
+        if(CommonHelper::isFieldEncrypted($post['user_phone']) == true){
+            unset($post['user_phone']);
+        }
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
@@ -173,6 +179,9 @@ class UsersController extends AdminBaseController
         if(0 < $user_id){
             unset($post['credential_username']);  
             unset($post['credential_email']);
+            if ($post['user_dob'] == "0000-00-00" || $post['user_dob'] == "" || strtotime($post['user_dob']) == 0) {
+                unset($post['user_dob']);
+            }    
         }
         
         /* [ new user    */        
@@ -276,6 +285,7 @@ class UsersController extends AdminBaseController
         $this->set('user_id', $user_id);
         $this->set('stateId', $stateId);
         $this->set('frmUser', $frmUser);
+        $this->set('data', $data);
         $this->_template->render(false, false);
     }
 
@@ -2239,4 +2249,37 @@ class UsersController extends AdminBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
+    
+    public function cookiesPreferencesForm($userId)
+    {
+        $this->objPrivilege->canViewUsers();
+        $userId = FatUtility::int($userId);
+        if (1 > $userId) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+
+        $frm = $this->getCookiesPreferencesForm();
+        $userObj = new User($userId);
+        $data = $userObj->getUserSelectedCookies();
+        if ($data != false) {
+            $frm->fill($data);
+        }
+
+        $this->set('frm', $frm);
+        $this->set('user_id', $userId);
+        $this->_template->render(false, false);
+    }
+    
+    private function getCookiesPreferencesForm()
+    {
+        $frm = new Form('frmCookiesPreferences');
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->adminLangId), 'ucp_functional', 1, array(), true, 0);
+        $fld->htmlAfterField = '<div>'.Labels::getLabel('LBL_Functional_Cookies_Information', $this->adminLangId).'</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->adminLangId), 'ucp_statistical', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>'.Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->adminLangId).'</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->adminLangId), 'ucp_personalized', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>'.Labels::getLabel('LBL_Personalise_Cookies_Information', $this->adminLangId).'</div>';
+        return $frm;
+    }
+    
 }

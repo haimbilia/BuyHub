@@ -40,24 +40,30 @@ class AdminAuthentication extends FatModel
             return false;
         }
 
-        $password = UserAuthentication::encryptPassword($password);
+        //$password = UserAuthentication::encryptPassword($password);
 
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin');
         $srch->addCondition('admin_username', '=', $username);
-        $srch->addCondition('admin_password', '=', $password);
+        //$srch->addCondition('admin_password', '=', $password);
         $rs = $srch->getResultSet();
 
         if (!$row = $db->fetch($rs)) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('MSG_Invalid_Username_or_Password', $this->adminLangId);
+            //$this->error = Labels::getLabel('MSG_Invalid_Username_or_Password', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_Username', $this->adminLangId);
             return false;
         }
-        if (strtolower($row['admin_username']) != strtolower($username) || $row['admin_password'] != $password) {
+        if (false == password_verify($password , $row['admin_password'])) {
+            $objUserAuthentication->logFailedAttempt($ip, $username);
+            $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+            return false;
+        }
+        /*if (strtolower($row['admin_username']) != strtolower($username) || $row['admin_password'] != $password) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('MSG_Invalid_Username_or_Password', $this->adminLangId);
             return false;
-        }
+        }*/
         if ($row['admin_active'] !== applicationConstants::ACTIVE) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('MSG_Your_account_is_inactive.', $this->adminLangId);

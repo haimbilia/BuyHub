@@ -3,7 +3,7 @@
 class GuestUserController extends MyAppController
 {
     public function loginForm($isRegisterForm = 0)
-    {
+    {   
         /* if(UserAuthentication::doCookieLogin()){
         FatApp::redirectUser(UrlHelper::generateUrl('account'));
         } */
@@ -41,11 +41,21 @@ class GuestUserController extends MyAppController
         } else {
             $termsAndConditionsLinkHref = 'javascript:void(0)';
         }
+        
+        $privacyPolicyLinkHref = 'javascript:void(0)';
+        $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
+        $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
+        if (!empty($cpage) && is_array($cpage)) {
+            $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+        } 
+        
         $registerdata = array(
             'registerFrm' => $registerFrm,
             'termsAndConditionsLinkHref' => $termsAndConditionsLinkHref,
             'siteLangId' => $this->siteLangId,
             'signUpWithPhone' => $signUpWithPhone,
+            'privacyPolicyLinkHref' => $privacyPolicyLinkHref,
         );
         $isRegisterForm = FatUtility::int($isRegisterForm);
 
@@ -93,7 +103,18 @@ class GuestUserController extends MyAppController
         $this->app_user['temp_user_id'] = 0;
 
         $userId = UserAuthentication::getLoggedUserId();
-
+        
+        $user = new User($userId);
+        $userSelectedCookies = $user->getUserSelectedCookies();
+        if(CommonHelper::checkCookiesEnabledSession() && empty($userSelectedCookies)){
+            //$user = new User($userId);            
+            $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
+            $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
+            if(!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)){
+                FatUtility::dieJsonError($user->getError());
+            }
+        }
+        
         if (true === MOBILE_APP_API_CALL) {
             $uObj = new User($userId);
             if (!$token = $uObj->setMobileAppToken()) {
@@ -1086,7 +1107,7 @@ class GuestUserController extends MyAppController
     }
 
     public function logout()
-    {
+    {   
         UserAuthentication::logout();
         if (true === MOBILE_APP_API_CALL) {
             $fcmToken = FatApp::getPostedData('fcmToken', FatUtility::VAR_STRING, '');

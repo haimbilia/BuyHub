@@ -40,3 +40,9 @@
     transition: all 0.3s ease-in-out 0s;
     border-radius: $radius4;
 }
+
+.cookie-alert {
+    p {
+        color: $txt-gray;
+    }
+}

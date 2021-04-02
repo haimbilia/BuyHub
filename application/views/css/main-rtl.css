@@ -10691,6 +10691,14 @@ a.link-arrow {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex; }
+  .checkbox-flex,
+  .radio-flex {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important; }
+    .checkbox-flex a,
+    .radio-flex a {
+      text-decoration: underline; }
 
 .checkbox input, .checkbox .form input[type="text"], .form .checkbox input[type="text"], .checkbox .form input[type="email"], .form .checkbox input[type="email"], .checkbox .form input[type="phone"], .form .checkbox input[type="phone"], .checkbox .form input[type="search"], .form .checkbox input[type="search"], .checkbox .form input[type="password"], .form .checkbox input[type="password"], .checkbox .form input[type="date"], .form .checkbox input[type="date"], .checkbox .form input[type="url"], .form .checkbox input[type="url"], .checkbox .form input[type="tel"], .form .checkbox input[type="tel"], .checkbox .form input[type="number"], .form .checkbox input[type="number"], .checkbox .form input[type="file"], .form .checkbox input[type="file"], .checkbox .form select, .form .checkbox select, .checkbox .form .custom-select, .form .checkbox .custom-select, .checkbox .form textarea, .form .checkbox textarea,
 .radio input,
@@ -11408,6 +11416,9 @@ span.subheading {
   transition: all 0.3s ease-in-out 0s;
   border-radius: 4px; }
 
+.cookie-alert p {
+  color: #8798ad; }
+
 .flat-ui {
   text-align: center;
   margin: 120px auto; }
@@ -11875,6 +11886,16 @@ span.subheading {
   .form .field_label:empty {
     min-height: 15px; }
 
+.form .field_cover {
+  position: relative; }
+  .form .field_cover .fa {
+    position: absolute;
+    top: 12px;
+    left: 8px;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer; }
+
 .form input, .form input[type="text"], .form input[type="email"], .form input[type="phone"], .form input[type="search"], .form input[type="password"], .form input[type="date"], .form input[type="url"], .form input[type="tel"], .form input[type="number"], .form input[type="file"], .form select, .form .custom-select, .form textarea {
   padding: 0 1rem;
   border: solid 1px #dee2e6;
@@ -11908,7 +11929,8 @@ span.subheading {
     background-color: rgba(0, 0, 0, 0.12);
     -webkit-box-shadow: none;
     box-shadow: none;
-    cursor: initial; }
+    cursor: initial;
+    border-color: transparent; }
   .form input.is-invalid, .form select.is-invalid, .form .is-invalid.custom-select, .form textarea.is-invalid {
     border-color: #dc3545; }
   .form input.field--calender, .form select.field--calender, .form .field--calender.custom-select, .form textarea.field--calender {
