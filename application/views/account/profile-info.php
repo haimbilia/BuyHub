@@ -55,6 +55,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         </li>
                                     <?php }
                                     ?>
+                                    <li id="tab-cookies-preferences">
+                                        <a href="javascript:void(0);" onClick="cookiesPreferencesForm()"><?php echo Labels::getLabel('LBL_Cookies_Preferences', $siteLangId); ?></a>
+                                    </li>
                                 </ul>
                             </div>
                             <?php } ?>

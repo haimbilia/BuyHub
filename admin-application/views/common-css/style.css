@@ -12090,11 +12090,20 @@ form[name="frmShippingProfile"] {
     overflow-y: auto;
     max-height: 350px;
 }
-
 .tagify {
     min-height: 35px;
 }
-
 .overflow_auto{
     overflow: auto;
+}
+.field_cover {
+    position: relative;
+}
+.field_cover .fa {
+    position: relative;
+    left: -30px;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
+
 }

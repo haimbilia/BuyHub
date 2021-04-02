@@ -1153,13 +1153,45 @@ $(document).ready(function () {
         openSignInForm();
     });
 
-    $(".cc-cookie-accept-js").click(function () {
-        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), '', function (t) {
-            $(".cookie-alert").hide('slow');
-            $(".cookie-alert").remove();
+    $(".cc-cookie-accept-js").click(function() {
+        var data = {'statistical_cookies' : 1, 'personalise_cookies' : 1};
+        updateUserCookies(data);
+    });
+    
+    $(".cookie-preferences-js").click(function() {
+        $.facebox(function() {
+            fcom.ajax(fcom.makeUrl('Custom', 'cookiePreferencesData'), '', function(t) {
+                fcom.updateFaceboxContent(t, 'faceboxWidth');
+            });
         });
     });
-
+    
+    setUserCookiePreferences = function(){
+        var statisticalCookies = 0;
+        if($("input[name='statistical_cookies']").prop('checked') == true){
+            statisticalCookies = 1;
+        };
+        var personaliseCookies = 0;
+        if ($("input[name='personalise_cookies']").prop('checked') == true){
+            personaliseCookies = 1;
+        }; 
+        var data = {'statistical_cookies' : statisticalCookies, 'personalise_cookies' : personaliseCookies};
+        updateUserCookies(data);
+    }
+    
+    updateUserCookies = function(data){
+        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), data, function(rsp) {
+            var ans = $.parseJSON(rsp);
+                        console.log(ans);
+            if (ans.status == 0) {
+                $.mbsmessage(ans.msg, true, 'alert--danger');
+            }else{
+                $(".cookie-alert").hide('slow');
+                $(".cookie-alert").remove();
+                $(document).trigger('close.facebox');
+            }
+        });
+    }
 
     $(document).on("click", '.increase-js', function () {
         var type = $('input[name="fulfillment_type"]:checked').val();

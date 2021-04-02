@@ -5,6 +5,7 @@ $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 8;
 $btnSubmit = $frm->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
+$btnSubmit->setFieldTagAttribute('disabled', "disabled");
 ?>
 <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <main id="main-area" class="main"   >
@@ -34,5 +35,13 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
         $('.star-rating').barrating({
             showSelectedRating: false
         });
+        
+        $("input[name='agree']").change(function() {
+            if(this.checked) { 
+                $("input[name='btn_submit']").removeAttr('disabled');
+            }else{
+                $("input[name='btn_submit']").attr('disabled', 'disabled');
+            }            
+        });        
     });
 </script>
