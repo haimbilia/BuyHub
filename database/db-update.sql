@@ -309,3 +309,6 @@ INNER JOIN tbl_order_products op ON op.op_id = ops.opship_op_id;
 ALTER TABLE `tbl_order_product_shipment` DROP `opship_response`;
 /* For Shipment Responses */
 -- --- Easypost Shipping API--- --
+-- --- Mollie Payment Gateway--- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Mollie', '13', 'Mollie', '0', '25');
+-- --- Mollie Payment Gateway--- --
