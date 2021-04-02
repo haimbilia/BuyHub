@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* Renaming DPO payment gateway to Paygate. */
 UPDATE `tbl_plugins` SET `plugin_identifier`='Paygate', `plugin_code`='Paygate' WHERE plugin_code = 'Dpo';
 /* Renaming DPO payment gateway to Paygate. */
@@ -312,7 +311,6 @@ ALTER TABLE `tbl_order_product_shipment` DROP `opship_response`;
 /* For Shipment Responses */
 -- --- Easypost Shipping API--- --
 
-
 -- --- Tax Module Update --- --
 ALTER TABLE `tbl_tax_rule_locations` CHANGE `taxruleloc_country_id` `taxruleloc_to_country_id` INT NOT NULL, CHANGE `taxruleloc_state_id` `taxruleloc_to_state_id` INT NOT NULL;
 ALTER TABLE `tbl_tax_rule_locations` ADD `taxruleloc_from_country_id` INT NOT NULL AFTER `taxruleloc_taxcat_id`, ADD `taxruleloc_from_state_id` INT NOT NULL AFTER `taxruleloc_from_country_id`;
@@ -391,6 +389,18 @@ ALTER TABLE `tbl_plugin_to_user`
 INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, 'LBL_SET_PASSWORD_MSG', '1', 'To set your password enter a new password below', '1');
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_DEFAULT_CURRENCY_SEPARATOR', '.', '0');
 
+
+-- --- Mollie Payment Gateway--- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Mollie', '13', 'Mollie', '0', '25');
+-- --- Mollie Payment Gateway--- --
+
+-- --- Payfast Payment Gateway--- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Payfast', '13', 'Payfast', '0', '24');
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_PAYFAST_PASSPHRASE_DESCRIPTION', 1, 'The passphrase is considered a secret between the merchant and PayFast and should never be sent or given out.<br>The merchant may set their own passphrase by:<br> 1. Login to PayFast using their merchant credentials.<br> 2. Clicking on "Settings", and then "Edit" under the Security Pass Phrase section.<br> 3. Inputting the desired passphrase and click "Update"', 1),
+('LBL_PAYFAST_SIGNATURE_DESCRIPTION', 1, 'System generated MD5 signature. It will generate automatically while checkout using "Payfast".', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- --- Payfast Payment Gateway--- --
  
 -- --- task_81779_advanced_GDPR_module --- --
 UPDATE

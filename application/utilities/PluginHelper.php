@@ -95,14 +95,14 @@ trait PluginHelper
         }
 
         if (isset($this->requiredKeys) && !empty($this->requiredKeys) && is_array($this->requiredKeys)) {
-            foreach ($this->requiredKeys as $key) {               
+            foreach ($this->requiredKeys as $key) {
                 if (!array_key_exists($key, $this->settings) || '' == $this->settings[$key]) {
                     $this->error = static::KEY_NAME . ' : ' . ' "' . $key . '" ' . Labels::getLabel('MSG_SETTINGS_NOT_CONFIGURED', $langId);
                     return false;
                 }
             }
         }
-      
+
         return true;
     }
 
@@ -185,7 +185,25 @@ trait PluginHelper
         $reflect  = new ReflectionClass($keyName);
         return $reflect->newInstanceArgs($args);
     }
-    
+
+    /**
+     * updateSettings
+     *
+     * @param  int $pluginId
+     * @param  array $data
+     * @param  string $error - Reference Variable
+     * @return bool
+     */
+    public function updateSettings(int $pluginId, array $data, &$error = ""): bool
+    {
+        $pluginSetting = new PluginSetting($pluginId);
+        if (!$pluginSetting->updateSetting($data)) {
+            $error = $pluginSetting->getError();
+            return false;
+        }
+        return true;
+    }
+
     /**
      * 
      * @param int $recordId
@@ -194,10 +212,14 @@ trait PluginHelper
     {
         $this->recordId = $recordId;
     }
-
+    
+    /**
+     * getRecordId
+     *
+     * @return int
+     */
     public function getRecordId()
     {
         return $this->recordId;
     }
-
 }
