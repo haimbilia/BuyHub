@@ -6,6 +6,7 @@ class PluginSetting
     private $pluginId;
     private $pluginKey;
     private $langId;
+    protected $recordId;
 
     public const DB_TBL = 'tbl_plugin_settings';
     public const DB_TBL_PREFIX = 'pluginsetting_';
@@ -15,11 +16,12 @@ class PluginSetting
     public const TYPE_FLOAT = 3;
     public const TYPE_BOOL = 4;
 
-    public function __construct($id, $pluginKey = '')
+    public function __construct($id, $pluginKey = '', $recordId = 0)
     {
         $this->pluginId = empty($pluginKey) ? $id : Plugin::getAttributesByCode($pluginKey, 'plugin_id');
         $this->pluginKey = $pluginKey;
         $this->langId = CommonHelper::getLangId();
+        $this->recordId = $recordId;
     }
 
     public function getError()
@@ -33,16 +35,13 @@ class PluginSetting
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
             return false;
         }
-
-        if (empty($statement)) {
-            $statement = [
-                'smt' => static::DB_TBL_PREFIX . 'plugin_id = ?',
-                'vals' => [
-                    $this->pluginId
-                ]
-            ];
-        }
-
+        $statement = [
+            'smt' => static::DB_TBL_PREFIX . 'plugin_id = ? and '.static::DB_TBL_PREFIX .'record_id = ?',
+            'vals' => [
+                $this->pluginId,
+                $this->recordId
+            ]
+        ];
         if (!FatApp::getDb()->deleteRecords(static::DB_TBL, $statement)) {
             $this->error = FatApp::getDb()->getError();
             return false;
@@ -59,19 +58,27 @@ class PluginSetting
 
         $srch = new SearchBase(static::DB_TBL, 'tps');
         $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'plugin_id', '=', $this->pluginId);
-        $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));
+        $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'record_id', '=', $this->recordId);
+        $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));        
         $rs = $srch->getResultSet();
         if (!$rs) {
             $this->error = $srch->getError();
             return false;
         }
-        $row =  FatApp::getDb()->fetchAllAssoc($rs);
+        $row =  FatApp::getDb()->fetchAllAssoc($rs); 
         
-        $settingsData = Plugin::getAttributesByCode($this->pluginKey, '', $langId);
-        if (0 < $langId && empty($column)) {
+        if(0 < $this->recordId){
+            $settingsData = SellerPlugin::getAttributesByCode($this->recordId, $this->pluginKey, '', $langId ,false);
+        }else{
+            $settingsData = Plugin::getAttributesByCode($this->pluginKey, '', $langId);
+        }      
+        
+        if (0 < $langId) {
             $settingsData['plugin_name'] = !empty($settingsData['plugin_name']) ? $settingsData['plugin_name'] : $settingsData['plugin_identifier'];
         }
-        $settings = array_merge($row, $settingsData);
+        $settings = array_merge($row, $settingsData);  
+
+
         if (!empty($column) && is_string($column)) {
             return array_key_exists($column, $settings) ? $settings[$column] : '';
         }
@@ -106,11 +113,12 @@ class PluginSetting
         foreach ($data as $key => $val) {
             $updateData = [
                 'pluginsetting_plugin_id' => $this->pluginId,
+                'pluginsetting_record_id' => $this->recordId,
                 'pluginsetting_key' => $key,
                 'pluginsetting_value' => is_array($val) ? serialize($val) : $val,
             ];
-
-            if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $updateData, false, ['IGNORE'])) {
+          
+            if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $updateData, false, [], $updateData)) {
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
@@ -167,7 +175,7 @@ class PluginSetting
                 $fld->requirements()->setRequired(true);
             }
         }
-
+       
         $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }

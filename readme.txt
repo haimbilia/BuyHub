@@ -1,4 +1,12 @@
 
+Updates:
+    => Tax Module update
+
+Features:
+
+    - Shopify sync module for SV seller
+
+
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
     => System API version : 2.3
@@ -57,10 +65,15 @@ Fixes:
     => 051003 - banner image getting repeated as width increases
     => 051070 - admin> cms> import instructions> identifiers are not manageable
     => 051091 - on the category page, google is undefined error coming in browser console
+    => 051329 - Tax api isue to fetch tax categories.
     => 051261 - issue with editor> long text is not accepting and some formatting issue
     => 051206 - Signup with otp >> verify your number >> enter wrong otp>> some error message should be there 
     => 051404 - On Contact us & Footer country code should be there with mobile number
     => 051407 - Advertiser account >> update credentials >> selected country code while signup should get displayed on update credentials instead of default country of system
+    => 051474 - Invalid Currency & Language symbol displays in pdf
+    => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
+    => 051573 - Product search is not working when we Activate Geo Location and shipping plugin.
+    => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
     
 Enhancements :
    => Make provision to made seller

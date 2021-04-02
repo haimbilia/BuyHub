@@ -4,6 +4,7 @@ class DummyController extends AdminBaseController
 {
     public function index()
     {
+      
        $prodSrchObj = new ProductSearch();
        $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
        $prodSrchObj->joinProductToCategory();
@@ -132,4 +133,11 @@ class DummyController extends AdminBaseController
     {
         $this->_template->render(true, true);
     }
+    
+    public function dataMigration()
+    {
+        $dataMigration = new DataMigration();
+        $dataMigration->sync();
+    } 
+
 }

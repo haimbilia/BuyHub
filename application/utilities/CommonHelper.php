@@ -622,12 +622,7 @@ class CommonHelper extends FatUtility
             $sign = '-';
         }
 
-        if ($numberFormat && !$stringFormat) {
-            $val = number_format($val, 2);
-        } else {
-            $afterDecimal = $val - floor($val);
-            $val = (0 < $afterDecimal ? number_format($val, 2, '.', '') : $val);
-        }
+        $val = self::numberFormat($val,$numberFormat,$stringFormat);
 
         if ($stringFormat) {
             $val = static::numberStringFormat($val);
@@ -647,6 +642,22 @@ class CommonHelper extends FatUtility
 
         return trim($sign . $val);
     }
+
+    public static function numberFormat($val,$numberFormat=true,$stringFormat=false){
+        
+        $decimalpoint =  FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.');
+        $separator =  $decimalpoint == '.' ? ',' : '.';
+
+        if ($numberFormat && !$stringFormat) {
+            $val = number_format($val, 2,$decimalpoint,$separator);
+        }else{
+            $afterDecimal = $val - floor($val);
+            $val = (0 < $afterDecimal ? number_format($val, 2, $decimalpoint,$separator) : $val);
+        }
+
+        return $val;
+    }
+
     public static function convertCurrencyToRewardPoint($currencyValue)
     {
         $currencyValue = FatUtility::convertToType($currencyValue, FatUtility::VAR_FLOAT);
@@ -1811,10 +1822,7 @@ class CommonHelper extends FatUtility
 
     public static function demoUrl()
     {
-        if (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false) {
-            return true;
-        }
-        return false;
+        return (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false);
     }
 
     public static function jsonEncodeUnicode($data, $convertToType = false)

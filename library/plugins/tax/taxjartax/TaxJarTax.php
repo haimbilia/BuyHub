@@ -30,8 +30,7 @@ class TaxJarTax extends TaxBase
     private const TAX_RATE_SPECIAL = 7;
 
     public $requiredKeys = [
-        'sandbox_key',
-        'environment'
+        'sandbox_key'
     ];
 
     /**
@@ -62,11 +61,10 @@ class TaxJarTax extends TaxBase
      */
     public function requiredKeys()
     {
-        $envoirment = FatUtility::int($this->getKey('environment'));
+        $envoirment = FatUtility::int($this->getKey('env'));
         if (0 < $envoirment) {
             $this->requiredKeys = [
-                'live_key',
-                'environment',
+                'live_key'
             ];
         }
     }

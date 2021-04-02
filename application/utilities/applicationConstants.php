@@ -106,6 +106,9 @@ class applicationConstants
     public const CLASS_DANGER = 'label-danger';
     public const CLASS_WARNING = 'label-warning';
 
+    public const CURRENCY_SEPARATOR_DECIMAL = '.';
+    public const CURRENCY_SEPARATOR_COMMA = ',';
+
     public static function getWeightUnitsArr($langId, $unitOnly = false)
     {
         $langId = FatUtility::int($langId);
@@ -480,6 +483,15 @@ class applicationConstants
             3 => applicationConstants::CLASS_WARNING
         );
     }
+
+    public static function currencySeparatorArr($langId)
+    {
+        return array(
+            static::CURRENCY_SEPARATOR_DECIMAL => Labels::getLabel('LBL_Decimal_(_._)', $langId),
+            static::CURRENCY_SEPARATOR_COMMA => Labels::getLabel('LBL_Comma_(_,_)', $langId)
+        );
+    }
+
 
     public static function getClassColor(string $class): string
     {

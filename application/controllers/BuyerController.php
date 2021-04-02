@@ -411,8 +411,13 @@ class BuyerController extends BuyerBaseController
         $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
         $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
 
+        // set LTR direction for english translation
+        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
+        // set font
+        $pdf->SetFont('dejavusans');
+
         $templatePath = "buyer/view-invoice.php";
-        $html = $template->render(false, false, $templatePath, true, true);
+        $html = addslashes($template->render(false, false, $templatePath, true, true));
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
 

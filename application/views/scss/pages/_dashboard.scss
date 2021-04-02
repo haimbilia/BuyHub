@@ -1939,6 +1939,25 @@ input.sp-input {
             border: $border;
             border-radius: $radius4;
             padding: 1rem;
+            .actions{
+                a{
+                    padding: 5px;
+                    width: 30px;
+                    height: 30px;
+                    color: #2e384d;
+                    font-size: 0.7rem !important;
+                    border: solid 1px #dee2e6;
+                    border-radius: 2px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    &:hover{
+                            background: $brand-color;
+                            color:$brand-color-inverse;
+                            border-color: $brand-color;;
+                    }
+                }
+            }
         }
     }
     .title {
