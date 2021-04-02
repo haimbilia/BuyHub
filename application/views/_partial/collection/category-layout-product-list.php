@@ -1,4 +1,4 @@
-<div id="tabUl" class="tabs tabs--flat-js justify-content-md-center">
+<div id="tabUl" class="tabs tabs--flat-js justify-content-md-center tabs--mobileview">
     <ul>
         <?php foreach ($collection['categories'] as $key => $category) { ?>
             <li class=""><a href="#tb-<?php echo $key; ?>"><?php echo $category['catData']['prodcat_name']; ?></a>

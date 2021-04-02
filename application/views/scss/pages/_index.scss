@@ -349,6 +349,25 @@
 }
 
 //FEATURED SECTION CSS HERE
+@include media-breakpoint-down(sm) {
+    .tabs--mobileview {
+        display: block;
+        margin: 0;
+        padding: 0;
+        ul {
+            display: block;
+            text-align: center;
+            overflow: auto;
+            white-space: nowrap;
+            padding-bottom: 10px;
+            li {
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+    }
+}
+
 .featured-products {
     display: grid;
     grid-template-columns: repeat(12, 1fr);

@@ -15831,6 +15831,9 @@ img.mfp-img, .post .post_media iframe.mfp-img, .post .post_media .posted-content
 
 .tabs-content {
   margin: 2rem 0 0; }
+  @media (max-width: 767.98px) {
+    .tabs-content {
+      margin: 1rem 0 0; } }
 
 .tabs_panel {
   min-height: 500px; }
@@ -34148,6 +34151,21 @@ div.faqanswer {
 
 .home .section:not([style*="background"]) + .section:not([style*="background"]) {
   padding-top: 0px; }
+
+@media (max-width: 767.98px) {
+  .tabs--mobileview {
+    display: block;
+    margin: 0;
+    padding: 0; }
+    .tabs--mobileview ul {
+      display: block;
+      text-align: center;
+      overflow: auto;
+      white-space: nowrap;
+      padding-bottom: 10px; }
+      .tabs--mobileview ul li {
+        display: inline-block;
+        vertical-align: middle; } }
 
 .featured-products {
   display: grid;
