@@ -41,11 +41,14 @@ class UserAuthentication extends FatModel
         );
     }
 
-    public static function encryptPassword($pass)
+    public static function encryptPassword(string $pass, bool $oldStyle = false)
     {
-        //return md5(PASSWORD_SALT . $pass . PASSWORD_SALT);
+        if($oldStyle){
+            return md5(PASSWORD_SALT . $pass . PASSWORD_SALT);
+        }
         return  password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
-    }
+    }   
+    
 
     public function logFailedAttempt($ip, $username)
     {
@@ -342,10 +345,49 @@ class UserAuthentication extends FatModel
             return false;
         }
         
+        
+        /* [To Do - need to remove credential_password_old in next release */            
+        if (!empty($row['credential_password_old'])) {
+            $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
+            if ($oldPassword !== $row['credential_password_old']) {
+                $this->logFailedAttempt($ip, $username);
+                $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                return false;
+            }
+            if (true == $encryptPassword) {
+                if (!$this->resetUserPassword($row['user_id'], $password)) {
+                    SystemLog::set('Unable to set new hash user password');
+                }else{
+                    if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
+                        SystemLog::set('Unable to blank user old password');
+                    }
+                }                
+            }
+        } else {
+            if (true == $encryptPassword) {
+                if (false == password_verify($password, $row['credential_password'])) {
+                    $this->logFailedAttempt($ip, $username);
+                    $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                    return false;
+                }
+            } else {
+                if ($password !== $row['credential_password']) {
+                    $this->logFailedAttempt($ip, $username);
+                    $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                    return false;
+                }
+            }
+        }
+        /* [To Do - need to remove credential_password_old in next release */
+
+
+        /*
         if ((true == $encryptPassword) && false == password_verify($password , $row['credential_password'])) {
             $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
             return false;
         }
+         * 
+         */
         
         if ($row && $row['user_deleted'] == applicationConstants::YES) {
             $this->logFailedAttempt($ip, $username);
@@ -365,12 +407,14 @@ class UserAuthentication extends FatModel
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
             return false;
         }*/
-        
+        /*
         if(false == $encryptPassword && $row['credential_password'] !== $password){
                 $this->logFailedAttempt($ip, $username);
                 $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
                 return false;
         }
+         * 
+         */
         
         if (!$isAdmin) {
             if ($row['credential_verified'] != applicationConstants::YES) {
