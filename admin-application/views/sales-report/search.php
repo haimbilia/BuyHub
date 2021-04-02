@@ -20,13 +20,25 @@ $arr = array(
     'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $adminLangId),
 
     'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $adminLangId),
+    'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $adminLangId),
+    'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $adminLangId),
+
     'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $adminLangId),
-    'discountTotal' => Labels::getLabel('LBL_Coupon_Discount', $adminLangId),
+    'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $adminLangId),
+    'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $adminLangId),
+
+    'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $adminLangId),
     'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $adminLangId),
     'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $adminLangId),
 
     'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $adminLangId),
+    'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $adminLangId),
+    'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $adminLangId),
+
     'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $adminLangId),
+
+    'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $adminLangId),
+    'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $adminLangId),
     'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $adminLangId)
 );
 if (empty($orderDate)) {
@@ -66,14 +78,22 @@ foreach ($arr_listing as $sn => $row) {
             case 'grossSales':
             case 'transactionAmount':
             case 'inventoryValue':
-            case 'inventoryValue':
             case 'taxTotal':
+            case 'adminTaxTotal':
+            case 'sellerTaxTotal':
             case 'shippingTotal':
+            case 'sellerShippingTotal':
+            case 'adminShippingTotal':
             case 'discountTotal':
+            case 'couponDiscount':
             case 'volumeDiscount':
             case 'rewardDiscount':
             case 'refundedAmount':
+            case 'refundedShipping':
+            case 'refundedTax':
             case 'orderNetAmount':
+            case 'commissionCharged':
+            case 'refundedCommission':
             case 'adminSalesEarnings':
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
@@ -93,11 +113,16 @@ if (count($arr_listing) == 0) {
         Labels::getLabel('LBL_No_Records_Found', $adminLangId)
     );
 }
-echo $tbl->getHtml();
-$postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array(
-    'name' => 'frmSalesReportSearchPaging'
-));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 ?>
+<div class="overflow_auto">
+    <?php echo $tbl->getHtml();
+    $postedData['page'] = $page;
+    echo FatUtility::createHiddenFormFromData($postedData, array(
+        'name' => 'frmSalesReportSearchPaging'
+    ));
+    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+    ?>
+</div><?php
+        $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+
+        ?>

@@ -69,7 +69,8 @@
                     </div>
                     <div class="sectionbody">
                         <div class="tablewrap">
-                            <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?>
+                            <div id="listing"> 
+                                <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?>
                             </div>
                         </div>
                     </div>

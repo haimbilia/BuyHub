@@ -12094,3 +12094,7 @@ form[name="frmShippingProfile"] {
 .tagify {
     min-height: 35px;
 }
+
+.overflow_auto{
+    overflow: auto;
+}

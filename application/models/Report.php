@@ -14,6 +14,11 @@ class Report extends SearchBase
         $this->setFields($attr);
     }
 
+    public function joinSettings()
+    {
+        $this->joinTable(OrderProduct::DB_TBL_SETTINGS, 'LEFT OUTER JOIN', 'op.op_id = opst.opsetting_op_id', 'opst');
+    }
+
     public function joinOrders()
     {
         if ($this->ordersTableJoined) {
@@ -45,15 +50,16 @@ class Report extends SearchBase
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'seller.user_id = credential_user_id', 'seller_cred');
     }
 
-    public function joinOtherCharges($includeNegativeSeperatly = false)
+    public function joinOtherCharges($bifurcationCharges = false)
     {
         $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
         $ocSrch->doNotCalculateRecords();
         $ocSrch->doNotLimitRecords();
         $ocSrch->addGroupBy('opc.opcharge_op_id');
         $ocSrch->addMultipleFields(['opcharge_op_id', 'sum(opc.opcharge_amount) as op_other_charges']);
-        if ($includeNegativeSeperatly) {
+        if ($bifurcationCharges) {
             $ocSrch->addFld('SUM(CASE WHEN opc.opcharge_amount<0 THEN opc.opcharge_amount ELSE 0 END) as opDiscountCharges');
+            $ocSrch->addFld('SUM(CASE WHEN opc.opcharge_amount>0 THEN opc.opcharge_amount ELSE 0 END) as opNonDiscountCharges');
         }
 
         $this->joinTable('(' . $ocSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
@@ -67,19 +73,25 @@ class Report extends SearchBase
     public function joinOrderProductTaxCharges()
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_TAX, 'optax');
+        $this->joinSettings();
         $this->addFld('(SUM(IFNULL(optax.opcharge_amount,0))) as taxTotal');
+        $this->addFld('SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0)) as sellerTaxTotal');
+        $this->addFld('SUM(if(opst.op_tax_collected_by_seller = 0,IFNULL(optax.opcharge_amount,0),0)) as adminTaxTotal');
     }
 
     public function joinOrderProductShipCharges()
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
+        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFt JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
         $this->addFld('(SUM(IFNULL(opship.opcharge_amount,0))) as shippingTotal');
+        $this->addFld('SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0)) as sellerShippingTotal');
+        $this->addFld('SUM(if(ops.opshipping_by_seller_user_id = 0,IFNULL(opship.opcharge_amount,0),0)) as adminShippingTotal');
     }
 
     public function joinOrderProductDicountCharges()
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_DISCOUNT, 'opDis');
-        $this->addFld('(SUM(IFNULL(opDis.opcharge_amount,0))) as discountTotal');
+        $this->addFld('(SUM(IFNULL(opDis.opcharge_amount,0))) as couponDiscount');
     }
 
     public function joinOrderProductVolumeCharges()
@@ -169,11 +181,11 @@ class Report extends SearchBase
 
     public function setCompletedOrdersCondition()
     {
-        // $this->addStatusCondition(unserialize(FatApp::getConfig('CONF_COMPLETED_ORDER_STATUS')));
-        $completedStatus = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS", FatUtility::VAR_STRING, ''));
+        $this->addStatusCondition(unserialize(FatApp::getConfig('CONF_COMPLETED_ORDER_STATUS')));
+        /* $completedStatus = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS", FatUtility::VAR_STRING, ''));
         $cancelledStatus = [FatApp::getConfig('CONF_DEFAULT_CANCEL_ORDER_STATUS')];
         $refundCompletedStatus = array_diff($completedStatus, $cancelledStatus);
-        $this->addStatusCondition($refundCompletedStatus);
+        $this->addStatusCondition($refundCompletedStatus); */
     }
 
     public function excludeDeletedOrdersCondition()
@@ -195,6 +207,7 @@ class Report extends SearchBase
 
     public static function getFields($fields = [])
     {
+        // pending NetSales
         $arr = [
             'orderDate' => 'DATE(o.order_date_added) as order_date',
             'totOrders' => 'ocount.totOrders',
@@ -204,13 +217,17 @@ class Report extends SearchBase
             'grossSales' => 'sum(( op_unit_price * op_qty ) + op_other_charges + op_rounding_off - opDiscountCharges) as grossSales',
             'transactionAmount' => 'sum(( op_unit_price * op_qty ) + op_other_charges + op_rounding_off) as transactionAmount',
             'inventoryValue' => 'SUM(op_unit_price*op_qty) as inventoryValue',
-            'commissionCharged' => 'sum(op_commission_charged) as commissionCharged',
+
             'refundedAmount' => 'sum(op_refund_amount) as refundedAmount',
-            'refundedCommission' => 'sum(op_refund_commission) as refundedCommission',
             'refundedShipping' => '(SUM(op_refund_shipping)) as refundedShipping',
+            'refundedTax' => 'sum(op_refund_amount) as refundedTax',
+
+            'commissionCharged' => 'sum(op_commission_charged) as commissionCharged',
+            'refundedCommission' => 'sum(op_refund_commission) as refundedCommission',
             'affiliateCommissionCharged' => 'sum(op_affiliate_commission_charged) as affiliateCommissionCharged',
             'refundedAffiliateCommission' => '(SUM(op_refund_shipping)) as refundedAffiliateCommission',
             'adminSalesEarnings' => 'sum((op_commission_charged - op_refund_commission)) as adminSalesEarnings',
+
             'orderNetAmount' => 'sum(( op_unit_price * op_qty ) + op_other_charges + op_rounding_off - op_refund_amount) as orderNetAmount',
             'unitPrice' => 'SUM(op_unit_price*op_qty)/sum(op_qty) as unitPrice',
             'roundingOff' => 'op_rounding_off',
@@ -222,7 +239,7 @@ class Report extends SearchBase
             return array_values($arr);
         }
 
-        $fields = array_diff($fields, ['taxTotal', 'shippingTotal', 'discountTotal', 'volumeDiscount', 'rewardDiscount']);
+        $fields = array_diff($fields, ['taxTotal', 'shippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'opDiscountCharges', 'opNonDiscountCharges', 'sellerShippingTotal', 'adminShippingTotal', 'sellerTaxTotal', 'adminTaxTotal']);
 
         $flds = [];
         foreach ($fields as $key) {

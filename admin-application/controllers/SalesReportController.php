@@ -40,7 +40,7 @@ class SalesReportController extends AdminBaseController
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
 
-        $fields = ['orderDate', 'totOrders', 'totQtys', 'totRefundedQtys', 'netSoldQty','grossSales', 'transactionAmount','inventoryValue', 'taxTotal', 'shippingTotal', 'discountTotal', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'orderNetAmount'];
+        $fields = ['orderDate',  'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount'];
         $srch = new Report(0, $fields);
         $srch->joinOrders();
         $srch->joinPaymentMethod();
@@ -53,13 +53,14 @@ class SalesReportController extends AdminBaseController
         $srch->setPaymentStatusCondition();
         $srch->setCompletedOrdersCondition();
         $srch->excludeDeletedOrdersCondition();
-        $srch->addTotalOrdersCount('order_date_added');
 
         $fromDate = $toDate = $orderDate;
         if (empty($orderDate)) {
             $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
             $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
             $srch->setGroupBy('orderDate');
+            $srch->addTotalOrdersCount('order_date_added');
+            $srch->addFld('totOrders');
         } else {
             $this->set('orderDate', $orderDate);
             $srch->setGroupBy('op_invoice_number');
@@ -94,58 +95,131 @@ class SalesReportController extends AdminBaseController
         $srchFrm = $this->getSearchForm($orderDate);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        /* $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10); */
 
-        $srch = Report::salesReportObject();
+        $fields = ['orderDate',  'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount'];
+        $srch = new Report(0, $fields);
+        $srch->joinOrders();
+        $srch->joinPaymentMethod();
+        $srch->joinOtherCharges(true);
+        $srch->joinOrderProductTaxCharges();
+        $srch->joinOrderProductShipCharges();
+        $srch->joinOrderProductDicountCharges();
+        $srch->joinOrderProductVolumeCharges();
+        $srch->joinOrderProductRewardCharges();
+        $srch->setPaymentStatusCondition();
+        $srch->setCompletedOrdersCondition();
+        $srch->excludeDeletedOrdersCondition();
+
+        $fromDate = $toDate = $orderDate;
         if (empty($orderDate)) {
-            $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
-            if (!empty($date_from)) {
-                $srch->addCondition('o.order_date_added', '>=', $date_from . ' 00:00:00');
-            }
-
-            $date_to = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
-            if (!empty($date_to)) {
-                $srch->addCondition('o.order_date_added', '<=', $date_to . ' 23:59:59');
-            }
-            $srch->addGroupBy('DATE(o.order_date_added)');
+            $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
+            $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
+            $srch->setGroupBy('orderDate');
+            $srch->addTotalOrdersCount('order_date_added');
+            $srch->addFld('totOrders');
         } else {
             $this->set('orderDate', $orderDate);
-            $srch->addGroupBy('op_invoice_number');
-            $srch->addCondition('o.order_date_added', '>=', $orderDate . ' 00:00:00');
-            $srch->addCondition('o.order_date_added', '<=', $orderDate . ' 23:59:59');
-            $srch->addFld(array('op_invoice_number'));
+            $srch->setGroupBy('op_invoice_number');
+            $srch->addFld('op_invoice_number');
         }
 
+        $srch->setDateCondition($fromDate, $toDate);
         $srch->addOrder('order_date', 'desc');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        /* $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize); */
         //echo $srch->getQuery();
         $rs = $srch->getResultSet();
         //$arr_listing = $db->fetchAll($rs);
 
         $sheetData = array();
-        $arr1 = array(Labels::getLabel('LBL_Sr_No', $this->adminLangId), Labels::getLabel('LBL_Date', $this->adminLangId), Labels::getLabel('LBL_No._Of_Orders', $this->adminLangId));
-        $arr2 = array(Labels::getLabel('LBL_Sr_No', $this->adminLangId), Labels::getLabel('LBL_Invoice_Number', $this->adminLangId));
-        $arr = array(Labels::getLabel('LBL_No._Of_Qty', $this->adminLangId), Labels::getLabel('LBL_Refund_Qty', $this->adminLangId), Labels::getLabel('LBL_Inventory_Value', $this->adminLangId), Labels::getLabel('LBL_Order_Net_Amount', $this->adminLangId), Labels::getLabel('LBL_Tax_Charged', $this->adminLangId), Labels::getLabel('LBL_Shipping_Charges', $this->adminLangId), Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId), Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId));
+        $arrFlds1 = array(
+            'listserial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'order_date' => Labels::getLabel('LBL_Date', $this->adminLangId),
+            'totOrders' => Labels::getLabel('LBL_Order_Placed', $this->adminLangId),
+            /*  'orderNetAmount' => Labels::getLabel('LBL_Order_Net_Amount', $this->adminLangId), */
+        );
+        $arrFlds2  = array(
+            'listserial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'op_invoice_number' => Labels::getLabel('LBL_Invoice_Number', $this->adminLangId),
+            /* 'order_net_amount' => Labels::getLabel('LBL_Order_Net_Amount', $this->adminLangId), */
+        );
+        $arr = array(
+            'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
+            'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
+            'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->adminLangId),
+            'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->adminLangId),
+            'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
+            'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->adminLangId),
+
+            'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
+            'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $this->adminLangId),
+            'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->adminLangId),
+
+            'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
+            'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $this->adminLangId),
+            'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->adminLangId),
+
+            'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
+            'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
+            'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
+
+            'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
+            'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
+            'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
+
+            'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
+
+            'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->adminLangId),
+            'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->adminLangId),
+            'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId)
+        );
         if (empty($orderDate)) {
-            $arr = array_merge($arr1, $arr);
+            $arr_flds = array_merge($arrFlds1, $arr);
         } else {
-            $arr = array_merge($arr2, $arr);
+            $arr_flds = array_merge($arrFlds2, $arr);
         }
-        array_push($sheetData, $arr);
+
+        array_push($sheetData, array_values($arr_flds));
 
         $count = 1;
         while ($row = $db->fetch($rs)) {
-            if (empty($orderDate)) {
-                $arr1 = array($count, FatDate::format($row['order_date']), $row['totOrders']);
-            } else {
-                $arr1 = array($count, $row['op_invoice_number']);
+            $arr = [];
+            foreach ($arr_flds as $key => $val) {
+                switch ($key) {
+                    case 'listserial':
+                        $arr[] = $count;
+                        break;
+                    case 'listserial':
+                        $arr[] = FatDate::format($row['order_date']);
+                        break;
+                    case 'grossSales':
+                    case 'transactionAmount':
+                    case 'inventoryValue':
+                    case 'taxTotal':
+                    case 'adminTaxTotal':
+                    case 'sellerTaxTotal':
+                    case 'shippingTotal':
+                    case 'sellerShippingTotal':
+                    case 'adminShippingTotal':
+                    case 'discountTotal':
+                    case 'couponDiscount':
+                    case 'volumeDiscount':
+                    case 'rewardDiscount':
+                    case 'refundedAmount':
+                    case 'refundedShipping':
+                    case 'refundedTax':
+                    case 'orderNetAmount':
+                    case 'commissionCharged':
+                    case 'refundedCommission':
+                    case 'adminSalesEarnings':
+                        $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                        break;
+                    default:
+                        $arr[] = $row[$key];
+                        break;
+                }
             }
-            $arr = array($row['totQtys'], $row['totRefundedQtys'], $row['inventoryValue'], $row['orderNetAmount'], $row['taxTotal'], $row['shippingTotal'], $row['totalRefundedAmount'], $row['totalSalesEarnings']);
-            $arr = array_merge($arr1, $arr);
+
             array_push($sheetData, $arr);
             $count++;
         }
