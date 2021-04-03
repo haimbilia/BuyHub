@@ -174,22 +174,22 @@ class SalesReportController extends AdminBaseController
             'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId)
         );
         if (empty($orderDate)) {
-            $arr_flds = array_merge($arrFlds1, $arr);
+            $arrFlds = array_merge($arrFlds1, $arr);
         } else {
-            $arr_flds = array_merge($arrFlds2, $arr);
+            $arrFlds = array_merge($arrFlds2, $arr);
         }
 
-        array_push($sheetData, array_values($arr_flds));
+        array_push($sheetData, array_values($arrFlds));
 
         $count = 1;
         while ($row = $db->fetch($rs)) {
             $arr = [];
-            foreach ($arr_flds as $key => $val) {
+            foreach ($arrFlds as $key => $val) {
                 switch ($key) {
                     case 'listserial':
                         $arr[] = $count;
                         break;
-                    case 'listserial':
+                    case 'order_date':
                         $arr[] = FatDate::format($row['order_date']);
                         break;
                     case 'grossSales':

@@ -123,7 +123,12 @@ class Report extends SearchBase
                 $srch->addGroupBy('o.order_id');
                 $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.order_id = o.order_id', 'ocount');
                 break;
-            case 'op_selprod_id':
+            case 'product_id':
+                $srch->addMultipleFields(['SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) ) as product_id', 'count(DISTINCT(op.op_id)) as totOrders']);
+                $srch->addGroupBy('product_id');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.product_id = SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) )', 'ocount');
+                break;
+            case 'selprod_id':
                 $srch->addMultipleFields(['op.op_selprod_id', 'count(DISTINCT(op.op_id)) as totOrders']);
                 $srch->addGroupBy('op.op_selprod_id');
                 $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.op_selprod_id = op.op_selprod_id', 'ocount');
@@ -198,6 +203,14 @@ class Report extends SearchBase
         switch ($key) {
             case 'orderDate':
                 $this->addGroupBy('DATE(o.order_date_added)');
+                break;
+            case 'product_id':
+                $this->addFld('SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) ) as product_id');
+                $this->addGroupBy('product_id');
+                break;
+            case 'selprod_id':
+                $this->addFld('op.op_selprod_id');
+                $this->addGroupBy('op.op_selprod_id');
                 break;
             default:
                 $this->addGroupBy($key);
