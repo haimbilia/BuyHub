@@ -65,9 +65,15 @@ echo $loginFrm->getFormTag(); ?>
                 <small class="countdownFld--js d-none">
                     <?php
                         $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
-                        echo CommonHelper::replaceStringData($msg, ['{SECONDS}' => '<b><span class="intervalTimer-js">' . User::OTP_INTERVAL . '</span></b>']);
+                        $replace = [
+                            '{SECONDS}' => '<b><span class="intervalTimer-js">' . User::OTP_INTERVAL . '</span></b>',
+                        ];
+                        echo CommonHelper::replaceStringData($msg, $replace);
                     ?>
                 </small>
+                <a href="javascript:void(0);" class="link alreadyHave-js">
+                    <small><?php echo  Labels::getLabel('LBL_ALREADY_HAVE?', $siteLangId); ?></small>
+                </a>
             </div>
             <div class="col-md-4">
                 <a href="javascript:void(0);" onclick="withPassword(this);" class="link float-right">
