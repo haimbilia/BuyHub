@@ -35,6 +35,7 @@ class SellerProduct extends MyAppModel
     public const VOL_DISCOUNT_MAX_QTY = 9999;
 
     public const UPDATE_OPTIONS_COUNT = 10;
+    public const INVENTORY_RESTRICT_LIMIT = 20;
 
     public function __construct($id = 0)
     {
@@ -1169,12 +1170,14 @@ class SellerProduct extends MyAppModel
             return false;
         }
 
+        if (true == MetaTag::isExists($tabsArr[$metaType]['controller'], $tabsArr[$metaType]['action'], $selprod_id, 0)) {
+            return true;
+        }
+
         $metaData['meta_controller'] = $tabsArr[$metaType]['controller'];
         $metaData['meta_action'] = $tabsArr[$metaType]['action'];
         $metaData['meta_record_id'] = $selprod_id;
         $metaData['meta_subrecord_id'] = 0;
-
-        $metaIdentifier = static::getProductDisplayTitle($selprod_id, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
 
         $meta = new MetaTag();
         $meta->assignValues($metaData);
@@ -1183,6 +1186,7 @@ class SellerProduct extends MyAppModel
             $this->error = $meta->getError();
             return false;
         }
+
         $metaId = $meta->getMainTableRecordId();
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {

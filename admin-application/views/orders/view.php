@@ -548,8 +548,8 @@ if ($order['order_reward_point_used'] > 0) {
                                                 </td>
                                                 <td>
                                                     <?php if (0 == FatUtility::int($row['opayment_txn_status'])) { ?>
-                                                        <a href="javascript::void(0);" onclick="approve('<?php echo $row['opayment_id']; ?>')" class="btn btn-secondary btn-sm"><?php echo Labels::getLabel("LBL_APPROVE", $adminLangId); ?></a>
-                                                        <a href="javascript::void(0);" onclick="reject('<?php echo $row['opayment_id']; ?>')" class="btn btn-outline-secondary btn-sm"><?php echo Labels::getLabel("LBL_REJECT", $adminLangId); ?></a>
+                                                        <a href="javascript:void(0);" onclick="approve('<?php echo $row['opayment_id']; ?>')" class="btn btn-secondary btn-sm"><?php echo Labels::getLabel("LBL_APPROVE", $adminLangId); ?></a>
+                                                        <a href="javascript:void(0);" onclick="reject('<?php echo $row['opayment_id']; ?>')" class="btn btn-outline-secondary btn-sm"><?php echo Labels::getLabel("LBL_REJECT", $adminLangId); ?></a>
                                                     <?php } else {
                                                         echo Labels::getLabel("LBL_N/A", $adminLangId);
                                                     } ?>

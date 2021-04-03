@@ -16,6 +16,9 @@ class UserAuthentication extends FatModel
     public const TOKEN_LENGTH = 32;
 
     private $commonLangId;
+    private $loginWithOtp = false;
+    private $loginDcode = '';
+    private $loginPhone = '';
 
     public const AFFILIATE_REG_STEP1 = 1;
     public const AFFILIATE_REG_STEP2 = 2;
@@ -90,14 +93,18 @@ class UserAuthentication extends FatModel
         if (in_array($ip, $ips)) {
             return false;
         }
+
+        if (true === $this->loginWithOtp) {
+            $username = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
+        }
+
         $srch = new SearchBase('tbl_failed_login_attempts');
         $srch->addCondition('attempt_ip', '=', $ip)->attachCondition('attempt_username', '=', $username);
         $srch->addCondition('attempt_time', '>=', date('Y-m-d H:i:s', strtotime("-5 minutes")));
         $srch->addFld('COUNT(*) AS total');
         $rs = $srch->getResultSet();
-
         $row = $db->fetch($rs);
-
+        // echo $srch->getQuery();
         return ($row['total'] > 3);
     }
 
@@ -282,14 +289,21 @@ class UserAuthentication extends FatModel
         return true;
     }
 
+    public function setLoginWithOtp($dcode, $phone) {
+        $this->loginDcode = $dcode;
+        $this->loginPhone = $phone;
+        $this->loginWithOtp = (!empty($this->loginDcode) && !empty($this->loginPhone));
+    }
+
     public function login($username, $password, $ip, $encryptPassword = true, $isAdmin = false, $tempUserId = 0, $userType = 0, $withPhone = false)
     {
         $db = FatApp::getDb();
         if ($this->isBruteForceAttempt($ip, $username)) {
             $userSrch = User::getSearchObject(true, 0, false);
-            $userSrch->addCondition('credential_username', '=', $username);
+            $condition = $userSrch->addCondition('credential_username', '=', $username);
+            $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
             $userRs = $userSrch->getResultSet();
-
+            // echo $userSrch->getQuery();
             if ($row = $db->fetch($userRs)) {
                 $email = new EmailHandler();
                 $email->failedLoginAttempt(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $row);
@@ -299,7 +313,7 @@ class UserAuthentication extends FatModel
             return false;
         }
 
-        if ($encryptPassword) {
+        if ($encryptPassword && false === $this->loginWithOtp) {
             $password = UserAuthentication::encryptPassword($password);
         }
 
@@ -307,7 +321,15 @@ class UserAuthentication extends FatModel
         $condition = $srch->addCondition('credential_username', '=', $username);
         $condition->attachCondition('credential_email', '=', $username, 'OR');
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
-        $srch->addCondition('credential_password', '=', $password);
+
+        if (false === $this->loginWithOtp) {
+            $srch->addCondition('credential_password', '=', $password);
+        } else {
+            $loginPhone = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
+            $srch->joinTable(User::DB_TBL_USER_PHONE_VER, 'INNER JOIN', 'upv_user_id = user_id', 'upv');
+            $srch->addCondition('mysql_func_CONCAT(upv_phone_dcode, upv_phone)', '=', $loginPhone, 'AND', true);
+            $srch->addCondition('upv_otp', '=', $password);
+        }
         if (0 < $userType) {
             switch ($userType) {
                 case User::USER_TYPE_BUYER:
@@ -329,18 +351,19 @@ class UserAuthentication extends FatModel
         }
 
         $rs = $srch->getResultSet();
-        
         if (!$row = $db->fetch($rs)) {
+            $this->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
             if ($withPhone) {
-                $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER_OR_PASSWORD', $this->commonLangId);
+                $lbl = (false === $this->loginWithOtp) ? 'PASSWORD' : 'OTP';
+                $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER_OR_' . $lbl, $this->commonLangId);
             }
             return false;
         }
 
         if ($row && $row['user_deleted'] == applicationConstants::YES) {
             $this->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELTED', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELETED', $this->commonLangId);
             return false;
         }
 
@@ -349,10 +372,21 @@ class UserAuthentication extends FatModel
             $this->error = Labels::getLabel('ERR_Shipping_user_are_not_allowed_to_login', $this->commonLangId);
             return false;
         }
-
-        if ((!(strtolower($row['credential_username']) === strtolower($username) || strtolower($row['credential_email']) === strtolower($username) || $row['user_phone_dcode'] . $row['user_phone'] === $username)) || $row['credential_password'] !== $password) {
+        
+        if (
+                (
+                    !(strtolower($row['credential_username']) === strtolower($username) || 
+                    strtolower($row['credential_email']) === strtolower($username) || 
+                    $row['user_phone_dcode'] . $row['user_phone'] === $username)
+                ) || 
+                (false === $this->loginWithOtp && $row['credential_password'] !== $password)
+            ) {
             $this->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
+            if ($withPhone) {
+                $lbl = (false === $this->loginWithOtp) ? 'PASSWORD' : 'OTP';
+                $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER_OR_' . $lbl, $this->commonLangId);
+            }
             return false;
         }
         if (!$isAdmin) {
@@ -408,7 +442,10 @@ class UserAuthentication extends FatModel
             $rowUser = User::getAttributesById($row['credential_user_id']);
         }
 
-
+        if (true === $this->loginWithOtp) {
+            $user = new User();
+            $user->deletePhoneOtp($row['credential_user_id']);
+        }
 
         $rowUser['user_ip'] = $ip;
         $rowUser['user_email'] = $row['credential_email'];

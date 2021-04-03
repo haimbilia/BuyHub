@@ -659,11 +659,26 @@ function codeLatLng(lat, lng, callback) {
 }
 
 function defaultSetUpLogin(frm, v) {
+    var formClass = '';
+    if ($(frm).hasClass('loginpopup--js')) {
+        formClass = 'form.loginpopup--js ';
+    }
+    if (0 < $(formClass + '.loginWithOtp--js').length && 0 < $(formClass + '.loginWithOtp--js').val()) {
+        $(formClass + "input.otpVal-js").each(function () {
+            if ('undefined' == typeof $(this).val() || '' == $(this).val()) {
+                $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":false}');
+                invalidOtpField();
+                $.mbsmessage(langLbl.requiredFields, false, 'alert--danger');
+                return false;
+            }
+        });
+    }
+
     v.validate();
     if (!v.isValid()) {
-
         return false;
     }
+
     fcom.ajax(fcom.makeUrl('GuestUser', 'login'), fcom.frmData(frm), function (t) {
         var ans = JSON.parse(t);
         /* alert(t); */
@@ -1135,14 +1150,76 @@ $(document).ready(function () {
         var inputElement = $(formElement + " input[name='username']");
         var altPlaceHolder = inputElement.attr('data-alt-placeholder');
         var placeHolder = inputElement.attr('placeholder')
-        inputElement.val("").attr({ 'placeholder': altPlaceHolder, 'data-alt-placeholder': placeHolder });
+        inputElement.val("").attr({ 'placeholder': altPlaceHolder, 'data-alt-placeholder': placeHolder, 'data-field-caption' : altPlaceHolder });
         var objLbl = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
         $(obj).attr('onclick', 'signInWithPhone(this, ' + (!flag) + ')').text(objLbl)
+        $('.withOtp--js').removeClass('d-none');
         if (false === flag) {
             inputElement.removeClass('hasFlag-js');
+            $('.withOtp--js').addClass('d-none');
         }
         stylePhoneNumberFld(formElement + " input[name='username']", (!flag));
     };
+
+    withOtp = function (obj) {
+        $(obj).hide();
+        var formClass = '';
+        if ($(obj).closest('form').hasClass('loginpopup--js')) {
+            formClass = 'form.loginpopup--js ';
+        }
+        
+        $(formClass + '.forgetPwd--js, ' + formClass + ' .pwdField--js, ' + formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').hide();
+        $(formClass + ' .withPwdLbl--js').removeClass('d-none');
+    }
+
+    withPassword = function (obj) {
+        var formClass = '';
+        if ($(obj).closest('form').hasClass('loginpopup--js')) {
+            formClass = 'form.loginpopup--js ';
+        }
+        $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":true}');
+        $(formClass + '.loginWithOtp--js').val(0);
+        $(formClass + '.withOtp--js').show();
+        $(formClass + '.forgetPwd--js, ' + formClass + ' .pwdField--js, ' + formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').show();
+        $(formClass + ' .withPwdLbl--js, ' + formClass + '.otpFieldBlock--js').addClass('d-none');
+    }
+
+    getLoginOtp = function (obj) {
+        var formClass = '';
+        if ($(obj).closest('form').hasClass('loginpopup--js')) {
+            formClass = 'form.loginpopup--js ';
+        }
+
+        var phone = $(formClass + 'input[name="username"]').val();
+        var dialCode = $(formClass + 'input[name="username_dcode"]').val();
+
+        if ('undefined' == typeof phone || '' == phone || 'undefined' == typeof dialCode || '' == dialCode) {
+            $(obj).closest('form').submit();
+            $.mbsmessage(langLbl.requiredFields, false, 'alert--danger');
+            return false;
+        }
+
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        var data = 'username=' + $(formClass + 'input[name="username"]').val() + '&username_dcode=' + $(formClass + 'input[name="username_dcode"]').val();
+        fcom.ajax(fcom.makeUrl('GuestUser', 'getLoginOtp', []), data, function (t) {
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                $.mbsmessage(t.msg, false, 'alert--danger');
+                return false;
+            }
+            $.mbsmessage.close();
+
+            $(obj).addClass('d-none');
+            $('small', obj).text(langLbl.resendOtp);
+            
+            $(formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').show();
+            $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":false}');
+            $(formClass + '.loginWithOtp--js').val(1);
+            $(formClass + '.otpFieldBlock--js,' + formClass  + ' .countdownFld--js').removeClass('d-none');
+            startOtpInterval(formClass);
+        });
+        return false;
+    }
 
     redirectfunc = function (url, orderStatus) {
         var input = '<input type="hidden" name="status" value="' + orderStatus + '">';
@@ -1769,3 +1846,11 @@ function awebersignup() {
         }
     }, 1000);
 }
+
+$(document).on('click', '.v-tabs--js ul li', function(e){
+    e.preventDefault();
+    $('.v-tabs--js .is-active').removeClass('is-active');
+    var target = $('a.v-tab--js', this).attr('href');
+    $(this).addClass('is-active');
+    $(target).addClass('is-active');
+});

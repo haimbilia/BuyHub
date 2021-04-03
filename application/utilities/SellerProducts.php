@@ -1,7 +1,11 @@
 <?php
 
+use PhpParser\Node\Stmt\Label;
+
 trait SellerProducts
 {
+    private $selProdRecordId = 0;
+
     protected function getSellerProductSearchForm($product_id = 0)
     {
         $frm = new Form('frmSearch');
@@ -162,6 +166,8 @@ trait SellerProducts
         }
 
         /* $this->_template->addJs(array('js/jquery.datetimepicker.js'), false); */
+        $this->_template->addJs(['js/select2.js']);
+        $this->_template->addCss(['custom/page-css/select2.min.css']);
         $this->set('product_type', $productRow['product_type']);
         $this->set('product_id', $product_id);
         $this->set('selprod_id', $selprod_id);
@@ -191,10 +197,9 @@ trait SellerProducts
         }
 
         $productRow = Product::getProductDataById($this->siteLangId, $product_id, array('IFNULL(product_name, product_identifier) as product_name', 'product_active', 'product_seller_id', 'product_added_by_admin_id', 'product_cod_enabled', 'product_type', 'product_approved', 'product_min_selling_price'));
-
+        
         if (!$productRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
 
         if ($productRow['product_active'] != applicationConstants::ACTIVE) {
@@ -208,10 +213,18 @@ trait SellerProducts
         if (($productRow['product_seller_id'] != $this->userParentId) && $productRow['product_added_by_admin_id'] == 0) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), false);
         }
-        $productLangRow = Product::getProductDataById(CommonHelper::getLangId(), $product_id, array('product_identifier'));
+        
+        $productLangRow = Product::getProductDataById($this->siteLangId, $product_id, array('product_identifier'));
+        
+        $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
 
-        $frmSellerProduct = $this->getSellerProductForm($product_id, $selprod_id);
-
+        $availableOptionsCount = 1;
+        array_walk($productOptions, function($val) use (&$availableOptionsCount) {
+            $availableOptionsCount *= count($val['optionValues']);
+        });
+        
+        $frmSellerProduct = $this->getSellerProductForm($product_id, $selprod_id, 'SELLER_PRODUCT', $availableOptionsCount);
+        
         $sellerProductRow = [];
         if ($selprod_id) {
             $sellerProductRow = SellerProduct::getAttributesById($selprod_id, null, true, true);
@@ -242,7 +255,7 @@ trait SellerProducts
             $sellerProductRow['selprod_cod_enabled'] = $productRow['product_cod_enabled'];
             $sellerProductRow['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($productLangRow['product_identifier']));
         }
-
+        
         $productWarranty = Product::getAttributesById($product_id, 'product_warranty', true);
         $sellerProductRow['product_warranty'] = FatUtility::int($productWarranty);
 
@@ -273,18 +286,20 @@ trait SellerProducts
         if (Product::isProductShippedBySeller($product_id, $productRow['product_seller_id'], $this->userParentId)) {
             $shippedBySeller = 1;
         }
-        $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
+
         $availableOptions = array();
-        foreach ($optionCombinations as $optionKey => $optionValue) {
-            /* Check if product already added for this option [ */
-            $selProdCode = $product_id . '_' . $optionKey;
-            $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
-            if (!empty($selProdAvailable) && !$selProdAvailable['selprod_deleted']) {
-                continue;
+        if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $availableOptionsCount) {
+            $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
+            foreach ($optionCombinations as $optionKey => $optionValue) {
+                /* Check if product already added for this option [ */
+                $selProdCode = $product_id . '_' . $optionKey;
+                $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
+                if (!empty($selProdAvailable) && !$selProdAvailable['selprod_deleted']) {
+                    continue;
+                }
+                $availableOptions[$optionKey] = $optionValue;
+                /* ] */
             }
-            $availableOptions[$optionKey] = $optionValue;
-            /* ] */
         }
         $optionValues = array();
         if (isset($sellerProductRow['selprodoption_optionvalue_id'])) {
@@ -297,7 +312,10 @@ trait SellerProducts
 
         //$shipBySeller = SellerProduct::prodShipByseller($product_id);
         $shipBySeller = Product::isProductShippedBySeller($product_id, $productRow['product_seller_id'], UserAuthentication::getLoggedUserId());
+        
+        $inventoryForm = $this->inventoryOptionsForm();
 
+        $this->set('inventoryForm', $inventoryForm);
         $this->set('shipBySeller', $shipBySeller);
         $this->set('optionValues', $optionValues);
         $this->set('availableOptions', $availableOptions);
@@ -312,7 +330,100 @@ trait SellerProducts
         $this->set('productMinSellingPrice', $productRow['product_min_selling_price']);
         $this->set('language', Language::getAllNames());
         $this->set('activeTab', 'GENERAL');
-        $this->_template->render(false, false);
+
+        $autoCompleteTemp = (SellerProduct::INVENTORY_RESTRICT_LIMIT < $availableOptionsCount ? '-autocomplete' : '');
+
+        $this->_template->render(false, false, 'seller/seller-product-general-form' . $autoCompleteTemp . '.php');
+    }
+
+    public function getOptions($productId)
+    {
+        $needle = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (empty($needle)) {
+            die(json_encode(['options' => []]));
+        }
+        
+        $selectedOptions = FatApp::getPostedData('selectedOptions', FatUtility::VAR_STRING, '');
+        if (!empty($selectedOptions) && true === LibHelper::isJson($selectedOptions)) {
+            $selectedOptions = json_decode($selectedOptions, true);
+        }
+
+        $keywordData = [];
+        if (!empty($needle) && false !== strpos($needle, '|')) {
+            $keywordData = explode('|', $needle);
+        } else if (!empty($needle) && false !== strpos($needle, '_')) {
+            $keywordData = explode('_', $needle);
+        }
+        
+        if (!empty($keywordData)) {
+            $needle = $keywordData[0];
+        }
+        
+        Product::setSearchOptionName(trim($needle));
+        $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
+        $invOptionsArr = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
+        
+        $availableOptions = array();
+        foreach ($invOptionsArr as $optionKey => $optionValue) {
+            $selProdCode = $productId . '_' . $optionKey;
+            $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
+            if (
+                (!empty($selProdAvailable) && !$selProdAvailable['selprod_deleted']) || 
+                (is_array($selectedOptions) && in_array($optionKey, $selectedOptions))
+            ) {
+                continue;
+            }
+            
+            $haystack = strtolower($optionValue);
+            
+            if (!empty($keywordData)) {
+                $keywordData = array_map('trim', $keywordData);
+                $needle = implode('_', $keywordData);
+            }
+            ;
+            if (!empty($needle) && false === strpos($haystack, trim(strtolower($needle)))) {
+                continue;
+            }
+            
+            $availableOptions[] = array(
+                'id' => $optionKey,
+                'name' => str_replace("_", " | ", $optionValue)
+            );
+        }
+        
+        die(json_encode(['options' => $availableOptions]));
+    }
+
+    public function addInvOption()
+    {
+        $this->setUpMultipleSellerProducts(1);
+        $post = FatApp::getPostedData();
+        $this->set('selprod_id', $this->selProdRecordId);
+        $this->set('optionData', $post);
+        $json['html'] = $this->_template->render(false, false, 'seller/add-inv-option.php', true);
+        FatUtility::dieJsonSuccess($json);
+    }
+
+    private function inventoryOptionsForm()
+    {
+        $frm = new Form('frmInventoryOptionsForm');
+        $frm->addSelectBox(Labels::getLabel('LBL_VARIANT/OPTION', $this->siteLangId), 'option_autocomplete', [], '', array('class' => 'optionname--js', 'placeholder' => Labels::getLabel('LBL_SELECT_OPTION', $this->siteLangId)));
+        
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_COST_PRICE', $this->siteLangId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'inv_option_cost');
+        $fld->requirements()->setPositive();
+        
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_SELLING_PRICE', $this->siteLangId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'inv_option_sell_price');
+        $fld->requirements()->setPositive();
+
+        $frm->addRequiredField(Labels::getLabel('LBL_QUANTITY', $this->siteLangId), 'inv_option_stock');
+        $frm->addRequiredField(Labels::getLabel('LBL_SKU', $this->siteLangId), 'inv_option_sku');
+        
+        $frm->addHiddenField('', 'inv_option_name');
+        $frm->addHiddenField('', 'inv_option_id');
+        $frm->addHiddenField('', 'inv_option_selprod_id');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_ADD', $this->siteLangId));
+        $frm->addButton('', 'btn_clear', Labels::getLabel('LBL_CLEAR', $this->siteLangId));
+        return $frm;
     }
 
     public function validatePostedData($post)
@@ -483,116 +594,164 @@ trait SellerProducts
         }
     }
 
-    public function setUpMultipleSellerProducts()
+    private function addOption(int $selprod_id, array $data_to_be_save, string $optionValue)
+    {
+        $post = $this->validatePostedData(FatApp::getPostedData());
+        $useShopPolicy = FatApp::getPostedData('use_shop_policy', FatUtility::VAR_INT, 0);
+        $sellerProdObj = new SellerProduct($selprod_id);
+        $sellerProdObj->assignValues($data_to_be_save);
+        if (!$sellerProdObj->save()) {
+            FatUtility::dieJsonError($sellerProdObj->getError());
+        }
+
+        $this->selProdRecordId = $sellerProdObj->getMainTableRecordId();
+
+        /* save options data, if any [ */
+        $options = array();
+        $optionValues = explode("_", $optionValue);
+        foreach ($optionValues as $optionValueId) {
+            $optionId = OptionValue::getAttributesById($optionValueId, 'optionvalue_option_id', false);
+            $options[$optionId] = $optionValueId;
+        }
+        asort($options);
+        if (!$sellerProdObj->addUpdateSellerProductOptions($this->selProdRecordId, $options)) {
+            FatUtility::dieJsonError($sellerProdObj->getError());
+        }
+        /* ] */
+
+        $selProdSpecificsObj = new SellerProductSpecifics($this->selProdRecordId);
+        if (0 < $useShopPolicy) {
+            if (!$selProdSpecificsObj->deleteRecord()) {
+                FatUtility::dieJsonError($selProdSpecificsObj->getError());
+            }
+        } else {
+            $post['sps_selprod_id'] = $this->selProdRecordId;
+            $selProdSpecificsObj->assignValues($post);
+            $data = $selProdSpecificsObj->getFlds();
+            if (!$selProdSpecificsObj->addNew(array(), $data)) {
+                FatUtility::dieJsonError($selProdSpecificsObj->getError());
+            }
+        }
+
+        $sellerProdObj->rewriteUrlProduct($post['selprod_url_keyword']);
+        $sellerProdObj->rewriteUrlReviews($post['selprod_url_keyword']);
+        $sellerProdObj->rewriteUrlMoreSellers($post['selprod_url_keyword']);
+
+        /* Add Meta data automatically[ */
+        if (!$sellerProdObj->saveMetaData()) {
+            FatUtility::dieJsonError($sellerProdObj->getError());
+        }
+        /* ] */
+
+        /* Update seller product language data[ */
+        $languages = Language::getAllNames();
+        foreach ($languages as $langId => $langName) {
+            if (empty($post['selprod_title' . $langId])) {
+                continue;
+            }
+            $selProdData = array(
+                'selprodlang_selprod_id' => $this->selProdRecordId,
+                'selprodlang_lang_id' => $langId,
+                'selprod_title' => $post['selprod_title' . $langId],
+                'selprod_comments' => isset($post['selprod_comments' . $langId]) ? $post['selprod_comments' . $langId] : '',
+            );
+
+            if (!$sellerProdObj->updateLangData($langId, $selProdData)) {
+                FatUtility::dieJsonError($sellerProdObj->getError());
+            }
+        }
+        /* ] */
+    }
+
+    public function viewProdOptions(int $product_id)
+    {
+        if (1 > $product_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+        
+        $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
+        if (empty($productOptions)) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_NO_RECORD_FOUND', $this->siteLangId));
+        }
+        
+        $this->set('productOptions', $productOptions);
+        $json['html'] = $this->_template->render(false, false, 'seller/prod-options.php', true);
+        FatUtility::dieJsonSuccess($json);
+    }
+
+    public function setUpMultipleSellerProducts(int $return = 0)
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         $post = $this->validatePostedData(FatApp::getPostedData());
+        
         $productOptions = Product::getProductOptions($post['selprod_product_id'], $this->siteLangId, true);
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
-        if (empty($productOptions) || empty($optionCombinations)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        if (empty($productOptions)) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
         }
+
+        $availableOptionsCount = 1;
+        array_walk($productOptions, function($val) use (&$availableOptionsCount) {
+            $availableOptionsCount *= count($val['optionValues']);
+        });
+
         $productId = FatApp::getPostedData('selprod_product_id', FatUtility::VAR_INT, 0);
-        unset($post['selprod_id']);
         $data_to_be_save = $post;
-        $useShopPolicy = FatApp::getPostedData('use_shop_policy', FatUtility::VAR_INT, 0);
         $this->deleteSelProdWithoutOptions($productId, $this->userParentId);
+        $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $error = false;
-        $selprod_id = 0;
-        foreach ($optionCombinations as $optionKey => $optionValue) {
-            /* Check if product already added for this option [ */
-            $selProdCode = $post['selprod_code'] . $optionKey;
-            $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
-            if (!empty($selProdAvailable)) {
-                if (!$selProdAvailable['selprod_deleted']) {
-                    /*$error = true;
-                    Message::addErrorMessage($optionValue . ' ' . Labels::getLabel('MSG_ALREADY_ADDED', $this->siteLangId));*/
+        if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $availableOptionsCount) {
+            $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
+
+            foreach ($optionCombinations as $optionKey => $optionValue) {
+                /* Check if product already added for this option [ */
+                $selProdCode = $post['selprod_code'] . $optionKey;
+                $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
+                if (!empty($selProdAvailable)) {
+                    if (!$selProdAvailable['selprod_deleted']) {
+                        /*$error = true;
+                        Message::addErrorMessage($optionValue . ' ' . Labels::getLabel('MSG_ALREADY_ADDED', $this->siteLangId));*/
+                        continue;
+                    }
+                    $data_to_be_save['selprod_deleted'] = applicationConstants::NO;
+                }
+                if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey]) || !isset($post['selprod_stock' . $optionKey])) {
                     continue;
                 }
-                $data_to_be_save['selprod_deleted'] = applicationConstants::NO;
+                $data_to_be_save['selprod_code'] = $selProdCode;
+                $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
+                $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionKey];
+                $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
+                $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey];
+                $this->addOption($selprod_id, $data_to_be_save, $optionKey);
             }
-            if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey]) || !isset($post['selprod_stock' . $optionKey])) {
-                continue;
+        } else {
+            $optionValue = FatApp::getPostedData('inv_option_id', FatUtility::VAR_STRING, '');
+            if (!empty($optionValue) && false === Product::validateProductOptionValue($post['selprod_product_id'], $optionValue)) {
+                FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            }
+
+            if (1 > $selprod_id && SellerProduct::INVENTORY_RESTRICT_LIMIT < $availableOptionsCount) {
+                $selprod_id = FatApp::getPostedData('inv_option_selprod_id', FatUtility::VAR_INT, 0);
+            }
+
+            $selProdCode = $post['selprod_code'] . $optionValue;
+            $data_to_be_save['selprod_deleted'] = applicationConstants::NO;
+
+            if (!isset($post['selprod_cost' . $optionValue]) || !isset($post['selprod_price' . $optionValue]) || !isset($post['selprod_stock' . $optionValue])) {
+                FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             }
             $data_to_be_save['selprod_code'] = $selProdCode;
-            $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
-            $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionKey];
-            $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
-            $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey];
-
-            $sellerProdObj = new SellerProduct();
-            $sellerProdObj->assignValues($data_to_be_save);
-            if (!$sellerProdObj->save()) {
-                Message::addErrorMessage(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $selprod_id = $sellerProdObj->getMainTableRecordId();
-
-            /* save options data, if any [ */
-            $options = array();
-            $optionValues = explode("_", $optionKey);
-            foreach ($optionValues as $optionValueId) {
-                $optionId = OptionValue::getAttributesById($optionValueId, 'optionvalue_option_id', false);
-                $options[$optionId] = $optionValueId;
-            }
-            asort($options);
-            if (!$sellerProdObj->addUpdateSellerProductOptions($selprod_id, $options)) {
-                Message::addErrorMessage(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            /* ] */
-
-            $selProdSpecificsObj = new SellerProductSpecifics($selprod_id);
-            if (0 < $useShopPolicy) {
-                if (!$selProdSpecificsObj->deleteRecord()) {
-                    Message::addErrorMessage(Labels::getLabel($selProdSpecificsObj->getError(), $this->siteLangId));
-                    FatUtility::dieWithError(Message::getHtml());
-                }
-            } else {
-                $post['sps_selprod_id'] = $selprod_id;
-                $selProdSpecificsObj->assignValues($post);
-                $data = $selProdSpecificsObj->getFlds();
-                if (!$selProdSpecificsObj->addNew(array(), $data)) {
-                    Message::addErrorMessage(Labels::getLabel($selProdSpecificsObj->getError(), $this->siteLangId));
-                    FatUtility::dieWithError(Message::getHtml());
-                }
-            }
-
-            $sellerProdObj->rewriteUrlProduct($post['selprod_url_keyword']);
-            $sellerProdObj->rewriteUrlReviews($post['selprod_url_keyword']);
-            $sellerProdObj->rewriteUrlMoreSellers($post['selprod_url_keyword']);
-
-            /* Add Meta data automatically[ */
-            if (!$sellerProdObj->saveMetaData()) {
-                Message::addErrorMessage($sellerProdObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            /* ] */
-
-            /* Update seller product language data[ */
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (empty($post['selprod_title' . $langId])) {
-                    continue;
-                }
-                $selProdData = array(
-                    'selprodlang_selprod_id' => $selprod_id,
-                    'selprodlang_lang_id' => $langId,
-                    'selprod_title' => $post['selprod_title' . $langId],
-                    'selprod_comments' => isset($post['selprod_comments' . $langId]) ? $post['selprod_comments' . $langId] : '',
-                );
-
-                if (!$sellerProdObj->updateLangData($langId, $selProdData)) {
-                    Message::addErrorMessage(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
-                    FatUtility::dieWithError(Message::getHtml());
-                }
-            }
-            /* ] */
-
-            // $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
+            $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionValue];
+            $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionValue];
+            $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
+            $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionValue];
+            $this->addOption($selprod_id, $data_to_be_save, $optionValue);
         }
+
         Product::updateMinPrices($productId);
+
+        /* Return if called in other function; */
+        if (0 < $return) { return; }
 
         if ($error) {
             FatUtility::dieWithError(Message::getHtml());

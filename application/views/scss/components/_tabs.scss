@@ -191,3 +191,58 @@
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+
+.v-tabs {
+    display: flex;
+
+    &-list {
+        flex: 0 0 30%;
+        max-width: 30%;
+        margin-#{$end-direction}: 20px;
+
+        li {
+            background-color: $gray-light;
+            border-radius: 5px;
+            display: block;
+            margin-bottom: 15px;
+            padding: 0 1rem;
+            line-height: 50px;
+            font-size: 0.85rem;
+            position: relative;
+            &.is-active {
+                background-color: $brand-color;
+                color: $brand-color-inverse;
+                a {
+                    color: currentColor;
+                }
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    top: 50%;
+                    width: 0;
+                    height: 0;
+                    border: 8px solid transparent;
+                    border-#{$start-direction}-color: $brand-color;
+                    border-#{$end-direction}: 0;
+                    margin-top: -8px;
+                    margin-#{$end-direction}: -8px;
+                }
+            }
+            a {
+                display: block;
+            }
+        }
+    }
+    &-data {
+        display: none;
+        flex: 1;
+        padding: 0 1rem;
+        font-size: 0.8rem;
+        color: $txt-gray;
+        &.is-active {
+            display: block;
+        }
+    }
+}

@@ -163,6 +163,10 @@ class MyAppController extends FatController
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
                 'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
                 'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
+                'requiredFields' => Labels::getLabel('MSG_PLEASE_FILL_REQUIRED_FIELDS', $this->siteLangId),
+                'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->siteLangId),
+                'typeToSearch' => Labels::getLabel('MSG_TYPE_TO_SEARCH..', $this->siteLangId),
+                'resendOtp' => Labels::getLabel('LBL_RESEND_OTP?', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
@@ -389,6 +393,15 @@ class MyAppController extends FatController
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName, array('placeholder' => Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'data-alt-placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId)));
         $pwd = $frm->addPasswordField(Labels::getLabel('LBL_Password', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('LBL_Password', $siteLangId)));
         $pwd->requirements()->setRequired();
+
+        if (SmsArchive::canSendSms(SmsTemplate::LOGIN)) {
+            $attr = ['maxlength' => 1, 'size' => 1, 'placeholder' => '*'];
+            for ($i = 0; $i < User::OTP_LENGTH; $i++) {
+                $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
+            }
+            $frm->addHiddenField('', 'loginWithOtp', 0);
+        }
+
         $frm->addCheckbox(Labels::getLabel('LBL_Remember_Me', $siteLangId), 'remember_me', 1, array(), '', 0);
         $frm->addHtml('', 'forgot', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_LOGIN', $siteLangId));

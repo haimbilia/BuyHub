@@ -49,7 +49,10 @@
                              <?php } ?>
                         </div>
                     </div>
-                    <?php $this->includeTemplate('guest-user/loginPageTemplate.php', $loginData, false); ?>
+                    <?php 
+                    $loginData['smsPluginStatus'] = $smsPluginStatus;
+                    $this->includeTemplate('guest-user/loginPageTemplate.php', $loginData, false); 
+                    ?>
                 </div>
             </div>
             <div id="sign-up" class="form-item sign-up <?php echo ($isRegisterForm == 1) ? 'is-opened' : '' ;?>">

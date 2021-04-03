@@ -62,7 +62,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                                                         <i class="input-helper"></i>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript::void(0);"
+                                                        <a href="javascript:void(0);"
                                                             onclick="removeCard('<?php echo $cardDetail['id']; ?>')"
                                                             title="<?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>">
                                                             <svg class="svg">

@@ -1,5 +1,7 @@
 <?php
 
+use PhpParser\Node\Stmt\Label;
+
 class GuestUserController extends MyAppController
 {
     public function loginForm($isRegisterForm = 0)
@@ -77,15 +79,35 @@ class GuestUserController extends MyAppController
         if (true === MOBILE_APP_API_CALL && 1 > $userType) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
+
+        $password = FatApp::getPostedData('password');
+
         $userName = FatApp::getPostedData('username');
         $dialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
+
+        $loginWithOtp = FatApp::getPostedData('loginWithOtp', FatUtility::VAR_INT, 0);
+        if (0 < $loginWithOtp) {
+            $post = FatApp::getPostedData();
+            $authentication->setLoginWithOtp($dialCode, $userName);
+            if (true === MOBILE_APP_API_CALL) {
+                if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
+                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                }
+                $password = $post['upv_otp'];
+            } else {
+                if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
+                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                }
+                $password = implode("", $post['upv_otp']);
+            }
+        }
 
         $withPhone = empty($dialCode) ? false : true;
         if (!empty($dialCode) && false === strpos($userName, $dialCode)) {
             $userName = trim($dialCode) . trim($userName);
         }
 
-        if (!$authentication->login($userName, FatApp::getPostedData('password'), $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
+        if (!$authentication->login($userName, $password, $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
             $message = Labels::getLabel($authentication->getError(), $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
@@ -951,6 +973,25 @@ class GuestUserController extends MyAppController
             $this->_template->render(false, false, 'json-success.php');
         }
         $this->otpForm($userId);
+    }
+
+    public function getLoginOtp()
+    {
+        $phone = FatApp::getPostedData('username', FatUtility::VAR_INT, 0);
+        $phoneDialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
+
+        if (1 > $phone || '' == $phoneDialCode) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $phoneDialCode = false === strpos($phoneDialCode, '+') ? '+' . trim($phoneDialCode) : trim($phoneDialCode);
+        $userPhone = $phoneDialCode . $phone;
+        $user = new User();
+        $row = $user->checkUserByPhoneOrUserName($userPhone, $userPhone);
+        if (empty($row)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId)); 
+        }
+        $this->resendOtp($row['user_id'], 1);
     }
 
     public function otpForm($userId = 0)

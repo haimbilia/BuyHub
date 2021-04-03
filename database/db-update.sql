@@ -400,3 +400,5 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('LBL_PAYFAST_SIGNATURE_DESCRIPTION', 1, 'System generated MD5 signature. It will generate automatically while checkout using "Payfast".', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- --- Payfast Payment Gateway--- --
+
+DELETE FROM tbl_language_labels WHERE label_key = "ERR_USER_INACTIVE_OR_DELTED";

@@ -35,7 +35,7 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
                                     $fld->setFieldTagAttribute('class', 'otpVal-js');
                                     echo $frm->getFieldHtml('upv_otp[' . $i . ']'); ?>
                                     <?php if ($i < (User::OTP_LENGTH - 1)) { ?>
-                                        <span>-</span>
+                                        <span class="dash">-</span>
                                     <?php } ?>
                                 </div>
                             <?php } ?>
