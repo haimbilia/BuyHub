@@ -1,11 +1,10 @@
 
 Updates:
     => Tax Module update
+    => Admin can create users 
 
 Features:
-
     - Shopify sync module for SV seller
-
 
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0

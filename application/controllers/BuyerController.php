@@ -2583,7 +2583,9 @@ class BuyerController extends BuyerBaseController
         }
 
         $frm->addRequiredField(Labels::getLabel('LBL_Title', $langId), 'spreview_title');
-        $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();
+        $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();        
+        $arr = ["{website_name}" => FatApp::getConfig("CONF_WEBSITE_NAME_" . $langId)]; 
+        $frm->addCheckBox(strtr(Labels::getLabel('LBL_I_agree_that_my_review,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId),$arr), 'agree', 1);
         $frm->addHiddenField('', 'op_id', $op_id);
         $frm->addHiddenField('', 'referrer', CommonHelper::redirectUserReferer(true));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Review', $langId));

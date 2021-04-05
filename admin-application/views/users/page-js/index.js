@@ -316,11 +316,8 @@ $(document).ready(function() {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Users', 'setup'), data, function(t) {
-            if (t.userId > 0) {
-                addBankInfoForm(t.userId);
-                return false;
-            }
             $(document).trigger('close.facebox');
+            reloadUserList();
         });
     };
 
@@ -420,6 +417,13 @@ $(document).ready(function() {
         }
         $("#frmUsersListing").attr("action",fcom.makeUrl('Users','deleteSelected')).submit();
     };
+
+    displayCookiesPerferences = function(id) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('Users', 'cookiesPreferencesForm', [id]), '', function(t) {
+            fcom.updateFaceboxContent(t);
+        });
+    };
     
     markSellerAsBuyer = function (userId) {
         if (!confirm(langLbl.confirmSellerAsBuyer)) {
@@ -433,6 +437,5 @@ $(document).ready(function() {
         fcom.updateWithAjax(fcom.makeUrl('Users', 'markSellerAsBuyer'), {userId: userId}, function (t) {
             reloadUserList();
         });
-    };
-
+    }    
 })();

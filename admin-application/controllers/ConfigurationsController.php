@@ -634,6 +634,10 @@ class ConfigurationsController extends AdminBaseController
                 $currencyArr = Currency::getCurrencyNameWithCode($this->adminLangId);
                 $frm->addSelectBox(Labels::getLabel('LBL_Default_System_Currency', $this->adminLangId), 'CONF_CURRENCY', $currencyArr, false, array(), '');
 
+                $currencySeparatorArr = applicationConstants::currencySeparatorArr($this->adminLangId);
+                $frm->addSelectBox(Labels::getLabel('LBL_Default_Currency_Decimal_Separator', $this->adminLangId), 'CONF_DEFAULT_CURRENCY_SEPARATOR', $currencySeparatorArr, false, array(), '');
+
+
                 $faqCategoriesArr = FaqCategory::getFaqPageCategories();
                 $sellerCategoriesArr = FaqCategory::getSellerPageCategories();
 

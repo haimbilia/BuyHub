@@ -13,13 +13,25 @@
          color: $txt-gray;
          margin: 0;
          margin-bottom: 5px;
-         min-height: 15px; /*for alignment issue where no content in form lebal - form button and input alignment */
+         min-height: 15px;
+         /*for alignment issue where no content in form lebal - form button and input alignment */
          display: inline-block;
          min-height: none;
          cursor: default;
          /*opacity: 0.6;*/
          &:empty {
              min-height: 15px;
+         }
+     }
+     .field_cover {
+         position: relative;
+         .fa {
+             position: absolute;
+             top: 12px;
+             #{$end-direction}: 8px;
+             font-size: 0.8rem;
+             color: #888;
+             cursor: pointer;
          }
      }
      input {
@@ -85,6 +97,7 @@
              -webkit-box-shadow: none;
              box-shadow: none;
              cursor: initial;
+             border-color: transparent;
          }
          &.is-invalid {
              border-color: $danger;
@@ -170,16 +183,18 @@
              transition: opacity 0.2s;
              pointer-events: none;
          }
-         i{
-             &:before{opacity: 1 !important;}
+         i {
+             &:before {
+                 opacity: 1 !important;
+             }
          }
          &:focus {
-              > :before {
+             > :before {
                  opacity: 0.2;
              }
          }
          &:active {
-              > :before {
+             > :before {
                  opacity: 0.32;
              }
          }
