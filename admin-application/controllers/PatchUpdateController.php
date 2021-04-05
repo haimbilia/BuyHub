@@ -120,7 +120,7 @@ class PatchUpdateController extends AdminBaseController
         }
 
         $codesArr = $taxPluginObj->getCodes(null, null, null, array(), false);
-        if (is_array($codesArr) && false === $codesArr['status']) {
+        if (is_array($codesArr) && array_key_exists('status', $codesArr) && false === $codesArr['status']) {
             FatUtility::dieWithError($codesArr['msg']);
         }
 

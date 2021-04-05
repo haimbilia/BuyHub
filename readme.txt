@@ -75,8 +75,11 @@ Fixes:
     => 051716 - Shipping by admin - seller is able to change order status
     => 051974 - Showing error while syncing by activating TaxZar plugin. 
     => 051960 - Google shoping feed settings not displaying
+    => 051979 - Error Displayed : Undefined index status TaxZar Syncing    
     => 051967 - No category search results show up when parent/subcategory is searched which is not directly linked with the product. Only the category linked with a product shows up in search results    
     => 052015 - Order Id duplicacy issue when multiple user place order with same time frame.
+    => 051973 - tax invoice UI got distorted
+    => 051994 - Digital product can be linked to shipping profiles
 
 Enhancements :
    => Make provision to made seller

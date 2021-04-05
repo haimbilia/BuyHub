@@ -23,6 +23,7 @@ class ShippingProfileProductsController extends AdminBaseController
         $srch = ShippingProfileProduct::getSearchObject();
         $srch->addCondition('shippro_shipprofile_id', '=', $profileId);
         $srch->addCondition('shippro_user_id', '=', 0);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '=', Product::PRODUCT_TYPE_PHYSICAL);
         $srch->addOrder('product_name', 'ASC');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -52,6 +53,7 @@ class ShippingProfileProductsController extends AdminBaseController
             $cnd->attachCondition('product_identifier', 'LIKE', '%'. $post['keyword'] . '%', 'OR');
         }
 
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '=', Product::PRODUCT_TYPE_PHYSICAL);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         
@@ -87,10 +89,16 @@ class ShippingProfileProductsController extends AdminBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
-        if (empty($post)) {
+        if (false == $post) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
+
+        $prodType = Product::getAttributesById($post['shippro_product_id'], 'product_type');
+        if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->adminLangId));
+        }
+
         $data = array(
             'shippro_user_id' => 0,
             'shippro_product_id' => $post['shippro_product_id'],
