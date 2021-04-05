@@ -473,7 +473,7 @@ class SellerOrdersController extends AdminBaseController
         $pdf->SetFont('dejavusans');
 
         $templatePath = "seller-orders/view-invoice.php";
-        $html = addslashes($template->render(false, false, $templatePath, true, true));
+        $html = $template->render(false, false, $templatePath, true, true);
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
 

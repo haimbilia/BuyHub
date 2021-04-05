@@ -76,6 +76,7 @@ Fixes:
     => 051974 - Showing error while syncing by activating TaxZar plugin. 
     => 051960 - Google shoping feed settings not displaying
     => 051979 - Error Displayed : Undefined index status TaxZar Syncing
+    => 051973 - tax invoice UI got distorted
     
 Enhancements :
    => Make provision to made seller

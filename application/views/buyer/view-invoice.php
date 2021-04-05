@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage . '); ?>
-<table width="100%" cellspacing="0" cellpadding="10" border="0" style="font-size: 14px;background: #f2f2f2;font-family: Arial, sans-serif;">
+<table width="100%" cellspacing="0" cellpadding="10" border="0" style="font-size: 14px;background: #f2f2f2;">
     <tbody>
         <tr>
             <td>
