@@ -73,6 +73,7 @@ Fixes:
     => 051691 - on stripe connect unable to load form loading coming on seller end
     => 051694 - Loader image coming on product images even after it fully loaded
     => 051716 - Shipping by admin - seller is able to change order status
+    => 051960 - Google shoping feed settings not displaying
     
 Enhancements :
    => Make provision to made seller
