@@ -1,5 +1,7 @@
 <?php
 
+use PhpParser\Node\Stmt\Label;
+
 class RatingTypesController extends AdminBaseController
 {
     private $canEdit;
@@ -10,14 +12,10 @@ class RatingTypesController extends AdminBaseController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $this->objPrivilege->canViewRatingTypes($this->admin_id);
-
-        $this->canEdit = $this->objPrivilege->canEditRatingTypes($this->admin_id, true);
-        $this->set("canEdit", $this->canEdit);
     }
 
     public function index()
-    {
-        $this->objPrivilege->canViewAbusiveWords();
+    {        
         $frmSearch = $this->getSearchForm();
         $this->set("frmSearch", $frmSearch);
         $this->_template->render();
@@ -25,28 +23,25 @@ class RatingTypesController extends AdminBaseController
 
     public function search()
     {
-        $this->objPrivilege->canViewAbusiveWords();
-
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
+        $page = ($page <= 0) ? 1 : $page;
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
-        $srch = Abusive::getSearchObject();
-        $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE);
-        $srch->addOrder('aw.' . Abusive::DB_TBL_PREFIX . 'lang_id', 'ASC');
+        if (false === $post) {
+            FatUtility::dieJsonError(current($searchForm->getValidationErrors()));
+        }
+
+        $srch = new RatingTypeSearch($this->adminLangId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
-        if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('aw.abusive_keyword', 'like', '%' . $post['keyword'] . '%');
+        $keyword = $post['keyword'];
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('rt_name', 'like', '%' . $keyword . '%');
+            $cnd->attachCondition('rt_identifier', 'like', '%' . $keyword . '%');
         }
-
-        if ($post['lang_id'] > 0) {
-            $cond = $srch->addCondition('aw.abusive_lang_id', '=', $post['lang_id']);
-        }
-
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -59,135 +54,119 @@ class RatingTypesController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function form($abusive_id)
+    public function form(int $rtId)
     {
-        $this->objPrivilege->canViewAbusiveWords();
+        $frm = $this->getForm();
 
-        $abusive_id = FatUtility::int($abusive_id);
-
-        $frm = $this->getForm($abusive_id);
-
-        $data = array('abusive_id' => $abusive_id);
-        if ($abusive_id > 0) {
-            $data = Abusive::getAttributesById($abusive_id);
-            if ($data == false) {
+        $data = [];
+        if ($rtId > 0) {
+            $data = (array) RatingType::getAttributesById($rtId);
+            if (empty($data)) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
         }
 
         $frm->fill($data);
-
-        $this->set('abusive_id', $abusive_id);
         $this->set('frm', $frm);
-        $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
     public function setup()
     {
-        $this->objPrivilege->canEditAbusiveWords();
-        $data = FatApp::getPostedData();
+        $this->objPrivilege->canEditRatingTypes();
 
         $frm = $this->getForm();
-        $post = $frm->getFormDataFromArray($data);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
-        $abusive_id = FatUtility::int($post['abusive_id']);
-        unset($post['abusive_id']);
+        $rtId = FatApp::getPostedData('rt_id', FatUtility::VAR_INT, 0);
 
-        $record = new Abusive($abusive_id);
+        $record = new RatingType($rtId);
         $record->assignValues($post);
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($record->getError());
         }
 
-        $this->set('msg', 'Set up successful');
+        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULL', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function deleteRecord()
     {
-        $this->objPrivilege->canEditAbusiveWords();
+        $this->objPrivilege->canEditRatingTypes();
 
-        $abusive_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($abusive_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $rtId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
+        if ($rtId < 1) {
+            FatUtility::dieJsonError($this->str_invalid_request_id);
         }
 
-        $data = Abusive::getAttributesById($abusive_id);
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        if (false == RatingType::getAttributesById($rtId)) {
+            FatUtility::dieJsonError($this->str_invalid_request_id);
         }
 
-        $this->markAsDeleted($abusive_id);
+        $this->markAsDeleted($rtId);
 
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
 
     public function deleteSelected()
     {
-        $this->objPrivilege->canEditAbusiveWords();
-        $abusiveIdsArr = FatUtility::int(FatApp::getPostedData('abusive_ids'));
+        $this->objPrivilege->canEditRatingTypes();
+        $ratingTypeIdsArr = FatUtility::int(FatApp::getPostedData('rt_ids'));
 
-        if (empty($abusiveIdsArr)) {
-            FatUtility::dieWithError(
+        if (empty($ratingTypeIdsArr)) {
+            FatUtility::dieJsonError(
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
 
-        foreach ($abusiveIdsArr as $abusiveId) {
-            $data = Abusive::getAttributesById($abusiveId);
-            if (1 > $abusiveId || false === $data) {
+        foreach ($ratingTypeIdsArr as $rtId) {
+            if (1 > $rtId || false === RatingType::getAttributesById($rtId)) {
                 continue;
             }
 
-            $this->markAsDeleted($abusiveId);
+            $this->markAsDeleted($rtId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($abusiveId)
+    private function markAsDeleted($rtId)
     {
-        $abusiveId = FatUtility::int($abusiveId);
-        if (1 > $abusiveId) {
-            FatUtility::dieWithError(
+        $rtId = FatUtility::int($rtId);
+        if (1 > $rtId) {
+            FatUtility::dieJsonError(
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
-        $obj = new Abusive($abusiveId);
+        $obj = new RatingType($rtId);
         if (!$obj->deleteRecord(false)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($obj->getError());
         }
     }
 
-    private function getSearchForm()
+    private function getSearchForm(int $langId = 0)
     {
-        $this->objPrivilege->canViewAbusiveWords();
+        $langId = 1 > $langId ? $this->adminLangId : $langId;
         $frm = new Form('frmWordSearch');
-        $frm->addTextBox('Keyword', 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', 'Search');
-        $fld_cancel = $frm->addButton("", "btn_clear", "Clear Search");
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $langId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $langId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
-    private function getForm($abusiveId = 0)
+    private function getForm(int $langId = 0)
     {
-        $this->objPrivilege->canViewAbusiveWords();
-        $frm = new Form('frmAbusiveWord');
-        $frm->addHiddenField('', 'abusive_id', $abusiveId);
+        $langId = 1 > $langId ? $this->adminLangId : $langId;
+        $frm = new Form('frmRatingTypes');
+        $frm->addHiddenField('', 'rt_id');
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'abusive_lang_id', $languages, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
-        $frm->addTextbox('Keyword', 'abusive_keyword');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Language', $langId), 'rtlang_lang_id', $languages, '', array(), Labels::getLabel('LBL_Select', $langId));
+        $frm->addTextbox(Labels::getLabel('LBL_RATING_TYPE', $langId), 'rt_name');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $langId));
         return $frm;
     }
 }
