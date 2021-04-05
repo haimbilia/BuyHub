@@ -247,9 +247,9 @@ class ProductsController extends MyAppController
                 /* ] */
                 $conditionRs = $conditionSrch->getResultSet();
                 $conditionArr = $db->fetch($conditionRs);
-                if(!empty($conditionArr)){
+                if (!empty($conditionArr)) {
                     $conditionsArr[] = $db->fetch($conditionRs);
-                }                
+                }
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
         } else {
@@ -281,8 +281,7 @@ class ProductsController extends MyAppController
             $filterDefaultMinValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-min-range'], $this->siteCurrencyId, false);
             $filterDefaultMaxValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-max-range'], $this->siteCurrencyId, false);
             $priceArr['minPrice'] = $filterDefaultMinValue;
-            $priceArr['maxPrice'] = $filterDefaultMaxValue;        
-            
+            $priceArr['maxPrice'] = $filterDefaultMaxValue;
         }
 
         /* ] */
@@ -750,7 +749,7 @@ class ProductsController extends MyAppController
         $frmReviewSearch = $this->getReviewSearchForm(5);
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
         $this->set('frmReviewSearch', $frmReviewSearch);
-        $this->set('currentStock', $product['in_stock'] - Product::tempHoldStockCount($selprod_id));        
+        $this->set('currentStock', $product['in_stock'] - Product::tempHoldStockCount($selprod_id));
         /* Get product Polls [ */
         /*$pollQuest = Polling::getProductPoll($product['product_id'], $this->siteLangId);
         $this->set('pollQuest', $pollQuest);*/
@@ -1177,14 +1176,15 @@ class ProductsController extends MyAppController
             $prodSrchObj->joinSellers();
             $prodSrchObj->setGeoAddress();
             $prodSrchObj->joinShops();
-            $prodSrchObj->validateAndJoinDeliveryLocation();
+            $prodSrchObj->validateAndJoinDeliveryLocation(false, false);
             $prodSrchObj->joinBrands($this->siteLangId);
-            $prodSrchObj->joinProductToCategory($this->siteLangId);
+
             $prodSrchObj->joinSellerSubscription(0, false, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
 
             $brandSrch = clone $prodSrchObj;
+            $brandSrch->joinProductToCategory($this->siteLangId);
             $brandSrch->addMultipleFields(array('brand_id', 'COALESCE(tb_l.brand_name, brand.brand_identifier) as brand_name', 'if(LOCATE("' . $keyword . '", COALESCE(tb_l.brand_name, brand.brand_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(tb_l.brand_name, brand.brand_identifier)), 99) as level'));
             //$brandSrch->addKeywordSearch($keyword, false, false);
             $brandSrch->addCondition('brand_name', 'LIKE', '%' . $keyword . '%');
@@ -1198,14 +1198,30 @@ class ProductsController extends MyAppController
             }
 
             $catListingCount = 10 - count($brandArr);
+            $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
+
             $catSrch = clone $prodSrchObj;
-            $catSrch->setPageSize($catListingCount);
-            $catSrch->addMultipleFields(array('prodcat_id', 'COALESCE(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'if(LOCATE("' . $keyword . '", COALESCE(c_l.prodcat_name, c.prodcat_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(c_l.prodcat_name, c.prodcat_identifier)), 99) as level'));
-            //$catSrch->addKeywordSearch($keyword, false, false);
-            $catSrch->addCondition('prodcat_name', 'LIKE', '%' . $keyword . '%');
-            $catSrch->addOrder('level');
-            $catSrch->addGroupBy('prodcat_id');
-            $catRs = $catSrch->getResultSet();
+
+            $catSrch->joinProductToCategory();
+            $catSrch->joinCategoryRelationWithChild();
+            $catSrch->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
+            $catSrch->doNotCalculateRecords();
+            $catSrch->doNotLimitRecords();
+            // echo $catSrch->getQuery();
+            $srch->joinTable('(' . $catSrch->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
+            $srch->addMultipleFields(array('prodcat_id', 'COALESCE(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'if(LOCATE("' . $keyword . '", COALESCE(c_l.prodcat_name, c.prodcat_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(c_l.prodcat_name, c.prodcat_identifier)), 99) as level'));
+            $srch->joinTable(ProductCategory::DB_TBL, 'INNER JOIN', 'c.prodcat_id = cr.pcr_prodcat_id', 'c');
+            $srch->joinTable(
+                ProductCategory::DB_TBL_LANG,
+                'LEFT OUTER JOIN',
+                'prodcatlang_prodcat_id = c.prodcat_id
+                AND prodcatlang_lang_id = ' . $this->siteLangId,
+                'c_l'
+            );
+            $srch->setPageSize($catListingCount);
+            $srch->addOrder('level');
+            $srch->addGroupBy('prodcat_id');
+            $catRs = $srch->getResultSet();
             // $catArr = FatApp::getDb()->fetchAll($catRs);
             $catArr = [];
             while ($row = FatApp::getDb()->fetch($catRs)) {
@@ -1224,6 +1240,7 @@ class ProductsController extends MyAppController
             $prodArr = [];
             if (empty($tags)) {
                 $prodSrchObj->setPageSize(10);
+                $prodSrchObj->joinProductToCategory($this->siteLangId);
                 $prodSrchObj->addMultipleFields(array('selprod_id', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'COALESCE(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'if(LOCATE("' . $keyword . '", COALESCE(selprod_title, product_name, product_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(selprod_title, product_name, product_identifier)), 99) as level'));
                 $prodSrchObj->addKeywordSearch($keyword, false, false);
                 $prodSrchObj->addOrder('level');
