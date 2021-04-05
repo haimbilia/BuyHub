@@ -342,9 +342,9 @@ class EasyPost extends ShippingServicesBase
             $serviceName = Labels::getLabel("LBL_{CARRIER}_-_{SERVICE}", $this->langId);
             $serviceName = CommonHelper::replaceStringData($serviceName, ['{CARRIER}' => $rates['carrier'], '{SERVICE}' => $rates['service']]);
 
-            if (array_key_exists('est_delivery_days', $rates) && 0 < $rates['est_delivery_days']) {
+            if (array_key_exists('delivery_days', $rates) && 0 < $rates['delivery_days']) {
                 $deliveryDays = Labels::getLabel("LBL_ESTIMATED_DELIVERY_IN_{DELIVERY-DAYS}_DAY_'S", $this->langId);
-                $serviceName .= '. ' . CommonHelper::replaceStringData($deliveryDays, ['{DELIVERY-DAYS}' => $rates['est_delivery_days']]);
+                $serviceName .= '. ' . CommonHelper::replaceStringData($deliveryDays, ['{DELIVERY-DAYS}' => $rates['delivery_days']]);
             }
 
             $service = $shipment['id'] . '|' . $rates['id'];
