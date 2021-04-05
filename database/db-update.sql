@@ -433,3 +433,12 @@ ALTER TABLE `tbl_admin` ADD `admin_password` VARCHAR(100) NOT NULL AFTER `admin_
 ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
 -- --- task_81779_advanced_GDPR_module --- --
+
+/* Shop And Product Ratings */
+CREATE TABLE IF NOT EXISTS `tbl_rating_types` ( `rt_id` BIGINT NOT NULL AUTO_INCREMENT ,  `rt_identifier` VARCHAR(150) NOT NULL ,    PRIMARY KEY  (`rt_id`),    UNIQUE  (`rt_identifier`)) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `tbl_rating_types_lang` ( `rtlang_rt_id` BIGINT NOT NULL ,  `rtlang_lang_id` INT NOT NULL ,  `rt_name` VARCHAR(150) NOT NULL ) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `tbl_prodcat_rating_types` ( `prt_prodcat_id` BIGINT NOT NULL ,  `prt_rt_id` BIGINT NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `tbl_prodcat_rating_types` ADD PRIMARY KEY (`prt_prodcat_id`,`prt_rt_id`);
+/* Shop And Product Ratings */
