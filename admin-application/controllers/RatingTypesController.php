@@ -12,6 +12,7 @@ class RatingTypesController extends AdminBaseController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $this->objPrivilege->canViewRatingTypes($this->admin_id);
+        $this->set("canEdit", $this->objPrivilege->canEditAbusiveWords($this->admin_id, true));
     }
 
     public function index()
