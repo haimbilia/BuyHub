@@ -813,7 +813,7 @@ class Importexport extends ImportexportCommon
                         $prodCatDataArr['prodcat_parent'] = 0;
                     }
                 }
-                
+
                 $prodCatDataArr['prodcat_status'] = applicationConstants::YES;
                 if (!empty($categoryData) && $categoryData['prodcat_id']) {
                     $where = array('smt' => 'prodcat_id = ?', 'vals' => array($categoryId));
@@ -2035,23 +2035,28 @@ class Importexport extends ImportexportCommon
                             'ps_user_id' => $shippedByUserId,
                         );
 
+                        $prodType = Product::getAttributesById($productId, 'product_type');
+
                         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && $newRecord == true && 0 < $sellerId) {
                             if (!ShippingProfileProduct::isShippingProfileLinked($productId)) {
-                                $shipProProdData = array(
+                                $shippro_shipprofile_id = $adminDefaultShipProfileId;
+                                $shippedByUserId = 0;
+                                /* $shipProProdData = array(
                                     'shippro_shipprofile_id' => $adminDefaultShipProfileId,
                                     'shippro_product_id' => $productId,
                                     'shippro_user_id' => 0
-                                );
+                                ); */
                             }
 
                             if (!Product::isShipFromConfigured($productId)) {
                                 $prodShippingArr['ps_from_country_id'] = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
                                 $prodShippingArr['ps_free'] = 0;
-                                $productSellerShiping = array_merge($productSellerShiping, $prodShippingArr);
-                                FatApp::getDb()->insertFromArray(Product::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping);
+                                // $productSellerShiping = array_merge($productSellerShiping, $prodShippingArr);
+                                /* FatApp::getDb()->insertFromArray(Product::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping); */
                             }
                         }
-                        if ($shippro_shipprofile_id > 0) {
+
+                        if ($shippro_shipprofile_id > 0 && Product::PRODUCT_TYPE_PHYSICAL == $prodType) {
                             $shipProProdData = array(
                                 'shippro_shipprofile_id' => $shippro_shipprofile_id,
                                 'shippro_product_id' => $productId,
@@ -2062,7 +2067,7 @@ class Importexport extends ImportexportCommon
                             FatApp::getDb()->insertFromArray(Product::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping);
                         }
 
-                        if (!empty($shipProProdData)) {
+                        if (!empty($shipProProdData) && Product::PRODUCT_TYPE_PHYSICAL == $prodType) {
                             $spObj = new ShippingProfileProduct();
                             $spObj->addProduct($shipProProdData);
                         }

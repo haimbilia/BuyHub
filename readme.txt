@@ -78,6 +78,7 @@ Fixes:
     => 051979 - Error Displayed : Undefined index status TaxZar Syncing    
     => 051967 - No category search results show up when parent/subcategory is searched which is not directly linked with the product. Only the category linked with a product shows up in search results    
     => 051973 - tax invoice UI got distorted
+    => 051994 - Digital product can be linked to shipping profiles
 
 Enhancements :
    => Make provision to made seller
