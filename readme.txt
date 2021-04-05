@@ -76,6 +76,8 @@ Fixes:
     => 051974 - Showing error while syncing by activating TaxZar plugin. 
     => 051960 - Google shoping feed settings not displaying
     => 051967 - No category search results show up when parent/subcategory is searched which is not directly linked with the product. Only the category linked with a product shows up in search results    
+    => 052015 - Order Id duplicacy issue when multiple user place order with same time frame.
+
 Enhancements :
    => Make provision to made seller
    => At shop level  pickup interval option given
