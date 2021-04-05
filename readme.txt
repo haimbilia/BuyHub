@@ -73,6 +73,7 @@ Fixes:
     => 051691 - on stripe connect unable to load form loading coming on seller end
     => 051694 - Loader image coming on product images even after it fully loaded
     => 051716 - Shipping by admin - seller is able to change order status
+    => 051974 - Showing error while syncing by activating TaxZar plugin. 
     => 051960 - Google shoping feed settings not displaying
     => 051967 - No category search results show up when parent/subcategory is searched which is not directly linked with the product. Only the category linked with a product shows up in search results    
 Enhancements :
