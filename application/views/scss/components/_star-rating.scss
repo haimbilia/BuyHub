@@ -26,6 +26,7 @@
     color: #646464;
 }
 
+
 /******* EXAMPLE B *******/
 
 .rating-b .br-widget {
@@ -58,6 +59,7 @@
     background-color: #cbcbcb;
 }
 
+
 /******* EXAMPLE C *******/
 
 .rating-c .br-widget {
@@ -84,6 +86,7 @@
     background-color: #59a6d6;
     color: white;
 }
+
 
 /******* EXAMPLE D *******/
 
@@ -112,7 +115,6 @@
 
 .rating-d .br-widget a.br-active,
 .rating-d .br-widget a.br-selected {
-
     border-bottom: 2px solid #646464;
 }
 
@@ -120,6 +122,7 @@
 .rating-d .br-widget a.br-current span {
     color: #646464;
 }
+
 
 /******* EXAMPLE E *******/
 
@@ -143,6 +146,7 @@
     color: white;
 }
 
+
 /******* EXAMPLE F *******/
 
 .rating-f .br-widget {
@@ -162,6 +166,7 @@
 .rating-f .br-widget a.br-selected {
     background-position: 0 24px;
 }
+
 
 /******* EXAMPLE G *******/
 
@@ -191,11 +196,78 @@
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-only screen and (min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio: 1.5),
 (-webkit-min-device-pixel-ratio: 2),
 (min-resolution: 192dpi) {
     .rating-f .br-widget a {
         /* background: url('../images/star@2x.png');
         background-size: 24px 48px; */
+    }
+}
+
+// NEW RATING STYLE
+.rating {
+    --rating-fg: #f5861f;
+    --size: 1rem;
+    --space: 0.25em;
+    position: relative;
+    display: flex;
+    margin-#{$start-direction}: - 0.25em;
+    &-action,
+    &-view {
+        display: inline-flex;
+        .icon {
+            width: var(--size);
+            height: var(--size);
+            min-width: var(--size);
+            min-height: var(--size);
+            padding: var(--space);
+            box-sizing: content-box;
+            margin: 0;
+        }
+    }
+    &-action,
+    &-view {
+        flex-direction: row-reverse;
+        .icon {
+            fill: #ddd;
+            stroke: #ddd;
+        }
+        @for $i from 1 through 5 {
+            &[data-rating="#{$i}"] {
+                .icon:nth-last-child(#{$i}),
+                .icon:nth-last-child(#{$i})~.icon {
+                    fill: var(--rating-fg);
+                    stroke: var(--rating-fg);
+                }
+            }
+        }
+    }
+    &-action {
+        .icon {
+            &:hover,
+            &:hover~.icon {
+                fill: var(--rating-fg);
+                stroke: var(--rating-fg);
+            }
+        }
+    }
+    &:not([data-readonly]) {
+        .rating-action {
+            .icon {
+                cursor: pointer;
+                &:hover,
+                &:hover~.icon {
+                    fill: var(--rating-fg);
+                    stroke: var(--rating-fg);
+                }
+            }
+        }
+    }
+    &__count,
+    &__text {
+        font-size: .875rem;
+        color: $txt-gray;
+        padding-#{$start-direction}: .5rem;
     }
 }

@@ -20,7 +20,7 @@ if (!empty($reviews)) {
     }
 }
 ?>
-<div class="col-md-7">
+<div class="col-md-5">
     <div class="listing--progress-wrapper ">
         <ul class="listing--progress">
             <li>

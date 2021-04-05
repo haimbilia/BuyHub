@@ -25,65 +25,106 @@ if($totReviews){
 	$rate_1_width = round(FatUtility::convertToType($rated_1/$totReviews*100,FatUtility::VAR_FLOAT),2);
 }
 ?>
-<div class="row">
-<div class="col-md-5 column">
-	<div class="shop-reviews-wrapper">
-		<div class="shop-reviews">
-			<svg class="svg">
-				<use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#rating-star" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#rating-star"></use>
-			</svg>
-
-			<div class="shop-reviews-points"><?php echo round($avgRating,1); ?></div>
+<div class="rating-wrapper">
+	<div class="row">
+		<div class="col-md-6 column">
+			<div class="shop-reviews-wrapper">
+			<div class="rating">
+                <div class="rating-view" data-rating="4">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text"> Shipping*</span>
+            </div>      
+            <div class="rating">
+                <div class="rating-view" data-rating="3">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text">Stock Availability*</span>
+            </div>    
+            <div class="rating">
+                <div class="rating-view" data-rating="2">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text">Delivery time*</span>
+            </div>    
+            <div class="rating">
+                <div class="rating-view" data-rating="4">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text">Package Quality*</span>
+            </div> 
+				<!-- <div class="shop-reviews">
+					<svg class="svg">
+						<use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#rating-star" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#rating-star"></use>
+					</svg>
+					<div class="shop-reviews-points"><?php echo round($avgRating,1); ?></div>
+				</div> -->
+				<!-- <div class="total-reviews"><?php echo Labels::getLabel('Lbl_Based_on',$siteLangId) ,' ', $totReviews ,' ',Labels::getLabel('Lbl_ratings',$siteLangId);?></div> -->
+			</div>
 		</div>
-		<div class="total-reviews"><?php echo Labels::getLabel('Lbl_Based_on',$siteLangId) ,' ', $totReviews ,' ',Labels::getLabel('Lbl_ratings',$siteLangId);?></div>
+		<div class="col-md-6 column">
+			<div class="listing--progress-wrapper">
+				<ul class="listing--progress">
+					<li>
+						<span class="progress_count">5 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
+						<div class="progress__bar">
+							<div title="<?php echo $rate_5_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_5_stars',$siteLangId); ?>" style="width: <?php echo $rate_5_width; ?>%" class="progress__fill"></div>
+						</div>
+					</li>
+					<li>
+						<span class="progress_count">4 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
+						<div class="progress__bar">
+							<div title="<?php echo $rate_4_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_4_stars',$siteLangId); ?>" style="width: <?php echo $rate_4_width; ?>%" class="progress__fill"></div>
+						</div>
+					</li>
+					<li>
+						<span class="progress_count">3 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
+						<div class="progress__bar">
+							<div title="<?php echo $rate_3_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_3_stars',$siteLangId); ?>" style="width: <?php echo $rate_3_width; ?>%" class="progress__fill"></div>
+						</div>
+					</li>
+					<li>
+						<span class="progress_count">2 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
+						<div class="progress__bar">
+							<div title="<?php echo $rate_2_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_2_stars',$siteLangId); ?>" style="width: <?php echo $rate_2_width; ?>%" class="progress__fill"></div>
+						</div>
+					</li>
+					<li>
+						<span class="progress_count">1 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
+						<div class="progress__bar">
+							<div title="<?php echo $rate_1_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_1_stars',$siteLangId); ?>" style="width: <?php echo $rate_1_width; ?>%" class="progress__fill"></div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	<?php
+	/* <div class="col-md-4 border--left">
+		<h4><?php echo Labels::getLabel('Lbl_Share_your_thoughts',$siteLangId); ?></h4>
+		<h6><?php echo Labels::getLabel('Lbl_With_other_customers',$siteLangId); ?></h6>
+		<a class="btn btn-brand btn--h-large" href="<?php echo UrlHelper::generateUrl('Reviews','write',array($shop_id)); ?>"><?php echo Labels::getLabel('Lbl_Write_a_Review',$siteLangId); ?></a>
+	</div> */
+	?>
+		
 	</div>
 </div>
-<div class="col-md-7 column">
-	<div class="listing--progress-wrapper">
-		<ul class="listing--progress">
-			<li>
-				<span class="progress_count">5 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
-				<div class="progress__bar">
-					<div title="<?php echo $rate_5_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_5_stars',$siteLangId); ?>" style="width: <?php echo $rate_5_width; ?>%" class="progress__fill"></div>
-				</div>
-			</li>
-			<li>
-				<span class="progress_count">4 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
-				<div class="progress__bar">
-					<div title="<?php echo $rate_4_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_4_stars',$siteLangId); ?>" style="width: <?php echo $rate_4_width; ?>%" class="progress__fill"></div>
-				</div>
-			</li>
-			<li>
-				<span class="progress_count">3 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
-				<div class="progress__bar">
-					<div title="<?php echo $rate_3_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_3_stars',$siteLangId); ?>" style="width: <?php echo $rate_3_width; ?>%" class="progress__fill"></div>
-				</div>
-			</li>
-			<li>
-				<span class="progress_count">2 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
-				<div class="progress__bar">
-					<div title="<?php echo $rate_2_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_2_stars',$siteLangId); ?>" style="width: <?php echo $rate_2_width; ?>%" class="progress__fill"></div>
-				</div>
-			</li>
-			<li>
-				<span class="progress_count">1 <?php echo Labels::getLabel('Lbl_Star',$siteLangId); ?></span>
-				<div class="progress__bar">
-					<div title="<?php echo $rate_1_width,'% ',Labels::getLabel('LBL_Number_of_reviews_have_1_stars',$siteLangId); ?>" style="width: <?php echo $rate_1_width; ?>%" class="progress__fill"></div>
-				</div>
-			</li>
-		</ul>
-	</div>
-</div>
-<?php
-/* <div class="col-md-4 border--left">
-	<h4><?php echo Labels::getLabel('Lbl_Share_your_thoughts',$siteLangId); ?></h4>
-	<h6><?php echo Labels::getLabel('Lbl_With_other_customers',$siteLangId); ?></h6>
-	<a class="btn btn-brand btn--h-large" href="<?php echo UrlHelper::generateUrl('Reviews','write',array($shop_id)); ?>"><?php echo Labels::getLabel('Lbl_Write_a_Review',$siteLangId); ?></a>
-   </div> */
-?>
-
-	
-</div><div class="listings__body">
+<div class="listings__body">
 	  
 		<div class="row">
 			<div class="col-md-6 col-sm-6"><span id='reviews-pagination-strip--js' hidden><?php echo Labels::getLabel('Lbl_Displaying_Reviews',$siteLangId); ?>  <span id='reviewStartIndex'>XX</span>-<span id='reviewEndIndex'>XX</span> <?php echo Labels::getLabel('Lbl_of',$siteLangId); ?> <span id='reviewsTotal'>XX</span></span></div>

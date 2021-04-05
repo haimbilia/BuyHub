@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if ($reviewsList) { ?>
-    <ul class="reviews-list mt-5">
+    <ul class="reviews-list mt-4">
     <?php foreach ($reviewsList as $review) { ?>
         <li>
         <div class="row">
@@ -43,6 +43,23 @@
                         </p>
                         <!-- <a class="btn btn-secondary mt-3" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'] , $review['spreview_id'])) ?>"><?php echo Labels::getLabel('Lbl_Permalink', $siteLangId); ?> </a> -->
                     </div>
+                    <div class="all-review-media">
+                        <ul class="review-media-list">
+                            <li><a class="review-media" href="javascript:void(0)"><img src="http://localhost/yokart-V8/image/product/7/MEDIUM/0/1591"></a></li>
+                            <li><a class="review-media" href="javascript:void(0)"><iframe width="1280" height="720" src="https://www.youtube.com/embed/trHk-4SsAoU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></a></li>
+                            <li><a class="review-media" href="javascript:void(0)"><img src="http://localhost/yokart-V8/image/product/7/MEDIUM/0/1591"></a></li>
+                            <li><a class="review-media" href="javascript:void(0)"><img src="http://localhost/yokart-V8/image/product/7/MEDIUM/0/1591"></a></li>
+                            <li><a class="review-media" href="javascript:void(0)"><img src="http://localhost/yokart-V8/image/product/7/MEDIUM/0/1591"></a></li>
+                            <li><a class="review-media" href="javascript:void(0)"><img src="http://localhost/yokart-V8/image/product/7/MEDIUM/0/1591"></a></li>
+                          
+                            <li class="more-media">
+                                <a class="review-media" href="javascript:void(0)" data-count="45+">
+                                     <img src="http://localhost/yokart-V8/image/product/7/MEDIUM/0/1591">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>

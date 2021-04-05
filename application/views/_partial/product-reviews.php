@@ -24,22 +24,64 @@ if (!empty($reviews)) {
     }
 }
 ?>
-<div class="row justify-content-between">
-    <div class="col-md-5">
-        <div class="section-head">
-            <div class="section__heading">
-                <h2><?php echo Labels::getLabel('LBl_Rating_&_Reviews', $siteLangId); ?></h2>
-            </div>
-        </div>
-        <div class="products__rating"> <i class="icn"><svg class="svg">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use></svg></i> <span class="rate"><?php echo round($avgRating, 1); ?><span></span></span>
-        </div>
-        <p class="small"><?php echo Labels::getLabel('Lbl_Based_on', $siteLangId) ,' ', $totReviews ,' ',Labels::getLabel('Lbl_ratings', $siteLangId);?></p>
+ <div class="section-head">
+    <div class="section__heading">
+        <h2><?php echo Labels::getLabel('LBl_Rating_&_Reviews', $siteLangId); ?></h2>
     </div>
-    <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('reviews'=>$reviews,'siteLangId'=>$siteLangId,'product_id'=>$product_id), false); ?>
+</div>
+<div class="rating-wrapper">
+    <div class="row justify-content-between">
+        <div class="col-md-7"> 
+            <div class="rating">
+                <div class="rating-view" data-rating="4">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text"> Shipping*</span>
+            </div>      
+            <div class="rating">
+                <div class="rating-view" data-rating="3">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text">Stock Availability*</span>
+            </div>    
+            <div class="rating">
+                <div class="rating-view" data-rating="2">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text">Delivery time*</span>
+            </div>    
+            <div class="rating">
+                <div class="rating-view" data-rating="4">
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                    <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                </div>
+                <span class="rating__text">Package Quality*</span>
+            </div>    
+            <!-- <div class="products__rating"> <i class="icn"><svg class="svg">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use></svg></i> <span class="rate"><?php echo round($avgRating, 1); ?><span></span></span>
+            </div>
+            <p class="small"><?php echo Labels::getLabel('Lbl_Based_on', $siteLangId) ,' ', $totReviews ,' ',Labels::getLabel('Lbl_ratings', $siteLangId);?></p> -->
+        </div>
+        <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('reviews'=>$reviews,'siteLangId'=>$siteLangId,'product_id'=>$product_id), false); ?>
+    </div>
 </div>
 <?php if($canSubmitFeedback || $totReviews > 0) { ?>
-<div class="row mt-5">
+<div class="row mt-4">
     <?php if ($canSubmitFeedback) { ?>
     <div class="col-auto <?php echo ($totReviews > 0) ? 'col-auto' : ''; ?>">
         <a onClick="rateAndReviewProduct(<?php echo $product_id; ?>)" href="javascript:void(0)" class="btn btn-brand <?php echo ($totReviews > 0) ? 'btn-block' : '' ; ?>"><?php echo Labels::getLabel('Lbl_Add_Review', $siteLangId); ?></a>
