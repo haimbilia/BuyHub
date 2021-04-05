@@ -433,3 +433,87 @@ ALTER TABLE `tbl_admin` ADD `admin_password` VARCHAR(100) NOT NULL AFTER `admin_
 ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
 -- --- task_81779_advanced_GDPR_module --- --
+
+
+ALTER TABLE `tbl_order_products` ADD `op_refund_tax` DECIMAL(10,2) NOT NULL AFTER `op_refund_shipping`;
+
+-- --- query to update cancel order data --- --
+
+CREATE VIEW view_cancel_order AS SELECT
+    op.op_id,
+    op.op_invoice_number,
+    op.op_qty,
+    op.op_commission_charged,
+    op.op_affiliate_commission_charged,
+    (
+        (op.op_unit_price * op.op_qty) + SUM(opc.opcharge_amount) + op.op_rounding_off
+    ) AS txnAmount,
+    SUM(
+        CASE WHEN opc.opcharge_type = 3 THEN opc.opcharge_amount ELSE 0
+    END
+) AS shipping,
+SUM(
+CASE WHEN opc.opcharge_type = 1 THEN opc.opcharge_amount ELSE 0
+END
+) AS tax
+FROM
+`tbl_order_cancel_requests` ocr
+INNER JOIN  
+tbl_order_products as op on op.op_id = ocr.ocrequest_op_id and ocr.ocrequest_status = 1
+LEFT OUTER JOIN `tbl_order_product_charges` AS opc
+ON
+opc.opcharge_op_id = op.op_id 
+WHERE
+op_refund_amount = 0
+GROUP BY
+op_id;    
+
+UPDATE tbl_order_products op
+INNER JOIN  
+view_cancel_order on op.op_id = view_cancel_order.op_id
+SET
+op.op_refund_qty = view_cancel_order.op_qty,
+op.op_refund_amount = view_cancel_order.txnAmount,
+op.op_refund_commission = view_cancel_order.op_commission_charged,
+op.op_refund_shipping = view_cancel_order.shipping,
+op.op_refund_tax = view_cancel_order.tax,
+op.op_refund_affiliate_commission = view_cancel_order.op_affiliate_commission_charged;
+
+DROP VIEW view_cancel_order;
+
+-- --- query to update cancel order data --- --
+
+-- --- query to update refund order data --- --
+CREATE VIEW view_refund_order AS SELECT
+    orrequest_op_id,
+    LEAST(
+        (
+            (
+                opc.opcharge_amount / op.op_qty
+            ) * orrequest_qty
+        ),
+        opc.opcharge_amount
+    ) AS refund_tax
+FROM
+    `tbl_order_return_requests` orrequest
+LEFT OUTER JOIN `tbl_order_products` AS op
+ON
+    orrequest.orrequest_op_id = op.op_id
+LEFT OUTER JOIN `tbl_orders` AS o
+ON
+    op_order_id = order_id
+INNER JOIN `tbl_order_product_charges` AS opc
+ON
+    opc.opcharge_op_id = op.op_id AND opcharge_type = 1
+WHERE
+    orrequest_status = 2 AND op_refund_tax = 0;
+
+UPDATE tbl_order_products op
+INNER JOIN  
+view_refund_order on op.op_id = view_refund_order.orrequest_op_id
+SET
+op.op_refund_tax = view_refund_order.refund_tax;
+
+DROP VIEW view_refund_order;
+
+-- --- query to update refund order data --- --

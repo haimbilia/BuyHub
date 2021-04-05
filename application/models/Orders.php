@@ -1606,6 +1606,23 @@ class Orders extends MyAppModel
                 }
                 /* ]*/
             }
+            
+            $opRefundArr = array(
+                'op_refund_qty' => $childOrderInfo["op_qty"],
+                'op_refund_amount' => $txnAmount,
+                'op_refund_commission' => $childOrderInfo["op_commission_charged"],
+                'op_refund_shipping' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+                'op_refund_affiliate_commission' => $childOrderInfo["op_affiliate_commission_charged"],
+                'op_refund_tax' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+            );
+            if (!$db->updateFromArray(
+                            Orders::DB_TBL_ORDER_PRODUCTS,
+                            $opRefundArr,
+                            array('smt' => 'op_id = ? ', 'vals' => array($op_id))
+                    )) {
+                $this->error = $db->getError();
+                return false;
+            }
         }
         /* ] */
 
