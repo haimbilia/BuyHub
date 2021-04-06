@@ -192,7 +192,6 @@ class ShippingProfile extends MyAppModel
         if (true == $createDefaultRates && 0 < $shipProZoneId && 0 < $shippingProfileId) {
             self::setDefaultRates($shipProZoneId, $shippingProfileId);
         }
-
         
         if (0 < $shippingProfileId && true == $createDefaultShipProfile) {
             $srch = new ProductSearch(CommonHelper::getLangId(), null, null, false, false);
@@ -204,6 +203,7 @@ class ShippingProfile extends MyAppModel
                 $cnd->attachCondition('product_added_by_admin_id', '=', applicationConstants::YES, 'AND');
             }
 
+            $srch->addCondition('product_type', '=', Product::PRODUCT_TYPE_PHYSICAL);
             $srch->addCondition('product_deleted', '=', applicationConstants::NO);
             if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
                 $is_custom_or_catalog = FatApp::getPostedData('type', FatUtility::VAR_INT, -1);
