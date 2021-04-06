@@ -24,6 +24,7 @@ class ShippingProfileProductsController extends SellerBaseController
         $srch = ShippingProfileProduct::getSearchObject($this->siteLangId);
         $srch->addCondition('shippro_shipprofile_id', '=', $profileId);
         $srch->addCondition('shippro_user_id', '=', $this->userParentId);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '=', Product::PRODUCT_TYPE_PHYSICAL);
         $srch->addOrder('product_name', 'ASC');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -53,6 +54,12 @@ class ShippingProfileProductsController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
+        
+        $prodType = Product::getAttributesById($post['shippro_product_id'], 'product_type');
+        if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
+        }
+
         $data = array(
             'shippro_user_id' => $this->userParentId,
             'shippro_shipprofile_id' => $post['shippro_shipprofile_id'],
@@ -121,6 +128,7 @@ class ShippingProfileProductsController extends SellerBaseController
             $cnd->attachCondition('product_seller_id', '=', 0, 'AND');
         }
         
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '=', Product::PRODUCT_TYPE_PHYSICAL);
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         //$srch->addDirectCondition('sppro.shippro_product_id is null');
         

@@ -417,7 +417,7 @@ class BuyerController extends BuyerBaseController
         $pdf->SetFont('dejavusans');
 
         $templatePath = "buyer/view-invoice.php";
-        $html = addslashes($template->render(false, false, $templatePath, true, true));
+        $html = $template->render(false, false, $templatePath, true, true);
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
 

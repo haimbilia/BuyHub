@@ -1,9 +1,9 @@
-$(document).ready(function () {
+$(document).ready(function() {
     setTimeout(function() {
-        stylePhoneNumberFld('.phone-js');
+        //stylePhoneNumberFld('.phone-js');
     }, 1000);
 
-	$(document).on('keypress', 'input.zip-js', function (e) {
+    $(document).on('keypress', 'input.zip-js', function(e) {
         var regex = new RegExp("^[a-zA-Z0-9]+$");
         var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(str)) {
@@ -13,10 +13,10 @@ $(document).ready(function () {
         e.preventDefault();
         return false;
     });
-	$('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 
     $(document).ajaxComplete(function() {
-        stylePhoneNumberFld('.phone-js');
+        //stylePhoneNumberFld('.phone-js');
     });
 });
 
@@ -61,12 +61,12 @@ $(document).ready(function () {
             }
         },
 
-		resetEditorWidth: function(width = "100%") {
+        resetEditorWidth: function(width = "100%") {
             if (typeof oUtil != 'undefined') {
-                (oUtil.arrEditor).forEach(function (input) {
-					var oEdit1 = eval(input);
-					$("#idArea" + oEdit1.oName).attr("width", width);
-				});
+                (oUtil.arrEditor).forEach(function(input) {
+                    var oEdit1 = eval(input);
+                    $("#idArea" + oEdit1.oName).attr("width", width);
+                });
             }
         },
 
@@ -74,11 +74,11 @@ $(document).ready(function () {
             var editors = oUtil.arrEditor;
             layout = langLbl['language' + lang_id];
             for (x in editors) {
-				var oEdit1 = eval(editors[x]);
-				if ($('#idArea' + oEdit1.oName).parents(".layout--rtl").length){
-					$('#idContent' + editors[x]).contents().find("body").css('direction', layout);
-					$('#idArea' + oEdit1.oName + ' td[dir="ltr"]').attr('dir', layout);
-				}
+                var oEdit1 = eval(editors[x]);
+                if ($('#idArea' + oEdit1.oName).parents(".layout--rtl").length) {
+                    $('#idContent' + editors[x]).contents().find("body").css('direction', layout);
+                    $('#idArea' + oEdit1.oName + ' td[dir="ltr"]').attr('dir', layout);
+                }
             }
         },
 
@@ -147,10 +147,10 @@ $(document).ready(function () {
     });
 
     $.systemMessage = function(data, cls, autoClose = true) {
-		if ("" == data) {
-			return;
-		}
-		
+        if ("" == data) {
+            return;
+        }
+
         if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
             autoClose = false;
         }
@@ -285,7 +285,7 @@ $(document).ready(function () {
     	$('ul.dropdown-menu').hide();
     }); */
 
-    autofillLangData = function (autoFillBtn, frm) {
+    autofillLangData = function(autoFillBtn, frm) {
         var actionUrl = autoFillBtn.data('action');
 
         var defaultLangField = $('input.defaultLang', frm);
@@ -294,13 +294,13 @@ $(document).ready(function () {
             return false;
         }
         var proceed = true;
-        var stringToTranslate =  '';
+        var stringToTranslate = '';
         defaultLangField.each(function(index) {
             if ('' != $(this).val()) {
                 if (0 < index) {
                     stringToTranslate += "&";
                 }
-                stringToTranslate +=  $(this).attr('name') + "=" + $(this).val();
+                stringToTranslate += $(this).attr('name') + "=" + $(this).val();
             } else {
                 $(this).focus();
                 $.systemMessage(langLbl.primaryLanguageField, 'alert--danger');
@@ -322,7 +322,7 @@ $(document).ready(function () {
             });
         }
     }
-	$('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 })(jQuery);
 
 function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
@@ -472,6 +472,7 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
     }
 
 })();
+
 function isJson(str) {
     try {
         var json = JSON.parse(str);
@@ -486,9 +487,9 @@ $(document).on("change", "input[type='file']", fileSizeValidation);
 function fileSizeValidation() {
     const fsize = this.files[0].size;
     if (fsize > langLbl.allowedFileSize) {
-		if(0 < $("#facebox").length) {
-			$(document).trigger('close.facebox');
-		}
+        if (0 < $("#facebox").length) {
+            $(document).trigger('close.facebox');
+        }
         var msg = langLbl.fileSizeExceeded;
         var msg = msg.replace("{size-limit}", bytesToSize(langLbl.allowedFileSize));
         $.mbsmessage(msg, true, 'alert--danger');
@@ -496,7 +497,7 @@ function fileSizeValidation() {
         $("#uploadFileName").text("Select File To Upload");
         return false;
     }
-	return true;
+    return true;
 }
 
 function bytesToSize(bytes) {
@@ -507,13 +508,13 @@ function bytesToSize(bytes) {
 }
 
 var gCaptcha = false;
-function googleCaptcha()
-{
+
+function googleCaptcha() {
     $("body").addClass("captcha");
     var inputObj = $("form input[name='g-recaptcha-response']");
     var submitBtn = inputObj.closest("form").find('input[type="submit"]');
     submitBtn.attr("disabled", "disabled");
-    var checkToken = setInterval(function(){
+    var checkToken = setInterval(function() {
         if (true === gCaptcha) {
             submitBtn.removeAttr("disabled");
             clearInterval(checkToken);
@@ -521,17 +522,17 @@ function googleCaptcha()
     }, 500);
 
     /*Google reCaptcha V3  */
-    setTimeout(function(){
+    setTimeout(function() {
         if (0 < inputObj.length && 'undefined' !== typeof grecaptcha) {
             grecaptcha.ready(function() {
-                grecaptcha.execute(langLbl.captchaSiteKey, {action: inputObj.data('action')}).then(function(token) {
+                grecaptcha.execute(langLbl.captchaSiteKey, { action: inputObj.data('action') }).then(function(token) {
                     inputObj.val(token);
                     gCaptcha = true;
                 });
-			});
+            });
         } else if ('undefined' === typeof grecaptcha) {
-			$.mbsmessage(langLbl.invalidGRecaptchaKeys,true,'alert--danger');
-		}
+            $.mbsmessage(langLbl.invalidGRecaptchaKeys, true, 'alert--danger');
+        }
     }, 200);
 }
 
@@ -558,16 +559,16 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     // address = document.getElementById('postal_code').value;
     /*address = {lat: parseFloat(lat), lng: parseFloat(lat)};
 	geocodeAddress(geocoder, map, infowindow, { 'location': latlng });*/
-	
-	var sel = document.getElementById('shop_country_code');
-	var country = sel.options[sel.selectedIndex].text;
-    
-	address = document.getElementById('postal_code').value;
-	address = country + ' ' + address;
-	
+
+    var sel = document.getElementById('shop_country_code');
+    var country = sel.options[sel.selectedIndex].text;
+
+    address = document.getElementById('postal_code').value;
+    address = country + ' ' + address;
+
     geocodeAddress(geocoder, map, infowindow, { 'address': address });
 
-    document.getElementById('postal_code').addEventListener('blur', function () {
+    document.getElementById('postal_code').addEventListener('blur', function() {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
@@ -577,7 +578,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         geocodeAddress(geocoder, map, infowindow, { 'address': address });
     });
 
-    document.getElementById('shop_state').addEventListener('change', function () {
+    document.getElementById('shop_state').addEventListener('change', function() {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
@@ -589,23 +590,23 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         geocodeAddress(geocoder, map, infowindow, { 'address': address });
     });
 
-    document.getElementById('shop_country_code').addEventListener('change', function () {
+    document.getElementById('shop_country_code').addEventListener('change', function() {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
         geocodeAddress(geocoder, map, infowindow, { 'address': country });
     });
 
-	/* for (i = 0; i < document.getElementsByClassName('addressSelection-js').length; i++) {
-	    document.getElementsByClassName('addressSelection-js')[i].addEventListener("change", function(e) {
-			address = e.target.options[e.target.selectedIndex].text;
-			geocodeAddress(geocoder, map, infowindow, {'address': address});
-	  	});
-	} */
+    /* for (i = 0; i < document.getElementsByClassName('addressSelection-js').length; i++) {
+        document.getElementsByClassName('addressSelection-js')[i].addEventListener("change", function(e) {
+    		address = e.target.options[e.target.selectedIndex].text;
+    		geocodeAddress(geocoder, map, infowindow, {'address': address});
+      	});
+    } */
 }
 
 function geocodeAddress(geocoder, resultsMap, infowindow, address) {
-    geocoder.geocode(address, function (results, status) {
+    geocoder.geocode(address, function(results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
             resultsMap.setCenter(results[0].geometry.location);
             if (marker && marker.setMap) {
@@ -616,13 +617,13 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 position: results[0].geometry.location,
                 draggable: true
             });
-			geocodeSetData(results);
-            google.maps.event.addListener(marker, 'dragend', function () {
-				geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
-					if (status == google.maps.GeocoderStatus.OK) {
-						geocodeSetData(results);
-					}
-				});
+            geocodeSetData(results);
+            google.maps.event.addListener(marker, 'dragend', function() {
+                geocoder.geocode({ 'latLng': marker.getPosition() }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        geocodeSetData(results);
+                    }
+                });
             });
         } else {
             /*console.log('Geocode was not successful for the following reason: ' + status);*/
@@ -631,48 +632,48 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
 }
 
 function geocodeSetData(results) {
-	document.getElementById('lat').value = marker.getPosition().lat();
-	document.getElementById('lng').value = marker.getPosition().lng();
-	if (results[0]) {
-		infowindow.setContent(results[0].formatted_address);
-		infowindow.open(map, marker);
-		var address_components = results[0].address_components;
-		var data = {};
-		/* data['lat'] = pos.lat();
-		data['lng'] = pos.lng(); */
-		data['formatted_address'] = results[0].formatted_address;
-		if (0 < address_components.length) {
-			var addressComponents = address_components;
-			for (var i = 0; i < addressComponents.length; i++) {
-				var key = address_components[i].types[0];
-				var value = address_components[i].long_name;
-				data[key] = value;
-				if ('country' == key) {
-					data['country_code'] = address_components[i].short_name;
-					data['country'] = value;
-				} else if ('administrative_area_level_1' == key) {
-					data['state_code'] = address_components[i].short_name;
-					data['state'] = value;
-				} else if ('administrative_area_level_2' == key) {
-					data['city'] = value;
-				}
-			}
-		}
-		$('#postal_code').val(data.postal_code);
-		$('#shop_country_code option').each(function () {
-			if (this.text == data.country) {
-				$('#shop_country_code').val(this.value);
-				var state = 0;
-				$('#shop_state option').each(function () {
-					if (this.value == data.state_code || this.text == data.state) {
-						return state = this.value;
-					}
-				});
-				getStatesByCountryCode(this.value, state, '#shop_state', 'state_code');
-				return false;
-			}
-		});
-	}
+    document.getElementById('lat').value = marker.getPosition().lat();
+    document.getElementById('lng').value = marker.getPosition().lng();
+    if (results[0]) {
+        infowindow.setContent(results[0].formatted_address);
+        infowindow.open(map, marker);
+        var address_components = results[0].address_components;
+        var data = {};
+        /* data['lat'] = pos.lat();
+        data['lng'] = pos.lng(); */
+        data['formatted_address'] = results[0].formatted_address;
+        if (0 < address_components.length) {
+            var addressComponents = address_components;
+            for (var i = 0; i < addressComponents.length; i++) {
+                var key = address_components[i].types[0];
+                var value = address_components[i].long_name;
+                data[key] = value;
+                if ('country' == key) {
+                    data['country_code'] = address_components[i].short_name;
+                    data['country'] = value;
+                } else if ('administrative_area_level_1' == key) {
+                    data['state_code'] = address_components[i].short_name;
+                    data['state'] = value;
+                } else if ('administrative_area_level_2' == key) {
+                    data['city'] = value;
+                }
+            }
+        }
+        $('#postal_code').val(data.postal_code);
+        $('#shop_country_code option').each(function() {
+            if (this.text == data.country) {
+                $('#shop_country_code').val(this.value);
+                var state = 0;
+                $('#shop_state option').each(function() {
+                    if (this.value == data.state_code || this.text == data.state) {
+                        return state = this.value;
+                    }
+                });
+                getStatesByCountryCode(this.value, state, '#shop_state', 'state_code');
+                return false;
+            }
+        });
+    }
 }
 
 function queryStringToJSON(qs) {
@@ -685,11 +686,11 @@ function queryStringToJSON(qs) {
         var key = pair[0];
         var value = decodeURIComponent(pair[1] || '');
 
-        if( result[key] ) {
-            if( Object.prototype.toString.call( result[key] ) === '[object Array]' ) {
-                result[key].push( value );
+        if (result[key]) {
+            if (Object.prototype.toString.call(result[key]) === '[object Array]') {
+                result[key].push(value);
             } else {
-                result[key] = [ result[key], value ];
+                result[key] = [result[key], value];
             }
         } else {
             result[key] = value;
@@ -704,9 +705,9 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
     var country = '' == langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode;
     inputList.forEach(function(input) {
         if (true == destroy) {
-			$(input).removeAttr('style');
-			var clone = input.cloneNode(true);
-			$('.iti').replaceWith(clone);
+            $(input).removeAttr('style');
+            var clone = input.cloneNode(true);
+            $('.iti').replaceWith(clone);
         } else {
             if ($(input).hasClass('hasFlag-js')) {
                 return;
@@ -729,7 +730,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                 initialCountry: country,
             });
 
-            var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2; 
+            var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
             if (0 < dialCodeElement.length) {
                 dialCodeElement.insertAfter(input);
                 if ('' == dialCodeElement.val()) {
@@ -745,7 +746,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
 
             input.addEventListener('countrychange', function(e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
-                    var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2; 
+                    var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
                     var parent = $(input).parent();
                     parent.find('input[name="' + elementName + '"]').val(dCode);
                 }
