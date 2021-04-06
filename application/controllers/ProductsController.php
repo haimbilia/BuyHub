@@ -750,7 +750,7 @@ class ProductsController extends MyAppController
         $frmReviewSearch = $this->getReviewSearchForm(5);
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
         $this->set('frmReviewSearch', $frmReviewSearch);
-        $this->set('currentStock', $product['in_stock'] - Product::tempHoldStockCount($selprod_id));        
+        $this->set('currentStock', $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id));         
         /* Get product Polls [ */
         /*$pollQuest = Polling::getProductPoll($product['product_id'], $this->siteLangId);
         $this->set('pollQuest', $pollQuest);*/
