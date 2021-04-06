@@ -208,11 +208,11 @@ only screen and (min-device-pixel-ratio: 1.5),
 // NEW RATING STYLE
 .rating {
     --rating-fg: #f5861f;
-    --size: 1rem;
-    --space: 0.25em;
+    --size: .875rem;
+    --space: 0.15em;
     position: relative;
     display: flex;
-    margin-#{$start-direction}: - 0.25em;
+    margin-#{$start-direction}: - 0.15em;
     &-action,
     &-view {
         display: inline-flex;
@@ -264,10 +264,18 @@ only screen and (min-device-pixel-ratio: 1.5),
             }
         }
     }
-    &__count,
-    &__text {
+    &__count {
         font-size: .875rem;
         color: $txt-gray;
         padding-#{$start-direction}: .5rem;
+    }
+    &__text {
+        font-size: .75rem;
+        color: $txt-gray;
+        border: $border;
+        border-radius: 50px;
+        display: inline-block;
+        padding: 0.15rem 1rem;
+        margin-bottom: .5rem;
     }
 }

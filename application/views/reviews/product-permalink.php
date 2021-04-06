@@ -67,7 +67,7 @@
 													<use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
 												</svg></i> <span class="rate"><?php echo round($reviewData["prod_rating"], 1); ?></span> </div>
 										<div class="cms">
-											<p><strong><?php echo $reviewData['spreview_title']; ?></strong></p>
+											<h6><strong><?php echo $reviewData['spreview_title']; ?></strong></h6>
 											<p>
 												<?php echo nl2br($reviewData['spreview_description']); ?>
 											</p>

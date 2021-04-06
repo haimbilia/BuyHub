@@ -32,15 +32,20 @@ $shopLocation = $shop_city . $shop_state. $shop_country;
                         <div class="rowx listing__all">
                             <ul class="reviews-list mt-4">
                                 <li>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="profile-avatar">
-                                                <div class="profile__dp">
-                                                    <img src="<?php echo UrlHelper::generateUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'],'thumb',true)); ?>" alt="<?php echo $reviewData['user_name']; ?>"></div>
-                                                <div class="profile__bio">
-                                                    <div class="title"><?php echo Labels::getLabel('Lbl_By', $siteLangId) ; ?> <?php echo CommonHelper::displayName($reviewData['user_name']); ?> <span
-                                                            class="dated"><?php echo Labels::getLabel('Lbl_On_Date', $siteLangId) , ' ',FatDate::format($reviewData['spreview_posted_on']); ?></span></div>
-                                                    <div class="yes-no">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
+                                                    <div class="profile-avatar">
+                                                        <div class="profile__dp">
+                                                            <img src="<?php echo UrlHelper::generateUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'],'thumb',true)); ?>" alt="<?php echo $reviewData['user_name']; ?>"></div>
+                                                        <div class="profile__bio">
+                                                        <div class="title"><?php echo Labels::getLabel('Lbl_By', $siteLangId) ; ?> <?php echo CommonHelper::displayName($reviewData['user_name']); ?> <span
+                                                                class="dated"><?php echo Labels::getLabel('Lbl_On_Date', $siteLangId) , ' ',FatDate::format($reviewData['spreview_posted_on']); ?></span></div>
+                                                    
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                     <div class="yes-no">
                                                         <ul>
                                                             <li><a href="javascript:undefined;" onclick='markReviewHelpful(<?php echo FatUtility::int($reviewData['spreview_id']); ?>,1);return false;' class="yes <?php echo 'rev_'.FatUtility::int($reviewData['spreview_id']).'_1'; ?>"><img
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/thumb-up.png" alt="<?php echo Labels::getLabel('LBL_Helpful', $siteLangId); ?>"> <span>(<?php echo $reviewHelpfulData['helpful']; ?>)</span></a>
@@ -52,19 +57,72 @@ $shopLocation = $shop_city . $shop_state. $shop_country;
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="reviews-desc">
-                                                <div class="products__rating"> <i class="icn"><svg class="svg">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-                                                        </svg></i> <span class="rate"><?php echo round($reviewData["shop_rating"], 1); ?></span> </div>
-                                                <div class="cms">
-                                                    <p><strong><?php echo $reviewData['spreview_title']; ?></strong></p>
-                                                    <p> <?php echo nl2br($reviewData['spreview_description']); ?> </p>
+                                           
+                                      
+                                            <div class="reviews-desc">    
+                                                
+                                                <ul class="ratedby-list">
+                                                    <li>
+                                                        <div class="rating flex-column">
+                                                            <span class="rating__text"> Shipping</span>
+                                                            <div class="rating-view" data-rating="4">
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                            </div>                
+                                                        </div> 
+                                                    </li> 
+                                                    <li>    
+                                                        <div class="rating flex-column">
+                                                            <span class="rating__text">Stock Availability</span>
+                                                            <div class="rating-view" data-rating="3">
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                            </div>
+                                                            
+                                                        </div> 
+                                                    </li>
+                                                    <li>   
+                                                        <div class="rating flex-column">
+                                                            <span class="rating__text">Delivery time</span>
+                                                            <div class="rating-view" data-rating="2">
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                            </div>
+                                                            
+                                                        </div> 
+                                                    </li>
+                                                    <li>   
+                                                        <div class="rating flex-column">
+                                                            <span class="rating__text">Package Quality</span>
+                                                            <div class="rating-view" data-rating="4">
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                                <svg class="icon" width="24" height="24"> <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use></svg>
+                                                            </div>
+                                                            
+                                                        </div> 
+                                                    </li>
+                                                </ul> 
+                                                <div class="review-container">
+                                                    <div class="cms">
+                                                        <h6><strong><?php echo $reviewData['spreview_title']; ?></strong></h6>
+                                                        <p> <?php echo nl2br($reviewData['spreview_description']); ?> </p>
+                                                    </div>
                                                 </div>
+
                                             </div>
-                                        </div>
-                                    </div>
+                                       
                                 </li>
                             </ul>
                         </div>
