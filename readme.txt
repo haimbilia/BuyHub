@@ -80,6 +80,7 @@ Fixes:
     => 052015 - Order Id duplicacy issue when multiple user place order with same time frame.
     => 051973 - tax invoice UI got distorted
     => 051994 - Digital product can be linked to shipping profiles
+    => 044068 - When an order is placed with Bank transfer as payment method, the Buyer doesn't receive any order placement email notification
 
 Enhancements :
    => Make provision to made seller
