@@ -44,6 +44,9 @@ class Product extends MyAppModel
 
     public const DB_PRODUCT_EXTERNAL_RELATIONS = 'tbl_product_external_relations';
     public const DB_PRODUCT_EXTERNAL_RELATIONS_PREFIX = 'perel_';
+    
+    public const DB_PRODUCT_TO_PLUGIN_PRODUCT = 'tbl_products_to_plugin_product';
+    public const DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX = 'ptpp_';
 
     public const PRODUCT_TYPE_PHYSICAL = 1;
     public const PRODUCT_TYPE_DIGITAL = 2;
@@ -1489,9 +1492,9 @@ END,   special_price_found ) as special_price_found'
 
         $minPriceRange = '';
         if (array_key_exists('price-min-range', $criteria)) {
-            $minPriceRange = floor($criteria['price-min-range']);
+            $minPriceRange = $criteria['price-min-range'];
         } elseif (array_key_exists('min_price_range', $criteria)) {
-            $minPriceRange = floor($criteria['min_price_range']);
+            $minPriceRange = $criteria['min_price_range'];
         }
         //currency_id
         if (!empty($minPriceRange)) {
@@ -1503,9 +1506,9 @@ END,   special_price_found ) as special_price_found'
 
         $maxPriceRange = '';
         if (array_key_exists('price-max-range', $criteria)) {
-            $maxPriceRange = ceil($criteria['price-max-range']);
+            $maxPriceRange = $criteria['price-max-range'];
         } elseif (array_key_exists('max_price_range', $criteria)) {
-            $maxPriceRange = ceil($criteria['max_price_range']);
+            $maxPriceRange = $criteria['max_price_range'];
         }
 
         if (!empty($maxPriceRange)) {
@@ -1549,7 +1552,7 @@ END,   special_price_found ) as special_price_found'
 
             switch ($sortBy) {
                 case 'keyword':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('keyword_relevancy', 'DESC');
@@ -1558,7 +1561,7 @@ END,   special_price_found ) as special_price_found'
                     $srch->addOrder('theprice', $sortOrder);
                     break;
                 case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)&& FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('selprod_sold_count', $sortOrder);
@@ -1579,8 +1582,7 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
-        $srch->addGroupBy('product_id');
-        // echo $srch->getQuery();
+        $srch->addGroupBy('product_id');        
         if (!empty($keyword)) {
             $srch->addGroupBy('keywordmatched');
             $srch->addOrder('keywordmatched', 'desc');
@@ -1631,52 +1633,60 @@ END,   special_price_found ) as special_price_found'
         return false;
     }
 
-    public static function updateMinPrices($productId = 0, $shopId = 0, $brandId = 0)
+    public static function updateMinPrices($productId = 0, $shopId = 0, $brandId = 0, $countryId = 0, $stateId = 0)
     {
         $criteria = array();
         $shopId = FatUtility::int($shopId);
         $brandId = FatUtility::int($brandId);
         $productId = FatUtility::int($productId);
+        $countryId = FatUtility::int($countryId);
 
-        if (0 < $shopId) {
-            $criteria = array('shop_id' => $shopId);
-        }/* else {
-            $shop = Shop::getAttributesByUserId($sellerId);
-            if (!empty($shop) && array_key_exists('shop_id', $shop)) {
-                $criteria = array('shop_id'=>$shop['shop_id'] );
-            }
-        }*/
-
-        if (0 < $brandId) {
-            $criteria = array('brand_id' => $brandId);
-        }
-
-        $criteria = array('max_price' => true);
+        $criteria = array(
+            'max_price' => true,
+            'product_id' => $productId,
+            'brand_id' => $brandId,
+            'country_id' => $countryId,
+            'shop_id' => $shopId,
+            'state_id' => $stateId,
+        );
 
         $srch = new ProductSearch();
         $srch->setDefinedCriteria(1, 0, $criteria, true, false);
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription(0, false, true);
         $srch->addSubscriptionValidCondition();
+        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_available_from', '<=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
-        $srch->addMultipleFields(array('product_id', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
+        $srch->addMultipleFields(array('DISTINCT(product_id)', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
-        $srch->addGroupBy('product_id');
-        if (!empty($shop) && array_key_exists('shop_id', $shop)) {
-            $srch->addCondition('shop_id', '=', $shop['shop_id']);
-        }
+        // $srch->addGroupBy('product_id');
 
         if (0 < $productId) {
             $srch->addCondition('product_id', '=', $productId);
         }
 
+        if (0 < $brandId) {
+            $srch->addCondition('brand_id', '=', $brandId);
+        }
+
+        if (0 < $shopId) {
+            $srch->addCondition('shop_id', '=', $shopId);
+        }
+
+        if (0 < $countryId) {
+            $srch->addCondition('country_id', '=', $countryId);
+        }
+        if (0 < $stateId) {
+            $srch->addCondition('state_id', '=', $stateId);
+        }
+
         $tmpQry = $srch->getQuery();
 
         $qry = "INSERT INTO " . static::DB_PRODUCT_MIN_PRICE . " (pmp_product_id, pmp_selprod_id, pmp_min_price, pmp_splprice_id) SELECT * FROM (" . $tmpQry . ") AS t ON DUPLICATE KEY UPDATE pmp_selprod_id = t.selprod_id, pmp_min_price = t.theprice, pmp_splprice_id = t.splprice_id";
-
         FatApp::getDb()->query($qry);
+
         $query = "DELETE m FROM " . static::DB_PRODUCT_MIN_PRICE . " m LEFT OUTER JOIN (" . $tmpQry . ") ON pmp_product_id = selprod_product_id WHERE m.pmp_product_id IS NULL";
         FatApp::getDb()->query($query);
     }
@@ -1953,5 +1963,20 @@ END,   special_price_found ) as special_price_found'
     public static function setProductFulfillmentType(int $productId, int $loggedUserId, int $fulfillmentType): int
     {
         return $fulfillmentType;
+    }    
+    
+    public static function getProdIdByPlugin(int $pluginId, int $pluginProdId): int
+    {
+        $srch = new SearchBase(static::DB_PRODUCT_TO_PLUGIN_PRODUCT);
+        $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_id', '=', $pluginId);
+        $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_product_id', '=', $pluginProdId);
+        $srch->addFld('ptpp_product_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs); 
+        if (!$records) {
+            return 0;
+        }
+        return $records['ptpp_product_id'];
     }
+
 }

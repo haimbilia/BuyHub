@@ -205,7 +205,7 @@ class BlogPostsController extends AdminBaseController
         $postObj = new BlogPost();
         $post_categories = $postObj->getPostCategories($post_id);
         $selectedCats = array();
-        if (!$post_categories) {
+        if (empty($post_categories)) {
             $this->set('openLinksForm', true);
         }
         $this->set('msg', Labels::getLabel('MSG_Blog_Post_Setup_Successful', $this->adminLangId));
@@ -563,7 +563,7 @@ class BlogPostsController extends AdminBaseController
 
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
         $postStatusArr = applicationConstants::getBlogPostStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Post_Status', $this->adminLangId), 'post_published', $postStatusArr, '', array(), 'Select');
+        $frm->addSelectBox(Labels::getLabel('LBL_Post_Status', $this->adminLangId), 'post_published', $postStatusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
         $frm->addHiddenField('', 'page');
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
@@ -577,7 +577,7 @@ class BlogPostsController extends AdminBaseController
         $postObj = new BlogPost();
         $post_categories = $postObj->getPostCategories($post_id);
         $selectedCats = array();
-        if ($post_categories) {
+        if (!empty($post_categories)) {
             foreach ($post_categories as $cat) {
                 $selectedCats[] = $cat['bpcategory_id'];
             }

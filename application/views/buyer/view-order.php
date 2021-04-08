@@ -599,7 +599,7 @@ if (!$print) { ?>
                                 }
 
                                 if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                    $billingAddress  .= '<br>' . $orderDetail['billingAddress']['oua_phone'];
+                                    $billingAddress  .= '<br>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
                                 }
                                 ?>
                                 <div class="info--order">
@@ -641,7 +641,7 @@ if (!$print) { ?>
                                     }
 
                                     if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-                                        $shippingAddress .= '<br>' . $orderDetail['shippingAddress']['oua_phone'];
+                                        $shippingAddress .= '<br>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
                                     } ?>
                                     <div class="info--order">
                                         <p>
@@ -782,7 +782,8 @@ if (!$print) { ?>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($orderDetail['comments'] as $row) {
+                                        <?php 
+                                        foreach ($orderDetail['comments'] as $row) {
                                         ?>
                                             <tr>
                                                 <td>
@@ -796,11 +797,15 @@ if (!$print) { ?>
                                                     echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
                                                     if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                         if (empty($row['oshistory_courier'])) {
-                                                            $str = !empty($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $siteLangId) . ' ' . $row['oshistory_tracking_number'] : '';
+                                                            $str = !empty($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . '( ' . $row['oshistory_tracking_number'] . ' )': '';
                                                             if (empty($childOrderDetail['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
                                                                 $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
                                                             } elseif (!empty($childOrderDetail['opship_tracking_url'])) {
-                                                                $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $childOrderDetail['opship_tracking_url'] . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
+                                                                $trackingUrls = (array) explode(', ', $childOrderDetail['opship_tracking_url']);
+                                                                $str .= '<br>';
+                                                                foreach ($trackingUrls as $url) {
+                                                                    $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $url . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
+                                                                }
                                                             }
                                                             echo $str;
                                                         } else {

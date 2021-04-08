@@ -18,8 +18,7 @@ class AvalaraTax extends TaxBase
 
     public $requiredKeys = [
         'account_number',
-        'company_code',
-        'environment',
+        'company_code',       
         'license_key'
     ];
 

@@ -35,7 +35,12 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
 		   <div class="field-set">
 			   <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_PHONE',$siteLangId);?> <span class="mandatory">*</span></label></div>
 			   <div class="field-wraper">
-				   <div class="field_cover"><?php echo $frm->getFieldHTML('user_phone');?></div>
+				   <div class="field_cover">
+				   <?php 
+				   	echo $frm->getFieldHTML('user_phone');
+				   	echo $frm->getFieldHTML('user_phone_dcode');
+				   ?>
+				   </div>
 			   </div>
 		   </div>
 	   </div>

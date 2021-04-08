@@ -105,7 +105,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $srch->joinOrderUser();
         $srch->addMultipleFields(
             array('order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
-            'ou.user_name as buyer_user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'order_net_amount',   'order_pmethod_id', 'plugin_name', 'order_discount_total')
+            'ou.user_name as buyer_user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'order_net_amount',   'order_pmethod_id', 'plugin_name', 'order_discount_total')
         );
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
@@ -236,7 +236,7 @@ class SubscriptionOrdersController extends AdminBaseController
         
         $frm->addTextBox(Labels::getLabel('LBL_SELLER', $this->adminLangId), 'seller', '');
         
-        $frm->addSelectBox(Labels::getLabel('LBL_Payment_Status', $this->adminLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($langId), '', array(), 'Select Payment Status');
+        $frm->addSelectBox(Labels::getLabel('LBL_Payment_Status', $this->adminLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($langId), '', array(), Labels::getLabel('LBL_Select_Payment_Status', $this->adminLangId));
         
         $frm->addDateField('', 'date_from', '', array('placeholder' => 'Date From', 'readonly' => 'readonly' ));
         $frm->addDateField('', 'date_to', '', array('placeholder' => 'Date To', 'readonly' => 'readonly' ));

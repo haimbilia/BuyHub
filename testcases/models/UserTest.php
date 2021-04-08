@@ -120,10 +120,10 @@ class UserTest extends YkModelTest
     public function updateUserReturnAddressData()
     {
         return array(
-            array(4, array('ura_state_id' =>'1250', 'ura_country_id' =>'50', 'ura_zip' => '1234', 'ura_phone' => '9879879870'), true), //Existing user id
-            array('test', array('ura_state_id' =>'1250', 'ura_country_id' =>'50', 'ura_zip' => '1234', 'ura_phone' => '9879879870'), false), //Invalid user id
+            array(4, array('ura_state_id' =>'1250', 'ura_country_id' =>'50', 'ura_zip' => '1234', 'ura_phone_dcode' => '+91', 'ura_phone' => '9879879870'), true), //Existing user id
+            array('test', array('ura_state_id' =>'1250', 'ura_country_id' =>'50', 'ura_zip' => '1234', 'ura_phone_dcode' => '+91', 'ura_phone' => '9879879870'), false), //Invalid user id
             array(999999, array('ura_state_id' =>'1180', 'ura_country_id' =>'80', 'ura_zip' => '8520'
-            , 'ura_phone' => '3213213210'), true), //User id does not exist
+            , 'ura_phone_dcode' => '+91', 'ura_phone' => '3213213210'), true), //User id does not exist
         );
     }
     

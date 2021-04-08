@@ -6,6 +6,7 @@
             <li><a href="javascript:void(0)" onclick="userForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a></li>
             <li><a href="javascript:void(0)" onclick="addBankInfoForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Bank_Info', $adminLangId); ?></a></li>
             <li><a class="active" href="javascript:void(0)" onclick="userAddresses(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Addresses', $adminLangId); ?></a></li>
+            <li><a href="javascript:void(0)" onclick="displayCookiesPerferences(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Cookies_Preferences',$adminLangId); ?></a></li>	
         </ul>
         <div class="tabs_panel_wrap">
             <a href="javascript:void(0)" class="themebtn btn-default btn-sm" onClick="addOneAddress(<?php echo $user_id ?>,0)"><?php echo Labels::getLabel('LBL_Add_New', $adminLangId); ?></a>
@@ -41,8 +42,13 @@
                                 $address .= (!empty($row['addr_city'])) ? $row['addr_city'] . ',' : '';
                                 $address .= (!empty($row['state_name'])) ? $row['state_name'] . '<br>' : '';
                                 $address .= (!empty($row['country_name'])) ? $row['country_name'] . '<br>' : '';
-                                $address .= (!empty($row['addr_zip'])) ? 'Postal Code: ' . $row['addr_zip'] . '<br>' : '';
-                                $address .= (!empty($row['addr_phone'])) ? 'Phone: ' . $row['addr_phone'] . '<br>' : '';
+                                $address .= (!empty($row['addr_zip'])) ? Labels::getLabel('LBL_Zip:', $adminLangId) . $row['addr_zip'] . '<br>' : '';
+                                $addrPhone = (!empty($row['addr_phone'])) ? $row['addr_phone'] : '';
+                                if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
+                                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
+                                }
+                                $addrPhone = Labels::getLabel('LBL_Phone:', $adminLangId) . $addrPhone . '<br>';
+                                $address .= $addrPhone;
 
                                 $td->appendElement('plaintext', array(), $address, true);
                                 break;

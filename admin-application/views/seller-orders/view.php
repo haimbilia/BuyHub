@@ -69,32 +69,42 @@ if (!empty($order['opship_tracking_url'])) {
                             ];
 
                             if (!$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
-                                if (empty($order['opship_response']) && empty($order['opship_tracking_number'])) {
+                                $plugin = new Plugin();
+                                $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+
+                                if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && 'EasyPost' != $keyName) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
-                                            'onclick' => 'generateLabel("' . $order['order_id'] . '", ' . $order['op_id'] . ')',
+                                            'onclick' => 'generateLabel(' . $order['op_id'] . ')',
                                             'title' => Labels::getLabel('LBL_GENERATE_LABEL', $adminLangId)
                                         ],
                                         'label' => '<i class="fas fa-file-download"></i>'
                                     ];
-                                } elseif (!empty($order['opship_response'])) {
+                                } elseif (!empty($order['opr_response']) && (!empty($order['opship_tracking_url']) || 'EasyPost' != $keyName)) {
+                                    $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
+                                    $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
                                     $data['otherButtons'][] = [
                                         'attr' => [
-                                            'href' => UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$order['op_id']]),
+                                            'href' => UrlHelper::generateUrl("ShippingServices", $method, [$order['op_id']]),
                                             'target' => "_blank",
-                                            'title' => Labels::getLabel('LBL_PREVIEW_LABEL', $adminLangId)
+                                            'title' => Labels::getLabel($title, $adminLangId)
                                         ],
                                         'label' => '<i class="fas fa-file-export"></i>'
                                     ];
                                 }
 
-                                if (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opship_response'])) {
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || 'EasyPost' == $keyName) && empty($order['opship_tracking_number'])) {
+                                    if ('EasyPost' == $keyName) {
+                                        $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
+                                    } else {
+                                        $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId);
+                                    }
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
                                             'onclick' => 'proceedToShipment(' . $order['op_id'] . ')',
-                                            'title' => Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId)
+                                            'title' => $label
                                         ],
                                         'label' => '<i class="fas fa-shipping-fast"></i>'
                                     ];
@@ -194,7 +204,7 @@ if (!empty($order['opship_tracking_url'])) {
                                     <h5><?php echo Labels::getLabel('LBL_Seller_Details', $adminLangId); ?></h5>
                                     <p><strong><?php echo Labels::getLabel('LBL_Shop_Name', $adminLangId); ?> : </strong><?php echo $order["op_shop_name"] ?><br><strong><?php echo Labels::getLabel('LBL_Name', $adminLangId); ?>:
                                         </strong><?php echo $order["op_shop_owner_name"] ?><br><strong><?php echo Labels::getLabel('LBL_Email_ID', $adminLangId); ?> : </strong>
-                                        <?php echo $order["op_shop_owner_email"] ?><br><strong><?php echo Labels::getLabel('LBL_Phone', $adminLangId); ?> : </strong> <?php echo $order["op_shop_owner_phone"] ?></p>
+                                        <?php echo $order["op_shop_owner_email"] ?><br><strong><?php echo Labels::getLabel('LBL_Phone', $adminLangId); ?> : </strong> <?php echo $order["op_shop_owner_phone_dcode"] . $order["op_shop_owner_phone"]; ?></p>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12">
                                     <h5><?php echo Labels::getLabel('LBL_Customer_Details', $adminLangId); ?></h5>
@@ -245,7 +255,7 @@ if (!empty($order['opship_tracking_url'])) {
                                         }
 
                                         if ($order['billingAddress']['oua_phone'] != '') {
-                                            $billingAddress .= '<br>Phone: ' . $order['billingAddress']['oua_phone'];
+                                            $billingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['billingAddress']['oua_phone_dcode']) . $order['billingAddress']['oua_phone'];
                                         }
                                         echo $billingAddress;
                                         ?><br>
@@ -280,7 +290,7 @@ if (!empty($order['opship_tracking_url'])) {
                                             }
 
                                             if ($order['shippingAddress']['oua_phone'] != '') {
-                                                $shippingAddress .= '<br>Phone: ' . $order['shippingAddress']['oua_phone'];
+                                                $shippingAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['shippingAddress']['oua_phone_dcode']) . $order['shippingAddress']['oua_phone'];
                                             }
 
                                             echo $shippingAddress;
@@ -320,7 +330,7 @@ if (!empty($order['opship_tracking_url'])) {
                                             }
 
                                             if ($order['pickupAddress']['oua_phone'] != '') {
-                                                $pickupAddress .= '<br>Phone: ' . $order['pickupAddress']['oua_phone'];
+                                                $pickupAddress .= '<br>' . Labels::getLabel('LBL_PHONE', $adminLangId) . ': ' . ValidateElement::formatDialCode($order['pickupAddress']['oua_phone_dcode']) . $order['pickupAddress']['oua_phone'];
                                             }
                                             echo $pickupAddress;
                                         } ?>
@@ -550,7 +560,12 @@ if (!empty($order['opship_tracking_url'])) {
                                                     if (empty($order['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
                                                         $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($adminLangId, $order["opshipping_label"]) . "</em>";
                                                     } elseif (!empty($order['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
-                                                        $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $order['opship_tracking_url'] . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $adminLangId) . "</a>";
+                                                        $trackingUrls = (array) explode(', ', $order['opship_tracking_url']);
+                                                        $str .= '<br>';
+                                                        foreach ($trackingUrls as $url) {
+                                                            $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $url . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $adminLangId) . "</a>";
+                                                        }
+                                                        
                                                     }
                                                     echo $str;
                                                 } else {

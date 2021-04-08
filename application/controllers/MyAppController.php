@@ -124,7 +124,6 @@ class MyAppController extends FatController
                 'AddProductToFavourite' => Labels::getLabel('LBL_Add_Product_To_favourite_list', $this->siteLangId),
                 'MovedSuccessfully' => Labels::getLabel('LBL_Moved_Successfully', $this->siteLangId),
                 'RemovedSuccessfully' => Labels::getLabel('LBL_Removed_Successfully', $this->siteLangId),
-                'siteCurrencyId' => $this->siteCurrencyId,
                 'controllerName' => $controllerName,
                 'confirmDeletePersonalInformation' => Labels::getLabel('LBL_Do_you_really_want_to_remove_all_your_personal_information', $this->siteLangId),
                 'preferredDimensions' => Labels::getLabel('LBL_Preferred_Dimensions_%s', $this->siteLangId),
@@ -162,6 +161,8 @@ class MyAppController extends FatController
                 'changePickup' => Labels::getLabel('LBL_CHANGE_PICKUP', $this->siteLangId),
                 'selectProduct' => Labels::getLabel('LBL_PLEASE_SELECT_PRODUCT', $this->siteLangId),
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
+                'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
+                'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
@@ -172,6 +173,8 @@ class MyAppController extends FatController
         } else {
             $jsVariables =  unserialize($jsVariablesCache);
         }
+        
+        $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
 
         $themeId = FatApp::getConfig('CONF_FRONT_THEME', FatUtility::VAR_INT, 1);
 
@@ -408,7 +411,8 @@ class MyAppController extends FatController
 
         if (0 < $signUpWithPhone) {
             $frm->addHiddenField('', 'signUpWithPhone', 1);
-            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId)));
+            $frm->addHiddenField('', 'user_phone_dcode');
+            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'class' => 'phone-js'));
         } else {
             $fld = $frm->addEmailField(Labels::getLabel('LBL_EMAIL', $siteLangId), 'user_email', '', array('placeholder' => Labels::getLabel('LBL_EMAIL', $siteLangId)));
             if (false === MOBILE_APP_API_CALL) {
@@ -476,10 +480,11 @@ class MyAppController extends FatController
         $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
         $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
-
+        
+        $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        // $phnFld->htmlAfterField='<small class="text--small">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addHiddenField('', 'addr_id');
@@ -624,12 +629,14 @@ class MyAppController extends FatController
             'user_name' => $data['user_name'],
             'link' => $link,
             'user_new_email' => $data['user_email'],
+            'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
             'user_phone' => $data['user_phone'],
         );
 
         if (!$configureEmail) {
             $dataArr = array(
                 'user_name' => $data['user_name'],
+                'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
                 'user_phone' => $data['user_phone'],
                 'link' => $link,
                 'user_new_email' => $data['user_new_email'],
@@ -730,6 +737,7 @@ class MyAppController extends FatController
     protected function getPhoneNumberForm()
     {
         $frm = new Form('phoneNumberFrm');
+        $frm->addHiddenField('', 'user_phone_dcode');
         $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId)));
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_GET_OTP', $this->siteLangId));
@@ -780,13 +788,8 @@ class MyAppController extends FatController
 
         if (0 < $updateToDb) {
             $userObj = clone $obj;
-            $userObj->assignValues(['user_dial_code' => $resp['upv_dial_code'], 'user_phone' => $resp['upv_phone']]);
+            $userObj->assignValues(['user_phone_dcode' => $resp['upv_phone_dcode'], 'user_phone' => $resp['upv_phone']]);
             if (!$userObj->save()) {
-                LibHelper::dieJsonError($userObj->getError());
-            }
-
-            $userObj = clone $obj;
-            if (false === $userObj->updateUserMeta('user_country_iso', $resp['upv_country_iso'])) {
                 LibHelper::dieJsonError($userObj->getError());
             }
             $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
@@ -799,7 +802,7 @@ class MyAppController extends FatController
                     LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
                 }
 
-                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone', 'credential_email'), true, true, true);
+                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);
                 $data = array_merge(['token' => $token], $userInfo);
                 $this->set('data', $data);
             }

@@ -6,6 +6,7 @@ trait PluginHelper
     public $settings = [];
     public $langId = 0;
     public $keyName;
+    protected $recordId = 0;
 
     /**
      * getError
@@ -29,7 +30,7 @@ trait PluginHelper
     {
         $this->keyName = !empty($this->keyName) ? $this->keyName : static::KEY_NAME;
         $this->langId = 0 < $this->langId ? $this->langId : CommonHelper::getLangId();
-        $this->pluginSetting = new PluginSetting(0, $this->keyName);
+        $this->pluginSetting = new PluginSetting(0, $this->keyName, $this->recordId);
     }
 
     /**
@@ -81,9 +82,16 @@ trait PluginHelper
     {
         $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
         $this->settings = $this->getSettings();
-        if (Plugin::INACTIVE == $this->settings['plugin_active']) {
-            $this->error = static::KEY_NAME . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
-            return false;
+        if (0 < $this->recordId) {
+            if (Plugin::INACTIVE == $this->settings['pu_active']) {
+                $this->error = static::KEY_NAME . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
+                return false;
+            }
+        } else {
+            if (Plugin::INACTIVE == $this->settings['plugin_active']) {
+                $this->error = static::KEY_NAME . ' : ' . Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $langId);
+                return false;
+            }
         }
 
         if (isset($this->requiredKeys) && !empty($this->requiredKeys) && is_array($this->requiredKeys)) {
@@ -94,6 +102,7 @@ trait PluginHelper
                 }
             }
         }
+
         return true;
     }
 
@@ -177,7 +186,43 @@ trait PluginHelper
         return $reflect->newInstanceArgs($args);
     }
 
+     /** updateSettings
+     *
+     * @param  int $pluginId
+     * @param  array $data
+     * @param  string $error - Reference Variable
+     * @return bool
+     */
+    public function updateSettings(int $pluginId, array $data, &$error = ""): bool
+    {
+        $pluginSetting = new PluginSetting($pluginId);
+        if (!$pluginSetting->updateSetting($data)) {
+            $error = $pluginSetting->getError();
+            return false;
+        }
+        return true;
+    }
+
     /**
+     * 
+     * @param int $recordId
+     */
+    public function setRecordId(int $recordId)
+    {
+        $this->recordId = $recordId;
+    }
+    
+    /**
+     * getRecordId
+     *
+     * @return int
+     */
+    public function getRecordId()
+    {
+        return $this->recordId;
+    }
+
+     /**
      * formatOutput
      *
      * @param  int $status

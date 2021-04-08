@@ -38,9 +38,9 @@ $(document).ready(function(){
         });
     };
 
-    /* ShipStation */
-    generateLabel = function (orderId, opId) {
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [orderId, opId]), '', function (t) {
+    /* ShippingServices */
+    generateLabel = function (opId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
             window.location.reload();
         });
     }
@@ -64,6 +64,7 @@ $(document).ready(function(){
             if (0 < $(form).length) {
                 $(form + " .status-js").val(orderShippedStatus).change();
                 $(form + " .notifyCustomer-js").val(1);
+                $(form + " input[name='tracking_number']").val(t.tracking_number);
                 canShipByPlugin = 0;
                 setTimeout(function(){ $(form).submit(); }, 200);
             } else {
@@ -71,7 +72,7 @@ $(document).ready(function(){
             }
         });
     }
-    /* ShipStation */
+    /* ShippingServices */
     
 })();
 

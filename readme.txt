@@ -1,6 +1,18 @@
+
+Updates:
+    => Tax Module update
+    => Admin can create users 
+
+Features:
+    - Shopify sync module for SV seller
+
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
     => System API version : 2.3
+
+New Feature : 
+    => 82248 : DPO Payment Gateway Integration
+    => 82892 : Easypost Shipping API Integration
 
 Fixes:
     => 047746 - Get current location not working
@@ -16,14 +28,61 @@ Fixes:
     => 048604 - Fatal error in View Order API.
     => 048534 - Design issue of blank li tag adding in header if single language and single currency 
     => 048605 - getting error while creating shipping profile IN ADMIN
-
+    => 048634 - Users are unable to see products in the favourite list if brand is not selected for the product
+    => 048649 - whenever seller/admin edits the catalog/inventory then on updating it updates the url and changes it to id
+    => 048457 - on seller credit page unable to edit label BL_Add_Wallet_Credits_[ Br]
+    => 049052 - Category icon not displayed in Android and iOS mobile applications
+    => 049066 - when admin product is available for pickup only then on buyer end it's listing- price 0 and getting problem on further step
+    => 049147 - Digital product details page >> Available for shipping and pickup should be removed.
+    => 049029 - when hamburger menu is selected for categories then on web- all categories are listing while on app only categories containing data are listing
+    => 049317 - Mpesa Payment Gateway argument type Issue reported with live credentials
+    => 049365 - When you order more than one item with only one allowing for COD, it completes the order as so with all the items, even the ones that don’t have COD option eligible 
+    => 049364 - About Us image is not getting updated in cms due to cache.
+    => 049390 - Shipping is listing twice on front end when cart products from multiple sellers and admin shipping only enabled.
+    => 049439 - payment status is not getting updated through paypal
+    => 049425 - Seller >> shop >> pickup address tab >> if we click on "pickup address " tab before adding shop details then blank page gets displayed
+    => 049682 - unable to save seller inventory if quantity is zero
+    => 049811 - While uploading user profile image profile link is wrong in response
+    => 049777 - The - button (QUANTITY reducer) is not functional when we order a product through pickup
+    => 049919 - labels missing in system
+    => 049995 - If order is placed with digital product then unable to cancel the order even if it is allow from admin
+    => 049981 - seller/admin> attribute tab> some UI issue while adding product
+    => 050083 - On admin dashboard under statistics tab subscription earning data is wrong
+    => 050137 - Apart from added components in combined tax,extra Duplicate entry is visible in tax details in ORDERS .(where we have the display of the tax components)
+    => 049980 - issue with URL rewetting
+    => 050289 - Order email table BG is not updating as per theme
+    => 050045 - Signup >> when we enter capital letter in username then it shows some errors. 
+    => 050397 - When seller click on "shipping package " then some error gets displayed
+    => 050680 - Phone number should allow special symbols like + - (Contact Us and Footer - Site Phone)
+    => 050654 - Wrong error message "Cart is empty" is displayed if we increase/decrease quantity of a product available only for pickup and then proceed.
+    => 050831 - while adding option to catalog> it got stuck randomly
+    => 050810 - issue with price filter when there is single item on seeking bar product disappears and can't reset again
+    => 051065 - Fatal error: Uncaught Error: Class 'Libhelper' not found
+    => 051068 - Google Shopping Feed > Unable to bind products
+    => 050972 - while placing order with guest order error coming email sending
+    => 051054 - If only one product is there then condition list not should not come in filter 
+    => 051003 - banner image getting repeated as width increases
+    => 051070 - admin> cms> import instructions> identifiers are not manageable
+    => 051091 - on the category page, google is undefined error coming in browser console
+    => 051329 - Tax api isue to fetch tax categories.
+    => 051261 - issue with editor> long text is not accepting and some formatting issue
+    => 051206 - Signup with otp >> verify your number >> enter wrong otp>> some error message should be there 
+    => 051404 - On Contact us & Footer country code should be there with mobile number
+    => 051407 - Advertiser account >> update credentials >> selected country code while signup should get displayed on update credentials instead of default country of system
+    => 051474 - Invalid Currency & Language symbol displays in pdf
+    => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
+    => 051573 - Product search is not working when we Activate Geo Location and shipping plugin.
+    => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
+    
 Enhancements :
    => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.
+   => Performance optimization
     
 Known Issues and Problems :
+    => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
 
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin
@@ -39,7 +98,9 @@ Installation steps:
 	• Update basic configuration as per your system requirements under {document root}/conf directory.
 
 Notes:
-    
+    Procedures : 
+        Execute "{siteurl}/admin/admin-users/create-procedures" is mandatory.
+        
     Composer :
 
         => Composer should be installed on server to run the stripe connect module: composer.json on root of the project has details to download the required libraries in root's vendor folder.

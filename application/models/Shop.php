@@ -233,44 +233,70 @@ class Shop extends MyAppModel
         if ($this->mainTableRecordId < 1) {
             return false;
         }
-
-        $seoUrl = CommonHelper::seoUrl($keyword);
-
+        $originalUrl = $this->getRewriteOriginalUrl($type);        
+        $seoUrl = $this->sanitizeSeoUrl($keyword,$type);
+        
+        $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl, $this->mainTableRecordId);
+        return UrlRewrite::update($originalUrl, $customUrl);
+    }
+    
+    private function getRewriteOriginalUrl($type = 'shop', $collectionId = 0)
+    {
+        if ($this->mainTableRecordId < 1) {
+            return false;
+        }
         switch (strtolower($type)) {
             case 'top-products':
                 $originalUrl = Shop::SHOP_TOP_PRODUCTS_ORGINAL_URL . $this->mainTableRecordId;
-                $seoUrl = preg_replace('/-top-products$/', '', $seoUrl);
-                $seoUrl .= '-top-products';
                 break;
             case 'reviews':
                 $originalUrl = Shop::SHOP_REVIEWS_ORGINAL_URL . $this->mainTableRecordId;
-                $seoUrl = preg_replace('/-reviews$/', '', $seoUrl);
-                $seoUrl .= '-reviews';
                 break;
             case 'contact':
                 $originalUrl = Shop::SHOP_SEND_MESSAGE_ORGINAL_URL . $this->mainTableRecordId;
-                $seoUrl = preg_replace('/-contact$/', '', $seoUrl);
-                $seoUrl .= '-contact';
                 break;
             case 'policy':
                 $originalUrl = Shop::SHOP_POLICY_ORGINAL_URL . $this->mainTableRecordId;
-                $seoUrl = preg_replace('/-policy$/', '', $seoUrl);
-                $seoUrl .= '-policy';
                 break;
             case 'collection':
                 $originalUrl = Shop::SHOP_COLLECTION_ORGINAL_URL . $this->mainTableRecordId . '/' . $collectionId;
-                $shopUrl = static::getRewriteCustomUrl($this->mainTableRecordId);
-                $seoUrl = preg_replace('/-' . $shopUrl . '$/', '', $seoUrl);
-                $seoUrl .= '-' . $shopUrl;
                 break;
             default:
                 $originalUrl = Shop::SHOP_VIEW_ORGINAL_URL . $this->mainTableRecordId;
                 break;
         }
+        return $originalUrl;
+    }
 
-        $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl, $this->mainTableRecordId);
-
-        return UrlRewrite::update($originalUrl, $customUrl);
+    public function sanitizeSeoUrl($keyword, $type = 'shop')
+    {
+        $seoUrl = CommonHelper::seoUrl($keyword);
+        switch (strtolower($type)) {
+            case 'top-products':                
+                $seoUrl = preg_replace('/-top-products$/', '', $seoUrl);
+                $seoUrl .= '-top-products';
+                break;
+            case 'reviews':               
+                $seoUrl = preg_replace('/-reviews$/', '', $seoUrl);
+                $seoUrl .= '-reviews';
+                break;
+            case 'contact':                
+                $seoUrl = preg_replace('/-contact$/', '', $seoUrl);
+                $seoUrl .= '-contact';
+                break;
+            case 'policy':                
+                $seoUrl = preg_replace('/-policy$/', '', $seoUrl);
+                $seoUrl .= '-policy';
+                break;
+            case 'collection':               
+                $shopUrl = static::getRewriteCustomUrl($this->mainTableRecordId);
+                $seoUrl = preg_replace('/-' . $shopUrl . '$/', '', $seoUrl);
+                $seoUrl .= '-' . $shopUrl;
+                break;
+            default:                
+                break;
+        }
+        return $seoUrl;        
     }
 
     public function setupCollectionUrl($keyword, $collectionId)
@@ -281,6 +307,10 @@ class Shop extends MyAppModel
     public function rewriteUrlShop($keyword)
     {
         return $this->_rewriteUrl($keyword);
+    }
+    
+    public function getRewriteShopOriginalUrl(){
+        return $this->getRewriteOriginalUrl('shop');
     }
 
     public function rewriteUrlReviews($keyword)

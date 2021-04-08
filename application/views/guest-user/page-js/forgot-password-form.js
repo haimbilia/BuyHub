@@ -17,9 +17,6 @@
         fcom.ajax(fcom.makeUrl( 'GuestUser', 'forgotPasswordForm', [withPhone, 0]), '', function(t) {
             $.systemMessage.close();
             $('.forgotPwForm').html(t);
-            if (0 < withPhone) {
-                stylePhoneNumberFld();
-            }
 		});
     };
 
@@ -49,6 +46,7 @@
             if (1 == t.status) {
                 window.location.href = t.redirectUrl;
             } else {
+                $.systemMessage(t.msg, 'alert--danger', true);
                 invalidOtpField();
             }
         });	

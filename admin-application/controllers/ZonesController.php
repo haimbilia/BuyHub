@@ -102,7 +102,7 @@ class ZonesController extends AdminBaseController
         if ($zoneId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = zone::getAttributesByLangId($langId, $zoneId)) {
+                if (!$row = Zone::getAttributesByLangId($langId, $zoneId)) {
                     $newTabLangId = $langId;
                     break;
                 }
@@ -184,7 +184,7 @@ class ZonesController extends AdminBaseController
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId =>$langName) {
-            if (!$row = zone::getAttributesByLangId($langId, $zoneId)) {
+            if (!$row = Zone::getAttributesByLangId($langId, $zoneId)) {
                 $newTabLangId = $langId;
                 break;
             }
@@ -235,7 +235,7 @@ class ZonesController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $data = zone::getAttributesById($zoneId, array('zone_active'));
+        $data = Zone::getAttributesById($zoneId, array('zone_active'));
 
         if ($data==false) {
             Message::addErrorMessage($this->str_invalid_request);

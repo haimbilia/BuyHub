@@ -1,4 +1,7 @@
 <?php
+/* 
+    Docs : https://phpunit.readthedocs.io/en/9.5/
+*/
 
 declare(strict_types=1);
 
@@ -11,13 +14,14 @@ class YkAppTest extends TestCase
     public const TYPE_STRING = 3;
     public const TYPE_ARRAY = 4;
 
-    private $returnType = self::TYPE_BOOL;
+    private $returnType;
     private $result = '';
     private $error = '';
     protected $classObj;
 
-    public $langId = CONF_LANG_ID;
+    protected $pluginTest = false;
 
+    public $langId = SYSTEM_LANG_ID;
     /**
      * execute
      *
@@ -40,32 +44,35 @@ class YkAppTest extends TestCase
 
             if (true === $invalidParam) {
                 $this->error = $this->getError();
-                return false;
+                return $this->returnResponse();
             }
         }
 
         //Get the parameters of a method
         $reflectionParam = $reflectMethod->getParameters();
-        
         $invalidParam = $this->validateParamType($reflectionParam, $args);
 
         if (true === $invalidParam) {
             $this->error = $this->getError();
-            return false;
+            return $this->returnResponse();
         }
 
         if (!$reflectMethod->isStatic()) {
             $reflectionClass = $reflectionClass->newInstanceArgs($constructorArgs);
             $this->classObj = $reflectionClass;
-            if (method_exists($this, 'init') && false === $this->init()) {
+
+            if (true === $this->pluginTest) {
+                require 'pluginConf.php';
+            }
+
+            if (method_exists($this, 'init') && false === $this->init($method)) {
                 $this->error = $reflectionClass->getError();
-                return false;
+                return $this->returnResponse();
             }
         }
 
         $reflectionMethod = new ReflectionMethod($class, $method);
         $this->result = $reflectionMethod->invokeArgs($reflectionClass, $args);
-
         return $this->returnResponse();
     }
 
@@ -79,9 +86,9 @@ class YkAppTest extends TestCase
     private function validateParamType(array $reflectionParam, array $args): bool
     {
         $invalidParam = false;
+        
         foreach ($reflectionParam as $index => $param) {
             $paramValue = (array_key_exists($index, $args)) ? $args[$index] : null;
-
             if ($param->isOptional() && null == $paramValue) {
                 continue;
             }
@@ -109,6 +116,9 @@ class YkAppTest extends TestCase
                 case 'array':
                     $invalidParam = (false === is_array($paramValue));
                     break;
+                default:
+                    $invalidParam = false;
+                    break;
             }
 
             if (true === $invalidParam) {
@@ -130,8 +140,17 @@ class YkAppTest extends TestCase
     private function returnResponse()
     {
         switch ($this->returnType) {
+            case self::TYPE_BOOL:
+                return empty($this->result) || !is_bool($this->result) ? false : $this->result;
+                break;
+            case self::TYPE_INT:
+                return empty($this->result) || !is_int($this->result) ? 0 : $this->result;
+                break;
+            case self::TYPE_STRING:
+                return empty($this->result) || !is_string($this->result) ? '' : $this->result;
+                break;
             case self::TYPE_ARRAY:
-                return is_array($this->result);
+                return empty($this->result) || !is_array($this->result) ? [] : $this->result;
                 break;
             default:
                 return $this->result;
@@ -140,7 +159,7 @@ class YkAppTest extends TestCase
     }
 
     /**
-     * expectedReturnType
+     * expectedReturnType - Call this function before calling execute if calling test case method having return type.
      *
      * @param  int $returnType
      * @return void
@@ -148,16 +167,6 @@ class YkAppTest extends TestCase
     public function expectedReturnType(int $returnType): void
     {
         $this->returnType = $returnType;
-    }
-
-    /**
-     * getResult
-     *
-     * @return mixed
-     */
-    public function getResult()
-    {
-        return $this->result;
     }
 
     /**
@@ -184,5 +193,15 @@ class YkAppTest extends TestCase
                 FatApp::getDb()->insertFromArray($table, $data, false, array(), $data);
             }
         }
+    }
+
+    /**
+     * getClassObject
+     *
+     * @return object
+     */
+    protected function getClassObject(): object
+    {
+        return is_null($this->classObj) ? (object) $this->classObj : $this->classObj;
     }
 }

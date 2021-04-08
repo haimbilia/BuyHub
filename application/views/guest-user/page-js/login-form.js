@@ -2,7 +2,6 @@
 	signUpWithPhone = function() {
         fcom.ajax(fcom.makeUrl( 'GuestUser', 'signUpWithPhone'), '', function(t) {
             $('#sign-up').html(t);
-            stylePhoneNumberFld();
 		});
     };
     
@@ -39,6 +38,7 @@
             if (1 == t.status) {
                 window.location.href = t.redirectUrl;
             } else {
+                $.systemMessage(t.msg, 'alert--danger', true);
                 invalidOtpField();
             }
         });	

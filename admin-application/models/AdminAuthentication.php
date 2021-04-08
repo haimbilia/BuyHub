@@ -39,25 +39,44 @@ class AdminAuthentication extends FatModel
             $this->error = Labels::getLabel('MSG_Login_attempt_limit_exceeded._Please_try_after_some_time.', $this->adminLangId);
             return false;
         }
-
-        $password = UserAuthentication::encryptPassword($password);
-
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin');
-        $srch->addCondition('admin_username', '=', $username);
-        $srch->addCondition('admin_password', '=', $password);
+        $srch->addCondition('admin_username', '=', $username);        
         $rs = $srch->getResultSet();
 
         if (!$row = $db->fetch($rs)) {
+            $objUserAuthentication->logFailedAttempt($ip, $username);           
+            $this->error = Labels::getLabel('MSG_Invalid_Username', $this->adminLangId);
+            return false;
+        }
+        
+        /* [To Do - need to remove admin_password_old in next release */
+        if (!empty($row['admin_password_old'])) {
+            $oldPassword = UserAuthentication::encryptPassword($password, true);
+            if ($oldPassword !== $row['admin_password_old']) {
+                $objUserAuthentication->logFailedAttempt($ip, $username);
+                $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+                return false;
+            }
+            $this->changeAdminPwd($row['admin_id'], UserAuthentication::encryptPassword($password));
+            if (!$db->updateFromArray('tbl_admin', array('admin_password_old' => ''), array('smt' => 'admin_id=?', 'vals' => array($row['admin_id'])))) {
+                $this->error = $db->getError();
+                return false;
+            };
+        } else {
+            if (false == password_verify($password, $row['admin_password'])) {
+                $objUserAuthentication->logFailedAttempt($ip, $username);
+                $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+                return false;
+            }
+        }
+        /* To Do need - to remove admin_password_old in next release] */
+
+        /*if (strtolower($row['admin_username']) != strtolower($username) || $row['admin_password'] != $password) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('MSG_Invalid_Username_or_Password', $this->adminLangId);
             return false;
-        }
-        if (strtolower($row['admin_username']) != strtolower($username) || $row['admin_password'] != $password) {
-            $objUserAuthentication->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('MSG_Invalid_Username_or_Password', $this->adminLangId);
-            return false;
-        }
+        }*/
         if ($row['admin_active'] !== applicationConstants::ACTIVE) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('MSG_Your_account_is_inactive.', $this->adminLangId);

@@ -3,8 +3,9 @@
 class FcmPushNotificationTest extends YkPluginTest
 {
     public const KEY_NAME = 'FcmPushNotification';
+    public const PLUGIN_TYPE = Plugin::TYPE_PUSH_NOTIFICATION;
 
-     /**
+    /**
      * init
      *
      * @return void
@@ -21,35 +22,51 @@ class FcmPushNotificationTest extends YkPluginTest
     }
 
     /**
-     * testRequestAccessToken
+     * @test
      *
-     * @dataProvider dataNotify
+     * @dataProvider feedNotify
      * @param  int $expected
      * @param  mixed $title
      * @param  mixed $message
      * @param  mixed $os
      * @param  mixed $data
+     * @param  mixed $responseStatus
      * @return void
      */
-    public function testNotify($expected, $title, $message, $os, $data = [])
+    public function notify($expected, $title, $message, $os, $data)
     {
-        $response = $this->execute(self::KEY_NAME, [CommonHelper::getLangId()], 'notify', [$title, $message, $os, $data]);
-        $this->assertEquals($expected, $response['status']);
-    }
+        $this->expectedReturnType(static::TYPE_ARRAY);
+        $response = $this->execute(self::KEY_NAME, [SYSTEM_LANG_ID], 'notify', [$title, $message, $os, $data]);
         
+        $status = 0;
+        if (!empty($response)) {
+            $this->assertArrayHasKey('status', $response);
+            $this->assertArrayHasKey('msg', $response);
+            $this->assertArrayHasKey('data', $response);
+            $status = $response['status'];
+        }
+        $this->assertEquals($expected, $status);
+    }
+
     /**
-     * dataNotify
+     * feedNotify
      *
      * @return array
      */
-    public function dataNotify()
+    public function feedNotify()
     {
         // Returned false in case of invalid or missing Plugin Keys. Fail in case of opposite expectation.
         return [
-            [Plugin::RETURN_FALSE, '', '', 0, []], // Return False in case of all input empty and Invalid.
-            [Plugin::RETURN_TRUE, 'Title3', 'Message3', 0, []], // Return true Either Invalid Device token or OS is 0 but function run successfully. Because It will tell number of successfully sent and number of failure.
-            [Plugin::RETURN_TRUE, 'Title4', 'Message4', 1, []], // Return true Either Invalid Device token but function run successfully. Because It will tell number of successfully sent and number of failure.
-            [Plugin::RETURN_TRUE, 'Title5', 'Message5', 1, ['test' => 'body']], // Return true Either Invalid Device token but function run successfully. Because It will tell number of successfully sent and number of failure.
+            [0, '', '', 0, []], // Return 0 in case of all input empty and Invalid.
+            [1, 'Title3', 'Message3', 0, []], // Return 1 Either Invalid Device token or OS is 0 but function run successfully. Because It will tell number of successfully sent and number of failure.
+            [1, 'Title4', 'Message4', 1, []], // Return 1 Either Invalid Device token but function run successfully. Because It will tell number of successfully sent and number of failure.
+            [1, 'Title5', 'Message5', 1, ['test' => 'body']], // Return 1 Either Invalid Device token but function run successfully. Because It will tell number of successfully sent and number of failure.
+            [0, 123, 'Message5', 1, ['test' => 'body']], // Invalid value type. Return 0
+            [0, 'Title6', 123, 1, ['test' => 'body']], // Invalid value type. Return 0
+            [0, 'Title7', 'Message5', 'ANDROID', ['test' => 'body']], // Invalid value type. Return 0
+            [0, 'Title8', 'Message5', 1, 1], // Invalid value type. Return 0
+            [0, 'Title8', 'Message5', 1, 'avs'], // Invalid value type. Return 0
+            [0, 123, 123, 'IOS', 1], // Invalid value type. Return 0
         ];
     }
 }

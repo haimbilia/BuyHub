@@ -8,10 +8,9 @@ class CategoryController extends MyAppController
     }
 
     public function index()
-    {
-        /* $categoriesArr = ProductCategory::getTreeArr($this->siteLangId, 0, true, false, true); */
+    {        
 		$productCategory = ProductCategory::getSearchObject(false, $this->siteLangId, true);
-                $productCategory->addOrder('m.prodcat_active', 'DESC');
+        $productCategory->addOrder('m.prodcat_active', 'DESC');
 		$productCategory->addCondition('prodcat_parent', '=', 0);
 		$productCategory->addCondition('prodcat_deleted', '=', 0);
 		$productCategory->addOrder('prodcat_ordercode');
@@ -91,7 +90,7 @@ class CategoryController extends MyAppController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-
+        
         $data = array(
             'frmProductSearch' => $frm,
             'category' => $category,
@@ -121,7 +120,7 @@ class CategoryController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-
+        
         $this->set('data', $data);
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
@@ -334,7 +333,6 @@ class CategoryController extends MyAppController
         }
 
         $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId);
-
         if (empty($categoriesArr)) {
             $categoriesArr = array();
         }
