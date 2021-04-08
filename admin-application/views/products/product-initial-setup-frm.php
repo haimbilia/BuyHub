@@ -378,7 +378,7 @@ $(document).ready(function(){
     });
 
 	$('input[name=\'category_name\']').autocomplete({
-        minLength: 0,
+        minLength: 3,
         'classes': {
             "ui-autocomplete": "custom-ui-autocomplete"
         },

@@ -1792,7 +1792,7 @@ class ProductsController extends MyAppController
     {
         $prodCatObj = new ProductCategory();
         $post = FatApp::getPostedData();
-        $arr_options = $prodCatObj->getProdCatTreeStructureSearch(0, $this->siteLangId, $post['keyword']);
+        $arr_options = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->siteLangId, $post['keyword']);
         $json = array();
         foreach ($arr_options as $key => $product) {
             $json[] = array(
