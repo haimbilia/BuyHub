@@ -4,20 +4,18 @@ use PhpParser\Node\Stmt\Label;
 
 class RatingTypesController extends AdminBaseController
 {
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $this->objPrivilege->canViewRatingTypes($this->admin_id);
-        $this->set("canEdit", $this->objPrivilege->canEditAbusiveWords($this->admin_id, true));
     }
 
     public function index()
     {        
         $frmSearch = $this->getSearchForm();
+        $this->set("canEdit", $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->_template->render();
     }
@@ -43,9 +41,10 @@ class RatingTypesController extends AdminBaseController
             $cnd = $srch->addCondition('rt_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('rt_identifier', 'like', '%' . $keyword . '%');
         }
+        $srch->addOrder('rt_id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
+        $this->set("canEdit", $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
         $this->set("arr_listing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -57,6 +56,7 @@ class RatingTypesController extends AdminBaseController
 
     public function form(int $rtId)
     {
+        $this->objPrivilege->canEditRatingTypes();
         $frm = $this->getForm();
 
         $data = [];
@@ -69,6 +69,35 @@ class RatingTypesController extends AdminBaseController
 
         $frm->fill($data);
         $this->set('frm', $frm);
+        $this->set('rtId', $rtId);
+        $this->_template->render(false, false);
+    }
+
+    public function langForm(int $rtId, int $langId, int $autoFillLangData = 0)
+    {
+        $this->objPrivilege->canEditRatingTypes();
+        $frm = $this->getLangForm($langId);
+        if (0 < $autoFillLangData) {
+            $updateLangDataobj = new TranslateLangData(RatingType::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($rtId, $langId);
+            if (false === $translatedData) {
+                Message::addErrorMessage($updateLangDataobj->getError());
+                FatUtility::dieWithError(Message::getHtml());
+            }
+            $langData = current($translatedData);
+        } else {
+            $langData = RatingType::getAttributesByLangId($langId, $rtId);
+        }
+
+        $langData['rtlang_rt_id'] = $rtId;
+        $langData['rtlang_lang_id'] = $langId;
+        $frm->fill($langData);
+
+        $this->set('languages', Language::getAllNames());
+        $this->set('rt_id', $rtId);
+        $this->set('rt_lang_id', $langId);
+        $this->set('frm', $frm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
@@ -90,83 +119,104 @@ class RatingTypesController extends AdminBaseController
             FatUtility::dieJsonError($record->getError());
         }
 
-        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULL', $this->adminLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteRecord()
-    {
-        $this->objPrivilege->canEditRatingTypes();
-
-        $rtId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($rtId < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
-        }
-
-        if (false == RatingType::getAttributesById($rtId)) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
-        }
-
-        $this->markAsDeleted($rtId);
-
-        FatUtility::dieJsonSuccess($this->str_delete_record);
-    }
-
-    public function deleteSelected()
-    {
-        $this->objPrivilege->canEditRatingTypes();
-        $ratingTypeIdsArr = FatUtility::int(FatApp::getPostedData('rt_ids'));
-
-        if (empty($ratingTypeIdsArr)) {
-            FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
-        }
-
-        foreach ($ratingTypeIdsArr as $rtId) {
-            if (1 > $rtId || false === RatingType::getAttributesById($rtId)) {
-                continue;
+        $rtId = $record->getMainTableRecordId();
+        $newTabLangId = 0;
+        if ($rtId > 0) {
+            $languages = Language::getAllNames();
+            foreach ($languages as $langId => $langName) {
+                if (!RatingType::getAttributesByLangId($langId, $rtId)) {
+                    $newTabLangId = $langId;
+                    break;
+                }
             }
-
-            $this->markAsDeleted($rtId);
+        } else {
+            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        $this->set('msg', $this->str_delete_record);
+
+        $this->set('rtId', $rtId);
+        $this->set('langId', $newTabLangId);
+        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($rtId)
+    public function langSetup()
     {
-        $rtId = FatUtility::int($rtId);
+        $this->objPrivilege->canEditRatingTypes();
+
+        $langId = FatApp::getPostedData('rtlang_lang_id', FatUtility::VAR_INT, $this->adminLangId);
+        $frm = $this->getLangForm($langId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $rtId = FatApp::getPostedData('rtlang_rt_id', FatUtility::VAR_INT, 0);
         if (1 > $rtId) {
-            FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            FatUtility::dieJsonError($this->str_invalid_request_id);
         }
-        $obj = new RatingType($rtId);
-        if (!$obj->deleteRecord(false)) {
-            FatUtility::dieJsonError($obj->getError());
+        unset($post['auto_update_other_langs_data'], $post['btn_submit']);
+
+        $ratingTypeObj = new RatingType($rtId);
+        if (!$ratingTypeObj->updateLangData($langId, $post)) {
+            FatUtility::dieJsonError($ratingTypeObj->getError());
         }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(RatingType::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($rtId)) {
+                FatUtility::dieJsonError($updateLangDataobj->getError());
+            }
+        }
+
+        $newTabLangId = 0;
+        $languages = Language::getAllNames();
+        foreach ($languages as $langId => $langName) {
+            if (!RatingType::getAttributesByLangId($langId, $rtId)) {
+                $newTabLangId = $langId;
+                break;
+            }
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('rtId', $rtId);
+        $this->set('langId', $newTabLangId);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSearchForm(int $langId = 0)
+    private function getSearchForm()
     {
-        $langId = 1 > $langId ? $this->adminLangId : $langId;
         $frm = new Form('frmWordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $langId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $langId));
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
-    private function getForm(int $langId = 0)
+    private function getForm()
     {
-        $langId = 1 > $langId ? $this->adminLangId : $langId;
         $frm = new Form('frmRatingTypes');
         $frm->addHiddenField('', 'rt_id');
+        $frm->addRequiredField(Labels::getLabel('LBL_RATING_TYPE', $this->adminLangId), 'rt_identifier');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
+        return $frm;
+    }
+
+    private function getLangForm(int $langId)
+    {
+        $frm = new Form('frmRatingTypes');
+        $frm->addHiddenField('', 'rtlang_rt_id');
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $langId), 'rtlang_lang_id', $languages, '', array(), Labels::getLabel('LBL_Select', $langId));
-        $frm->addTextbox(Labels::getLabel('LBL_RATING_TYPE', $langId), 'rt_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_Language', $langId), 'rtlang_lang_id', $languages, $langId, [], '');
+        $frm->addRequiredField(Labels::getLabel('LBL_RATING_TYPE', $langId), 'rt_name');
+
+        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+
+        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $langId));
         return $frm;
     }

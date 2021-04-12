@@ -43,7 +43,7 @@
                                         [
                                             'attr' => [
                                                 'href' => 'javascript:void(0)',
-                                                'onclick' => 'RatingTypesForm(0)',
+                                                'onclick' => 'ratingTypesForm(0, ' . $adminLangId . ')',
                                                 'title' => Labels::getLabel('LBL_ADD_RATING_TYPE', $adminLangId)
                                             ],
                                             'label' => '<i class="fas fa-plus"></i>'

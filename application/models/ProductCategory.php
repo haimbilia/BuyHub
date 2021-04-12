@@ -10,6 +10,9 @@ class ProductCategory extends MyAppModel
     public const DB_TBL_PROD_CAT_RELATIONS = 'tbl_product_category_relations';
     public const DB_TBL_PROD_CAT_REL_PREFIX = 'pcr_';
 
+    public const DB_TBL_PROD_CAT_RATING_TYPES = 'tbl_prodcat_rating_types';
+    public const DB_TBL_PROD_CAT_RT_PREFIX = 'prt_';
+
     public const REWRITE_URL_PREFIX = 'category/view/';
     public const REMOVED_OLD_IMAGE_TIME = 4;
     private $categoryTreeArr = array();
@@ -878,7 +881,7 @@ class ProductCategory extends MyAppModel
         }
         return false;
     }
-    
+
     public static function recordCategoryWeightage($categoryId)
     {
         /* $categoryId =  FatUtility::int($categoryId);
@@ -1152,7 +1155,7 @@ class ProductCategory extends MyAppModel
 
         $childrens = $this->getChildrens();
         $db = FatApp::getDb();
-        foreach($childrens as $catId => $notInUse) {
+        foreach ($childrens as $catId => $notInUse) {
             if (!$db->query('CALL updateCategoryRelations(' . $catId . ')')) {
                 $this->error = $db->getError();
                 return false;
@@ -1254,7 +1257,7 @@ class ProductCategory extends MyAppModel
     }
 
     public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true)
-    {   
+    {
         $attr = [
             'm.*',
             'COALESCE(prodcat_name,m.prodcat_identifier ) as prodcat_name'
@@ -1339,7 +1342,7 @@ class ProductCategory extends MyAppModel
         $childrens = $this->getChildrens();
         $db = FatApp::getDb();
         $db->updateFromArray(static::DB_TBL, array(static::DB_TBL_PREFIX . 'parent' => $parentCatId), array('smt' => static::DB_TBL_PREFIX . 'id = ?', 'vals' => array($this->mainTableRecordId)));
-        foreach($childrens as $catId => $notInUse) {
+        foreach ($childrens as $catId => $notInUse) {
             if (!$db->query('CALL updateCategoryRelations(' . $catId . ')')) {
                 $this->error = $db->getError();
                 return false;
@@ -1500,5 +1503,75 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs, 'pcr_prodcat_id');
+    }
+
+    public function addUpdateRatingType(int $rtId)
+    {
+        if (1 > $this->mainTableRecordId || 1 > $rtId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+        $record = new TableRecord(static::DB_TBL_PROD_CAT_RATING_TYPES);
+
+        $data = [
+            static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id' => $this->mainTableRecordId,
+            static::DB_TBL_PROD_CAT_RT_PREFIX . 'rt_id' => $rtId
+        ];
+
+        $record->assignValues($data);
+        if (!$record->addNew(array(), $data)) {
+            $this->error = $record->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function removeRatingType(int $rtId)
+    {
+        $db = FatApp::getDb();
+        if (1 > $this->mainTableRecordId || 1 > $rtId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+
+        if (!$db->deleteRecords(static::DB_TBL_PROD_CAT_RATING_TYPES, array('smt' => static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id = ? AND ' . static::DB_TBL_PROD_CAT_RT_PREFIX . 'rt_id = ?', 'vals' => array($this->mainTableRecordId, $rtId)))) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getRatingTypes(int $langId = 0): array
+    {
+        $langId = 1 > $langId ? $this->commonLangId : $langId;
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
+            return false;
+        }
+
+        $db = FatApp::getDb();
+        $srch = new SearchBase(static::DB_TBL_PROD_CAT_RATING_TYPES, 'prt');
+        $srch->joinTable(
+            RatingType::DB_TBL,
+            'INNER JOIN',
+            'rt.rt_id = prt.prt_rt_id',
+            'rt'
+        );
+        $srch->joinTable(
+            RatingType::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'rt_l.rtlang_rt_id = rt.rt_id AND rt_l.rtlang_lang_id = ' . $langId,
+            'rt_l'
+        );
+        $srch->addCondition('prt_prodcat_id', '=', $this->mainTableRecordId);
+        
+        $srch->addMultipleFields(['rt_id', 'COALESCE(rt_name, rt_identifier) as rt_name']);
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
     }
 }

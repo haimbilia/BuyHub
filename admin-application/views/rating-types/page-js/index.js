@@ -32,14 +32,21 @@ $(document).ready(function() {
         });
     };
 
-    ratingTypesForm = function(abusiveId) {
+    ratingTypesForm = function(rtId) {
         $.facebox(function() {
-            addRatingTypesForm(abusiveId);
+            addRatingTypesForm(rtId);
         });
     };
 
-    addRatingTypesForm = function(abusiveId) {
-        fcom.ajax(fcom.makeUrl('RatingTypes', 'form', [abusiveId]), '', function(t) {
+    addRatingTypesForm = function(rtId) {
+        fcom.ajax(fcom.makeUrl('RatingTypes', 'form', [rtId]), '', function(t) {
+            fcom.updateFaceboxContent(t);
+        });
+    };
+
+    ratingTypesLangForm = function (rtId, langId, autoFillLangData = 0) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('RatingTypes', 'langForm', [rtId, langId, autoFillLangData]), '', function (t) {
             fcom.updateFaceboxContent(t);
         });
     };
@@ -48,6 +55,18 @@ $(document).ready(function() {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
+            reloadList();
+            if (t.langId > 0) {
+                ratingTypesLangForm(t.rtId, t.langId);
+                return;
+            }
+            $(document).trigger('close.facebox');
+        });
+    };
+    setupRatingTypesLang = function(frm) {
+        if (!$(frm).validate()) return;
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl('RatingTypes', 'langSetup'), data, function(t) {
             reloadList();
             $(document).trigger('close.facebox');
         });

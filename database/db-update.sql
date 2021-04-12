@@ -441,4 +441,9 @@ CREATE TABLE IF NOT EXISTS `tbl_rating_types_lang` ( `rtlang_rt_id` BIGINT NOT N
 
 CREATE TABLE IF NOT EXISTS `tbl_prodcat_rating_types` ( `prt_prodcat_id` BIGINT NOT NULL ,  `prt_rt_id` BIGINT NOT NULL ) ENGINE = InnoDB;
 ALTER TABLE `tbl_prodcat_rating_types` ADD PRIMARY KEY (`prt_prodcat_id`,`prt_rt_id`);
+
+ALTER TABLE `tbl_rating_types_lang`
+  ADD PRIMARY KEY (`rtlang_rt_id`,`rtlang_lang_id`),
+  ADD UNIQUE KEY `rt_name` (`rtlang_lang_id`,`rt_name`);
+
 /* Shop And Product Ratings */
