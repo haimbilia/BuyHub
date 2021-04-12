@@ -82,6 +82,7 @@ Fixes:
     => 051994 - Digital product can be linked to shipping profiles
     => 044068 - When an order is placed with Bank transfer as payment method, the Buyer doesn't receive any order placement email notification
     => 052142 - Same order showing multiple times when digital product having multiple links and multiple files
+    => 052242 - social login icons changed from admin not reflecting on front end
 
 Enhancements :
    => Make provision to made seller
