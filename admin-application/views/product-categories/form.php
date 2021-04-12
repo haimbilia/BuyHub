@@ -395,8 +395,6 @@ foreach ($categories as $catId => $catName) {
                     var ans = $.parseJSON(t2);
                     fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_rt_id=' + newRtId, function(t3) {
                         $('tag[value="' + e.detail.data.value + '"]').attr('id', newRtId);
-                        console.log('tag[value="' + e.detail.data.value + '"]');
-                        console.log(newRtId);
                     });
                 });
             });
