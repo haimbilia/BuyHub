@@ -83,6 +83,7 @@ Fixes:
     => 044068 - When an order is placed with Bank transfer as payment method, the Buyer doesn't receive any order placement email notification
     => 052142 - Same order showing multiple times when digital product having multiple links and multiple files
     => 052242 - social login icons changed from admin not reflecting on front end
+    => 052110 - when otp is sent over email to buyer then in email> username is not populating
 
 Enhancements :
    => Make provision to made seller
