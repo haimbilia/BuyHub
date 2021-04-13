@@ -621,13 +621,57 @@ class BuyerController extends BuyerBaseController
         $this->_template->render(true, true);
     }
 
+    /*use downloads_new function when app work is done */
+    public function downloads()
+    {
+        $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+        $user_id = UserAuthentication::getLoggedUserId();
+
+        $srch = new OrderProductSearch($this->siteLangId, true);
+        $srch->joinOrderUser();
+        $srch->joinDigitalDownloads(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, 'LEFT JOIN');
+        $srch->joinDigitalDownloadLinks('LEFT JOIN');
+        $srch->addDigitalDownloadCondition();
+        $srch->joinSellerProducts();
+        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
+        $srch->addMultipleFields(array('op_id', 'op_invoice_number', 'order_user_id', 'op_product_type', 'order_date_added', 'op_qty', 'op_status_id', 'op_selprod_max_download_times', 'op_selprod_id', 'product_updated_on', 'selprod_product_id', 'op_selprod_download_validity_in_days', 'opd.*', 'opa.*', 'IFNULL(op_selprod_title, op_product_name) as selprod_title'));
+        $srch->setPageNumber($page);
+        $srch->addCondition('order_user_id', '=', $user_id);
+        $srch->addOrder('order_date_added', 'desc');
+        $srch->setPageSize($pagesize);
+        $keyword = FatApp::getPostedData('keyword', null, '');
+        if (!empty($keyword)) {
+            $srch->addKeywordSearch($keyword);
+            $frm->fill(array('keyword' => $keyword));
+        }
+
+        $rs = $srch->getResultSet();
+        $downloads = FatApp::getDb()->fetchAll($rs);
+
+        $downloads = Orders::digitalDownloadFormat($downloads);
+        $downloads = Orders::digitalDownloadLinksFormat($downloads);
+        $this->set('downloads', $downloads);
+        $this->set('page', $page);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('postedData', $post);
+        $this->set('languages', Language::getAllNames());
+        $this->_template->render();
+    }
 
     /**
      * downloads - Used For APPs.
      *
      * downloadSearch and downloadLinksSearch merged
      */
-    public function downloads()
+    public function downloads_new()
     {
         $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -975,7 +1019,7 @@ class BuyerController extends BuyerBaseController
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-        
+
         $ocRequestSrch = new OrderCancelRequestSearch();
         $ocRequestSrch->doNotCalculateRecords();
         $ocRequestSrch->doNotLimitRecords();
@@ -1251,7 +1295,7 @@ class BuyerController extends BuyerBaseController
                 'orrequest_date', 'orrequest_status', 'orrequest_reference', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
                 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_qty',
                 'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
-                'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges','op_rounding_off'
+                'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off'
             )
         );
         $rs = $srch->getResultSet();
