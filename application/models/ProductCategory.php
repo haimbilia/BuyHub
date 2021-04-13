@@ -194,10 +194,10 @@ class ProductCategory extends MyAppModel
         return 1;
     }
 
-    public static function getArray($langId, $parentId = 0, $sortByName = false, $excludeCatHavingNoProducts = false, $keywords = false, $useCache = false)
+    public static function getArray($langId, $parentId = 0, $sortByName = false, $excludeCatHavingNoProducts = false, $keywords = false, $useCache = false, $parseTree = true)
     {
         if (true == $useCache) {
-            $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords;
+            $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords . '-' . $parseTree;
             $categoryArrCache = FatCache::get('categoryArrCache' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
             if ($categoryArrCache) {
                 return unserialize($categoryArrCache);
@@ -262,7 +262,9 @@ class ProductCategory extends MyAppModel
 
         $rs = $srch->getResultSet();
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
-        $categoriesArr = static::parseTree($categoriesArr, $parentId);
+        if (true == $parseTree) {
+            $categoriesArr = static::parseTree($categoriesArr, $parentId);
+        }
         if (true == $useCache) {
             FatCache::set('categoryArrCache' . $cacheKey, serialize($categoriesArr), '.txt');
         }
@@ -821,7 +823,6 @@ class ProductCategory extends MyAppModel
         } else {
             $prodCatSrch->addOrder('prodcat_ordercode');
         }
-
         $rs = $prodCatSrch->getResultSet();
         if ($forSelectBox) {
             $categoriesArr = FatApp::getDb()->fetchAllAssoc($rs);
