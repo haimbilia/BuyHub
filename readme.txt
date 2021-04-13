@@ -84,6 +84,7 @@ Fixes:
     => 052142 - Same order showing multiple times when digital product having multiple links and multiple files
     => 052242 - social login icons changed from admin not reflecting on front end
     => 052110 - when otp is sent over email to buyer then in email> username is not populating
+    => 052317	Request For Category- Seller dashboard when only one language activated
 
 Enhancements :
    => Make provision to made seller
