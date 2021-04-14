@@ -86,6 +86,7 @@ Fixes:
     => 052110 - when otp is sent over email to buyer then in email> username is not populating
     => 052317	Request For Category- Seller dashboard when only one language activated
     => 052413 - Removed settings for recurring discount in case of subscription.
+    => 052352 - getting double loader while making payment 
 
 Enhancements :
    => Make provision to made seller
