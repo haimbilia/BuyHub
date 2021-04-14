@@ -6,12 +6,12 @@ class Report extends SearchBase
     private $ordersTableJoined;
     private $attr = [];
 
-    public function __construct($langId = 0, $attr = [])
+    public function __construct($langId = 0, $attr = [], $shopSpecific = false)
     {
         parent::__construct(Orders::DB_TBL_ORDER_PRODUCTS, 'op');
         $this->langId = FatUtility::int($langId);
         $this->ordersTableJoined = false;
-        $this->setFields($attr);
+        $this->setFields($attr, $shopSpecific);
     }
 
     public function joinSettings()
@@ -50,7 +50,7 @@ class Report extends SearchBase
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'seller.user_id = credential_user_id', 'seller_cred');
     }
 
-    public function joinOtherCharges($bifurcationCharges = false)
+    public function joinOtherCharges($bifurcationCharges = false, $excludeType = [])
     {
         $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
         $ocSrch->doNotCalculateRecords();
@@ -60,6 +60,10 @@ class Report extends SearchBase
         if ($bifurcationCharges) {
             $ocSrch->addFld('SUM(CASE WHEN opc.opcharge_amount<0 THEN opc.opcharge_amount ELSE 0 END) as opDiscountCharges');
             $ocSrch->addFld('SUM(CASE WHEN opc.opcharge_amount>0 THEN opc.opcharge_amount ELSE 0 END) as opNonDiscountCharges');
+        }
+
+        if (!empty($excludeType)) {
+            $ocSrch->addCondition('opcharge_type', 'not in', $excludeType);
         }
 
         $this->joinTable('(' . $ocSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
@@ -212,13 +216,17 @@ class Report extends SearchBase
                 $this->addFld('op.op_selprod_id');
                 $this->addGroupBy('op.op_selprod_id');
                 break;
+            case 'shop_id':
+                $this->addFld('op.op_shop_id');
+                $this->addGroupBy('op.op_shop_id');
+                break;
             default:
                 $this->addGroupBy($key);
                 break;
         }
     }
 
-    public static function getFields($fields = [])
+    public static function getFields($fields = [], $shopSpecific = false)
     {
         // pending NetSales
         $arr = [
@@ -233,7 +241,7 @@ class Report extends SearchBase
 
             'refundedAmount' => 'sum(op_refund_amount) as refundedAmount',
             'refundedShipping' => '(SUM(op_refund_shipping)) as refundedShipping',
-            'refundedTax' => 'sum(op_refund_amount) as refundedTax',
+            'refundedTax' => 'sum(op_refund_tax) as refundedTax',
 
             'commissionCharged' => 'sum(op_commission_charged) as commissionCharged',
             'refundedCommission' => 'sum(op_refund_commission) as refundedCommission',
@@ -247,6 +255,10 @@ class Report extends SearchBase
             'op_other_charges' => 'sum(op_other_charges) as op_other_charges'
 
         ];
+
+        if (true == $shopSpecific) {
+            $arr['grossSales'] = 'sum(( op_unit_price * op_qty ) + op_other_charges - opDiscountCharges) as grossSales';
+        }
 
         if (empty($fields)) {
             return array_values($arr);
@@ -266,12 +278,12 @@ class Report extends SearchBase
         return $flds;
     }
 
-    private function setFields($fields = [])
+    private function setFields($fields = [], $shopSpecific = false)
     {
         if (empty($fields)) {
             return;
         }
-        $this->attr[] = array_merge($this->attr, self::getFields($fields));
+        $this->attr[] = array_merge($this->attr, self::getFields($fields, $shopSpecific));
         $this->addMultipleFields($this->attr);
     }
 

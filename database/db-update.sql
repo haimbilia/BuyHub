@@ -387,7 +387,7 @@ ALTER TABLE `tbl_plugin_to_user`
 -- --- Shopify --- --
 
 INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, 'LBL_SET_PASSWORD_MSG', '1', 'To set your password enter a new password below', '1');
-INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_DEFAULT_CURRENCY_SEPARATOR', '.', '0');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_DEFAULT_CURRENCY_SEPARATOR', '.', '0');
 
 
 -- --- Mollie Payment Gateway--- --
@@ -396,7 +396,7 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 
 -- --- Payfast Payment Gateway--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Payfast', '13', 'Payfast', '0', '24');
-INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_PAYFAST_PASSPHRASE_DESCRIPTION', 1, 'The passphrase is considered a secret between the merchant and PayFast and should never be sent or given out.<br>The merchant may set their own passphrase by:<br> 1. Login to PayFast using their merchant credentials.<br> 2. Clicking on "Settings", and then "Edit" under the Security Pass Phrase section.<br> 3. Inputting the desired passphrase and click "Update"', 1),
 ('LBL_PAYFAST_SIGNATURE_DESCRIPTION', 1, 'System generated MD5 signature. It will generate automatically while checkout using "Payfast".', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
@@ -419,15 +419,15 @@ CREATE TABLE `tbl_user_cookies_preferences` (
 ALTER TABLE `tbl_user_cookies_preferences`
   ADD PRIMARY KEY (`ucp_user_id`);
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY", "1", "I Agree To The %s And %s", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY", "1", "I Agree To The %s And %s", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_What_is_a_cookie_Information", "1", "A cookie is a small text file that is stored in a dedicated location on your computer, tablet, smartphone or other device when you use your browser to visit an online service. A cookie allows its sender to identify the device on which it is stored during the period of validity of consent, which does not exceed 13 months.\r\n\r\nYou may accept or reject the cookies listed below using the check box provided.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_What_is_a_cookie_Information", "1", "A cookie is a small text file that is stored in a dedicated location on your computer, tablet, smartphone or other device when you use your browser to visit an online service. A cookie allows its sender to identify the device on which it is stored during the period of validity of consent, which does not exceed 13 months.\r\n\r\nYou may accept or reject the cookies listed below using the check box provided.", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_Functional_Cookies_Information", "1", "These cookies are required for optimum operation of the website, and cannot be configured. They allow us to offer you the key functions of the website (language used, display resolution, account access, shopping bag, wish list, etc.), provide you with online advice and secure our website against any attempted fraud.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_Functional_Cookies_Information", "1", "These cookies are required for optimum operation of the website, and cannot be configured. They allow us to offer you the key functions of the website (language used, display resolution, account access, shopping bag, wish list, etc.), provide you with online advice and secure our website against any attempted fraud.", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION", "1", "These cookies are used to measure and analyse our website audience (visitor volume, pages viewed, average browsing time, etc.) to help us improve its performance. By accepting these cookies, you are helping us to improve our website.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION", "1", "These cookies are used to measure and analyse our website audience (visitor volume, pages viewed, average browsing time, etc.) to help us improve its performance. By accepting these cookies, you are helping us to improve our website.", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_PERSONALISE_COOKIES_INFORMATION", "1", "These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_PERSONALISE_COOKIES_INFORMATION", "1", "These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.", "2");
 ALTER TABLE `tbl_admin` CHANGE `admin_password` `admin_password_old` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
 ALTER TABLE `tbl_admin` ADD `admin_password` VARCHAR(100) NOT NULL AFTER `admin_password_old`;
 ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

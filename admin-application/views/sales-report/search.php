@@ -113,16 +113,15 @@ if (count($arr_listing) == 0) {
         Labels::getLabel('LBL_No_Records_Found', $adminLangId)
     );
 }
-?>
-<div class="overflow_auto">
-    <?php echo $tbl->getHtml();
-    $postedData['page'] = $page;
-    echo FatUtility::createHiddenFormFromData($postedData, array(
-        'name' => 'frmSalesReportSearchPaging'
-    ));
-    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
-    ?>
-</div><?php
-        $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 
-        ?>
+echo '<div class="overflow_auto">';
+echo $tbl->getHtml();
+$postedData['page'] = $page;
+echo FatUtility::createHiddenFormFromData($postedData, array(
+    'name' => 'frmSalesReportSearchPaging'
+));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+echo '</div>';
+$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+
+?>

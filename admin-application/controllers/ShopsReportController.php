@@ -36,66 +36,34 @@ class ShopsReportController extends AdminBaseController
         }
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        /* shop products count sub query [ */
-        $prodSrch = new ProductSearch(0);
-        $prodSrch->doNotCalculateRecords();
-        $prodSrch->doNotLimitRecords();
-        $prodSrch->addGroupBy('selprod_user_id');
-        $prodSrch->joinSellerProducts();
-        $prodSrch->addMultipleFields(array('count(selprod_id) as totStoreProducts', 'selprod_user_id'));
-        /* ] */
 
-        /* shop reviews count Sub Query[ */
-        $reviewSrch = new SelProdReviewSearch();
-        $reviewSrch->doNotCalculateRecords();
-        $reviewSrch->doNotLimitRecords();
-        $reviewSrch->joinSelProdRatingByType(SelProdRating::TYPE_PRODUCT);
-        $reviewSrch->addGroupby('spreview_seller_user_id');
-        $reviewSrch->addMultipleFields(array('count(spreview_id) as totReviews', 'spreview_seller_user_id'));
-        /* ] */
-
-        /* shop rating count sub query[ */
-        $ratingSrch = new SelProdReviewSearch();
-        $ratingSrch->doNotCalculateRecords();
-        $ratingSrch->doNotLimitRecords();
-        $ratingSrch->joinSelProdRating();
-        $ratingSrch->addCondition('sprating_rating_type', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
-        $ratingSrch->addGroupby('spreview_seller_user_id');
-        $ratingSrch->addMultipleFields(array('avg(sprating_rating) as avg_rating', 'spreview_seller_user_id', 'sprating_rating'));
-        /* ] */
-
-        /* get Shop Order Products Sub Query[ */
-        $opSrch = new OrderProductSearch(0, true);
+        $fields = ['totOrders', 'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount'];
+        $opSrch = new Report(0, $fields, true);
+        $opSrch->joinOrders();
         $opSrch->joinPaymentMethod();
+        $opSrch->joinOtherCharges(true, [OrderProduct::CHARGE_TYPE_DISCOUNT, OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]);
+        $opSrch->joinOrderProductTaxCharges();
+        $opSrch->joinOrderProductShipCharges();
+        $opSrch->joinOrderProductDicountCharges();
+        $opSrch->joinOrderProductVolumeCharges();
+        $opSrch->joinOrderProductRewardCharges();
+        $opSrch->setPaymentStatusCondition();
+        $opSrch->setCompletedOrdersCondition();
+        $opSrch->excludeDeletedOrdersCondition();
+        $opSrch->addTotalOrdersCount('op_selprod_user_id');
+        $opSrch->setGroupBy('shop_id');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $cnd = $opSrch->addCondition('o.order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
-        $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
-        $cnd->attachCondition('plugin_code', '=', 'payatstore');
-        $opSrch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-
-        $opSrch->addMultipleFields(array('op_shop_id', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'SUM( (op_unit_price) * op_qty - op_refund_amount ) as total', 'SUM(op_commission_charged - op_refund_commission) as commission'));
-        $opSrch->addGroupBy('op_shop_id');
-        /* ] */
-
-        /* Sub Query to get, how many users marked current shop as Favorites [ */
-        $uFSsrch = new UserFavoriteShopSearch();
-        $uFSsrch->doNotCalculateRecords();
-        $uFSsrch->doNotLimitRecords();
-        $uFSsrch->addGroupBy('ufs_shop_id');
-        $uFSsrch->addMultipleFields(array('ufs_shop_id', 'count(ufs_user_id) as totalFavorites'));
-        /* ] */
 
         $srch = new ShopSearch($this->adminLangId, false, false);
         $srch->joinShopOwner(false);
-        $srch->joinTable('(' . $reviewSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'spreview.spreview_seller_user_id = s.shop_user_id', 'spreview');
-        $srch->joinTable('(' . $ratingSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'sprating.spreview_seller_user_id = s.shop_user_id', 'sprating');
-        $srch->joinTable('(' . $prodSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'selprod.selprod_user_id = s.shop_user_id', 'selprod');
+        $srch->addProductsCount();
+        $srch->addReviewsCount();
+        $srch->addRatingsCount();
+        $srch->addFavoritesCount();
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 's.shop_id = opq.op_shop_id', 'opq');
-        $srch->joinTable('(' . $uFSsrch->getQuery() . ')', 'LEFT OUTER JOIN', 's.shop_id = ufsq.ufs_shop_id', 'ufsq');
-        $srch->addMultipleFields(array('shop_id', 'shop_user_id', 's.shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'u.user_id', 'u.user_name as owner_name', 'u_cred.credential_email as owner_email', 'IFNULL(spreview.totReviews, 0) as totReviews', 'IFNULL(sprating.avg_rating, 0) as totRating', 'IFNULL(selprod.totStoreProducts, 0) as totProducts', 'IFNULL(opq.totSoldQty, 0) as totSoldQty', 'IFNULL(opq.total, 0) as total', 'IFNULL(commission, 0) as commission', 'IFNULL(ufsq.totalFavorites, 0) as totalFavorites'));
+        $srch->addMultipleFields(array('shop_id', 'shop_user_id', 's.shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'u.user_id', 'u.user_name as owner_name', 'u_cred.credential_email as owner_email', 'opq.*'));
         $srch->addOrder('shop_name');
-
 
         $shop_id = FatApp::getPostedData('shop_id', null, '');
         $shop_keyword = FatApp::getPostedData('shop_name', null, '');
