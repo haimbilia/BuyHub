@@ -85,6 +85,7 @@ Fixes:
     => 052242 - social login icons changed from admin not reflecting on front end
     => 052110 - when otp is sent over email to buyer then in email> username is not populating
     => 052317	Request For Category- Seller dashboard when only one language activated
+    => 052413 - Removed settings for recurring discount in case of subscription.
 
 Enhancements :
    => Make provision to made seller
