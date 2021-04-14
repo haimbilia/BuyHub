@@ -29,7 +29,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->joinProducts($this->siteLangId);
         $selProdReviewObj->joinSellerProducts($this->siteLangId);
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -70,7 +70,7 @@ class ReviewsController extends MyAppController
         $srch->joinSelProdRating();
         $srch->joinUser();
         $srch->joinSelProdReviewHelpful();
-        $srch->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $srch->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
         $srch->addCondition('spr.spreview_product_id', '=', $productId);
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked' ));
@@ -146,7 +146,7 @@ class ReviewsController extends MyAppController
         $selProdRatingSrch = SelProdRating::getSearchObj();
         $selProdRatingSrch->doNotCalculateRecords();
         $selProdRatingSrch->addMultipleFields(array('sprating_spreview_id', 'round(avg(sprating_rating),2) seller_rating'));
-        $selProdRatingSrch->addCondition('sprating_rating_type', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
         $selProdRatingSrch->addGroupBy('sprating_spreview_id');
         $spratingQuery = $selProdRatingSrch->getQuery();
 
@@ -191,7 +191,7 @@ class ReviewsController extends MyAppController
         $selProdRatingSrch = SelProdRating::getSearchObj();
         $selProdRatingSrch->doNotCalculateRecords();
         $selProdRatingSrch->addMultipleFields(array('sprating_spreview_id', 'round(avg(sprating_rating),2) seller_rating'));
-        $selProdRatingSrch->addCondition('sprating_rating_type', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
         $selProdRatingSrch->addGroupBy('sprating_spreview_id');
         $spratingQuery = $selProdRatingSrch->getQuery();
 
@@ -267,7 +267,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->joinProducts($this->siteLangId);
         $selProdReviewObj->joinSellerProducts($this->siteLangId);
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -295,7 +295,7 @@ class ReviewsController extends MyAppController
         $srch->joinUser();
         $srch->joinSelProdReviewHelpful();
 
-        $srch->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $srch->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
 
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked' ));
@@ -348,7 +348,7 @@ class ReviewsController extends MyAppController
         $selProdRatingSrch = SelProdRating::getSearchObj();
         $selProdRatingSrch->doNotCalculateRecords();
         $selProdRatingSrch->addMultipleFields(array('sprating_spreview_id', 'round(avg(sprating_rating),2) seller_rating'));
-        $selProdRatingSrch->addCondition('sprating_rating_type', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
         $selProdRatingSrch->addGroupBy('sprating_spreview_id');
         $spratingQuery = $selProdRatingSrch->getQuery();
 

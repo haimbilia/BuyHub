@@ -381,25 +381,25 @@ foreach ($categories as $catId => $catName) {
 
 
     addRatingType = function(e) {
-        console.log(e);
         var rt_id = e.detail.tag.id;
-        var rt_name = e.detail.tag.title;
+        var ratingtype_name = e.detail.tag.title;
         var prodCatId = $("input[name='prodcat_id']").val();
         if (rt_id == '') {
-            var data = 'rt_id=0&rt_identifier=' + rt_name
+            if( !confirm(langLbl.addNewRatingType) ){ return; }
+            var data = 'ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
                 var ans = $.parseJSON(t);
                 var newRtId = ans.rtId;
-                var dataLang = 'rtlang_rt_id=' + newRtId + '&rt_name=' + rt_name + '&rtlang_lang_id=<?php echo $adminLangId; ?>';
+                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' + ratingtype_name + '&ratingtypelang_lang_id=<?php echo $adminLangId; ?>';
                 fcom.ajax(fcom.makeUrl('RatingTypes', 'langSetup'), dataLang, function(t2) {
                     var ans = $.parseJSON(t2);
-                    fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_rt_id=' + newRtId, function(t3) {
+                    fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + newRtId, function(t3) {
                         $('tag[value="' + e.detail.data.value + '"]').attr('id', newRtId);
                     });
                 });
             });
         } else {
-            fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_rt_id=' + rt_id, function(t) {});
+            fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
         }
         tagifyRatingTypes();
     }
@@ -407,7 +407,8 @@ foreach ($categories as $catId => $catName) {
     removeRatingType = function(e) {
         var rt_id = e.detail.tag.id;
         var prodCatId = $("input[name='prodcat_id']").val();
-        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' + prodCatId + '&prt_rt_id=' + rt_id, function(t) {});
+        if('' == rt_id || '' == prodCatId){ return; }
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
         tagifyRatingTypes();
     }
 
@@ -419,7 +420,7 @@ foreach ($categories as $catId => $catName) {
             for (i = 0; i < ans.length; i++) {            
                 list.push({
                     "id" : ans[i].id,
-                    "value" : ans[i].rt_identifier, 
+                    "value" : ans[i].ratingtype_identifier, 
                 });
             }
             tagify.settings.whitelist = list;

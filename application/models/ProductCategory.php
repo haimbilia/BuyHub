@@ -1515,7 +1515,7 @@ class ProductCategory extends MyAppModel
 
         $data = [
             static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id' => $this->mainTableRecordId,
-            static::DB_TBL_PROD_CAT_RT_PREFIX . 'rt_id' => $rtId
+            static::DB_TBL_PROD_CAT_RT_PREFIX . 'ratingtype_id' => $rtId
         ];
 
         $record->assignValues($data);
@@ -1535,7 +1535,7 @@ class ProductCategory extends MyAppModel
             return false;
         }
 
-        if (!$db->deleteRecords(static::DB_TBL_PROD_CAT_RATING_TYPES, array('smt' => static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id = ? AND ' . static::DB_TBL_PROD_CAT_RT_PREFIX . 'rt_id = ?', 'vals' => array($this->mainTableRecordId, $rtId)))) {
+        if (!$db->deleteRecords(static::DB_TBL_PROD_CAT_RATING_TYPES, array('smt' => static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id = ? AND ' . static::DB_TBL_PROD_CAT_RT_PREFIX . 'ratingtype_id = ?', 'vals' => array($this->mainTableRecordId, $rtId)))) {
             $this->error = $db->getError();
             return false;
         }
@@ -1543,35 +1543,45 @@ class ProductCategory extends MyAppModel
         return true;
     }
 
-    public function getRatingTypes(int $langId = 0): array
+    public function getRatingTypes(int $langId = 0, int $isActive = -1): array
     {
         $langId = 1 > $langId ? $this->commonLangId : $langId;
+
         if (1 > $this->mainTableRecordId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
-            return false;
+            return [];
         }
 
-        $db = FatApp::getDb();
+        $srch = self::getRatingTypesObj($langId, $isActive);
+        $srch->addCondition('prt_prodcat_id', '=', $this->mainTableRecordId);
+        $srch->addCondition('ratingtype_active', '=', applicationConstants::ACTIVE);
+        $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'ratingtype_active', 'ratingtype_default']);
+
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
+    }
+
+    public static function getRatingTypesObj(int $langId = 0, int $isActive = -1)
+    {
         $srch = new SearchBase(static::DB_TBL_PROD_CAT_RATING_TYPES, 'prt');
         $srch->joinTable(
             RatingType::DB_TBL,
             'INNER JOIN',
-            'rt.rt_id = prt.prt_rt_id',
+            'rt.ratingtype_id = prt.prt_ratingtype_id',
             'rt'
         );
         $srch->joinTable(
             RatingType::DB_TBL_LANG,
             'LEFT OUTER JOIN',
-            'rt_l.rtlang_rt_id = rt.rt_id AND rt_l.rtlang_lang_id = ' . $langId,
+            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $langId,
             'rt_l'
         );
-        $srch->addCondition('prt_prodcat_id', '=', $this->mainTableRecordId);
-        
-        $srch->addMultipleFields(['rt_id', 'COALESCE(rt_name, rt_identifier) as rt_name']);
 
+        if (0 < $isActive) {
+            $srch->addCondition('ratingtype_active', '=', $isActive);
+        }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetchAll($rs);
+        return $srch;
     }
 }

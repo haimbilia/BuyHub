@@ -1,38 +1,68 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
+    'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    'rt_name' => Labels::getLabel('LBL_RATING_TYPE', $adminLangId),
+    'ratingtype_name' => Labels::getLabel('LBL_RATING_TYPE', $adminLangId),
+    'ratingtype_active' => Labels::getLabel('LBL_STATUS', $adminLangId),
     'action' => '',
 );
 
 if (!$canEdit) {
-    unset($arr_flds['action']);
+    unset($arr_flds['select_all'], $arr_flds['action']);
 }
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
-    $th->appendElement('th', array(), $val);
+    if ('select_all' == $key) {
+        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
+    } else {
+        $th->appendElement('th', array(), $val);
+    }
 }
 
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$sr_no = 1;
 foreach ($arr_listing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
 
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
+            case 'select_all':
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="ratingtypeIds[]" value=' . $row['ratingtype_id'] . '><i class="input-helper"></i></label>', true);
+                break;
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
-            case 'rt_name':
-                $name = array_key_exists('rt_name', $row) && !empty($row[$key]) ? $row[$key] : $row['rt_identifier'];
+            case 'ratingtype_name':
+                $name = array_key_exists('ratingtype_name', $row) && !empty($row[$key]) ? $row[$key]  . ' (' . $row['ratingtype_identifier'] . ')' : $row['ratingtype_identifier'];
+
+                if (array_key_exists('ratingtype_active', $row) && applicationConstants::YES == $row['ratingtype_default']) {
+                    $name .= ' <span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
+                }
+
                 $td->appendElement('plaintext', array(), $name, true);
+                break;
+            case 'ratingtype_active':
+                $active = "";
+                if (applicationConstants::ACTIVE == $row['ratingtype_active']) {
+                    $active = 'checked';
+                }
+                
+                $statusClass = ($canEdit === false) ? 'disabled' : '';
+                $str = '<label class="statustab -txt-uppercase">
+                        <input ' . $active . ' type="checkbox" id="switch' . $row['ratingtype_id'] . '" value="' . $row['ratingtype_id'] . '" onclick="toggleStatus(event,this,' . (int) !(applicationConstants::ACTIVE == $row['ratingtype_active']) . ')" class="switch-labels"/>
+                        <i class="switch-handles ' . $statusClass . '"></i>';
+                $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'action':
                 if ($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "ratingTypesForm(" . $row['rt_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                    $function = "ratingTypesForm(" . $row['ratingtype_id'] . ")";
+                    if (array_key_exists($row['ratingtype_id'], $defaultRatingsCols)) {
+                        $function = "ratingTypesLangForm(" . $row['ratingtype_id'] . "," . $adminLangId . ");";
+                    }
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
                 }
                 break;
             default:
@@ -40,7 +70,7 @@ foreach ($arr_listing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $sr_no++;
 }
 if (count($arr_listing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
@@ -49,6 +79,7 @@ if (count($arr_listing) == 0) {
 $frm = new Form('frmRatingTypesSearch', array('id' => 'frmRatingTypesSearch'));
 $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
+$frm->setFormTagAttribute('action', UrlHelper::generateUrl('RatingTypes', 'toggleBulkStatuses'));
 $frm->addHiddenField('', 'status');
 
 echo $frm->getFormTag();
@@ -57,7 +88,7 @@ echo $tbl->getHtml(); ?>
 </form>
 <?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
-        'name' => 'frmRatingTypesSrchPaging'
+    'name' => 'frmRatingTypesSrchPaging'
 ));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

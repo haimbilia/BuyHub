@@ -3,8 +3,6 @@ $(document).ready(function() {
 });
 
 (function() {
-    var currentPage = 1;
-    var runningAjaxReq = false;
     var dv = '#listing';
 
     goToSearchPage = function(page) {
@@ -72,25 +70,32 @@ $(document).ready(function() {
         });
     };
 
-    removeRatingTypes = function(id) {
-        if (!confirm(langLbl.confirmDelete)) {
-            return;
-        }
-        data = 'id=' + id;
-        fcom.updateWithAjax(fcom.makeUrl('RatingTypes', 'deleteRecord'), data, function(res) {
-            reloadList();
-        });
-    };
-
     clearSearch = function() {
         document.frmRatingTypesSearch.reset();
         searchRatingTypes(document.frmRatingTypesSearch);
     };
 
-	deleteSelected = function(){
-        if(!confirm(langLbl.confirmDelete)){
+    toggleStatus = function (e, obj, status) {
+        if (!confirm(langLbl.confirmUpdateStatus)) {
+            e.preventDefault();
+            return;
+        }
+        var rtId = parseInt(obj.value);
+        if (rtId < 1) {
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
-        $("#frmRatingTypesListing").attr("action",fcom.makeUrl('RatingTypes','deleteSelected')).submit();
+        data = 'ratingtype_id=' + rtId + '&status=' + status;
+        fcom.ajax(fcom.makeUrl('RatingTypes', 'changeStatus'), data, function (res) {
+            var ans = $.parseJSON(res);
+            if (ans.status == 1) {
+                fcom.displaySuccessMessage(ans.msg);
+                $(obj).toggleClass("active");
+                $(obj).attr('onclick', 'toggleStatus(event,this,' + (status ? 0 : 1) + ')');
+            } else {
+                $(obj).prop('checked', false);
+                fcom.displayErrorMessage(ans.msg);
+            }
+        });
     };
 })()

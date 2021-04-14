@@ -8,9 +8,11 @@ class RatingTypeSearch extends SearchBase
      * __construct
      *
      * @param  int $langId
+     * @param  int $isActive
+     * @param  int $isDefault
      * @return void
      */
-    public function __construct(int $langId = 0)
+    public function __construct(int $langId = 0, int $isActive = -1, int $isDefault = -1)
     {
         $this->langId = FatUtility::int($langId);
         parent::__construct(RatingType::DB_TBL, 'rt');
@@ -19,9 +21,17 @@ class RatingTypeSearch extends SearchBase
             $this->joinTable(
                 RatingType::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'rt_l.rtlang_rt_id = rt.rt_id AND rt_l.rtlang_lang_id = ' . $langId,
+                'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $langId,
                 'rt_l'
             );
+        }
+
+        if (-1 < $isActive) {
+            $this->addCondition(RatingType::DB_TBL_PREFIX . 'active', '=',  $isActive);
+        }
+
+        if (-1 < $isDefault) {
+            $this->addCondition(RatingType::DB_TBL_PREFIX . 'default', '=',  $isDefault);
         }
     }
 }

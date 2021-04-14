@@ -108,8 +108,8 @@ class ProductCategoriesController extends AdminBaseController
             $prodCat = new ProductCategory($prodCatId);
             $ratingTypes = array();
             foreach ($prodCat->getRatingTypes() as $key => $data) {
-                $ratingTypes[$key]['id'] = $data['rt_id'];
-                $ratingTypes[$key]['value'] = $data['rt_name'];
+                $ratingTypes[$key]['id'] = $data['ratingtype_id'];
+                $ratingTypes[$key]['value'] = $data['ratingtype_name'];
             }
             $ratingTypes = ['rating_type' => json_encode($ratingTypes)];
             $data = array_merge($data, $catNameArr, $ratingTypes);
@@ -555,7 +555,7 @@ class ProductCategoriesController extends AdminBaseController
     {
         $this->objPrivilege->canEditProductCategories();
         $prodCatId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
-        $rtId = FatApp::getPostedData('prt_rt_id', FatUtility::VAR_INT, 0);
+        $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
         if ($prodCatId < 1 || $rtId < 1) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
@@ -572,7 +572,7 @@ class ProductCategoriesController extends AdminBaseController
     {
         $this->objPrivilege->canEditProductCategories();
         $prodCatId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
-        $rtId = FatApp::getPostedData('prt_rt_id', FatUtility::VAR_INT, 0);
+        $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
         if ($prodCatId < 1 || $rtId < 1) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
@@ -595,20 +595,20 @@ class ProductCategoriesController extends AdminBaseController
         $srch = new RatingTypeSearch($this->adminLangId);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
-            $cnd = $srch->addCondition('rt_name', 'like', '%' . $keyword . '%');
-            $cnd->attachCondition('rt_identifier', 'like', '%' . $keyword . '%');
+            $cnd = $srch->addCondition('ratingtype_name', 'like', '%' . $keyword . '%');
+            $cnd->attachCondition('ratingtype_identifier', 'like', '%' . $keyword . '%');
         }
-        $srch->addOrder('rt_id', 'DESC');
+        $srch->addCondition('ratingtype_active', '=', applicationConstants::YES);
         $rs = $srch->getResultSet();
-        $options = FatApp::getDb()->fetchAll($rs, 'rt_id');
+        $options = FatApp::getDb()->fetchAll($rs, 'ratingtype_id');
 
         $json = array();
         foreach ($options as $key => $option) {
-            $identifer = array_key_exists('rt_name', $option) && !empty($option['rt_name']) ? $option['rt_name'] : $option['rt_identifier'];
+            $identifer = array_key_exists('ratingtype_name', $option) && !empty($option['ratingtype_name']) ? $option['ratingtype_name'] : $option['ratingtype_identifier'];
             $json[] = array(
                 'id' => $key,
                 'name' => $identifer,
-                'rt_identifier' => $identifer
+                'ratingtype_identifier' => $identifer
             );
         }
         die(json_encode($json));

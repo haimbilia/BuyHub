@@ -59,7 +59,7 @@ class ShopsReportController extends AdminBaseController
         $ratingSrch->doNotCalculateRecords();
         $ratingSrch->doNotLimitRecords();
         $ratingSrch->joinSelProdRating();
-        $ratingSrch->addCondition('sprating_rating_type', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $ratingSrch->addCondition('sprating_ratingtype_id', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
         $ratingSrch->addGroupby('spreview_seller_user_id');
         $ratingSrch->addMultipleFields(array('avg(sprating_rating) as avg_rating', 'spreview_seller_user_id', 'sprating_rating'));
         /* ] */

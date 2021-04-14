@@ -4,6 +4,11 @@ $frm->setFormTagAttribute('onsubmit', 'setupRatingTypes(this); return(false);');
 $frm->setFormTagAttribute('id', 'frmRatingTypes');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
+
+if (array_key_exists($rtId, $defaultRatingsCols)) {
+	$fld = $frm->getField('ratingtype_identifier');
+	$fld->setfieldTagAttribute('readonly', 'readonly');
+}
 ?>
 <section class="section">
 	<div class="sectionhead">
@@ -13,19 +18,25 @@ $frm->developerTags['fld_default_col'] = 12;
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="tabs_nav_container responsive flat">
-					<ul class="tabs_nav">
-						<li><a class="active" href="javascript:void(0)"
-								onclick="ratingTypesForm(<?php echo $rtId ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId);?></a>
-						</li>
-						<li class="<?php echo (0 == $rtId) ? 'fat-inactive' : ''; ?>">
-							<a href="javascript:void(0);" <?php echo (0 < $rtId) ? "onclick='ratingTypesLangForm(" . $rtId . "," . $adminLangId . ");'" : ""; ?>>
-								<?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
-							</a>
-						</li>
-					</ul>
-					<div class="tabs_panel_wrap">
+						<?php if (!array_key_exists($rtId, $defaultRatingsCols)) { ?>
+							<ul class="tabs_nav">
+								<li>
+									<a class="active" href="javascript:void(0)"
+										onclick="ratingTypesForm(<?php echo $rtId ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId);?></a>
+								</li>
+								<li class="<?php echo (0 == $rtId) ? 'fat-inactive' : ''; ?>">
+									<a href="javascript:void(0);" <?php echo (0 < $rtId) ? "onclick='ratingTypesLangForm(" . $rtId . "," . $adminLangId . ");'" : ""; ?>>
+										<?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+									</a>
+								</li>
+							</ul>
+						<?php } ?>
+					<div class="tabs_panel_wrap" style="min-height: inherit;">
 						<div class="tabs_panel">
-							<?php echo $frm->getFormHtml(); ?>
+							<?php 
+							if (!array_key_exists($rtId, $defaultRatingsCols)) {
+								echo $frm->getFormHtml(); 
+							} ?>
 						</div>
 					</div>
 				</div>

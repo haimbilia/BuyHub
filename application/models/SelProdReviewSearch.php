@@ -103,10 +103,10 @@ class SelProdReviewSearch extends SearchBase
         }
         if (!is_array($ratingType)) {
             $ratingType = FatUtility::int($ratingType);
-            $this->joinTable(SelProdRating::DB_TBL, 'LEFT OUTER JOIN', $obj . '.sprating_spreview_id = spr.spreview_id and ' . $obj . '.sprating_rating_type = ' . $ratingType, $obj);
+            $this->joinTable(SelProdRating::DB_TBL, 'LEFT OUTER JOIN', $obj . '.sprating_spreview_id = spr.spreview_id and ' . $obj . '.sprating_ratingtype_id = ' . $ratingType, $obj);
         } else {
             if (count($ratingType)) {
-                $this->joinTable(SelProdRating::DB_TBL, 'LEFT OUTER JOIN', $obj . '.sprating_spreview_id = spr.spreview_id and ' . $obj . '.sprating_rating_type in (' . implode(',', $ratingType) . ')', $obj);
+                $this->joinTable(SelProdRating::DB_TBL, 'LEFT OUTER JOIN', $obj . '.sprating_spreview_id = spr.spreview_id and ' . $obj . '.sprating_ratingtype_id in (' . implode(',', $ratingType) . ')', $obj);
             } else {
                 trigger_error(Labels::getLabel('ERR_Please_supply_non_empty_rating_types_array', $this->commonLangId), E_USER_ERROR);
             }

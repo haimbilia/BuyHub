@@ -897,7 +897,8 @@ class DataMigration
                     'productSpecifics' => [
                         'op_selprod_return_age' => $productInfo['return_age'],
                         'op_selprod_cancellation_age' => $productInfo['cancellation_age'],
-                        'op_product_warranty' => $productInfo['product_warranty']
+                        'op_product_warranty' => $productInfo['product_warranty'],
+                        'op_prodcat_id' => $productInfo['prodcat_id']
                     ],
                     'op_rounding_off' => 0,
                 );
@@ -1316,6 +1317,7 @@ class DataMigration
         $srch->joinSellerProductSpecifics();
         $srch->joinProductSpecifics();
 
+        $srch->joinProductToCategory();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('selprod_id', '=', $selProdId);
@@ -1327,7 +1329,7 @@ class DataMigration
             'selprod_user_id', 'selprod_code', 'selprod_sku', 'selprod_cost', 'selprod_condition', 'shop_id',
             'selprod_max_download_times', 'selprod_download_validity_in_days', 'seller_user_cred.credential_email as shop_owner_email',
             'seller_user_cred.credential_username as shop_owner_username', 'seller_user.user_name as shop_onwer_name',
-            'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age'
+            'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age', 'prodcat_id'
         );
 
         $srch->addMultipleFields($fields);

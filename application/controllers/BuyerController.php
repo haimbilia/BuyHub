@@ -1722,10 +1722,22 @@ class BuyerController extends BuyerBaseController
             $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
         }
 
+        $orderProd = new OrderProduct($opId);
+        $specifics = $orderProd->getSpecifics();
+        if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
+            $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
+            $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
+            $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+            if (0 < count($ratingTypes)) {
+                $ratingAspects = $ratingAspects + $ratingTypes;
+            }
+        }
+
         foreach ($ratingsPosted as $ratingAspect => $ratingValue) {
             if (isset($ratingAspects[$ratingAspect])) {
                 $selProdRating = new SelProdRating();
-                $ratingRow = array('sprating_spreview_id' => $spreviewId, 'sprating_rating_type' => $ratingAspect, 'sprating_rating' => $ratingValue);
+                $ratingRow = array('sprating_spreview_id' => $spreviewId, 'sprating_ratingtype_id' => $ratingAspect, 'sprating_rating' => $ratingValue);
                 $selProdRating->assignValues($ratingRow);
                 if (!$selProdRating->save()) {
                     Message::addErrorMessage($selProdRating->getError());
@@ -2574,6 +2586,18 @@ class BuyerController extends BuyerBaseController
             $ratingAspects = SelProdRating::getDigitalOrderAspectsArr($langId);
         } else {
             $ratingAspects = SelProdRating::getRatingAspectsArr($langId, $fulfillmentType);
+        }
+
+        $orderProd = new OrderProduct($op_id);
+        $specifics = $orderProd->getSpecifics();
+        if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
+            $srch = ProductCategory::getRatingTypesObj($langId, applicationConstants::ACTIVE);
+            $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
+            $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+            if (0 < count($ratingTypes)) {
+                $ratingAspects = $ratingAspects + $ratingTypes;
+            }
         }
 
         foreach ($ratingAspects as $aspectVal => $aspectLabel) {

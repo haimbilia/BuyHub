@@ -435,15 +435,62 @@ ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NU
 -- --- task_81779_advanced_GDPR_module --- --
 
 /* Shop And Product Ratings */
-CREATE TABLE IF NOT EXISTS `tbl_rating_types` ( `rt_id` BIGINT NOT NULL AUTO_INCREMENT ,  `rt_identifier` VARCHAR(150) NOT NULL ,    PRIMARY KEY  (`rt_id`),    UNIQUE  (`rt_identifier`)) ENGINE = InnoDB;
+--
+-- Table structure for table `tbl_rating_types`
+--
 
-CREATE TABLE IF NOT EXISTS `tbl_rating_types_lang` ( `rtlang_rt_id` BIGINT NOT NULL ,  `rtlang_lang_id` INT NOT NULL ,  `rt_name` VARCHAR(150) NOT NULL ) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `tbl_rating_types` (
+  `ratingtype_id` bigint NOT NULL,
+  `ratingtype_identifier` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ratingtype_default` tinyint NOT NULL,
+  `ratingtype_active` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `tbl_prodcat_rating_types` ( `prt_prodcat_id` BIGINT NOT NULL ,  `prt_rt_id` BIGINT NOT NULL ) ENGINE = InnoDB;
-ALTER TABLE `tbl_prodcat_rating_types` ADD PRIMARY KEY (`prt_prodcat_id`,`prt_rt_id`);
+--
+-- Dumping data for table `tbl_rating_types`
+--
 
+INSERT INTO `tbl_rating_types` (`ratingtype_id`, `ratingtype_identifier`, `ratingtype_default`, `ratingtype_active`) VALUES
+(1, 'Product', 1, 1),
+(2, 'Shipping Quality', 1, 1),
+(3, 'Stock Availability', 1, 1),
+(4, 'Packaging Quality', 1, 1);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_rating_types`
+--
+ALTER TABLE `tbl_rating_types`
+  ADD PRIMARY KEY (`ratingtype_id`),
+  ADD UNIQUE KEY `ratingtype_identifier` (`ratingtype_identifier`) USING BTREE;
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_rating_types`
+--
+ALTER TABLE `tbl_rating_types`
+  MODIFY `ratingtype_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+CREATE TABLE IF NOT EXISTS `tbl_rating_types_lang` ( `ratingtypelang_ratingtype_id` BIGINT NOT NULL ,  `ratingtypelang_lang_id` INT NOT NULL ,  `ratingtype_name` VARCHAR(150) NOT NULL ) ENGINE = InnoDB;
 ALTER TABLE `tbl_rating_types_lang`
-  ADD PRIMARY KEY (`rtlang_rt_id`,`rtlang_lang_id`),
-  ADD UNIQUE KEY `rt_name` (`rtlang_lang_id`,`rt_name`);
+  ADD PRIMARY KEY (`ratingtypelang_ratingtype_id`,`ratingtypelang_lang_id`),
+  ADD UNIQUE KEY `ratingtype_name` (`ratingtypelang_lang_id`,`ratingtype_name`);
+
+CREATE TABLE IF NOT EXISTS `tbl_prodcat_rating_types` ( `prt_prodcat_id` BIGINT NOT NULL ,  `prt_ratingtype_id` BIGINT NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `tbl_prodcat_rating_types` ADD PRIMARY KEY (`prt_prodcat_id`,`prt_ratingtype_id`);
+
+ALTER TABLE `tbl_order_product_specifics` ADD `op_prodcat_id` BIGINT NOT NULL AFTER `op_product_warranty`;
+UPDATE tbl_order_product_specifics tops
+INNER JOIN tbl_order_products op ON op.op_id = tops.ops_op_id
+INNER JOIN tbl_product_to_category ptc ON ptc.ptc_product_id = SUBSTRING( op.op_selprod_code, 1, (LOCATE( "_", op.op_selprod_code ) - 1 ) )
+SET tops.op_prodcat_id = ptc.ptc_prodcat_id;
+
+ALTER TABLE `tbl_seller_product_rating` CHANGE `sprating_rating_type` `sprating_ratingtype_id` BIGINT NOT NULL;
 
 /* Shop And Product Ratings */

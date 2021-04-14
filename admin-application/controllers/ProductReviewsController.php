@@ -137,7 +137,7 @@ class ProductReviewsController extends AdminBaseController
 
         $ratingSrch = SelProdRating::getSearchObj();
         $ratingSrch->addCondition('sprating_spreview_id', '=', $spreview_id);
-        $ratingSrch->addMultipleFields(array('sprating_spreview_id', 'sprating_rating_type', 'sprating_rating'));
+        $ratingSrch->addMultipleFields(array('sprating_spreview_id', 'sprating_ratingtype_id', 'sprating_rating'));
         $ratingSrch->doNotCalculateRecords();
         $ratingSrch->doNotLimitRecords();
 

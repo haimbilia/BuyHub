@@ -17,29 +17,28 @@ class SelProdRating extends MyAppModel
 
     public static function getSearchObj()
     {
-        // return $srch = new SearchBase(static::DB_TBL, 'spr');
-        return $srch = new SearchBase(static::DB_TBL, 'sprating');
+        return new SearchBase(static::DB_TBL, 'sprating');
     }
 
-    public static function getRatingAspectsArr($langId , $fulfillmentType = Shipping::FULFILMENT_ALL) 
+    public static function getRatingAspectsArr($langId , $fulfillmentType = Shipping::FULFILMENT_ALL, $isActive = 1) 
     {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
 
-        $arr = array(
-            static::TYPE_PRODUCT => Labels::getLabel('LBL_Product', $langId),
-            static::TYPE_SELLER_SHIPPING_QUALITY => Labels::getLabel('LBL_Rating_Type_Shipping', $langId),
-            static::TYPE_SELLER_STOCK_AVAILABILITY => Labels::getLabel('LBL_Rating_Type_Stock_availabiity', $langId),
-            static::TYPE_SELLER_PACKAGING_QUALITY => Labels::getLabel('LBL_Rating_Type_Package_Quality', $langId),
-        );
+        $srch = new RatingTypeSearch($langId, $isActive, applicationConstants::YES);
+
+        $attr = ['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name'];
+        $srch->addMultipleFields($attr);
+
+        $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         
         if($fulfillmentType == Shipping::FULFILMENT_PICKUP){
-            unset($arr[static::TYPE_SELLER_SHIPPING_QUALITY]);
+            unset($ratingTypes[static::TYPE_SELLER_SHIPPING_QUALITY]);
         }
-        
-        return $arr;
+
+        return $ratingTypes;
     }
     
     public static function getDigitalOrderAspectsArr($langId)
@@ -49,10 +48,18 @@ class SelProdRating extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
 
-        return array(
-            static::TYPE_PRODUCT => Labels::getLabel('LBL_Product', $langId),        
-            static::TYPE_SELLER_STOCK_AVAILABILITY => Labels::getLabel('LBL_Rating_Type_Stock_availabiity', $langId)        
-        );
+        $ratingTypes = self::getRatingAspectsArr($langId);
+
+
+        $arr = [];        
+        if (array_key_exists(static::TYPE_PRODUCT, $ratingTypes)) {
+            $arr[static::TYPE_PRODUCT] = $ratingTypes[static::TYPE_PRODUCT];
+        }
+        
+        if (array_key_exists(static::TYPE_SELLER_STOCK_AVAILABILITY, $ratingTypes)) {
+            $arr[static::TYPE_SELLER_STOCK_AVAILABILITY] = $ratingTypes[static::TYPE_SELLER_STOCK_AVAILABILITY];
+        }
+        return $arr;
     }
 
     public static function getSellerRating($userId)
@@ -63,7 +70,7 @@ class SelProdRating extends MyAppModel
         $srch->joinSellerProducts();
         $srch->joinSelProdRating();
         $srch->addMultipleFields(array("ROUND(AVG(sprating_rating),2) as avg_rating"));
-        $srch->addCondition('sprating_rating_type', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $srch->addCondition('sprating_ratingtype_id', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spreview_seller_user_id', '=', $userId);

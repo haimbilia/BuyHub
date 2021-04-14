@@ -27,7 +27,7 @@ $frm->developerTags['fld_default_col'] = 12;
 			</dl>
 			<?php foreach($ratingData as $rating){?>
 			<dl class="list">
-				<dt><?php echo $ratingTypeArr[$rating['sprating_rating_type']];?></dt>
+				<dt><?php echo $ratingTypeArr[$rating['sprating_ratingtype_id']];?></dt>
 				<dd><ul class="rating list-inline">
 				  <?php for($j=1;$j<=5;$j++){ ?>	
 				  <li class="<?php echo $j<=round($rating["sprating_rating"])?"active":"in-active" ?>">
