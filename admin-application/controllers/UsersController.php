@@ -138,12 +138,12 @@ class UsersController extends AdminBaseController
     {
         $this->objPrivilege->canEditUsers();
         $userObj = new User($userId);
-        $user = $userObj->getUserInfo(array('credential_username', 'credential_password', 'user_preferred_dashboard'), false, false);
+        $user = $userObj->getUserInfo(array('credential_username','if(credential_password != "", credential_password, credential_password_old) as credential_password', 'user_preferred_dashboard'), false, false);
         if (!$user) {
             Message::addErrorMessage($this->str_invalid_request);
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
         }
-        $userAuthObj = new UserAuthentication();
+        $userAuthObj = new UserAuthentication();       
         if (!$userAuthObj->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false, true) === true) {
             Message::addErrorMessage($userObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
