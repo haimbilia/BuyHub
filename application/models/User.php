@@ -1413,7 +1413,8 @@ class User extends MyAppModel
         }
         $record = new TableRecord(static::DB_TBL_CRED);
         $arrFlds = array(
-            static::DB_TBL_CRED_PREFIX . 'password' => UserAuthentication::encryptPassword($password)
+            static::DB_TBL_CRED_PREFIX . 'password' => UserAuthentication::encryptPassword($password),
+            static::DB_TBL_CRED_PREFIX . 'password_old' => ''
         );
         $record->setFldValue(static::DB_TBL_CRED_PREFIX . 'user_id', $userId);
         $record->assignValues($arrFlds);
@@ -1704,7 +1705,7 @@ class User extends MyAppModel
         }
 
         $db = FatApp::getDb();
-        if (!$db->updateFromArray(static::DB_TBL_CRED, [static::DB_TBL_CRED_PREFIX . 'password' => $pwd], ['smt' => static::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$this->mainTableRecordId]])) {
+        if (!$db->updateFromArray(static::DB_TBL_CRED, [static::DB_TBL_CRED_PREFIX . 'password' => $pwd, static::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => static::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$this->mainTableRecordId]])) {
             $this->error = $db->getError();
             return false;
         }
@@ -1850,7 +1851,7 @@ class User extends MyAppModel
     public function sendAdminNewUserCreationEmail($userData, $langId)
     {
         $userAuthObj = new UserAuthentication();
-        $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20));
+        $token = FatUtility::getRandomString(30);
 
         $data = array(
             'user_name' => $userData['user_name'],
