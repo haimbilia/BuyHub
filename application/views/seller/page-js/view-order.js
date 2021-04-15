@@ -8,6 +8,14 @@ $(document).ready(function(){
 			}			
 		});
 	});
+
+    $(document).on('click','input.manualShipping-js',function(){
+        if ($(this).is(":checked")) {
+            setTimeout(() => {
+                trackingUrlFld();
+            }, 500);
+        }
+	});	
 });
 
 (function() {
@@ -72,7 +80,20 @@ $(document).ready(function(){
         });
     }
     /* ShipStation */
-    
+
+    courierFld = function () {
+        $('.courierBlk--js').removeClass('d-none');
+        $('.courierFld--js').attr('data-fatreq', '{"required": true}');
+        $('.trackingUrlBlk--js').addClass('d-none');
+        $('.trackingUrlFld--js').attr('data-fatreq', '{"required": false}');
+    }
+
+    trackingUrlFld = function () {
+        $('.trackingUrlBlk--js').removeClass('d-none');
+        $('.trackingUrlFld--js').attr('data-fatreq', '{"required": true}');
+        $('.courierBlk--js').addClass('d-none');
+        $('.courierFld--js').attr('data-fatreq', '{"required": false}');
+    }
 })();
 
 function pageRedirect(op_id) {

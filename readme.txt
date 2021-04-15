@@ -87,6 +87,7 @@ Fixes:
     => 052317	Request For Category- Seller dashboard when only one language activated
     => 052413 - Removed settings for recurring discount in case of subscription.
     => 052352 - getting double loader while making payment 
+    => 052450 - Separate Tracking URL and Tracking Courier if Aftership enabled
 
 Enhancements :
    => Make provision to made seller
