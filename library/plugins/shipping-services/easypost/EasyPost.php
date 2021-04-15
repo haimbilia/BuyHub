@@ -88,9 +88,10 @@ class EasyPost extends ShippingServicesBase
     /**
      * getCarriers
      *
+     * @param  int $limit
      * @return array
      */
-    public function getCarriers(): array
+    public function getCarriers(int $limit = 0): array
     {
         if (Plugin::INACTIVE == $this->settings['plugin_active']) {
             return [];
@@ -102,11 +103,15 @@ class EasyPost extends ShippingServicesBase
         }
 
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
-            echo $this->error;
             return [];
         }
 
-        $records = $this->getResponse();
+        $records = (array) $this->getResponse();
+
+        if (0 < $limit && $limit  < count($records)) {
+            $records = array_slice($records, ($limit - 1));
+        }
+
         return array_map(function ($records) {
             return $records + ['code' => $records['readable']];
         }, $records);
@@ -408,7 +413,7 @@ class EasyPost extends ShippingServicesBase
         $this->resp = $this->shipment;
         return true;
     }
-    
+
     /**
      * getShipment : Currently used in test cases
      *
@@ -504,7 +509,7 @@ class EasyPost extends ShippingServicesBase
         $filename = empty($ext) ? trim($filename) . '.zip' : $filename;
         $this->createZipAndDownload($labelData, $filename);
     }
-    
+
     /**
      * createZipAndDownload
      *
@@ -667,7 +672,7 @@ class EasyPost extends ShippingServicesBase
             "carrier" => $shipments[0]['tracker']['carrier'], /* Because of all shipments( More than 1 qty of individual purchased product ) belongs to same shipping carrier. */
             "tracking_codes" => implode(',', $trackingCodes)
         ];
-        
+
         if (false === $this->doRequest(self::REQUEST_REFUND_SHIPMENT, $requestRefundParam)) {
             return false;
         }
@@ -675,7 +680,7 @@ class EasyPost extends ShippingServicesBase
     }
 
 
-    
+
     /**
      * getRefundResponse
      *
