@@ -340,6 +340,7 @@ class Shipping
                 $product['shippack_height'],
                 $dimensionUnits[$product['shippack_units']]
             ];
+
             foreach ($carriers as $carrier) {
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrier['code'], $fromZipCode, $this->langId]);
                 $cacheKey = self::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
@@ -356,7 +357,6 @@ class Shipping
                 if (false == $shippingRates || empty($shippingRates)) {
                     continue;
                 }
-                
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
@@ -372,7 +372,6 @@ class Shipping
                     ];
 
                     $shipmentId = array_key_exists('shipmentId', $value) ? $value['shipmentId'] : $carrier['code'] . '|' . $value['serviceName'];
-
                     $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']][$shipmentId] = $shippingCost;
                 }
                 /*If rates fetched from one shipment carriers then ignore for others */
@@ -381,6 +380,7 @@ class Shipping
                 }
             }
         }
+
         return true;
     }
 

@@ -74,6 +74,7 @@ Fixes:
     => 051573 - Product search is not working when we Activate Geo Location and shipping plugin.
     => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
+    => 052463 - Setup shipping of other product not working with EasyPost
     
 Enhancements :
    => Make provision to made seller

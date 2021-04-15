@@ -24,6 +24,7 @@ class EasyPost extends ShippingServicesBase
     private $weight;
     private $selectedShippingService;
     private $shipment;
+    private $shipmentOrderId;
     private $orderQty = 1;
     private $refundStatus = [];
 
@@ -373,17 +374,18 @@ class EasyPost extends ShippingServicesBase
      */
     public function retrieveOrder(string $orderId, bool $formatResp = true): bool
     {
-        if (!is_null($this->shipment) && !empty($this->shipment)) {
+        if (!is_null($this->shipment) && !empty($this->shipment) && $this->shipmentOrderId == trim($orderId)) {
             $this->shipment['orderStatus'] = current($this->shipment['shipments'])['status'];
             $this->resp = $this->shipment;
             return true;
         }
 
-        $orderId = trim($orderId);
-        if (false === $this->doRequest(self::REQUEST_RETRIEVE_ORDER, $orderId, $formatResp)) {
+        $this->shipmentOrderId = trim($orderId);
+        if (false === $this->doRequest(self::REQUEST_RETRIEVE_ORDER, $this->shipmentOrderId, $formatResp)) {
             return false;
         }
         $this->shipment = $this->getResponse();
+
         $this->shipment['orderStatus'] = current($this->shipment['shipments'])['status'];
         $this->resp = $this->shipment;
         return true;
@@ -459,6 +461,7 @@ class EasyPost extends ShippingServicesBase
             return (true === $formatResp ? [] : (object)[]);
         }
         $rates = $shipment['rates'];
+
         $key = array_search($shipmentRate[1], array_column($rates, 'id'));
         if (false === $key) {
             $this->error = Labels::getLabel('MSG_UNABLE_TO_FIND_SHIPMENT', $this->langId);
