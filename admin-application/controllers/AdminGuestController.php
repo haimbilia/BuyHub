@@ -191,7 +191,7 @@ class AdminGuestController extends FatController
             $this->_template->render(false, false, 'json-error.php', true, false);
         }
 
-        $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20));
+        $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20),true);
 
         $data = array('admin_id' => $admin['admin_id'], 'token' => $token);
         $reset_url = UrlHelper::generateFullUrl('adminGuest', 'resetPwd', array($admin['admin_id'], $token));

@@ -307,13 +307,13 @@ class AccountController extends LoggedUserController
         }
 
         if (empty($data['credential_password'])) {
-            $oldPassword = UserAuthentication::encryptPassword($post['credential_password'], true);
-            if ($oldPassword !== $data['credential_password_old']) {
+            $currentEncPassword = UserAuthentication::encryptPassword($post['current_password'], true);
+            if ($currentEncPassword !== $data['credential_password_old']) {
                 $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
         } else {
-            if (false == password_verify($post['credential_password'], $data['credential_password'])) {
+            if (false == password_verify($post['current_password'], $data['credential_password'])) {
                 $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
