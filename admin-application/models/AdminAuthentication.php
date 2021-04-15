@@ -51,10 +51,10 @@ class AdminAuthentication extends FatModel
         }
         
         /* [To Do - need to remove admin_password_old in next release */
-        if (!empty($row['admin_password'])) {
+        if (!empty($row['admin_password'])) {            
             if (false == password_verify($password, $row['admin_password'])) {
                 $objUserAuthentication->logFailedAttempt($ip, $username);
-                $this->error = Labels::getLabel('MSG_Invalid_Password1', $this->adminLangId);
+                $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
                 return false;
             }
         } else {
@@ -258,7 +258,7 @@ class AdminAuthentication extends FatModel
         }
 
         $db = FatApp::getDb();
-        $data = array('admin_password' => $pwd);
+        $data = array('admin_password' => $pwd, 'admin_password_old' => '');
         if ($db->updateFromArray('tbl_admin', $data, array('smt' => 'admin_id=?', 'vals' => array($aId)))) {
             $db->deleteRecords('tbl_admin_password_reset_requests', array('smt' => 'aprr_admin_id=?', 'vals' => array($aId)));
             return true;
