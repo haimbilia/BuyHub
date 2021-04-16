@@ -163,6 +163,7 @@ class MyAppController extends FatController
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
                 'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
                 'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
+                'redirecting' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

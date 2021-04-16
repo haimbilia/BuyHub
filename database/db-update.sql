@@ -442,6 +442,7 @@ ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NU
 CREATE TABLE IF NOT EXISTS `tbl_rating_types` (
   `ratingtype_id` bigint NOT NULL,
   `ratingtype_identifier` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ratingtype_type` tinyint(4) NOT NULL,
   `ratingtype_default` tinyint NOT NULL,
   `ratingtype_active` tinyint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -450,11 +451,12 @@ CREATE TABLE IF NOT EXISTS `tbl_rating_types` (
 -- Dumping data for table `tbl_rating_types`
 --
 
-INSERT INTO `tbl_rating_types` (`ratingtype_id`, `ratingtype_identifier`, `ratingtype_default`, `ratingtype_active`) VALUES
-(1, 'Product', 1, 1),
-(2, 'Shipping Quality', 1, 1),
-(3, 'Stock Availability', 1, 1),
-(4, 'Packaging Quality', 1, 1);
+INSERT INTO `tbl_rating_types` (`ratingtype_id`, `ratingtype_identifier`, `ratingtype_type`, `ratingtype_default`, `ratingtype_active`) VALUES
+(1, 'Product', 1, 1, 1),
+(2, 'Shop', 2, 1, 1),
+(3, 'Delivery', 3, 1, 1),
+(4, 'Stock Availability', 4, 0, 1),
+(5, 'Packaging Quality', 4, 0, 1),
 
 --
 -- Indexes for dumped tables
@@ -492,5 +494,7 @@ INNER JOIN tbl_product_to_category ptc ON ptc.ptc_product_id = SUBSTRING( op.op_
 SET tops.op_prodcat_id = ptc.ptc_prodcat_id;
 
 ALTER TABLE `tbl_seller_product_rating` CHANGE `sprating_rating_type` `sprating_ratingtype_id` BIGINT NOT NULL;
-
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '5' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 4;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 3;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
 /* Shop And Product Ratings */

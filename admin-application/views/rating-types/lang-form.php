@@ -16,7 +16,7 @@ $langFld->setfieldTagAttribute('onChange', "ratingTypesLangForm(" . $rtId . ", t
         <div class="row">
             <div class="col-sm-12">
                 <div class="tabs_nav_container responsive flat">
-                    <?php if (!array_key_exists($rtId, $defaultRatingsCols)) { ?>
+                    <?php if (!in_array($rtId, $restrictTypes)) { ?>
                         <ul class="tabs_nav">
                             <li><a href="javascript:void(0);"
                                     onclick="ratingTypesForm(<?php echo $rtId ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a>

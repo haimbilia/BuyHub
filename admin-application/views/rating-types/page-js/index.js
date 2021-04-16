@@ -93,7 +93,7 @@ $(document).ready(function() {
                 $(obj).toggleClass("active");
                 $(obj).attr('onclick', 'toggleStatus(event,this,' + (status ? 0 : 1) + ')');
             } else {
-                $(obj).prop('checked', false);
+                $(obj).prop('checked', (1 != status));
                 fcom.displayErrorMessage(ans.msg);
             }
         });

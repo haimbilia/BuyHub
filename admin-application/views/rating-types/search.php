@@ -30,7 +30,9 @@ foreach ($arr_listing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="ratingtypeIds[]" value=' . $row['ratingtype_id'] . '><i class="input-helper"></i></label>', true);
+                if ($row['ratingtype_id'] != RatingType::TYPE_PRODUCT) {
+                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="ratingtypeIds[]" value=' . $row['ratingtype_id'] . '><i class="input-helper"></i></label>', true);
+                }
                 break;
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
@@ -45,24 +47,30 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
             case 'ratingtype_active':
-                $active = "";
-                if (applicationConstants::ACTIVE == $row['ratingtype_active']) {
-                    $active = 'checked';
+                if ($row['ratingtype_id'] != RatingType::TYPE_PRODUCT) {
+                    $active = "";
+                    if (applicationConstants::ACTIVE == $row['ratingtype_active']) {
+                        $active = 'checked';
+                    }
+                    
+                    $statusClass = ($canEdit === false) ? 'disabled' : '';
+                    $str = '<label class="statustab -txt-uppercase">
+                            <input ' . $active . ' type="checkbox" id="switch' . $row['ratingtype_id'] . '" value="' . $row['ratingtype_id'] . '" onclick="toggleStatus(event,this,' . (int) !(applicationConstants::ACTIVE == $row['ratingtype_active']) . ')" class="switch-labels"/>
+                            <i class="switch-handles ' . $statusClass . '"></i>';
+                } else {
+                    $str = Labels::getLabel('LBL_N/A', $adminLangId);
                 }
-                
-                $statusClass = ($canEdit === false) ? 'disabled' : '';
-                $str = '<label class="statustab -txt-uppercase">
-                        <input ' . $active . ' type="checkbox" id="switch' . $row['ratingtype_id'] . '" value="' . $row['ratingtype_id'] . '" onclick="toggleStatus(event,this,' . (int) !(applicationConstants::ACTIVE == $row['ratingtype_active']) . ')" class="switch-labels"/>
-                        <i class="switch-handles ' . $statusClass . '"></i>';
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'action':
                 if ($canEdit) {
                     $function = "ratingTypesForm(" . $row['ratingtype_id'] . ")";
-                    if (array_key_exists($row['ratingtype_id'], $defaultRatingsCols)) {
+                    if (in_array($row['ratingtype_id'], $restrictTypes)) {
                         $function = "ratingTypesLangForm(" . $row['ratingtype_id'] . "," . $adminLangId . ");";
                     }
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
+                } else {
+                    $td->appendElement('plaintext', array(), Labels::getLabel('LBL_N/A', $adminLangId), true);
                 }
                 break;
             default:

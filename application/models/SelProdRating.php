@@ -6,9 +6,10 @@ class SelProdRating extends MyAppModel
     public const DB_TBL_PREFIX = '	sprating_';
 
     public const TYPE_PRODUCT = 1;
-    public const TYPE_SELLER_SHIPPING_QUALITY = 2;
+    public const TYPE_SHOP = 2;
     public const TYPE_SELLER_STOCK_AVAILABILITY = 3;
     public const TYPE_SELLER_PACKAGING_QUALITY = 4;
+    public const TYPE_SELLER_SHIPPING_QUALITY = 5;
 
     public function __construct($id = 0)
     {
@@ -20,14 +21,14 @@ class SelProdRating extends MyAppModel
         return new SearchBase(static::DB_TBL, 'sprating');
     }
 
-    public static function getRatingAspectsArr($langId , $fulfillmentType = Shipping::FULFILMENT_ALL, $isActive = 1) 
+    public static function getRatingAspectsArr($langId , $fulfillmentType = Shipping::FULFILMENT_ALL, $isActive = 1, $ratingType = RatingType::TYPE_PRODUCT) 
     {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
 
-        $srch = new RatingTypeSearch($langId, $isActive, applicationConstants::YES);
+        $srch = new RatingTypeSearch($langId, $ratingType, $isActive, applicationConstants::YES);
 
         $attr = ['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name'];
         $srch->addMultipleFields($attr);
@@ -48,10 +49,9 @@ class SelProdRating extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
 
-        $ratingTypes = self::getRatingAspectsArr($langId);
+        return $ratingTypes = self::getRatingAspectsArr($langId);
 
-
-        $arr = [];        
+        /* $arr = [];        
         if (array_key_exists(static::TYPE_PRODUCT, $ratingTypes)) {
             $arr[static::TYPE_PRODUCT] = $ratingTypes[static::TYPE_PRODUCT];
         }
@@ -59,7 +59,27 @@ class SelProdRating extends MyAppModel
         if (array_key_exists(static::TYPE_SELLER_STOCK_AVAILABILITY, $ratingTypes)) {
             $arr[static::TYPE_SELLER_STOCK_AVAILABILITY] = $ratingTypes[static::TYPE_SELLER_STOCK_AVAILABILITY];
         }
-        return $arr;
+        return $arr; */
+    }
+
+    public static function getShopRatingTypeArr($langId): array
+    {
+        $langId = FatUtility::int($langId);
+        if ($langId < 1) {
+            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
+        }
+
+        return self::getRatingAspectsArr($langId, Shipping::FULFILMENT_ALL, applicationConstants::ACTIVE, RatingType::TYPE_SHOP);
+    }
+
+    public static function getDeliveryRatingTypeArr($langId): array
+    {
+        $langId = FatUtility::int($langId);
+        if ($langId < 1) {
+            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
+        }
+
+        return self::getRatingAspectsArr($langId, Shipping::FULFILMENT_ALL, applicationConstants::ACTIVE, RatingType::TYPE_DELIVERY);
     }
 
     public static function getSellerRating($userId)

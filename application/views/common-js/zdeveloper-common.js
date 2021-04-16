@@ -230,7 +230,7 @@ function formAction(frm, callback) {
 }
 
 function initialize() {
-    if(typeof google == 'undefined'){
+    if (typeof google == 'undefined') {
         return;
     }
     geocoder = new google.maps.Geocoder();
@@ -791,7 +791,7 @@ function defaultSetUpLogin(frm, v) {
         if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
             autoClose = false;
         }
-        
+
         initialize();
         $.systemMessage.loading();
         $.systemMessage.fillSysMessage(data, cls, autoClose);
@@ -1153,39 +1153,39 @@ $(document).ready(function () {
         openSignInForm();
     });
 
-    $(".cc-cookie-accept-js").click(function() {
-        var data = {'statistical_cookies' : 1, 'personalise_cookies' : 1};
+    $(".cc-cookie-accept-js").click(function () {
+        var data = { 'statistical_cookies': 1, 'personalise_cookies': 1 };
         updateUserCookies(data);
     });
-    
-    $(".cookie-preferences-js").click(function() {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('Custom', 'cookiePreferencesData'), '', function(t) {
+
+    $(".cookie-preferences-js").click(function () {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('Custom', 'cookiePreferencesData'), '', function (t) {
                 fcom.updateFaceboxContent(t, 'faceboxWidth');
             });
         });
     });
-    
-    setUserCookiePreferences = function(){
+
+    setUserCookiePreferences = function () {
         var statisticalCookies = 0;
-        if($("input[name='statistical_cookies']").prop('checked') == true){
+        if ($("input[name='statistical_cookies']").prop('checked') == true) {
             statisticalCookies = 1;
         };
         var personaliseCookies = 0;
-        if ($("input[name='personalise_cookies']").prop('checked') == true){
+        if ($("input[name='personalise_cookies']").prop('checked') == true) {
             personaliseCookies = 1;
-        }; 
-        var data = {'statistical_cookies' : statisticalCookies, 'personalise_cookies' : personaliseCookies};
+        };
+        var data = { 'statistical_cookies': statisticalCookies, 'personalise_cookies': personaliseCookies };
         updateUserCookies(data);
     }
-    
-    updateUserCookies = function(data){
-        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), data, function(rsp) {
+
+    updateUserCookies = function (data) {
+        fcom.ajax(fcom.makeUrl('Custom', 'updateUserCookies'), data, function (rsp) {
             var ans = $.parseJSON(rsp);
-                        console.log(ans);
+            console.log(ans);
             if (ans.status == 0) {
                 $.mbsmessage(ans.msg, true, 'alert--danger');
-            }else{
+            } else {
                 $(".cookie-alert").hide('slow');
                 $(".cookie-alert").remove();
                 $(document).trigger('close.facebox');
@@ -1801,3 +1801,48 @@ function awebersignup() {
         }
     }, 1000);
 }
+
+// Multiple images preview in browser
+var imagesPreview = function (input, placeToInsertImagePreview) {
+    if (input.files) {
+        if (1 > $(placeToInsertImagePreview + ' ul').length) {
+            $(placeToInsertImagePreview).html('<ul class="review-media-list"></ul>');
+        }
+
+        var fileFldName = $(input).attr('name');
+        var filesAmount = input.files.length;
+        for (i = 0; i < filesAmount; i++) {
+            let selectedFile = input.files[i];
+
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var htm = '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><a href="javascript:void(0);" class="file-remove fileRemove--js" data-filefld="' + fileFldName + '"></a></div></li>';
+                $(placeToInsertImagePreview + ' ul').append(htm);
+                $($.parseHTML('<img class="imgToUpload--js" title="' + selectedFile.name + '">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview + ' ul li:last-child .uploaded-file__thumb');
+            }
+
+            reader.readAsDataURL(input.files[i]);
+        }
+    }
+};
+
+function DataURIToBlob(dataURI) {
+    const splitDataURI = dataURI.split(',')
+    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
+    const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+
+    const ia = new Uint8Array(byteString.length)
+    for (let i = 0; i < byteString.length; i++)
+        ia[i] = byteString.charCodeAt(i)
+
+    return new Blob([ia], { type: mimeString })
+}
+
+$(document).on('change', '.multipleImgs--js', function () {
+    var galleryElement = '.multipleImgsGallery--js';
+    $(galleryElement).html('');
+    imagesPreview(this, galleryElement);
+});
+$(document).on('click', '.fileRemove--js', function () {
+    $(this).closest('li').remove();
+});

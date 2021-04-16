@@ -43,9 +43,9 @@ class RatingTypesController extends AdminBaseController
         }
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $defaultRatingsCols = SelProdRating::getRatingAspectsArr($this->adminLangId);
+        $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
 
-        $this->set('defaultRatingsCols', $defaultRatingsCols);
+        $this->set('restrictTypes', $restrictTypes);
         $this->set("canEdit", $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
         $this->set("arr_listing", $records);
         $this->set('pageCount', $srch->pages());
@@ -70,10 +70,11 @@ class RatingTypesController extends AdminBaseController
         }
 
         $frm->fill($data);
-        $defaultRatingsCols = SelProdRating::getRatingAspectsArr($this->adminLangId, Shipping::FULFILMENT_ALL, -1);
+
+        $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
 
         $this->set('frm', $frm);
-        $this->set('defaultRatingsCols', $defaultRatingsCols);
+        $this->set('restrictTypes', $restrictTypes);
         $this->set('rtId', $rtId);
         $this->_template->render(false, false);
     }
@@ -97,8 +98,8 @@ class RatingTypesController extends AdminBaseController
         $langData['ratingtypelang_lang_id'] = $langId;
         $frm->fill($langData);
 
-        $defaultRatingsCols = SelProdRating::getRatingAspectsArr($this->adminLangId, Shipping::FULFILMENT_ALL, -1);
-        $this->set('defaultRatingsCols', $defaultRatingsCols);
+        $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
+        $this->set('restrictTypes', $restrictTypes);
         $this->set('languages', Language::getAllNames());
         $this->set('rtId', $rtId);
         $this->set('rt_lang_id', $langId);
@@ -119,11 +120,11 @@ class RatingTypesController extends AdminBaseController
 
         $rtId = FatApp::getPostedData('ratingtype_id', FatUtility::VAR_INT, 0);
 
-        $defaultRatingsCols = SelProdRating::getRatingAspectsArr($this->adminLangId, Shipping::FULFILMENT_ALL, -1);
-        if (array_key_exists($rtId, $defaultRatingsCols)) {
+        $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
+        if (in_array($rtId, $restrictTypes)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_ALLOWED_TO_UPDATE_DEFAULT_RATING_TYPE_IDENTIFIER', $this->adminLangId));
         }
-
+        $post['ratingtype_type'] = RatingType::TYPE_OTHER;
         $record = new RatingType($rtId);
         $record->assignValues($post);
         if (!$record->save()) {
@@ -277,17 +278,23 @@ class RatingTypesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateRatingTypeStatus($brandId, $status)
+    private function updateRatingTypeStatus($rtId, $status)
     {
         $status = FatUtility::int($status);
-        $brandId = FatUtility::int($brandId);
-        if (1 > $brandId || -1 == $status) {
+        $rtId = FatUtility::int($rtId);
+        if (1 > $rtId || -1 == $status) {
             FatUtility::dieJsonError(
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
 
-        $brandObj = new RatingType($brandId);
+        if ($rtId == RatingType::TYPE_PRODUCT) {
+            FatUtility::dieJsonError(
+                Labels::getLabel('MSG_NOT_ALLOWED', $this->adminLangId)
+            );
+        }
+
+        $brandObj = new RatingType($rtId);
         if (!$brandObj->changeStatus($status)) {
             FatUtility::dieJsonError($brandObj->getError());
         }

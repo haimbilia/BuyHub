@@ -5,7 +5,7 @@ $frm->setFormTagAttribute('id', 'frmRatingTypes');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 
-if (array_key_exists($rtId, $defaultRatingsCols)) {
+if (in_array($rtId, $restrictTypes)) {
 	$fld = $frm->getField('ratingtype_identifier');
 	$fld->setfieldTagAttribute('readonly', 'readonly');
 }
@@ -18,7 +18,8 @@ if (array_key_exists($rtId, $defaultRatingsCols)) {
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="tabs_nav_container responsive flat">
-						<?php if (!array_key_exists($rtId, $defaultRatingsCols)) { ?>
+						<?php 
+						if (!in_array($rtId, $restrictTypes)) { ?>
 							<ul class="tabs_nav">
 								<li>
 									<a class="active" href="javascript:void(0)"
@@ -34,7 +35,7 @@ if (array_key_exists($rtId, $defaultRatingsCols)) {
 					<div class="tabs_panel_wrap" style="min-height: inherit;">
 						<div class="tabs_panel">
 							<?php 
-							if (!array_key_exists($rtId, $defaultRatingsCols)) {
+							if (!in_array($rtId, $restrictTypes)) {
 								echo $frm->getFormHtml(); 
 							} ?>
 						</div>
