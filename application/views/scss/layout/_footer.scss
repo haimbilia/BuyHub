@@ -130,14 +130,20 @@
     ul {
         display: table;
         width: 100%;
+        @include media-breakpoint-down(sm) {
+            display: block;
+        }
         li {
             text-align: center;
             vertical-align: top;
             display: table-cell;
             padding: 25px 15px;
-            -webkit-border-start: $border;
-            -moz-border-start: $border;
             border-#{$start-direction}: $border;
+            @include media-breakpoint-down(sm) {
+                display: block;
+                border: none;
+                padding: 15px;
+            }
             &:first-child {
                 -webkit-border-start: none;
                 -moz-border-start: none;

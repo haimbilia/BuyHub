@@ -84,7 +84,7 @@ class ContentPage extends MyAppModel
         return $srch;
     }
 
-    public static function getPagesForSelectBox($langId, $ignoreCpageId = 0)
+    public static function getPagesForSelectBox(int $langId, $ignoreCpageId = 0)
     {
         $langId = FatUtility::int($langId);
         $ignoreCpageId = FatUtility::int($ignoreCpageId);

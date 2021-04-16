@@ -19,6 +19,9 @@ class FilterHelper extends FatUtility
         $post = FatApp::getPostedData();
 
         $prodSrchObj = new ProductSearch($langId);
+        if (array_key_exists('addFld', $headerFormParamsAssocArr)) {
+            $prodSrchObj->addFld($headerFormParamsAssocArr['addFld']);
+        }
         /*
         $prodSrchObj->setDefinedCriteria(0, 0, $headerFormParamsAssocArr, true);
         $prodSrchObj->joinProductToCategory();
@@ -176,7 +179,7 @@ class FilterHelper extends FatUtility
         $brandSrch->addCondition('brand_id', '!=', 'null');
         /* if needs to show product counts under brands[ */
         //$brandSrch->addFld('count(selprod_id) as totalProducts');
-        /* ] */
+        /* ] */       
         $brandRs = $brandSrch->getResultSet();
         $brands = FatApp::getDb()->fetchAll($brandRs);
 
@@ -254,15 +257,20 @@ class FilterHelper extends FatUtility
         $cacheKey .= (true ===  MOBILE_APP_API_CALL) ? $cacheKey . '-m' : $cacheKey;
         $catFilter =  FatCache::get('catFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$catFilter) {
-            $catSrch = clone $prodSrchObj;
-            $catSrch->doNotLimitRecords();
-            $catSrch->joinProductToCategoryLang($langId);
-            $catSrch->addGroupBy('c.prodcat_id');
-            $excludeCatHavingNoProducts = true;
-            if (!empty($keyword)) {
-                $excludeCatHavingNoProducts = false;
+            if (0 < $categoryId) {
+                $categoriesArr = ProductCategory::getArray($langId, $categoryId, true, true, false, true);
+            } else {
+                $catSrch = clone $prodSrchObj;
+                $catSrch->doNotLimitRecords();
+                /* 
+                $catSrch->joinProductToCategoryLang($langId);
+                $catSrch->addGroupBy('c.prodcat_id'); */
+                $excludeCatHavingNoProducts = true;
+                if (!empty($keyword)) {
+                    $excludeCatHavingNoProducts = false;
+                }
+                $categoriesArr = ProductCategory::getTreeArr($langId, $categoryId, false, $catSrch, $excludeCatHavingNoProducts);
             }
-            $categoriesArr = ProductCategory::getTreeArr($langId, $categoryId, false, $catSrch, $excludeCatHavingNoProducts);
             $categoriesArr = (true ===  MOBILE_APP_API_CALL) ? array_values($categoriesArr) : $categoriesArr;
             FatCache::set('catFilter' . $cacheKey, serialize($categoriesArr), '.txt');
             return $categoriesArr;

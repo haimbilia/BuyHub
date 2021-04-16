@@ -647,12 +647,12 @@ $("document").ready(function () {
                 if ('undefined' != typeof method) {
                     $(frm).attr('action', fcom.makeUrl(method + 'Pay', 'charge', [orderId]));
                 }
-                $.mbsmessage(t.msg, false, 'alert--success');
+                $.mbsmessage(t.msg, true, 'alert--success');
                 $('.successOtp-js').removeClass('d-none');
                 $('.otpBlock-js').addClass('d-none');
                 confirmOrder(frm);
             } else {
-                $.mbsmessage(t.msg, false, 'alert--danger');
+                $.mbsmessage(t.msg, true, 'alert--danger');
                 invalidOtpField();
             }
         });

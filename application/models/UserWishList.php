@@ -58,7 +58,7 @@ class UserWishList extends MyAppModel
         $srchObj->joinTable(UserWishListProducts::DB_TBL, 'LEFT OUTER JOIN', 'uwlist_id = uwlp_uwlist_id');
     }
 
-    public function addUpdateListProducts($uwlp_uwlist_id, $selprod_id)
+    public function addUpdateListProducts(int $uwlp_uwlist_id, int $selprod_id): bool
     {
         $uwlp_uwlist_id = FatUtility::int($uwlp_uwlist_id);
         $selprod_id = FatUtility::int($selprod_id);
@@ -71,12 +71,13 @@ class UserWishList extends MyAppModel
         return true;
     }
 
-    public function deleteWishList($uwlist_id)
+    public function deleteWishList(int $uwlistId): bool
     {
-        $uwlist_id = FatUtility::int($uwlist_id);
+        $uwlistId = FatUtility::int($uwlistId);
         $db = FatApp::getDb();
-        $db->deleteRecords(UserWishListProducts::DB_TBL, array('smt' => 'uwlp_uwlist_id = ?', 'vals' => array($uwlist_id)));
-        $db->deleteRecords(static::DB_TBL, array('smt' => 'uwlist_id = ?', 'vals' => array($uwlist_id)));
+        $db->deleteRecords(UserWishListProducts::DB_TBL, array('smt' => 'uwlp_uwlist_id = ?', 'vals' => array($uwlistId)));
+        $db->deleteRecords(static::DB_TBL, array('smt' => 'uwlist_id = ?', 'vals' => array($uwlistId)));
+        return true;
     }
 
     public static function getUserWishLists($userId = 0, $fetchProducts = false, $excludeWishList = 0, $type = -1)

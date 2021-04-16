@@ -16,24 +16,28 @@
 <link rel="manifest" href="<?php echo UrlHelper::generateUrl('Home', 'pwaManifest'); ?>">
 <?php
 if ($canonicalUrl == '') {
-    $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), !empty(FatApp::getParameters()) ? FatApp::getParameters() : array());
+    if (!empty(FatApp::getParameters())) {
+        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), FatApp::getParameters());
+    } else {
+        if (FatApp::getAction() == 'index') {
+            $cName = ($controllerName == 'Home') ? '' : $controllerName;
+            $canonicalUrl = UrlHelper::generateFullUrl($cName);
+        }
+    }
 }
 ?>
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
 <style>
     :root {
-        <?php if (CommonHelper::isAppUser()) { ?>
-            --brand-color: #<?php echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-            --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;   
-            --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-            --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        <?php } else { ?>
-            --brand-color: #<?php echo $themeDetail[ThemeColor::TYPE_BRAND]; ?>;
-            --brand-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_BRAND_INVERSE]; ?>;
-            --secondary-color: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY]; ?>;
-            --secondary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY_INVERSE]; ?>;
-        <?php } ?>
-        --primary-color: #<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>;
+        <?php if (CommonHelper::isAppUser()) { ?>--brand-color: #<?php echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        <?php } else { ?>--brand-color: #<?php echo $themeDetail[ThemeColor::TYPE_BRAND]; ?>;
+        --brand-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_BRAND_INVERSE]; ?>;
+        --secondary-color: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY]; ?>;
+        --secondary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY_INVERSE]; ?>;
+        <?php } ?>--primary-color: #<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>;
         --primary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY_INVERSE]; ?>;
         --third-color: #<?php echo $themeDetail[ThemeColor::TYPE_THIRD]; ?>;
         --third-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_THIRD_INVERSE]; ?>;
@@ -92,7 +96,7 @@ if ($canonicalUrl == '') {
             })();
     <?php }
     $pixelId = FatApp::getConfig("CONF_FACEBOOK_PIXEL_ID", FatUtility::VAR_STRING, '');
-    if ('' != $pixelId) { ?>
+    if ('' != $pixelId && User::checkStatisticalCookiesEnabled() == true) { ?>
             ! function(f, b, e, v, n, t, s) {
                 if (f.fbq) return;
                 n = f.fbq = function() {
@@ -116,17 +120,17 @@ if ($canonicalUrl == '') {
         var fbPixel = true;
     <?php } ?>
 </script>
-<?php 
+<?php
 
-if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT", FatUtility::VAR_STRING, '')) {
+if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT", FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
     echo FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT", FatUtility::VAR_STRING, '');
 }
-if (FatApp::getConfig("CONF_HOTJAR_HEAD_SCRIPT", FatUtility::VAR_STRING, '')) {
+if (FatApp::getConfig("CONF_HOTJAR_HEAD_SCRIPT", FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
     echo FatApp::getConfig("CONF_HOTJAR_HEAD_SCRIPT", FatUtility::VAR_STRING, '');
 }
 if (FatApp::getConfig("CONF_DEFAULT_SCHEMA_CODES_SCRIPT", FatUtility::VAR_STRING, '')) {
     echo FatApp::getConfig("CONF_DEFAULT_SCHEMA_CODES_SCRIPT", FatUtility::VAR_STRING, '');
 }
 if (isset($layoutTemplate) && $layoutTemplate != '') { ?>
-    <link rel="stylesheet" href="<?php echo UrlHelper::generateUrl('ThemeColor', $layoutTemplate, array($layoutRecordId)); ?>"/>
+    <link rel="stylesheet" href="<?php echo UrlHelper::generateUrl('ThemeColor', $layoutTemplate, array($layoutRecordId)); ?>" />
 <?php }

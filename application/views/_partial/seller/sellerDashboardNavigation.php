@@ -113,6 +113,16 @@ $plugin = new Plugin();
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?></span></a></div>
                         </li>
                     <?php } ?>
+                     <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item <?php echo ($controller == 'seller-plugins' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_DATA_MIGRATION', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins','index',[Plugin::TYPE_DATA_MIGRATION]); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_DATA_MIGRATION', $siteLangId); ?></span></a></div>
+                        </li>
+                    <?php } ?>    
+                        
                     <li class="divider"></li>
                 <?php } ?>
                 

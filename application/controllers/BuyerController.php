@@ -183,7 +183,6 @@ class BuyerController extends BuyerBaseController
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '=', $orderId);
 
-
         if (0 < $opId) {
             if (true === MOBILE_APP_API_CALL) {
                 $srch->joinTable(SelProdReview::DB_TBL, 'LEFT OUTER JOIN', 'o.order_id = spr.spreview_order_id and op.op_selprod_id = spr.spreview_selprod_id', 'spr');
@@ -214,6 +213,7 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
 
         $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
+        
         foreach ($childOrderDetail as $op_id => $val) {
             $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
 
@@ -411,8 +411,13 @@ class BuyerController extends BuyerBaseController
         $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
         $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
 
+        // set LTR direction for english translation
+        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
+        // set font
+        $pdf->SetFont('dejavusans');
+
         $templatePath = "buyer/view-invoice.php";
-        $html = $template->render(false, false, $templatePath, true, true);
+        $html = addslashes($template->render(false, false, $templatePath, true, true));
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
 
@@ -911,16 +916,7 @@ class BuyerController extends BuyerBaseController
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-
-        if (!in_array($opDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses())) {
-            $message = Labels::getLabel('MSG_Order_Cancellation_cannot_placed', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
+        
         $ocRequestSrch = new OrderCancelRequestSearch();
         $ocRequestSrch->doNotCalculateRecords();
         $ocRequestSrch->doNotLimitRecords();
@@ -2587,7 +2583,9 @@ class BuyerController extends BuyerBaseController
         }
 
         $frm->addRequiredField(Labels::getLabel('LBL_Title', $langId), 'spreview_title');
-        $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();
+        $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();        
+        $arr = ["{website_name}" => FatApp::getConfig("CONF_WEBSITE_NAME_" . $langId)]; 
+        $frm->addCheckBox(strtr(Labels::getLabel('LBL_I_agree_that_my_review,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId),$arr), 'agree', 1);
         $frm->addHiddenField('', 'op_id', $op_id);
         $frm->addHiddenField('', 'referrer', CommonHelper::redirectUserReferer(true));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Review', $langId));

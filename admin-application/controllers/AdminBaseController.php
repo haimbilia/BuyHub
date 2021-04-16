@@ -157,7 +157,9 @@ class AdminBaseController extends FatController
             'invalidFromTime' => Labels::getLabel('LBL_PLEASE_SELECT_VALID_FROM_TIME', $this->adminLangId),
             'selectTimeslotDay' => Labels::getLabel('LBL_ATLEAST_ONE_DAY_AND_TIMESLOT_NEEDS_TO_BE_CONFIGURED', $this->adminLangId),
             'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->adminLangId),
-            'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),           
+            'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
+            'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
+            'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),     
         );
 
         $languages = Language::getAllNames(false);
@@ -288,17 +290,17 @@ class AdminBaseController extends FatController
         $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'credential_username', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->adminLangId), 'user_name');
         $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->adminLangId), 'user_dob', '', array('readonly' => 'readonly'));
-        /*$frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'user_phone');*/
+        $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $frm->addEmailField(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array())->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
         $frm->addTextBox(Labels::getLabel('LBL_City', $this->adminLangId), 'user_city');
 
         switch ($userType) {
@@ -385,27 +387,27 @@ class AdminBaseController extends FatController
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
 
         $taxCategories = Tax::getSaleTaxCatArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), 'Select')->requirements()->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
 
         if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
             $shipProfileArr = ShippingProfile::getProfileArr(0, true, true);
-            $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr)->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
 
             if ($type == 'REQUESTED_CATALOG_PRODUCT') {
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-                $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [])->requirements()->setRequired();
+                $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
             }
         }
 
         if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
             if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
                 $shipPackArr = ShippingPackage::getAllNames();
-                $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Package', $this->adminLangId), 'product_ship_package', $shipPackArr)->requirements()->setRequired();
+                $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Package', $this->adminLangId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
             }
 
             /* weight unit[ */
             $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
-            $frm->addSelectBox(Labels::getLabel('LBL_Weight_Unit', $langId), 'product_weight_unit', $weightUnitsArr)->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('LBL_Weight_Unit', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
             $pWeightUnitUnReqObj = new FormFieldRequirement('product_weight_unit', Labels::getLabel('LBL_Weight_Unit', $langId));
             $pWeightUnitUnReqObj->setRequired(false);
 

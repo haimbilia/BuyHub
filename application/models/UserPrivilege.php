@@ -32,8 +32,8 @@ class UserPrivilege
     public const SECTION_SHIPPING_PACKAGES = 29;
     public const SECTION_SELLER_REQUESTS = 30;
     public const SECTION_ADVERTISEMENT_FEED = 31;
-    public const SECTION_MARKETPLACE_CHANNEL = 32;
-
+    public const SECTION_SELLER_PLUGIN = 32;
+    public const SECTION_MARKETPLACE_CHANNEL = 33;
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -130,6 +130,7 @@ class UserPrivilege
             static::SECTION_SHIPPING_PROFILE => Labels::getLabel('LBL_Shipping_Profiles', $langId),
             static::SECTION_SHIPPING_PACKAGES => Labels::getLabel('LBL_Shipping_Packages', $langId),
             static::SECTION_ADVERTISEMENT_FEED => Labels::getLabel('LBL_Advertisement_Feed', $langId),
+            static::SECTION_SELLER_PLUGIN => Labels::getLabel('LBL_SELLER_PLUGIN', $langId),
         );
         return $arr;
     }
@@ -145,6 +146,7 @@ class UserPrivilege
                 static::SECTION_PRODUCT_OPTIONS => Labels::getLabel('LBL_Product_Options', $langId),
                 static::SECTION_TAX_CATEGORY => Labels::getLabel('LBL_Tax_Categories', $langId),
                 static::SECTION_SELLER_REQUESTS => Labels::getLabel('LBL_Seller_Requests', $langId),
+                static::SECTION_SELLER_PLUGIN => Labels::getLabel('LBL_SELLER_PLUGIN', $langId),
             ),
             static::MODULE_PROMOTIONS =>
             array(
@@ -890,6 +892,16 @@ class UserPrivilege
     public function canEditAdvertisementFeed($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_ADVERTISEMENT_FEED, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewSellerPlugins($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_SELLER_PLUGIN, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditSellerPlugins($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_SELLER_PLUGIN, static::PRIVILEGE_WRITE, $returnResult);
     }
 
     public function canViewMarketplaceChannel($sellerId = 0, $returnResult = false)

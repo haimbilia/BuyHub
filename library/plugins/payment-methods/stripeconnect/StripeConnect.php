@@ -71,21 +71,19 @@ class StripeConnect extends PaymentMethodBase
     public function __construct(int $langId)
     {
         $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
+        $this->requiredKeys();
     }
 
+
     /**
-     * init
+     * requiredKeys
      *
-     * @param int $userId
      * @return void
      */
-    public function init(int $userId = 0)
+    public function requiredKeys()
     {
-        if (false == $this->validateSettings()) {
-            return false;
-        }
-
-        if (isset($this->settings['env']) && Plugin::ENV_PRODUCTION == $this->settings['env']) {
+        $this->env = FatUtility::int($this->getKey('env'));
+        if (Plugin::ENV_PRODUCTION == $this->env) {
             $this->liveMode = "live_";
             $this->requiredKeys = [
                 'env',
@@ -94,9 +92,24 @@ class StripeConnect extends PaymentMethodBase
                 $this->liveMode . 'secret_key'
             ];
         }
+    }
+
+    /**
+     * init
+     *
+     * @param int $userId
+     * @return void
+     */
+    public function init(int $userId = 0, bool $isSeller = false)
+    {
+        if (false == $this->validateSettings()) {
+            return false;
+        }
 
         if (0 < $userId) {
-            if (false === $this->loadLoggedUserInfo($userId)) {
+            if (false === $isSeller && false === $this->loadLoggedUserInfo($userId)) {
+                return false;
+            } else if (false === $this->loadSellerInfo($userId)) {
                 return false;
             }
         }
@@ -229,7 +242,7 @@ class StripeConnect extends PaymentMethodBase
                 'name' => $this->userData['shop_name'],
                 'url' => UrlHelper::generateFullUrl('shops', 'view', [$this->userData['shop_id']]),
                 'support_url' => UrlHelper::generateFullUrl('shops', 'view', [$this->userData['shop_id']]),
-                'support_phone' => $this->userData['shop_phone'],
+                'support_phone' => ValidateElement::formatDialCode($this->userData['shop_phone_dcode']) . $this->userData['shop_phone'],
                 'support_email' => $this->userData['credential_email'],
                 'support_address' => [
                     'city' => $this->userData['shop_city'],

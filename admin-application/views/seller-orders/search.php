@@ -1,5 +1,7 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$plugin = new Plugin();
+$keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+
 $arr_flds = array(
     'op_invoice_number' =>    Labels::getLabel('LBL_INV_No', $adminLangId),
     'vendor' => Labels::getLabel('LBL_Seller', $adminLangId),
@@ -36,7 +38,7 @@ foreach ($vendorOrdersList as $sn => $row) {
                 $txt = '<br/><strong>' . Labels::getLabel('LBL_Shop', $adminLangId) . ':  </strong>' . $row['op_shop_name'];
                 $txt .= '<br/><strong>' . Labels::getLabel('LBL_User_Name', $adminLangId) . ':  </strong>' . $row['op_shop_owner_username'];
                 $txt .= '<br/><strong>' . Labels::getLabel('LBL_Email', $adminLangId) . ':   </strong><a href="mailto:' . $row['op_shop_owner_email'] . '">' . $row['op_shop_owner_email'] . '</a>';
-                /* $txt .= '<br/><strong>'.Labels::getLabel('LBL_Phone',$adminLangId).':   </strong>'.$row['op_shop_owner_phone']; */
+                /* $txt .= '<br/><strong>'.Labels::getLabel('LBL_Phone',$adminLangId).':   </strong>'.ValidateElement::formatDialCode($row['op_shop_owner_phone_dcode']) . $row['op_shop_owner_phone']; */
                 $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'buyer_name':
@@ -48,7 +50,7 @@ foreach ($vendorOrdersList as $sn => $row) {
                 }
                 $txt = '<br/><strong>' . Labels::getLabel('LBL_User_Name', $adminLangId) . ':  </strong>' . $row['buyer_username'];
                 $txt .= '<br/><strong>' . Labels::getLabel('LBL_Email', $adminLangId) . ':  </strong><a href="mailto:' . $row['buyer_email'] . '">' . $row['buyer_email'] . '</a>';
-                $txt .= '<br/><strong>' . Labels::getLabel('LBL_Phone', $adminLangId) . ':  </strong>' . $row['buyer_phone'];
+                $txt .= '<br/><strong>' . Labels::getLabel('LBL_Phone', $adminLangId) . ':  </strong>' . ValidateElement::formatDialCode($row['buyer_phone_dcode']) . $row['buyer_phone'];
                 $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'order_net_amount':
@@ -83,10 +85,14 @@ foreach ($vendorOrdersList as $sn => $row) {
                 }
                 $shipBySeller = CommonHelper::canAvailShippingChargesBySeller($row['op_selprod_user_id'], $row['opshipping_by_seller_user_id']);
                 if ($row['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !$shipBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $row['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $row['order_payment_status']) && !empty($row['opshipping_carrier_code']) && !empty($row['opshipping_service_code'])) {
-                    if (empty($row['opship_response']) && empty($row['opship_tracking_number'])) {
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'generateLabel("' . $row['order_id'] . '", ' . $row['op_id'] . ')', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_GENERATE_LABEL', $adminLangId)), '<i class="fas fa-file-download"></i>', true);
-                    } elseif (!empty($row['opship_response'])) {
-                        $td->appendElement('a', array('href' => UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$row['op_id']]), 'target' => '_blank', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_PREVIEW_LABEL', $adminLangId)), '<i class="fas fa-file-export"></i>', true);
+                    if (empty($row['opr_response']) && empty($row['opship_tracking_number']) && 'EasyPost' != $keyName) {
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'generateLabel(' . $row['op_id'] . ')', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_GENERATE_LABEL', $adminLangId)), '<i class="fas fa-file-download"></i>', true);
+                    } elseif (!empty($row['opr_response']) && (!empty($row['opship_tracking_url']) || 'EasyPost' != $keyName) && OrderStatus::ORDER_CANCELLED != $row["op_status_id"]) {
+                        if (OrderStatus::ORDER_REFUNDED == $row["op_status_id"] && $canEdit) {
+                            $td->appendElement('a', array('href' => UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$row['op_id']]), 'target' => '_blank', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $adminLangId)), '<i class="fas fa-file-export"></i>', true);
+                        } else if ($canEdit) {
+                            $td->appendElement('a', array('href' => UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$row['op_id']]), 'target' => '_blank', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_PREVIEW_LABEL', $adminLangId)), '<i class="fas fa-file-export"></i>', true);
+                        }
                     }
                 }
 

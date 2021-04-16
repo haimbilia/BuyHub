@@ -139,4 +139,24 @@ class Countries extends MyAppModel
 
         return $row;
     }
+    
+    public static function getCountryAttributeByName(string $countryName, int $langId, string $attr): string
+    {
+        $countryArr = $this->getCountryArrByName($countryName, $langId, [$attr]);
+        return (string) (array_key_exists($attr, $countryArr) ? $countryArr[$attr] : '');
+    }
+
+    public static function getCountryArrByName(string $countryName, int $langId, array $attr = []): array
+    {
+        if (empty($countryName)) {
+            return [];
+        }
+
+        $srch = static::getSearchObject(true, $langId, $attr);
+        $srch->addCondition('country_name', '=', $countryName);
+        
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetch($rs);
+    }
+
 }

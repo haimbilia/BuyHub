@@ -24,8 +24,7 @@ strong {
     text-align: left !important;
 }
 
-.text-right {
-    text-align: right !important;
+.text-right {text-align: right !important;
 }
 
 .text-center {
@@ -72,6 +71,8 @@ strong {
 .clearfix:after {
     clear: both;
 }
+
+.iti{display: block;}
 
 .gap {
     height: 15px;
@@ -12085,4 +12086,21 @@ form[name="frmShippingProfile"] {
     margin-right: 5px;
 }
 
-.ui-autocomplete{ overflow-y:  auto; max-height: 350px;}
+.ui-autocomplete {
+    overflow-y: auto;
+    max-height: 350px;
+}
+.tagify {
+    min-height: 35px;
+}
+
+.field_cover {
+    position: relative;
+}
+.field_cover .fa {
+    position: relative;
+    left: -30px;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
+}

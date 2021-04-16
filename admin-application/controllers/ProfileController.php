@@ -240,20 +240,32 @@ class ProfileController extends AdminBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
         }
 
-        if (!$curDbPassword = AdminUsers::getAttributesById($this->_adminId, 'admin_password')) {
-            Message::addErrorMessage($this->_adminProfileObj->getError());
+        /* Restrict to change password for admin on demo URL. */
+        if (CommonHelper::demoUrl() && 1 == $this->_adminId) {
+            Message::addErrorMessage(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->adminLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
         }
 
+        if (!$adminCredentials = AdminUsers::getAttributesById($this->_adminId, ['admin_password', 'admin_password_old'])) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
+        }
+        
+        if (!empty($adminCredentials['admin_password'])) {
+            if (false == password_verify(FatApp::getPostedData('current_password'), $adminCredentials['admin_password'])) {
+                Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->adminLangId));
+                FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
+            }
+        } else {
+            $currentEncPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('current_password'), true);            
+            if ($currentEncPassword !== $adminCredentials['admin_password_old']) {
+                Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->adminLangId));
+                FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));               
+            }            
+        }
         $newPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('new_password'));
-        $currentPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('current_password'));
-
-        if ($curDbPassword != $currentPassword) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->adminLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
-        }
-
-        $data = array( 'admin_password' => $newPassword);
+   
+        $data = array( 'admin_password' => $newPassword, 'admin_password_old' => '');
 
         $this->_adminProfileObj->assignValues($data);
         if (!$this->_adminProfileObj->save()) {

@@ -16,6 +16,7 @@ class UserSearch extends SearchBase
             array(
             'user_id',
             'user_name',
+            'user_phone_dcode',
             'user_phone',
             'user_regdate',
             'credential_username',

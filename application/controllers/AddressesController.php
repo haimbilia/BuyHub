@@ -12,7 +12,7 @@ class AddressesController extends LoggedUserController
     {
         $frm = $this->getUserAddressForm($this->siteLangId);
         $post = FatApp::getPostedData();
-        $post['addr_phone'] = !empty($post['addr_phone']) ? ValidateElement::convertPhone($post['addr_phone']) : '';
+
         $markAsDefault = (!empty($post['isDefault']) && 0 < FatUtility::int($post['isDefault']) ? true : false);
 
         if (empty($post)) {
@@ -37,6 +37,8 @@ class AddressesController extends LoggedUserController
 
         $addr_id = FatApp::getPostedData('addr_id', FatUtility::VAR_INT, 0);
         unset($post['addr_id']);
+        
+        $post['addr_phone_dcode'] = FatApp::getPostedData('addr_phone_dcode', FatUtility::VAR_STRING, '');
 
         $addressObj = new Address($addr_id);
 

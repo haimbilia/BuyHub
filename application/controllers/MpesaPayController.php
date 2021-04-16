@@ -72,10 +72,8 @@ class MpesaPayController extends PaymentController
         $customerPhone =  '';
         if (0 < $this->userId) {
             $userObj = new User($this->userId);
-            $userData = $userObj->getUserInfo(['user_dial_code', 'user_phone']);
-            $dialCode = !empty($userData["user_dial_code"]) ? FatUtility::int($userData["user_dial_code"]) : '';
-            $phone = !empty($userData["user_phone"]) ? FatUtility::int($userData["user_phone"]) : '';
-            $customerPhone = $dialCode . $phone;
+            $userData = $userObj->getUserInfo(['user_phone']);
+            $customerPhone = array_key_exists('user_phone', $userData) ? $userData["user_phone"] : '';
         }
 
         $frm = $this->getPaymentForm($orderId);

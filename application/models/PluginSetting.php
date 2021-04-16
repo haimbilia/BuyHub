@@ -6,20 +6,22 @@ class PluginSetting
     private $pluginId;
     private $pluginKey;
     private $langId;
+    protected $recordId;
 
     public const DB_TBL = 'tbl_plugin_settings';
     public const DB_TBL_PREFIX = 'pluginsetting_';
-    
+
     public const TYPE_STRING = 1;
     public const TYPE_INT = 2;
     public const TYPE_FLOAT = 3;
     public const TYPE_BOOL = 4;
 
-    public function __construct($id, $pluginKey = '')
+    public function __construct($id, $pluginKey = '', $recordId = 0)
     {
         $this->pluginId = empty($pluginKey) ? $id : Plugin::getAttributesByCode($pluginKey, 'plugin_id');
         $this->pluginKey = $pluginKey;
         $this->langId = CommonHelper::getLangId();
+        $this->recordId = $recordId;
     }
 
     public function getError()
@@ -27,16 +29,17 @@ class PluginSetting
         return $this->error;
     }
 
-    private function delete(): bool
+    private function delete(array $statement = []): bool
     {
         if (1 > $this->pluginId) {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
             return false;
         }
         $statement = [
-            'smt' => static::DB_TBL_PREFIX . 'plugin_id = ?',
+            'smt' => static::DB_TBL_PREFIX . 'plugin_id = ? and '.static::DB_TBL_PREFIX .'record_id = ?',
             'vals' => [
-                $this->pluginId
+                $this->pluginId,
+                $this->recordId
             ]
         ];
         if (!FatApp::getDb()->deleteRecords(static::DB_TBL, $statement)) {
@@ -55,23 +58,35 @@ class PluginSetting
 
         $srch = new SearchBase(static::DB_TBL, 'tps');
         $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'plugin_id', '=', $this->pluginId);
-        $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));
+        $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'record_id', '=', $this->recordId);
+        $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));        
         $rs = $srch->getResultSet();
         if (!$rs) {
             $this->error = $srch->getError();
             return false;
         }
-        $row =  FatApp::getDb()->fetchAllAssoc($rs);
-
-        $settingsData = Plugin::getAttributesByCode($this->pluginKey, '', $langId);
+        $row =  FatApp::getDb()->fetchAllAssoc($rs); 
+        
+        if(0 < $this->recordId){
+            $settingsData = SellerPlugin::getAttributesByCode($this->recordId, $this->pluginKey, '', $langId ,false);
+        }else{
+            $settingsData = Plugin::getAttributesByCode($this->pluginKey, '', $langId);
+        }      
+        
         if (0 < $langId) {
             $settingsData['plugin_name'] = !empty($settingsData['plugin_name']) ? $settingsData['plugin_name'] : $settingsData['plugin_identifier'];
         }
-        $settings = array_merge($row, $settingsData);
-        return (!empty($column) && is_string($column) && isset($settings[$column])) ? $settings[$column] : $settings;
+        $settings = array_merge($row, $settingsData);  
+
+
+        if (!empty($column) && is_string($column)) {
+            return array_key_exists($column, $settings) ? $settings[$column] : '';
+        }
+
+        return $settings;
     }
 
-    public function save(array $data): bool
+    public function cleanData(&$data): bool
     {
         if (empty($data) || !is_array($data)) {
             $this->error = Labels::getLabel('MSG_PLEASE_PROVIDE_DATA_TO_SAVE_SETTINGS', $this->langId);
@@ -79,22 +94,56 @@ class PluginSetting
         }
         unset($data['keyName'], $data['btn_submit'], $data["plugin_id"]);
 
-        if (!$this->delete()) {
+        if (1 > count($data)) {
+            $this->error = Labels::getLabel('MSG_NOTHING_TO_UPDATE', $this->langId);
+            return false;
+        }
+        return true;
+    }
+
+    public function save(array $data, array $statement = []): bool
+    {
+        if (false === $this->cleanData($data)) {
+            return false;
+        }
+
+        if (!$this->delete($statement)) {
             return false;
         }
         foreach ($data as $key => $val) {
             $updateData = [
                 'pluginsetting_plugin_id' => $this->pluginId,
+                'pluginsetting_record_id' => $this->recordId,
                 'pluginsetting_key' => $key,
                 'pluginsetting_value' => is_array($val) ? serialize($val) : $val,
             ];
-
-            if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $updateData, false, ['IGNORE'])) {
+          
+            if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $updateData, false, [], $updateData)) {
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
         }
         return true;
+    }
+
+    public function updateSetting(array $data): bool
+    {
+        if (false === $this->cleanData($data)) {
+            return false;
+        }
+
+        $smt = self::DB_TBL_PREFIX . 'plugin_id = ?';
+        $vals = [$this->pluginId];
+        foreach ($data as $key => $val) {
+            $smt .= " AND pluginsetting_key = ?";
+            $vals[] = $key;
+        }
+
+        $statement = [
+            'smt' => $smt,
+            'vals' => $vals
+        ];
+        return $this->save($data, $statement);
     }
 
     public static function getForm($requirements, $langId)
@@ -126,7 +175,7 @@ class PluginSetting
                 $fld->requirements()->setRequired(true);
             }
         }
-
+       
         $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
