@@ -3031,7 +3031,6 @@ class User extends MyAppModel
         return true;
     }
     
-    
     public function saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)
     {
         if (1 > $this->mainTableRecordId) {

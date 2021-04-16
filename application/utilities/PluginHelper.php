@@ -186,7 +186,43 @@ trait PluginHelper
         return $reflect->newInstanceArgs($args);
     }
 
+     /** updateSettings
+     *
+     * @param  int $pluginId
+     * @param  array $data
+     * @param  string $error - Reference Variable
+     * @return bool
+     */
+    public function updateSettings(int $pluginId, array $data, &$error = ""): bool
+    {
+        $pluginSetting = new PluginSetting($pluginId);
+        if (!$pluginSetting->updateSetting($data)) {
+            $error = $pluginSetting->getError();
+            return false;
+        }
+        return true;
+    }
+
     /**
+     * 
+     * @param int $recordId
+     */
+    public function setRecordId(int $recordId)
+    {
+        $this->recordId = $recordId;
+    }
+    
+    /**
+     * getRecordId
+     *
+     * @return int
+     */
+    public function getRecordId()
+    {
+        return $this->recordId;
+    }
+
+     /**
      * formatOutput
      *
      * @param  int $status
@@ -225,42 +261,5 @@ trait PluginHelper
         }
 
         CommonHelper::redirectUserReferer();
-    }
-
-    /** 
-     * updateSettings
-     *
-     * @param  int $pluginId
-     * @param  array $data
-     * @param  string $error - Reference Variable
-     * @return bool
-     */
-    public function updateSettings(int $pluginId, array $data, &$error = ""): bool
-    {
-        $pluginSetting = new PluginSetting($pluginId);
-        if (!$pluginSetting->updateSetting($data)) {
-            $error = $pluginSetting->getError();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 
-     * @param int $recordId
-     */
-    public function setRecordId(int $recordId)
-    {
-        $this->recordId = $recordId;
-    }
-    
-    /**
-     * getRecordId
-     *
-     * @return int
-     */
-    public function getRecordId()
-    {
-        return $this->recordId;
     }
 }

@@ -207,6 +207,12 @@ class LibHelper extends FatUtility
         return openssl_decrypt(mb_substr($data, 64, null, '8bit'), 'aes-256-ctr', $key, OPENSSL_RAW_DATA, $iv);
     }
 
+    /**
+     * isJson
+     *
+     * @param  string $string
+     * @return bool
+     */
     public static function isJson($string, &$error = ''): bool
     {
         json_decode($string);
