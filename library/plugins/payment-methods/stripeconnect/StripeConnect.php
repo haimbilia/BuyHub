@@ -775,7 +775,7 @@ class StripeConnect extends PaymentMethodBase
             $this->loadBaseCurrencyCode();
             $requestParam['external_account']['object'] = 'bank_account';
             $requestParam['external_account']['country'] = strtoupper($this->userData['country_code']);
-            $requestParam['external_account']['currency'] = $this->systemCurrencyCode;
+            $requestParam['external_account']['currency'] = Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code');
         }
         
         $requestParam = $this->cleanRequest($requestParam);
@@ -808,7 +808,7 @@ class StripeConnect extends PaymentMethodBase
                 'account_number' => $requestParam['account_number'],
                 'account_holder_type' => $businessType,
                 'country' => strtoupper($this->userData['country_code']),
-                'currency' => $this->systemCurrencyCode,
+                'currency' => Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code'),
                 'routing_number' => $requestParam['routing_number'],
             ]
         ];
