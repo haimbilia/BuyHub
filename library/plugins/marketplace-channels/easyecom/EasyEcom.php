@@ -21,7 +21,6 @@ class EasyEcom extends MarketplaceChannelsBase
     private $authToken;
     private $reqAuthToken;
     private $db;
-    private $userId;
 
     public function __construct(int $langId, string $action, int $userId)
     {
