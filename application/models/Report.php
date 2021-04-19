@@ -5,12 +5,14 @@ class Report extends SearchBase
     private $langId;
     private $ordersTableJoined;
     private $attr = [];
+    private $shopSpecific = false;
 
     public function __construct($langId = 0, $attr = [], $shopSpecific = false)
     {
         parent::__construct(Orders::DB_TBL_ORDER_PRODUCTS, 'op');
         $this->langId = FatUtility::int($langId);
         $this->ordersTableJoined = false;
+        $this->shopSpecific = $shopSpecific;
         $this->setFields($attr, $shopSpecific);
     }
 
@@ -63,6 +65,16 @@ class Report extends SearchBase
         }
 
         if (!empty($excludeType)) {
+            $ocSrch->addCondition('opcharge_type', 'not in', $excludeType);
+        }
+
+        if (empty($excludeType) && $this->shopSpecific) {
+            $excludeType = [
+                OrderProduct::CHARGE_TYPE_TAX,
+                OrderProduct::CHARGE_TYPE_SHIPPING,
+                OrderProduct::CHARGE_TYPE_DISCOUNT,
+                OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT
+            ];
             $ocSrch->addCondition('opcharge_type', 'not in', $excludeType);
         }
 
@@ -235,29 +247,33 @@ class Report extends SearchBase
             'totQtys' => 'SUM(op_qty) as totQtys',
             'totRefundedQtys' => 'SUM(op_refund_qty) as totRefundedQtys',
             'netSoldQty' => 'SUM(op_qty - op_refund_qty) as netSoldQty',
-            'grossSales' => 'sum(( op_unit_price * op_qty ) + op_other_charges + op_rounding_off - opDiscountCharges) as grossSales',
-            'transactionAmount' => 'sum(( op_unit_price * op_qty ) + op_other_charges + op_rounding_off) as transactionAmount',
+            'grossSales' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges, 0) + IFNULL(op_rounding_off,0) - opDiscountCharges) as grossSales',
+            'transactionAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0)) as transactionAmount',
             'inventoryValue' => 'SUM(op_unit_price*op_qty) as inventoryValue',
 
-            'refundedAmount' => 'sum(op_refund_amount) as refundedAmount',
-            'refundedShipping' => '(SUM(op_refund_shipping)) as refundedShipping',
-            'refundedTax' => 'sum(op_refund_tax) as refundedTax',
+            'refundedAmount' => 'sum(IFNULL(op_refund_amount,0)) as refundedAmount',
+            'refundedShipping' => '(SUM(IFNULL(op_refund_shipping,0))) as refundedShipping',
+            'refundedTax' => 'SUM(IFNULL(op_refund_tax,0)) as refundedTax',
 
-            'commissionCharged' => 'sum(op_commission_charged) as commissionCharged',
-            'refundedCommission' => 'sum(op_refund_commission) as refundedCommission',
-            'affiliateCommissionCharged' => 'sum(op_affiliate_commission_charged) as affiliateCommissionCharged',
-            'refundedAffiliateCommission' => '(SUM(op_refund_shipping)) as refundedAffiliateCommission',
-            'adminSalesEarnings' => 'sum((op_commission_charged - op_refund_commission)) as adminSalesEarnings',
+            'commissionCharged' => 'sum(IFNULL(op_commission_charged,0)) as commissionCharged',
+            'refundedCommission' => 'sum(IFNULL(op_refund_commission,0)) as refundedCommission',
+            'affiliateCommissionCharged' => 'sum(IFNULL(op_affiliate_commission_charged,0)) as affiliateCommissionCharged',
+            'refundedAffiliateCommission' => '(SUM(IFNULL(op_refund_shipping,0))) as refundedAffiliateCommission',
+            'adminSalesEarnings' => 'sum((IFNULL(op_commission_charged,0) - IFNULL(op_refund_commission,0))) as adminSalesEarnings',
 
-            'orderNetAmount' => 'sum(( op_unit_price * op_qty ) + op_other_charges + op_rounding_off - op_refund_amount) as orderNetAmount',
+            'orderNetAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - IFNULL(op_refund_amount,0)) as orderNetAmount',
             'unitPrice' => 'SUM(op_unit_price*op_qty)/sum(op_qty) as unitPrice',
             'roundingOff' => 'op_rounding_off',
-            'op_other_charges' => 'sum(op_other_charges) as op_other_charges'
+            'op_other_charges' => 'sum(IFNULL(op_other_charges,0)) as op_other_charges'
 
         ];
 
         if (true == $shopSpecific) {
-            $arr['grossSales'] = 'sum(( op_unit_price * op_qty ) + op_other_charges - opDiscountCharges) as grossSales';
+            $arr = array_merge($arr, [
+                'grossSales' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) - IFNULL(opDiscountCharges,0)) as grossSales',
+                'refundedTaxToSeller' => 'SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(op.op_refund_tax,0),0)) as refundedTaxToSeller',
+                'refundedShippingToSeller' => 'SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(op.op_refund_shipping,0),0)) as refundedShippingToSeller'
+            ]);
         }
 
         if (empty($fields)) {

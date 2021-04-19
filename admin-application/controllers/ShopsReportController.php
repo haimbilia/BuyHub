@@ -37,11 +37,11 @@ class ShopsReportController extends AdminBaseController
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
 
-        $fields = ['totOrders', 'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount'];
+        $fields = ['totOrders', 'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount', 'refundedTaxToSeller', 'refundedShippingToSeller'];
         $opSrch = new Report(0, $fields, true);
         $opSrch->joinOrders();
         $opSrch->joinPaymentMethod();
-        $opSrch->joinOtherCharges(true, [OrderProduct::CHARGE_TYPE_DISCOUNT, OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]);
+        $opSrch->joinOtherCharges(true);
         $opSrch->joinOrderProductTaxCharges();
         $opSrch->joinOrderProductShipCharges();
         $opSrch->joinOrderProductDicountCharges();
