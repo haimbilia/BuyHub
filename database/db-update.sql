@@ -288,7 +288,6 @@ ALTER TABLE `tbl_users` CHANGE `user_dial_code` `user_phone_dcode` VARCHAR(50) C
 ALTER TABLE `tbl_countries` DROP `country_dial_code`;
 
 /* Bind all phone number fields with flag field. */
-<<<<<<< HEAD
 -- --- Easypost Shipping API--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('EasyPost', '8', 'EasyPost', '0', '2');
 
