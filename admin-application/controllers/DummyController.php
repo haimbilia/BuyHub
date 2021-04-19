@@ -139,5 +139,32 @@ class DummyController extends AdminBaseController
         $dataMigration = new DataMigration();
         $dataMigration->sync();
     } 
+    
+    public function tt(){    
+        require CONF_INSTALLATION_PATH . 'vendor/autoload.php';
+        $formData = [
+            'v' => '1',  # API Version.
+            'tid' => "UA-193566603-1",  # Tracking ID / Property ID.
+            # Anonymous Client Identifier. Ideally, this should be a UUID that
+            # is associated with particular user, device, or browser instance.
+            'cid' => '555',
+            't' => 'event',  # Event hit type.
+            'ec' => 'Poker',  # Event category.
+            'ea' => 'Royal Flush',  # Event action.
+            'el' => 'Hearts',  # Event label.
+            'ev' => 0,  # Event value, must be an integer
+        ];
+
+        $baseUri = 'http://www.google-analytics.com/';
+        $curl = new Curl\Curl();
+        $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $curl->post($baseUri."collect",$formData);
+
+        if ($curl->error) {
+            $this->error = $curl->errorCode . ' : ' . $curl->errorMessage;
+            $this->error .= !empty($curl->getResponse()->error) ? $curl->getResponse()->error : '';
+            return false;
+        }
+    }
 
 }
