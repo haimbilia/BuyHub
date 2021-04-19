@@ -698,7 +698,8 @@ class DataMigration
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId);
         $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId);
 
-        foreach ($orders as $order) {
+        foreach ($orders as $order) {            
+            $orderData = [];
             $isNewOrder = 1;
             $orderId = Orders::getOrderIdByPlugin($this->pluginObj->settings['plugin_id'], $order['id']);
             if (0 < $orderId) {
