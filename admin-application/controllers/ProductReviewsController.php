@@ -113,7 +113,7 @@ class ProductReviewsController extends AdminBaseController
     {
         $spreview_id = FatUtility::int($spreview_id);
         if (1 > $spreview_id) {
-            dieWithError($this->str_invalid_request);
+            FatUtility::dieWithError($this->str_invalid_request);
         }
 
         $srch = new SelProdReviewSearch($this->adminLangId);
@@ -136,8 +136,20 @@ class ProductReviewsController extends AdminBaseController
         $avgRatingData = FatApp::getDb()->fetch($avgRatingRs);
 
         $ratingSrch = SelProdRating::getSearchObj();
+        $ratingSrch->joinTable(
+            RatingType::DB_TBL,
+            'INNER JOIN',
+            'rt.ratingtype_id = sprating_ratingtype_id',
+            'rt'
+        );
+        $ratingSrch->joinTable(
+            RatingType::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->adminLangId,
+            'rt_l'
+        );
         $ratingSrch->addCondition('sprating_spreview_id', '=', $spreview_id);
-        $ratingSrch->addMultipleFields(array('sprating_spreview_id', 'sprating_ratingtype_id', 'sprating_rating'));
+        $ratingSrch->addMultipleFields(array('sprating_spreview_id', 'sprating_ratingtype_id', 'sprating_rating', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name'));
         $ratingSrch->doNotCalculateRecords();
         $ratingSrch->doNotLimitRecords();
 
@@ -152,7 +164,6 @@ class ProductReviewsController extends AdminBaseController
         $this->set("data", $records);
         $this->set("ratingData", $ratingData);
         $this->set("avgRatingData", $avgRatingData);
-        $this->set("ratingTypeArr", SelProdRating::getRatingAspectsArr($this->adminLangId));
         $this->set("frm", $frm);
         $this->_template->render(false, false);
     }

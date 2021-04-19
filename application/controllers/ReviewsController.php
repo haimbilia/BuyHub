@@ -70,10 +70,10 @@ class ReviewsController extends MyAppController
         $srch->joinSelProdRating();
         $srch->joinUser();
         $srch->joinSelProdReviewHelpful();
-        $srch->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
+        // $srch->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
         $srch->addCondition('spr.spreview_product_id', '=', $productId);
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-        $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked' ));
+        $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked'));
         $srch->addGroupBy('spr.spreview_id');
 
         $srch->setPageNumber($page);
@@ -87,8 +87,9 @@ class ReviewsController extends MyAppController
                 $srch->addOrder('spr.spreview_posted_on', 'desc');
                 break;
         }
+        
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-
+        
         $this->set('reviewsList', $records);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());

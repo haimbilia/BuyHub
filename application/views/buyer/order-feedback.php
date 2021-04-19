@@ -47,6 +47,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             }
                                         ?>
                                         <div class="rating">
+                                            <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                             <div class="rating-action" data-rating="0">
                                                 <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                     <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -58,7 +59,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
                                                 $fld->setFieldTagAttribute('class', 'd-none');
                                                 echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
-                                            <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -137,6 +137,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <div class="rating-listing">
                                         <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                             <div class="rating">
+                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                                 <div class="rating-action" data-rating="0">
                                                     <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                         <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -148,7 +149,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                     $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
                                                     $fld->setFieldTagAttribute('class', 'd-none');
                                                     echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
-                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                             </div>
                                         <?php } ?>
                                     </div>
@@ -159,6 +159,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <div class="rating-listing">
                                         <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                             <div class="rating pb-0">
+                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                                 <div class="rating-action" data-rating="0">
                                                     <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                         <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -170,7 +171,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                     $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
                                                     $fld->setFieldTagAttribute('class', 'd-none');
                                                     echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
-                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                             </div>
                                         <?php } ?>
                                     </div>

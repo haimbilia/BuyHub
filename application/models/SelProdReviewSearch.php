@@ -91,9 +91,23 @@ class SelProdReviewSearch extends SearchBase
         }
     }
 
-    public function joinSelProdRating()
+    public function joinSelProdRating(int $langId = 0)
     {
         $this->joinTable(SelProdRating::DB_TBL, 'LEFT OUTER JOIN', 'sprating.sprating_spreview_id = spr.spreview_id', 'sprating');
+        $this->joinTable(
+            RatingType::DB_TBL,
+            'INNER JOIN',
+            'rt.ratingtype_id = sprating_ratingtype_id',
+            'rt'
+        );
+        if (0 < $langId) {
+            $this->joinTable(
+                RatingType::DB_TBL_LANG,
+                'LEFT OUTER JOIN',
+                'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $langId,
+                'rt_l'
+            );
+        }
     }
 
     public function joinSelProdRatingByType($ratingType, $obj = 'sprt')
@@ -117,4 +131,15 @@ class SelProdReviewSearch extends SearchBase
     {
         $this->joinTable(SelProdReviewHelpful::DB_TBL, 'LEFT OUTER JOIN', 'sprh.sprh_spreview_id = spr.spreview_id', 'sprh');
     }
+
+    public function joinOrderProduct()
+    {
+        $this->joinTable(OrderProduct::DB_TBL, 'INNER JOIN', 'op.op_order_id = spr.spreview_order_id AND op.op_selprod_id = spr.spreview_selprod_id', 'op');
+    }
+    
+    public function joinOrderProductSpecifics()
+    {
+        $this->joinTable(OrderProductSpecifics::DB_TBL, 'LEFT JOIN', 'opspec.ops_op_id = op.op_id', 'opspec');
+    }
+
 }
