@@ -448,7 +448,7 @@ class ProductCategoriesController extends AdminBaseController
     {
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $prodCatObj = new ProductCategory();
-        $arr_options = $prodCatObj->getProdCatTreeStructureSearch(0, $this->adminLangId, $keyword);
+        $arr_options = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->adminLangId, $keyword);
         $json = array();
         foreach ($arr_options as $key => $product) {
             $json[] = array(

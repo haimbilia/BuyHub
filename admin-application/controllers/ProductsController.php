@@ -1389,6 +1389,12 @@ class ProductsController extends AdminBaseController
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieWithError(Message::getHtml());
         }
+
+        $prodType = Product::getAttributesById($productId, 'product_type');
+        if (!empty($prodType) && Product::PRODUCT_TYPE_DIGITAL == $prodType) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->adminLangId));
+        }
+
         $prod = new Product($productId);
         if (!$prod->saveProductData($post)) {
             Message::addErrorMessage($prod->getError());

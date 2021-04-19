@@ -199,6 +199,11 @@ class UserAuthentication extends FatModel
                 $this->error = Labels::getLabel('ERR_YOUR_ACCOUNT_ALREADY_EXIST._PLEASE_LOGIN', $this->commonLangId);
                 return false;
             }
+            
+            if ($row && $row['user_deleted'] == applicationConstants::YES) {               
+                $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELETED', $this->commonLangId);
+                return false;
+            }
 
             $rowUser = User::getAttributesById($row['user_id']);
 
@@ -391,7 +396,7 @@ class UserAuthentication extends FatModel
 
         if ($row && $row['user_deleted'] == applicationConstants::YES) {
             $this->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELTED', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELETED', $this->commonLangId);
             return false;
         }
 

@@ -4,7 +4,6 @@ sass.compiler = require('node-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 
-
 function css() {
     return src('./application/views/scss/*.scss')
         .pipe(sourcemaps.init({ loadMaps: true }))
@@ -13,7 +12,6 @@ function css() {
         .pipe(sourcemaps.write('.'))
         .pipe(dest('./application/views/css'));
 }
-
 
 // Watch files
 function watchFiles() {

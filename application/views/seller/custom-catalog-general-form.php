@@ -383,6 +383,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
         });
 
         $('input[name=\'category_name\']').autocomplete({
+            minLength: 2,
             'classes': {
                 "ui-autocomplete": "custom-ui-autocomplete"
             },

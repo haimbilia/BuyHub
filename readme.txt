@@ -1,10 +1,4 @@
 
-Updates:
-    => Tax Module update
-    => Admin can create users 
-
-Features:
-    - Shopify sync module for SV seller
 
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
@@ -13,6 +7,12 @@ Multivendor - Released Version : RV-9.3.0
 New Feature : 
     => 82248 : DPO Payment Gateway Integration
     => 82892 : Easypost Shipping API Integration
+    =>  Shopify sync module for SV seller
+
+Updates:
+    => Tax Module update
+    => Admin can create users 
+    => 83842 : Out of stock fixes    
 
 Fixes:
     => 047746 - Get current location not working
@@ -73,15 +73,35 @@ Fixes:
     => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
     => 051573 - Product search is not working when we Activate Geo Location and shipping plugin.
     => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
+    => 051651 - Top - header menu are not aligned properly
+    => 051594 - non verified user (*deleted) is proceeding for checkout and getting error - session expire
+    => 051691 - on stripe connect unable to load form loading coming on seller end
+    => 051694 - Loader image coming on product images even after it fully loaded
+    => 051716 - Shipping by admin - seller is able to change order status
+    => 051974 - Showing error while syncing by activating TaxZar plugin. 
+    => 051960 - Google shoping feed settings not displaying
+    => 051979 - Error Displayed : Undefined index status TaxZar Syncing    
+    => 051967 - No category search results show up when parent/subcategory is searched which is not directly linked with the product. Only the category linked with a product shows up in search results    
+    => 052015 - Order Id duplicacy issue when multiple user place order with same time frame.
+    => 051973 - tax invoice UI got distorted
+    => 051994 - Digital product can be linked to shipping profiles
+    => 044068 - When an order is placed with Bank transfer as payment method, the Buyer doesn't receive any order placement email notification
+    => 052142 - Same order showing multiple times when digital product having multiple links and multiple files
+    => 052242 - social login icons changed from admin not reflecting on front end
+    => 052110 - when otp is sent over email to buyer then in email> username is not populating
+    => 052317	Request For Category- Seller dashboard when only one language activated
+    => 052413 - Removed settings for recurring discount in case of subscription.
+    => 052352 - getting double loader while making payment 
+    => 052450 - Separate Tracking URL and Tracking Courier if Aftership enabled
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
     => 052463 - Setup shipping of other product not working with EasyPost
-    
+
 Enhancements :
    => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.
-   => Performance optimization
+   => Performance optimization   
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

@@ -5,7 +5,7 @@ class CustomRouter
     {
         $userType = null;
         define('LANG_CODES_ARR', Language::getAllCodesAssoc());
-        
+
         if ('mobile-app-api' == $controller) {
             define('MOBILE_APP_API_CALL', true);
             define('MOBILE_APP_API_VERSION', '1.0');
@@ -50,6 +50,7 @@ class CustomRouter
                 $userType = intval($_SERVER['HTTP_X_USER_TYPE']);
             }
         } else {
+
             /* [ Handled lang code in url */
             if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && in_array(strtoupper($controller), LANG_CODES_ARR)) {
                 $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
@@ -72,12 +73,13 @@ class CustomRouter
                 define('SYSTEM_LANG_ID', CommonHelper::getLangId());
             }
             /* ] */
-            
+
             define('MOBILE_APP_API_CALL', false);
             define('MOBILE_APP_API_VERSION', '');
         }
         define('MOBILE_APP_USER_TYPE', $userType);
-       
+
+        self::checkRequiredParam($controller, $action);
         /* Handled CDN url for static contents and 404 for other requests. Specially when mapped on same root directory[*/
         if (CDN_DOMAIN_URL != '' && (strpos(CDN_DOMAIN_URL, $_SERVER['SERVER_NAME']) !== false)) {
             if (!UrlHelper::staticContentProvider($controller, $action)) {
@@ -89,15 +91,15 @@ class CustomRouter
 
         if (defined('SYSTEM_FRONT') && SYSTEM_FRONT === true/*  && !FatUtility::isAjaxCall() */) {
             $url = urldecode($_SERVER['REQUEST_URI']);
-                        
+
             if (strpos($url, "index.php?url=") !== false || UrlHelper::staticContentProvider($controller, $action) == true) {
-                return ;
+                return;
             }
 
             if (strpos($url, "?") !== false && strpos($url, "/?") === false) {
                 $url = str_replace('?', '/?', $url);
             }
-          
+
             $customUrl = substr($url, strlen(CONF_WEBROOT_URL));
             $customUrl = rtrim($customUrl, '/');
             $customUrl = explode('/?', $customUrl);
@@ -113,13 +115,13 @@ class CustomRouter
                 }
             }
             /* ] */
-                
+
             /* [ Check url rewritten by the system or system url with query parameter*/
             $row = false;
             if (!empty($customUrl[0])) {
                 $srch = UrlRewrite::getSearchObject();
                 $srch->doNotCalculateRecords();
-                $srch->addMultipleFields(array('urlrewrite_custom','urlrewrite_original'));
+                $srch->addMultipleFields(array('urlrewrite_custom', 'urlrewrite_original'));
                 $srch->setPageSize(1);
                 $srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'custom', '=', $customUrl[0]);
                 //$srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'lang_id', '=', SYSTEM_LANG_ID);
@@ -129,7 +131,7 @@ class CustomRouter
                 if (!$row && FatApp::getConfig('CONF_ENABLE_301', FatUtility::VAR_INT, 0) && !FatUtility::isAjaxCall()) {
                     $srch = UrlRewrite::getSearchObject();
                     $srch->doNotCalculateRecords();
-                    $srch->addMultipleFields(array('urlrewrite_custom','urlrewrite_original'));
+                    $srch->addMultipleFields(array('urlrewrite_custom', 'urlrewrite_original'));
                     $srch->setPageSize(1);
                     $srch->addCondition(UrlRewrite::DB_TBL_PREFIX . 'original', '=', $customUrl[0]);
                     $rs = $srch->getResultSet();
@@ -142,16 +144,18 @@ class CustomRouter
                     }
                 }
             }
+
+
             if (!$row && (!isset($customUrl[1]) || (isset($customUrl[1]) && strpos($customUrl[1], 'pagesize') === false))) {
                 return;
             }
             /*]*/
-           
+
             $url = (!empty($row['urlrewrite_original'])) ? $row['urlrewrite_original'] : '';
             if (!$row && isset($customUrl[1])) {
                 $url = $customUrl[0];
             }
-           
+
             $arr = explode('/', $url);
 
             $controller = (isset($arr[0])) ? $arr[0] : '';
@@ -167,7 +171,7 @@ class CustomRouter
                 $customUrl = explode('&', $customUrl[1]);
                 $queryString = array_merge($queryString, $customUrl);
             }
-            
+
             /* ]*/
 
             if ($controller != '' && $action == '') {
@@ -177,10 +181,31 @@ class CustomRouter
             if ($controller == '') {
                 $controller = 'Content';
             }
-            
+
             if ($action == '') {
                 $action = 'error404';
             }
+        }
+    }
+
+    private static function checkRequiredParam($controller, $action)
+    {
+        if (empty($action)) {
+            return false;
+        }
+        $action = FatUtility::dashed2Camel($action);
+        $controller = FatUtility::dashed2Camel($controller . 'Controller', true);
+        if (!file_exists(CONF_APPLICATION_PATH . 'controllers/' . $controller . '.php')) {
+            return false;
+        }
+        try {
+            $reflection = new ReflectionMethod($controller, $action);
+            $requiredParamCount = $reflection->getNumberOfRequiredParameters();
+            if ($requiredParamCount > 0 && $requiredParamCount + 2 > count(explode('/', trim($_SERVER['REQUEST_URI'], '\/')))) {
+                FatUtility::exitWithErrorCode(404);
+            }
+        } catch (Exception $exc) {
+            FatUtility::exitWithErrorCode(404);
         }
     }
 }
