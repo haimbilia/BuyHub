@@ -275,9 +275,7 @@ class StripeConnect extends PaymentMethodBase
             ]
         ];
 
-        if (true === $this->loadBaseCurrencyCode()) {
-            $data['default_currency'] = $this->systemCurrencyCode;
-        }
+        $data['default_currency'] = Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code');
 
         $this->resp = $this->create($data);
         if (false === $this->resp) {
