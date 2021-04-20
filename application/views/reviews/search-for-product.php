@@ -34,97 +34,25 @@
                 </div>
                 <div class="reviews-desc">
                     <ul class="ratedby-list">
-                        <li>
-                            <div class="rating flex-column">
-                                <span class="rating__text"> Shipping</span>
-                                <div class="rating-view" data-rating="4">
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
+                        <?php
+                        foreach ($recordRatings as $rating) {
+                            if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
+                                continue;
+                            }
+                        ?>
+                            <li>
+                                <div class="rating flex-column">
+                                    <span class="rating__text"><?php echo $rating['ratingtype_name']; ?></span>
+                                    <div class="rating-view" data-rating="<?php echo $rating['sprating_rating']; ?>">
+                                        <?php for ($i = 5; $i >= 1; $i--) { ?>
+                                            <svg class="icon" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
+                                            </svg>
+                                        <?php } ?>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rating flex-column">
-                                <span class="rating__text">Stock Availability</span>
-                                <div class="rating-view" data-rating="3">
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rating flex-column">
-                                <span class="rating__text">Delivery time</span>
-                                <div class="rating-view" data-rating="2">
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rating flex-column">
-                                <span class="rating__text">Package Quality</span>
-                                <div class="rating-view" data-rating="4">
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </li>
+                            </li>
+                        <?php } ?>
                     </ul>
 
                     <div class="review-container">
@@ -145,19 +73,33 @@
                         </div>
                         <div class="all-review-media">
                             <ul class="review-media-list">
-                                <li><a class="review-media" href="javascript:void(0)"><img src="http://yokart-v8.local.4livedemo.com/image/product/7/MEDIUM/0/1591"></a></li>
-                                <li><a class="review-media" href="javascript:void(0)"><img src="http://yokart-v8.local.4livedemo.com/image/product/7/MEDIUM/0/1591"></a></li>
-                                <li><a class="review-media" href="javascript:void(0)"><img src="http://yokart-v8.local.4livedemo.com/image/product/7/MEDIUM/0/1591"></a></li>
-                                <li><a class="review-media" href="javascript:void(0)"><img src="http://yokart-v8.local.4livedemo.com/image/product/7/MEDIUM/0/1591"></a></li>
-                                <li><a class="review-media" href="javascript:void(0)"><img src="http://yokart-v8.local.4livedemo.com/image/product/7/MEDIUM/0/1591"></a></li>
+                                <?php
+                                $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
+                                
+                                $i = 0;
+                                foreach ($images as $image) { 
+                                    $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, 'MINITHUMB', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, 'LARGE', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
-                                <li class="more-media">
-                                    <a class="review-media" href="javascript:void(0)" data-count="45+">
-                                        <img src="http://yokart-v8.local.4livedemo.com/image/product/7/MEDIUM/0/1591">
-                                    </a>
-                                </li>
+                                    if (5 > $i || 6 == count($images)) { ?>
+                                        <li>
+                                            <a class="review-media" href="javascript:void(0)" onclick="previewImage(this);">
+                                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
+                                            </a>
+                                        </li>
+                                    <?php } else { ?>
+                                        <li class="more-media">
+                                            <a class="review-media" href="javascript:void(0)" onclick="previewImage(this);" data-count="<?php echo count($images); ?>+">
+                                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
+                                            </a>
+                                        </li>
+                                    <?php }
+                                    $i++;
+                                } ?>
                             </ul>
                         </div>
+                        <a class="btn btn-secondary mt-3" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>"><?php echo Labels::getLabel('Lbl_Permalink', $siteLangId); ?> </a>
                     </div>
 
                 </div>

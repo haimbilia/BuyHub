@@ -2077,6 +2077,9 @@ class CommonHelper extends FatUtility
     public static function displayEncryptedEmail($email)
     {
         $userEmail = preg_split( '/[@.]/', $email);
+        if (empty(array_filter($userEmail))) {
+            return;
+        }
         $emailFirstPart = substr($userEmail[0], 0, 1).str_repeat('*', strlen($userEmail[0]) - 1);
         $emailSecondPart = str_repeat('*', strlen($userEmail[1]));
         $emailThirdPart = $userEmail[2];        

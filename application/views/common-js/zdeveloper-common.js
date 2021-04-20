@@ -1846,3 +1846,13 @@ $(document).on('change', '.multipleImgs--js', function () {
 $(document).on('click', '.fileRemove--js', function () {
     $(this).closest('li').remove();
 });
+
+function previewImage(obj) {
+    var imgUrl = $('img', obj).data('altimg');
+    if ('' == imgUrl || 'undefined' == typeof imgUrl) {
+        imgUrl = $('img', obj).attr('src');
+    }
+
+    var img = $($.parseHTML('<img>')).attr('src', imgUrl);
+    fcom.updateFaceboxContent(img, 'text-center');
+}
