@@ -86,7 +86,32 @@ class ReviewsController extends MyAppController
                 break;
         }
 
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
+        $records = (array) FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
+
+        $recordRatings = [];
+        if (0 < count($records)) {
+            $ratings = SelProdRating::getSearchObj();
+            $ratings->joinTable(
+                RatingType::DB_TBL,
+                'INNER JOIN',
+                'rt.ratingtype_id = sprating_ratingtype_id',
+                'rt'
+            );
+            $ratings->joinTable(
+                RatingType::DB_TBL_LANG,
+                'LEFT OUTER JOIN',
+                'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->siteLangId,
+                'rt_l'
+            );
+
+            $ratings->addMultipleFields(['sprating_spreview_id', 'ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'sprating_rating']);
+
+            $ratings->addCondition('sprating_spreview_id', 'IN', array_keys($records));
+            $ratings->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
+            $recordRatings = (array) FatApp::getDb()->fetchAll($ratings->getResultSet());
+        }
+
+        $this->set('recordRatings', $recordRatings);
         $this->set('reviewsList', $records);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
