@@ -1857,3 +1857,9 @@ function previewImage(obj) {
     var img = $($.parseHTML('<img>')).attr('src', imgUrl);
     fcom.updateFaceboxContent(img, 'text-center');
 }
+
+function loadMoreImages(obj) {
+    $('a', obj).removeAttr('data-count').attr('onclick', 'previewImage(this)');
+    $(obj).removeClass('more-media').removeAttr('onclick');
+    $(obj).nextAll().removeClass('d-none');
+}

@@ -45,7 +45,7 @@ if (!empty($reviews)) {
             </h6>
 
         </div>
-        <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('reviews' => $reviews, 'siteLangId' => $siteLangId, 'product_id' => $product_id), false); ?>
+        <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product_id), false); ?>
     </div>
 </div>
 <?php if ($canSubmitFeedback || $totReviews > 0) { ?>

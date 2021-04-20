@@ -1677,11 +1677,7 @@ class BuyerController extends BuyerBaseController
         $shopRs = $srch->getResultSet();
         $shop = FatApp::getDb()->fetch($shopRs);
 
-        if ($opDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $ratingAspects = SelProdRating::getDigitalOrderAspectsArr($this->siteLangId);
-        } else {
-            $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
-        }
+        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
 
         $orderProd = new OrderProduct($opId);
         $specifics = $orderProd->getSpecifics();
@@ -1791,11 +1787,7 @@ class BuyerController extends BuyerBaseController
             LibHelper::dieJsonError($message);
         }
 
-        if ($opDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $ratingAspects = SelProdRating::getDigitalOrderAspectsArr($this->siteLangId);
-        } else {
-            $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
-        }
+        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
 
         $orderProd = new OrderProduct($opId);
         $specifics = $orderProd->getSpecifics();

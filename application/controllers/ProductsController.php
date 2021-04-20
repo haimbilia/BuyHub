@@ -735,6 +735,17 @@ class ProductsController extends MyAppController
             $displayProductNotAvailableLable = true;
         }
 
+        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $product['selprod_fulfillment_type']);
+
+        if (array_key_exists('prodcat_id', $product) && !empty($product['prodcat_id'])) {
+            $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
+            $srch->addCondition('prt_prodcat_id', '=', $product['prodcat_id']);
+            $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+            $ratingAspects = (0 < count($ratingTypes)) ? $ratingTypes : $ratingAspects;
+        }
+
+        $this->set('ratingAspects', $ratingAspects);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
         $this->set('canSubmitFeedback', $canSubmitFeedback);
         $this->set('upsellProducts', !empty($upsellProducts) ? $upsellProducts : array());

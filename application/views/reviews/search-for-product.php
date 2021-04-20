@@ -82,15 +82,15 @@
                                     $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, 'MINITHUMB', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                     $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, 'LARGE', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
-                                    if (5 > $i || 6 == count($images)) { ?>
-                                        <li>
+                                    if (5 > $i || 5 < $i) { ?>
+                                        <li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
                                             <a class="review-media" href="javascript:void(0)" onclick="previewImage(this);">
                                                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                             </a>
                                         </li>
                                     <?php } else { ?>
-                                        <li class="more-media">
-                                            <a class="review-media" href="javascript:void(0)" onclick="previewImage(this);" data-count="<?php echo count($images); ?>+">
+                                        <li class="more-media" onclick="loadMoreImages(this);">
+                                            <a class="review-media" href="javascript:void(0)" data-count="<?php echo count($images); ?>+">
                                                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                             </a>
                                         </li>
