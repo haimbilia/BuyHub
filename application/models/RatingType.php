@@ -13,6 +13,12 @@ class RatingType extends MyAppModel
     public const TYPE_DELIVERY = 3;
     public const TYPE_OTHER = 4;
 
+    public const RATING_PRODUCT = 1;
+    public const RATING_SHOP = 2;
+    public const RATING_DELIVERY = 3;
+    public const RATING_SELLER_STOCK_AVAILABILITY = 4;
+    public const RATING_SELLER_PACKAGING_QUALITY = 5;
+
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'identifier',

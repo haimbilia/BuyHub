@@ -55,7 +55,7 @@ class SelProdReview extends MyAppModel
         $srch->joinSeller();
         $srch->joinSellerProducts();
         $srch->joinProducts();
-        $srch->joinSelProdRatingByType(SelProdRating::TYPE_PRODUCT);
+        $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
         $srch->addMultipleFields(array('count(*) as numOfReviews'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

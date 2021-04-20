@@ -142,7 +142,6 @@
                                         <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
                                 <?php } ?>
                             </p>
-                            <!-- <a class="btn btn-secondary mt-3" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>"><?php echo Labels::getLabel('Lbl_Permalink', $siteLangId); ?> </a> -->
                         </div>
                         <div class="all-review-media">
                             <ul class="review-media-list">

@@ -49,7 +49,7 @@ class ShopsReportController extends AdminBaseController
         $reviewSrch = new SelProdReviewSearch();
         $reviewSrch->doNotCalculateRecords();
         $reviewSrch->doNotLimitRecords();
-        $reviewSrch->joinSelProdRatingByType(SelProdRating::TYPE_PRODUCT);
+        $reviewSrch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
         $reviewSrch->addGroupby('spreview_seller_user_id');
         $reviewSrch->addMultipleFields(array('count(spreview_id) as totReviews', 'spreview_seller_user_id'));
         /* ] */
@@ -59,7 +59,7 @@ class ShopsReportController extends AdminBaseController
         $ratingSrch->doNotCalculateRecords();
         $ratingSrch->doNotLimitRecords();
         $ratingSrch->joinSelProdRating();
-        $ratingSrch->addCondition('sprating_ratingtype_id', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $ratingSrch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::RATING_DELIVERY, RatingType::RATING_SELLER_STOCK_AVAILABILITY, RatingType::RATING_SELLER_PACKAGING_QUALITY));
         $ratingSrch->addGroupby('spreview_seller_user_id');
         $ratingSrch->addMultipleFields(array('avg(sprating_rating) as avg_rating', 'spreview_seller_user_id', 'sprating_rating'));
         /* ] */

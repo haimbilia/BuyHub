@@ -5,12 +5,6 @@ class SelProdRating extends MyAppModel
     public const DB_TBL = 'tbl_seller_product_rating';
     public const DB_TBL_PREFIX = '	sprating_';
 
-    public const TYPE_PRODUCT = 1;
-    public const TYPE_SHOP = 2;
-    public const TYPE_SELLER_STOCK_AVAILABILITY = 3;
-    public const TYPE_SELLER_PACKAGING_QUALITY = 4;
-    public const TYPE_SELLER_SHIPPING_QUALITY = 5;
-
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -35,31 +29,11 @@ class SelProdRating extends MyAppModel
 
         $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
 
-        if ($fulfillmentType == Shipping::FULFILMENT_PICKUP) {
-            unset($ratingTypes[static::TYPE_SELLER_SHIPPING_QUALITY]);
+        if ($fulfillmentType == Shipping::FULFILMENT_PICKUP && array_key_exists(RatingType::TYPE_DELIVERY, $ratingTypes)) {
+            unset($ratingTypes[RatingType::TYPE_DELIVERY]);
         }
 
         return $ratingTypes;
-    }
-
-    public static function getDigitalOrderAspectsArr($langId)
-    {
-        $langId = FatUtility::int($langId);
-        if ($langId < 1) {
-            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
-        }
-
-        return $ratingTypes = self::getRatingAspectsArr($langId);
-
-        /* $arr = [];        
-        if (array_key_exists(static::TYPE_PRODUCT, $ratingTypes)) {
-            $arr[static::TYPE_PRODUCT] = $ratingTypes[static::TYPE_PRODUCT];
-        }
-        
-        if (array_key_exists(static::TYPE_SELLER_STOCK_AVAILABILITY, $ratingTypes)) {
-            $arr[static::TYPE_SELLER_STOCK_AVAILABILITY] = $ratingTypes[static::TYPE_SELLER_STOCK_AVAILABILITY];
-        }
-        return $arr; */
     }
 
     public static function getShopRatingTypeArr($langId): array
@@ -90,7 +64,7 @@ class SelProdRating extends MyAppModel
         $srch->joinSellerProducts();
         $srch->joinSelProdRating();
         $srch->addMultipleFields(array("ROUND(AVG(sprating_rating),2) as avg_rating"));
-        $srch->addCondition('sprating_ratingtype_id', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $srch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::RATING_DELIVERY, RatingType::RATING_SELLER_STOCK_AVAILABILITY, RatingType::RATING_SELLER_PACKAGING_QUALITY));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spreview_seller_user_id', '=', $userId);

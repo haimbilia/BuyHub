@@ -419,7 +419,7 @@ class ProductsController extends MyAppController
         $selProdReviewObj->joinSelProdRating();
         $selProdReviewObj->joinUser();
         // $selProdReviewObj->joinSelProdReviewHelpful();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -948,7 +948,7 @@ class ProductsController extends MyAppController
 
         /*$selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -1526,7 +1526,7 @@ class ProductsController extends MyAppController
 
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
