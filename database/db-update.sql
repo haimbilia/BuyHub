@@ -456,7 +456,7 @@ INSERT INTO `tbl_rating_types` (`ratingtype_id`, `ratingtype_identifier`, `ratin
 (2, 'Shop', 2, 1, 1),
 (3, 'Delivery', 3, 1, 1),
 (4, 'Stock Availability', 4, 0, 1),
-(5, 'Packaging Quality', 4, 0, 1),
+(5, 'Packaging Quality', 4, 0, 1);
 
 --
 -- Indexes for dumped tables

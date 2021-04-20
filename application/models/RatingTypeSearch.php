@@ -3,17 +3,16 @@
 class RatingTypeSearch extends SearchBase
 {
     private $langId;
-    
+
     /**
      * __construct
      *
-     * @param  int $langId
-     * @param  int $ratingType
+     * @param  int $langId   
      * @param  int $isActive
      * @param  int $isDefault
      * @return void
      */
-    public function __construct(int $langId = 0, int $ratingType = -1, int $isActive = -1, int $isDefault = -1)
+    public function __construct(int $langId = 0, int $isActive = -1, int $isDefault = -1)
     {
         $this->langId = FatUtility::int($langId);
         parent::__construct(RatingType::DB_TBL, 'rt');
@@ -27,10 +26,6 @@ class RatingTypeSearch extends SearchBase
             );
         }
 
-        if (-1 < $ratingType) {
-            $this->addCondition(RatingType::DB_TBL_PREFIX . 'type', '=',  $ratingType);
-        }
-
         if (-1 < $isActive) {
             $this->addCondition(RatingType::DB_TBL_PREFIX . 'active', '=',  $isActive);
         }
@@ -38,5 +33,16 @@ class RatingTypeSearch extends SearchBase
         if (-1 < $isDefault) {
             $this->addCondition(RatingType::DB_TBL_PREFIX . 'default', '=',  $isDefault);
         }
+    }
+
+    /**
+     * addTypesCondition
+     *
+     * @param  array $ratingTypeArr
+     * @return void
+     */
+    public function addTypesCondition(array $ratingTypeArr)
+    {
+        $this->addCondition(RatingType::DB_TBL_PREFIX . 'type', 'IN',  $ratingTypeArr);
     }
 }

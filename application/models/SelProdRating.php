@@ -21,27 +21,27 @@ class SelProdRating extends MyAppModel
         return new SearchBase(static::DB_TBL, 'sprating');
     }
 
-    public static function getRatingAspectsArr($langId , $fulfillmentType = Shipping::FULFILMENT_ALL, $isActive = 1, $ratingType = RatingType::TYPE_PRODUCT) 
+    public static function getRatingAspectsArr($langId, $fulfillmentType = Shipping::FULFILMENT_ALL, $isActive = 1, $ratingType = RatingType::TYPE_PRODUCT)
     {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
 
-        $srch = new RatingTypeSearch($langId, $ratingType, $isActive, applicationConstants::YES);
-
+        $srch = new RatingTypeSearch($langId, $isActive, applicationConstants::YES);
+        $srch->addTypesCondition([$ratingType]);
         $attr = ['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name'];
         $srch->addMultipleFields($attr);
 
         $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-        
-        if($fulfillmentType == Shipping::FULFILMENT_PICKUP){
+
+        if ($fulfillmentType == Shipping::FULFILMENT_PICKUP) {
             unset($ratingTypes[static::TYPE_SELLER_SHIPPING_QUALITY]);
         }
 
         return $ratingTypes;
     }
-    
+
     public static function getDigitalOrderAspectsArr($langId)
     {
         $langId = FatUtility::int($langId);

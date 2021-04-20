@@ -37,7 +37,7 @@ class RatingType extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $ratingTypeId);
         $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
     }
-    
+
     /**
      * getTypeArr
      *
@@ -52,5 +52,15 @@ class RatingType extends MyAppModel
             self::TYPE_DELIVERY => Labels::getLabel('LBL_DELIVERY', $langId),
             self::TYPE_OTHER => Labels::getLabel('LBL_OTHER', $langId),
         ];
+    }
+
+    /**
+     * getDefaultKeys
+     *    
+     * @return array
+     */
+    public static function getDefaultKeys(): array
+    {
+        return [self::TYPE_PRODUCT, self::TYPE_SHOP, self::TYPE_DELIVERY];
     }
 }
