@@ -1,6 +1,7 @@
 <?php
 
 require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
+
 /**
  * Parameter reference 
  * https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
@@ -12,65 +13,123 @@ class EcommerceTracking
     private $trackingId;
     private $userId;
     private $event = [];
-
+    private $pageTitle;
+    private $transactionDetails;
+    private $productAction;
+    private $products = [];
+    
+    const PROD_ACTION_TYPE_DETAIL = 1;
+    const PROD_ACTION_TYPE_ADD_TO_CART = 2;
+    const PROD_ACTION_TYPE_REMOVE_FROM_CART = 3;
+    const PROD_ACTION_TYPE_CHECKOUT = 4;
+    const PROD_ACTION_TYPE_PURCHASE = 5;
+    const PROD_ACTION_TYPE_REFUND = 6;
     
 
-    public function __construct($trackingId, $userId ,$pageTitle)
+    public function __construct($trackingId, $pageTitle ,$userId = NULL)
     {
         $this->trackingId = $trackingId;
-        $this->userId = $userId;
-    }
-    
-    
-    
-    public function addImpression($listName)
-    {        
-        $this->impression[$this->impressionCount] = $listName;       
+        $this->userId = $userId ?? session_id();
+        $this->pageTitle = $pageTitle;
     }
 
-    public function addImpressionProducts($productId, $productName, $category, $brand, $variant, $position)
+    public function addImpression($listName)
     {
-        $impressionCount = count($this->impression);
-        $this->impressions[$impressionCount]['products'][] = [       
+        $this->impressions[]['title'] = $listName;
+    }
+
+    public function addImpressionProduct($productId, $productName, $category, $brand, $position)
+    {
+        $impressionKey = count($this->impressions) - 1;
+        $this->impressions[$impressionKey]['products'][] = [
+            'productId' => $productId,
+            'productName' => urlencode($productName),
+            'category' => urlencode($category),
+            'brand' => urlencode($brand),            
+            'position' => $position,
+            //'variant' => $variant,
+        ];
+        
+    }
+
+    public function addTransaction($id = NULL, $amount = NULL, $shipping = NULL, $tax = NULL, $currencyCode = NULL)
+    {
+        $this->transactionDetails = [
+            'id' => $id,
+            'amount' => $amount,
+            'shipping' => $shipping,
+            'tax' => $tax,
+            'currencyCode' => $currencyCode,
+        ];
+    }
+
+    public function addEvent($action, $category)
+    {
+        $this->event = [
+            'action' => $action,
+            'category' => $category,
+        ];
+    }
+
+    public function addProductAction($action)
+    {
+        $this->productAction = $action;
+    }
+
+    public function addProduct($productId, $productName = NULL, $category= NULL, $brand= NULL, $quantity = NULL,$price = NULL)
+    {
+        $this->products[] = [
             'productId' => $productId,
             'productName' => $productName,
             'category' => $category,
             'brand' => $brand,
-            'variant' => $variant,
-            'position' => $position,
+           // 'variant' => $variant,
+            'quantity' => $quantity,
+            'price' => $price
         ];
     }
-    
-    
-    public function addEvent($action,$category, $label)
-    {       
-        $this->event = [       
-            'action' => $action,
-            'category' => $category,
-            'label' => $label, 
-        ];
-    }
-    
-    
-    public function sendRequest(){
+
+    public function sendRequest()
+    {
+        $gaParams = $this->buildParams(); 
+        //$gaParams = http_build_query($gaParams);
         
-    $gaParams = [
+        $url = 'https://www.google-analytics.com/debug/collect';
+        $curl = new Curl\Curl();
+        $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $curl->post($url, $gaParams);
+
+        if ($curl->error) {            
+            echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
+//            $this->error = $curl->errorCode . ' : ' . $curl->errorMessage;
+//            $this->error .= !empty($curl->getResponse()->error) ? $curl->getResponse()->error : '';
+//            return false;
+        }else {
+           
+           // echo 'Response:' . "\n";
+            print_r($curl->response);
+        }
+    }
+
+    private function buildParams()
+    {
+        $gaParams = [
             'v' => '1', # API Version.
             'tid' => $this->trackingId, # Tracking ID / Property ID.
             # Anonymous Client Identifier. Ideally, this should be a UUID that
             # is associated with particular user, device, or browser instance.
             'cid' => $this->userId,
-            'dh'  => $_SERVER['HTTP_HOST'],
-            'dp'  => $_SERVER['REQUEST_URI'],
-                
+            'dh' => urlencode($_SERVER['HTTP_HOST']),
+            'dp' => urlencode($_SERVER['REQUEST_URI']),
         ];
 
         foreach ($this->impressions as $key => $impression) {
+            $key++;
             $impressionKey = "il" . $key;
-            $gaParams += ['il' . $key . 'nm' => $impression];
-            
+            $gaParams += ['il' . $key . 'nm' => $impression['title']];
+
             foreach ($impression['products'] as $prodKey => $product) {
-                $prodKey++;                
+                $prodKey++;
                 $prodImpressionKey = $impressionKey . "pi" . $prodKey;
 
                 $gaParams += [
@@ -78,41 +137,79 @@ class EcommerceTracking
                     $prodImpressionKey . 'nm' => $product['productName'], // Product Impression name.
                     $prodImpressionKey . 'ca' => $product['category'], // Product Impression category.
                     $prodImpressionKey . 'br' => $product['brand'], // Product Impression brand.
-                    $prodImpressionKey . 'va' => $product['variant'], // Product Impression variant.
+                    //$prodImpressionKey . 'va' => $product['variant'], // Product Impression variant.
                     $prodImpressionKey . 'ps' => $product['position'], // Product Impression position.
                 ];
             }
         }
-        
+
         if (0 < count($this->event)) {
-            $gaParams +=  [
-                't'=>'event',
-                'ec'=>$this->event['category'],     // Event Category. Required.
-                'ea'=>$this->event['action'],       // Event Action. Required.
-                'el'=>$this->event['label'],        // Event label.
+            $gaParams += [
+                't' => 'event',
+                'ec' => $this->event['category'], // Event Category. Required.
+                'ea' => $this->event['action'], // Event Action. Required.
+                /*'el' => $this->event['label'], // Event label.*/
             ];
         } else {
-            
-             $gaParams +=  [
-                't'=>'pageview',
-                'dh'=>$this->event['category'],     // Document hostname
-                'dp'=>$this->event['action'],       // Page.
-                'dt'=>$this->event['label'],    
+            $gaParams += [
+                't' => 'pageview',
+                'dh' => $_SERVER['HTTP_HOST'], // Document hostname
+                'dp' => $_SERVER['REQUEST_URI'], // Page.
+                'dt' => $this->pageTitle,
             ];
-            
         }
 
-        $url = 'http://www.google-analytics.com/collect';
-        $curl = new Curl\Curl();
-        $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
-        $curl->post($url,$gaParams);
 
-        if ($curl->error) {
-            $this->error = $curl->errorCode . ' : ' . $curl->errorMessage;
-            $this->error .= !empty($curl->getResponse()->error) ? $curl->getResponse()->error : '';
-            return false;
+        if (!empty($this->productAction)) {
+            $pa = '';
+            switch ($this->productAction) {
+                case self::PROD_ACTION_TYPE_DETAIL:
+                    $pa = "detail";
+                    break;
+                case self::PROD_ACTION_TYPE_ADD_TO_CART:
+                    $pa = "add";
+                    break;
+                case self::PROD_ACTION_TYPE_REMOVE_FROM_CART:
+                    $pa = "remove";
+                    break;
+                case self::PROD_ACTION_TYPE_CHECKOUT:
+                    $pa = "checkout";
+                    break;
+                case self::PROD_ACTION_TYPE_PURCHASE:
+                    $pa = "purchase";
+                    break;
+                case self::PROD_ACTION_TYPE_REFUND:
+                    $pa = "refund";
+                    break;             
+                
+            }
+            $gaParams['pa'] = $pa;
+        }
+
+        foreach ($this->products as $prodKey => $product) {
+            $prodKey++;
+            $gaKey = "pr" . $prodKey;
+            $gaParams += [
+                $gaKey . 'id' => $product['productId'], // Product ID. 
+                $gaKey . 'nm' => $product['productName'], // Product name.
+                $gaKey . 'ca' => $product['category'], // Product category.
+                $gaKey . 'br' => $product['brand'], // Product  brand.
+               // $gaKey . 'va' => $product['variant'], // Product variant.
+                $gaKey . 'qt' => $product['quantity'], // Product quantity.
+                $gaKey . 'pr' => $product['price'],
+            ];
+        }
+
+        if (!empty($this->transactionDetails)) {
+            $gaParams += [
+                'ti' => $this->transactionDetails['id'],
+                'tr' => $this->transactionDetails['amount'], // Revenue.
+                'ts' => $this->transactionDetails['shipping'], // Shipping.
+                'tt' => $this->transactionDetails['tax'], // Tax.
+                'cu' => $this->transactionDetails['currencyCode'], // Tax.
+            ];
         }
         
+        return $gaParams;
     }
-
 }

@@ -383,7 +383,7 @@ class CartController extends MyAppController
             $srch->joinProductToCategory();
             $srch->addCondition('pricetbl.selprod_id', '=', $productId);
             $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'product_name'));
+            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'product_name','prodcat_name','brand_name','selprod_title','selprod_price'));
             $rs = $srch->getResultSet();
             $db = FatApp::getDb();
             $sellerProductRow = $db->fetch($rs);
@@ -450,6 +450,15 @@ class CartController extends MyAppController
             if ($productAdd) {
                 $returnUserId = (true === MOBILE_APP_API_CALL) ? true : false;
                 $cartUserId = $cartObj->add($productId, $quantity, 0, $returnUserId);
+                $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+                if (!empty($analyticsId)) {                     
+                    $cartQty = $cartObj->getQtyBySelProdId($sellerProductRow['selprod_id']);
+                    $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId));
+                    $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_ADD_TO_CART);
+                    $et->addProduct($sellerProductRow['selprod_id'], $sellerProductRow['selprod_title'], $sellerProductRow['prodcat_name'], $sellerProductRow['brand_name'], $cartQty,$sellerProductRow['selprod_price']);
+                    $et->sendRequest();
+                }
+                
                 if (true === MOBILE_APP_API_CALL) {
                     $this->set('tempUserId', $cartUserId);
                 }

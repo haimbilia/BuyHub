@@ -119,7 +119,19 @@ class ProductsController extends MyAppController
         }
 
         $data = array_merge($data, $common, $arr);
-
+                
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (!empty($analyticsId) && 0 < $data['recordCount']) {
+            $et = new EcommerceTracking($analyticsId, $method);
+            $et->addImpression(($method == 'search' ? $arr['pageTitle'] . " " . $arr['pageTitle'] : $arr['pageTitle']));
+            $productPostion = 1;
+            foreach ($data['products'] as $product) {
+                $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);
+                $productPostion++;
+            }
+            $et->sendRequest();
+        }
+        
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $data['products']);
             $this->set('page', $data['page']);
@@ -786,6 +798,23 @@ class ProductsController extends MyAppController
             }
             $recentlyViewed = $this->getRecentlyViewedProductsDetail($recentlyViewed);
             $this->set('recentlyViewed', $recentlyViewed);
+        }
+                
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (!empty($analyticsId)) {            
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId));
+            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
+            $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'],1, $product['selprod_price']);
+            
+            if(0 < count($recommendedProducts)){      
+                $et->addImpression(Labels::getLabel('LBL_Recommended_Products', $this->siteLangId));
+                $productPostion = 1;
+                foreach ($recommendedProducts as $product) {
+                    $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);
+                    $productPostion++;
+                }                
+            }            
+            $et->sendRequest();
         }
 
         $this->_template->render();

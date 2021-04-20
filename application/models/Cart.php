@@ -579,7 +579,8 @@ class Cart extends FatModel
             'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_fulfillment_type',
             'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
             'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units'
+            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'
         ));
 
         if ($siteLangId) {
@@ -824,7 +825,14 @@ class Cart extends FatModel
                     $found = true;
                     unset($this->SYSTEM_ARR['cart'][$cartKey]);
                     $this->updateTempStockHold($product['selprod_id'], 0, 0);
-                    if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {
+                    if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {                        
+                        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+                        if (!empty($analyticsId)) {                
+                            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', commonHelper::getLangId()));
+                            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REMOVE_FROM_CART);
+                            $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 0);
+                            $et->sendRequest();
+                        }
                         if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
                             AbandonedCart::saveAbandonedCart($this->cart_user_id, $product['selprod_id'], $product['quantity'], AbandonedCart::ACTION_DELETED);
                         }
@@ -2153,4 +2161,12 @@ class Cart extends FatModel
     {
         $this->includeTax = false;
     }
+    
+    public function getQtyBySelProdId($selprod_id)
+    {
+        $key = static::CART_KEY_PREFIX_PRODUCT . $selprod_id;
+        $key = base64_encode(json_encode($key));
+        return $this->SYSTEM_ARR['cart'][$key] ?? 0;
+    }
+
 }
