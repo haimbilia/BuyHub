@@ -3,9 +3,6 @@
   "version": "9.3.0",
   "description": "Yo!Kart Multivendor Platform",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AblySoft268/Yokart-V8.git"
@@ -27,5 +24,14 @@
   },
   "browserslist": [
     "last 10 versions"
-  ]
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "web-watch": "webpack --watch"
+  },
+  "bugs": {
+    "url": "https://github.com/AblySoft268/Yokart-V8/issues"
+  },
+  "homepage": "https://github.com/AblySoft268/Yokart-V8#readme"
 }

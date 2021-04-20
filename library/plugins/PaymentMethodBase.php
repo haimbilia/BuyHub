@@ -28,6 +28,7 @@ class PaymentMethodBase extends PluginBase
 
     private $sellerInfoColumns = [
         'shop_phone',
+        'shop_phone_dcode',
         'shop_id',
         'shop_postalcode',
         'IFNULL(shop_name, shop_identifier) as shop_name',

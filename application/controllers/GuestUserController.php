@@ -730,7 +730,7 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
         }
 
-        $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20));
+        $token = FatUtility::getRandomString(30);
         $row['token'] = $token;
 
         $recordId = 0 < $withPhone ? $row['user_id'] : 0;

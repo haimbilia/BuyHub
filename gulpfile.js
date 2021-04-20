@@ -13,7 +13,7 @@ function css() {
         .pipe(dest('./application/views/css'));
 }
 
-
+// Watch files
 function watchFiles() {
     watch(['./application/views/scss'], css);
 }

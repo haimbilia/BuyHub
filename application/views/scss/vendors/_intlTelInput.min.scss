@@ -1,6 +1,6 @@
 .iti {
     position: relative;
-   /* display: inline-block*/
+    display: flex;
 }
 
 .iti * {
@@ -24,24 +24,29 @@
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     padding-#{$end-direction}: 36px;
-    margin-right: 0
+    margin-#{$end-direction}: 0
 }
 
-.iti__flag-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    padding: 1px
+.iti input[type=text] {
+    padding-left: .625rem !important;
+    padding-right: .625rem !important;
 }
 
+// .iti__flag-container {
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     right: 0;
+//     padding: 1px
+// }
 .iti__selected-flag {
     z-index: 1;
     position: relative;
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 6px 0 8px
+    padding: 0 6px 0 8px;
+    margin-#{$end-direction}: -2px;
 }
 
 .iti__arrow {
@@ -62,7 +67,7 @@
     position: absolute;
     z-index: 2;
     list-style: none;
-    text-align: left;
+    text-align: #{$start-direction};
     padding: 0;
     margin: 0 0 0 -1px;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, .2);
@@ -71,7 +76,8 @@
     white-space: nowrap;
     max-height: 200px;
     overflow-y: scroll;
-    -webkit-overflow-scrolling: touch
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
 }
 
 .iti__country-list--dropup {
@@ -98,7 +104,8 @@
 
 .iti__country {
     padding: 5px 10px;
-    outline: 0
+    outline: 0;
+    font-size: .875rem;
 }
 
 .iti__dial-code {
@@ -128,7 +135,7 @@
 .iti--separate-dial-code input[type=text] {
     padding-#{$end-direction}: 6px;
     padding-#{$start-direction}: 52px;
-    margin-left: 0
+    margin-#{$start-direction}: 0
 }
 
 .iti--allow-dropdown .iti__flag-container,
@@ -145,13 +152,13 @@
     background-color: rgba(0, 0, 0, .05)
 }
 
-.iti--allow-dropdown input[disabled] + .iti__flag-container:hover,
-.iti--allow-dropdown input[readonly] + .iti__flag-container:hover {
+.iti--allow-dropdown input[disabled]+.iti__flag-container:hover,
+.iti--allow-dropdown input[readonly]+.iti__flag-container:hover {
     cursor: default
 }
 
-.iti--allow-dropdown input[disabled] + .iti__flag-container:hover .iti__selected-flag,
-.iti--allow-dropdown input[readonly] + .iti__flag-container:hover .iti__selected-flag {
+.iti--allow-dropdown input[disabled]+.iti__flag-container:hover .iti__selected-flag,
+.iti--allow-dropdown input[readonly]+.iti__flag-container:hover .iti__selected-flag {
     background-color: transparent
 }
 
@@ -160,13 +167,14 @@
 }
 
 .iti--separate-dial-code .iti__selected-dial-code {
-    margin-left: 6px
+    margin-left: 6px;
+    font-size: .875rem;
 }
 
 .iti--container {
     position: absolute;
     top: -1000px;
-    left: -1000px;
+    #{$start-direction}: -1000px;
     z-index: 1060;
     padding: 1px
 }

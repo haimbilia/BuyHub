@@ -293,7 +293,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 <?php }*/ ?>
 
                                     <!-- Add To Cart [ -->
-                                    <?php if ($product['in_stock']) {
+                                    <?php if (0 < $currentStock) {
                                         if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
                                             <div class="not-available">
                                                 <svg class="svg">
@@ -369,7 +369,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 <?php } */ ?>
 
                                     <?php /* Volume Discounts[ */
-                                    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && $product['in_stock']) { ?>
+                                    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
                                         <div class="gap"></div>
                                         <div class="h6">
                                             <?php echo Labels::getLabel('LBL_Wholesale_Price_(Piece)', $siteLangId); ?>:</div>

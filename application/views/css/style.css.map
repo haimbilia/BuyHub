@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.scss"],"names":[],"mappings":"AAEA;EACE,UAHc,EAAA","file":"style.css","sourcesContent":["$body-color: red;\n\nbody {\n  color: $body-color;\n}"]}

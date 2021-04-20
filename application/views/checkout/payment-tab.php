@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $pmethodName = $paymentMethod["plugin_name"];
-$pmethodDescription = $paymentMethod["plugin_description"];
 $pmethodCode = $paymentMethod["plugin_code"];
 
 $isCodOrPayAtStore = in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']);

@@ -397,23 +397,36 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             $fld1->setFieldTagAttribute('class', 'notifyCustomer-js');
                             $fld1->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 
-                            $fld = $frm->getField('tracking_number');
-                            if (null != $fld) {
-                                $fld->developerTags['col'] = 6;
-                            }
-
+                            
                             if (null != $manualFld) {
                                 $manualFld->setFieldTagAttribute('class', 'manualShipping-js fieldsVisibility-js');
                                 $manualFld->developerTags['col'] = 4;
 
+                                $fld = $frm->getField('tracking_number');
+                                $fld->developerTags['col'] = 4;
+
                                 $fld = $frm->getField('opship_tracking_url');
+                                $courierFld = $frm->getField('oshistory_courier');
                                 if (null != $fld) {
-                                    $fld->developerTags['col'] = 6;
+                                    $fld->developerTags['col'] = 4;
+                                    $fld->setWrapperAttribute('class', 'trackingUrlBlk--js');
+                                    $fld->setFieldTagAttribute('class', 'trackingUrlFld--js');
+                                    if (null != $courierFld) {
+                                        $fld->htmlAfterField = '<a href="javascript:void(0)" onclick="courierFld()" class="link"><small>' . Labels::getLabel(
+                                            'LBL_OR_SELECT_COURIER_?',
+                                            $siteLangId
+                                        ) . '</small></a>';
+                                    }
                                 }
-                                
-                                $fld = $frm->getField('oshistory_courier');
-                                if (null != $fld) {
-                                    $fld->developerTags['col'] = 6;
+
+                                if (null != $courierFld) {
+                                    $courierFld->developerTags['col'] = 4;
+                                    $courierFld->setWrapperAttribute('class', 'courierBlk--js d-none');
+                                    $courierFld->setFieldTagAttribute('class', 'courierFld--js');
+                                    $courierFld->htmlAfterField = '<a href="javascript:void(0)" onclick="trackingUrlFld()" class="link"><small>' . Labels::getLabel(
+                                        'LBL_OR_TRACK_THROUGH_URL_?',
+                                        $siteLangId
+                                    ) . '</small></a>';
                                 }
                             }
 
