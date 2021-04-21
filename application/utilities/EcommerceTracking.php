@@ -5,6 +5,11 @@ require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
 /**
  * Parameter reference 
  * https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
+ * 
+ * 
+ * https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide
+ * https://www.optimizesmart.com/implementing-enhanced-ecommerce-tracking-universal-analytics/#a8
+ * 
  */
 class EcommerceTracking
 {
@@ -17,7 +22,7 @@ class EcommerceTracking
     private $transactionDetails;
     private $productAction;
     private $products = [];
-    
+
     const PROD_ACTION_TYPE_DETAIL = 1;
     const PROD_ACTION_TYPE_ADD_TO_CART = 2;
     const PROD_ACTION_TYPE_REMOVE_FROM_CART = 3;
@@ -25,8 +30,9 @@ class EcommerceTracking
     const PROD_ACTION_TYPE_PURCHASE = 5;
     const PROD_ACTION_TYPE_REFUND = 6;
     
+    const DEBUG = false;
 
-    public function __construct($trackingId, $pageTitle ,$userId = NULL)
+    public function __construct($trackingId, $pageTitle, $userId = NULL)
     {
         $this->trackingId = $trackingId;
         $this->userId = $userId ?? session_id();
@@ -45,11 +51,10 @@ class EcommerceTracking
             'productId' => $productId,
             'productName' => urlencode($productName),
             'category' => urlencode($category),
-            'brand' => urlencode($brand),            
+            'brand' => urlencode($brand),
             'position' => $position,
-            //'variant' => $variant,
+                //'variant' => $variant,
         ];
-        
     }
 
     public function addTransaction($id = NULL, $amount = NULL, $shipping = NULL, $tax = NULL, $currencyCode = NULL)
@@ -76,14 +81,14 @@ class EcommerceTracking
         $this->productAction = $action;
     }
 
-    public function addProduct($productId, $productName = NULL, $category= NULL, $brand= NULL, $quantity = NULL,$price = NULL)
+    public function addProduct($productId, $productName = NULL, $category = NULL, $brand = NULL, $quantity = NULL, $price = NULL)
     {
         $this->products[] = [
             'productId' => $productId,
-            'productName' => $productName,
-            'category' => $category,
-            'brand' => $brand,
-           // 'variant' => $variant,
+            'productName' => urlencode($productName),
+            'category' => urlencode($category),
+            'brand' => urlencode($brand),
+            // 'variant' => $variant,
             'quantity' => $quantity,
             'price' => $price
         ];
@@ -91,23 +96,23 @@ class EcommerceTracking
 
     public function sendRequest()
     {
-        $gaParams = $this->buildParams(); 
-        //$gaParams = http_build_query($gaParams);
-        
-        $url = 'https://www.google-analytics.com/debug/collect';
+        $gaParams = $this->buildParams();
+
+        $url = 'https://www.google-analytics.com/collect';
+        if (true == self::DEBUG) {
+            $url = 'https://www.google-analytics.com/debug/collect';
+            CommonHelper::logData("GOOGLE ECOMMERCE TRACKING PARAMS==>" . json_encode($gaParams));
+        }
         $curl = new Curl\Curl();
         $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
         $curl->post($url, $gaParams);
-
-        if ($curl->error) {            
-            echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
-//            $this->error = $curl->errorCode . ' : ' . $curl->errorMessage;
-//            $this->error .= !empty($curl->getResponse()->error) ? $curl->getResponse()->error : '';
-//            return false;
-        }else {
-           
-           // echo 'Response:' . "\n";
-            print_r($curl->response);
+        if (true == self::DEBUG) {
+            if ($curl->error) {
+                echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
+            } else {
+                //CommonHelper::printArray(json_decode($curl->response,true));
+                CommonHelper::logData("GOOGLE ECOMMERCE TRACKING RESPONSE==>" . $curl->response);
+            }
         }
     }
 
@@ -148,7 +153,7 @@ class EcommerceTracking
                 't' => 'event',
                 'ec' => $this->event['category'], // Event Category. Required.
                 'ea' => $this->event['action'], // Event Action. Required.
-                /*'el' => $this->event['label'], // Event label.*/
+                    /* 'el' => $this->event['label'], // Event label. */
             ];
         } else {
             $gaParams += [
@@ -180,8 +185,7 @@ class EcommerceTracking
                     break;
                 case self::PROD_ACTION_TYPE_REFUND:
                     $pa = "refund";
-                    break;             
-                
+                    break;
             }
             $gaParams['pa'] = $pa;
         }
@@ -194,7 +198,7 @@ class EcommerceTracking
                 $gaKey . 'nm' => $product['productName'], // Product name.
                 $gaKey . 'ca' => $product['category'], // Product category.
                 $gaKey . 'br' => $product['brand'], // Product  brand.
-               // $gaKey . 'va' => $product['variant'], // Product variant.
+                // $gaKey . 'va' => $product['variant'], // Product variant.
                 $gaKey . 'qt' => $product['quantity'], // Product quantity.
                 $gaKey . 'pr' => $product['price'],
             ];
@@ -209,7 +213,8 @@ class EcommerceTracking
                 'cu' => $this->transactionDetails['currencyCode'], // Tax.
             ];
         }
-        
+
         return $gaParams;
     }
+
 }
