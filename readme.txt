@@ -96,6 +96,12 @@ Fixes:
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
     => 052463 - Setup shipping of other product not working with EasyPost
 
+
+Develop
+
+Fixes:
+    => 052651 - on using comma as currency separator it's not impacting in text areas 
+
 Enhancements :
    => Make provision to made seller
    => At shop level  pickup interval option given

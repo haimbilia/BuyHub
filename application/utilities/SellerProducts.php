@@ -2771,7 +2771,7 @@ trait SellerProducts
         $json = array(
             'status' => true,
             'msg' => Labels::getLabel('MSG_Success', $this->siteLangId),
-            'data' => array('value' => $value)
+            'data' => array('value' => CommonHelper::numberFormat($value))
         );
         FatUtility::dieJsonSuccess($json);
     }

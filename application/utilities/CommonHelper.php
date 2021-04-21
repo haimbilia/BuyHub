@@ -644,16 +644,16 @@ class CommonHelper extends FatUtility
         return trim($sign . $val);
     }
 
-    public static function numberFormat($val,$numberFormat=true,$stringFormat=false){
-        
+    public static function numberFormat($val, $numberFormat = true, $stringFormat = false, $decimals = 2)
+    {
         $decimalpoint =  FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.');
         $separator =  $decimalpoint == '.' ? ',' : '.';
 
         if ($numberFormat && !$stringFormat) {
-            $val = number_format($val, 2,$decimalpoint,$separator);
+            $val = number_format($val, $decimals, $decimalpoint, $separator);
         }else{
             $afterDecimal = $val - floor($val);
-            $val = (0 < $afterDecimal ? number_format($val, 2, $decimalpoint,$separator) : $val);
+            $val = (0 < $afterDecimal ? number_format($val, $decimals, $decimalpoint,$separator) : $val);
         }
 
         return $val;
@@ -1897,9 +1897,9 @@ class CommonHelper extends FatUtility
         }
 
         if ($taxVal['inPercentage'] == Tax::TYPE_PERCENTAGE) {
-            return $taxVal['name'] . ' (' . $taxVal['percentageValue'] . '%)';
+            return $taxVal['name'] . ' (' . CommonHelper::numberFormat($taxVal['percentageValue']) . '%)';
         }
-        return $taxVal['name'] . ' (' . $taxVal['percentageValue'] . ')';
+        return $taxVal['name'] . ' (' . CommonHelper::numberFormat($taxVal['percentageValue']) . ')';
     }
 
 
