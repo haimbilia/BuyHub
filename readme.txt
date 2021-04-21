@@ -73,6 +73,11 @@ Fixes:
     => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
     => 051573 - Product search is not working when we Activate Geo Location and shipping plugin.
     => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
+
+
+Develop
+    Fixes:
+    => 052654 - Admin can create seller/buyer/advertiser/affiliate account from back-end - Not working
     
 Enhancements :
    => Make provision to made seller
