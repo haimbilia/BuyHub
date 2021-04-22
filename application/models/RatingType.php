@@ -11,7 +11,7 @@ class RatingType extends MyAppModel
     public const TYPE_PRODUCT = 1;
     public const TYPE_SHOP = 2;
     public const TYPE_DELIVERY = 3;
-    public const TYPE_OTHER = 4;
+    public const TYPE_OTHER = 4; /* For Category */
 
     public const RATING_PRODUCT = 1;
     public const RATING_SHOP = 2;

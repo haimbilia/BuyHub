@@ -119,66 +119,70 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <h5 class="blocktitle"><?php echo Labels::getLabel('LBL_SELLER_FEEDBACK', $siteLangId); ?></h5>
-                                <div class="shop-rating-wrap mb-4">
-                                    <div class="shop-card pb-3">
-                                        <div class="shop-card__img">
-                                            <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL')); ?>" />
-                                        </div>
-                                        <div class="shop-card__detail">
-                                            <h6><?php echo $opDetail['op_shop_name']; ?> </h6>
-                                            <span class="shop-opened">
-                                                <?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId);
-                                                $date = new DateTime($shop['user_regdate']);
-                                                echo $date->format('M d, Y'); ?> </span>
-                                        </div>
-                                    </div>
-                                    <div class="rating-listing">
-                                        <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                            <div class="rating">
-                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
-                                                <div class="rating-action" data-rating="0">
-                                                    <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                                        <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                                        </svg>
-                                                    <?php } ?>
+                            <?php if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) { ?>
+                                <div class="col-md-6">
+                                    <?php if (!empty($shopRatingTypesArr)) { ?>
+                                        <h5 class="blocktitle"><?php echo Labels::getLabel('LBL_SELLER_FEEDBACK', $siteLangId); ?></h5>
+                                        <div class="shop-rating-wrap mb-4">
+                                            <div class="shop-card pb-3">
+                                                <div class="shop-card__img">
+                                                    <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL')); ?>" />
                                                 </div>
-                                                <?php
-                                                    $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                    $fld->setFieldTagAttribute('class', 'd-none');
-                                                    echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
-                                </div>
-                                <!--shop-rating-wrap-->
-                                <h5 class="blocktitle"><?php echo Labels::getLabel('LBL_DELIVERY_FEEDBACK', $siteLangId); ?></h5>
-                                <div class="shop-rating-wrap mb-4">
-                                    <div class="rating-listing">
-                                        <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                            <div class="rating pb-0">
-                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
-                                                <div class="rating-action" data-rating="0">
-                                                    <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                                        <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
-                                                        </svg>
-                                                    <?php } ?>
+                                                <div class="shop-card__detail">
+                                                    <h6><?php echo $opDetail['op_shop_name']; ?> </h6>
+                                                    <span class="shop-opened">
+                                                        <?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId);
+                                                        $date = new DateTime($shop['user_regdate']);
+                                                        echo $date->format('M d, Y'); ?> </span>
                                                 </div>
-                                                <?php
-                                                    $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                    $fld->setFieldTagAttribute('class', 'd-none');
-                                                    echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                             </div>
-                                        <?php } ?>
-                                    </div>
+                                            <div class="rating-listing">
+                                                <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
+                                                    <div class="rating">
+                                                        <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
+                                                        <div class="rating-action" data-rating="0">
+                                                            <?php for ($i = 5; $i >= 1; $i--) { ?>
+                                                                <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
+                                                                </svg>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <?php
+                                                            $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
+                                                            $fld->setFieldTagAttribute('class', 'd-none');
+                                                            echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <!--shop-rating-wrap-->
+                                    <?php }
+                                    if (!empty($deliveryRatingTypesArr)) { ?>
+                                        <h5 class="blocktitle"><?php echo Labels::getLabel('LBL_DELIVERY_FEEDBACK', $siteLangId); ?></h5>
+                                        <div class="shop-rating-wrap mb-4">
+                                            <div class="rating-listing">
+                                                <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
+                                                    <div class="rating pb-0">
+                                                        <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
+                                                        <div class="rating-action" data-rating="0">
+                                                            <?php for ($i = 5; $i >= 1; $i--) { ?>
+                                                                <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star"></use>
+                                                                </svg>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <?php
+                                                            $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
+                                                            $fld->setFieldTagAttribute('class', 'd-none');
+                                                            echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <!--Delivery-rating-wrap-->
+                                    <?php } ?>
                                 </div>
-                                <!--Delivery-rating-wrap-->
-                            </div>
-                        </div>
-
+                            <?php } ?>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="field-set">

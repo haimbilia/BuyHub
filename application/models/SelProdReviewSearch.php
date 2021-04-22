@@ -98,7 +98,7 @@ class SelProdReviewSearch extends SearchBase
         $this->joinTable(
             RatingType::DB_TBL,
             'INNER JOIN',
-            'rt.ratingtype_id = sprating_ratingtype_id',
+            'rt.ratingtype_id = sprating_ratingtype_id AND rt.ratingtype_active = ' . applicationConstants::ACTIVE,
             'rt'
         );
         if (0 < $langId) {

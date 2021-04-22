@@ -56,6 +56,31 @@ class SelProdRating extends MyAppModel
         return self::getRatingAspectsArr($langId, Shipping::FULFILMENT_ALL, applicationConstants::ACTIVE, RatingType::TYPE_DELIVERY);
     }
 
+    public static function getReviewsAndRatings($recordId, $langId, $isSeller = true)
+    {
+        $srch = new SelProdReviewSearch();
+        $srch->joinSeller();
+        $srch->joinSellerProducts();
+        $srch->joinSelProdRating($langId);
+        $srch->joinOrderProduct();
+        $srch->joinOrderProductShipping();
+        $srch->addMultipleFields(['sprating_spreview_id', 'ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'sprating_rating']);
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN TRUE ELSE `ratingtype_type` != '" . RatingType::TYPE_DELIVERY . "' END)");
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+
+        if (true === $isSeller) {
+            $srch->addCondition('spreview_seller_user_id', '=', $recordId);
+        } else {
+            $srch->addCondition('sprating_spreview_id', '=', $recordId);
+        }
+
+        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addOrder('ratingtype_id');
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
+    }
+
     public static function getSellerRating($userId)
     {
         $userId = FatUtility::int($userId);
@@ -66,7 +91,7 @@ class SelProdRating extends MyAppModel
         $srch->joinOrderProduct();
         $srch->joinOrderProductShipping();
         $srch->addMultipleFields(array("ROUND(AVG(sprating_rating),2) as avg_rating"));
-        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `sprating_ratingtype_id` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `sprating_ratingtype_id` = '" . RatingType::TYPE_SHOP . "' END)");
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spreview_seller_user_id', '=', $userId);
@@ -74,10 +99,7 @@ class SelProdRating extends MyAppModel
         $srch->addGroupby('spreview_seller_user_id');
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
-        if ($record == false) {
-            return 0;
-        }
-        return $record['avg_rating'];
+        return ($record == false) ? 0 : $record['avg_rating'];
     }
 
     public static function getAvgSelProdReviewsRating(int $selProdId, int $langId): array
@@ -92,6 +114,26 @@ class SelProdRating extends MyAppModel
             'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 
             'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
         ]);
+        $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+
+    public static function getAvgShopReviewsRating(int $shopUserId, int $langId): array
+    {
+        $srch = new SelProdReviewSearch();
+        $srch->joinOrderProduct();
+        $srch->joinOrderProductShipping();
+        $srch->joinSelProdRating($langId);
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "') END)");
+
+        $srch->addCondition('op_selprod_user_id', '=', $shopUserId);
+        $srch->addGroupBy('sprating_ratingtype_id');
+        $srch->addMultipleFields([
+            'sprating_ratingtype_id', 
+            'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 
+            'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
+        ]);
+        $srch->addOrder('sprating_ratingtype_id');
         $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }

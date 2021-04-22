@@ -195,6 +195,15 @@ class ReviewsController extends MyAppController
         $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG'));
         $frmReviewSearch->fill(array('shop_id' => $shop_id));
         $this->set('frmReviewSearch', $frmReviewSearch);
+        
+        $ratingAspects = SelProdRating::getAvgShopReviewsRating($shop['shop_user_id'], $this->siteLangId);
+        $this->set('ratingAspects', $ratingAspects);
+
+        $shop_rating = 0;
+        if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id']);
+        }
+        $this->set('shop_rating', $shop_rating);
         $this->set('shop', $shop);
         $this->_template->render();
     }
@@ -247,7 +256,11 @@ class ReviewsController extends MyAppController
                 $srch->addOrder('spr.spreview_posted_on', 'desc');
                 break;
         }
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $records = (array) FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
+
+        $recordRatings = (array) SelProdRating::getReviewsAndRatings($sellerId, $this->siteLangId);
+        $this->set('recordRatings', $recordRatings);
         $this->set('reviewsList', $records);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
@@ -269,6 +282,29 @@ class ReviewsController extends MyAppController
         $json['html'] = $this->_template->render(false, false, 'reviews/search-for-shop.php', true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'reviews/load-more-shop-reviews-btn.php', true, false);
         FatUtility::dieJsonSuccess($json);
+    }
+
+    private function getReviewRating($reviewId)
+    {
+        $ratings = SelProdRating::getSearchObj();
+        $ratings->joinTable(
+            RatingType::DB_TBL,
+            'INNER JOIN',
+            'rt.ratingtype_id = sprating_ratingtype_id',
+            'rt'
+        );
+        $ratings->joinTable(
+            RatingType::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->siteLangId,
+            'rt_l'
+        );
+
+        $ratings->addMultipleFields(['sprating_spreview_id', 'ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'sprating_rating']);
+
+        $ratings->addCondition('sprating_spreview_id', '=', $reviewId);
+        $ratings->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
+        return (array) FatApp::getDb()->fetchAll($ratings->getResultSet());
     }
 
     public function productPermalink($selprod_id, $reviewId)
@@ -332,26 +368,8 @@ class ReviewsController extends MyAppController
 
         $reviewHelpfulData = FatApp::getDb()->fetch($srch->getResultSet());
 
-        $ratings = SelProdRating::getSearchObj();
-        $ratings->joinTable(
-            RatingType::DB_TBL,
-            'INNER JOIN',
-            'rt.ratingtype_id = sprating_ratingtype_id',
-            'rt'
-        );
-        $ratings->joinTable(
-            RatingType::DB_TBL_LANG,
-            'LEFT OUTER JOIN',
-            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->siteLangId,
-            'rt_l'
-        );
-
-        $ratings->addMultipleFields(['sprating_spreview_id', 'ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'sprating_rating']);
-
-        $ratings->addCondition('sprating_spreview_id', '=', $reviewId);
-        $ratings->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
-        $recordRatings = (array) FatApp::getDb()->fetchAll($ratings->getResultSet());
-
+        
+        $recordRatings = $this->getReviewRating($reviewId);
         $this->set('recordRatings', $recordRatings);
         $this->set('reviewHelpfulData', $reviewHelpfulData);
         $this->set('product', $product);
@@ -404,8 +422,6 @@ class ReviewsController extends MyAppController
         $selProdRatingSrch->addGroupBy('sprating_spreview_id');
         $spratingQuery = $selProdRatingSrch->getQuery();
 
-
-
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinProducts($this->siteLangId);
         $selProdReviewObj->joinSellerProducts($this->siteLangId);
@@ -446,6 +462,9 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_id', '=', $reviewId);
 
         $reviewHelpfulData = FatApp::getDb()->fetch($srch->getResultSet());
+
+        $recordRatings = (array) SelProdRating::getReviewsAndRatings($reviewId, $this->siteLangId, false);
+        $this->set('recordRatings', $recordRatings);
 
         $this->set('reviewHelpfulData', $reviewHelpfulData);
         $this->set('shop', $shop);
