@@ -102,6 +102,7 @@ Develop
 Fixes:
     => 052651 - on using comma as currency separator it's not impacting in text areas 
     => 052654 - Admin can create seller/buyer/advertiser/affiliate account from back-end - Not working
+    => 052664 - admin> users> asterisk marked field shouldn't be mandatory for admin 
 
 Enhancements :
    => Make provision to made seller
