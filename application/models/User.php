@@ -1846,7 +1846,9 @@ class User extends MyAppModel
     
     public function sendAdminNewUserCreationEmail($userData, $langId)
     {
-        $userAuthObj = new UserAuthentication();
+        $userAuthObj = new UserAuthentication();        
+        $userAuthObj->deleteOldPasswordResetRequest($userData['user_id']);
+        
         $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20));
 
         $data = array(

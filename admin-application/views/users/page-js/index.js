@@ -431,5 +431,12 @@ $(document).ready(function() {
             reloadUserList();
         });
     };
+    
+    sendSetPasswordEmail = function (userId) {
+        fcom.displayProcessing();
+        fcom.updateWithAjax(fcom.makeUrl('Users', 'resendSetPasswordEmail'), {userId: userId}, function (t) {
+            
+        });
+    };
 
 })();

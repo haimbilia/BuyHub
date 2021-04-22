@@ -785,24 +785,18 @@ class UserAuthentication extends FatModel
             return false;
         }
         $db = FatApp::getDb();
-        if ($db->insertFromArray(
-            static::DB_TBL_USER_PRR,
-            array(
-                static::DB_TBL_UPR_PREFIX . 'user_id' => intval($data['user_id']),
-                static::DB_TBL_UPR_PREFIX . 'token' => $data['token'],
-                static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+".($data['days'] ?? 1)." DAY"))
-            )
-        )) {
-            $db->deleteRecords(
-                static::DB_TBL_USER_AUTH,
-                array(
-                    'smt' => static::DB_TBL_UAUTH_PREFIX . 'user_id = ?',
-                    'vals' => array($data['user_id'])
-                )
-            );
-            return true;
+        if (!$db->insertFromArray(
+                        static::DB_TBL_USER_PRR,
+                        array(
+                            static::DB_TBL_UPR_PREFIX . 'user_id' => intval($data['user_id']),
+                            static::DB_TBL_UPR_PREFIX . 'token' => $data['token'],
+                            static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+" . ($data['days'] ?? 1) . " DAY"))
+                        )
+                )) {
+            $this->error = $db->getError();
+            return false;
         }
-        return false;
+        return true;
     }
 
     public function checkResetLink($uId, $token)
