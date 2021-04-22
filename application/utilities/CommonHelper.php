@@ -75,7 +75,7 @@ class CommonHelper extends FatUtility
             self::$_currency_id,
             array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
         );
-        
+
         self::$_lang_code = Language::getAttributesById(
             self::$_lang_id,
             'language_code'
@@ -623,7 +623,7 @@ class CommonHelper extends FatUtility
             $sign = '-';
         }
 
-        $val = self::numberFormat($val,$numberFormat,$stringFormat);
+        $val = self::numberFormat($val, $numberFormat, $stringFormat);
 
         if ($stringFormat) {
             $val = static::numberStringFormat($val);
@@ -644,16 +644,16 @@ class CommonHelper extends FatUtility
         return trim($sign . $val);
     }
 
-    public static function numberFormat($val,$numberFormat=true,$stringFormat=false){
-        
+    public static function numberFormat($val, $numberFormat = true, $stringFormat = false, $decimals = 2)
+    {
         $decimalpoint =  FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.');
         $separator =  $decimalpoint == '.' ? ',' : '.';
 
         if ($numberFormat && !$stringFormat) {
-            $val = number_format($val, 2,$decimalpoint,$separator);
-        }else{
+            $val = number_format($val, $decimals, $decimalpoint, $separator);
+        } else {
             $afterDecimal = $val - floor($val);
-            $val = (0 < $afterDecimal ? number_format($val, 2, $decimalpoint,$separator) : $val);
+            $val = (0 < $afterDecimal ? number_format($val, $decimals, $decimalpoint, $separator) : floor($val));
         }
 
         return $val;
@@ -1768,22 +1768,22 @@ class CommonHelper extends FatUtility
     }
 
     public static function getUserCookiesEnabled()
-    {   
-        $userId = UserAuthentication::getLoggedUserId(true);        
-        if($userId > 0){          
+    {
+        $userId = UserAuthentication::getLoggedUserId(true);
+        if ($userId > 0) {
             $user = new User($userId);
             $userSelectedCookies = $user->getUserSelectedCookies();
-            return !empty($userSelectedCookies) ? true : false; 
-        }else{  
-            return static::checkCookiesEnabledSession();          
-        } 
+            return !empty($userSelectedCookies) ? true : false;
+        } else {
+            return static::checkCookiesEnabledSession();
+        }
     }
-    
+
     public static function checkCookiesEnabledSession()
-    {   
-        return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false; 
+    {
+        return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false;
     }
-    
+
 
     public static function getDefaultCurrencySymbol()
     {
@@ -2053,7 +2053,7 @@ class CommonHelper extends FatUtility
             return CommonHelper::displayMoneyFormat($childOrder['op_rounding_off']);
         }
         return false;
-    }    
+    }
 
     /**
      * stripAllTags - This differs from strip_tags() because it removes the contents of the <script> and <style> tags. 
@@ -2074,33 +2074,33 @@ class CommonHelper extends FatUtility
 
         return trim($string);
     }
-    
+
     public static function displayEncryptedEmail($email)
     {
-        $userEmail = preg_split( '/[@.]/', $email);
+        $userEmail = preg_split('/[@.]/', $email);
         if (empty(array_filter($userEmail))) {
             return;
         }
-        $emailFirstPart = substr($userEmail[0], 0, 1).str_repeat('*', strlen($userEmail[0]) - 1);
+        $emailFirstPart = substr($userEmail[0], 0, 1) . str_repeat('*', strlen($userEmail[0]) - 1);
         $emailSecondPart = str_repeat('*', strlen($userEmail[1]));
-        $emailThirdPart = $userEmail[2];        
-        return $emailFirstPart.'@'.$emailSecondPart.'.'.$emailThirdPart;
+        $emailThirdPart = $userEmail[2];
+        return $emailFirstPart . '@' . $emailSecondPart . '.' . $emailThirdPart;
     }
-    
+
     public static function displayEncryptedDob($dob)
     {
         $userDob = explode('-', $dob);
-        $dobFirstPart = substr($userDob[0], 0, 1).str_repeat('*', strlen($userDob[0]) - 1);
+        $dobFirstPart = substr($userDob[0], 0, 1) . str_repeat('*', strlen($userDob[0]) - 1);
         $dobSecondPart = str_repeat('*', strlen($userDob[1]));
-        $dobThirdPart = str_repeat('*', strlen($userDob[2]) - 1).substr($userDob[2], strlen($userDob[2]) - 1, 1);
-        return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;
+        $dobThirdPart = str_repeat('*', strlen($userDob[2]) - 1) . substr($userDob[2], strlen($userDob[2]) - 1, 1);
+        return $dobFirstPart . '-' . $dobSecondPart . '-' . $dobThirdPart;
     }
-    
+
     public static function displayEncryptedFieldData($data)
     {
         $len = strlen($data);
-        return substr($data, 0, 1).str_repeat('*', $len - 2).substr($data, $len - 1, 1);
-        
+        return substr($data, 0, 1) . str_repeat('*', $len - 2) . substr($data, $len - 1, 1);
+
         /*$formattedNumber = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $phone);
         $userPhone = explode('-', $formattedNumber);
         $dobFirstPart = substr($userPhone[0], 0, 1).str_repeat('*', strlen($userPhone[0]) - 1);
@@ -2108,12 +2108,12 @@ class CommonHelper extends FatUtility
         $dobThirdPart = str_repeat('*', strlen($userPhone[2]) - 1).substr($userPhone[2], strlen($userPhone[2]) - 1, 1);
         return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;*/
     }
-    
+
     public static function isFieldEncrypted($data)
     {
-        if(strpos($data, '*') !== false){
+        if (strpos($data, '*') !== false) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

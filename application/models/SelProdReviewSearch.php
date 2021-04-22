@@ -4,6 +4,7 @@ class SelProdReviewSearch extends SearchBase
 {
     private $langId;
     private $commonLangId;
+    private $joinOrderProd = false;
     public function __construct($langId = 0)
     {
         $langId = FatUtility::int($langId);
@@ -134,11 +135,23 @@ class SelProdReviewSearch extends SearchBase
 
     public function joinOrderProduct()
     {
+        $this->joinOrderProd = true;
         $this->joinTable(OrderProduct::DB_TBL, 'INNER JOIN', 'op.op_order_id = spr.spreview_order_id AND op.op_selprod_id = spr.spreview_selprod_id', 'op');
+    }
+    
+    public function joinOrderProductShipping()
+    {
+        if (false === $this->joinOrderProd) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_ORDER_PRODUCT.', $this->commonLangId), E_USER_ERROR);
+        }
+        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
     }
     
     public function joinOrderProductSpecifics()
     {
+        if (false === $this->joinOrderProd) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_ORDER_PRODUCT.', $this->commonLangId), E_USER_ERROR);
+        }
         $this->joinTable(OrderProductSpecifics::DB_TBL, 'LEFT JOIN', 'opspec.ops_op_id = op.op_id', 'opspec');
     }
 

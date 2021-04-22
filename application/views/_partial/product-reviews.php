@@ -6,22 +6,6 @@ if (!empty($reviews)) {
 
     $pixelToFillRight = $avgRating / 5 * 160;
     $pixelToFillRight = FatUtility::convertToType($pixelToFillRight, FatUtility::VAR_FLOAT);
-
-    $rate_5_width = $rate_4_width = $rate_3_width = $rate_2_width = $rate_1_width = 0;
-
-    if ($totReviews) {
-        $rated_1 = FatUtility::int($reviews['rated_1']);
-        $rated_2 = FatUtility::int($reviews['rated_2']);
-        $rated_3 = FatUtility::int($reviews['rated_3']);
-        $rated_4 = FatUtility::int($reviews['rated_4']);
-        $rated_5 = FatUtility::int($reviews['rated_5']);
-
-        $rate_5_width = round(FatUtility::convertToType($rated_5 / $totReviews * 100, FatUtility::VAR_FLOAT), 2);
-        $rate_4_width = round(FatUtility::convertToType($rated_4 / $totReviews * 100, FatUtility::VAR_FLOAT), 2);
-        $rate_3_width = round(FatUtility::convertToType($rated_3 / $totReviews * 100, FatUtility::VAR_FLOAT), 2);
-        $rate_2_width = round(FatUtility::convertToType($rated_2 / $totReviews * 100, FatUtility::VAR_FLOAT), 2);
-        $rate_1_width = round(FatUtility::convertToType($rated_1 / $totReviews * 100, FatUtility::VAR_FLOAT), 2);
-    }
 }
 ?>
 <div class="section-head">
@@ -30,7 +14,7 @@ if (!empty($reviews)) {
     </div>
 </div>
 <div class="rating-wrapper">
-    <div class="row justify-content-between">
+    <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
             <div class="products__rating overall-rating-count">
                 <svg class="svg">
@@ -45,7 +29,7 @@ if (!empty($reviews)) {
             </h6>
 
         </div>
-        <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product_id), false); ?>
+        <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product_id), false); ?>
     </div>
 </div>
 <?php if ($canSubmitFeedback || $totReviews > 0) { ?>

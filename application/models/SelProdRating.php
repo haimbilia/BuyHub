@@ -63,8 +63,10 @@ class SelProdRating extends MyAppModel
         $srch->joinSeller();
         $srch->joinSellerProducts();
         $srch->joinSelProdRating();
+        $srch->joinOrderProduct();
+        $srch->joinOrderProductShipping();
         $srch->addMultipleFields(array("ROUND(AVG(sprating_rating),2) as avg_rating"));
-        $srch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::RATING_DELIVERY, RatingType::RATING_SELLER_STOCK_AVAILABILITY, RatingType::RATING_SELLER_PACKAGING_QUALITY));
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `sprating_ratingtype_id` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `sprating_ratingtype_id` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spreview_seller_user_id', '=', $userId);
@@ -76,5 +78,21 @@ class SelProdRating extends MyAppModel
             return 0;
         }
         return $record['avg_rating'];
+    }
+
+    public static function getAvgSelProdReviewsRating(int $selProdId, int $langId): array
+    {
+        $srch = new SelProdReviewSearch();
+        $srch->joinSelProdRating($langId);
+        $srch->addCondition(RatingType::DB_TBL_PREFIX . 'type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
+        $srch->addCondition('spreview_selprod_id', '=', $selProdId);
+        $srch->addGroupBy('sprating_ratingtype_id');
+        $srch->addMultipleFields([
+            'sprating_ratingtype_id', 
+            'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 
+            'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
+        ]);
+        $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 }

@@ -50,6 +50,10 @@ class ReviewsController extends MyAppController
         $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG'));
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
         $this->set('frmReviewSearch', $frmReviewSearch);
+
+        $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
+        $this->set('ratingAspects', $ratingAspects);
+
         $this->set('product', $product);
         $this->_template->render();
     }
