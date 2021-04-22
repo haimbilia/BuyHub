@@ -461,11 +461,11 @@ INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `et
 
 CREATE TABLE IF NOT EXISTS `tbl_rating_types` (
   `ratingtype_id` bigint NOT NULL,
-  `ratingtype_identifier` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ratingtype_identifier` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `ratingtype_type` tinyint(4) NOT NULL,
   `ratingtype_default` tinyint NOT NULL,
   `ratingtype_active` tinyint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `tbl_rating_types`
