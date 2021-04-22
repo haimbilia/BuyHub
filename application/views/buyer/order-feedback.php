@@ -183,7 +183,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <?php } ?>
                                 </div>
                             <?php } ?>
-                        <div class="row">
                             <div class="col-md-12">
                                 <div class="field-set">
                                     <div class="field-wraper">
