@@ -41,14 +41,14 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
         <meta property="og:site_name" content="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, ''); ?>" />
         <meta property="og:image" content="<?php echo $socialShareContent['image']; ?>" />
         <meta property="og:url" content="<?php echo UrlHelper::getCurrUrl(); ?>" />
-        <meta property="og:description" content="<?php echo $socialShareContent['description']; ?>" />
+        <meta property="og:description" content="<?php echo html_entity_decode($socialShareContent['description'], ENT_QUOTES, 'utf-8'); ?>" />
         <!-- ]   -->
         <!--Here is the Twitter Card code for this product  -->
         <?php if (!empty(FatApp::getConfig("CONF_TWITTER_USERNAME", FatUtility::VAR_STRING, ''))) { ?>
             <meta name="twitter:card" content="product">
             <meta name="twitter:site" content="@<?php echo FatApp::getConfig("CONF_TWITTER_USERNAME", FatUtility::VAR_STRING, ''); ?>">
             <meta name="twitter:title" content="<?php echo $socialShareContent['title']; ?>">
-            <meta name="twitter:description" content="<?php echo $socialShareContent['description']; ?>">
+            <meta name="twitter:description" content="<?php echo html_entity_decode($socialShareContent['description'], ENT_QUOTES, 'utf-8'); ?>">
             <meta name="twitter:image:src" content="<?php echo $socialShareContent['image']; ?>">
         <?php }  ?>
         <!-- End Here is the Twitter Card code for this product  -->

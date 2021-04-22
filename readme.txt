@@ -102,6 +102,8 @@ Develop
 Fixes:
     => 052651 - on using comma as currency separator it's not impacting in text areas 
     => 052654 - Admin can create seller/buyer/advertiser/affiliate account from back-end - Not working
+    => 052645 - wile adding product specifications> it's not accepting character after &
+    => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
 
 Enhancements :
    => Make provision to made seller
