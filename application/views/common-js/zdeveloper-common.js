@@ -1841,7 +1841,7 @@ function DataURIToBlob(dataURI) {
 
 $(document).on('change', '.multipleImgs--js', function () {
     if ($(this)[0].files.length > 8) {
-        alert(langLbl.uploadImageLimit);
+        $.mbsmessage(langLbl.uploadImageLimit, true, 'alert--danger');
         $(this).val("");
         if (0 < $('.fileRemove--js').length) {
             $(".fileRemove--js").click();
