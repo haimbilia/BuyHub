@@ -1853,7 +1853,8 @@ class User extends MyAppModel
     {
         $userAuthObj = new UserAuthentication();
         $token = FatUtility::getRandomString(30);
-
+        $userAuthObj->deleteOldPasswordResetRequest($userData['user_id']);
+        
         $data = array(
             'user_name' => $userData['user_name'],
             'user_id' => $userData['user_id'],

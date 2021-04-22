@@ -47,6 +47,7 @@ class UsersController extends AdminBaseController
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true);
+        $srch->addFld(User::DB_TBL_CRED_PREFIX . 'password');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'user_id = shop.shop_user_id OR user_parent = shop.shop_user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
         $srch->addOrder('u.user_id', 'DESC');
@@ -280,12 +281,12 @@ class UsersController extends AdminBaseController
             $stateId = $data['user_state_id'];
             $frmUser->fill($data);
             $userParent = $data['user_parent'];
+            $this->set('data', $data);
         }
         $this->set('userParent', $userParent);
         $this->set('user_id', $user_id);
         $this->set('stateId', $stateId);
-        $this->set('frmUser', $frmUser);
-        $this->set('data', $data);
+        $this->set('frmUser', $frmUser);        
         $this->_template->render(false, false);
     }
 
@@ -1939,6 +1940,43 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
         $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+    
+    public function resendSetPasswordEmail()
+    {
+        $this->objPrivilege->canEditUsers();
+        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+        if (1 > $userId) {
+            FatUtility::dieWithError($this->str_invalid_request_id);
+        }
+
+        $userObj = new User($userId);
+        $user = $userObj->getUserInfo(['user_name', 'credential_email', 'user_is_supplier', 'user_is_affiliate','user_is_advertiser'], true, false);
+        if (!$user) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+
+        $userType = User::USER_TYPE_BUYER;
+        if ($user['user_is_supplier'] == 1) {
+            $userType = User::USER_TYPE_SELLER;
+        } elseif ($user['user_is_affiliate'] == 1) {
+            $userType = User::USER_TYPE_AFFILIATE;
+        } elseif ($user['user_is_advertiser'] == 1) {
+            $userType = User::USER_TYPE_ADVERTISER;
+        }
+
+        $userData = [
+            'user_name' => $user['user_name'],
+            'user_email' => $user['credential_email'],
+            'user_id' => $userId,
+            'account_type' => User::getUserTypesArr($this->adminLangId)[$userType]
+        ];
+
+        if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
+            FatUtility::dieJsonError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id));
+        }
+        $this->set('msg', Labels::getLabel("MSG_Email_Sent_Successful", $this->admin_id));
         $this->_template->render(false, false, 'json-success.php');
     }
 
