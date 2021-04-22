@@ -815,9 +815,9 @@
 
     saveSpecification = function (langId, prodSpecId) {
         var productId = $("input[name='product_id']").val();
-        var prodspec_name = $("input[name='prodspec_name[" + langId + "]']").val();
-        var prodspec_value = $("input[name='prodspec_value[" + langId + "]']").val();
-        var prodspec_group = $("input[name='prodspec_group[" + langId + "]']").val();
+        var prodspec_name = encodeURIComponent($("input[name='prodspec_name[" + langId + "]']").val());
+        var prodspec_value = encodeURIComponent($("input[name='prodspec_value[" + langId + "]']").val());
+        var prodspec_group = encodeURIComponent($("input[name='prodspec_group[" + langId + "]']").val());
         if (prodspec_name.trim() == '' || prodspec_value.trim() == '') {
             $(".erlist_specification_" + langId).show();
             return false;

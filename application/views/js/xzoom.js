@@ -422,7 +422,7 @@ if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){
 
       var timestamp = '';
       if (aie) timestamp = '?r='+(new Date()).getTime();
-      img.src = mObj.attr('xoriginal')+timestamp;
+      img.src = mObj.attr('data-xoriginal')+timestamp;
 
       imgObj = $(img);
       imgObj.css('position', 'absolute');
@@ -829,7 +829,7 @@ if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){
         if (Obj.attr('title')) mObj.attr('title',Obj.attr('title'));
 
         //imgObj.attr('src',_xorig);
-        mObj.attr('xoriginal',_xorig);
+        mObj.attr('data-xoriginal',_xorig);
         mObj.removeAttr('style');
         mObj.attr('src', _prev);
         if (current.options.adaptive) {
