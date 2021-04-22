@@ -1591,7 +1591,7 @@ $("document").ready(function() {
         if (typeof mainSelprodId != 'undefined' && mainSelprodId == selprodId) {
             $(".list-addons--js").find("input").each(function(e) {
                 if (($(this).val() > 0) && (!$(this).closest(".addon--js").hasClass("cancelled--js"))) {
-                    data = data + '&' + $(this).attr('lang') + "=" + $(this).val();
+                    data = data + '&' + $(this).attr('data-lang') + "=" + $(this).val();
                 }
             });
         }

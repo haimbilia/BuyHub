@@ -141,11 +141,11 @@
                     <?php $this->includeTemplate('_partial/blogSidePanel.php', array('popularPostList' => $popularPostList, 'featuredPostList' => $featuredPostList)); ?>
                 </div>
             <?php } ?>
-            <!--<div class="col-md-3 colums__right">
+            <?php /* <div class="col-md-3 colums__right">
             <div class="wrapper--adds" >
               <div class="grids" id="div--banners"> </div>
             </div>
-          </div>-->
+          </div>  */?>
         </div>
     </div>
 </section>
