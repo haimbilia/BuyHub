@@ -123,7 +123,7 @@ class ProductsController extends MyAppController
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
         if (!empty($analyticsId) && 0 < $data['recordCount']) {
             $et = new EcommerceTracking($analyticsId, $method);
-            $et->addImpression(($method == 'search' ? $arr['pageTitle'] . " " . $arr['pageTitle'] : $arr['pageTitle']));
+            $et->addImpression(($method == 'search' ? $arr['pageTitle'] . " " . $arr['keyword'] : $arr['pageTitle']));
             $productPostion = 1;
             foreach ($data['products'] as $product) {
                 $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);

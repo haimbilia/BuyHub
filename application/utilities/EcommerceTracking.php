@@ -30,7 +30,7 @@ class EcommerceTracking
     const PROD_ACTION_TYPE_PURCHASE = 5;
     const PROD_ACTION_TYPE_REFUND = 6;
     
-    const DEBUG = false;
+    const DEBUG = true;
 
     public function __construct($trackingId, $pageTitle, $userId = NULL)
     {
@@ -49,9 +49,9 @@ class EcommerceTracking
         $impressionKey = count($this->impressions) - 1;
         $this->impressions[$impressionKey]['products'][] = [
             'productId' => $productId,
-            'productName' => urlencode($productName),
-            'category' => urlencode($category),
-            'brand' => urlencode($brand),
+            'productName' => $productName,
+            'category' => $category,
+            'brand' => $brand,
             'position' => $position,
                 //'variant' => $variant,
         ];
@@ -85,9 +85,9 @@ class EcommerceTracking
     {
         $this->products[] = [
             'productId' => $productId,
-            'productName' => urlencode($productName),
-            'category' => urlencode($category),
-            'brand' => urlencode($brand),
+            'productName' => $productName,
+            'category' => $category,
+            'brand' => $brand,
             // 'variant' => $variant,
             'quantity' => $quantity,
             'price' => $price
@@ -101,7 +101,7 @@ class EcommerceTracking
         $url = 'https://www.google-analytics.com/collect';
         if (true == self::DEBUG) {
             $url = 'https://www.google-analytics.com/debug/collect';
-            CommonHelper::logData("GOOGLE ECOMMERCE TRACKING PARAMS==>" . json_encode($gaParams));
+            CommonHelper::logData("GOOGLE ECOMMERCE TRACKING PARAMS==>" . http_build_query($gaParams));
         }
         $curl = new Curl\Curl();
         $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
@@ -124,8 +124,8 @@ class EcommerceTracking
             # Anonymous Client Identifier. Ideally, this should be a UUID that
             # is associated with particular user, device, or browser instance.
             'cid' => $this->userId,
-            'dh' => urlencode($_SERVER['HTTP_HOST']),
-            'dp' => urlencode($_SERVER['REQUEST_URI']),
+            'dh' => $_SERVER['HTTP_HOST'],
+            'dp' => $_SERVER['REQUEST_URI'],
         ];
 
         foreach ($this->impressions as $key => $impression) {
