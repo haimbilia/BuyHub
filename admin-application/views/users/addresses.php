@@ -6,6 +6,7 @@
             <li><a href="javascript:void(0)" onclick="userForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a></li>
             <li><a href="javascript:void(0)" onclick="addBankInfoForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Bank_Info', $adminLangId); ?></a></li>
             <li><a class="active" href="javascript:void(0)" onclick="userAddresses(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Addresses', $adminLangId); ?></a></li>
+            <li><a href="javascript:void(0)" onclick="displayCookiesPerferences(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Cookies_Preferences',$adminLangId); ?></a></li>	
         </ul>
         <div class="tabs_panel_wrap">
             <a href="javascript:void(0)" class="themebtn btn-default btn-sm" onClick="addOneAddress(<?php echo $user_id ?>,0)"><?php echo Labels::getLabel('LBL_Add_New', $adminLangId); ?></a>

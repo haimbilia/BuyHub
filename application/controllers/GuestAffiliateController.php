@@ -119,17 +119,17 @@ class GuestAffiliateController extends MyAppController
                         }
                         FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                     }
-                } else {
-                    if (FatApp::getConfig('CONF_WELCOME_EMAIL_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1) == 1) {
-                        $link = UrlHelper::generateFullUrl('GuestAffiliate');
-                        if (!$userObj->userWelcomeEmailRegistration($post, $link, $this->siteLangId)) {
-                            Message::addErrorMessage(Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
-                            $db->rollbackTransaction();
-                            if (FatUtility::isAjaxCall()) {
-                                FatUtility::dieWithError(Message::getHtml());
-                            }
-                            FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
+                }
+                
+                if (FatApp::getConfig('CONF_WELCOME_EMAIL_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1) == 1) {
+                    $link = UrlHelper::generateFullUrl('GuestAffiliate');
+                    if (!$userObj->userWelcomeEmailRegistration($post, $link, $this->siteLangId)) {
+                        Message::addErrorMessage(Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+                        $db->rollbackTransaction();
+                        if (FatUtility::isAjaxCall()) {
+                            FatUtility::dieWithError(Message::getHtml());
                         }
+                        FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                     }
                 }
 

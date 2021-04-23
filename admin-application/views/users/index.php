@@ -41,6 +41,14 @@
                                     [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
+                                            'onclick' => 'addUserForm(0)',
+                                            'title' => Labels::getLabel('LBL_ADD_USERS', $adminLangId)
+                                        ],
+                                        'label' => '<i class="fas fa-plus"></i>'
+                                    ],
+                                    [
+                                        'attr' => [
+                                            'href' => 'javascript:void(0)',
                                             'onclick' => 'deletedUser()',
                                             'title' => Labels::getLabel('LBL_Deleted_users', $adminLangId)
                                         ],
