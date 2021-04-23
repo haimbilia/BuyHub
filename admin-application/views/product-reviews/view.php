@@ -4,8 +4,10 @@ $frm->developerTags['fld_default_col'] = 12;
 ?>
 <section class="section">
 	<div class="sectionhead">
-
 		<h4><?php echo Labels::getLabel('LBL_Product_Rating_Information', $adminLangId); ?></h4>
+		<div class="section__toolbar">
+			<a href="javascript:void(0);" onclick="backToListing();" title="Back" class="btn-clean btn-sm btn-icon btn-secondary "><i class="fas fa-arrow-left"></i></a>			
+		</div>
 	</div>
 	<div class="sectionbody space">
 		<div class="border-box border-box--space">
@@ -80,6 +82,34 @@ $frm->developerTags['fld_default_col'] = 12;
 								<dd><?php echo preg_replace('/' . $findKeywordStr . '/i', '<span class="highlight">$0</span>', nl2br($data['spreview_description'])); ?></dd>
 							<?php } ?>
 						</dl>
+						<div class="all-review-media">
+							<ul class="review-media-list">
+								<?php
+								$images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $spreview_id);
+
+								$i = 0;
+								foreach ($images as $image) {
+									$uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+									$imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($spreview_id, 0, 'MINITHUMB', $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+									$largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($spreview_id, 0, 'LARGE', $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+									if (5 > $i || 5 < $i) { ?>
+										<li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
+											<a class="review-media" href="javascript:void(0)" onclick="previewImage(this);">
+												<img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
+											</a>
+										</li>
+									<?php } else { ?>
+										<li class="more-media" onclick="loadMoreImages(this);">
+											<a class="review-media" href="javascript:void(0)" data-count="<?php echo count($images); ?>+">
+												<img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
+											</a>
+										</li>
+								<?php }
+									$i++;
+								} ?>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<?php /* if($data['spreview_status'] == SelProdReview::STATUS_PENDING){ */ ?>

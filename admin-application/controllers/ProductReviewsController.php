@@ -160,6 +160,7 @@ class ProductReviewsController extends AdminBaseController
         $frm->fill($records);
 
         $abusiveWords = Abusive::getAbusiveWords();
+        $this->set("spreview_id", $spreview_id);
         $this->set("abusiveWords", $abusiveWords);
         $this->set("data", $records);
         $this->set("ratingData", $ratingData);
