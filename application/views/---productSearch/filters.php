@@ -173,7 +173,7 @@ if (isset($prodcat_code)) {
                 <input class="input-filter " value="<?php echo floor($priceArr['minPrice']); ?>" name="priceFilterMinValue" type="text">
                 <span class="rsText"><?php echo CommonHelper::getCurrencySymbolRight()?CommonHelper::getCurrencySymbolRight():CommonHelper::getCurrencySymbolLeft(); ?></span> </div>
         </div>
-        <span class="dash"> - </span>
+        <span class="dash"></span>
         <div class="price-input">
             <div class="price-text-box">
                 <input value="<?php echo ceil($priceArr['maxPrice']); ?>" class="input-filter form-control " name="priceFilterMaxValue" type="text">

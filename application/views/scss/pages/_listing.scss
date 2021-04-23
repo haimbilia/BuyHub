@@ -423,7 +423,19 @@
 
 .filter-content .dash {
     display: inline-block;
-    padding: 6px;
+    padding: 2px;
+    position: relative;
+    width: 35px;
+    flex: 0 0 35px;
+    text-align: center;
+    &:after {
+        content: "";
+        height: 2px;
+        width: 14px;
+        background-color: $body-color;
+        display: inline-block;
+        vertical-align: middle;
+    }
 }
 
 .brands-list li {

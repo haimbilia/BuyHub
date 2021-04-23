@@ -24,7 +24,8 @@ strong {
     text-align: left !important;
 }
 
-.text-right {text-align: right !important;
+.text-right {
+    text-align: right !important;
 }
 
 .text-center {
@@ -72,7 +73,9 @@ strong {
     clear: both;
 }
 
-.iti{display: block;}
+.iti {
+    display: block;
+}
 
 .gap {
     height: 15px;
@@ -3448,10 +3451,12 @@ input[type="password"][disabled] {
     height: 17px;
 }
 
+
+/* 
 .checkbox input:checked+.input-helper:before {
     -webkit-transform: scale(0);
     transform: scale(0);
-}
+} */
 
 .checkbox input:checked+.input-helper:after {
     -webkit-transform: scale(1) rotate(-50deg);
@@ -3471,13 +3476,13 @@ input[type="password"][disabled] {
     filter: alpha(opacity=0);
     -webkit-transform: scale(0) rotate(80deg);
     transform: scale(0) rotate(80deg);
-    width: 16px;
-    height: 9px;
-    border-bottom: 2px solid #f04b3d;
-    border-left: 2px solid #f04b3d;
-    border-bottom-left-radius: 2px;
-    left: -1px;
-    top: 1px;
+    width: 12px;
+    height: 6px;
+    border-bottom: 1px solid #f04b3d;
+    border-left: 1px solid #f04b3d;
+    //border-bottom-left-radius: 2px;
+    left: 3px;
+    top: 3px;
 }
 
 .radio input {
