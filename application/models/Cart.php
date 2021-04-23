@@ -828,7 +828,7 @@ class Cart extends FatModel
                     if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {                        
                         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
                         if (!empty($analyticsId)) {                
-                            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', commonHelper::getLangId()));
+                            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', commonHelper::getLangId()), $this->cart_user_id);
                             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REMOVE_FROM_CART);
                             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 0);
                             $et->sendRequest();

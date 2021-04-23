@@ -122,8 +122,8 @@ class ProductsController extends MyAppController
                 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
         if (!empty($analyticsId) && 0 < $data['recordCount']) {
-            $et = new EcommerceTracking($analyticsId, $method);
-            $et->addImpression(($method == 'search' ? $arr['pageTitle'] . " " . $arr['keyword'] : $arr['pageTitle']));
+            $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId());
+            $et->addImpression(($method == 'search' ? Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));        
             $productPostion = 1;
             foreach ($data['products'] as $product) {
                 $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);
@@ -387,7 +387,7 @@ class ProductsController extends MyAppController
     }
 
     public function view($selprod_id = 0)
-    {
+    {        
         $selprod_id = FatUtility::int($selprod_id);
         if (true === MOBILE_APP_API_CALL && 1 > $selprod_id) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
@@ -801,7 +801,34 @@ class ProductsController extends MyAppController
         }
                 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId)) {            
+        if (!empty($analyticsId)) {              
+             /* [product click event from search page */            
+            $refererParseUrl = parse_url(CommonHelper::redirectUserReferer(true));
+            if (isset($refererParseUrl['path'])) {
+                $productAction = '';
+                switch ($refererParseUrl['path']) {
+                    case '/products/index':
+                        $productAction = Labels::getLabel('LBL_All_PRODUCTS', $this->siteLangId);
+                        break;
+                    case '/products/search':
+                        $productAction = Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId);
+                        break;
+                    case '/products/featured':
+                        $productAction = Labels::getLabel('LBL_FEATURED_PRODUCTS', $this->siteLangId);
+                        break;
+                }
+            }
+            if (!empty($productAction)) {
+                $et = new EcommerceTracking($analyticsId, NULL, UserAuthentication::getLoggedUserId());
+                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CLICK);
+                $et->addProductActionList($productAction);
+                $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
+                $et->addEvent('click', 'UX');                
+                $et->sendRequest();
+            }
+            /* product click event from search page] */
+            
+            /* [product view */
             $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'],1, $product['selprod_price']);

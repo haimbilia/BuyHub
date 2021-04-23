@@ -21,21 +21,23 @@ class EcommerceTracking
     private $pageTitle;
     private $transactionDetails;
     private $productAction;
+    private $productActionList;
     private $products = [];
 
-    const PROD_ACTION_TYPE_DETAIL = 1;
-    const PROD_ACTION_TYPE_ADD_TO_CART = 2;
-    const PROD_ACTION_TYPE_REMOVE_FROM_CART = 3;
-    const PROD_ACTION_TYPE_CHECKOUT = 4;
-    const PROD_ACTION_TYPE_PURCHASE = 5;
-    const PROD_ACTION_TYPE_REFUND = 6;
+    const PROD_ACTION_TYPE_CLICK = 1;
+    const PROD_ACTION_TYPE_DETAIL = 2;
+    const PROD_ACTION_TYPE_ADD_TO_CART = 3;
+    const PROD_ACTION_TYPE_REMOVE_FROM_CART = 4;
+    const PROD_ACTION_TYPE_CHECKOUT = 5;
+    const PROD_ACTION_TYPE_PURCHASE = 6;
+    const PROD_ACTION_TYPE_REFUND = 7;
     
-    const DEBUG = true;
+    const DEBUG = false;
 
-    public function __construct($trackingId, $pageTitle, $userId = NULL)
+    public function __construct($trackingId, $pageTitle = NULL, $userId = NULL)
     {
         $this->trackingId = $trackingId;
-        $this->userId = $userId ?? session_id();
+        $this->userId = $userId ?? $this->uuidV4();        
         $this->pageTitle = $pageTitle;
     }
 
@@ -80,6 +82,11 @@ class EcommerceTracking
     {
         $this->productAction = $action;
     }
+    
+    public function addProductActionList($name)
+    {
+        $this->productActionList = $name;
+    }
 
     public function addProduct($productId, $productName = NULL, $category = NULL, $brand = NULL, $quantity = NULL, $price = NULL)
     {
@@ -97,13 +104,15 @@ class EcommerceTracking
     public function sendRequest()
     {
         $gaParams = $this->buildParams();
-
-        $url = 'https://www.google-analytics.com/collect';
+        
+        $url = 'https://www.google-analytics.com/collect';        
         if (true == self::DEBUG) {
             $url = 'https://www.google-analytics.com/debug/collect';
-            CommonHelper::logData("GOOGLE ECOMMERCE TRACKING PARAMS==>" . http_build_query($gaParams));
-        }
-        $curl = new Curl\Curl();
+            CommonHelper::logData("GOOGLE ECOMMERCE TRACKING PARAMS==>" . $gaParams);
+        }      
+        $curl = new Curl\Curl();        
+        $curl->setUserAgent($_SERVER['HTTP_USER_AGENT']);
+        $curl->setHeader('Content-type', 'application/x-www-form-urlencoded');
         $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
         $curl->post($url, $gaParams);
         if (true == self::DEBUG) {
@@ -123,9 +132,7 @@ class EcommerceTracking
             'tid' => $this->trackingId, # Tracking ID / Property ID.
             # Anonymous Client Identifier. Ideally, this should be a UUID that
             # is associated with particular user, device, or browser instance.
-            'cid' => $this->userId,
-            'dh' => $_SERVER['HTTP_HOST'],
-            'dp' => $_SERVER['REQUEST_URI'],
+            'cid' => $this->userId,   
         ];
 
         foreach ($this->impressions as $key => $impression) {
@@ -159,7 +166,7 @@ class EcommerceTracking
             $gaParams += [
                 't' => 'pageview',
                 'dh' => $_SERVER['HTTP_HOST'], // Document hostname
-                'dp' => $_SERVER['REQUEST_URI'], // Page.
+                'dp' => urldecode($_SERVER['REQUEST_URI']), // Page.
                 'dt' => $this->pageTitle,
             ];
         }
@@ -168,6 +175,9 @@ class EcommerceTracking
         if (!empty($this->productAction)) {
             $pa = '';
             switch ($this->productAction) {
+                case self::PROD_ACTION_TYPE_CLICK:
+                    $pa = "click";
+                    break;
                 case self::PROD_ACTION_TYPE_DETAIL:
                     $pa = "detail";
                     break;
@@ -189,7 +199,11 @@ class EcommerceTracking
             }
             $gaParams['pa'] = $pa;
         }
-
+        
+        if (!empty($this->productActionList)) {
+            $gaParams['pal'] = $this->productActionList;
+        }
+        
         foreach ($this->products as $prodKey => $product) {
             $prodKey++;
             $gaKey = "pr" . $prodKey;
@@ -214,7 +228,26 @@ class EcommerceTracking
             ];
         }
 
-        return $gaParams;
+        return http_build_query($gaParams);
+    }
+    
+    private function uuidV4()
+    {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                // 32 bits for "time_low"
+                mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+                // 16 bits for "time_mid"
+                mt_rand(0, 0xffff),
+                // 16 bits for "time_hi_and_version",
+                // four most significant bits holds version number 4
+                mt_rand(0, 0x0fff) | 0x4000,
+                // 16 bits, 8 bits for "clk_seq_hi_res",
+                // 8 bits for "clk_seq_low",
+                // two most significant bits holds zero and one for variant DCE1.1
+                mt_rand(0, 0x3fff) | 0x8000,
+                // 48 bits for "node"
+                mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
     }
 
 }

@@ -453,7 +453,7 @@ class CartController extends MyAppController
                 $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
                 if (!empty($analyticsId)) {                     
                     $cartQty = $cartObj->getQtyBySelProdId($sellerProductRow['selprod_id']);
-                    $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId));
+                    $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId());
                     $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_ADD_TO_CART);
                     $et->addProduct($sellerProductRow['selprod_id'], $sellerProductRow['selprod_title'], $sellerProductRow['prodcat_name'], $sellerProductRow['brand_name'], $cartQty,$sellerProductRow['selprod_price']);
                     $et->sendRequest();
