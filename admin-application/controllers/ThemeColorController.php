@@ -24,6 +24,11 @@ class ThemeColorController extends AdminBaseController
         $this->_template->render();
     }
 
+    public function index1()
+    {
+        $this->_template->render();
+    }
+
     public function search()
     {
         $this->objPrivilege->canViewThemeColor();
