@@ -434,4 +434,92 @@ ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_pass
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
 -- --- task_81779_advanced_GDPR_module --- --
 
+<<<<<<< HEAD
+=======
+DELETE FROM `tbl_language_labels` WHERE label_key = 'ERR_USER_INACTIVE_OR_DELTED';
+
+UPDATE
+    tbl_email_templates
+SET
+    etpl_body =
+REPLACE
+    (
+        etpl_body,
+        "style=\"background:#ff3a59;\"",
+        ""
+    );
+
+UPDATE `tbl_configurations` SET `conf_val` = '<table align=\"center\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%; margin:auto;\">\r\n                        <tr>\r\n                            <td style=\"background:#fff;vertical-align:top;text-align: center;\">\r\n                                <table cellpadding=\"0\" cellspacing=\"0\" style=\"width: 100%;\">\r\n                                    <tr>\r\n                                        <td style=\"color:#999;padding:30px 30px;\">\r\n                                            Get in touch if you have any questions regarding our Services.<br /> Feel free to contact us 24/7. We are here to help.<br />\r\n                                            <br /> All the best,<br /> The {website_name} Team<br />\r\n                                        </td>\r\n                                    </tr>\r\n                                </table>\r\n                            </td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td style=\"padding: 30px 30px;background:rgba(0,0,0,0.04); text-align: center;\">\r\n                                <h4 style=\"font-size:20px; color:#000;margin: 0;\">Need more help?</h4>\r\n                                <a href=\"{contact_us_url}\" style=\"color:#ff3a59;\">We are here, ready to talk</a>\r\n                                <br> <br>\r\n                                {social_media_icons}\r\n                            </td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td style=\"padding:0; text-align: center; font-size:13px; color:#999;vertical-align:top; line-height:20px;padding: 10px;\">\r\n                                {website_name} Inc.\r\n                            </td>\r\n                        </tr>\r\n                    </table>' WHERE `tbl_configurations`.`conf_name` = 'CONF_EMAIL_TEMPLATE_FOOTER_HTML1';
+UPDATE `tbl_seller_packages` SET `spackage_type` = '2' WHERE `tbl_seller_packages`.`spackage_id` = 4;
+
+ALTER TABLE `tbl_affiliate_commission_settings` CHANGE `afcommsetting_fees` `afcommsetting_fees` DECIMAL(12,2) NOT NULL;
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('admin_new_user_creation_email', '1', 'New Account Created By Admin', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Welcome to {website_name}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            <a href=\"{website_url}\">{website_name}</a> admin has created an {account_type} account for you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">To access and verify your account please visit the link given below. Your email address will be your username. \r\n                                            Please note that the link is valid for next {days} days.<br />\r\n                                            <a href=\"{reset_url}\">{reset_url}</a>.</td>\r\n                                    </tr>\r\n\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{user_email} User Email <br>\r\n{account_type} Account Type <br>\r\n{days} Days after which link expire\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', '1');
+
+/* Shop And Product Ratings */
+--
+-- Table structure for table `tbl_rating_types`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_rating_types` (
+  `ratingtype_id` bigint NOT NULL,
+  `ratingtype_identifier` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ratingtype_type` tinyint(4) NOT NULL,
+  `ratingtype_default` tinyint NOT NULL,
+  `ratingtype_active` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `tbl_rating_types`
+--
+
+INSERT INTO `tbl_rating_types` (`ratingtype_id`, `ratingtype_identifier`, `ratingtype_type`, `ratingtype_default`, `ratingtype_active`) VALUES
+(1, 'Product', 1, 1, 1),
+(2, 'Shop', 2, 1, 1),
+(3, 'Delivery', 3, 1, 1),
+(4, 'Stock Availability', 4, 0, 1),
+(5, 'Packaging Quality', 4, 0, 1);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_rating_types`
+--
+ALTER TABLE `tbl_rating_types`
+  ADD PRIMARY KEY (`ratingtype_id`),
+  ADD UNIQUE KEY `ratingtype_identifier` (`ratingtype_identifier`) USING BTREE;
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_rating_types`
+--
+ALTER TABLE `tbl_rating_types`
+  MODIFY `ratingtype_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+CREATE TABLE IF NOT EXISTS `tbl_rating_types_lang` ( `ratingtypelang_ratingtype_id` BIGINT NOT NULL ,  `ratingtypelang_lang_id` INT NOT NULL ,  `ratingtype_name` VARCHAR(150) NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `tbl_rating_types_lang`
+  ADD PRIMARY KEY (`ratingtypelang_ratingtype_id`,`ratingtypelang_lang_id`),
+  ADD UNIQUE KEY `ratingtype_name` (`ratingtypelang_lang_id`,`ratingtype_name`);
+
+CREATE TABLE IF NOT EXISTS `tbl_prodcat_rating_types` ( `prt_prodcat_id` BIGINT NOT NULL ,  `prt_ratingtype_id` BIGINT NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `tbl_prodcat_rating_types` ADD PRIMARY KEY (`prt_prodcat_id`,`prt_ratingtype_id`);
+
+ALTER TABLE `tbl_order_product_specifics` ADD `op_prodcat_id` BIGINT NOT NULL AFTER `op_product_warranty`;
+UPDATE tbl_order_product_specifics tops
+INNER JOIN tbl_order_products op ON op.op_id = tops.ops_op_id
+INNER JOIN tbl_product_to_category ptc ON ptc.ptc_product_id = SUBSTRING( op.op_selprod_code, 1, (LOCATE( "_", op.op_selprod_code ) - 1 ) )
+SET tops.op_prodcat_id = ptc.ptc_prodcat_id;
+
+ALTER TABLE `tbl_seller_product_rating` CHANGE `sprating_rating_type` `sprating_ratingtype_id` BIGINT NOT NULL;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '5' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 4;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 3;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
+/* Shop And Product Ratings */
+
+>>>>>>> 7a097badc49cb50a9ea0b90fb86bbd2d3fb8ee4c
 DELETE FROM tbl_language_labels WHERE label_key = "ERR_USER_INACTIVE_OR_DELTED";

@@ -1476,7 +1476,7 @@ class Product extends MyAppModel
         if (true === $includeRating) {
             $selProdReviewObj = new SelProdReviewSearch();
             $selProdReviewObj->joinSelProdRating();
-            $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+            $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
             $selProdReviewObj->doNotCalculateRecords();
             $selProdReviewObj->doNotLimitRecords();
             $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -1592,7 +1592,7 @@ END,   special_price_found ) as special_price_found'
         }
 
         //var_dump($criteria); exit;
-        $srch->addOrder('in_stock', 'DESC');
+        //$srch->addOrder('in_stock', 'DESC');
 
         if (array_key_exists('sortBy', $criteria)) {
             $sortBy = $criteria['sortBy'];

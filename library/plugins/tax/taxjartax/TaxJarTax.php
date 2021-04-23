@@ -81,7 +81,7 @@ class TaxJarTax extends TaxBase
             return false;
         }
         
-        $env = $this->settings['environment'];
+        $env = $this->settings['env'];
         $apiToken = Plugin::ENV_SANDBOX == $env ? $this->settings['sandbox_key'] : $this->settings['live_key'];
 
         $this->client = TaxJar\Client::withApiKey($apiToken);
@@ -388,7 +388,7 @@ class TaxJarTax extends TaxBase
             return false;
         }
 
-        // if (0 < $this->settings['environment']) {
+        // if (0 < $this->settings['env']) {
         //     try {
         //         $addresses = $this->client->validateAddress([
         //             'country' => $address['countryCode'],

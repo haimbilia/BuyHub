@@ -167,6 +167,8 @@ class MyAppController extends FatController
                 'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->siteLangId),
                 'typeToSearch' => Labels::getLabel('MSG_TYPE_TO_SEARCH..', $this->siteLangId),
                 'resendOtp' => Labels::getLabel('LBL_RESEND_OTP?', $this->siteLangId),
+                'redirecting' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
+                'uploadImageLimit' => Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

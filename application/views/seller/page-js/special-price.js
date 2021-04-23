@@ -240,7 +240,7 @@ $(document).on('blur', ".js--splPriceCol:not(.date_js)", function(){
         }
     };
     showElement = function(currObj, value){
-        var sibling = currObj.siblings('div');
+        var sibling = currObj.siblings('div:first');
         if ('' != value){
             sibling.text(value);
         }

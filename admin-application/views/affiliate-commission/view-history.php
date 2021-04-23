@@ -35,6 +35,9 @@
                             case 'acsh_afcommsetting_user_id':
                                 $td->appendElement('plaintext', array(), CommonHelper::displayText($row['vendor']), true);
                                 break;
+                            case 'acsh_afcommsetting_fees':
+                                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
+                                break;
                             case 'acsh_added_on':
                                 $td->appendElement('plaintext', array(), FatDate::format($row[$key]), true);
                                 break;

@@ -296,18 +296,18 @@ if (!empty($order['opship_tracking_url'])) {
                                             echo $shippingAddress;
                                         }
                                         if (!empty($order['pickupAddress'])) { ?>
-                                            <h5><?php echo Labels::getLabel('LBL_Pickup_Details', $adminLangId); ?></h5>
-                                            <p>
-                                                <strong>
-                                                    <?php
-                                                    $opshippingDate = isset($order['opshipping_date']) ? $order['opshipping_date'] . ' ' : '';
-                                                    $timeSlotFrom = isset($order['opshipping_time_slot_from']) ? date('H:i', strtotime($order['opshipping_time_slot_from'])) . ' - ' : '';
-                                                    $timeSlotTo = isset($order['opshipping_time_slot_to']) ? date('H:i', strtotime($order['opshipping_time_slot_to'])) : '';
-                                                    echo $opshippingDate . ' (' . $timeSlotFrom . $timeSlotTo . ')';
-                                                    ?>
-                                                </strong><br>
-                                                <?php echo $order['pickupAddress']['oua_name']; ?>,
-                                            <?php
+                                        <h5><?php echo Labels::getLabel('LBL_Pickup_Details', $adminLangId); ?></h5>
+                                        <p>
+                                            <strong>
+                                                <?php
+                                                $opshippingDate = isset($order['opshipping_date']) ? $order['opshipping_date'] . ' ' : '';
+                                                $timeSlotFrom = isset($order['opshipping_time_slot_from']) ? date('H:i', strtotime($order['opshipping_time_slot_from'])) . ' - ' : '';
+                                                $timeSlotTo = isset($order['opshipping_time_slot_to']) ? date('H:i', strtotime($order['opshipping_time_slot_to'])) : '';
+                                                echo $opshippingDate . ' (' . $timeSlotFrom . $timeSlotTo . ')';
+                                                ?>
+                                            </strong><br>
+                                            <?php echo $order['pickupAddress']['oua_name']; ?>,
+                                        <?php
                                             $pickupAddress = '';
                                             if ($order['pickupAddress']['oua_address1'] != '') {
                                                 $pickupAddress .= $order['pickupAddress']['oua_address1'] . '<br>';
@@ -629,23 +629,36 @@ if (!empty($order['opship_tracking_url'])) {
                             $notiFld->setFieldTagAttribute('class', 'notifyCustomer-js');
                             $notiFld->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 
-                            $fldTracking = $frm->getField('tracking_number');
-							$fldTracking->developerTags['col'] = 6;	
                             if (null != $manualFld) {
                                 $manualFld->setFieldTagAttribute('class', 'manualShipping-js fieldsVisibility-js');
                                 $manualFld->developerTags['col'] = 4;
 
+                                $fldTracking = $frm->getField('tracking_number');
+                                $fldTracking->developerTags['col'] = 4;
+
                                 $fld = $frm->getField('opship_tracking_url');
-                                if(null != $fld){
-                                   $fld->developerTags['col'] = 6; 
+                                $courierFld = $frm->getField('oshistory_courier');
+                                if (null != $fld) {
+                                    $fld->developerTags['col'] = 4;
+                                    $fld->setWrapperAttribute('class', 'trackingUrlBlk--js');
+                                    $fld->setFieldTagAttribute('class', 'trackingUrlFld--js');
+                                    if (null != $courierFld) {
+                                        $fld->htmlAfterField = '<a href="javascript:void(0)" onclick="courierFld()">' . Labels::getLabel(
+                                            'LBL_OR_SELECT_COURIER_?',
+                                            $adminLangId
+                                        ) . '</a>';
+                                    }
                                 }
-                                
-                                $fld = $frm->getField('oshistory_courier');
-                                if(null != $fld){
-                                   $fld->developerTags['col'] = 6; 
+
+                                if (null != $courierFld) {
+                                    $courierFld->developerTags['col'] = 4;
+                                    $courierFld->setWrapperAttribute('class', 'courierBlk--js d-none');
+                                    $courierFld->setFieldTagAttribute('class', 'courierFld--js');
+                                    $courierFld->htmlAfterField = '<a href="javascript:void(0)" onclick="trackingUrlFld()">' . Labels::getLabel(
+                                        'LBL_OR_TRACK_THROUGH_URL_?',
+                                        $adminLangId
+                                    ) . '</a>';
                                 }
-                                
-                                
                             }
 
                             echo $frm->getFormHtml(); ?>

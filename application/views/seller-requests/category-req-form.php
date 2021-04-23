@@ -89,8 +89,9 @@ $submitFld->developerTags['noCaptionTag'] = true;
                                 </div>
                             <?php } ?>
                         </div>
-                    </div>
-                    <div class="row">
+                    </div>                    
+                <?php } ?>
+                <div class="row">
                         <div class="col-6">
                             <div class="field-set">
                                 <div class="field-wraper">
@@ -101,7 +102,6 @@ $submitFld->developerTags['noCaptionTag'] = true;
                             </div>
                         </div>
                     </div>
-                <?php } ?>
                 <?php echo $frm->getFieldHtml('prodcat_id'); ?>
                 </form>
                 <?php echo $frm->getExternalJS(); ?>
