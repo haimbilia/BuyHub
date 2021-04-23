@@ -2002,6 +2002,13 @@ trait CustomProducts
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+
+        $prodType = Product::getAttributesById($productId, 'product_type');
+        if (!empty($prodType) && Product::PRODUCT_TYPE_DIGITAL == $prodType) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
+        }
+
+
         $frm = $this->getProductShippingFrm($productId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {

@@ -1030,8 +1030,8 @@ class DiscountCouponsController extends AdminBaseController
         $typeArr = DiscountCoupons::getTypeArr($this->adminLangId, true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Select_Discount_Type', $this->adminLangId), 'coupon_type', $typeArr, '', array(), '')->requirements()->setRequired();
-        $validForArr = DiscountCoupons::getValidForArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Discount_Valid_For', $this->adminLangId), 'coupon_valid_for', $validForArr, '', array(), '');
+       /*  $validForArr = DiscountCoupons::getValidForArr($this->adminLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Discount_Valid_For', $this->adminLangId), 'coupon_valid_for', $validForArr, '', array(), ''); */
 
         $percentageFlatArr = applicationConstants::getPercentageFlatArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Discount_in', $this->adminLangId), 'coupon_discount_in_percent', $percentageFlatArr, '', array(), '');

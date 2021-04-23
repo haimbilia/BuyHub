@@ -56,7 +56,7 @@ class ProductReviewsController extends AdminBaseController
         $srch->joinShops($this->adminLangId);
         $srch->joinProducts();
         $srch->joinSellerProducts($this->adminLangId);
-        $srch->joinSelProdRatingByType(SelProdRating::TYPE_PRODUCT);
+        $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
         $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_id', 'usc.credential_username as seller_username', 'uc.credential_username as reviewed_by', 'uc.credential_user_id', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'sprating_rating', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
         $srch->addOrder('spreview_posted_on', 'DESC');
 
@@ -113,13 +113,13 @@ class ProductReviewsController extends AdminBaseController
     {
         $spreview_id = FatUtility::int($spreview_id);
         if (1 > $spreview_id) {
-            dieWithError($this->str_invalid_request);
+            FatUtility::dieWithError($this->str_invalid_request);
         }
 
         $srch = new SelProdReviewSearch($this->adminLangId);
         $srch->joinUser();
         $srch->joinProducts();
-        //$srch->joinSelProdRatingByType(SelProdRating::TYPE_PRODUCT);
+        //$srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
         $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'uc.credential_username as reviewed_by', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'spreview_title', 'spreview_description'));
         $srch->addOrder('spreview_posted_on', 'DESC');
         $srch->addCondition('spreview_id', '=', $spreview_id);
@@ -136,8 +136,20 @@ class ProductReviewsController extends AdminBaseController
         $avgRatingData = FatApp::getDb()->fetch($avgRatingRs);
 
         $ratingSrch = SelProdRating::getSearchObj();
+        $ratingSrch->joinTable(
+            RatingType::DB_TBL,
+            'INNER JOIN',
+            'rt.ratingtype_id = sprating_ratingtype_id',
+            'rt'
+        );
+        $ratingSrch->joinTable(
+            RatingType::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->adminLangId,
+            'rt_l'
+        );
         $ratingSrch->addCondition('sprating_spreview_id', '=', $spreview_id);
-        $ratingSrch->addMultipleFields(array('sprating_spreview_id', 'sprating_rating_type', 'sprating_rating'));
+        $ratingSrch->addMultipleFields(array('sprating_spreview_id', 'sprating_ratingtype_id', 'sprating_rating', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name'));
         $ratingSrch->doNotCalculateRecords();
         $ratingSrch->doNotLimitRecords();
 
@@ -148,11 +160,11 @@ class ProductReviewsController extends AdminBaseController
         $frm->fill($records);
 
         $abusiveWords = Abusive::getAbusiveWords();
+        $this->set("spreview_id", $spreview_id);
         $this->set("abusiveWords", $abusiveWords);
         $this->set("data", $records);
         $this->set("ratingData", $ratingData);
         $this->set("avgRatingData", $avgRatingData);
-        $this->set("ratingTypeArr", SelProdRating::getRatingAspectsArr($this->adminLangId));
         $this->set("frm", $frm);
         $this->_template->render(false, false);
     }

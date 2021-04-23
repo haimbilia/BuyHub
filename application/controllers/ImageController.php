@@ -1306,4 +1306,58 @@ class ImageController extends FatController
                 break;
         }
     }
+
+    public function review($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $displayUniversalImage = true)
+    {
+        $recordId = FatUtility::int($recordId);
+        $afile_id = FatUtility::int($afile_id);
+        $lang_id = FatUtility::int($lang_id);
+
+        if ($afile_id > 0) {
+            $res = AttachedFile::getAttributesById($afile_id);
+            if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_ORDER_FEEDBACK) {
+                $file_row = $res;
+            }
+        } else {
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_ORDER_FEEDBACK, $recordId, 0, $lang_id, $displayUniversalImage);
+        }
+
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        
+        switch (strtoupper($sizeType)) {
+            case 'ICON':
+                $w = 30;
+                $h = 30;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            case 'MINITHUMB':
+                $w = 61;
+                $h = 61;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            case 'THUMB':
+                $w = 100;
+                $h = 100;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            case 'SMALL':
+                $w = 200;
+                $h = 200;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            case 'MEDIUM':
+                $w = 250;
+                $h = 250;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            case 'LARGE':
+                $w = 500;
+                $h = 500;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            default:
+                AttachedFile::displayOriginalImage($image_name);
+                break;
+        }
+    }
 }

@@ -24,6 +24,7 @@ class EasyPost extends ShippingServicesBase
     private $weight;
     private $selectedShippingService;
     private $shipment;
+    private $shipmentOrderId;
     private $orderQty = 1;
     private $refundStatus = [];
 
@@ -88,9 +89,10 @@ class EasyPost extends ShippingServicesBase
     /**
      * getCarriers
      *
+     * @param  int $limit
      * @return array
      */
-    public function getCarriers(): array
+    public function getCarriers(int $limit = 0): array
     {
         if (Plugin::INACTIVE == $this->settings['plugin_active']) {
             return [];
@@ -102,11 +104,15 @@ class EasyPost extends ShippingServicesBase
         }
 
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
-            echo $this->error;
             return [];
         }
 
-        $records = $this->getResponse();
+        $records = (array) $this->getResponse();
+
+        if (0 < $limit && $limit  < count($records)) {
+            $records = array_slice($records, ($limit - 1));
+        }
+
         return array_map(function ($records) {
             return $records + ['code' => $records['readable']];
         }, $records);
@@ -342,9 +348,9 @@ class EasyPost extends ShippingServicesBase
             $serviceName = Labels::getLabel("LBL_{CARRIER}_-_{SERVICE}", $this->langId);
             $serviceName = CommonHelper::replaceStringData($serviceName, ['{CARRIER}' => $rates['carrier'], '{SERVICE}' => $rates['service']]);
 
-            if (array_key_exists('est_delivery_days', $rates) && 0 < $rates['est_delivery_days']) {
+            if (array_key_exists('delivery_days', $rates) && 0 < $rates['delivery_days']) {
                 $deliveryDays = Labels::getLabel("LBL_ESTIMATED_DELIVERY_IN_{DELIVERY-DAYS}_DAY_'S", $this->langId);
-                $serviceName .= '. ' . CommonHelper::replaceStringData($deliveryDays, ['{DELIVERY-DAYS}' => $rates['est_delivery_days']]);
+                $serviceName .= '. ' . CommonHelper::replaceStringData($deliveryDays, ['{DELIVERY-DAYS}' => $rates['delivery_days']]);
             }
 
             $service = $shipment['id'] . '|' . $rates['id'];
@@ -368,17 +374,18 @@ class EasyPost extends ShippingServicesBase
      */
     public function retrieveOrder(string $orderId, bool $formatResp = true): bool
     {
-        if (!is_null($this->shipment) && !empty($this->shipment)) {
+        if (!is_null($this->shipment) && !empty($this->shipment) && $this->shipmentOrderId == trim($orderId)) {
             $this->shipment['orderStatus'] = current($this->shipment['shipments'])['status'];
             $this->resp = $this->shipment;
             return true;
         }
 
-        $orderId = trim($orderId);
-        if (false === $this->doRequest(self::REQUEST_RETRIEVE_ORDER, $orderId, $formatResp)) {
+        $this->shipmentOrderId = trim($orderId);
+        if (false === $this->doRequest(self::REQUEST_RETRIEVE_ORDER, $this->shipmentOrderId, $formatResp)) {
             return false;
         }
         $this->shipment = $this->getResponse();
+
         $this->shipment['orderStatus'] = current($this->shipment['shipments'])['status'];
         $this->resp = $this->shipment;
         return true;
@@ -408,7 +415,7 @@ class EasyPost extends ShippingServicesBase
         $this->resp = $this->shipment;
         return true;
     }
-    
+
     /**
      * getShipment : Currently used in test cases
      *
@@ -454,6 +461,7 @@ class EasyPost extends ShippingServicesBase
             return (true === $formatResp ? [] : (object)[]);
         }
         $rates = $shipment['rates'];
+
         $key = array_search($shipmentRate[1], array_column($rates, 'id'));
         if (false === $key) {
             $this->error = Labels::getLabel('MSG_UNABLE_TO_FIND_SHIPMENT', $this->langId);
@@ -504,7 +512,7 @@ class EasyPost extends ShippingServicesBase
         $filename = empty($ext) ? trim($filename) . '.zip' : $filename;
         $this->createZipAndDownload($labelData, $filename);
     }
-    
+
     /**
      * createZipAndDownload
      *
@@ -667,7 +675,7 @@ class EasyPost extends ShippingServicesBase
             "carrier" => $shipments[0]['tracker']['carrier'], /* Because of all shipments( More than 1 qty of individual purchased product ) belongs to same shipping carrier. */
             "tracking_codes" => implode(',', $trackingCodes)
         ];
-        
+
         if (false === $this->doRequest(self::REQUEST_REFUND_SHIPMENT, $requestRefundParam)) {
             return false;
         }
@@ -675,7 +683,7 @@ class EasyPost extends ShippingServicesBase
     }
 
 
-    
+
     /**
      * getRefundResponse
      *

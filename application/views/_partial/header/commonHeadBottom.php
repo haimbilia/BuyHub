@@ -43,7 +43,7 @@ if (CommonHelper::demoUrl()) {
     }
     ?>
     <?php
-    if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '')) {
+    if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
         echo FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '');
     }
     ?>

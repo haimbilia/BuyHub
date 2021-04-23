@@ -40,7 +40,7 @@ foreach ($arr_listing as $sn => $row) {
             case 'user':
                 $userDetail = '<strong>' . Labels::getLabel('LBL_N:', $adminLangId) . ' </strong>' . $row['user_name'] . '<br/>';
                 $userDetail .= '<strong>' . Labels::getLabel('LBL_UN:', $adminLangId) . ' </strong>' . $row['credential_username'] . '<br/>';
-                $userDetail .= '<strong>' . Labels::getLabel('LBL_Email:', $adminLangId) . ' </strong>' . $row['credential_email'] . '<br/>';
+                $userDetail .= '<strong>' . Labels::getLabel('LBL_Email:', $adminLangId) . ' </strong>' . CommonHelper::displayEncryptedEmail($row['credential_email']) . '<br/>';
                 $userDetail .= '<strong>' . Labels::getLabel('LBL_User_ID:', $adminLangId) . ' </strong>' . $row['user_id'] . '<br/>';
                 $td->appendElement('plaintext', array(), $userDetail, true);
                 break;
@@ -139,7 +139,11 @@ foreach ($arr_listing as $sn => $row) {
 
                     $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Email_User', $adminLangId), "onclick" => "sendMailForm(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Email_User', $adminLangId), true);
-
+                    if(empty($row['credential_password'])){
+                        $innerLi = $innerUl->appendElement('li');
+                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $adminLangId), "onclick" => "sendSetPasswordEmail(" . $row['user_id'] . ")"), Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $adminLangId), true);
+                    }    
+                    
                     $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete_User', $adminLangId), "onclick" => "deleteUser(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Delete_User', $adminLangId), true);
                 }

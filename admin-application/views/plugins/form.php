@@ -22,7 +22,7 @@ $frm->developerTags['fld_default_col'] = 12;
                     </a>
                 </li>          
             </ul>
-            <div class="tabs_panel_wrap">
+            <div class="tabs_panel_wrap" style="min-height: inherit;">
                 <div class="tabs_panel">
                     <?php echo $frm->getFormHtml(); ?>
                 </div>

@@ -30,7 +30,10 @@ foreach ($arr_listing as $sn => $row) {
         switch ($key) {    
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
-                break;      
+                break;  
+            case 'trr_rate':
+                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
+                break;
             case 'action':
                 if ($canEdit) {
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "ruleForm(".$row['taxrule_taxcat_id']."," . $row['taxrule_id'] . ")"), '<i class="far fa-edit icon"></i>', true);

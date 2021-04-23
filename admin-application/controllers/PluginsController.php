@@ -194,6 +194,10 @@ class PluginsController extends AdminBaseController
 
         $pluginDetail = Plugin::getAttributesById($pluginId, ['plugin_type', 'plugin_identifier']);
 
+        if (!in_array($pluginDetail['plugin_type'], Plugin::HAVING_DESCRIPTION)) {
+            $langFrm->removeField($langFrm->getField('plugin_description'));
+        }
+
         $this->set('languages', Language::getAllNames());
         $this->set('type', $pluginDetail['plugin_type']);
         $this->set('identifier', $pluginDetail['plugin_identifier']);
@@ -226,7 +230,7 @@ class PluginsController extends AdminBaseController
         'pluginlang_lang_id' => $lang_id,
         'pluginlang_plugin_id' => $pluginId,
         'plugin_name' => $post['plugin_name'],
-        'plugin_description' => $post['plugin_description'],
+        'plugin_description' => FatApp::getPostedData('plugin_description', FatUtility::VAR_STRING, ''),
         );
 
         $pluginObj = new Plugin($pluginId);
@@ -381,18 +385,20 @@ class PluginsController extends AdminBaseController
         if (in_array($pluginType, Plugin::HAVING_KINGPIN)) {
             $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->adminLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $pluginId, array(), false, 0);
         }
-        
-        $fld = $frm->addButton(
-            'Icon',
-            'plugin_icon',
-            Labels::getLabel('LBL_Upload_File', $this->adminLangId),
-            array('class'=>'uploadFile-Js','id'=>'plugin_icon','data-plugin_id' => $pluginId)
-        );
-        $fld->htmlAfterField = '<span id="plugin_icon"></span>';
-        if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $pluginId)) {
-            $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
-            $fld->htmlAfterField .= '<div class="uploaded--image">
-            <img src="'.UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($pluginId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').'"></div>';
+
+        if (in_array($pluginType, Plugin::HAVING_SEPARATE_ICON)) {
+            $fld = $frm->addButton(
+                'Icon',
+                'plugin_icon',
+                Labels::getLabel('LBL_Upload_File', $this->adminLangId),
+                array('class'=>'uploadFile-Js','id'=>'plugin_icon','data-plugin_id' => $pluginId)
+            );
+            $fld->htmlAfterField = '<span id="plugin_icon"></span>';
+            if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $pluginId)) {
+                $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
+                $fld->htmlAfterField .= '<div class="uploaded--image">
+                <img src="'.UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($pluginId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').'"></div>';
+            }
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));

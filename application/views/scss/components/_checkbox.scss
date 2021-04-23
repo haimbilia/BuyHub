@@ -39,6 +39,12 @@
     &.brand {
         display: flex;
     }
+    &-flex {
+        display: flex !important;
+        a {
+            text-decoration: underline;
+        }
+    }
 }
 
 .checkbox input,

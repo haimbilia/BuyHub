@@ -47,6 +47,7 @@ class UsersController extends AdminBaseController
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true);
+        $srch->addFld(User::DB_TBL_CRED_PREFIX . 'password');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'user_id = shop.shop_user_id OR user_parent = shop.shop_user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
         $srch->addOrder('u.user_id', 'DESC');
@@ -138,14 +139,14 @@ class UsersController extends AdminBaseController
     {
         $this->objPrivilege->canEditUsers();
         $userObj = new User($userId);
-        $user = $userObj->getUserInfo(array('credential_username', 'credential_password', 'user_preferred_dashboard'), false, false);
+        $user = $userObj->getUserInfo(array('credential_username','if(credential_password != "", credential_password, credential_password_old) as credential_password', 'user_preferred_dashboard'), false, false);
         if (!$user) {
             Message::addErrorMessage($this->str_invalid_request);
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
         }
-        $userAuthObj = new UserAuthentication();
+        $userAuthObj = new UserAuthentication();       
         if (!$userAuthObj->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false, true) === true) {
-            Message::addErrorMessage($userObj->getError());
+            Message::addErrorMessage($userAuthObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
         }
 
@@ -155,10 +156,16 @@ class UsersController extends AdminBaseController
     public function setup()
     {
         $this->objPrivilege->canEditUsers();
-        $frm = $this->getForm();
+        $frm = $this->getForm(FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0));
 
         $post = FatApp::getPostedData();
         $user_state_id = FatUtility::int($post['user_state_id']);
+        if(CommonHelper::isFieldEncrypted($post['user_dob']) == true){
+            unset($post['user_dob']);
+        }
+        if(CommonHelper::isFieldEncrypted($post['user_phone']) == true){
+            unset($post['user_phone']);
+        }
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
@@ -169,16 +176,78 @@ class UsersController extends AdminBaseController
         $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
 
         $user_id = FatUtility::int($post['user_id']);
-        unset($post['user_id']);
-        unset($post['credential_username']);
-        unset($post['credential_email']);
-
+        unset($post['user_id']);        
+        if(0 < $user_id){
+            unset($post['credential_username']);  
+            unset($post['credential_email']);
+            if ($post['user_dob'] == "0000-00-00" || $post['user_dob'] == "" || strtotime($post['user_dob']) == 0) {
+                unset($post['user_dob']);
+            }    
+        }
+        
+        /* [ new user    */        
+        if (1 > $user_id) {
+            $post['user_verify'] = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
+            if ($post['user_type'] == User::USER_TYPE_BUYER) {
+                $post['user_is_buyer'] = 1;
+                $post['user_preferred_dashboard'] = User::USER_BUYER_DASHBOARD;
+                $post['user_registered_initially_for'] = User::USER_TYPE_BUYER;
+                $post['user_is_supplier'] = (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1) || FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) ? 0 : 1;
+                $post['user_is_advertiser'] = (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1) || FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) ? 0 : 1;
+            } elseif ($post['user_type'] == User::USER_TYPE_SELLER) {
+                $post['user_is_buyer'] = 1;
+                $post['user_is_supplier'] = 1;
+                $post['user_preferred_dashboard'] = User::USER_SELLER_DASHBOARD;
+                $post['user_registered_initially_for'] = User::USER_TYPE_SELLER;
+                if (FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
+                    $post['user_is_buyer'] = 0;
+                }
+            } elseif ($post['user_type'] == User::USER_TYPE_AFFILIATE) {
+                $post['user_is_affiliate'] = 1;
+                $post['user_registered_initially_for'] = User::USER_TYPE_AFFILIATE;
+                $post['user_preferred_dashboard'] = User::USER_AFFILIATE_DASHBOARD;
+            } elseif ($post['user_type'] == User::USER_TYPE_ADVERTISER) {
+                $post['user_is_advertiser'] = 1;
+                $post['user_registered_initially_for'] = User::USER_TYPE_ADVERTISER;
+                $post['user_preferred_dashboard'] = User::USER_ADVERTISER_DASHBOARD;
+            }
+        }
+        /* new user ]   */
+        
+        $db = FatApp::getDb();
+        $db->startTransaction();
         $userObj = new User($user_id);
         $userObj->assignValues($post);
         if (!$userObj->save()) {
+            $db->rollbackTransaction();
             Message::addErrorMessage($userObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
+        /* [ new user    */
+        if (1 > $user_id) {
+            if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE)) {
+                $db->rollbackTransaction();
+                return false;
+            }
+            
+            $userData = [
+                'user_name' => $post['user_name'],
+                'user_email' => $post['credential_email'],
+                'user_id' => $userObj->getMainTableRecordId(),
+                'account_type' => User::getUserTypesArr($this->adminLangId)[$post['user_type']]
+            ];
+            
+            if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
+                $db->rollbackTransaction();
+                $message = Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id);
+                return false;
+            }
+            
+        }
+        /*  new user ] */
+        
+        $db->commitTransaction();
+        
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -212,11 +281,12 @@ class UsersController extends AdminBaseController
             $stateId = $data['user_state_id'];
             $frmUser->fill($data);
             $userParent = $data['user_parent'];
+            $this->set('data', $data);
         }
         $this->set('userParent', $userParent);
         $this->set('user_id', $user_id);
         $this->set('stateId', $stateId);
-        $this->set('frmUser', $frmUser);
+        $this->set('frmUser', $frmUser);        
         $this->_template->render(false, false);
     }
 
@@ -1872,6 +1942,43 @@ class UsersController extends AdminBaseController
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
+    
+    public function resendSetPasswordEmail()
+    {
+        $this->objPrivilege->canEditUsers();
+        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+        if (1 > $userId) {
+            FatUtility::dieWithError($this->str_invalid_request_id);
+        }
+
+        $userObj = new User($userId);
+        $user = $userObj->getUserInfo(['user_name', 'credential_email', 'user_is_supplier', 'user_is_affiliate','user_is_advertiser'], true, false);
+        if (!$user) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+
+        $userType = User::USER_TYPE_BUYER;
+        if ($user['user_is_supplier'] == 1) {
+            $userType = User::USER_TYPE_SELLER;
+        } elseif ($user['user_is_affiliate'] == 1) {
+            $userType = User::USER_TYPE_AFFILIATE;
+        } elseif ($user['user_is_advertiser'] == 1) {
+            $userType = User::USER_TYPE_ADVERTISER;
+        }
+
+        $userData = [
+            'user_name' => $user['user_name'],
+            'user_email' => $user['credential_email'],
+            'user_id' => $userId,
+            'account_type' => User::getUserTypesArr($this->adminLangId)[$userType]
+        ];
+
+        if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
+            FatUtility::dieJsonError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id));
+        }
+        $this->set('msg', Labels::getLabel("MSG_Email_Sent_Successful", $this->admin_id));
+        $this->_template->render(false, false, 'json-success.php');
+    }
 
     /* public function image($userId, $sizeType = '', $afile_id = 0){
     $default_image = 'user_deafult_image.jpg';
@@ -2011,14 +2118,29 @@ class UsersController extends AdminBaseController
         $user_id = FatUtility::int($user_id);
         $frm = new Form('frmUser', array('id' => 'frmUser'));
         $frm->addHiddenField('', 'user_id', $user_id);
-        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'credential_username', '');
+        if(1 > $user_id){            
+            $userTypesArr = User::getUserTypesArr($this->adminLangId);                      
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->adminLangId), 'user_type', $userTypesArr, [], [], Labels::getLabel('LBL_Select', $this->adminLangId));
+            $fld->requirement->setRequired(true);
+        }
+        
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'credential_username', '');
+        if (1 > $user_id) {
+            $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
+            $fld->requirements()->setRequired();
+            $fld->requirements()->setUsername();
+        }
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->adminLangId), 'user_name');
         $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->adminLangId), 'user_dob', '', array('readonly' => 'readonly'));
         $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
+        if (1 > $user_id) {
+            $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
+            $fld->requirements()->setRequired();
+        }
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
@@ -2165,4 +2287,37 @@ class UsersController extends AdminBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
+    
+    public function cookiesPreferencesForm($userId)
+    {
+        $this->objPrivilege->canViewUsers();
+        $userId = FatUtility::int($userId);
+        if (1 > $userId) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+
+        $frm = $this->getCookiesPreferencesForm();
+        $userObj = new User($userId);
+        $data = $userObj->getUserSelectedCookies();
+        if ($data != false) {
+            $frm->fill($data);
+        }
+
+        $this->set('frm', $frm);
+        $this->set('user_id', $userId);
+        $this->_template->render(false, false);
+    }
+    
+    private function getCookiesPreferencesForm()
+    {
+        $frm = new Form('frmCookiesPreferences');
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->adminLangId), 'ucp_functional', 1, array(), true, 0);
+        $fld->htmlAfterField = '<div>'.Labels::getLabel('LBL_Functional_Cookies_Information', $this->adminLangId).'</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->adminLangId), 'ucp_statistical', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>'.Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->adminLangId).'</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->adminLangId), 'ucp_personalized', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>'.Labels::getLabel('LBL_Personalise_Cookies_Information', $this->adminLangId).'</div>';
+        return $frm;
+    }
+    
 }

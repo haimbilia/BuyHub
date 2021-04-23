@@ -1939,8 +1939,8 @@ input.sp-input {
             border: $border;
             border-radius: $radius4;
             padding: 1rem;
-            .actions{
-                a{
+            .actions {
+                a {
                     padding: 5px;
                     width: 30px;
                     height: 30px;
@@ -1951,10 +1951,11 @@ input.sp-input {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    &:hover{
-                            background: $brand-color;
-                            color:$brand-color-inverse;
-                            border-color: $brand-color;;
+                    &:hover {
+                        background: $brand-color;
+                        color: $brand-color-inverse;
+                        border-color: $brand-color;
+                        ;
                     }
                 }
             }
@@ -2104,4 +2105,161 @@ input.sp-input {
             margin-#{$end-direction}: 22px;
         }
     }
+}
+
+.product-card,.shop-card {
+    display: flex;
+    align-items: flex-start;
+    &__img {
+        max-width: 80px;
+        flex: 0 0 80px;
+        width: 80px;        
+        height: 80px;
+        border: $border;
+        border-radius: .25rem;
+        background-color: #fff;
+        margin-#{$end-direction}: .625rem;
+        overflow: hidden;
+        display: flex;
+        justify-content:center;
+        align-items: center;
+    }
+    &__detail {
+        h6 {
+            color: $txt-gray;
+            font-weight: normal;
+            line-height: 1.5;
+            font-size: .875rem;
+        }
+    }
+}
+.shop-card{
+    align-items: center;
+    &__img {
+        border-radius: 50%;
+    }
+    &__detail {
+        h6{
+            margin: 0;
+            color: $body-color;           
+        }
+    }
+    .shop-opened{font-size: .75rem;color: $txt-gray;}
+}
+.field_cover {
+    .all-review-media {
+        margin-top: 0;
+        padding-top: 0;
+        border: none;
+    }
+}
+.order-feedback-section{
+    .blocktitle{
+        padding-bottom: .75rem;
+    }
+}
+
+.rating-listing {    
+    .rating {
+        padding-bottom: .75rem;
+        --size: 1rem;
+    }
+    .rating__text{
+        border: none;
+        padding: 0;
+        margin: 0;
+        padding-left: .5rem;
+        color: $body-color;
+    }
+}
+
+.uploaded-file {
+    position: relative;
+    margin-right: 1rem;
+    display: inline-block;
+    vertical-align: top;
+    &__thumb {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #dcdcdc;
+        border-radius: .25rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .file-remove {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 1px solid #dcdcdc;
+        background-color: #fff;
+        color: var(--body-color);
+        border-radius: 100%;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        transform: rotate(45deg);
+        &:hover {
+            color: red;
+        }
+        &:before,
+        &:after {
+            content: "";
+            width: 10px;
+            height: 2px;
+            border-radius: 2px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: currentColor;
+        }
+        &:before {
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+    }
+}
+
+.file__upload {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: $body-color;
+    cursor: pointer;
+    border: 1px solid currentColor;
+    padding: .3rem 1rem;
+    border-radius: .25rem;
+    margin: .875rem 0;
+    font-size: .75rem;
+    &:hover {
+        color: $primary-color;
+    }
+    input[type="file"] {
+        position: absolute;
+        border: none;
+        opacity: 0;
+        padding: 0;
+        cursor: pointer;
+    }
+    span {
+        font-size: .75rem;
+        color: currentColor;
+        svg {
+            fill: currentColor;
+        }
+        &.upload-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-#{$end-direction}: .25rem;
+        }
+    }
+}
+.shop-rating-wrap{
+    padding: 1.5rem;
+    background-color: #f3f4f5;
+    border-radius: 4px;
 }
