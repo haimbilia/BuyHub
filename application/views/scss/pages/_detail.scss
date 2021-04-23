@@ -61,8 +61,8 @@
             hyphens: auto;
         }
         .favourite-wrapper-detail {
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
             align-items: center;
             z-index: 1;
@@ -74,15 +74,13 @@
         }
     }
     .products-reviews {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         -ms-flex-direction: column;
         flex-direction: column;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         border: solid 1px #323232;
         border-radius: $radius4;
@@ -197,22 +195,18 @@
 }
 
 .article-options {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     margin: 0;
     padding: 15px 10px;
     background: #fff;
     border-radius: $radius4;
     ul {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         margin: 0;
         padding: 0;
@@ -243,14 +237,12 @@
         border-radius: 50%;
         width: 20px;
         height: 20px;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
+        
+        
         justify-content: center;
         span {
             display: block;
@@ -307,13 +299,11 @@
     position: -webkit-sticky;
     /*z-index: 1;*/
     top: 180px;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
     margin-bottom: 2rem;
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
     /*align-items: center;*/
     @include media-breakpoint-down(lg) {
@@ -324,8 +314,8 @@
         }
     }
     .slider-for {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
+        
+       
         flex: 1;
         -webkit-box-ordinal-group: 3;
         -ms-flex-order: 2;
@@ -469,8 +459,7 @@
 .list--specification {
     li {
         margin: 5px 0;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         font-size: 0.875em;
         color: lighten($body-color, 50%);
@@ -482,14 +471,11 @@
 }
 
 .discount-slider {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
     margin: 0 -10px;
     @include media-breakpoint-down(sm) {
@@ -516,11 +502,9 @@
 }
 
 .shop-owner-detail {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     .owner_logo {
         background: #fff;
@@ -532,15 +516,13 @@
         position: relative;
         -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.11);
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.11);
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         padding: 10px;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
+        
+        
         justify-content: center;
     }
 }
@@ -566,14 +548,12 @@
 .shop-reviews-wrapper {
     position: relative;
     .shop-reviews {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
+        
+        
         justify-content: center;
         width: 130px;
         height: 130px;
@@ -645,14 +625,11 @@
 
 .yes-no ul {
     margin: 10px 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
+    
     justify-content: center;
 }
 
@@ -679,11 +656,9 @@
 
 .share-this {
     position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     -webkit-box-pack: space-evenly;
     -ms-flex-pack: space-evenly;
@@ -706,11 +681,9 @@
 .share-this:after {
     position: absolute;
     top: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     width: 50%;
     height: 100%;
@@ -722,8 +695,8 @@
 .share-this:before {
     content: '';
     #{$start-direction}: 0;
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
+    
+    
     justify-content: flex-end;
     background-color: #fff;
 }
@@ -765,14 +738,11 @@
     position: absolute;
     top: 0;
     #{$start-direction}: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
+    
     justify-content: center;
     width: 100%;
     height: 100%;
@@ -789,14 +759,11 @@
 
 .share-this .social-link {
     position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
+    
     justify-content: center;
     width: auto;
     height: 100%;
@@ -804,8 +771,8 @@
     -webkit-transition: 0.25s;
     transition: 0.25s;
     padding: 0;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
+    
+   
     flex: 1;
     cursor: pointer;
 }
@@ -928,22 +895,18 @@
 }
 
 .shop-avatar {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
 }
 
 .shoper__dp {
     width: 92px;
     height: 92px;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     overflow: hidden;
     border-radius: 50%;
@@ -968,8 +931,7 @@
     /*top: 146px;*/
     z-index: 1;
     ul {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -1152,11 +1114,9 @@
 
 .listing--progress-wrapper {
     li {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
@@ -1173,8 +1133,8 @@
             background: #f3f3f3;
             height: 6px;
             width: 100%;
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
             overflow: hidden;
             .progress__fill {
@@ -1208,11 +1168,9 @@
         }
     }
     .certified-box {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;

@@ -60,7 +60,7 @@
                                         <?php }
                                                     } ?></p>
                                 </div>
-                                <p class="txt-brand pt-2"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
+                                <p class="text-danger pt-2"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
                             </div>
                         </div>
                         <button class="btn btn-outline-brand btn-sm" type="button" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );"> <?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?></button>

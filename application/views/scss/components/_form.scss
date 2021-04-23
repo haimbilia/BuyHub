@@ -117,7 +117,7 @@
      select {
          @extend input;
          padding-#{$end-direction}: 35px;
-         background-image: url(../images/retina/down-arrow.svg);
+         background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzA2cHgiIGhlaWdodD0iMzA2cHgiIHZpZXdCb3g9IjAgMCAzMDYgMzA2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMDYgMzA2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQoJPGc+DQoJCTxnIGlkPSJleHBhbmQtbW9yZSI+DQoJCQk8cG9seWdvbiBwb2ludHM9IjI3MC4zLDU4LjY1IDE1MywxNzUuOTUgMzUuNyw1OC42NSAwLDk0LjM1IDE1MywyNDcuMzUgMzA2LDk0LjM1IiAvPg0KCQk8L2c+DQoJPC9nPg0KDQo8L3N2Zz4NCg==");
          background-size: 10px;
          background-color: $bg-white;
          background-repeat: no-repeat;
@@ -264,11 +264,9 @@
  
  .custom-select {
      @extend select;
-     -moz-appearance: none;
-     -webkit-appearance: none;
      appearance: none;
      padding-#{$end-direction}: 35px;
-     background-image: url(../images/retina/down-arrow.svg);
+     background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzA2cHgiIGhlaWdodD0iMzA2cHgiIHZpZXdCb3g9IjAgMCAzMDYgMzA2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMDYgMzA2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQoJPGc+DQoJCTxnIGlkPSJleHBhbmQtbW9yZSI+DQoJCQk8cG9seWdvbiBwb2ludHM9IjI3MC4zLDU4LjY1IDE1MywxNzUuOTUgMzUuNyw1OC42NSAwLDk0LjM1IDE1MywyNDcuMzUgMzA2LDk0LjM1IiAvPg0KCQk8L2c+DQoJPC9nPg0KDQo8L3N2Zz4NCg==");
      background-size: 10px;
      background-color: $bg-white;
      background-repeat: no-repeat;
@@ -329,21 +327,13 @@
      display: table;
      width: 100%;
      margin: 0 auto;
-     display: -webkit-box;
-     display: -ms-flexbox;
      display: flex;
-     -webkit-box-align: center;
-     -ms-flex-align: center;
      align-items: center;
-     -webkit-box-pack: center;
-     -ms-flex-pack: center;
      justify-content: center;
      input[type="text"] {
          width: auto;
          margin: 0;
          margin-#{$end-direction}: 5px;
-         -webkit-box-flex: 1;
-         -ms-flex: 1;
          flex: 1;
      }
      input[type="submit"] {
@@ -368,8 +358,6 @@
  
  .input-group {
      position: relative;
-     display: -webkit-box;
-     display: -ms-flexbox;
      display: flex;
      -ms-flex-wrap: wrap;
      flex-wrap: wrap;
@@ -379,7 +367,6 @@
      width: 100%;
      input {
          position: relative;
-         -webkit-box-flex: 1;
          -ms-flex: 1 1 auto;
          flex: 1 1 auto;
          width: 1%;
@@ -396,11 +383,7 @@
  }
  
  .icon-group {
-     display: -webkit-box;
-     display: -ms-flexbox;
      display: flex;
-     -webkit-box-align: center;
-     -ms-flex-align: center;
      align-items: center;
      .btn {
          margin-#{$start-direction}: 5px;

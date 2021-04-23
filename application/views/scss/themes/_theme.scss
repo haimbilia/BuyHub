@@ -17,8 +17,10 @@ $secondary-color-inverse: var(--secondary-color-inverse);
 $third-color: var(--third-color);
 $third-color-inverse:var(--third-color-inverse);
 //fixed theme colors
-$body-color: #2e384d;
-$txt-gray:#8798ad;
+$body-color: #000;
+$txt-body:#000;
+$txt-gray:#888;
+  
 //border colors
 $border-color:#dee2e6;
 $border: solid 1px $border-color;
@@ -30,6 +32,10 @@ $bg-white: #fff;
 $bg-white-inverse:$body-color;
 $gray-light: #f3f4f5;
 $bg-gray: #f3f4f5;
+//shadow
+$shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2); 
+$shadow-rgb: var(--shadow-rgb);
+
 //radius
 $radius4:4px;
 $radius3:3px;

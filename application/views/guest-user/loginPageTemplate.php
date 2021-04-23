@@ -12,7 +12,7 @@ $fldforgot = $loginFrm->getField('forgot');
 $fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm') . '"
     class="link">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
 $fldSubmit = $loginFrm->getField('btn_submit');
-$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide'); 
+$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide btn-block'); 
 
 if (isset($smsPluginStatus) && true === $smsPluginStatus) {
     $pwdFld = $loginFrm->getField('password');
@@ -118,9 +118,9 @@ echo $loginFrm->getFormTag(); ?>
 echo $loginFrm->getExternalJS();
 
 if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
-    <div class="or-divider">
-        <span class="or">
-            <?php echo Labels::getLabel('LBL_Or', $siteLangId); ?>
+    <div class="or">
+        <span>
+            <?php echo Labels::getLabel('LBL_OR_CONTINUE_WITH', $siteLangId); ?>
         </span>
     </div>
     <div class="buttons-list">
