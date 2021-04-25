@@ -64,11 +64,12 @@ class PluginCommon extends MyAppModel
     
     public const HAVING_SEPARATE_ICON = [
         self::TYPE_SPLIT_PAYMENT_METHOD,
-        self::TYPE_REGULAR_PAYMENT_METHOD
+        self::TYPE_REGULAR_PAYMENT_METHOD,
+        self::TYPE_TAX_SERVICES,
     ];
 
     public const HAVING_DESCRIPTION = [
-        self::TYPE_ADVERTISEMENT_FEED
+        self::TYPE_ADVERTISEMENT_FEED,
     ];
 
     public const ATTRS = [
@@ -96,7 +97,7 @@ class PluginCommon extends MyAppModel
             self::TYPE_PAYOUTS => Labels::getLabel('LBL_PAYOUT', $langId),
             self::TYPE_ADVERTISEMENT_FEED => Labels::getLabel('LBL_ADVERTISEMENT_FEED', $langId),
             self::TYPE_SMS_NOTIFICATION => Labels::getLabel('LBL_SMS_NOTIFICATION', $langId),
-            self::TYPE_TAX_SERVICES => Labels::getLabel('LBL_TAX_SERVICES', $langId),
+            self::TYPE_TAX_SERVICES => Labels::getLabel('LBL_SALES_TAX_SERVICES', $langId),
             // self::TYPE_FULL_TEXT_SEARCH => Labels::getLabel('LBL_FULL_TEXT_SEARCH', $langId), /* NOT IN USE */
             self::TYPE_SPLIT_PAYMENT_METHOD => Labels::getLabel('LBL_SPLIT_PAYMENT_METHODS', $langId),
             self::TYPE_REGULAR_PAYMENT_METHOD => Labels::getLabel('LBL_REGULAR_PAYMENT_METHODS', $langId),

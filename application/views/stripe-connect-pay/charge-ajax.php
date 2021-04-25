@@ -100,9 +100,11 @@ echo $frm->getFormTag(); ?>
                         $.systemMessage(t.msg, 'alert--danger', false);
                         return;
                     } else {
+                        alert('hjhjh');
                         $(paymentForm).html(t.html);
                         $(".btnFields-js").html(fcom.getLoader());
                         $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+                        return;
                     }
                 });
             };

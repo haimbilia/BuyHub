@@ -402,6 +402,7 @@ class StripeConnectPayController extends PaymentController
             'transfer_group' => $this->orderId,
             'payment_method' => $this->sourceId,
             'payment_method_types' => ['card'],
+            'on_behalf_of' => 'acct_1Ihvhf2QPH3xVGdQ',
         ];
 
         if (!empty($customerId)) {
