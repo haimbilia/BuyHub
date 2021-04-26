@@ -163,7 +163,7 @@
             backdrop-filter: blur(7px);
             position: absolute;
             bottom: 33px;
-            z-index: 10; 
+            z-index: 10;
             width: 100%;
             box-shadow: $shadow1;
         }
@@ -217,18 +217,17 @@
     visibility: hidden;
     height: 0;
     overflow: hidden;
-    -webkit-transform: translateX(-72px);
     transform: translateX(-72px);
-    -webkit-transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    @include media-breakpoint-down(md) {
+        padding-bottom: 60px;
+    }
     &.active {
         opacity: 1;
         visibility: visible;
         height: auto;
         overflow: inherit;
-        -webkit-transform: translateX(0) scale(1);
         transform: translateX(0) scale(1);
-        -webkit-transition-delay: 0.4s;
         transition-delay: 0.4s;
     }
     &__section {
