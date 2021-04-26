@@ -1386,7 +1386,8 @@ class HomeController extends MyAppController
                 $icons = [
                     'src' => $iconUrl,
                     'sizes' => $val . 'x' . $val,
-                    'type' => 'image/png'
+                    'type' => 'image/png',
+                    'purpose'=> 'any maskable'
                 ];
                 $arr['icons'][] = $icons;
             }
