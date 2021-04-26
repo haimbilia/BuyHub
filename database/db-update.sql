@@ -434,8 +434,6 @@ ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_pass
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
 -- --- task_81779_advanced_GDPR_module --- --
 
-<<<<<<< HEAD
-=======
 DELETE FROM `tbl_language_labels` WHERE label_key = 'ERR_USER_INACTIVE_OR_DELTED';
 
 UPDATE
@@ -521,5 +519,4 @@ UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl
 UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
 /* Shop And Product Ratings */
 
->>>>>>> 7a097badc49cb50a9ea0b90fb86bbd2d3fb8ee4c
 DELETE FROM tbl_language_labels WHERE label_key = "ERR_USER_INACTIVE_OR_DELTED";

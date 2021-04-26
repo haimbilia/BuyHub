@@ -1,6 +1,6 @@
 <div class="form-side-inner">
     <a class="form-item_logo" href=""> <img src="http://localhost/yokart/image/site-logo/1?t=1608690809" alt=""> </a>
-    <div class="card-sign">
+    <div class="card-sign"> 
         <div class="card-sign_head">
             <h2 class="title">
                 <?php echo Labels::getLabel('LBL_Sign_Up', $siteLangId); ?>

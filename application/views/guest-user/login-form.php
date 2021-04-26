@@ -49,22 +49,15 @@
                             $this->includeTemplate('guest-user/loginPageTemplate.php', $loginData, false);
                             ?>
 
-
                         </div>
                         <div class="card-sign_foot">
                             <p class="more-links">
-                            <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) { ?>
-                                <a class="" href="javaScript:void(0)" data-form="frmLogin" onClick="signInWithPhone(this, true)">
-                                    <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD', $siteLangId); ?>
+                                <?php echo $loginData['loginFrm']->getFieldHtml('forgot'); ?>
+                                |
+                                <a class="js--register-btn" href="javaScript:void(0)">
+                                    <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
                                 </a>
-                            <?php } ?>
-
-                            |
-
-
-
                             </p>
-                           
                         </div>
                     </div>
 

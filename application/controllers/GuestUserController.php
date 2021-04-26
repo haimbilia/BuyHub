@@ -1,7 +1,5 @@
 <?php
 
-use PhpParser\Node\Stmt\Label;
-
 class GuestUserController extends MyAppController
 {
     public function loginForm($isRegisterForm = 0)

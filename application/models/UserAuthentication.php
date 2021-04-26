@@ -368,18 +368,6 @@ class UserAuthentication extends FatModel
             }
             return false;
         }
-<<<<<<< HEAD
-        
-        
-        /* [To Do - need to remove credential_password_old in next release */ 
-        if (true === $this->loginWithOtp) {           
-            if (!empty($row['credential_password_old'])) {
-                $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
-                if ($oldPassword !== $row['credential_password_old']) {
-                    $this->logFailedAttempt($ip, $username);
-                    $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
-                    return false;
-=======
 
 
         /* [To Do - need to remove credential_password_old in next release */
@@ -397,7 +385,6 @@ class UserAuthentication extends FatModel
                         $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
                         return false;
                     }
->>>>>>> 7a097badc49cb50a9ea0b90fb86bbd2d3fb8ee4c
                 }
                 if (true == $encryptPassword) {
                     if (!$this->resetUserPassword($row['user_id'], $password)) {
@@ -409,26 +396,11 @@ class UserAuthentication extends FatModel
                     }                
                 }
             } else {
-<<<<<<< HEAD
-                if (true == $encryptPassword) {
-                    if (false == password_verify($password, $row['credential_password'])) {
-                        $this->logFailedAttempt($ip, $username);
-                        $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
-                        return false;
-                    }
-                } else {
-                    if ($password !== $row['credential_password']) {
-                        $this->logFailedAttempt($ip, $username);
-                        $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
-                        return false;
-                    }
-=======
                 $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
                 if ($oldPassword !== $row['credential_password_old']) {
                     $this->logFailedAttempt($ip, $username);
                     $this->error = Labels::getLabel('ERR_INVALID_PASSWORD', $this->commonLangId);
                     return false;
->>>>>>> 7a097badc49cb50a9ea0b90fb86bbd2d3fb8ee4c
                 }
                 if (true == $encryptPassword) {
                     if (!$this->resetUserPassword($row['user_id'], $password)) {

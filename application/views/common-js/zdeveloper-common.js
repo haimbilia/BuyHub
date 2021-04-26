@@ -914,19 +914,6 @@ $(function() { // this will be called when the DOM is ready
         var obj = $(this).hasClass('clear-all') ? 'all' : '';
         clearSearchKeyword(obj);
     });
-
-    $(document).on('click', '.alreadyHave-js', function(e) {
-        e.preventDefault();
-        $(this).hide();
-        var formClass = '';
-        if ($(this).closest('form').hasClass('loginpopup--js')) {
-            formClass = 'form.loginpopup--js ';
-        }
-        $(formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').show();
-        $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":false}');
-        $(formClass + '.loginWithOtp--js').val(1);
-        $(formClass + '.otpFieldBlock--js').removeClass('d-none');
-    });
 });
 
 $(document).mouseup(function(e) {
@@ -1170,6 +1157,10 @@ $(document).ready(function() {
             formClass = 'form.loginpopup--js ';
         }
 
+        $(formClass + '.alreadyHave-js').show();
+        $(formClass + ' .withPwdLbl--js, ' + formClass + ' .getOtpBtnBlock--js').removeClass('d-none');
+        $(formClass + '.forgetPwd--js, ' + formClass + ' .pwdField--js, ' + formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').hide();
+
         $(formClass + '.withOtp--js').removeClass('d-none');
         if (false === flag) {
             inputElement.removeClass('hasFlag-js');
@@ -1178,35 +1169,10 @@ $(document).ready(function() {
             $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":true}');
             $(formClass + '.loginWithOtp--js').val(0);
             $(formClass + '.forgetPwd--js, ' + formClass + ' .pwdField--js, ' + formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').show();
-            $(formClass + ' .withPwdLbl--js, ' + formClass + '.otpFieldBlock--js').addClass('d-none');
+            $(formClass + ' .withPwdLbl--js, ' + formClass + '.otpFieldBlock--js, ' + formClass + ' .getOtpBtnBlock--js').addClass('d-none');
         }
         stylePhoneNumberFld(formElement + " input[name='username']", (!flag));
     };
-
-    withOtp = function (obj) {
-        $(obj).addClass('d-none');
-        var formClass = '';
-        if ($(obj).closest('form').hasClass('loginpopup--js')) {
-            formClass = 'form.loginpopup--js ';
-        }
-        
-        $(formClass + '.alreadyHave-js').show();
-        $(formClass + '.forgetPwd--js, ' + formClass + ' .pwdField--js, ' + formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').hide();
-        $(formClass + ' .withPwdLbl--js').removeClass('d-none');
-    }
-
-    withPassword = function (obj) {
-        var formClass = '';
-        if ($(obj).closest('form').hasClass('loginpopup--js')) {
-            formClass = 'form.loginpopup--js ';
-        }
-        $(formClass + '.withOtp--js').removeClass('d-none');
-        $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":true}');
-        $(formClass + '.loginWithOtp--js').val(0);
-        $(formClass + '.alreadyHave-js').show();
-        $(formClass + '.forgetPwd--js, ' + formClass + ' .pwdField--js, ' + formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').show();
-        $(formClass + ' .withPwdLbl--js, ' + formClass + '.otpFieldBlock--js').addClass('d-none');
-    }
 
     getLoginOtp = function (obj) {
         var formClass = '';
