@@ -90,6 +90,7 @@ Fixes:
     => 052450 - Separate Tracking URL and Tracking Courier if Aftership enabled
     => 052645 - wile adding product specifications> it's not accepting character after &
     => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
+    => 052869 - caching directory delete issue for some server
 
 Enhancements :
    => Make provision to made seller

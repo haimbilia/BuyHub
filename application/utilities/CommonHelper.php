@@ -1,5 +1,7 @@
 <?php
 
+use phpDocumentor\Reflection\PseudoTypes\True_;
+
 class CommonHelper extends FatUtility
 {
     private static $_ip;
@@ -75,7 +77,7 @@ class CommonHelper extends FatUtility
             self::$_currency_id,
             array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
         );
-        
+
         self::$_lang_code = Language::getAttributesById(
             self::$_lang_id,
             'language_code'
@@ -1434,16 +1436,19 @@ class CommonHelper extends FatUtility
         return trim($string, '-');
     }
 
-    public static function recursiveDelete($str)
+    public static function recursiveDelete($str, $removeParent = false)
     {
         if (is_file($str)) {
             return @unlink($str);
         } elseif (is_dir($str)) {
             $scan = glob(rtrim($str, '/') . '/*');
             foreach ($scan as $index => $path) {
-                static::recursiveDelete($path);
+                static::recursiveDelete($path, true);
             }
-            return @rmdir($str);
+
+            if ($removeParent) {
+                return @rmdir($str);
+            }
         }
     }
 
@@ -2030,7 +2035,7 @@ class CommonHelper extends FatUtility
         }
         return false;
     }
-    
+
     /**
      * stripAllTags - This differs from strip_tags() because it removes the contents of the <script> and <style> tags. 
      * E.g. strip_tags( '<script>something</script>' ) will return ‘something’. stripAllTags will return ”
