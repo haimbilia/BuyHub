@@ -370,7 +370,7 @@ class UserAuthentication extends FatModel
             $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
             if ($oldPassword !== $row['credential_password_old']) {
                 $this->logFailedAttempt($ip, $username);
-                $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_INVALID_PASSWORD', $this->commonLangId);
                 return false;
             }
             if (true == $encryptPassword) {
@@ -388,7 +388,7 @@ class UserAuthentication extends FatModel
 
         /*
         if ((true == $encryptPassword) && false == password_verify($password , $row['credential_password'])) {
-            $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_PASSWORD', $this->commonLangId);
             return false;
         }
          * 

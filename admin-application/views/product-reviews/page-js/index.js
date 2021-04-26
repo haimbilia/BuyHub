@@ -62,13 +62,17 @@ $(document).ready(function(){
 		});
 	};
 	
-	viewReview = function(reviewId){			
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('ProductReviews', 'view', [reviewId]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
-			});
+	viewReview = function(reviewId){
+		fcom.ajax(fcom.makeUrl('ProductReviews', 'view', [reviewId]), '', function(t) {
+			$('.listingbody--js').fadeOut();
+			$('.review--js').html(t);
 		});
 	};
+	
+	backToListing = function () {
+		$('.review--js').html("");
+		$('.listingbody--js').fadeIn();
+	}
 	
 	updateStatus = function(frm){
 		if (!$(frm).validate()) return;	

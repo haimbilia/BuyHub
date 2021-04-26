@@ -146,7 +146,7 @@ class UsersController extends AdminBaseController
         }
         $userAuthObj = new UserAuthentication();       
         if (!$userAuthObj->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false, true) === true) {
-            Message::addErrorMessage($userObj->getError());
+            Message::addErrorMessage($userAuthObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
         }
 

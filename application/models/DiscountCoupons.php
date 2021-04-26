@@ -650,7 +650,7 @@ AND couponlang_lang_id = ' . $langId,
                 if (!empty($directCondtion3)) {
                     $directCondtion3 .= 'OR ';
                 }
-                $directCondtion3 .= ' (grouped_coupon_brands IS NOT NULL AND ( FIND_IN_SET( ' . $cartProduct['brand_id'] . ', grouped_coupon_brands) ) ) ';
+                $directCondtion3 .= ' (grouped_coupon_brands IS NOT NULL AND ( FIND_IN_SET( ' . ($cartProduct['brand_id'] ?? 0) . ', grouped_coupon_brands) ) ) ';
             }
         }
 

@@ -163,6 +163,8 @@ class MyAppController extends FatController
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
                 'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
                 'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
+                'redirecting' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
+                'uploadImageLimit' => Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

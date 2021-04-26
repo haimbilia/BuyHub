@@ -27,13 +27,13 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
                                             $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
                                             $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>
-                                            <img alt="" class="xzoom active" id="xzoom-default" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
+                                            <img alt="" class="xzoom active" id="xzoom-default" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
                                         <?php break;
                                         } ?>
                                     <?php } else {
                                         $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'MEDIUM', 0)), CONF_IMG_CACHE_TIME, '.jpg');
                                         $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'ORIGINAL', 0)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
-                                        <img alt="" class="xzoom" src="<?php echo $mainImgUrl; ?>" xoriginal="<?php echo $originalImgUrl; ?>">
+                                        <img alt="" class="xzoom" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
                                     <?php } ?>
                                 </div>
                                 <?php if ($productImagesArr) { ?>
@@ -433,13 +433,13 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                         <div class="qty-wrapper">
                                                             <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>"><span class="decrease decrease-js"><i class="fas fa-minus"></i></span>
                                                                 <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                                                    <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                                                    <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
                                                                 </div>
                                                                 <span class="increase increase-js"><i class="fas fa-plus"></i></span>
                                                             </div>
                                                         </div>
                                                         <label class="checkbox">
-                                                            <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" id="check_addons" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                                            <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
                                                             <i class="input-helper"></i> </label>
 
 
@@ -618,7 +618,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                         <div id="itemRatings">
                             <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                                 <?php echo $frmReviewSearch->getFormHtml(); ?>
-                                <?php $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false); ?>
+                                <?php $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false); ?>
                             <?php } ?>
                         </div>
 
