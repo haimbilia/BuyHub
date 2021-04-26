@@ -138,6 +138,9 @@ Notes:
         => Composer should be installed on server to run the stripe connect module: composer.json on root of the project has details to download the required libraries in root's vendor folder.
         => Run command "composer update" at root of the project to update composer and fetch all dependennt libraries: 
 
+    Configuration :
+        => Please configure Ready For Pickup Order Statuses.
+
     Stripe Connect Installation :
 
         => Required to configure callback url as "{domain-name}/public/index.php?url=stripe-connect/callback" inside stripe's web master's account under https://dashboard.stripe.com/settings/applications under "Integration" -> "Redirects"

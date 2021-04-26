@@ -205,7 +205,7 @@ class SellerOrdersController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $vendorOrdersList = FatApp::getDb()->fetchAll($rs);
-        
+
         $oObj = new Orders();
         foreach ($vendorOrdersList as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id']);
@@ -258,7 +258,7 @@ class SellerOrdersController extends AdminBaseController
             Message::addErrorMessage($this->str_invalid_request);
             CommonHelper::redirectUserReferer();
         }
-        
+
         if ($opRow['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
             /* ShipStation */
             $this->loadShippingService();
@@ -325,7 +325,10 @@ class SellerOrdersController extends AdminBaseController
         if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
             // $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"));
+        } else {
+            $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
+
         $frm = $this->getOrderCommentsForm($opRow, $processingStatuses);
         $frm->fill($data);
 
@@ -654,7 +657,7 @@ class SellerOrdersController extends AdminBaseController
         if ($rs) {
             $orderDetail = FatApp::getDb()->fetch($rs);
         }
-        
+
         if (empty($orderDetail)) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
@@ -669,23 +672,23 @@ class SellerOrdersController extends AdminBaseController
         }
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
         $post = $frm->getFormDataFromArray($post);
-        
+
         if (!false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $restrictOrderStatusChange = array_merge(
             (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"),
             (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"),
             (array) FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")
         );
-        
+
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
 
@@ -694,13 +697,13 @@ class SellerOrdersController extends AdminBaseController
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $post['tracking_number'],
-                    //    "opship_tracking_url" => $post['opship_tracking_url'],
+                        //    "opship_tracking_url" => $post['opship_tracking_url'],
                     ];
-                    
-                    if(array_key_exists('opship_tracking_url', $post)){
+
+                    if (array_key_exists('opship_tracking_url', $post)) {
                         $updateData['opship_tracking_url'] =  $post['opship_tracking_url'];
                     }
-                    if(array_key_exists('oshistory_courier', $post)){
+                    if (array_key_exists('oshistory_courier', $post)) {
                         $trackingCourierCode = $post['oshistory_courier'];
                     }
 
@@ -877,7 +880,7 @@ class SellerOrdersController extends AdminBaseController
         $srch->addCondition('op_id', '=', $op_id);
         $rs = $srch->getResultSet();
         $orderDetail = (array) FatApp::getDb()->fetch($rs);
-        
+
         if (empty($orderDetail)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -996,11 +999,11 @@ class SellerOrdersController extends AdminBaseController
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
 
-            $shipmentTracking = new ShipmentTracking(); 
+            $shipmentTracking = new ShipmentTracking();
             if (false !== $shipmentTracking->init($this->adminLangId) && false !== $shipmentTracking->getTrackingCouriers()) {
                 $trackCarriers = $shipmentTracking->getResponse();
                 $frm->addSelectBox(Labels::getLabel('LBL_TRACKING_COURIER', $this->adminLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
-               
+
                 $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->adminLangId));
                 $trackCarrierFldUnReqObj->setRequired(false);
 
@@ -1008,7 +1011,7 @@ class SellerOrdersController extends AdminBaseController
                 $trackCarrierFldReqObj->setRequired(true);
 
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'oshistory_courier', $trackCarrierFldReqObj);
-                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);        
+                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);
             }
         }
 

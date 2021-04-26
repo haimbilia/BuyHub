@@ -518,3 +518,7 @@ UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '5' WHERE `tbl
 UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 3;
 UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
 /* Shop And Product Ratings */
+
+INSERT IGNORE INTO `tbl_orders_status` (`orderstatus_id`, `orderstatus_identifier`, `orderstatus_color_class`, `orderstatus_type`, `orderstatus_priority`, `orderstatus_is_active`, `orderstatus_is_digital`) VALUES (NULL, 'Ready For Pickup', NULL, '1', '6', '1', '');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES ('CONF_PICKUP_READY_ORDER_STATUS', 0);
+UPDATE `tbl_configurations` SET `conf_val` = (select orderstatus_id from tbl_orders_status where orderstatus_identifier = 'Ready For Pickup') WHERE `tbl_configurations`.`conf_name` = 'CONF_PICKUP_READY_ORDER_STATUS';
