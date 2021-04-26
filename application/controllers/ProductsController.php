@@ -122,7 +122,7 @@ class ProductsController extends MyAppController
                 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
         if (!empty($analyticsId) && 0 < $data['recordCount']) {
-            $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId());
+            $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId(true));
             $et->addImpression(($method == 'search' ? Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));        
             $productPostion = 1;
             foreach ($data['products'] as $product) {
@@ -819,7 +819,7 @@ class ProductsController extends MyAppController
                 }
             }
             if (!empty($productAction)) {
-                $et = new EcommerceTracking($analyticsId, NULL, UserAuthentication::getLoggedUserId());
+                $et = new EcommerceTracking($analyticsId, NULL, UserAuthentication::getLoggedUserId(true));
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CLICK);
                 $et->addProductActionList($productAction);
                 $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
@@ -829,7 +829,7 @@ class ProductsController extends MyAppController
             /* product click event from search page] */
             
             /* [product view */
-            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId));
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'],1, $product['selprod_price']);
             
