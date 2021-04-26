@@ -139,9 +139,6 @@ class DummyController extends AdminBaseController
         $dataMigration = new DataMigration();
         $dataMigration->sync();
     } 
-    
-    public function tt(){
-        echo CommonHelper::numberFormat(22.00,false,true);
-    }
+  
 
 }

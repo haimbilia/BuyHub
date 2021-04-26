@@ -518,3 +518,7 @@ UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '5' WHERE `tbl
 UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 3;
 UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
 /* Shop And Product Ratings */
+
+-- --- Display Total Savings on Checkout page  --- --
+ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
+-- --- Display Total Savings on Checkout page  --- --

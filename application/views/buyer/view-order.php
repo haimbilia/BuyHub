@@ -3,6 +3,8 @@ $canCancelOrder = true;
 $canReturnRefund = true;
 $canReviewOrders = false;
 $canSubmitFeedback = false;
+$selProdTotalPrice = 0;
+
 if (true == $primaryOrder) {
     if ($childOrderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
         $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses(true)));
@@ -17,6 +19,14 @@ if (true == $primaryOrder) {
     }
 
     $canSubmitFeedback = Orders::canSubmitFeedback($childOrderDetail['order_user_id'], $childOrderDetail['order_id'], $childOrderDetail['op_selprod_id']);
+    $selProdTotalPrice += $childOrderDetail['op_selprod_price'] * $childOrderDetail["op_qty"];      
+}else{
+    $firstOrderInfo = current($childOrderDetail);
+    foreach ($childOrderDetail as $childOrder) {
+        $selProdTotalPrice += $childOrder['op_selprod_price'] * $childOrder["op_qty"];
+        $cartTotal = $childOrder["op_unit_price"] * $childOrder["op_qty"];
+    }  
+    $totalSaving = ($selProdTotalPrice - $cartTotal) + $firstOrderInfo['order_discount_total'] + $firstOrderInfo['order_volume_discount_total'];
 }
 
 $orderStatusArr = Orders::getOrderPaymentStatusArr($siteLangId);
@@ -97,7 +107,12 @@ if (!$print) { ?>
                     } ?>
                 </div>
                 <div class="card-body ">
-                    <?php if ($primaryOrder) { ?>
+                    <?php if ($primaryOrder) {                        
+                        $cartTotal = CommonHelper::orderProductAmount($childOrderDetail, 'CART_TOTAL');
+                        $disc = CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT');
+                        $volumeDiscount = CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT');
+                        $totalSaving = ($selProdTotalPrice - $cartTotal) + abs($disc) + abs($volumeDiscount);
+                        ?>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 mb-4">
                                 <div class="info--order">
@@ -137,7 +152,7 @@ if (!$print) { ?>
                                         <strong>
                                             <?php echo Labels::getLabel('LBL_Cart_Total', $siteLangId); ?>:
                                         </strong>
-                                        <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'CART_TOTAL'), true, false, true, false, true); ?>
+                                        <?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?>
                                     </p>
                                     <?php if (CommonHelper::orderProductAmount($childOrderDetail, 'SHIPPING') > 0) { ?>
                                         <p>
@@ -164,8 +179,7 @@ if (!$print) { ?>
                                             </p>
                                     <?php }
                                     } ?>
-                                    <?php
-                                    $disc = CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT');
+                                    <?php                                    
                                     if (!empty($disc)) { ?>
                                         <p>
                                             <strong>
@@ -174,8 +188,7 @@ if (!$print) { ?>
                                             <?php echo CommonHelper::displayMoneyFormat($disc, true, false, true, false, true); ?>
                                         </p>
                                     <?php }
-
-                                    $volumeDiscount = CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT');
+                                    
                                     if (!empty($volumeDiscount) && 0 < $volumeDiscount) { ?>
                                         <p>
                                             <strong>
@@ -236,7 +249,16 @@ if (!$print) { ?>
                                             echo  $date . ' ' . $fromTime . ' - ' . $toTime;
                                             ?>
                                         </p>
+                                    <?php } ?>                                        
+                                    <p>
+                                       <?php if(0 < $totalSaving ){ ?>     
+                                        <strong>
+                                            <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
+                                        </strong>
+                                        <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
+                                    </p>
                                     <?php } ?>
+                                       
                                 </div>
                             </div>
                         </div>
@@ -244,13 +266,23 @@ if (!$print) { ?>
                     } else {
                     ?>
                         <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
+                                <div class="info--order">
                                 <p>
                                     <strong>
                                         <?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:
                                     </strong>
                                     <?php echo $orderDetail['order_id']; ?>
                                 </p>
+                                <?php if(0 < $totalSaving) { ?>
+                                <p>
+                                    <strong>
+                                        <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
+                                    </strong>
+                                    <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
+                                </p>
+                                <?php } ?>
+                            </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="info--order">
@@ -262,7 +294,7 @@ if (!$print) { ?>
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                                </div>
                     <?php
                     } ?>
                     <div class="js-scrollable table-wrap">
@@ -557,7 +589,7 @@ if (!$print) { ?>
                                         <td>
                                             <?php echo CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], true, false, true, false, true); ?>
                                         </td>
-                                    </tr>
+                                    </tr>                                   
 
                                 <?php } ?>
                             </tbody>

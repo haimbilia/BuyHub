@@ -12,7 +12,8 @@ New Feature :
 Updates:
     => Tax Module update
     => Admin can create users 
-    => 83842 : Out of stock fixes    
+    => 83842 : Out of stock fixes 
+    => Display Total Savings on Checkout page
 
 Fixes:
     => 047746 - Get current location not working

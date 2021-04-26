@@ -1148,6 +1148,7 @@ class Cart extends FatModel
         $prodTaxOptions = [];
         $roundingOff = 0;
         $originalTotalPrice = 0;
+        $selProdTotalPrice = 0;        
         $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
         if (is_array($products) && count($products)) {
             foreach ($products as $product) {
@@ -1229,6 +1230,7 @@ class Cart extends FatModel
 
                 $roundingOff += $product['rounding_off'];
                 $originalTotalPrice += ($product['actualPrice'] * $product['quantity']);
+                $selProdTotalPrice += ($product['selprod_price'] * $product['quantity']);
             }
         }
 
@@ -1275,6 +1277,7 @@ class Cart extends FatModel
             'taxOptions' => $taxOptions,
             'prodTaxOptions' => $prodTaxOptions,
             'roundingOff' => $roundingOff,
+            'totalSaving' => ($selProdTotalPrice - $cartTotal) + $cartVolumeDiscount + ($cartDiscounts['coupon_discount_total'] ?? 0),
         );
         return $cartSummary;
     }
