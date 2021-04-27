@@ -520,3 +520,16 @@ UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl
 /* Shop And Product Ratings */
 
 DELETE FROM tbl_language_labels WHERE label_key = "ERR_USER_INACTIVE_OR_DELTED";
+
+INSERT IGNORE INTO `tbl_orders_status` (`orderstatus_id`, `orderstatus_identifier`, `orderstatus_color_class`, `orderstatus_type`, `orderstatus_priority`, `orderstatus_is_active`, `orderstatus_is_digital`) VALUES (NULL, 'Ready For Pickup', NULL, '1', '6', '1', '');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES ('CONF_PICKUP_READY_ORDER_STATUS', 0);
+UPDATE `tbl_configurations` SET `conf_val` = (select orderstatus_id from tbl_orders_status where orderstatus_identifier = 'Ready For Pickup') WHERE `tbl_configurations`.`conf_name` = 'CONF_PICKUP_READY_ORDER_STATUS';
+
+
+-- --- Task 83836 - Font and Theme Color Management --- --
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_FONT_FAMILY', 'Poppins-regular', '1');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR', '#ff3a59', '1');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR_INVERSE', '#fff', '1');
+DROP TABLE `tbl_theme`;
+DROP TABLE `tbl_theme_colors`;
+-- --- Task 83836 - Font and Theme Color Management --- --

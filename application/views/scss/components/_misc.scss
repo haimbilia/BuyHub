@@ -344,3 +344,7 @@ a:hover {
 .scroll {
     padding-#{$end-direction}: 15px;
 }
+
+.svg {
+    fill: currentColor;
+}

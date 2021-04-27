@@ -2145,9 +2145,9 @@ class UsersController extends AdminBaseController
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $fld->requirement->setRequired(true);
+        //$fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $frm->addTextBox(Labels::getLabel('LBL_City', $this->adminLangId), 'user_city');
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));

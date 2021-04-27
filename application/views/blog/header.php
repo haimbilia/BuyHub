@@ -16,7 +16,6 @@ $commonHeadData = array(
     'action' => $action,
     'jsVariables' => $jsVariables,
     'extendEditorJs' => $extendEditorJs,
-    'themeDetail' => $themeDetail,
     'themeActive' => $themeActive,
     'currencySymbolLeft' => $currencySymbolLeft,
     'currencySymbolRight' => $currencySymbolRight,
