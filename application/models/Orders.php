@@ -1307,13 +1307,26 @@ class Orders extends MyAppModel
             $emailObj->newOrderBuyerAdmin($orderId, $orderInfo['order_language_id']);
             $emailObj->newOrderVendor($orderId, 0, $paymentMethodCode);            
         }
+        
+        $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());        
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()),$orderInfo['order_user_id']);
+            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_PURCHASE);
+            foreach ($subOrders as $op) {
+                $productTitle = ($op['op_selprod_title']) ? $op['op_selprod_title'] : $op['op_product_name'];
+                $et->addProduct($op['op_selprod_id'], $productTitle, '', $op['op_brand_name'], $op['op_qty'], $op["op_unit_price"]);
+            }
+            $et->addTransaction($orderInfo['order_id'], $orderInfo['order_net_amount'], array_sum(array_column($subOrders, 'op_actual_shipping_charges')), $orderInfo['order_tax_charged'], $orderInfo['order_currency_code']);
+            $et->sendRequest();
+        }
 
         // If order Payment status is 0 then becomes greater than 0 mail to Vendors and Update Child Order Status to Paid & Give Referral Reward Points
         if (!$orderInfo['order_payment_status'] && ($orderPaymentStatus > 0)) {
             $emailObj->newOrderVendor($orderId);
             $emailObj->newOrderBuyerAdmin($orderId, $orderInfo['order_language_id']);
 
-            $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type']);
+            /*$subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type']); */
             foreach ($subOrders as $subkey => $subval) {
                 $this->addChildProductOrderHistory($subval["op_id"], $orderInfo['order_language_id'], FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0), '', true);
                 if ($subval['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -1608,6 +1621,17 @@ class Orders extends MyAppModel
                 }
                 /* ]*/
             }
+            
+            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId),$childOrderInfo['order_user_id']);
+                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
+                $et->addProduct($childOrderInfo['op_selprod_id']);
+                $et->addTransaction($childOrderInfo['op_order_id']);
+                $et->addEvent('Ecommerce', 'Refund');
+                $et->sendRequest();
+            }
+            
         }
         /* ] */
 
@@ -1690,7 +1714,16 @@ class Orders extends MyAppModel
                     }
                 }
                 /* ]*/
-            }
+            }            
+            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
+                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
+                $et->addProduct($childOrderInfo['op_selprod_id'], $childOrderInfo['op_refund_qty']);
+                $et->addTransaction($childOrderInfo['op_order_id']);
+                $et->addEvent('Ecommerce', 'Refund');
+                $et->sendRequest();
+            }            
         }
         /* ] */
 

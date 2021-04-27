@@ -246,6 +246,17 @@ class CheckoutController extends MyAppController
         $address = new Address($this->cartObj->getCartShippingAddress(), $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
         $this->set('cartHasPhysicalProduct', $cartHasPhysicalProduct);
+        
+        $cart_products = $this->cartObj->getProducts($this->siteLangId);        
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (0 < count($cart_products) &&  !empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {  
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Checkout', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CHECKOUT);           
+            foreach($cart_products as $product){
+                $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $product['quantity']);
+            }            
+            $et->sendRequest();
+        }
 
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_RIGHT_BLOCK, $this->siteLangId);
