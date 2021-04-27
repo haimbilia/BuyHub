@@ -22,9 +22,10 @@ if (true == $primaryOrder) {
     $selProdTotalPrice += $childOrderDetail['op_selprod_price'] * $childOrderDetail["op_qty"];      
 }else{
     $firstOrderInfo = current($childOrderDetail);
+    $cartTotal = 0;
     foreach ($childOrderDetail as $childOrder) {
         $selProdTotalPrice += $childOrder['op_selprod_price'] * $childOrder["op_qty"];
-        $cartTotal = $childOrder["op_unit_price"] * $childOrder["op_qty"];
+        $cartTotal += $childOrder["op_unit_price"] * $childOrder["op_qty"];
     }  
     $totalSaving = ($selProdTotalPrice - $cartTotal) + $firstOrderInfo['order_discount_total'] + $firstOrderInfo['order_volume_discount_total'];
 }

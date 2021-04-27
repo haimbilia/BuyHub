@@ -10,9 +10,10 @@ if ($order['order_reward_point_used'] > 0) {
     $selected_method .= ($selected_method != '') ? ' + ' . Labels::getLabel("LBL_Rewards", $adminLangId) : Labels::getLabel("LBL_Rewards", $adminLangId);
 }
 $selProdTotalPrice = 0;
+$cartTotal = 0;
 foreach ($order["products"] as $op) {
     $selProdTotalPrice += $op['op_selprod_price'] * $op["op_qty"];
-    $cartTotal = CommonHelper::orderProductAmount($op, 'cart_total');
+    $cartTotal += CommonHelper::orderProductAmount($op, 'cart_total');
 }
 $totalSaving = ($selProdTotalPrice - $cartTotal) + $order['order_discount_total'] + $order['order_volume_discount_total'];
 ?>
