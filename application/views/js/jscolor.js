@@ -2262,6 +2262,12 @@ var jsc = {
 				'background-repeat': bg.repeat.join(', '),
 				'background-origin': bg.origin.join(', '),
 			};
+
+			var background = $(this.previewElement).data('bg');
+			if (typeof background !== 'undefined' && background !== false && background == 'none') {
+				sty['background-image'] = 'none';
+			}
+
 			jsc.setStyle(this.previewElement, sty, this.forceStyle);
 
 
@@ -2285,9 +2291,9 @@ var jsc = {
 		this.setValueElementValue = function (str) {
 			if (this.valueElement) {
 				if (jsc.nodeName(this.valueElement) === 'input') {
-					this.valueElement.value = str;
+					this.valueElement.value = str.toLowerCase();
 				} else {
-					this.valueElement.innerHTML = str;
+					this.valueElement.innerHTML = str.toLowerCase();
 				}
 			}
 		};

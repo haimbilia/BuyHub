@@ -8,10 +8,6 @@
 	<div class="tabs tabs-sm tabs--scroll clearfix">
 		<ul>
 			<li class="is-active" ><a href="javascript:void(0)"><?php echo Labels::getLabel('TXT_Template', $siteLangId);?></a></li>
-
-			<li >
-				<a onclick="themeColor()" href="javascript:void(0);"> <?php echo Labels::getLabel('TXT_Theme_Color', $siteLangId);?> </a>
-			</li>
 		</ul>
 	</div>
 

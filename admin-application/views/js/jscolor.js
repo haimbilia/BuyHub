@@ -2171,7 +2171,7 @@ var jsc = {
 				) {
 					previewPos = this.previewPosition;
 				}
-
+				
 				this.setPreviewElementBg(this.toRGBAString());
 			}
 
@@ -2238,7 +2238,7 @@ var jsc = {
 					origin: 'padding-box',
 				});
 			}
-
+			
 			var bg = {
 				image: [],
 				position: [],
@@ -2291,9 +2291,9 @@ var jsc = {
 		this.setValueElementValue = function (str) {
 			if (this.valueElement) {
 				if (jsc.nodeName(this.valueElement) === 'input') {
-					this.valueElement.value = str;
+					this.valueElement.value = str.toLowerCase();
 				} else {
-					this.valueElement.innerHTML = str;
+					this.valueElement.innerHTML = str.toLowerCase();
 				}
 			}
 		};

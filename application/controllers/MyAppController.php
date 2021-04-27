@@ -4,7 +4,6 @@ class MyAppController extends FatController
 {
     public $app_user = array();
     public $appToken = '';
-    public $themeDetail = '';
 
     public function __construct($action)
     {
@@ -184,15 +183,12 @@ class MyAppController extends FatController
             $themeId = $_SESSION['preview_theme'];
         }
 
-        $this->themeDetail = ThemeColor::getById($themeId, $this->siteLangId, false, true);
-
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
 
         $this->set('isUserDashboard', false);
         $this->set('currencySymbolLeft', $currencySymbolLeft);
         $this->set('currencySymbolRight', $currencySymbolRight);
-        $this->set('themeDetail', $this->themeDetail);
         $this->set('jsVariables', $jsVariables);
         $this->set('controllerName', $controllerName);
         $this->set('isAppUser', CommonHelper::isAppUser());

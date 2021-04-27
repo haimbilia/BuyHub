@@ -44,40 +44,15 @@ if ($canonicalUrl == '') {
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
 <style>
     :root {
-        <?php  if (CommonHelper::isAppUser()) { ?>
-            /* --brand-color: #<?php //echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-            --brand-color-inverse: #<?php //echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>; */
-            
-            --brand-color: <?php echo $themeColor; ?>;
-            --brand-color-inverse: <?php echo $themeColorInverse; ?>;
+        <?php  if (CommonHelper::isAppUser()) { ?>            
+            --brand-color: #<?php echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+            --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
             --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
             --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
         <?php } else { ?>
-            /* --brand-color: #<?php //echo $themeDetail[ThemeColor::TYPE_BRAND]; ?>;
-            --brand-color-inverse: #<?php //echo $themeDetail[ThemeColor::TYPE_BRAND_INVERSE]; ?>; */
             --brand-color: <?php echo $themeColor; ?>;
             --brand-color-inverse: <?php echo $themeColorInverse; ?>;
-            --secondary-color: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY]; ?>;
-            --secondary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY_INVERSE]; ?>;
-        <?php } ?>--primary-color: #<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>;
-        --primary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY_INVERSE]; ?>;
-        --third-color: #<?php echo $themeDetail[ThemeColor::TYPE_THIRD]; ?>;
-        --third-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_THIRD_INVERSE]; ?>;
-
-        --body-color: #<?php echo $themeDetail[ThemeColor::TYPE_BODY]; ?>;
-
-        /* --dark-color: ;
-        --light-color: ; */
-
-        --gray-color: #<?php echo $themeDetail[ThemeColor::TYPE_GREY]; ?>;
-        --gray-light: #<?php echo $themeDetail[ThemeColor::TYPE_GREY_LIGHT]; ?>;
-
-        --border-color: #<?php echo $themeDetail[ThemeColor::TYPE_BORDER]; ?>;
-        --border-dark-color: #<?php echo $themeDetail[ThemeColor::TYPE_BORDER_DARK]; ?>;
-        --border-light-color: #<?php echo $themeDetail[ThemeColor::TYPE_BORDER_LIGHT]; ?>;
-
-        --font-color: #<?php echo $themeDetail[ThemeColor::TYPE_FONT]; ?>;
-        --font-color2: #<?php echo $themeDetail[ThemeColor::TYPE_FONT_SECONDARY]; ?>;
+        <?php } ?>
     }
 </style>
 <script>
