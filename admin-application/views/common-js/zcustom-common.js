@@ -558,33 +558,44 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
 
-    // address = document.getElementById('postal_code').value;
+    // address = document.getElementById('geo_postal_code').value;
     /*address = {lat: parseFloat(lat), lng: parseFloat(lat)};
     geocodeAddress(geocoder, map, infowindow, { 'location': latlng });*/
 
-    var sel = document.getElementById('shop_country_code');
+    var sel = document.getElementById('geo_country_code');
     var country = sel.options[sel.selectedIndex].text;
+    if (country != null || country != '') {
+        address = country;
+    }
 
-    address = document.getElementById('postal_code').value;
-    address = country + ' ' + address;
+    var sel = document.getElementById('geo_state_code');
+    var state = sel.options[sel.selectedIndex].text;
+    if (state != null || state != '') {
+        address = address + ' ' + state;
+    }
+
+    var zip = document.getElementById('geo_postal_code');
+    if (zip != null) {
+        address = address + ' ' + zip.value;
+    }
 
     geocodeAddress(geocoder, map, infowindow, { 'address': address });
 
-    document.getElementById('postal_code').addEventListener('blur', function () {
-        var sel = document.getElementById('shop_country_code');
+    document.getElementById('geo_postal_code').addEventListener('blur', function () {
+        var sel = document.getElementById('geo_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
-        address = document.getElementById('postal_code').value;
+        address = document.getElementById('geo_postal_code').value;
         address = country + ' ' + address;
 
         geocodeAddress(geocoder, map, infowindow, { 'address': address });
     });
 
-    document.getElementById('shop_state').addEventListener('change', function () {
-        var sel = document.getElementById('shop_country_code');
+    document.getElementById('geo_state_code').addEventListener('change', function () {
+        var sel = document.getElementById('geo_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
-        var sel = document.getElementById('shop_state');
+        var sel = document.getElementById('geo_state_code');
         var state = sel.options[sel.selectedIndex].text;
 
         address = country + ' ' + state;
@@ -592,8 +603,8 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         geocodeAddress(geocoder, map, infowindow, { 'address': address });
     });
 
-    document.getElementById('shop_country_code').addEventListener('change', function () {
-        var sel = document.getElementById('shop_country_code');
+    document.getElementById('geo_country_code').addEventListener('change', function () {
+        var sel = document.getElementById('geo_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
         geocodeAddress(geocoder, map, infowindow, { 'address': country });
@@ -661,22 +672,29 @@ function geocodeSetData(results) {
                 }
             }
         }
-        $('#postal_code').val(data.postal_code);
-        $('#shop_country_code option').each(function () {
+        $('#geo_postal_code').val(data.postal_code);
+        $('#geo_country_code option').each(function () {
             if (this.text == data.country) {
-                $('#shop_country_code').val(this.value);
+                $('#geo_country_code').val(this.value);
                 var state = 0;
-                $('#shop_state option').each(function () {
+                $('#geo_state_code option').each(function () {
                     if (this.value == data.state_code || this.text == data.state) {
                         return state = this.value;
                     }
                 });
-                getStatesByCountryCode(this.value, state, '#shop_state', 'state_code');
+                getStatesByCountryCode(this.value, state, '#geo_state_code', 'state_code');
                 return false;
             }
         });
     }
 }
+
+function getStatesByCountryCode(countryCode, stateCode, dv, idCol = 'state_id') {
+    fcom.ajax(fcom.makeUrl('Configurations', 'getStatesByCountryCode', [countryCode, stateCode, idCol]), '', function (res) {
+        $(dv).empty();
+        $(dv).append(res).change();
+    });
+};
 
 function queryStringToJSON(qs) {
     qs = qs || location.search.slice(1);

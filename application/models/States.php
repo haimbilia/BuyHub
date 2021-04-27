@@ -162,7 +162,7 @@ class States extends MyAppModel
         $row = FatApp::getDb()->fetch($rs);
         return $row;
     }
-    
+
     public static function getStateAttrByCountryIdAndName(int $countryId, string $stateName, int $langId, string $attr): string
     {
         $stateArr = self::getStateArrByCountryIdAndName($countryId, $stateName, $langId, [$attr]);

@@ -157,6 +157,10 @@ class ConfigurationsController extends AdminBaseController
             $user_state_id = FatUtility::int($post['CONF_STATE']);
         }
 
+        if (isset($post['CONF_GEO_DEFAULT_STATE'])) {
+            $geoState = $post['CONF_GEO_DEFAULT_STATE'];
+        }
+
         $frmType = FatUtility::int($post['form_type']);
 
         if (1 > $frmType) {
@@ -187,6 +191,10 @@ class ConfigurationsController extends AdminBaseController
                     $post[$val] = 0;
                 }
             }
+        }
+
+        if (!empty($geoState)) {
+            $post['CONF_GEO_DEFAULT_STATE'] = $geoState;
         }
 
         $record = new Configurations();
@@ -797,6 +805,24 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_RADIUS_MAX_DISTANCE_IN_MILES', $this->adminLangId), 'CONF_RADIUS_DISTANCE_IN_MILES');
                 $fld->requirements()->setInt();
+
+                $fld = $frm->addRadioButtons(
+                    Labels::getLabel("LBL_SET_DEFAULT_GEO_LOCATION", $this->adminLangId),
+                    'CONF_DEFAULT_GEO_LOCATION',
+                    applicationConstants::getYesNoArr($this->adminLangId),
+                    '0',
+                    array('class' => 'list-inline')
+                );
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $this->adminLangId) . "</small>";
+
+                $countryObj = new Countries();
+                $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true, 'country_code');
+                $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'CONF_GEO_DEFAULT_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+
+                $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+                $frm->addTextBox(Labels::getLabel("LBL_Postal_Code", $this->adminLangId), 'CONF_GEO_DEFAULT_ZIPCODE');
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LAT', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72));
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LNG', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, -73.96));
                 break;
 
             case Configurations::FORM_USER_ACCOUNT:
