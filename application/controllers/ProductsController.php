@@ -119,7 +119,19 @@ class ProductsController extends MyAppController
         }
 
         $data = array_merge($data, $common, $arr);
-
+                
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (!empty($analyticsId) && 0 < $data['recordCount'] && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+            $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId(true));
+            $et->addImpression(($method == 'search' ? Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));        
+            $productPostion = 1;
+            foreach ($data['products'] as $product) {
+                $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);
+                $productPostion++;
+            }
+            $et->sendRequest();
+        }
+        
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $data['products']);
             $this->set('page', $data['page']);
@@ -374,7 +386,7 @@ class ProductsController extends MyAppController
     }
 
     public function view($selprod_id = 0)
-    {
+    {        
         $selprod_id = FatUtility::int($selprod_id);
         if (true === MOBILE_APP_API_CALL && 1 > $selprod_id) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
@@ -788,6 +800,50 @@ class ProductsController extends MyAppController
             }
             $recentlyViewed = $this->getRecentlyViewedProductsDetail($recentlyViewed);
             $this->set('recentlyViewed', $recentlyViewed);
+        }
+                
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {              
+             /* [product click event from search page */            
+            $refererParseUrl = parse_url(CommonHelper::redirectUserReferer(true));
+            if (isset($refererParseUrl['path'])) {
+                $productAction = '';
+                switch ($refererParseUrl['path']) {
+                    case '/products/index':
+                        $productAction = Labels::getLabel('LBL_All_PRODUCTS', $this->siteLangId);
+                        break;
+                    case '/products/search':
+                        $productAction = Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId);
+                        break;
+                    case '/products/featured':
+                        $productAction = Labels::getLabel('LBL_FEATURED_PRODUCTS', $this->siteLangId);
+                        break;
+                }
+            }
+            if (!empty($productAction)) {
+                $et = new EcommerceTracking($analyticsId, NULL, UserAuthentication::getLoggedUserId(true));
+                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CLICK);
+                $et->addProductActionList($productAction);
+                $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
+                $et->addEvent('click', 'UX');                
+                $et->sendRequest();
+            }
+            /* product click event from search page] */
+            
+            /* [product view */
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
+            $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'],1, $product['selprod_price']);
+            
+            if($recommendedProducts && 0 < count($recommendedProducts)){      
+                $et->addImpression(Labels::getLabel('LBL_Recommended_Products', $this->siteLangId));
+                $productPostion = 1;
+                foreach ($recommendedProducts as $product) {
+                    $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);
+                    $productPostion++;
+                }                
+            }            
+            $et->sendRequest();
         }
 
         $this->_template->render();
