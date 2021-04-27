@@ -11,7 +11,7 @@
 <?php } */ ?>
 <div class="order-summary__sections">
     <div class="order-summary__section order-summary__section--product-list">
-        <div class="order-summary__section__content scroll" data-simplebar data-simplebar-auto-hide="false">
+        <div class="order-summary__section__content scroll-y">
             <!-- List group -->
 
             <ul class="list-group list-cart list-cart-checkout">

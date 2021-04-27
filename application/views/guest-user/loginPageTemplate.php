@@ -12,13 +12,10 @@ $fldforgot = $loginFrm->getField('forgot');
 $fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm') . '"
     class="link">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
 $fldSubmit = $loginFrm->getField('btn_submit');
-$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide'); 
+$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide btn-block'); 
 
 if (isset($smsPluginStatus) && true === $smsPluginStatus) {
     $pwdFld = $loginFrm->getField('password');
-    $pwdFld->htmlAfterField = '<a href="javascript:void(0);" onclick="withOtp(this);" class="link float-right d-none withOtp--js">
-                <small>' . Labels::getLabel('LBL_WITH_OTP?', $siteLangId) . '</small>
-            </a>';
     $loginWithOtp = $loginFrm->getField('loginWithOtp');
     $loginWithOtp->addFieldTagAttribute('class', 'loginWithOtp--js');
 }
@@ -57,30 +54,6 @@ echo $loginFrm->getFormTag(); ?>
             <?php } ?>
             <?php echo $loginFrm->getFieldHtml('loginWithOtp'); ?>
         </div>
-        <div class="row withPwdLbl--js d-none">
-            <div class="col-md-8">
-                <a href="javascript:void(0);" onclick="getLoginOtp(this);" class="link resendOtp-js">
-                    <small><?php echo  Labels::getLabel('LBL_GET_OTP?', $siteLangId); ?></small>
-                </a>
-                <small class="countdownFld--js d-none">
-                    <?php
-                        $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
-                        $replace = [
-                            '{SECONDS}' => '<b><span class="intervalTimer-js">' . User::OTP_INTERVAL . '</span></b>',
-                        ];
-                        echo CommonHelper::replaceStringData($msg, $replace);
-                    ?>
-                </small>
-                <a href="javascript:void(0);" class="link alreadyHave-js">
-                    <small><?php echo  Labels::getLabel('LBL_ALREADY_HAVE?', $siteLangId); ?></small>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="javascript:void(0);" onclick="withPassword(this);" class="link float-right">
-                    <small><?php echo  Labels::getLabel('LBL_WITH_PASSWORD?', $siteLangId); ?></small>
-                </a>
-            </div>
-        </div>
     <?php } ?>
     <div class="row align-items-center">
         <div class="col-md-6 col-6 remember--js">
@@ -98,11 +71,47 @@ echo $loginFrm->getFormTag(); ?>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-6 forgetPwd--js">
+        <!-- <div class="col-md-6 col-6 forgetPwd--js">
             <div class="field-set">
-                <div class="forgot"><?php echo $loginFrm->getFieldHtml('forgot'); ?></div>
+                <div class="forgot"><?php //echo $loginFrm->getFieldHtml('forgot'); ?></div>
             </div>
-        </div>
+        </div> -->
+        <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) { ?>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 withPwdLbl--js d-none">
+                        <small class="countdownFld--js d-none">
+                            <?php
+                                $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
+                                $replace = [
+                                    '{SECONDS}' => '<b><span class="intervalTimer-js">' . User::OTP_INTERVAL . '</span></b>',
+                                ];
+                                echo CommonHelper::replaceStringData($msg, $replace);
+                            ?>
+                        </small>
+                    </div>
+                    <div class="col-md-6 field-set">
+                        <a class="link" href="javaScript:void(0)" data-form="frmLogin" onClick="signInWithPhone(this, true)">
+                            <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD', $siteLangId); ?>
+                        </a>
+                    </div>
+                </div>
+                <div class="row d-none getOtpBtnBlock--js">
+                    <div class="col-md-12">
+                        <div class="field-set">
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                    <a href="javaScript:void(0)" onclick="getLoginOtp(this);" class="btn btn-brand btn-wide btn-block resendOtp-js">
+                                        <?php echo Labels::getLabel('LBL_GET_OTP', $siteLangId); ?>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        
     </div>
     <div class="row submitBtn--js">
         <div class="col-md-12">
@@ -118,9 +127,9 @@ echo $loginFrm->getFormTag(); ?>
 echo $loginFrm->getExternalJS();
 
 if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
-    <div class="or-divider">
-        <span class="or">
-            <?php echo Labels::getLabel('LBL_Or', $siteLangId); ?>
+    <div class="or">
+        <span>
+            <?php echo Labels::getLabel('LBL_OR_CONTINUE_WITH', $siteLangId); ?>
         </span>
     </div>
     <div class="buttons-list">

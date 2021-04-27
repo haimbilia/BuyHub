@@ -1,7 +1,5 @@
 <?php
 
-use PhpParser\Node\Stmt\Label;
-
 class GuestUserController extends MyAppController
 {
     public function loginForm($isRegisterForm = 0)
@@ -29,7 +27,8 @@ class GuestUserController extends MyAppController
         $this->registerFormDetail($isRegisterForm);
 
         $this->set('loginData', $loginData);
-        $this->_template->render();
+        $this->set('exculdeMainHeaderDiv', true);
+        $this->_template->render(true, false);
     }
 
     public function registerFormDetail($isRegisterForm, $signUpWithPhone = 0)

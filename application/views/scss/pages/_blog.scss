@@ -2,11 +2,11 @@
     .main-bar-blog {
         padding: 0.6rem 0;
         .header-blog-inner {
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
+            
+            
             align-items: center;
             -webkit-box-pack: justify;
             -ms-flex-pack: justify;
@@ -23,11 +23,9 @@
         }
     }
     .backto {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         margin-#{$start-direction}: 20px;
         a {
@@ -151,8 +149,7 @@
         }
     }
     .post_category {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         margin-bottom: 0.5rem;
         -ms-flex-wrap: wrap;
@@ -161,8 +158,8 @@
     .post_category li {
         &:first-child {
             border-#{$start-direction}: none;
-            -webkit-padding-start: 0;
-            -moz-padding-start: 0;
+            
+            
             padding-#{$start-direction}: 0;
             margin-#{$start-direction}: 0;
         }
@@ -284,20 +281,17 @@
 
 .form-subscribe {
     margin: 1rem auto;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
     width: 100%;
     input {
         &[type="text"] {
-            -webkit-box-flex: 1;
-            -ms-flex: 1;
+            
+           
             flex: 1;
             background: #fff;
             height: 3.5rem;
@@ -345,11 +339,9 @@
 }
 
 .posted-by {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     margin-bottom: 2rem;
     color: lighten($body-color, 50%);
@@ -523,8 +515,7 @@
 .post__author {
     margin: 2rem 0;
     .media {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         -webkit-box-align:flex-start;
         -ms-flex-align:flex-start;
@@ -577,8 +568,7 @@
 
 .comment-meta {
     padding: 2rem;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
     border-top: $border;
     .avatar {
@@ -593,8 +583,8 @@
 }
 
 .comment-by {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
+    
+   
     flex: 1;
     cite {
         display: block;
@@ -642,7 +632,7 @@
         flex-direction: column;
         input {
             &[type="text"] {
-                -webkit-box-flex: 0;
+                
                 -ms-flex: none;
                 flex: none;
                 border-radius: 50px;
@@ -650,7 +640,7 @@
                 text-align: center;
             }
             &[type="submit"] {
-                -webkit-box-flex: 0;
+                
                 -ms-flex: none;
                 flex: none;
                 border-radius: 50px;
@@ -664,20 +654,17 @@
 .tabs-blog {
     background: #fff;
     overflow: hidden;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
     -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.05);
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.05);
     li {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
+        
+       
         flex: 1;
         a {
             display: block;
@@ -719,11 +706,9 @@
 }
 
 .pagination-blog {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     margin: 3rem 0;
 }

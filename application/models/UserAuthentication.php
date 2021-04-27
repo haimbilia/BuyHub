@@ -386,6 +386,15 @@ class UserAuthentication extends FatModel
                         return false;
                     }
                 }
+                if (true == $encryptPassword) {
+                    if (!$this->resetUserPassword($row['user_id'], $password)) {
+                        SystemLog::set('Unable to set new hash user password');
+                    }else{
+                        if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
+                            SystemLog::set('Unable to blank user old password');
+                        }
+                    }                
+                }
             } else {
                 $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
                 if ($oldPassword !== $row['credential_password_old']) {

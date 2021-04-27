@@ -17,7 +17,7 @@ if ($onSubmitFunctionName) {
 <?php
 $registerFrm->setFormTagAttribute('class', 'form');
 $fldSubmit = $registerFrm->getField('btn_submit');
-$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
+$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide btn-block');
 $registerFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $registerFrm->developerTags['fld_default_col'] = 12;
 
@@ -87,7 +87,7 @@ echo $registerFrm->getFormTag();
         <div class="field-set">
             <div class="field-wraper">
                 <div class="field_cover">
-                    <label class="checkbox checkbox-flex">
+                    <label class="checkbox checkbox-flex py-2">
                     <?php
                         $fld = $registerFrm->getFieldHTML('agree');
                         $fld = str_replace("<label >", "", $fld);

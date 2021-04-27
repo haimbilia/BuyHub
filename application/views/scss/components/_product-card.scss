@@ -252,7 +252,7 @@
     .products__category {
         color: lighten($body-color, 50%);
         font-size: 0.8em;
-        font-weight: 400;
+        font-weight: 400; 
     }
     .products__price {
         font-size: 0.85em;
@@ -402,11 +402,9 @@
 }
 
 .rating {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
 }
 
@@ -414,11 +412,9 @@
     vertical-align: middle;
     padding: 3px 5px;
     margin: 5px 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     -webkit-box-pack:flex-start;
     -ms-flex-pack:flex-start;
@@ -482,11 +478,9 @@
     .rate {
         font-size: 0.875rem;
         margin-#{$end-direction}: 10px;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
     }
     .totals-review {
@@ -547,14 +541,12 @@
         border-radius: $radius4;
         margin: 0;
         margin-#{$end-direction}: 10px;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
+        
+        
         justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         overflow: hidden;
         &-seller {

@@ -272,8 +272,8 @@
 
 .cart-total {
     font-size: 0.85rem;
-    .list-group {
-        .list-group-item {
+    ul {
+        li {
             display: flex;
             justify-content: space-between;
             .label {
@@ -283,6 +283,7 @@
                 font-size: 0.85rem;
                 text-transform: none;
             }
+            &:last-child{padding-bottom: 0;}
         }
     }
     .coupons {
@@ -530,10 +531,11 @@
 }
 
 .save-later {
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
     line-height: 1;
     font-weight: 500;
     font-size: 0.75rem;
+    color: $txt-gray;
     a {
         &:hover {
             color: $brand-color;

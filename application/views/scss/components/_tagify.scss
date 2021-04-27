@@ -28,8 +28,8 @@
             border: $border;
             padding: 5px;
             border-radius: $radius3;
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
             align-items: center;
             font-size: 0.7rem;
@@ -55,11 +55,11 @@
             width: 16px;
             height: 16px;
             font-size: 0.6rem;
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
+            
+            
             align-items: center;
             justify-content: center;
             margin-left: 8px;

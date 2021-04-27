@@ -5,15 +5,13 @@
     text-align: center;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
     position: relative;
     width: 100%;
     color: $body-color;
     ul {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;

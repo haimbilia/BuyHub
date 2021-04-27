@@ -9,7 +9,7 @@ function css() {
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass())
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write('.'))
+        .pipe(sourcemaps.write('.')) 
         .pipe(dest('./application/views/css'));
 }
 
