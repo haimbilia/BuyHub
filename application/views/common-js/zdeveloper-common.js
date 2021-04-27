@@ -81,6 +81,16 @@ $(document).ready(function() {
     if ('rtl' == langLbl.layoutDirection && 0 < $("[data-simplebar]").length && 1 > $("[data-simplebar-direction='rtl']").length) {
         $("[data-simplebar]").attr('data-simplebar-direction', 'rtl');
     }
+
+    var installJsColor = function () {
+        if (0 < $('.jscolor').length) {
+            $('.jscolor').each(function(){
+                $(this).attr('data-jscolor', '{}');
+            });
+            jscolor.install();
+        }
+    };
+    installJsColor();
 });
 
 
@@ -1701,6 +1711,8 @@ $(document).ajaxComplete(function() {
             $('html').removeClass('pop-on');
         }
     });
+    
+    installJsColor();
 });
 
 $(document).ready(function() {

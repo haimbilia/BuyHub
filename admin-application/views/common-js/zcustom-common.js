@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    setTimeout(function () {
-        //stylePhoneNumberFld('.phone-js');
-    }, 1000);
+    // setTimeout(function () {
+    //     stylePhoneNumberFld('.phone-js');
+    // }, 1000);
 
     $(document).on('keypress', 'input.zip-js', function (e) {
         var regex = new RegExp("^[a-zA-Z0-9]+$");
@@ -15,11 +15,21 @@ $(document).ready(function () {
     });
     $('[data-toggle="tooltip"]').tooltip();
 
+    var installJsColor = function () {
+        if (0 < $('.jscolor').length) {
+            $('.jscolor').each(function(){
+                $(this).attr('data-jscolor', '{}');
+            });
+            jscolor.install();
+        }
+    };
+    installJsColor();
+
     $(document).ajaxComplete(function () {
-        //stylePhoneNumberFld('.phone-js');
+        // stylePhoneNumberFld('.phone-js');
+        installJsColor();
     });
 });
-
 (function ($) {
     var screenHeight = $(window).height() - 100;
     window.onresize = function (event) {
@@ -510,7 +520,6 @@ function bytesToSize(bytes) {
 }
 
 var gCaptcha = false;
-
 function googleCaptcha() {
     $("body").addClass("captcha");
     var inputObj = $("form input[name='g-recaptcha-response']");
