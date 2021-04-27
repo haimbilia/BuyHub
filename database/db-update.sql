@@ -525,9 +525,9 @@ UPDATE `tbl_configurations` SET `conf_val` = (select orderstatus_id from tbl_ord
 
 
 -- --- Task 83836 - Font and Theme Color Management --- --
-INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_FONT_FAMILY', 'Poppins-regular', '');
-INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR', '#ff3a59', '');
-INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR_INVERSE', '#fff', '');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_FONT_FAMILY', 'Poppins-regular', '1');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR', '#ff3a59', '1');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR_INVERSE', '#fff', '1');
 DROP TABLE `tbl_theme`;
 DROP TABLE `tbl_theme_colors`;
 -- --- Task 83836 - Font and Theme Color Management --- --
