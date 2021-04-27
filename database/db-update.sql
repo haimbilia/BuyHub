@@ -433,3 +433,8 @@ ALTER TABLE `tbl_admin` ADD `admin_password` VARCHAR(100) NOT NULL AFTER `admin_
 ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
 -- --- task_81779_advanced_GDPR_module --- --
+
+
+-- --- Task 83836 - Font and Theme Color Management --- --
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_FONT_FAMILY', 'Poppins-regular', '');
+-- --- Task 83836 - Font and Theme Color Management --- --

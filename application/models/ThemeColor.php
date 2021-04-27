@@ -1,5 +1,6 @@
 <?php
 
+require_once CONF_INSTALLATION_PATH . 'library/GoogleFonts.class.php';
 class ThemeColor extends MyAppModel
 {
     public const DB_TBL = 'tbl_theme';
@@ -92,5 +93,18 @@ class ThemeColor extends MyAppModel
         }
 
         return FatApp::getDb()->fetchAll($rs);
+    }
+
+    public static function loadGoogleFont(array $data, bool $return = true)
+    {
+        if (!array_key_exists('name', $data) || empty($data['name'])) {
+            return "";
+        }
+
+        $font = new GoogleFonts(FatApp::getPostedData(), $return);
+        $html = $font->load();
+        if (true === $return) {
+            return $html;
+        }
     }
 }

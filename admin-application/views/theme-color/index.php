@@ -41,7 +41,25 @@
 		<section class="section">
 		<div class="sectionhead">
 			<h4><?php echo Labels::getLabel('LBL_Theme_Color_Listing',$adminLangId); ?></h4>
-		
+			<?php 
+				if ($canEdit) {
+					$data = [
+						'adminLangId' => $adminLangId,
+						'statusButtons' => false,
+						'deleteButton' => false,
+						'otherButtons' => [
+							[
+								'attr' => [
+									'href' => UrlHelper::generateUrl('ThemeColor', 'settings'),
+									'title' => Labels::getLabel('LBL_COLOR_SETTINGS', $adminLangId)
+								],
+								'label' => '<i class="fas fa-palette"></i>'
+							],
+						]
+					];
+					$this->includeTemplate('_partial/action-buttons.php', $data, false);
+				}
+				?>
 		</div>
 		<div class="sectionbody">
 			<div class="tablewrap" >

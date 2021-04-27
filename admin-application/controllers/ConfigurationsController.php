@@ -1407,6 +1407,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SUBSCRIPTION_KEY", $this->adminLangId), 'CONF_TRANSLATOR_SUBSCRIPTION_KEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_MICROSOFT_TRANSLATOR_TEXT_API_3.0_SUBSCRIPTION_KEY.", $this->adminLangId) . "</small>";
 
+                $frm->addHtml('', 'GoogleFontsAPI', '<h3>' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->adminLangId) . '</h3>');
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $this->adminLangId), 'CONF_GOOGLE_FONTS_API_KEY');
                 break;
             case Configurations::FORM_REFERAL:
                 $fld = $frm->addRadioButtons(

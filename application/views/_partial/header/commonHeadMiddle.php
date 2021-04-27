@@ -15,6 +15,23 @@
 <link rel="icon" type="image/png" sizes="16x16" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '16-16')), CONF_IMG_CACHE_TIME, '.png'); ?>">
 <link rel="manifest" href="<?php echo UrlHelper::generateUrl('Home', 'pwaManifest'); ?>">
 <?php
+$googleFontFamily = "'Poppins', sans-serif";
+
+$googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
+$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59");
+$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "#FFFFFF");
+if (!empty($googleFontFamilyUrl)) {
+    $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
+    $googleFontFamily = str_replace("+", " ", explode('-', $googleFontFamily)[0]);
+    
+    ?> 
+        <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet"> 
+        <style>
+            body{font-family: "<?php echo $googleFontFamily; ?>" !important;}
+        </style>
+    <?php
+}
+
 if ($canonicalUrl == '') {
     if (!empty(FatApp::getParameters())) {
         $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), FatApp::getParameters());
@@ -29,14 +46,21 @@ if ($canonicalUrl == '') {
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
 <style>
     :root {
-        <?php if (CommonHelper::isAppUser()) { ?>--brand-color: #<?php echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        <?php } else { ?>--brand-color: #<?php echo $themeDetail[ThemeColor::TYPE_BRAND]; ?>;
-        --brand-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_BRAND_INVERSE]; ?>;
-        --secondary-color: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY]; ?>;
-        --secondary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY_INVERSE]; ?>;
+        <?php  if (CommonHelper::isAppUser()) { ?>
+            /* --brand-color: #<?php //echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+            --brand-color-inverse: #<?php //echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>; */
+            
+            --brand-color: <?php echo $themeColor; ?>;
+            --brand-color-inverse: <?php echo $themeColorInverse; ?>;
+            --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+            --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        <?php } else { ?>
+            /* --brand-color: #<?php //echo $themeDetail[ThemeColor::TYPE_BRAND]; ?>;
+            --brand-color-inverse: #<?php //echo $themeDetail[ThemeColor::TYPE_BRAND_INVERSE]; ?>; */
+            --brand-color: <?php echo $themeColor; ?>;
+            --brand-color-inverse: <?php echo $themeColorInverse; ?>;
+            --secondary-color: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY]; ?>;
+            --secondary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_SECONDARY_INVERSE]; ?>;
         <?php } ?>--primary-color: #<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY]; ?>;
         --primary-color-inverse: #<?php echo $themeDetail[ThemeColor::TYPE_PRIMARY_INVERSE]; ?>;
         --third-color: #<?php echo $themeDetail[ThemeColor::TYPE_THIRD]; ?>;

@@ -117,7 +117,6 @@ $(document).on("change", ".state", function() {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopForm', [tab]), '', function(t) {
             $(dv).html(t);
-            jscolor.installByClassName("jscolor");
             if ('' != tab) {
                 $('.' + tab).click();
                 var url = self.location.href;
@@ -203,7 +202,6 @@ $(document).on("change", ".state", function() {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopThemeColor'), '', function(t) {
             $(dv).html(t);
-            jscolor.installByClassName("jscolor");
 
         });
     };

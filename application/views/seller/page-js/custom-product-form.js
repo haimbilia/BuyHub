@@ -186,7 +186,6 @@
         var dv = $('#loadForm');
         fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
             dv.html(t);
-            jscolor.installByClassName('jscolor');
         });
     };
 

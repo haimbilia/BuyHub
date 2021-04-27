@@ -45,10 +45,7 @@ $(document).ready(function(){
 
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('ThemeColor', 'form', [id]), '', function(t) {
-
 				$.facebox(t,'faceboxWidth');
-				jscolor.installByClassName('jscolor');
-
 			});
 		});
 	};
@@ -63,7 +60,6 @@ $(document).ready(function(){
 		fcom.ajax(fcom.makeUrl('ThemeColor', 'form', [tColorId]), '', function(t) {
 			fcom.updateFaceboxContent(t);
 			//$.facebox(t,'faceboxWidth');
-			jscolor.installByClassName('jscolor');
 		});
 	};
 
@@ -71,7 +67,6 @@ $(document).ready(function(){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('ThemeColor', 'cloneForm', [tColorId]), '', function(t) {
 				$.facebox(t,'faceboxWidth');
-				jscolor.installByClassName('jscolor');
 			});
 		});
 	};

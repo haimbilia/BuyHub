@@ -1,4 +1,7 @@
 <?php
+require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
+
+use Curl\Curl;
 
 class ThemeColorController extends AdminBaseController
 {
@@ -21,11 +24,6 @@ class ThemeColorController extends AdminBaseController
         $this->objPrivilege->canViewThemeColor();
         $search = $this->getSearchForm();
         $this->set("search", $search);
-        $this->_template->render();
-    }
-
-    public function index1()
-    {
         $this->_template->render();
     }
 
@@ -172,10 +170,10 @@ class ThemeColorController extends AdminBaseController
         $newThemeId = $record->getMainTableRecordId();
         foreach ($themeColors as $tColor) {
             $dataToSave = array(
-            'tcolor_theme_id' => $newThemeId,
-            'tcolor_key' => $tColor['tcolor_key'],
-            'tcolor_value' => isset($post[$tColor['tcolor_key']]) ? $post[$tColor['tcolor_key']] : $tColor['tcolor_value'],
-            ); 
+                'tcolor_theme_id' => $newThemeId,
+                'tcolor_key' => $tColor['tcolor_key'],
+                'tcolor_value' => isset($post[$tColor['tcolor_key']]) ? $post[$tColor['tcolor_key']] : $tColor['tcolor_value'],
+            );
             $dataToUpdateOnDuplicate = $dataToSave;
             unset($dataToUpdateOnDuplicate['uextra_user_id']);
             if (!FatApp::getDb()->insertFromArray(ThemeColor::DB_TBL_COLORS, $dataToSave, false, array(), $dataToUpdateOnDuplicate)) {
@@ -287,62 +285,6 @@ class ThemeColorController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* public function updateCssFiles()
-    {
-        $themeDetail = ThemeColor::getAttributesById(FatApp::getConfig('CONF_FRONT_THEME'));
-
-
-        if (!$theme_detail) {
-            $selected_theme = 1;
-        }
-
-        $filesArr = array(
-        'common-css/1base.css' => 'css/css-templates/1base.css',
-        'common-css/2nav.css' => 'css/css-templates/2nav.css',
-        'common-css/3skeleton.css' => 'css/css-templates/3skeleton.css',
-        'common-css/4phone.css' => 'css/css-templates/4phone.css'
-        );
-        $i = 1;
-
-        foreach ($filesArr as $fileKey => $fileName) {
-            $str = '';
-            if (substr($fileName, '-4') != '.css') {
-                continue;
-            }
-            $oldFile = CONF_FRONT_END_THEME_PATH . $fileName;
-            if (file_exists($oldFile)) {
-                $str .= file_get_contents($oldFile);
-            }
-            $newFileName = CONF_FRONT_END_THEME_PATH . $fileKey;
-            $newFile = fopen($newFileName, 'w');
-            $replace_arr = array(
-
-            "var(--brand-color)" => $themeDetail[ThemeColor::TYPE_BRAND],
-            "var(--brand-color-inverse)" => $themeDetail[ThemeColor::TYPE_BRAND_INVERSE],
-            "var(--primary-color)" => $themeDetail[ThemeColor::TYPE_PRIMARY],
-            "var(--primary-color-inverse)" => $themeDetail[ThemeColor::TYPE_PRIMARY_INVERSE],
-            "var(--secondary-color)" => $themeDetail[ThemeColor::TYPE_SECONDARY],
-            "var(--secondary-color-inverse)" => $themeDetail[ThemeColor::TYPE_SECONDARY_INVERSE],
-            "var(--third-color)" => $themeDetail[ThemeColor::TYPE_THIRD],
-            "var(--third-color-inverse)" => $themeDetail[ThemeColor::TYPE_THIRD_INVERSE],
-            "var(--body-color)" => $themeDetail[ThemeColor::TYPE_BODY],
-            "var(--gray-color)" => $themeDetail[ThemeColor::TYPE_GREY],
-            "var(--gray-light)" => $themeDetail[ThemeColor::TYPE_GREY_LIGHT],
-            "var(--border-color)" => $themeDetail[ThemeColor::TYPE_BORDER],
-            "var(--border-dark-color)" => $themeDetail[ThemeColor::TYPE_BORDER_DARK],
-            "var(--border-light-color)" => $themeDetail[ThemeColor::TYPE_BORDER_LIGHT],
-            "var(--font-color)" => $themeDetail[ThemeColor::TYPE_FONT],
-            "var(--font-color2)" => $themeDetail[ThemeColor::TYPE_FONT_SECONDARY],
-
-            );
-
-            foreach ($replace_arr as $key => $val) {
-                $str = str_replace($key, "#" . $val, $str);
-            }
-            fwrite($newFile, $str);
-        }
-    } */
-
     public function preview($themeId)
     {
         $themeId = FatUtility::int($themeId);
@@ -361,5 +303,103 @@ class ThemeColorController extends AdminBaseController
 
         $this->set('theme', $themeId);
         $this->_template->render(false, false);
+    }
+
+    public function settings()
+    {
+        $this->objPrivilege->canViewThemeColor();
+
+        $record = Configurations::getConfigurations();
+        $frm = $this->getFontsForm();
+        $frm->fill($record);
+        $this->set('frm', $frm);
+        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->_template->addJs(array('js/select2.js', 'js/jscolor.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->render();
+    }
+
+    private function getFontsForm()
+    {
+        $frm = new Form('frmGoogleFonts');
+        $frm->addHiddenField("", 'CONF_THEME_FONT_FAMILY_URL');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId), 'CONF_THEME_FONT_FAMILY', [], '', array('placeholder' => Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId)));
+        $fld->requirement->setRequired(true);
+        $link = "<a href='https://fonts.google.com' target='_blanlk'>https://fonts.google.com</a>";
+        $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->adminLangId), ['{URL}' => $link]);
+        $fld->htmlAfterField = '<small>' . $url . ' </small>';
+        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR', $this->adminLangId), 'CONF_THEME_COLOR');
+        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR_INVERSE', $this->adminLangId), 'CONF_THEME_COLOR_INVERSE');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
+        return $frm;
+    }
+
+    public function getGoogleFonts()
+    {
+        $this->objPrivilege->canEditThemeColor();
+
+        $apiKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
+        if (empty($apiKey)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->adminLangId));
+        }
+
+        $curl = new Curl();
+        $curl->get('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $apiKey);
+        if ($curl->error) {
+            FatUtility::dieJsonError($curl->errorCode . ': ' . $curl->errorMessage);
+        }
+
+        if (!isset($curl->response->items)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_UNABLE_TO_LOAD_FONTS', $this->adminLangId));
+        }
+
+        $googleFontsResp = json_decode(json_encode($curl->response), true);
+        
+        $fonts = [];
+        foreach ($googleFontsResp['items'] as $font) {
+            foreach ($font['variants'] as $variant) {
+                $name = str_replace(' ', '+', $font['family']) . '-' . $variant;
+                $fonts[] = [
+                    'id' => $name,
+                    'name' => $font['family'] . ' - ' . ucwords($variant),
+                    'text' => $name,
+                    'weight' => $variant,
+                    'subset' => implode(',', $font['subsets']),
+                ];
+            }
+        }
+
+        FatUtility::dieJsonSuccess(['fonts' => $fonts]);
+    }
+
+    public function loadGoogleFont()
+    {
+        if (empty(FatApp::getPostedData('name', FatUtility::VAR_STRING, ''))) {
+            $json['html'] = '';
+            FatUtility::dieJsonError($json);    
+        }
+        $json['html'] = ThemeColor::loadGoogleFont(FatApp::getPostedData());
+        FatUtility::dieJsonSuccess($json);
+    }
+
+    public function setupFontStyle()
+    {
+        $this->objPrivilege->canEditThemeColor();
+
+        $frm = $this->getFontsForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+        $post['CONF_THEME_FONT_FAMILY'] = FatApp::getPostedData('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
+
+        $record = new Configurations();
+        if (!$record->update($post)) {
+            FatUtility::dieJsonError($record->getError());
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->adminLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 }
