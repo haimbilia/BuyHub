@@ -249,7 +249,7 @@ class CheckoutController extends MyAppController
         
         $cart_products = $this->cartObj->getProducts($this->siteLangId);        
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (0 < count($cart_products) &&  !empty($analyticsId)) {  
+        if (0 < count($cart_products) &&  !empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {  
             $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Checkout', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CHECKOUT);           
             foreach($cart_products as $product){

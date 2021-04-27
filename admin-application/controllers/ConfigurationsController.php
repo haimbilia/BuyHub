@@ -1363,6 +1363,8 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Analytics_Id", $this->adminLangId), 'CONF_ANALYTICS_ID');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_Google_Analytics_ID._Ex._UA-xxxxxxx-xx.", $this->adminLangId) . "</small>";
+                
+                $frm->addRadioButtons(Labels::getLabel("LBL_ADVANCE_ECOMMERCE_TRACKING", $this->adminLangId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::NO, array('class' => 'list-inline'));
 
                 $accessToken = FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN", FatUtility::VAR_STRING, '');
                 include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';

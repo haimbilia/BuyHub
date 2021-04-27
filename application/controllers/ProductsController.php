@@ -121,7 +121,7 @@ class ProductsController extends MyAppController
         $data = array_merge($data, $common, $arr);
                 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId) && 0 < $data['recordCount']) {
+        if (!empty($analyticsId) && 0 < $data['recordCount'] && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
             $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId(true));
             $et->addImpression(($method == 'search' ? Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));        
             $productPostion = 1;
@@ -801,7 +801,7 @@ class ProductsController extends MyAppController
         }
                 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId)) {              
+        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {              
              /* [product click event from search page */            
             $refererParseUrl = parse_url(CommonHelper::redirectUserReferer(true));
             if (isset($refererParseUrl['path'])) {

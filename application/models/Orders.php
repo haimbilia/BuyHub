@@ -1308,7 +1308,7 @@ class Orders extends MyAppModel
         
         $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());        
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId)) {
+        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
             $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()),$orderInfo['order_user_id']);
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_PURCHASE);
             foreach ($subOrders as $op) {
@@ -1621,7 +1621,7 @@ class Orders extends MyAppModel
             }
             
             $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-            if (!empty($analyticsId)) {
+            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
                 $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId),$childOrderInfo['order_user_id']);
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
                 $et->addProduct($childOrderInfo['op_selprod_id']);
@@ -1714,7 +1714,7 @@ class Orders extends MyAppModel
                 /* ]*/
             }            
             $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-            if (!empty($analyticsId)) {
+            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
                 $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
                 $et->addProduct($childOrderInfo['op_selprod_id'], $childOrderInfo['op_refund_qty']);
