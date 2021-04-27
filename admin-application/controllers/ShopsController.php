@@ -64,7 +64,7 @@ class ShopsController extends AdminBaseController
         $ratingSrch->joinUser();
         $ratingSrch->joinSeller();
         $ratingSrch->joinProducts();
-        $ratingSrch->joinSelProdRatingByType(SelProdRating::TYPE_PRODUCT);
+        $ratingSrch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
         $ratingSrch->addMultipleFields(array('spreview_seller_user_id', 'count(*) as numOfReviews'));
         $ratingSrch->doNotCalculateRecords();
         $ratingSrch->doNotLimitRecords();

@@ -1878,8 +1878,8 @@ class Cart extends FatModel
 
         $shippedByArr = array_keys($shippingOptions);
         $shippingRates = [];
-        foreach ($shippedByArr as $hippedBy) {
-            foreach ($shippingOptions[$hippedBy] as $level => $levelItems) {
+        foreach ($shippedByArr as $shippedBy) {
+            foreach ($shippingOptions[$shippedBy] as $level => $levelItems) {
                 $rates = isset($levelItems['rates']) ? $levelItems['rates'] : [];
                 if (count($rates) <= 0) {
                     continue;
@@ -1889,7 +1889,7 @@ class Cart extends FatModel
                     $shippingRates[$name] =  $rates;
                 } else if (isset($levelItems['products'])) {
                     foreach ($levelItems['products'] as $product) {
-                        if (count($rates[$product['selprod_id']]) <= 0) {
+                        if (!array_key_exists($product['selprod_id'], $rates) || count($rates[$product['selprod_id']]) <= 0) {
                             continue;
                         }
                         $name = current($rates[$product['selprod_id']])['code'];

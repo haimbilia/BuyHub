@@ -42,6 +42,9 @@
                             case 'csh_commsetting_added_on':
                                 $td->appendElement('plaintext', array(), FatDate::format($row[$key]), true);
                                 break;
+                            case 'csh_commsetting_fees':
+                                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
+                                break;
                             default:
                                 $td->appendElement('plaintext', array(), CommonHelper::displayText($row[$key]), true);
                                 break;

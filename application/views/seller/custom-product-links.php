@@ -113,6 +113,7 @@
         <?php } ?>
 
         $('input[name=\'choose_links\']').autocomplete({
+            minLength: 2,
             'classes': {
                 "ui-autocomplete": "custom-ui-autocomplete"
             },

@@ -46,6 +46,9 @@ foreach ($arr_listing as $sn => $row) {
             case 'commsetting_product_id':
                 $td->appendElement('plaintext', array(), CommonHelper::displayText($row['product_name']), true);
                 break;
+            case 'commsetting_fees':
+                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
+                break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions actions--centered"));
                 if ($canEdit) {

@@ -24,7 +24,7 @@ strong {
 }
 
 .text-right {
-  text-align: right !important;
+    text-align: right !important;
 }
 
 .text-center {
@@ -74,7 +74,7 @@ strong {
 }
 
 .iti {
-  display: block;
+    display: block;
 }
 
 .gap {
@@ -3456,10 +3456,12 @@ input[type="password"][disabled] {
   height: 17px;
 }
 
-.checkbox input:checked + .input-helper:before {
-  -webkit-transform: scale(0);
-  transform: scale(0);
-}
+
+/* 
+.checkbox input:checked+.input-helper:before {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+} */
 
 .checkbox input:checked + .input-helper:after {
   -webkit-transform: scale(1) rotate(-50deg);
@@ -3475,17 +3477,17 @@ input[type="password"][disabled] {
 }
 
 .checkbox .input-helper:after {
-  opacity: 0;
-  filter: alpha(opacity=0);
-  -webkit-transform: scale(0) rotate(80deg);
-  transform: scale(0) rotate(80deg);
-  width: 16px;
-  height: 9px;
-  border-bottom: 2px solid #f04b3d;
-  border-left: 2px solid #f04b3d;
-  border-bottom-left-radius: 2px;
-  left: -1px;
-  top: 1px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    -webkit-transform: scale(0) rotate(80deg);
+    transform: scale(0) rotate(80deg);
+    width: 12px;
+    height: 6px;
+    border-bottom: 1px solid #f04b3d;
+    border-left: 1px solid #f04b3d;
+    //border-bottom-left-radius: 2px;
+    left: 3px;
+    top: 3px;
 }
 
 .radio input {
@@ -12221,11 +12223,11 @@ form[name="frmShippingProfile"] {
 }
 
 .field_cover .fa {
-  position: relative;
-  left: -30px;
-  font-size: 0.8rem;
-  color: #888;
-  cursor: pointer;
+    position: relative;
+    left: -30px;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
 }
 
 /*task_83836_font_theme_management*/
@@ -12343,3 +12345,70 @@ form[name="frmShippingProfile"] {
   .scroll-y::-webkit-scrollbar-thumb:hover {
     background: #818181;
   }
+
+
+.review-media-list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    margin: 0 -.35rem; }
+    .review-media-list li {    list-style: none;
+      margin: 0 .35rem 1rem .35rem;
+      -webkit-box-flex: 0;
+          -ms-flex: 0 0 60px;
+              flex: 0 0 60px;
+      max-width: 60px;
+      position: relative;
+      z-index: 0;
+      border: none; }
+      .review-media-list li .review-media {
+        display: block;
+        position: relative;
+        border: solid 1px #dee2e6;
+        width: 60px;
+        height: 60px; }
+        .review-media-list li .review-media:after {
+          content: "";
+          display: block;
+          padding-bottom: 100%;
+          background-color: #f0f0f0; }
+        .review-media-list li .review-media img, .review-media-list li .review-media .post .post_media iframe, .post .post_media .review-media-list li .review-media iframe, .review-media-list li .review-media .post .post_media .posted-content .posted-media .post__pic .media-wrapper img, .post .post_media .posted-content .posted-media .post__pic .media-wrapper .review-media-list li .review-media img, .review-media-list li .review-media .posted-content .posted-media .post__pic .media-wrapper .post .post_media img, .posted-content .posted-media .post__pic .media-wrapper .post .post_media .review-media-list li .review-media img,
+        .review-media-list li .review-media video,
+        .review-media-list li .review-media iframe,
+        .review-media-list li .review-media .posted-content .posted-media .post__pic .media-wrapper img,
+        .posted-content .posted-media .post__pic .media-wrapper .review-media-list li .review-media img {
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          margin: auto; }
+        
+        .review-media-list li .review-media iframe,
+        .review-media-list li .review-media .posted-content .posted-media .post__pic .media-wrapper img,
+        .posted-content .posted-media .post__pic .media-wrapper .review-media-list li .review-media img {
+          width: 100%;
+          height: 100%; }
+      .review-media-list li.more-media .review-media:before {
+        content: attr(data-count);
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+        font-weight: 700;
+        font-size: 1.125rem; }

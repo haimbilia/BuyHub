@@ -12,6 +12,14 @@ $(document).ready(function(){
 	$(document).on('click','ul.linksvertical li a.redirect--js',function(event){
 		event.stopPropagation();
 	});		
+
+	$(document).on('click','input.manualShipping-js',function(){
+        if ($(this).is(":checked")) {
+            setTimeout(() => {
+                trackingUrlFld();
+            }, 500);
+        }
+	});		
 	
 });
 function pageRedirect(op_id) {
@@ -87,4 +95,18 @@ function pageRedirect(op_id) {
         });
     }
     /* ShipStation */
+
+    courierFld = function () {
+        $('.courierBlk--js').removeClass('d-none');
+        $('.courierFld--js').attr('data-fatreq', '{"required": true}');
+        $('.trackingUrlBlk--js').addClass('d-none');
+        $('.trackingUrlFld--js').attr('data-fatreq', '{"required": false}');
+    }
+
+    trackingUrlFld = function () {
+        $('.trackingUrlBlk--js').removeClass('d-none');
+        $('.trackingUrlFld--js').attr('data-fatreq', '{"required": true}');
+        $('.courierBlk--js').addClass('d-none');
+        $('.courierFld--js').attr('data-fatreq', '{"required": false}');
+    }
 })();

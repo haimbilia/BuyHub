@@ -33,14 +33,12 @@ if (!empty($googleFontFamilyUrl)) {
 }
 
 if ($canonicalUrl == '') {
-    if (!empty(FatApp::getParameters())) {
-        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), FatApp::getParameters());
+    if (empty(FatApp::getParameters()) && FatApp::getAction() == 'index') {
+        $cName = ($controllerName == 'Home') ? '' : $controllerName;
+        $canonicalUrl = UrlHelper::generateFullUrl($cName);
     } else {
-        if (FatApp::getAction() == 'index') {
-            $cName = ($controllerName == 'Home') ? '' : $controllerName;
-            $canonicalUrl = UrlHelper::generateFullUrl($cName);
-        }
-    }
+        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), FatApp::getParameters());
+    }    
 }
 ?>
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />

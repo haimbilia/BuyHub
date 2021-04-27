@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    setTimeout(function () {
-        stylePhoneNumberFld('.phone-js');
-    }, 1000);
+    // setTimeout(function () {
+    //     stylePhoneNumberFld('.phone-js');
+    // }, 1000);
 
     $(document).on('keypress', 'input.zip-js', function (e) {
         var regex = new RegExp("^[a-zA-Z0-9]+$");
@@ -26,7 +26,7 @@ $(document).ready(function () {
     installJsColor();
 
     $(document).ajaxComplete(function () {
-        stylePhoneNumberFld('.phone-js');
+        // stylePhoneNumberFld('.phone-js');
         installJsColor();
     });
 });
@@ -484,6 +484,7 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
     }
 
 })();
+
 function isJson(str) {
     try {
         var json = JSON.parse(str);
@@ -769,4 +770,20 @@ function getCountryIso2CodeFromDialCode(dialCode) {
     var countriesData = window.intlTelInputGlobals.getCountryData();
     var countryData = countriesData.filter(function (country) { return country.dialCode == dialCode });
     return countryData[0].iso2;
+}
+
+function previewImage(obj) {
+    var imgUrl = $('img', obj).data('altimg');
+    if ('' == imgUrl || 'undefined' == typeof imgUrl) {
+        imgUrl = $('img', obj).attr('src');
+    }
+
+    var img = $($.parseHTML('<img class="m-auto">')).attr('src', imgUrl);
+    fcom.updateFaceboxContent(img, 'text-center');
+}
+
+function loadMoreImages(obj) {
+    $('a', obj).removeAttr('data-count').attr('onclick', 'previewImage(this)');
+    $(obj).removeClass('more-media').removeAttr('onclick');
+    $(obj).nextAll().removeClass('d-none');
 }

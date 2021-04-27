@@ -20,8 +20,8 @@ $coupon_discount_in_percent_fld = $frm->getField('coupon_discount_in_percent');
 $coupon_discount_in_percent_fld->addFieldTagAttribute('onChange', 'callCouponDiscountIn(this.value, ' . applicationConstants::PERCENTAGE . ', ' . applicationConstants::FLAT . '); ');
 $coupon_discount_in_percent_fld->addFieldTagAttribute('class', 'discountType-js');
 
-$cvalid_fld = $frm->getField('coupon_valid_for');
-$cvalid_fld->setWrapperAttribute('id', 'coupon_validfor_div');
+/* $cvalid_fld = $frm->getField('coupon_valid_for');
+$cvalid_fld->setWrapperAttribute('id', 'coupon_validfor_div'); */
 
 /* $reqTrue = new FormFieldRequirement('coupon_min_order_value','value');
 $reqTrue->setRequired();

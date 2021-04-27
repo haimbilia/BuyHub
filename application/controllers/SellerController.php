@@ -546,6 +546,8 @@ class SellerController extends SellerBaseController
 
         if ($orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
+        } else {
+            $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
 
         $charges = $orderObj->getOrderProductChargesArr($op_id);
@@ -703,7 +705,7 @@ class SellerController extends SellerBaseController
         $pdf->SetFont('dejavusans');
 
         $templatePath = "seller/view-invoice.php";
-        $html = addslashes($template->render(false, false, $templatePath, true, true));
+        $html = $template->render(false, false, $templatePath, true, true);
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
 
@@ -900,8 +902,8 @@ class SellerController extends SellerBaseController
                     $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
                 }
             }
-
-            if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $post["tracking_number"], 0, true, $trackingCourierCode)) {
+            $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
+            if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode)) {
                 Message::addErrorMessage($orderObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
@@ -1760,7 +1762,7 @@ class SellerController extends SellerBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
 
-        $srch = Tax::getSearchObject($this->siteLangId);      
+        $srch = Tax::getSearchObject($this->siteLangId);
         $srch->joinTable(TaxRule::DB_TBL, 'LEFT OUTER JOIN', 'taxRule.taxrule_taxcat_id = taxcat_id', 'taxRule');
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'LEFT OUTER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         if (!empty($post['keyword'])) {
@@ -1776,7 +1778,7 @@ class SellerController extends SellerBaseController
         $srch->addGroupBy('taxcat_id');
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->addOrder('taxcat_name', 'ASC');    
+        $srch->addOrder('taxcat_name', 'ASC');
         $rs = $srch->getResultSet();
         $taxCatData = FatApp::getDb()->fetchAll($rs, 'taxcat_id');
         $this->set('canEdit', $this->userPrivilege->canEditTaxCategory(UserAuthentication::getLoggedUserId(), true));
@@ -1807,23 +1809,23 @@ class SellerController extends SellerBaseController
         if (empty($data)) {
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        
+
         $frmSearch = $this->getTaxRulesSearchForm($taxCatId);
-        $this->set('frmSearch', $frmSearch);      
-        $this->set('taxCategory', $data['taxcat_name']);        
+        $this->set('frmSearch', $frmSearch);
+        $this->set('taxCategory', $data['taxcat_name']);
         $this->_template->render(true, true);
     }
-    
+
     public function taxRulesSearch()
-    {      
+    {
         $userId = UserAuthentication::getLoggedUserId();
-        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);              
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $taxCatId = FatApp::getPostedData('taxCatId', FatUtility::VAR_INT, 0);
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         if (1 > $page) {
             $page = 1;
         }
-        
+
         $srch = TaxRule::getSearchObject();
         $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);
 
@@ -1835,80 +1837,80 @@ class SellerController extends SellerBaseController
         $userSpecificSubQuery = $userSpecificRateSrch->getQuery();
 
         $srch = TaxRule::getSearchObject();
-        $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', "taxRule.".TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
+        $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', "taxRule." . TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         $srch->joinTable('(' . $userSpecificSubQuery . ')', 'LEFT OUTER JOIN', 'user_specific_rule_rate.taxrule_id = taxRule.taxrule_id', 'user_specific_rule_rate');
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_taxstr_id = taxstr_id');
-        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$this->siteLangId);
-        $srch->joinTable(TaxRuleLocation::DB_TBL, 'LEFT JOIN', TaxRuleLocation::tblFld('taxrule_id') . '= taxRule.' . TaxRule::tblFld('id'),'trloc');
-        
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
+        $srch->joinTable(TaxRuleLocation::DB_TBL, 'LEFT JOIN', TaxRuleLocation::tblFld('taxrule_id') . '= taxRule.' . TaxRule::tblFld('id'), 'trloc');
+
         $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'from_st.state_id = trloc.taxruleloc_from_state_id', 'from_st');
         $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'from_st_l.statelang_state_id = from_st.state_id  AND from_st_l.statelang_lang_id = ' . $this->siteLangId, 'from_st_l');
 
         $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'from_c.country_id = trloc.taxruleloc_from_country_id', 'from_c');
         $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'from_c_l.countrylang_country_id = from_c.country_id  AND from_c_l.countrylang_lang_id = ' . $this->siteLangId, 'from_c_l');
-        
+
         $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'to_st.state_id = trloc.taxruleloc_to_state_id', 'to_st');
         $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'to_st_l.statelang_state_id=to_st.state_id AND to_st_l.statelang_lang_id = ' . $this->siteLangId, 'to_st_l');
 
         $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'to_c.country_id = trloc.taxruleloc_to_country_id', 'to_c');
         $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'to_c_l.countrylang_country_id = to_c.country_id AND to_c_l.countrylang_lang_id = ' . $this->siteLangId, 'to_c_l');
-        
+
         $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);
-       
-        $srch->addMultipleFields(array('taxRule.taxrule_id', 'taxstr_name','taxstr_is_combined','taxrule_name', 'trr_rate','taxrule_taxcat_id','taxruleloc_type','IFNULL(from_c_l.country_name, from_c.country_code) as from_country', 'GROUP_CONCAT(DISTINCT IFNULL(from_st_l.state_name, from_st.state_identifier)) as from_state','IFNULL(to_c_l.country_name, to_c.country_code) as to_country', 'GROUP_CONCAT(DISTINCT IFNULL(to_st_l.state_name, to_st.state_identifier)) as to_state','user_specific_rule_rate.user_rule_rate'));
-        $srch->addGroupBy("taxRule.".TaxRule::tblFld('id'));
-               
+
+        $srch->addMultipleFields(array('taxRule.taxrule_id', 'taxstr_name', 'taxstr_is_combined', 'taxrule_name', 'trr_rate', 'taxrule_taxcat_id', 'taxruleloc_type', 'IFNULL(from_c_l.country_name, from_c.country_code) as from_country', 'GROUP_CONCAT(DISTINCT IFNULL(from_st_l.state_name, from_st.state_identifier)) as from_state', 'IFNULL(to_c_l.country_name, to_c.country_code) as to_country', 'GROUP_CONCAT(DISTINCT IFNULL(to_st_l.state_name, to_st.state_identifier)) as to_state', 'user_specific_rule_rate.user_rule_rate'));
+        $srch->addGroupBy("taxRule." . TaxRule::tblFld('id'));
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $srch->addOrder('taxrule_name', 'ASC');
-        
+
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-       
-        $rulesIds = array_column($records, 'taxrule_id');      
+
+        $rulesIds = array_column($records, 'taxrule_id');
         $combinedData = [];
-        
-        if(!empty($rulesIds)){
+
+        if (!empty($rulesIds)) {
             $userSpecificCombiRateSrch = TaxRule::getCombinedTaxSearchObject();
             $userSpecificCombiRateSrch->addCondition('taxruledet_user_id', '=', $userId);
             $userSpecificCombiRateSrch->addCondition('taxruledet_taxrule_id', 'IN', $rulesIds);
             $userSpecificCombiRateSrch->doNotCalculateRecords();
             $userSpecificCombiRateSrch->doNotLimitRecords();
-            $userSpecificCombiRateSrch->addMultipleFields(array('taxruledet_rate as user_rate','taxruledet_taxrule_id','taxruledet_taxstr_id'));
-            $userSpecificCombiSubQuery = $userSpecificCombiRateSrch->getQuery();       
+            $userSpecificCombiRateSrch->addMultipleFields(array('taxruledet_rate as user_rate', 'taxruledet_taxrule_id', 'taxruledet_taxstr_id'));
+            $userSpecificCombiSubQuery = $userSpecificCombiRateSrch->getQuery();
 
             $combinedTaxSrch = TaxRule::getCombinedTaxSearchObject();
             $combinedTaxSrch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'tc.taxruledet_taxstr_id = taxstr_id');
-            $combinedTaxSrch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$this->siteLangId);
+            $combinedTaxSrch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
             $combinedTaxSrch->addCondition('tc.taxruledet_taxrule_id', 'IN', $rulesIds);
             $combinedTaxSrch->addCondition('tc.taxruledet_user_id', '=', 0);
             $combinedTaxSrch->joinTable('(' . $userSpecificCombiSubQuery . ')', 'LEFT OUTER JOIN', 'user_specific_rate.taxruledet_taxrule_id = tc.taxruledet_taxrule_id and user_specific_rate.taxruledet_taxstr_id = tc.taxruledet_taxstr_id', 'user_specific_rate');
-            $combinedTaxSrch->addMultipleFields(array('taxstr_id','taxstr_is_combined','taxruledet_rate','tc.taxruledet_taxrule_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name','user_specific_rate.user_rate'));
-            $combinedTaxSrch->getQuery();        
-            $combinedData = TaxRule::groupDataByKey(FatApp::getDb()->fetchAll($combinedTaxSrch->getResultSet()),'taxruledet_taxrule_id');             
-        }     
-        
+            $combinedTaxSrch->addMultipleFields(array('taxstr_id', 'taxstr_is_combined', 'taxruledet_rate', 'tc.taxruledet_taxrule_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'user_specific_rate.user_rate'));
+            $combinedTaxSrch->getQuery();
+            $combinedData = TaxRule::groupDataByKey(FatApp::getDb()->fetchAll($combinedTaxSrch->getResultSet()), 'taxruledet_taxrule_id');
+        }
+
         $this->set("arr_listing", $records);
         $this->set("combinedData", $combinedData);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
-        $this->set('postedData', FatApp::getPostedData());     
+        $this->set('postedData', FatApp::getPostedData());
         $this->_template->render(false, false);
     }
-    
+
     private function getTaxRulesSearchForm($taxCatId)
     {
         $frm = new Form('frmSearchTaxRules');
         $frm->addHiddenField('', 'taxCatId', $taxCatId);
         return $frm;
     }
-    
+
     public function editTaxRuleForm($taxRuleId)
     {
-        $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());      
-        $taxRuleId = FatUtility::int($taxRuleId); 
-                
+        $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
+        $taxRuleId = FatUtility::int($taxRuleId);
+
         $srch = TaxRule::getSearchObject();
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id'));
         $srch->addCondition('taxrule_id', '=', $taxRuleId);
@@ -1916,38 +1918,38 @@ class SellerController extends SellerBaseController
         $cnd->attachCondition('trr_user_id', '=', 0);
         $srch->addOrder('trr_user_id', 'DESC');
         $srch->addMultipleFields(array('taxrule_id', 'trr_rate'));
-        $ruleData = FatApp::getDb()->fetch($srch->getResultSet()); 
+        $ruleData = FatApp::getDb()->fetch($srch->getResultSet());
         if (empty($ruleData)) {
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        
+
         $frm = $this->getTaxRuleForm();
-        if (!empty($ruleData)) {          
-            $frm->fill($ruleData);                  
-        } 
-        
+        if (!empty($ruleData)) {
+            $frm->fill($ruleData);
+        }
+
         $srch = TaxRule::getCombinedTaxSearchObject();
         $srch->doNotCalculateRecords();
         $srch->addCondition('taxruledet_taxrule_id', '=', $taxRuleId);
-        $srch->addCondition('taxruledet_user_id', '=', UserAuthentication::getLoggedUserId()); 
-        
+        $srch->addCondition('taxruledet_user_id', '=', UserAuthentication::getLoggedUserId());
+
         /* checking whether to fetch data from admin or login in user */
         $combinedTaxUserId = FatApp::getDb()->fetch($srch->getResultSet()) ? UserAuthentication::getLoggedUserId() : 0;
 
         $srch = TaxRule::getCombinedTaxSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL, 'INNER JOIN', 'taxruledet_taxstr_id = taxstr_id');
-        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = '.$this->siteLangId);
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
         $srch->addCondition('taxruledet_taxrule_id', '=', $taxRuleId);
         $srch->addCondition('taxruledet_user_id', '=', $combinedTaxUserId);
-        $srch->addMultipleFields(array('taxruledet_rate','taxruledet_taxstr_id','IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
-        $srch->doNotCalculateRecords();       
+        $srch->addMultipleFields(array('taxruledet_rate', 'taxruledet_taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
+        $srch->doNotCalculateRecords();
         $combinedTaxData = FatApp::getDb()->fetchAll($srch->getResultSet());
-        
-        $this->set('frm', $frm); 
+
+        $this->set('frm', $frm);
         $this->set('combinedTaxData', $combinedTaxData);
         $this->_template->render(false, false);
     }
-    
+
     private function getTaxRuleForm($taxRuleId = 0)
     {
         $frm = new Form('frmTaxRule');
@@ -1956,10 +1958,10 @@ class SellerController extends SellerBaseController
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Tax_Rate(%)', $this->siteLangId), 'trr_rate', '');
         $fld->requirements()->setPositive();
         $frm->addHiddenField('', 'combinedTaxDetails');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));  
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
         return $frm;
     }
-    
+
     public function updateTaxRule()
     {
         $userId = UserAuthentication::getLoggedUserId();
@@ -1974,7 +1976,7 @@ class SellerController extends SellerBaseController
         $combinedTaxDetails = (isset($post['combinedTaxDetails'])) ? $post['combinedTaxDetails'] : [];
         if (!empty($combinedTaxDetails)) {
             $totalCombinedTax = 0;
-            array_walk($combinedTaxDetails, function (& $value) use (&$totalCombinedTax) {
+            array_walk($combinedTaxDetails, function (&$value) use (&$totalCombinedTax) {
                 $value = FatUtility::int($value);
                 $totalCombinedTax += $value['taxruledet_rate'];
             });
@@ -2478,7 +2480,7 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $shop_id = $shopObj->getMainTableRecordId();
-        
+
         $post['ss_shop_id'] = $shop_id;
         $shopSpecificsObj = new ShopSpecifics($shop_id);
         $shopSpecificsObj->assignValues($post);
@@ -2645,7 +2647,7 @@ class SellerController extends SellerBaseController
         $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function isShopRewriteUrlUnique()
     {
         $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -3800,7 +3802,7 @@ class SellerController extends SellerBaseController
         $frm->addHiddenField('', 'shop_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('Lbl_phone', $this->siteLangId), 'shop_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
+        $phnFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</span>';
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $countryObj = new Countries();
@@ -3829,7 +3831,7 @@ class SellerController extends SellerBaseController
         $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_CANCELLATION_AGE', $this->siteLangId), 'shop_cancellation_age');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
-        
+
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $this->siteLangId) . ' [' . Labels::getLabel('LBL_Hours', $this->siteLangId) . ']', 'shop_pickup_interval');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
@@ -4012,16 +4014,9 @@ class SellerController extends SellerBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('Lbl_Select', $this->siteLangId));
         $fld->requirements()->setRequired();
 
-        $ntf = $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), Labels::getLabel('Lbl_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), Labels::getLabel('Lbl_Select', $this->siteLangId))->requirements()->setRequired();
 
-        $attr = [];
-        $labelGenerated = false;
-        if (isset($orderData['opship_tracking_number']) && !empty($orderData['opship_tracking_number'])) {
-            $attr = [
-                'disabled' => 'disabled'
-            ];
-            $labelGenerated = true;
-        } else {
+        if (array_key_exists('opship_tracking_number', $orderData) && empty($orderData['opship_tracking_number'])) {
             $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
 
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
@@ -4031,11 +4026,10 @@ class SellerController extends SellerBaseController
 
             $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, OrderStatus::ORDER_SHIPPED), 'eq', 'manual_shipping', $manualShipReqObj);
             $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, OrderStatus::ORDER_SHIPPED), 'ne', 'manual_shipping', $manualShipUnReqObj);
-        }
 
-        $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number', '', $attr);
 
-        if (false === $labelGenerated) {
+            $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number');
+
             $trackingUnReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
             $trackingUnReqObj->setRequired(false);
             $trackingReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
@@ -4044,35 +4038,31 @@ class SellerController extends SellerBaseController
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'tracking_number', $trackingReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'tracking_number', $trackingUnReqObj);
 
-            $plugin = new Plugin();
-            $afterShipData = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPMENT_TRACKING);
-            if ($afterShipData != false) {
-                $shipmentTracking = new ShipmentTracking();
-                $shipmentTracking->init($this->siteLangId);
-                $shipmentTracking->getTrackingCouriers();
+            $trackUrlFld = $frm->addTextBox(Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
+            $trackUrlFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_ENTER_THE_URL_TO_TRACK_THE_SHIPMENT.', $this->siteLangId) . '</span>';
+
+            $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
+            $trackingUrlUnReqObj->setRequired(false);
+            $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
+            $trackingurlReqObj->setRequired(true);
+
+            $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
+            $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
+
+            $shipmentTracking = new ShipmentTracking();
+            if (false !== $shipmentTracking->init($this->siteLangId) && false !== $shipmentTracking->getTrackingCouriers()) {
                 $trackCarriers = $shipmentTracking->getResponse();
 
-                $trackCarrierFld = $frm->addSelectBox(Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+                $frm->addSelectBox(Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
 
-                $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId));
+                $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
                 $trackCarrierFldUnReqObj->setRequired(false);
 
-                $trackCarrierFldReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId));
+                $trackCarrierFldReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
                 $trackCarrierFldReqObj->setRequired(true);
 
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'oshistory_courier', $trackCarrierFldReqObj);
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);
-            } else {
-                $trackUrlFld = $frm->addTextBox(Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId), 'opship_tracking_url', '', $attr);
-                $trackUrlFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_ENTER_THE_URL_TO_TRACK_THE_SHIPMENT.', $this->siteLangId) . '</span>';
-
-                $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId));
-                $trackingUrlUnReqObj->setRequired(false);
-                $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACK_THROUGH', $this->siteLangId));
-                $trackingurlReqObj->setRequired(true);
-
-                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
-                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
             }
         }
 
@@ -4884,7 +4874,7 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $post['ura_state_id'] = $ura_state_id;
         $post['ura_phone_dcode'] = FatApp::getPostedData('ura_phone_dcode', FatUtility::VAR_STRING, '');
 
@@ -5031,7 +5021,7 @@ class SellerController extends SellerBaseController
         $frm->addHiddenField('', 'ura_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'ura_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
+        $phnFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</span>';
 
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
@@ -5796,7 +5786,7 @@ class SellerController extends SellerBaseController
 
         $post = FatApp::getPostedData();
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
-        
+
         $addrStateId = FatUtility::int($post['addr_state_id']);
 
         $slotFromAll = '';
@@ -5892,6 +5882,5 @@ class SellerController extends SellerBaseController
 
         $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }    
-    
+    }
 }
