@@ -91,6 +91,7 @@ Fixes:
     => 052645 - wile adding product specifications> it's not accepting character after &
     => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
     => 052869 - caching directory delete issue for some server
+    => 052895 - when catalogue is approved from admin then no email is there for the same to seller
 
 Enhancements :
    => Make provision to made seller

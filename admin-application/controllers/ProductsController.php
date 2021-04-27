@@ -1039,6 +1039,16 @@ class ProductsController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Please_Choose_Category_From_List', $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
+        
+        /* sendApprovalStatusUpdate to seller */ 
+        $sendApprovalStatusUpdate = false;
+        if (0 < $productId) {
+            $oldProductData = Product::getAttributesById($productId, ['product_approved', 'product_seller_id']);
+            if (0 < $oldProductData['product_seller_id'] && $oldProductData['product_approved'] != $post['product_approved']) {
+                $sendApprovalStatusUpdate = true;
+            }
+        }
+
 
         $prod = new Product($productId);
         if (!$prod->saveProductData($post)) {
@@ -1050,6 +1060,18 @@ class ProductsController extends AdminBaseController
         if (!$prod->saveProductLangData($post)) {
             Message::addErrorMessage($prod->getError());
             FatUtility::dieWithError(Message::getHtml());
+        }
+        
+        if (true == $sendApprovalStatusUpdate) {
+            $email = new EmailHandler();
+            $emailData['status'] = $post['product_approved'];
+            $emailData['product_name'] = !empty($post['product_name' . $this->adminLangId]) ? $post['product_name' . $this->adminLangId] : $post['product_identifier'];
+            $emailData['seller_id'] = $oldProductData['product_seller_id'];
+
+            if (!$email->sendCatalogRequestStatusChangeNotification($this->adminLangId, $emailData)) {
+                Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->adminLangId));
+                FatUtility::dieWithError(Message::getHtml());
+            }
         }
 
         if (!$prod->saveProductCategory($post['ptc_prodcat_id'])) {
