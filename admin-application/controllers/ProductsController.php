@@ -891,7 +891,7 @@ class ProductsController extends AdminBaseController
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $languages = Language::getAllNames();
         $productFrm = $this->getProductIntialSetUpFrm($productId, $prodCatId);
-
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
         if ($productId > 0) {
             $prodData = Product::getAttributesById($productId);
             foreach ($languages as $langId => $data) {
@@ -955,6 +955,9 @@ class ProductsController extends AdminBaseController
             }
 
             $productFrm->fill($prodData);
+
+            $productType = $prodData['product_type'];
+
         }
 
         unset($languages[$siteDefaultLangId]);
@@ -962,6 +965,7 @@ class ProductsController extends AdminBaseController
         $this->set('siteDefaultLangId', $siteDefaultLangId);
         $this->set('otherLanguages', $languages);
         $this->set('prodCatId', $prodCatId);
+        $this->set('productType', $productType);
         $this->_template->render(false, false, 'products/product-initial-setup-frm.php');
     }
 
@@ -971,6 +975,18 @@ class ProductsController extends AdminBaseController
         $frm = new Form('frmProductIntialSetUp');
         $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $this->adminLangId), 'product_identifier');
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($this->adminLangId), Product::PRODUCT_TYPE_PHYSICAL, array(), '');
+
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_download_attachements_with_inventory', (array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->adminLangId)) + applicationConstants::getYesNoArr($this->adminLangId)), '', array(), '');
+
+        $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_download_attachements_with_inventory', 'value');
+        $downloadAttachementsWithInventoryTrue->setRequired();
+        $downloadAttachementsWithInventoryFalse = new FormFieldRequirement('product_download_attachements_with_inventory', 'value');
+        $downloadAttachementsWithInventoryFalse->setRequired(false);
+
+        $prodTypeFld = $frm->getField('product_type');
+        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'product_download_attachements_with_inventory', $downloadAttachementsWithInventoryTrue);
+        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'product_download_attachements_with_inventory', $downloadAttachementsWithInventoryFalse);
+
         $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand', $this->adminLangId), 'brand_name');
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
             $brandFld->requirements()->setRequired();
@@ -1038,6 +1054,10 @@ class ProductsController extends AdminBaseController
         if ($post['ptc_prodcat_id'] < 1) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_Choose_Category_From_List', $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
+        }
+
+        if ($post['product_download_attachements_with_inventory'] < 0 || $post['product_download_attachements_with_inventory'] > 1) {
+            $post['product_download_attachements_with_inventory'] = 0;
         }
 
         $prod = new Product($productId);
@@ -1465,5 +1485,36 @@ class ProductsController extends AdminBaseController
             );
         }
         die(json_encode($json));
+    }
+
+    public function downloadsForm($productId)
+    {
+        $frm = $this->getDownloadForm($this->adminLangId);
+        $frmData = [
+            'product_id' => $productId
+        ];
+        $frm->fill($frmData);
+        $this->set('downloadFrm', $frm);
+        $this->set('adminLangId', $this->adminLangId);
+        $this->_template->render(false, false, 'products/download-setup-frm.php');
+    }
+    
+    private function getDownloadForm($langId)
+    {
+        $frm = new Form('frmDownload');
+        $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
+        $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
+
+        $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
+        $fld = $frm->addTextArea(Labels::getLabel('LBL_Downloadable_Link', $langId), 'product_downloadable_link');
+        $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_Add_links_comma_separated_or_with_new_line', $langId) . '</small>';
+        $fld->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
+
+        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
+        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_Preview_File', $langId), 'preview_file', array('id' => 'preview_file'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->adminLangId));
+        $frm->addHiddenField('', 'product_id');
+        return $frm;
     }
 }

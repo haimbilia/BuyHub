@@ -21,6 +21,15 @@
         $("#tabs_004").remove();
     }
 
+    hideDownloadTab = function(){
+        $(".tabs_006").parent().hide();
+        $("#tabs_006").hide();
+    }
+    showDownloadTab = function(){
+        $(".tabs_006").parent().show();
+        $("#tabs_006").show();
+    }
+
     productInitialSetUpFrm = function(productId, prodCatId){      
 		var data = '';
 		fcom.ajax(fcom.makeUrl('Products','productInitialSetUpFrm',[productId, prodCatId]),data,function(res){
@@ -48,11 +57,18 @@
         validator.validate();       
         if (!validator.isValid()) return;
         //var data = fcom.frmData(frm);
-        var data = fcom.frmData(getFrm);   
+        var data = fcom.frmData(getFrm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setUpProduct'), data, function(t) {
             productAttributeAndSpecificationsFrm(t.productId);
             if(t.productType == PRODUCT_TYPE_DIGITAL){
                 hideShippingTab();
+                if ($("select[name='product_download_attachements_with_inventory']").val() == 1) {
+                    hideDownloadTab();
+                } else {
+                    showDownloadTab();
+                }
+            } else {
+                hideDownloadTab();
             }
         });
     };
@@ -491,3 +507,24 @@ $(document).on('click', '.tabs_005', function(){
         displayProdInitialTab();
     }
 });
+
+$(document).on('click', '.tabs_006', function(){
+    var productId = $("input[name='product_id']").val();
+    if(productId > 0){
+        productDownloads(productId);
+    }else{
+        displayProdInitialTab();
+    }
+});
+
+productDownloads = function(productId){
+    var data = '';
+    fcom.ajax(fcom.makeUrl('Products', 'downloadsForm', [productId]), data, function(res){
+        $(".tabs_panel").html('');
+        $(".tabs_panel").hide();
+        $(".tabs_nav  > li > a").removeClass('active');
+        $("#tabs_006").show();
+        $("a[rel='tabs_006']").addClass('active');
+        $("#tabs_006").html(res);
+    });
+}
