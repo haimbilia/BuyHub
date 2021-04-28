@@ -161,6 +161,16 @@ class MyAppController extends FatController
                 'changePickup' => Labels::getLabel('LBL_CHANGE_PICKUP', $this->siteLangId),
                 'selectProduct' => Labels::getLabel('LBL_PLEASE_SELECT_PRODUCT', $this->siteLangId),
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
+                'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
+                'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
+                'requiredFields' => Labels::getLabel('MSG_PLEASE_FILL_REQUIRED_FIELDS', $this->siteLangId),
+                'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->siteLangId),
+                'typeToSearch' => Labels::getLabel('MSG_TYPE_TO_SEARCH..', $this->siteLangId),
+                'resendOtp' => Labels::getLabel('LBL_RESEND_OTP?', $this->siteLangId),
+                'redirecting' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
+                'uploadImageLimit' => Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', $this->siteLangId),
+                'deleteAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
+                'unlinkAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
