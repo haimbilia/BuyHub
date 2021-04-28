@@ -58,7 +58,17 @@
                                 </i>
                                 <span id="js-curent-zip-code">
                                     <?php
-                                    echo isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : Labels::getLabel("LBL_Location", $siteLangId);
+                                    $geoAddress = '';
+                                    if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                                        $geoAddress = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
+                                        if (empty($address)) {
+                                            $address = FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0) . '-' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, '');
+                                        }
+                                    }
+                                    if (empty($geoAddress)) {
+                                        $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
+                                    }
+                                    echo isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
                                     ?>
                                 </span>
                             </a>

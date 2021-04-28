@@ -111,7 +111,8 @@ Enhancements :
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.
-   => Performance optimization   
+   => Performance optimization
+   => Upgrades in GEO location module to configure default location.   
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

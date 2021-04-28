@@ -822,7 +822,8 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
                 $frm->addTextBox(Labels::getLabel("LBL_Postal_Code", $this->adminLangId), 'CONF_GEO_DEFAULT_ZIPCODE');
                 $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LAT', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72));
-                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LNG', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, -73.96));
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LNG', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96));
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_ADDR', FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, ''));
                 break;
 
             case Configurations::FORM_USER_ACCOUNT:
@@ -1392,7 +1393,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Analytics_Id", $this->adminLangId), 'CONF_ANALYTICS_ID');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_Google_Analytics_ID._Ex._UA-xxxxxxx-xx.", $this->adminLangId) . "</small>";
-                
+
                 $frm->addRadioButtons(Labels::getLabel("LBL_ADVANCE_ECOMMERCE_TRACKING", $this->adminLangId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::NO, array('class' => 'list-inline'));
 
                 $accessToken = FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN", FatUtility::VAR_STRING, '');

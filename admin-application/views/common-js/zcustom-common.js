@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     var installJsColor = function () {
         if (0 < $('.jscolor').length) {
-            $('.jscolor').each(function(){
+            $('.jscolor').each(function () {
                 $(this).attr('data-jscolor', '{}');
             });
             jscolor.install();
@@ -682,6 +682,7 @@ function geocodeSetData(results) {
             }
         }
         $('#geo_postal_code').val(data.postal_code);
+        $('#geo_city').val(data.city);
         $('#geo_country_code option').each(function () {
             if (this.text == data.country) {
                 $('#geo_country_code').val(this.value);

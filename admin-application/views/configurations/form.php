@@ -89,6 +89,8 @@ switch ($frmType) {
         $latFld->setFieldTagAttribute('id', "lat");
         $lngFld = $frm->getField('CONF_GEO_DEFAULT_LNG');
         $lngFld->setFieldTagAttribute('id', "lng");
+        $lngFld = $frm->getField('CONF_GEO_DEFAULT_ADDR');
+        $lngFld->setFieldTagAttribute('id', "geo_city");
 
         $displayMap = true;
         break;
