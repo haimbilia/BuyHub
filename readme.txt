@@ -94,6 +94,7 @@ Fixes:
     => 052895 - when catalogue is approved from admin then no email is there for the same to seller
     => 052912 - front end> product editor> insert image option> upload button is not working in editor 
     => 052985 - when the subscription module is on then the catalog image upload /multiple inventory add limit not working properly
+    => 053007 - Stripe Connect Already Have Account Issue 
 
 Enhancements :
    => Make provision to made seller

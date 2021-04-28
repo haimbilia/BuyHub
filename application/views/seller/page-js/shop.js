@@ -828,7 +828,14 @@ $(document).on("change", ".state", function() {
     }
 
     deleteAccount = function(el) {
-        if (!confirm(langLbl.confirmDelete)) { return false; };
+        if (!confirm(langLbl.deleteAccount)) { return false; };
+        var href = $(el).data('href');
+        fcom.updateWithAjax(href, '', function(t) {
+            $('.pluginPlatform-js').click();
+        });
+    };
+    unlinkAccount = function(el) {
+        if (!confirm(langLbl.unlinkAccount)) { return false; };
         var href = $(el).data('href');
         fcom.updateWithAjax(href, '', function(t) {
             $('.pluginPlatform-js').click();
