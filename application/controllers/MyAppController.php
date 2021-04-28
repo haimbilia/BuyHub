@@ -174,7 +174,7 @@ class MyAppController extends FatController
         } else {
             $jsVariables =  unserialize($jsVariablesCache);
         }
-        
+
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
 
         $themeId = FatApp::getConfig('CONF_FRONT_THEME', FatUtility::VAR_INT, 1);
@@ -182,6 +182,10 @@ class MyAppController extends FatController
         if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
             $themeId = $_SESSION['preview_theme'];
         }
+
+        /* if (!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['ykGeoLng']) || !isset($_COOKIE['ykGeoCountryCode'])) {
+            setcookie('_ykGeoLat', $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
+        } */
 
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
@@ -478,11 +482,11 @@ class MyAppController extends FatController
         $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
         $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
-        
+
         $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
+        $phnFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</span>';
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addHiddenField('', 'addr_id');
