@@ -39,21 +39,23 @@ if (!empty($googleFontFamilyUrl)) {
                                 <div class="p-5">
                                     <?php echo $frm->getFormTag(); ?>
                                     <div class="form">
-                                        <div class="form-group">
-                                            <label class="labeled">
-                                                <?php 
-                                                    $fld = $frm->getField('CONF_THEME_FONT_FAMILY');
-                                                    $fld->addFieldTagAttribute('data-value', $fld->value);
-                                                    echo $frm->getField('CONF_THEME_FONT_FAMILY')->getCaption(); ?>
-                                            </label>
+                                        <?php if (!empty($apiKey)) { ?>
+                                            <div class="form-group">
+                                                <label class="labeled">
+                                                    <?php 
+                                                        $fld = $frm->getField('CONF_THEME_FONT_FAMILY');
+                                                        $fld->addFieldTagAttribute('data-value', $fld->value);
+                                                        echo $frm->getField('CONF_THEME_FONT_FAMILY')->getCaption(); ?>
+                                                </label>
 
-                                            <div class="dropdown dropdown-font-family">
-                                                <?php 
-                                                    echo $frm->getFieldHtml('CONF_THEME_FONT_FAMILY_URL'); 
-                                                    echo $frm->getFieldHtml('CONF_THEME_FONT_FAMILY'); 
-                                                ?>
+                                                <div class="dropdown dropdown-font-family">
+                                                    <?php 
+                                                        echo $frm->getFieldHtml('CONF_THEME_FONT_FAMILY_URL'); 
+                                                        echo $frm->getFieldHtml('CONF_THEME_FONT_FAMILY'); 
+                                                    ?>
+                                                </div>
                                             </div>
-                                        </div>
+                                        <?php } ?>
                                         <div class="form-group">
                                             <label class="labeled">
                                                 <?php

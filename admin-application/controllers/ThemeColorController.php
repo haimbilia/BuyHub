@@ -9,6 +9,7 @@ class ThemeColorController extends AdminBaseController
 {
     private $canView;
     private $canEdit;
+    private $apiKey;
 
     public function __construct($action)
     {
@@ -16,6 +17,8 @@ class ThemeColorController extends AdminBaseController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
         $this->canView = $this->objPrivilege->canViewThemeColor($this->admin_id, true);
         $this->canEdit = $this->objPrivilege->canEditThemeColor($this->admin_id, true);
+        $this->apiKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
+        $this->set("apiKey", $this->apiKey);
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
     }
@@ -25,6 +28,12 @@ class ThemeColorController extends AdminBaseController
         $this->objPrivilege->canViewThemeColor();
 
         $record = Configurations::getConfigurations();
+
+        $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
+        if (!empty($this->apiKey) && array_key_exists('CONF_THEME_FONT_FAMILY', $record) && ('' == $record['CONF_THEME_FONT_FAMILY'] || 'Poppins' == $googleFontFamily)) {
+            $record['CONF_THEME_FONT_FAMILY'] = 'Poppins-regular';
+        }
+        
         $frm = $this->getFontsForm();
         $frm->fill($record);
         $this->set('frm', $frm);
@@ -37,12 +46,16 @@ class ThemeColorController extends AdminBaseController
     private function getFontsForm()
     {
         $frm = new Form('frmGoogleFonts');
-        $frm->addHiddenField("", 'CONF_THEME_FONT_FAMILY_URL');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId), 'CONF_THEME_FONT_FAMILY', [], '', array('placeholder' => Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId)));
-        $fld->requirement->setRequired(true);
-        $link = "<a href='https://fonts.google.com' target='_blanlk'>https://fonts.google.com</a>";
-        $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->adminLangId), ['{URL}' => $link]);
-        $fld->htmlAfterField = '<small>' . $url . ' </small>';
+
+        if (!empty($this->apiKey)) {
+            $frm->addHiddenField("", 'CONF_THEME_FONT_FAMILY_URL');
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId), 'CONF_THEME_FONT_FAMILY', [], '', array('placeholder' => Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId)));
+            $fld->requirement->setRequired(true);
+            $link = "<a href='https://fonts.google.com' target='_blanlk'>https://fonts.google.com</a>";
+            $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->adminLangId), ['{URL}' => $link]);
+            $fld->htmlAfterField = '<small>' . $url . ' </small>';
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR', $this->adminLangId), 'CONF_THEME_COLOR');
         $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR_INVERSE', $this->adminLangId), 'CONF_THEME_COLOR_INVERSE');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
@@ -55,13 +68,12 @@ class ThemeColorController extends AdminBaseController
     {
         $this->objPrivilege->canEditThemeColor();
 
-        $apiKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
-        if (empty($apiKey)) {
+        if (empty($this->apiKey)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->adminLangId));
         }
 
         $curl = new Curl();
-        $curl->get('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $apiKey);
+        $curl->get('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $this->apiKey);
         if ($curl->error) {
             FatUtility::dieJsonError($curl->errorCode . ': ' . $curl->errorMessage);
         }
@@ -111,7 +123,8 @@ class ThemeColorController extends AdminBaseController
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
-        $post['CONF_THEME_FONT_FAMILY'] = FatApp::getPostedData('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
+        $fontFamily = FatApp::getPostedData('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
+        $post['CONF_THEME_FONT_FAMILY'] = empty($this->apiKey) ? 'Poppins' : $fontFamily;
 
         $record = new Configurations();
         if (!$record->update($post)) {
@@ -126,9 +139,11 @@ class ThemeColorController extends AdminBaseController
     {
         $this->objPrivilege->canEditThemeColor();
 
+        $font = empty($this->apiKey) ? 'Poppins' : 'Poppins-regular';
+
         $data = [
             "CONF_THEME_FONT_FAMILY_URL" => "",
-            "CONF_THEME_FONT_FAMILY" => "Poppins-regular",
+            "CONF_THEME_FONT_FAMILY" => $font,
             "CONF_THEME_COLOR" => "#ff3a59",
             "CONF_THEME_COLOR_INVERSE" => "#fff",
         ];
