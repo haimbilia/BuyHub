@@ -12,7 +12,7 @@
                             </svg></i><?php echo Labels::getLabel('LBL_Sign_up', $siteLangId); ?>
                     </div>
                     <h2><?php echo Labels::getLabel('LBL_Dont_have_an_account_yet?', $siteLangId); ?></h2>
-                    <a href="javaScript:void(0)" class="btn btn-outline-white js--register-btn"><?php echo Labels::getLabel('LBL_Register_Now', $siteLangId); ?></a>
+                    <a href="javaScript:void(0)" class="btn btn-outline-white loginRegBtn--js"><?php echo Labels::getLabel('LBL_Register_Now', $siteLangId); ?></a>
                 </div>
             </div>
             <div class="info-item" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>images/bg-signin.png);">
@@ -26,7 +26,7 @@
                         <?php echo Labels::getLabel('LBL_Sign_up', $siteLangId); ?>
                     </div>
                     <h2><?php echo Labels::getLabel('LBL_Do_You_Have_An_Account?', $siteLangId); ?></h2>
-                    <a href="javaScript:void(0)" class="btn btn-outline-white  js--login-btn"><?php echo Labels::getLabel('LBL_Sign_In_Now', $siteLangId); ?></a>
+                    <a href="javaScript:void(0)" class="btn btn-outline-white loginRegBtn--js"><?php echo Labels::getLabel('LBL_Sign_In_Now', $siteLangId); ?></a>
                 </div>
             </div>
         </div>
@@ -50,19 +50,16 @@
                             ?>
 
                         </div>
-                        <div class="card-sign_foot">
+                        <div class="card-sign_foot mt-0">
                             <p class="more-links">
                                 <?php echo $loginData['loginFrm']->getFieldHtml('forgot'); ?>
                                 |
-                                <a class="js--register-btn" href="javaScript:void(0)">
+                                <a class="loginRegBtn--js" href="javaScript:void(0)">
                                     <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
                                 </a>
                             </p>
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
             <div id="sign-up" class="form-item sign-up <?php echo ($isRegisterForm == 1) ? 'is-opened' : ''; ?>">
@@ -72,9 +69,3 @@
         </div>
     </section>
 </div>
-<script>
-    $('.info-item a.btn').click(function() {
-        $('.container-form').toggleClass("sign-up");
-        $('#sign-up').toggleClass("is-opened");
-    });
-</script>

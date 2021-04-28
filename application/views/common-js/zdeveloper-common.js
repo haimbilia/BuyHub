@@ -91,6 +91,11 @@ $(document).ready(function() {
         }
     };
     installJsColor();
+
+    $(document).on("click", '.loginRegBtn--js', function(){
+        $('.container-form').toggleClass("sign-up");
+        $('#sign-up').toggleClass("is-opened");
+    });
 });
 
 
@@ -150,12 +155,12 @@ startOtpInterval = function(parent = '', callback = '', params = []) {
     var counter = langLbl.otpInterval;
     element.parent().parent().show();
     element.text(counter);
-    $(parent + '.resendOtp-js').addClass('d-none');
+    $(parent + '.getOtpBtnBlock--js').addClass('d-none');
     otpIntervalObj = setInterval(function() {
         counter--;
         if (counter === 0) {
             clearInterval(otpIntervalObj);
-            $(parent + '.resendOtp-js').removeClass('d-none');
+            $(parent + '.getOtpBtnBlock--js').removeClass('d-none');
             element.parent().parent().hide();
             if ('' != callback && eval("typeof " + callback) == 'function') {
                 window[callback](params);
@@ -1209,12 +1214,12 @@ $(document).ready(function() {
             }
             $.mbsmessage.close();
 
-            $(obj).addClass('d-none');
-            $('small', obj).text(langLbl.resendOtp);
+            $(obj).text(langLbl.resendOtp);;
             
-            $(formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').show();
+            $(formClass + ' .submitBtn--js').show();
             $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":false}');
             $(formClass + '.loginWithOtp--js').val(1);
+            $(formClass  + ' .countdownFld--js').parent().removeClass('d-none');
             $(formClass + '.otpFieldBlock--js,' + formClass  + ' .countdownFld--js').removeClass('d-none');
             startOtpInterval(formClass);
         });
