@@ -156,11 +156,15 @@ startOtpInterval = function(parent = '', callback = '', params = []) {
     element.parent().parent().show();
     element.text(counter);
     $(parent + '.getOtpBtnBlock--js').addClass('d-none');
+
+    var resendOtpEle = $(parent + ".resendOtp-js");
+    var onClickFn = resendOtpEle.attr("onclick");
+    resendOtpEle.removeAttr("onclick");
     otpIntervalObj = setInterval(function() {
         counter--;
         if (counter === 0) {
             clearInterval(otpIntervalObj);
-            $(parent + " .resendOtp-js").attr("onclick", "getLoginOtp(this);").removeClass('disabled'); 
+            resendOtpEle.attr("onclick", onClickFn).removeClass('disabled'); 
             element.parent().parent().hide();
             if ('' != callback && eval("typeof " + callback) == 'function') {
                 window[callback](params);
@@ -1217,7 +1221,7 @@ $(document).ready(function() {
 
             $(obj).closest('.getOtpBtnBlock--js').addClass('d-none');
             
-            $(formClass + ' .resendOtp-js').removeAttr('onclick').addClass('disabled');
+            $(formClass + ' .resendOtp-js').addClass('disabled');
             $(formClass + ' .submitBtn--js').show();
             $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":false}');
             $(formClass + '.loginWithOtp--js').val(1);

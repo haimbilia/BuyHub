@@ -1,6 +1,6 @@
 <div class="form-side-inner">
     <a class="form-item_logo" href=""> <img src="http://localhost/yokart/image/site-logo/1?t=1608690809" alt=""> </a>
-    <div class="card-sign"> 
+    <div class="card-sign">
         <div class="card-sign_head">
             <h2 class="title">
                 <?php echo Labels::getLabel('LBL_Sign_Up', $siteLangId); ?>
@@ -12,12 +12,15 @@
         <div class="card-sign_foot">
             <?php if (isset($registerdata['signUpWithPhone']) && true === $smsPluginStatus) {
                 if (0 == $registerdata['signUpWithPhone']) { ?>
-                    <a class="otp-link" href="javaScript:void(0)" onClick="signUpWithPhone()"><?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD', $siteLangId); ?></a>
+                    <a class="otp-link" href="javaScript:void(0)" onClick="signUpWithPhone()"><?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?></a>
                 <?php } else { ?>
-                    <a class="otp-link" href="javaScript:void(0)" onClick="signUpWithEmail()"><?php echo Labels::getLabel('LBL_USE_EMAIL_INSTEAD', $siteLangId); ?></a>
+                    <a class="otp-link" href="javaScript:void(0)" onClick="signUpWithEmail()"><?php echo Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $siteLangId); ?></a>
                 <?php } ?>
             <?php } ?>
+            <span class="pipe">|</span>
+            <a class="loginRegBtn--js" href="javaScript:void(0)">
+                <?php echo Labels::getLabel('LBL_SIGN_IN_NOW', $siteLangId); ?>
+            </a>
         </div>
     </div>
-
 </div>

@@ -2442,7 +2442,9 @@ class User extends MyAppModel
             return false;
         }
 
-        if (!$this->setLoginCredentials($postedData['user_username'], $email, $postedData['user_password'], $postedData['user_active'], $postedData['user_verify'])) {
+        $password = array_key_exists('user_password', $postedData) && !empty($postedData['user_password']) ? $postedData['user_password'] : '';
+
+        if (!$this->setLoginCredentials($postedData['user_username'], $email, $password, $postedData['user_active'], $postedData['user_verify'])) {
             $db->rollbackTransaction();
             return false;
         }

@@ -125,14 +125,14 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                         <?php
                         $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
                         $replace = [
-                            '{SECONDS}' => ' <span class="intervaltime intervalTimer-js">' . User::OTP_INTERVAL . '</span>',
+                            '{SECONDS}' => '<span class="intervaltime intervalTimer-js">' . User::OTP_INTERVAL . '</span>',
                         ];
                         echo CommonHelper::replaceStringData($msg, $replace);
                         ?>
                     </p>
                 </div>
                 <div class="col-auto d-none">
-                    <a class="link resendOtp-js disabled" href="javascript:void(0);"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
+                    <a class="link resendOtp-js disabled" href="javascript:void(0);" onclick="getLoginOtp(this);"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
                 </div>
             </div>
         <?php } else { ?>
