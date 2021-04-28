@@ -512,6 +512,7 @@ $(document).on('click', '.tabs_006', function(){
     var productId = $("input[name='product_id']").val();
     if(productId > 0){
         productDownloads(productId);
+        getDigitalDownloads();
     }else{
         displayProdInitialTab();
     }
@@ -527,4 +528,53 @@ productDownloads = function(productId){
         $("a[rel='tabs_006']").addClass('active');
         $("#tabs_006").html(res);
     });
+}
+
+saveDownloadLinks = function ()
+{
+    productId = $('#frmDownload input[name=product_id]').val();
+    downloadType = $("#frmDownload select[name='download_type']").val();
+    optionCombi = $("#frmDownload select[name='option_comb_id']").val();
+
+    // alert(productId + ' <> ' + downloadType + ' <> ' + optionCombi);
+
+    var data = fcom.frmData(document.frmDownload);
+    if (!$('#frmDownload').validate()) return;
+    fcom.ajax(fcom.makeUrl('Products', 'setupDigitalDownloads'), data, function(t) {
+        var ans = $.parseJSON(t);
+        if( ans.status == 0 ){
+            $.systemMessage( ans.msg,'alert alert--danger' );
+            return;
+        }
+        $.systemMessage( ans.msg,'alert alert--success' );
+        // productDownloadsFrm(selprod_id, download_type);
+    });
+}
+
+getDigitalDownloads = function()
+{
+    productId = $('#frmDownload input[name=product_id]').val();
+    downloadType = $("#frmDownload select[name='download_type']").val();
+    optionCombi = $("#frmDownload select[name='option_comb_id']").val();
+    var data = '&product_id=' + productId + '&download_type=' + downloadType + '&option_comb=' + optionCombi;
+    
+    if (downloadType == 1) {
+        fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function(t) {
+            var ans = $.parseJSON(t);
+            if( ans.status == 0 ){
+                $.systemMessage( ans.msg,'alert alert--danger' );
+                return;
+            }
+            $("#product_downloadable_link").val(ans.links);
+        });
+    } else {
+        fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function(t) {
+            var ans = $.parseJSON(t);
+            if( ans.status == 0 ){
+                $.systemMessage( ans.msg,'alert alert--danger' );
+                return;
+            }
+            $("#product_downloadable_link").val(ans.links);
+        });
+    }
 }

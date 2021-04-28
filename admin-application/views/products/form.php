@@ -74,12 +74,17 @@
 </div>
 <script>
 productInitialSetUpFrm(<?php echo $productId; ?>, <?php echo $prodCatId; ?>);
+var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
 var product_type =  '<?php echo $productType; ?>';
 var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
 var PRODUCT_TYPE_PHYSICAL = '<?php echo Product::PRODUCT_TYPE_PHYSICAL; ?>';
 if(product_type == PRODUCT_TYPE_DIGITAL){
     hideShippingTab();
-    // showDownloadTab();
+    if (0 == attachDownloadsWithInv) {
+        showDownloadTab();
+    } else {
+        hideDownloadTab();
+    }
 } else {
     hideDownloadTab();
 }

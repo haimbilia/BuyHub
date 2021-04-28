@@ -874,10 +874,15 @@ class ProductsController extends AdminBaseController
     {
         $this->objPrivilege->canEditProducts();
         $productId = FatUtility::int($productId);
-        $productType = Product::getAttributesById($productId, 'product_type');
+        $prodData = Product::getAttributesById($productId, ['product_type', 'product_download_attachements_with_inventory']);
+
+        $productType = $prodData['product_type'];
+        $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+        
         $this->set('productId', $productId);
         $this->set('prodCatId', $prodCatId);
         $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
         $this->_template->addCss(array('css/cropper.css', 'css/tagify.css'));
         $this->set("includeEditor", true);
@@ -892,6 +897,7 @@ class ProductsController extends AdminBaseController
         $languages = Language::getAllNames();
         $productFrm = $this->getProductIntialSetUpFrm($productId, $prodCatId);
         $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = 0;
         if ($productId > 0) {
             $prodData = Product::getAttributesById($productId);
             foreach ($languages as $langId => $data) {
@@ -958,6 +964,8 @@ class ProductsController extends AdminBaseController
 
             $productType = $prodData['product_type'];
 
+            $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+
         }
 
         unset($languages[$siteDefaultLangId]);
@@ -966,6 +974,7 @@ class ProductsController extends AdminBaseController
         $this->set('otherLanguages', $languages);
         $this->set('prodCatId', $prodCatId);
         $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->_template->render(false, false, 'products/product-initial-setup-frm.php');
     }
 
@@ -1489,21 +1498,30 @@ class ProductsController extends AdminBaseController
 
     public function downloadsForm($productId)
     {
-        $frm = $this->getDownloadForm($this->adminLangId);
+        $frm = $this->getDownloadForm($this->adminLangId, $productId);
         $frmData = [
             'product_id' => $productId
         ];
+
         $frm->fill($frmData);
         $this->set('downloadFrm', $frm);
         $this->set('adminLangId', $this->adminLangId);
         $this->_template->render(false, false, 'products/download-setup-frm.php');
     }
     
-    private function getDownloadForm($langId)
+    private function getDownloadForm($langId, $productId)
     {
         $frm = new Form('frmDownload');
         $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
         $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
+
+        $productOptions = Product::getProductOptions($productId, $this->adminLangId, true);
+        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
+        
+        if (0 < count($optionCombinations)) {
+            $optionCombinations = array('all' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
+            $frm->addSelectBox(Labels::getLabel('LBL_Option', $langId), 'option_comb_id', $optionCombinations, '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();
+        }
 
         $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
         $fld = $frm->addTextArea(Labels::getLabel('LBL_Downloadable_Link', $langId), 'product_downloadable_link');
@@ -1516,5 +1534,69 @@ class ProductsController extends AdminBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->adminLangId));
         $frm->addHiddenField('', 'product_id');
         return $frm;
+    }
+
+    public function setupDigitalDownloads()
+    {
+        $post = FatApp::getPostedData();
+        
+        $type = $post['download_type'];
+        $prodId = $post['product_id'];
+        /* TODO
+            => need to check downloads allowed at product level
+        */
+
+        if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
+            $productdownload = new DigitalDownloads($prodId);
+            if ($productdownload->saveDownloadReferences($post['option_comb_id'], $post['product_downloadable_link'])) {
+                FatUtility::dieJsonSuccess('Saved Successfully');
+            } else {
+                FatUtility::dieJsonError($productdownload->getError());
+            }
+        } else {
+            CommonHelper::printArray([$post], 1);
+        }
+
+        FatUtility::dieJsonError('Something went wrong!!!');
+    }
+
+    public function getDigitalDownloadLinks()
+    {
+        $post = FatApp::getPostedData();
+        
+        $type = $post['download_type'];
+        $prodId = $post['product_id'];
+        $optionCombi = $post['option_comb'];
+
+        /* TODO
+            => need to check downloads allowed at product level
+        */
+
+        $srch = new DigitalDownloadsSearch();
+        $srch->addCondition('pdd_product_id', '=', $prodId);
+        $srch->addCondition('pdd_options_code', '=', $optionCombi);
+
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+
+        $links = '';
+        if (is_array($row)) {
+            $links = $row['pdd_ext_links'];
+        }
+        
+        $ret['msg'] = '';
+        $ret['links'] = $links;
+
+        FatUtility::dieJsonSuccess($ret);
+    }
+
+    public function getDigitalDownloadAttachments()
+    {
+        $post = FatApp::getPostedData();
+        
+        CommonHelper::printArray([$post], 1);
     }
 }

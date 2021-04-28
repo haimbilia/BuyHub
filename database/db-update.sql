@@ -307,4 +307,32 @@ UPDATE `tbl_seller_packages` SET `spackage_type` = '2' WHERE `tbl_seller_package
 
 -- --- task_84719_Preview_module_for_digital_files -- ---
 ALTER TABLE `tbl_products` ADD `product_download_attachements_with_inventory` TINYINT(1) NOT NULL DEFAULT '0' AFTER `product_type`;
+
+--
+-- Table structure for table `tbl_product_option_codes`
+--
+
+CREATE TABLE `tbl_product_digital_downloads` (
+  `pdd_id` int(11) NOT NULL,
+  `pdd_product_id` int(11) NOT NULL,
+  `pdd_options_code` varchar(255) NOT NULL COMMENT '-1 for all options',
+  `pdd_ext_links` text NOT NULL COMMENT 'For saving links'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for table `tbl_product_digital_downloads`
+--
+ALTER TABLE `tbl_product_digital_downloads`
+  ADD PRIMARY KEY (`pdd_id`),
+  ADD UNIQUE KEY `pdd_options_code` (`pdd_product_id`,`pdd_options_code`) USING BTREE;
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_product_digital_downloads`
+--
+ALTER TABLE `tbl_product_digital_downloads`
+  MODIFY `pdd_id` int(11) NOT NULL AUTO_INCREMENT;
 -- --- task_84719_Preview_module_for_digital_files -- ---
