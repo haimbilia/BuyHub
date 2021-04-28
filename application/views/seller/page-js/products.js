@@ -141,6 +141,7 @@ $(document).on('change','.selprodoption_optionvalue_id',function(){
 				$.mbsmessage(ans.msg, true, 'alert--success');
 			} else {
 				$.mbsmessage(ans.msg, true, 'alert--danger');
+                                $(obj).prop('checked',!$(obj).prop('checked'));
 			}
 			/* loadSellerProducts(document.frmSearchSellerProducts); */
 		});

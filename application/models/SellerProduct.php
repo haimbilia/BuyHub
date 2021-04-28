@@ -987,6 +987,7 @@ class SellerProduct extends MyAppModel
 
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_user_id', '=', $userId);
+        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
         if ($selprodId) {
             $srch->addCondition('selprod_id', '!=', $selprodId);
         }
