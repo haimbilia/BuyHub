@@ -1590,7 +1590,7 @@ class User extends MyAppModel
         $data = [
             static::DB_TBL_UPV_PREFIX . 'user_id' => $this->mainTableRecordId,
             static::DB_TBL_UPV_PREFIX . 'otp' => $otp,
-            static::DB_TBL_UPV_PREFIX . 'phone_dcode' => ValidateElement::formatDialCode(trim($dialCode)),
+            static::DB_TBL_UPV_PREFIX . 'phone_dcode' => trim($dialCode),
             static::DB_TBL_UPV_PREFIX . 'phone' => trim($phone),
             static::DB_TBL_UPV_PREFIX . 'expired_on' => date('Y-m-d H:i:s', strtotime("+" . self::OTP_AGE . " minutes", time())),
         ];
@@ -2090,7 +2090,7 @@ class User extends MyAppModel
         return true;
     }
 
-    private function deletePhoneOtp($userId)
+    public function deletePhoneOtp($userId)
     {
         $db = FatApp::getDb();
         if (!$db->deleteRecords(static::DB_TBL_USER_PHONE_VER, array('smt' => static::DB_TBL_UPV_PREFIX . 'user_id = ?', 'vals' => [$userId]))) {
@@ -2442,7 +2442,9 @@ class User extends MyAppModel
             return false;
         }
 
-        if (!$this->setLoginCredentials($postedData['user_username'], $email, $postedData['user_password'], $postedData['user_active'], $postedData['user_verify'])) {
+        $password = array_key_exists('user_password', $postedData) && !empty($postedData['user_password']) ? $postedData['user_password'] : '';
+
+        if (!$this->setLoginCredentials($postedData['user_username'], $email, $password, $postedData['user_active'], $postedData['user_verify'])) {
             $db->rollbackTransaction();
             return false;
         }
@@ -2579,7 +2581,7 @@ class User extends MyAppModel
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $userPhone, 'OR', true);
         $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetch($rs);
+        return (array) FatApp::getDb()->fetch($rs);
     }
 
     public function saveUserNotifications()

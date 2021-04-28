@@ -81,18 +81,10 @@
 .section-head {
     width: 100%;
     margin-bottom: 1rem;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     &.section--head--center {
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
         justify-content: center;
         text-align: center;
     }
@@ -288,11 +280,7 @@
         position: relative;
         font-size: 0.9em;
         font-weight: 400;
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
         text-decoration: none;
         -webkit-transition: all 0.2s linear;
@@ -312,8 +300,6 @@
         li {
             font-size: 0.95em;
             margin: 4px 0;
-            -webkit-padding-start: 0;
-            -moz-padding-start: 0;
             padding-#{$start-direction}: 0;
         }
     }
@@ -401,11 +387,7 @@
     position: relative;
     background-color: #fff;
     margin-#{$start-direction}: 5px;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -449,11 +431,7 @@
 }
 
 .promotion-area ul {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
     flex-wrap: wrap;
     @include media-breakpoint-down(md) {

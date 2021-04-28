@@ -3,12 +3,10 @@
     margin: 0;
     padding: 0;
     ul {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         margin: 0;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
@@ -54,16 +52,16 @@
     }
     &--center {
         ul {
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
+            
+            
             justify-content: center;
         }
     }
     &--right {
         color: #fff;
         ul {
-            -webkit-box-pack: end;
-            -ms-flex-pack: end;
+            
+            
             justify-content: flex-end;
         }
     }
