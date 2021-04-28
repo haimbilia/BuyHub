@@ -82,16 +82,6 @@ $(document).ready(function() {
         $("[data-simplebar]").attr('data-simplebar-direction', 'rtl');
     }
 
-    var installJsColor = function () {
-        if (0 < $('.jscolor').length) {
-            $('.jscolor').each(function(){
-                $(this).attr('data-jscolor', '{}');
-            });
-            jscolor.install();
-        }
-    };
-    installJsColor();
-
     $(document).on("click", '.loginRegBtn--js', function(){
         $('.container-form').toggleClass("sign-up");
         $('#sign-up').toggleClass("is-opened");
@@ -119,6 +109,16 @@ $(document).on('keyup', 'input.otpVal-js', function(e) {
         element.focus();
     }
 });
+
+installJsColor = function () {
+    if (0 < $('.jscolor').length) {
+        $('.jscolor').each(function(){
+            $(this).attr('data-jscolor', '{}');
+        });
+        jscolor.install();
+    }
+};
+installJsColor();
 
 unlinkSlick = function() {
     $('.js-widget-scroll').slick('unslick');
@@ -160,7 +160,7 @@ startOtpInterval = function(parent = '', callback = '', params = []) {
         counter--;
         if (counter === 0) {
             clearInterval(otpIntervalObj);
-            $(parent + '.getOtpBtnBlock--js').removeClass('d-none');
+            $(parent + " .resendOtp-js").attr("onclick", "getLoginOtp(this);").removeClass('disabled'); 
             element.parent().parent().hide();
             if ('' != callback && eval("typeof " + callback) == 'function') {
                 window[callback](params);
@@ -1186,6 +1186,7 @@ $(document).ready(function() {
             $(formClass + '.forgetPwd--js, ' + formClass + ' .pwdField--js, ' + formClass + ' .submitBtn--js, ' + formClass + ' .remember--js').show();
             $(formClass + ' .withPwdLbl--js, ' + formClass + '.otpFieldBlock--js, ' + formClass + ' .getOtpBtnBlock--js').addClass('d-none');
         }
+        
         stylePhoneNumberFld(formElement + " input[name='username']", (!flag));
     };
 
@@ -1214,12 +1215,13 @@ $(document).ready(function() {
             }
             $.mbsmessage.close();
 
-            $(obj).text(langLbl.resendOtp);;
+            $(obj).closest('.getOtpBtnBlock--js').addClass('d-none');
             
+            $(formClass + ' .resendOtp-js').removeAttr('onclick').addClass('disabled');
             $(formClass + ' .submitBtn--js').show();
             $(formClass + '.pwdField--js input[name="password"]').attr('data-fatreq', '{"required":false}');
             $(formClass + '.loginWithOtp--js').val(1);
-            $(formClass  + ' .countdownFld--js').parent().removeClass('d-none');
+            $(formClass  + ' .countdownFld--js, ' + formClass  + ' .resendOtp-js').parent().removeClass('d-none');
             $(formClass + '.otpFieldBlock--js,' + formClass  + ' .countdownFld--js').removeClass('d-none');
             startOtpInterval(formClass);
         });
@@ -1783,7 +1785,6 @@ $(document).ajaxComplete(function() {
             $('html').removeClass('pop-on');
         }
     });
-    
     installJsColor();
 });
 
