@@ -45,6 +45,25 @@ $submitBtnFld->developerTags['col'] = 12;
 $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-inventory');
 
+$inventoryForm->setCustomRendererClass('FormRendererBS');
+$inventoryForm->developerTags['colClassAfterWidthDefault'] = 'col';
+$inventoryForm->developerTags['colWidthClassesDefault'] = [null, null, null, null];
+$inventoryForm->developerTags['colWidthValuesDefault'] = [null, null, null, null];
+$inventoryForm->developerTags['fldWidthClassesDefault'] = [null, null, null, null];
+$inventoryForm->developerTags['fldWidthValuesDefault'] = [null, null, null, null];
+$inventoryForm->developerTags['labelWidthClassesDefault'] = [null, null, null, null];
+$inventoryForm->developerTags['labelWidthValuesDefault'] = [null, null, null, null];
+$inventoryForm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+
+$inventoryForm->setFormTagAttribute('onsubmit', 'addInvOption(); return(false);');
+$inventoryForm->setFormTagAttribute('class', 'form optionForm-js optionFld-js form--horizontal layout--' . Language::getLayoutDirection($siteDefaultLangId));
+
+$fld = $inventoryForm->getField('btn_submit');
+$fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
+
+$fld = $inventoryForm->getField('btn_clear');
+$fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block clearBtn--js');
+$fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -224,82 +243,6 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                     </div>
                 <?php } ?>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="js-scrollable table-wrap">
-                        <table id="optionsTable-js" class="table table-justified">
-                            <thead>
-                                <tr>
-                                    <?php if (($selprod_id == 0 && !empty($availableOptions)) || !empty($optionValues)) { ?>
-                                        <th><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
-                                        </th>
-                                    <?php } ?>
-                                    <th><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
-                                    </th>
-                                    <?php $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_This_price_is_including_the_tax_rates.', $siteLangId) : Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $siteLangId);
-                                    $selPriceTitle .= ' ' . Labels::getLabel('LBL_Min_Selling_price', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
-                                    ?>
-                                    <th><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
-                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
-                                    </th>
-                                    <th><?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
-                                    </th>
-                                    <th><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
-                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($selprod_id == 0 && !empty($availableOptions)) {
-                                    $i = $j = 0; ?>
-                                    <?php foreach ($availableOptions as $optionKey => $optionValue) {
-                                        if (SellerProduct::UPDATE_OPTIONS_COUNT < $i) {
-                                            $j++;
-                                            $i = 0;
-                                        } ?>
-                                        <tr>
-                                            <td><?php echo str_replace("_", " | ", $optionValue); ?>
-                                            </td>
-                                            <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_cost' . $optionKey . ']'); ?>
-                                            </td>
-                                            <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_price' . $optionKey . ']'); ?>
-                                            </td>
-                                            <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_stock' . $optionKey . ']'); ?>
-                                            </td>
-                                            <td class="optionFld-js fldSku"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_sku' . $optionKey . ']'); ?>
-                                            </td>
-                                            <td>
-                                                <button disabled="disabled" onClick="copyRowData(this)" type="button" class="js-copy-btn btn btn-secondary btn-elevate btn-icon" title="<?php echo Labels::getLabel('LBL_Copy_to_clipboard', $siteLangId) ?>">
-                                                    <i class="fas fa-paste"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    <?php
-                                        $i++;
-                                    } ?>
-                                <?php
-                                } else { ?>
-                                    <tr>
-                                        <?php if (!empty($optionValues)) { ?>
-                                            <td><?php echo implode(' | ', $optionValues); ?>
-                                            </td>
-                                        <?php } ?>
-                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_cost'); ?>
-                                        </td>
-                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_price'); ?>
-                                        </td>
-                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_stock'); ?>
-                                        </td>
-                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_sku'); ?>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="field-set">
@@ -374,34 +317,80 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                     </div>
                 </div>
             <?php } ?>
-            <div class="row">
-                <div class="col-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $frmSellerProduct->getFieldHtml('btn_cancel'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 text-right">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $frmSellerProduct->getFieldHtml('btn_submit'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <?php echo $frmSellerProduct->getFieldHtml('selprod_product_id');
             echo $frmSellerProduct->getFieldHtml('selprod_urlrewrite_id');
             echo $frmSellerProduct->getFieldHtml('selprod_id');
             ?>
             </form>
             <?php echo $frmSellerProduct->getExternalJS(); ?>
+
+
+            <?php if ($selprod_id == 0) { ?>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>
+                            <?php echo Labels::getLabel('LBL_INVENTORY_OPTIONS', $siteLangId); ?>
+                            <a href="javascript:void(0);" onclick="viewProdOptions(<?php echo $product_id; ?>)">
+                                <i class="fa fa-info-circle" data-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_CLICK_TO_VIEW_INVENTORY_OPTIONS', $siteLangId) ?>" style="font-size: 15px;"></i>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php echo $inventoryForm->getFormHtml(); ?>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="js-scrollable table-wrap">
+                        <table id="optionsTable-js" class="table table-justified <?php echo ($selprod_id == 0) ? 'd-none' : ''; ?>">
+                            <thead>
+                                <tr>
+                                    <?php if ($selprod_id == 0 || !empty($optionValues)) { ?>
+                                        <th><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
+                                        </th>
+                                    <?php } ?>
+                                    <th><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
+                                    </th>
+                                    <?php $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_This_price_is_including_the_tax_rates.', $siteLangId) : Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $siteLangId);
+                                    $selPriceTitle .= ' ' . Labels::getLabel('LBL_Min_Selling_price', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
+                                    ?>
+                                    <th><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
+                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
+                                    </th>
+                                    <th><?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
+                                    </th>
+                                    <th><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
+                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (0 < $selprod_id) { ?>
+                                    <tr>
+                                        <?php if (!empty($optionValues)) { ?>
+                                            <td><?php echo implode(' | ', $optionValues); ?>
+                                            </td>
+                                        <?php } ?>
+                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_cost'); ?>
+                                        </td>
+                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_price'); ?>
+                                        </td>
+                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_stock'); ?>
+                                        </td>
+                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_sku'); ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -485,12 +474,164 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
 
         });
 
-        copyRowData = function(btn) {
-            var copiedData = '';
-            $(btn).parent().parent().find('input').each(function() {
-                copiedData = copiedData + $(this).val() + '\t';
-            });
 
+        var productId = $("input[name='selprod_product_id']").val();
+
+        var selectedOptions = [];
+        bindOptionAutoComplete = function() {
+            if (1 > $(".optionname--js").length) {
+                return;
+            }
+
+            if (0 < $("table#optionsTable-js tbody tr").length) {
+                $("table#optionsTable-js").removeClass('d-none');
+            }
+
+            $(".optionname--js").select2({
+                closeOnSelect: true,
+                dir: langLbl.layoutDirection,
+                allowClear: true,
+                placeholder: $(".optionname--js").attr('placeholder'),
+                ajax: {
+                    url: fcom.makeUrl('Seller', 'getOptions', [productId]),
+                    dataType: 'json',
+                    delay: 250,
+                    method: 'post',
+                    data: function(params) {
+                        if ('undefined' != typeof params.term && '' != params.term) {
+                            $.systemMessage(langLbl.processing, 'alert--process', false);
+                        }
+                        return {
+                            keyword: params.term, // search term
+                            selectedOptions: JSON.stringify(selectedOptions),
+                        };
+                    },
+                    processResults: function(data, params) {
+                        if (0 < (data.options).length) {
+                            $.systemMessage.close();
+                        }
+                        return {
+                            results: data.options
+                        };
+                    },
+                    cache: false
+                },
+                minimumInputLength: 0,
+                templateResult: function(result) {
+                    return result.name;
+                },
+                templateSelection: function(result) {
+                    return result.name || result.text;
+                },
+                language: {
+                    noResults: function(params) {
+                        return langLbl.typeToSearch;
+                    }
+                }
+            }).on('select2:selecting', function(e) {
+                var item = e.params.args.data;
+                if (0 < $('table#optionsTable-js tbody tr#' + item.id).length) {
+                    $(".optionname--js").val(null).trigger('change');
+                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                    return;
+                } else {
+                    $('input[name="inv_option_name"]').val(item.name);
+                    $('input[name="inv_option_id"]').val(item.id);
+                }
+
+            }).on('select2:unselecting', function(e) {
+                $('input[name="inv_option_id"], input[name="inv_option_name"]').val('');
+            });
+        }
+
+        addInvOption = function() {
+            var productId = $("input[name='selprod_product_id']").val();
+            var invOptionName = $('input[name="inv_option_name"]').val();
+            var invOptionId = $('input[name="inv_option_id"]').val();
+            var invOptionCost = $('input[name="inv_option_cost"]').val();
+            var invOptionSell_price = $('input[name="inv_option_sell_price"]').val();
+            var invOptionStock = $('input[name="inv_option_stock"]').val();
+            var invOptionSku = $('input[name="inv_option_sku"]').val();
+            var selprod_id = $('.optionForm-js input[name="inv_option_selprod_id"]').val();
+
+            if ('' == selprod_id &&
+                ('' == invOptionName ||
+                    '' == invOptionId ||
+                    '' == invOptionCost ||
+                    '' == invOptionSell_price ||
+                    '' == invOptionStock ||
+                    '' == invOptionSku)) {
+                $.systemMessage(langLbl.requiredFields, 'alert--danger');
+                return;
+            }
+
+            var postData = {
+                inv_option_index: $("table#optionsTable-js tbody tr").length,
+                product_id: productId,
+                inv_option_name: invOptionName,
+                inv_option_id: invOptionId,
+                inv_option_selprod_id: selprod_id
+            };
+
+            postData['selprod_cost' + invOptionId] = invOptionCost;
+            postData['selprod_price' + invOptionId] = invOptionSell_price;
+            postData['selprod_stock' + invOptionId] = invOptionStock;
+            postData['selprod_sku' + invOptionId] = invOptionSku;
+
+            var invFormData = $('.inventoryForm-js').serializeArray().reduce(function(obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+
+            postData = $.extend(invFormData, postData);
+            $.systemMessage(langLbl.processing, 'alert--process');
+            $.ajax({
+                url: fcom.makeUrl('Seller', 'addInvOption'),
+                data: postData,
+                dataType: 'json',
+                type: 'post',
+                success: function(json) {
+                    $.systemMessage.close();
+                    $("table#optionsTable-js tbody").prepend(json.html);
+
+                    if (0 < $("table#optionsTable-js tbody tr").length) {
+                        $("table#optionsTable-js").removeClass('d-none');
+                    }
+                    
+                    if (0 < selectedOptions.length) {
+                        if (-1 == selectedOptions.indexOf(invOptionId)) {
+                            $.merge(selectedOptions, [invOptionId]);
+                        }
+                    } else {
+                        selectedOptions = [invOptionId];
+                    }
+
+                    clearInvOptionForm();
+                },
+            });
+        }
+
+        clearInvOptionForm = function() {
+            /* Reset inv option form */
+            $('.clearBtn--js').show();
+            $("input[name^=inv_option]").val('');
+            $(".optionForm-js .optionname--js").val(null).trigger('change');
+            $('.optionForm-js .optionname--js, .optionForm-js .select2').show();
+            $('.optionForm-js .optionname--js').parent().find('.optionName-js').remove();
+        }
+
+        <?php if ($selprod_id == 0) { ?>
+            bindOptionAutoComplete();
+        <?php } ?>
+
+        copyRowData = function(btn, selProdId = 0) {
+            var copiedData = '';
+            var tr = $(btn).closest('tr');
+            tr.find('[data-val]').each(function() {
+                if ('' != $(this).data('val')) {
+                    copiedData = copiedData + $(this).data('val') + '\t';
+                }
+            });
             var copiedField = document.createElement('input');
             copiedField.value = copiedData;
             document.body.appendChild(copiedField)
@@ -500,23 +641,71 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
 
             $(btn).attr('title', langLbl.copied);
             $(btn).addClass('clicked');
+
+            var optionId = tr.attr('id');
+            if (0 < selProdId) {
+                $('.clearBtn--js').hide();
+                var optionName = $("#" + optionId + " td:first").text();
+                $('.optionForm-js input[name="inv_option_id"]').val(optionId);
+                $('.optionForm-js input[name="inv_option_name"]').val(optionName);
+                $('.optionForm-js input[name="inv_option_selprod_id"]').val(selProdId);
+                $('.optionForm-js .optionname--js, .optionForm-js .select2').hide();
+
+                var optionNameHtm = '<input disabled="disabled" name="optname" class="optionName-js" value="' + optionName + '">'
+                $('.optionForm-js .optionname--js').parent().append(optionNameHtm);
+                tr.remove();
+            }
+
+            pasteData(copiedData, '.optionForm-js input:first');
         }
 
+        pasteData = function(pastedData, selector) {
+            var pastedDataArr = pastedData.split('\t');
+            var count = 0;
+            $(selector).closest('form').find('input[type="text"]').each(function() {
+                $(this).val('');
+                $(this).val(pastedDataArr[count]);
+                count = parseInt(count) + 1;
+            });
+            $(selector).parent().parent().find('button').removeAttr("disabled");
+            $('.js-copy-btn').attr('title', langLbl.copyToClipboard);
+            $('.js-copy-btn').removeClass('clicked');
+            $(selector).parent().parent().next().children().children().first().focus();
+        }
+
+        viewProdOptions = function(productId) {
+            $.facebox(function() {
+                fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
+                    var res = $.parseJSON(t);
+                    fcom.updateFaceboxContent(res.html, 'medium-fb-width');
+                });
+            });
+        };
+
+        sellerProductDelete = function(btn, id) {
+            if (!confirm(langLbl.confirmDelete)) {
+                return;
+            }
+            data = 'id=' + id;
+            fcom.updateWithAjax(fcom.makeUrl('Seller', 'sellerProductDelete'), data, function(res) {
+                var actionTr = $(btn).closest('tr');
+                var optionValuePos = selectedOptions.indexOf(actionTr.attr('id'));
+                
+                if (-1 < optionValuePos) {
+                    selectedOptions.splice(optionValuePos, 1);   
+                }
+                
+                $(btn).closest('tr').remove();
+                if (1 > $("table#optionsTable-js tbody tr").length) {
+                    $("table#optionsTable-js").addClass('d-none');
+                }
+            });
+        };
     });
 
     $(document).on('paste', '.optionFld-js input', function(e) {
         e.preventDefault();
         var pastedData = e.originalEvent.clipboardData.getData('text');
-        var pastedDataArr = pastedData.split('\t');
-        var count = 0;
-        $(this).parent().parent().find('input').each(function() {
-            $(this).val('')
-            $(this).val(pastedDataArr[count])
-            count = parseInt(count) + 1;
-        });
-        $(this).parent().parent().find('button').removeAttr("disabled");
-        $('.js-copy-btn').attr('title', langLbl.copyToClipboard);
-        $('.js-copy-btn').removeClass('clicked');
-        $(this).parent().parent().next().children().children().first().focus();
+        pasteData(pastedData, this);
     });
 </script>

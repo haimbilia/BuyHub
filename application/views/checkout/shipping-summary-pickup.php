@@ -6,20 +6,20 @@
                 <div class="review-block__label">
                     <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
                 </div>
-                <div class="review-block__content" role="cell">
+                <div class="review-block__content" >
                     <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
                         <?php if (strlen($addresses['addr_address2']) > 0) {
                             echo ", " . $addresses['addr_address2']; ?>
                         <?php } ?>
                     </p>
                     <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?></p>
-                    <?php if (strlen($addresses['addr_phone']) > 0) { 
+                    <?php if (strlen($addresses['addr_phone']) > 0) {
                         $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
-                        ?>
+                    ?>
                         <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                     <?php } ?>
                 </div>
-                <div class="review-block__link" role="cell">
+                <div class="review-block__link" >
                     <a class="link" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
                 </div>
             </li>
@@ -28,10 +28,10 @@
         <div class="step__section">
             <div class="step__section__head">
                 <h5 class="step__section__head__title">
-                    <?php 
+                    <?php
                     $cartObj = new Cart();
                     if ($cartObj->hasPhysicalProduct()) {
-                        echo Labels::getLabel('LBL_Pickup_Summary', $siteLangId); 
+                        echo Labels::getLabel('LBL_Pickup_Summary', $siteLangId);
                     } else {
                         echo Labels::getLabel('LBL_REVIEW_CHECKOUT', $siteLangId);
                     }
@@ -68,9 +68,9 @@
                                     </p>
                                     <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                     <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                                    <?php if (strlen($address['addr_phone']) > 0) { 
+                                    <?php if (strlen($address['addr_phone']) > 0) {
                                         $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
-                                        ?>
+                                    ?>
                                         <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                     <?php } ?>
                                     <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?></p>
@@ -80,7 +80,7 @@
                                 <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
                                 <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotDate; ?>">
                                 <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                                    <a class="btn btn-secondary btn-sm pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, 0)">
+                                    <a class="text-link mr-2 pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, 0)">
                                         <?php
                                         if (!empty($levelItems['pickup_address'])) {
                                             echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
@@ -125,9 +125,9 @@
                                                 </p>
                                                 <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                                 <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                                                <?php if (strlen($address['addr_phone']) > 0) { 
+                                                <?php if (strlen($address['addr_phone']) > 0) {
                                                     $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
-                                                    ?>
+                                                ?>
                                                     <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                                 <?php } ?>
                                                 <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?></p>
@@ -138,14 +138,14 @@
                                             <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
                                             <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotDate; ?>">
                                             <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                                                <a class="btn btn-secondary btn-sm pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $product['shop_id']; ?>)">
-                                                <?php
+                                                <a class="text-link mr-2 pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $product['shop_id']; ?>)">
+                                                    <?php
                                                     if (!empty($levelItems['pickup_address'])) {
                                                         echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
                                                     } else {
                                                         echo Labels::getLabel('LBL_SELECT_PICKUP', $siteLangId);
                                                     }
-                                                ?>
+                                                    ?>
                                                 </a>
                                             <?php } else {
                                                 echo Labels::getLabel('MSG_NO_PICKUP_ADDRESS_CONFIGURED', $siteLangId);
@@ -161,7 +161,8 @@
                                     <div class="product-profile__thumbnail">
                                         <a href="<?php echo $productUrl; ?>">
                                             <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                                        </a></div>
+                                        </a>
+                                    </div>
                                     <div class="product-profile__data">
                                         <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a></div>
                                         <div class="options">
@@ -173,21 +174,21 @@
                                                                 echo rtrim($optionStr, '|');
                                                             } ?></p>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="wrap-qty-price">
-                                <div class="quantity quantity-2">
-                                            <span class="decrease decrease-js"><i class="fas fa-minus"></i></span>
-                                            <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                                            <span class="increase increase-js"><i class="fas fa-plus"></i></span>
-                                </div>
+                                    <div class="quantity quantity-2">
+                                        <span class="decrease decrease-js"><i class="fas fa-minus"></i></span>
+                                        <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                        <span class="increase increase-js"><i class="fas fa-plus"></i></span>
+                                    </div>
 
-                                <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                    <?php if ($product['special_price_found']) { ?>
-                                        <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
-                                    <?php } ?>
-                                </div>
+                                    <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                        <?php if ($product['special_price_found']) { ?>
+                                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
+                                        <?php } ?>
+                                    </div>
                                 </div>
                                 <div class="product-action">
                                     <ul class="list-actions">
@@ -202,7 +203,8 @@
                                     </ul>
                                 </div>
                             </li>
-                            <?php if (isset($levelItems['products']) && count($levelItems['products']) == 1) { ?> </ul> <?php } ?>
+                            <?php if (isset($levelItems['products']) && count($levelItems['products']) == 1) { ?>
+                </ul> <?php } ?>
     <?php }
                     } ?>
 
@@ -228,7 +230,8 @@
                         <div class="product-profile__thumbnail">
                             <a href="<?php echo $productUrl; ?>">
                                 <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                            </a></div>
+                            </a>
+                        </div>
                         <div class="product-profile__data">
                             <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a></div>
                             <div class="options">
@@ -240,20 +243,20 @@
                                                     echo rtrim($optionStr, '|');
                                                 } ?></p>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="wrap-qty-price">
-                    <div class="quantity quantity-2">
-                                <span class="decrease decrease-js"><i class="fas fa-minus"></i></span>
-                                <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                                <span class="increase increase-js"><i class="fas fa-plus"></i></span>
-                    </div>
-                    <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                        <?php if ($product['special_price_found']) { ?>
-                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
-                        <?php } ?>
-                    </div>
+                        <div class="quantity quantity-2">
+                            <span class="decrease decrease-js"><i class="fas fa-minus"></i></span>
+                            <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                            <span class="increase increase-js"><i class="fas fa-plus"></i></span>
+                        </div>
+                        <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                            <?php if ($product['special_price_found']) { ?>
+                                <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div class="product-action">
                         <ul class="list-actions">

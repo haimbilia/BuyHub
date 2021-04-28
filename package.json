@@ -13,6 +13,9 @@
   "author": "Yo!Kart Multivendor Platform",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "autoprefixer": "^9.7.3",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-cli": "^2.3.0",

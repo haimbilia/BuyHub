@@ -5,8 +5,7 @@
     }
     .ftshops_item {
         background: #fff;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
@@ -21,17 +20,15 @@
         text-align: center;
         background: #373737;
         position: relative;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
+        
+        
         justify-content: center;
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
+        
+       
         flex: 1;
         max-width: 350px;
         border-radius: $radius4;
@@ -63,8 +60,8 @@
             content: "";
         }
         .products__rating {
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
+            
+            
             justify-content: center;
         }
         .shop-detail-inner {
@@ -74,8 +71,8 @@
     }
     .product-wrapper {
         margin-#{$start-direction}: 1rem;
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
+        
+       
         flex: 1;
         border-radius: $radius4;
         @include media-breakpoint-down(md) {
@@ -85,7 +82,7 @@
                     flex-wrap: nowrap;
                     >.col {
                         -ms-flex: 0 0 280px;
-                        -webkit-box-flex: 0;
+                        
                         flex: 0 0 280px;
                         max-width: 280px;
                     }
@@ -109,14 +106,12 @@
         position: relative;
         -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.11);
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.11);
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
+        
+        
         justify-content: center;
         padding: 1rem;
     }
@@ -253,11 +248,9 @@
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
     .products--layout {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
@@ -275,8 +268,8 @@
             width: calc(100% - 150px);
             text-align: #{$start-direction};
             .products__title {
-                -webkit-padding-start: 0;
-                -moz-padding-start: 0;
+                
+                
                 padding-#{$start-direction}: 0;
             }
         }

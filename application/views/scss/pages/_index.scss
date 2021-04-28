@@ -325,9 +325,9 @@
             width: 12px;
         }
         &:before {
-            -webkit-transform: rotate(90deg);
+            
             transform: rotate(90deg);
-            -webkit-transition: all 0.2s ease-in-out;
+            
             transition: all 0.2s ease-in-out;
         }
         &[aria-expanded='true']:before {

@@ -135,8 +135,8 @@ class MyAppController extends FatController
                 'defaultCountryCode' => $defaultCountryCode,
                 'scrollable' => Labels::getLabel('LBL_SCROLLABLE', $this->siteLangId),
                 'quantityAdjusted' => Labels::getLabel('MSG_MAX_QUANTITY_THAT_CAN_BE_PURCHASED_IS_{QTY}._SO,_YOUR_REQUESTED_QUANTITY_IS_ADJUSTED_TO_{QTY}.', $this->siteLangId),
-                'withUsernameOrEmail' => Labels::getLabel('LBL_USE_EMAIL_INSTEAD', $this->siteLangId),
-                'withPhoneNumber' => Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD', $this->siteLangId),
+                'withUsernameOrEmail' => Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $this->siteLangId),
+                'withPhoneNumber' => Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $this->siteLangId),
                 'otpInterval' => User::OTP_INTERVAL,
                 'captchaSiteKey' => FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, ''),
                 'allowedFileSize' => LibHelper::getMaximumFileUploadSize(),
@@ -162,6 +162,10 @@ class MyAppController extends FatController
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
                 'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
                 'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
+                'requiredFields' => Labels::getLabel('MSG_PLEASE_FILL_REQUIRED_FIELDS', $this->siteLangId),
+                'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->siteLangId),
+                'typeToSearch' => Labels::getLabel('MSG_TYPE_TO_SEARCH..', $this->siteLangId),
+                'resendOtp' => Labels::getLabel('LBL_RESEND_OTP?', $this->siteLangId),
                 'redirecting' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
                 'uploadImageLimit' => Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', $this->siteLangId),
             );
@@ -400,6 +404,15 @@ class MyAppController extends FatController
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName, array('placeholder' => Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'data-alt-placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId)));
         $pwd = $frm->addPasswordField(Labels::getLabel('LBL_Password', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('LBL_Password', $siteLangId)));
         $pwd->requirements()->setRequired();
+
+        if (SmsArchive::canSendSms(SmsTemplate::LOGIN)) {
+            $attr = ['maxlength' => 1, 'size' => 1, 'placeholder' => '*'];
+            for ($i = 0; $i < User::OTP_LENGTH; $i++) {
+                $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
+            }
+            $frm->addHiddenField('', 'loginWithOtp', 0);
+        }
+
         $frm->addCheckbox(Labels::getLabel('LBL_Remember_Me', $siteLangId), 'remember_me', 1, array(), '', 0);
         $frm->addHtml('', 'forgot', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_LOGIN', $siteLangId));
@@ -429,16 +442,15 @@ class MyAppController extends FatController
             if (false === MOBILE_APP_API_CALL) {
                 $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
             }
+            $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $siteLangId), 'user_password', '', array('placeholder' => Labels::getLabel('LBL_PASSWORD', $siteLangId)));
+            $fld->requirements()->setRequired();
+            $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
+            $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
+    
+            $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId)));
+            $fld1->requirements()->setRequired();
+            $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
         }
-
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $siteLangId), 'user_password', '', array('placeholder' => Labels::getLabel('LBL_PASSWORD', $siteLangId)));
-        $fld->requirements()->setRequired();
-        $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
-        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
-
-        $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId)));
-        $fld1->requirements()->setRequired();
-        $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
 
         $fld = $frm->addCheckBox('', 'agree', 1);
         $fld->requirements()->setRequired();

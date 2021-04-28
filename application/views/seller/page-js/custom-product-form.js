@@ -1,6 +1,6 @@
 /* $(document).ready(function(){
-	customProductForm(productId, productCatId);
-	var productOptions=[] ;
+    customProductForm(productId, productCatId);
+    var productOptions=[] ;
 }); */
 (function () {
     var runningAjaxReq = false;
@@ -17,17 +17,17 @@
     var prodCatId = 0;
     var blockCount = 0;
 
-	/* customProductForm = function( productId, prodcat_id ){
-		$(dv).html( fcom.getLoader() );
-		if( (typeof productId == 'undefined' || productId == 0) && (typeof prodcat_id == 'undefined' || prodcat_id == 0) ){
-			customCatalogProductCategoryForm( );
-			return;
-		}
+    /* customProductForm = function( productId, prodcat_id ){
+        $(dv).html( fcom.getLoader() );
+        if( (typeof productId == 'undefined' || productId == 0) && (typeof prodcat_id == 'undefined' || prodcat_id == 0) ){
+            customCatalogProductCategoryForm( );
+            return;
+        }
 
-		fcom.ajax(fcom.makeUrl('Seller', 'customProductGeneralForm', [ productId, prodcat_id ]), '', function(t) {
-			$(dv).html(t);
-		});
-	}; */
+        fcom.ajax(fcom.makeUrl('Seller', 'customProductGeneralForm', [ productId, prodcat_id ]), '', function(t) {
+            $(dv).html(t);
+        });
+    }; */
 
     customCatalogProductCategoryForm = function () {
         fcom.ajax(fcom.makeUrl('Seller', 'customCatalogProductCategoryForm'), '', function (t) {
@@ -102,32 +102,32 @@
     };
 
 
-	/* customProductForm = function( productId ){
-		fcom.resetEditorInstance();
-		fcom.ajax(fcom.makeUrl('Seller', 'customProductGeneralForm', [ productId ]), '', function(t) {
-			$(dv).html(t);
-		});
-	}; */
+    /* customProductForm = function( productId ){
+        fcom.resetEditorInstance();
+        fcom.ajax(fcom.makeUrl('Seller', 'customProductGeneralForm', [ productId ]), '', function(t) {
+            $(dv).html(t);
+        });
+    }; */
 
-	/* setupCustomProduct = function(frm){
-		if (!$(frm).validate()) return;
+    /* setupCustomProduct = function(frm){
+        if (!$(frm).validate()) return;
 
-		addingNew = ($(frm.product_id).val() == 0);
-		$(frm.product_options).val(productOptions);
-		var data = fcom.frmData(frm);
+        addingNew = ($(frm.product_id).val() == 0);
+        $(frm.product_options).val(productOptions);
+        var data = fcom.frmData(frm);
 
-		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupCustomProduct'), (data), function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupCustomProduct'), (data), function(t) {
 
-			$.mbsmessage.close();
+            $.mbsmessage.close();
 
-			if (addingNew) {
-				customProductLangForm(t.product_id, t.lang_id);
-				return ;
-			}
-			productId =  t.product_id;
-			addShippingTab(t.product_id,t.product_type);
-		});
-	}; */
+            if (addingNew) {
+                customProductLangForm(t.product_id, t.lang_id);
+                return ;
+            }
+            productId =  t.product_id;
+            addShippingTab(t.product_id,t.product_type);
+        });
+    }; */
 
     customProductLangForm = function (productId, lang_id, autoFillLangData = 0) {
         $(dv).html(fcom.getLoader());
@@ -293,29 +293,29 @@
     };
 
     /* Product shipping  */
-	/* addShippingTab = function(id){
-		var ShipDiv = "#tab_shipping";
-		var e = document.getElementById("product_type");
-		var type = e.options[e.selectedIndex].value;
+    /* addShippingTab = function(id){
+        var ShipDiv = "#tab_shipping";
+        var e = document.getElementById("product_type");
+        var type = e.options[e.selectedIndex].value;
 
-		if(type == prodTypeDigital){
-			$(ShipDiv).html('');
-			$('.not-digital-js').hide();
-			return;
-		}else{
-			$('.not-digital-js').show();
-		}
-		fcom.ajax(fcom.makeUrl('seller','getShippingTab'),'product_id='+id,function(t){
-			try{
-					res= jQuery.parseJSON(t);
-					$.facebox(res.msg,'faceboxWidth');
-				}catch (e){
+        if(type == prodTypeDigital){
+            $(ShipDiv).html('');
+            $('.not-digital-js').hide();
+            return;
+        }else{
+            $('.not-digital-js').show();
+        }
+        fcom.ajax(fcom.makeUrl('seller','getShippingTab'),'product_id='+id,function(t){
+            try{
+                    res= jQuery.parseJSON(t);
+                    $.facebox(res.msg,'faceboxWidth');
+                }catch (e){
 
-					$(ShipDiv).html(t);
-				}
+                    $(ShipDiv).html(t);
+                }
 
-		});
-	} */
+        });
+    } */
 
     addShippingTab = function (productId) {
         var ShipDiv = "#tab_shipping";
@@ -428,7 +428,7 @@
     }
 
     updateProductOption = function (product_id, option_id, e) {
-        $.systemMessage(langLbl.processing,'alert--process');
+        $.systemMessage(langLbl.processing, 'alert--process');
         fcom.ajax(fcom.makeUrl('Seller', 'updateProductOption'), 'product_id=' + product_id + '&option_id=' + option_id, function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 1) {
@@ -444,7 +444,7 @@
     }
 
     removeProductOption = function (product_id, option_id) {
-        $.systemMessage(langLbl.processing,'alert--process');
+        $.systemMessage(langLbl.processing, 'alert--process');
         fcom.ajax(fcom.makeUrl('Seller', 'checkOptionLinkedToInventory'), 'product_id=' + product_id + '&option_id=' + option_id, function (t) {
             ans = jQuery.parseJSON(t);
             if (ans.status != true) {
@@ -860,8 +860,16 @@
     }
 
     upcListing = function (product_id) {
-        fcom.ajax(fcom.makeUrl('Seller', 'upcListing', [product_id]), '', function (t) {
+        /* fcom.ajax(fcom.makeUrl('Seller', 'upcListing', [product_id]), '', function (t) {
             $("#upc-listing").html(t);
+        }); */
+        fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [product_id]), '', function (t) {
+            var res = $.parseJSON(t);
+            if (0 == res.status) {
+                $("#upc-listing").html('');
+                return;
+            }
+            $("#upc-listing").html(res.html);
         });
     };
 
@@ -975,35 +983,35 @@
     }
 
     /*setupCustomProductImages = function ( ){
-		var data = new FormData(  );
-		$inputs = $('#frmCustomProductImage input[type=text],#frmCustomProductImage select,#frmCustomProductImage input[type=hidden]');
-		$inputs.each(function() { data.append( this.name,$(this).val());});
+        var data = new FormData(  );
+        $inputs = $('#frmCustomProductImage input[type=text],#frmCustomProductImage select,#frmCustomProductImage input[type=hidden]');
+        $inputs.each(function() { data.append( this.name,$(this).val());});
 
-		$.each( $('#prod_image')[0].files, function(i, file) {
-				$('#imageupload_div').html(fcom.getLoader());
-				data.append('prod_image', file);
-				$.ajax({
-					url : fcom.makeUrl('Seller', 'setupCustomProductImages'),
-					type: "POST",
-					data : data,
-					processData: false,
-					contentType: false,
-					success: function(t){
-						var ans = $.parseJSON(t);
-						if(ans.status == 1){
-							$.mbsmessage(ans.msg, true, 'alert--success');
-						}else{
-							$.mbsmessage(ans.msg, true, 'alert--danger');
-						}
-						productImages( $('#frmCustomProductImage input[name=product_id]').val(), $('.option').val(), $('.language').val() );
-						$('#prod_image').val('');
-					},
-					error: function(jqXHR, textStatus, errorThrown){
-						alert("Error Occured.");
-					}
-				});
-			});
-	};*/
+        $.each( $('#prod_image')[0].files, function(i, file) {
+                $('#imageupload_div').html(fcom.getLoader());
+                data.append('prod_image', file);
+                $.ajax({
+                    url : fcom.makeUrl('Seller', 'setupCustomProductImages'),
+                    type: "POST",
+                    data : data,
+                    processData: false,
+                    contentType: false,
+                    success: function(t){
+                        var ans = $.parseJSON(t);
+                        if(ans.status == 1){
+                            $.mbsmessage(ans.msg, true, 'alert--success');
+                        }else{
+                            $.mbsmessage(ans.msg, true, 'alert--danger');
+                        }
+                        productImages( $('#frmCustomProductImage input[name=product_id]').val(), $('.option').val(), $('.language').val() );
+                        $('#prod_image').val('');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert("Error Occured.");
+                    }
+                });
+            });
+    };*/
 
     deleteCustomProductImage = function (productId, image_id) {
         var agree = confirm(langLbl.confirmDelete);
@@ -1262,7 +1270,6 @@
             });
         });
     };
-
 })();
 
 
@@ -1330,3 +1337,4 @@ $(document).on('click', '.tabs_006', function () {
         displayProdInitialTab();
     }
 });
+

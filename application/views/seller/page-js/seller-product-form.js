@@ -1,7 +1,3 @@
-$(document).ready(function(){
-	sellerProductForm(product_id,selprod_id);
-});
-
 $(document).on('change','.selprodoption_optionvalue_id',function(){
 	var frm = document.frmSellerProduct;
 	var data = fcom.frmData(frm);
@@ -283,25 +279,24 @@ $(document).on('change','.selprodoption_optionvalue_id',function(){
 	}
 
 	gotToProucts = function(){
-            window.location.href = fcom.makeUrl('seller', 'Products');
-        };
-        
-        getUniqueSlugUrl = function (obj, str, recordId) {
-            if (str == '') {
-                return;
-            }
-            var data = {url_keyword: str, recordId: recordId}
-            fcom.ajax(fcom.makeUrl('Seller', 'isProductRewriteUrlUnique'), data, function (t) {
-                var ans = $.parseJSON(t);
-                $(obj).next().html(ans.msg);
-                if(ans.status == 0){
-                    $(obj).next().addClass('text-danger').removeClass('text-muted');                  
-                }else{
-                    $(obj).next().removeClass('text-danger').addClass('text-muted');
-                }
-            });
-        };
-
+		window.location.href = fcom.makeUrl('seller', 'Products');
+	};
+	
+	getUniqueSlugUrl = function (obj, str, recordId) {
+		if (str == '') {
+			return;
+		}
+		var data = {url_keyword: str, recordId: recordId}
+		fcom.ajax(fcom.makeUrl('Seller', 'isProductRewriteUrlUnique'), data, function (t) {
+			var ans = $.parseJSON(t);
+			$(obj).next().html(ans.msg);
+			if(ans.status == 0){
+				$(obj).next().addClass('text-danger').removeClass('text-muted');                  
+			}else{
+				$(obj).next().removeClass('text-danger').addClass('text-muted');
+			}
+		});
+	};
 })();
 
 $(document).on('click', '.tabs_001', function(){

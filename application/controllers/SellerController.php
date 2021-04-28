@@ -4436,7 +4436,7 @@ class SellerController extends SellerBaseController
         return $frm;
     }
 
-    private function getSellerProductForm($product_id, $selprod_id = 0, $type = 'SELLER_PRODUCT')
+    private function getSellerProductForm($product_id, $selprod_id = 0, $type = 'SELLER_PRODUCT', $inventoryCount = 1)
     {
         /* Type is used when we called this form for custom catalog request with selprod data */
 
@@ -4564,8 +4564,8 @@ class SellerController extends SellerBaseController
             $frm->addRequiredField(Labels::getLabel('LBL_Url_Keyword', $this->siteLangId), 'selprod_url_keyword');
             $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
             if (!empty($productOptions) && $selprod_id == 0) {
-                $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
-                if ($optionCombinations) {
+                if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $inventoryCount) {
+                    $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
                     $i = $j = 0;
                     foreach ($optionCombinations as $optionKey => $optionValue) {
                         if (SellerProduct::UPDATE_OPTIONS_COUNT < $i) {

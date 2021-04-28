@@ -22,6 +22,8 @@ class MetaTag extends MyAppModel
     public const META_GROUP_BLOG_CATEGORY = 'Blog_Category';
     public const META_GROUP_BLOG_POST = 'Blog_Post';
 
+    private static $result = [];
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -150,8 +152,23 @@ class MetaTag extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'mt');
+        return new SearchBase(static::DB_TBL, 'mt');
+    }
 
-        return $srch;
+    public static function isExists(string $controller, string $action, int $recordId, int $subRecordId): bool
+    {
+        $srch = self::getSearchObject();
+        $srch->addCondition('meta_controller', '=', $controller);
+        $srch->addCondition('meta_action', '=', $action);
+        $srch->addCondition('meta_record_id', '=', $recordId);
+        $srch->addCondition('meta_subrecord_id', '=', $subRecordId);
+        $rs = $srch->getResultSet();
+        self::$result = (array) FatApp::getDb()->fetch($rs);
+        return !empty(self::$result);
+    }
+
+    public static function getResult(): array
+    {
+        return self::$result;
     }
 }

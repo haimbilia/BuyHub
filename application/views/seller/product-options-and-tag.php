@@ -7,7 +7,11 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="field-set">
-                             <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_Add_Associated_Product_Option_Groups', $siteLangId); ?></label></div>
+                             <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php echo Labels::getLabel('LBL_Add_Associated_Product_Option_Groups', $siteLangId); ?>
+                                </label>
+                            </div>
                              <div class="field-wraper">
                                  <div class="field_cover">
                                     <?php 
@@ -24,7 +28,7 @@
                      </div>
                  </div> 
                  <div class="row">
-                     <div class="col-md-12 mb-4" id="upc-listing">
+                     <div class="col-md-12 mb-4 mt-4" id="upc-listing">
                          
                      </div>
                  </div>
@@ -184,4 +188,5 @@ $("document").ready(function() {
     };
     tagifyTheOptions();
 });
+
 </script>

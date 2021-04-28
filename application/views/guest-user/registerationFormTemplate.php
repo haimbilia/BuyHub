@@ -17,123 +17,121 @@ if ($onSubmitFunctionName) {
 <?php
 $registerFrm->setFormTagAttribute('class', 'form');
 $fldSubmit = $registerFrm->getField('btn_submit');
-$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
+$fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide btn-block');
 $registerFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $registerFrm->developerTags['fld_default_col'] = 12;
 
 echo $registerFrm->getFormTag();
 ?>
-<div class="row">
-    <div class="col-md-6">
-        <div class="field-set">
-            <div class="field-wraper">
-                <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_name'); ?></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="field-set">
+                <div class="field-wraper">
+                    <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_name'); ?></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="field-set">
+                <div class="field-wraper">
+                    <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_username'); ?></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="field-set">
-            <div class="field-wraper">
-                <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_username'); ?></div>
+    <?php if (isset($signUpWithPhone) && 0 < $signUpWithPhone) { ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="field-set">
+                    <div class="field-wraper">
+                        <div class="field_cover">
+                        <?php 
+                        echo $registerFrm->getFieldHtml('user_phone'); 
+                        echo $registerFrm->getFieldHtml('user_phone_dcode'); 
+                        ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<?php if (isset($signUpWithPhone) && 0 < $signUpWithPhone) { ?>
+    <?php } else { ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="field-set">
+                    <div class="field-wraper">
+                        <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_email'); ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="field-set">
+                    <div class="field-wraper">
+                        <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_password'); ?></div>
+                        <span class="text-muted form-text"><?php echo sprintf(Labels::getLabel('LBL_Example_password', $siteLangId), 'User@123') ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="field-set">
+                    <div class="field-wraper">
+                        <div class="field_cover"><?php echo $registerFrm->getFieldHtml('password1'); ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
     <div class="row">
         <div class="col-md-12">
             <div class="field-set">
                 <div class="field-wraper">
                     <div class="field_cover">
-                    <?php 
-                    echo $registerFrm->getFieldHtml('user_phone'); 
-                    echo $registerFrm->getFieldHtml('user_phone_dcode'); 
-                    ?>
+                        <label class="checkbox checkbox-flex py-2">
+                        <?php
+                            $fld = $registerFrm->getFieldHTML('agree');
+                            $fld = str_replace("<label >", "", $fld);
+                            $fld = str_replace("</label>", "", $fld);
+                            echo $fld;
+                        ?>
+                        <span class="label-txt">
+                        <?php echo sprintf(
+                            Labels::getLabel('LBL_I_agree_to_the_terms_conditions_and_privacy_policy', $siteLangId),
+                            "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . '</a>',
+                            "<a target='_blank' href='$privacyPolicyLinkHref'>" . Labels::getLabel('LBL_Privacy_Policy', $siteLangId) . '</a>'
+                        ); ?>
+                        </span>
+                        </label>
+                        <?php if ($registerFrm->getField('user_newsletter_signup')) { ?>
+                        <span class="gap"></span>
+                        <label class="checkbox checkbox-flex">
+                            <?php
+                            $fld = $registerFrm->getFieldHTML('user_newsletter_signup');
+                            $fld = str_replace("<label >", "", $fld);
+                            $fld = str_replace("</label>", "", $fld);
+                            echo $fld;
+                            ?>
+                        </label>
+                        <?php }
+                        if ((!isset($signUpWithPhone) || 1 > $signUpWithPhone) && $registerFrm->getField('isCheckOutPage')) {
+                            echo $registerFrm->getFieldHTML('isCheckOutPage');
+                        } ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<?php } else { ?>
     <div class="row">
         <div class="col-md-12">
             <div class="field-set">
                 <div class="field-wraper">
-                    <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_email'); ?></div>
+                    <div class="field_cover">
+                        <?php echo $registerFrm->getFieldHTML('user_id') , $registerFrm->getFieldHTML('btn_submit'); ?>
+                        <?php echo (isset($signUpWithPhone) && 0 < $signUpWithPhone) ? $registerFrm->getFieldHTML('signUpWithPhone') : ''; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-<?php } ?>
-<div class="row">
-    <div class="col-md-6">
-        <div class="field-set">
-            <div class="field-wraper">
-                <div class="field_cover"><?php echo $registerFrm->getFieldHtml('user_password'); ?></div>
-                <span class="text-muted form-text"><?php echo sprintf(Labels::getLabel('LBL_Example_password', $siteLangId), 'User@123') ?></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="field-set">
-            <div class="field-wraper">
-                <div class="field_cover"><?php echo $registerFrm->getFieldHtml('password1'); ?></div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="field-set">
-            <div class="field-wraper">
-                <div class="field_cover">
-                    <label class="checkbox checkbox-flex">
-                    <?php
-                        $fld = $registerFrm->getFieldHTML('agree');
-                        $fld = str_replace("<label >", "", $fld);
-                        $fld = str_replace("</label>", "", $fld);
-                        echo $fld;
-                    ?>
-                    <span class="label-txt">
-                    <?php echo sprintf(
-                        Labels::getLabel('LBL_I_agree_to_the_terms_conditions_and_privacy_policy', $siteLangId),
-                        "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . '</a>',
-                        "<a target='_blank' href='$privacyPolicyLinkHref'>" . Labels::getLabel('LBL_Privacy_Policy', $siteLangId) . '</a>'
-                    ); ?>
-                    </span>
-                    </label>
-                    <?php if ($registerFrm->getField('user_newsletter_signup')) { ?>
-                    <span class="gap"></span>
-                    <label class="checkbox checkbox-flex">
-                        <?php
-                        $fld = $registerFrm->getFieldHTML('user_newsletter_signup');
-                        $fld = str_replace("<label >", "", $fld);
-                        $fld = str_replace("</label>", "", $fld);
-                        echo $fld;
-                        ?>
-                       
-                        
-                    </label>
-                    <?php }
-                    if ((!isset($signUpWithPhone) || 1 > $signUpWithPhone) && $registerFrm->getField('isCheckOutPage')) {
-                        echo $registerFrm->getFieldHTML('isCheckOutPage');
-                    } ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="field-set">
-            <div class="field-wraper">
-                <div class="field_cover">
-                    <?php echo $registerFrm->getFieldHTML('user_id') , $registerFrm->getFieldHTML('btn_submit'); ?>
-                    <?php echo (isset($signUpWithPhone) && 0 < $signUpWithPhone) ? $registerFrm->getFieldHTML('signUpWithPhone') : ''; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </form>
 <?php echo $registerFrm->getExternalJs(); ?>

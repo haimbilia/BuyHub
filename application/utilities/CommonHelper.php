@@ -1523,8 +1523,7 @@ class CommonHelper extends FatUtility
 
     public static function createSlug($string)
     {
-        $slug = preg_replace('/[^A-Za-z0-9-\/]+/', '-', ltrim($string, '/'));
-        return $slug;
+        return preg_replace('/[^A-Za-z0-9-\/]+/', '-', ltrim($string, '/'));
     }
 
     public static function getProdRatingInPercentage($rating, $total, $circleView)
