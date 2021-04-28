@@ -2989,6 +2989,11 @@ class Importexport extends ImportexportCommon
 
         $errInSheet = false;
         $breakForeach = false;
+        
+        if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $allowed_images = SellerPackages::getAllowedLimit($userId, $langId, 'ossubs_products_allowed');
+            $optionLangCombinationImgCount = [];
+        }
         while (($row = $this->getFileRow($csvFilePointer)) !== false) {
             $rowIndex++;
 
@@ -3114,7 +3119,16 @@ class Importexport extends ImportexportCommon
                 }
             }
 
-            if (false === $errorInRow && count($prodCatalogMediaArr)) {
+            if (false === $errorInRow && count($prodCatalogMediaArr)) {                
+                if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                    $combinationkey = $prodCatalogMediaArr['afile_record_id'] . "-" . $prodCatalogMediaArr['afile_lang_id'] . "-" . $prodCatalogMediaArr['afile_record_subid'];
+                    $optionLangCombinationImgCount[$combinationkey] = isset($optionLangCombinationImgCount[$combinationkey]) ? $optionLangCombinationImgCount[$combinationkey] + 1 : 1;
+                    if ($optionLangCombinationImgCount[$combinationkey] > $allowed_images) {
+                        $errMsg = Labels::getLabel("MSG_You_have_crossed_your_package_limit.", $langId);
+                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, $errMsg));
+                        continue;
+                    }
+                }
                 unset($prodCatalogMediaArr['option_identifier']);
                 unset($prodCatalogMediaArr['option_id']);
                 $fileType = AttachedFile::FILETYPE_PRODUCT_IMAGE;
