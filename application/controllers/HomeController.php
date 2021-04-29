@@ -1377,8 +1377,8 @@ class HomeController extends MyAppController
                 "lang" => $this->siteLangCode,
                 "start_url" => CONF_WEBROOT_URL,
                 "display" => "standalone",
-                "background_color" => isset($this->themeDetail[ThemeColor::TYPE_BODY]) ? '#' . $this->themeDetail[ThemeColor::TYPE_BODY] : '',
-                "theme_color" => isset($this->themeDetail[ThemeColor::TYPE_BRAND]) ? '#' . $this->themeDetail[ThemeColor::TYPE_BRAND] : '',
+                "background_color" => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"),
+                "theme_color" => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"),
             );
 
             foreach ($iconsArr as $key => $val) {

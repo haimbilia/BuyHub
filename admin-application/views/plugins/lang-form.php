@@ -24,7 +24,7 @@ $langFld->setfieldTagAttribute('onChange', "editPluginLangForm(" . $pluginId . "
                     </a>
                 </li>
             </ul>
-            <div class="tabs_panel_wrap">
+            <div class="tabs_panel_wrap" style="min-height: inherit;">
                 <?php
                         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
                         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);

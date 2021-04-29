@@ -1443,9 +1443,10 @@ trait CustomProducts
         $this->set('previousAction', (isset($arr[1])) ? $arr[1] : 'index');
         $this->set('productId', $prodId);
         $this->set('productType', $productType);
-        $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
         $this->set("includeEditor", true);
         $this->set('displayInventoryTab', $displayInventoryTab);
+        $this->_template->addCss(array('custom/page-css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -2001,6 +2002,13 @@ trait CustomProducts
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+
+        $prodType = Product::getAttributesById($productId, 'product_type');
+        if (!empty($prodType) && Product::PRODUCT_TYPE_DIGITAL == $prodType) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
+        }
+
+
         $frm = $this->getProductShippingFrm($productId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {

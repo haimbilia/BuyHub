@@ -16,6 +16,9 @@ class UserAuthentication extends FatModel
     public const TOKEN_LENGTH = 32;
 
     private $commonLangId;
+    private $loginWithOtp = false;
+    private $loginDcode = '';
+    private $loginPhone = '';
 
     public const AFFILIATE_REG_STEP1 = 1;
     public const AFFILIATE_REG_STEP2 = 2;
@@ -43,12 +46,12 @@ class UserAuthentication extends FatModel
 
     public static function encryptPassword(string $pass, bool $oldStyle = false)
     {
-        if($oldStyle){
+        if ($oldStyle) {
             return md5(PASSWORD_SALT . $pass . PASSWORD_SALT);
         }
         return  password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
-    }   
-    
+    }
+
 
     public function logFailedAttempt($ip, $username)
     {
@@ -94,12 +97,16 @@ class UserAuthentication extends FatModel
         if (in_array($ip, $ips)) {
             return false;
         }
+
+        if (true === $this->loginWithOtp) {
+            $username = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
+        }
+
         $srch = new SearchBase('tbl_failed_login_attempts');
         $srch->addCondition('attempt_ip', '=', $ip)->attachCondition('attempt_username', '=', $username);
         $srch->addCondition('attempt_time', '>=', date('Y-m-d H:i:s', strtotime("-5 minutes")));
         $srch->addFld('COUNT(*) AS total');
         $rs = $srch->getResultSet();
-
         $row = $db->fetch($rs);
 
         return ($row['total'] > 5);
@@ -199,6 +206,11 @@ class UserAuthentication extends FatModel
                 $this->error = Labels::getLabel('ERR_YOUR_ACCOUNT_ALREADY_EXIST._PLEASE_LOGIN', $this->commonLangId);
                 return false;
             }
+            
+            if ($row && $row['user_deleted'] == applicationConstants::YES) {               
+                $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELETED', $this->commonLangId);
+                return false;
+            }
 
             $rowUser = User::getAttributesById($row['user_id']);
 
@@ -286,14 +298,21 @@ class UserAuthentication extends FatModel
         return true;
     }
 
+    public function setLoginWithOtp($dcode, $phone) {
+        $this->loginDcode = $dcode;
+        $this->loginPhone = $phone;
+        $this->loginWithOtp = (!empty($this->loginDcode) && !empty($this->loginPhone));
+    }
+
     public function login($username, $password, $ip, $encryptPassword = true, $isAdmin = false, $tempUserId = 0, $userType = 0, $withPhone = false)
     {
         $db = FatApp::getDb();
         if ($this->isBruteForceAttempt($ip, $username)) {
             $userSrch = User::getSearchObject(true, 0, false);
-            $userSrch->addCondition('credential_username', '=', $username);
+            $condition = $userSrch->addCondition('credential_username', '=', $username);
+            $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
             $userRs = $userSrch->getResultSet();
-
+            // echo $userSrch->getQuery();
             if ($row = $db->fetch($userRs)) {
                 $email = new EmailHandler();
                 $email->failedLoginAttempt(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $row);
@@ -312,6 +331,13 @@ class UserAuthentication extends FatModel
         $condition->attachCondition('credential_email', '=', $username, 'OR');
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
         //$srch->addCondition('credential_password', '=', $password);
+
+        if (true === $this->loginWithOtp) {
+            $loginPhone = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
+            $srch->joinTable(User::DB_TBL_USER_PHONE_VER, 'INNER JOIN', 'upv_user_id = user_id', 'upv');
+            $srch->addCondition('mysql_func_CONCAT(upv_phone_dcode, upv_phone)', '=', $loginPhone, 'AND', true);
+            $srch->addCondition('upv_otp', '=', $password);
+        }
 
         if (0 < $userType) {
             switch ($userType) {
@@ -334,47 +360,56 @@ class UserAuthentication extends FatModel
         }
 
         $rs = $srch->getResultSet();
-        
+
         if (!$row = $db->fetch($rs)) {
-            //$this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME', $this->commonLangId);
             if ($withPhone) {
-                //$this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER_OR_PASSWORD', $this->commonLangId);
                 $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER', $this->commonLangId);
             }
             return false;
         }
-        
-        
-        /* [To Do - need to remove credential_password_old in next release */            
-        if (!empty($row['credential_password_old'])) {
-            $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
-            if ($oldPassword !== $row['credential_password_old']) {
-                $this->logFailedAttempt($ip, $username);
-                $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
-                return false;
-            }
-            if (true == $encryptPassword) {
-                if (!$this->resetUserPassword($row['user_id'], $password)) {
-                    SystemLog::set('Unable to set new hash user password');
-                }else{
-                    if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
-                        SystemLog::set('Unable to blank user old password');
+
+
+        /* [To Do - need to remove credential_password_old in next release */
+        if (false === $this->loginWithOtp) {
+            if (!empty($row['credential_password'])) {
+                if (true == $encryptPassword) {
+                    if (false == password_verify($password, $row['credential_password'])) {
+                        $this->logFailedAttempt($ip, $username);
+                        $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                        return false;
                     }
-                }                
-            }
-        } else {
-            if (true == $encryptPassword) {
-                if (false == password_verify($password, $row['credential_password'])) {
-                    $this->logFailedAttempt($ip, $username);
-                    $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
-                    return false;
+                } else {
+                    if ($password !== $row['credential_password']) {
+                        $this->logFailedAttempt($ip, $username);
+                        $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                        return false;
+                    }
+                }
+                if (true == $encryptPassword) {
+                    if (!$this->resetUserPassword($row['user_id'], $password)) {
+                        SystemLog::set('Unable to set new hash user password');
+                    }else{
+                        if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
+                            SystemLog::set('Unable to blank user old password');
+                        }
+                    }                
                 }
             } else {
-                if ($password !== $row['credential_password']) {
+                $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
+                if ($oldPassword !== $row['credential_password_old']) {
                     $this->logFailedAttempt($ip, $username);
-                    $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                    $this->error = Labels::getLabel('ERR_INVALID_PASSWORD', $this->commonLangId);
                     return false;
+                }
+                if (true == $encryptPassword) {
+                    if (!$this->resetUserPassword($row['user_id'], $password)) {
+                        SystemLog::set('Unable to set new hash user password');
+                    } else {
+                        if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
+                            SystemLog::set('Unable to blank user old password');
+                        }
+                    }
                 }
             }
         }
@@ -383,15 +418,15 @@ class UserAuthentication extends FatModel
 
         /*
         if ((true == $encryptPassword) && false == password_verify($password , $row['credential_password'])) {
-            $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_PASSWORD', $this->commonLangId);
             return false;
         }
          * 
          */
-        
+
         if ($row && $row['user_deleted'] == applicationConstants::YES) {
             $this->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELTED', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELETED', $this->commonLangId);
             return false;
         }
 
@@ -405,6 +440,10 @@ class UserAuthentication extends FatModel
         /*if ((!(strtolower($row['credential_username']) === strtolower($username) || strtolower($row['credential_email']) === strtolower($username) || $row['user_phone_dcode'] . $row['user_phone'] === $username)) || $row['credential_password'] !== $password) {
             $this->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
+            if ($withPhone) {
+                $lbl = (false === $this->loginWithOtp) ? 'PASSWORD' : 'OTP';
+                $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER_OR_' . $lbl, $this->commonLangId);
+            }
             return false;
         }*/
         /*
@@ -415,7 +454,7 @@ class UserAuthentication extends FatModel
         }
          * 
          */
-        
+
         if (!$isAdmin) {
             if ($row['credential_verified'] != applicationConstants::YES) {
                 $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="resendVerificationLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_Your_Account_verification_is_pending_{clickhere}', $this->commonLangId));
@@ -469,7 +508,10 @@ class UserAuthentication extends FatModel
             $rowUser = User::getAttributesById($row['credential_user_id']);
         }
 
-
+        if (true === $this->loginWithOtp) {
+            $user = new User();
+            $user->deletePhoneOtp($row['credential_user_id']);
+        }
 
         $rowUser['user_ip'] = $ip;
         $rowUser['user_email'] = $row['credential_email'];
@@ -778,7 +820,7 @@ class UserAuthentication extends FatModel
             $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER', $this->commonLangId);
             return false;
         }
-        
+
         return $row;
     }
 
@@ -846,24 +888,18 @@ class UserAuthentication extends FatModel
             return false;
         }
         $db = FatApp::getDb();
-        if ($db->insertFromArray(
-            static::DB_TBL_USER_PRR,
-            array(
-                static::DB_TBL_UPR_PREFIX . 'user_id' => intval($data['user_id']),
-                static::DB_TBL_UPR_PREFIX . 'token' => $data['token'],
-                static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+".($data['days'] ?? 1)." DAY"))
-            )
-        )) {
-            $db->deleteRecords(
-                static::DB_TBL_USER_AUTH,
-                array(
-                    'smt' => static::DB_TBL_UAUTH_PREFIX . 'user_id = ?',
-                    'vals' => array($data['user_id'])
-                )
-            );
-            return true;
+        if (!$db->insertFromArray(
+                        static::DB_TBL_USER_PRR,
+                        array(
+                            static::DB_TBL_UPR_PREFIX . 'user_id' => intval($data['user_id']),
+                            static::DB_TBL_UPR_PREFIX . 'token' => $data['token'],
+                            static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+" . ($data['days'] ?? 1) . " DAY"))
+                        )
+                )) {
+            $this->error = $db->getError();
+            return false;
         }
-        return false;
+        return true;
     }
 
     public function checkResetLink($uId, $token)

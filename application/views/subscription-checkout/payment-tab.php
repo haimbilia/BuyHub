@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 $pmethodName = $paymentMethod["plugin_name"];
-$pmethodDescription = $paymentMethod["plugin_description"];
 $pmethodCode = $paymentMethod["plugin_code"];
 
 $frm->setFormTagAttribute('class', 'form form--normal');
@@ -11,13 +10,6 @@ $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
-<!--<div class="">
-    <p><strong><?php echo sprintf(Labels::getLabel('LBL_Pay_using_Payment_Method', $siteLangId), $paymentMethod["plugin_name"]) ?>:</strong></p><br />
-    <p><?php echo $paymentMethod["plugin_description"] ?></p><br />
-    <?php if (!isset($error)) {
-        echo $frm->getFormHtml();
-    } ?>
-</div>-->
 <div class="text-center paymentForm-js d-none">
     <?php if (!isset($error)) {
         echo $frm->getFormHtml();

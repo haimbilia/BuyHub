@@ -10,6 +10,11 @@ $arr_flds = [
 ];
 $allPlugins = $arr_listing;
 $pluginType = (!empty($allPlugins)) ? (array_shift($allPlugins))['plugin_type'] : '';
+
+if (!in_array($pluginType, Plugin::HAVING_SEPARATE_ICON)) {
+    unset($arr_flds['plugin_icon']);
+}
+
 if (!$canEdit || 2 > count($arr_listing) || in_array($pluginType, Plugin::HAVING_KINGPIN)) {
     unset($arr_flds['dragdrop']);
     if (!$canEdit || in_array($pluginType, Plugin::HAVING_KINGPIN) || 1 > count($arr_listing)) {

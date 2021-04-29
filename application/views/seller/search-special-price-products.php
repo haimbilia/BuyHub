@@ -75,7 +75,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $input, true);
                 
                 $discountPrice = $row['selprod_price'] - $row[$column];
-                $discountPercentage = round(($discountPrice/$row['selprod_price'])*100, 2);
+                $discountPercentage = CommonHelper::numberFormat(round(($discountPrice/$row['selprod_price'])*100, 2));
                 $discountPercentage = $discountPercentage."% ".Labels::getLabel('LBL_off', $siteLangId);
                 $td->appendElement('div', array("class" => 'ml-3'), $discountPercentage, true);
                 break;

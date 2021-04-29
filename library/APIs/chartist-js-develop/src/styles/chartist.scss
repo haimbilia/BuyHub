@@ -50,9 +50,9 @@
 @mixin ct-flex() {
   // Fallback to block
   display: block;
-  display: -webkit-box;
+  
   display: -moz-box;
-  display: -ms-flexbox;
+  
   display: -webkit-flex;
   display: flex;
 }

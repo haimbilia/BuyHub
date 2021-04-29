@@ -246,6 +246,17 @@ class CheckoutController extends MyAppController
         $address = new Address($this->cartObj->getCartShippingAddress(), $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
         $this->set('cartHasPhysicalProduct', $cartHasPhysicalProduct);
+        
+        $cart_products = $this->cartObj->getProducts($this->siteLangId);        
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (0 < count($cart_products) &&  !empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {  
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Checkout', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CHECKOUT);           
+            foreach($cart_products as $product){
+                $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $product['quantity']);
+            }            
+            $et->sendRequest();
+        }
 
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_RIGHT_BLOCK, $this->siteLangId);
@@ -865,7 +876,7 @@ class CheckoutController extends MyAppController
             'selprod_condition', 'selprod_code',
             'special_price_found', 'theprice', 'shop_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(brand_name, brand_identifier) as brand_name', 'shop_name',
             'seller_user.user_name as shop_onwer_name', 'seller_user_cred.credential_username as shop_owner_username',
-            'seller_user.user_phone_dcode as shop_owner_phone_dcode', 'seller_user.user_phone as shop_owner_phone', 'seller_user_cred.credential_email as shop_owner_email', 'selprod_download_validity_in_days', 'selprod_max_download_times', 'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age'
+            'seller_user.user_phone_dcode as shop_owner_phone_dcode', 'seller_user.user_phone as shop_owner_phone', 'seller_user_cred.credential_email as shop_owner_email', 'selprod_download_validity_in_days', 'selprod_max_download_times', 'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age', 'prodcat_id'
         );
         $prodSrch->addMultipleFields($fields);
         $rs = $prodSrch->getResultSet();
@@ -1387,7 +1398,8 @@ class CheckoutController extends MyAppController
                     'productSpecifics' => [
                         'op_selprod_return_age' => $productInfo['return_age'],
                         'op_selprod_cancellation_age' => $productInfo['cancellation_age'],
-                        'op_product_warranty' => $productInfo['product_warranty']
+                        'op_product_warranty' => $productInfo['product_warranty'],
+                        'op_prodcat_id' => $productInfo['prodcat_id'],
                     ],
                     'op_rounding_off' => $cartProduct['rounding_off'],
                 );

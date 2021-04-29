@@ -149,7 +149,7 @@
         </div>
     </main>
 </div>
-<aside class="sidebar" role="complementary">
+<aside class="sidebar" data-close-on-click-outside=" ">
     <div class="sidebar__content">
         <div id="order-summary" class="order-summary summary-listing-js">
             <h5 class="mb-2"><?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?></h5>

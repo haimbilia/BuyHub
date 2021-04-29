@@ -116,6 +116,7 @@ class AdminPrivilege
     public const SECTION_SHIPPING_MANAGEMENT = 110;
     public const SECTION_IMAGE_ATTRIBUTES = 111;
     public const SECTION_PICKUP_ADDRESSES = 112;
+    public const SECTION_RATING_TYPES = 113;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -264,6 +265,7 @@ class AdminPrivilege
             static::SECTION_SUBSCRIPTION_ORDERS => Labels::getLabel('MSG_Subscription_Orders', CommonHelper::getLangId()),
 
             static::SECTION_PICKUP_ADDRESSES => Labels::getLabel('MSG_Pickup_Addresses', CommonHelper::getLangId()),
+            static::SECTION_RATING_TYPES => Labels::getLabel('MSG_RATING_TYPES', CommonHelper::getLangId()),
 
 
             /* static::SECTION_Languages => Labels::getLabel('MSG_Languages',CommonHelper::getLangId()),
@@ -1535,5 +1537,15 @@ class AdminPrivilege
             return true;
         }
         return false;
+    }
+
+    public function canViewRatingTypes($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_RATING_TYPES, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRatingTypes($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_RATING_TYPES, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

@@ -44,6 +44,9 @@ foreach ($arr_listing as $sn => $row) {
             case 'afcommsetting_user_id':
                 $td->appendElement('plaintext', array(), CommonHelper::displayText($row['credential_username']), true);
                 break;
+            case 'afcommsetting_fees':
+                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
+                break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions actions--centered"));
                 if ($canEdit) {

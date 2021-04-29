@@ -437,5 +437,11 @@ $(document).ready(function() {
         fcom.updateWithAjax(fcom.makeUrl('Users', 'markSellerAsBuyer'), {userId: userId}, function (t) {
             reloadUserList();
         });
-    }    
+    }
+    sendSetPasswordEmail = function (userId) {
+        fcom.displayProcessing();
+        fcom.updateWithAjax(fcom.makeUrl('Users', 'resendSetPasswordEmail'), {userId: userId}, function (t) {
+            
+        });
+    };
 })();

@@ -4,6 +4,7 @@ class SitemapController extends AdminBaseController
 {
     public function generate()
     {
+        set_time_limit(0);
         $this->startSitemapXml();
 
 
@@ -17,13 +18,13 @@ class SitemapController extends AdminBaseController
 
 
         /* Category Pages [ */
+        $categoriesArr = ProductCategory::getArray($this->adminLangId, 0, false, true, false, CONF_USE_FAT_CACHE, false);
 
-        $catSrch = clone $prodSrchObj;
+        /* $catSrch = clone $prodSrchObj;
         $catSrch->addGroupBy('prodcat_id');
-        $categoriesArr = productCategory::getProdCatParentChildWiseArr($this->adminLangId, 0, true, false, true, $catSrch);
-
+        $categoriesArr = productCategory::getProdCatParentChildWiseArr($this->adminLangId, 0, true, false, true, $catSrch); */
         foreach ($categoriesArr as $key => $val) {
-            $this->writeSitemapUrl(UrlHelper::generateFullUrl('category', 'view', array($val['prodcat_id']), CONF_WEBROOT_FRONT_URL), $freq = 'daily');
+            $this->writeSitemapUrl(UrlHelper::generateFullUrl('category', 'view', array($val['prodcat_id']), CONF_WEBROOT_FRONT_URL), 'daily');
         }
         /* ]*/
 
@@ -36,10 +37,13 @@ class SitemapController extends AdminBaseController
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
         $rs = $prodSrch->getResultSet();
-        $productsList = FatApp::getDb()->fetchAll($rs);
+        while ($row = FatApp::getDb()->fetch($rs)) {
+            $this->writeSitemapUrl(UrlHelper::generateFullUrl('products', 'view', array($row['selprod_id']), CONF_WEBROOT_FRONT_URL), 'daily');
+        }
+        /* $productsList = FatApp::getDb()->fetchAll($rs);
         foreach ($productsList as $key => $val) {
             $this->writeSitemapUrl(UrlHelper::generateFullUrl('products', 'view', array($val['selprod_id']), CONF_WEBROOT_FRONT_URL), $freq = 'daily');
-        }
+        } */
         /* ]*/
 
         /* Brand Pages [ */
@@ -50,11 +54,13 @@ class SitemapController extends AdminBaseController
         $brandSrch->doNotCalculateRecords();
         $brandSrch->doNotLimitRecords();
         $brandRs = $brandSrch->getResultSet();
-        $brandsArr = FatApp::getDb()->fetchAll($brandRs);
-
+        while ($row = FatApp::getDb()->fetch($brandRs)) {
+            $this->writeSitemapUrl(UrlHelper::generateFullUrl('brands', 'view', array($row['brand_id']), CONF_WEBROOT_FRONT_URL), 'daily');
+        }
+        /* $brandsArr = FatApp::getDb()->fetchAll($brandRs);
         foreach ($brandsArr as $key => $val) {
             $this->writeSitemapUrl(UrlHelper::generateFullUrl('brands', 'view', array($val['brand_id']), CONF_WEBROOT_FRONT_URL), $freq = 'daily');
-        }
+        } */
         /* ]*/
 
         /* Shop Pages [ */
@@ -68,10 +74,13 @@ class SitemapController extends AdminBaseController
         $shopSrch->doNotLimitRecords();
         $shopSrch->addMultipleFields(array('shop_id'));
         $rs = $shopSrch->getResultSet();
-        $shopsList = FatApp::getDb()->fetchAll($rs);
+        while ($row = FatApp::getDb()->fetch($rs)) {
+            $this->writeSitemapUrl(UrlHelper::generateFullUrl('shops', 'view', array($row['shop_id']), CONF_WEBROOT_FRONT_URL), 'daily');
+        }
+        /* $shopsList = FatApp::getDb()->fetchAll($rs);
         foreach ($shopsList as $key => $val) {
             $this->writeSitemapUrl(UrlHelper::generateFullUrl('shops', 'view', array($val['shop_id']), CONF_WEBROOT_FRONT_URL), $freq = 'daily');
-        }
+        } */
         /* ]*/
 
         /* CMS Pages [ */
@@ -88,12 +97,17 @@ class SitemapController extends AdminBaseController
         $cmsSrch->addCondition('nav_active', '=', applicationConstants::ACTIVE);
         $cmsSrch->addMultipleFields(array('nlink_cpage_id, nlink_type'));
         $rs = $cmsSrch->getResultSet();
-        $linksList = FatApp::getDb()->fetchAll($rs);
+        while ($row = FatApp::getDb()->fetch($rs)) {
+            if ($row['nlink_type'] == NavigationLinks::NAVLINK_TYPE_CMS && $row['nlink_cpage_id']) {
+                $this->writeSitemapUrl(UrlHelper::generateFullUrl('Cms', 'view', array($row['nlink_cpage_id']), CONF_WEBROOT_FRONT_URL), 'monthly');
+            }
+        }
+        /* $linksList = FatApp::getDb()->fetchAll($rs);
         foreach ($linksList as $key => $link) {
             if ($link['nlink_type'] == NavigationLinks::NAVLINK_TYPE_CMS && $link['nlink_cpage_id']) {
                 $this->writeSitemapUrl(UrlHelper::generateFullUrl('Cms', 'view', array($link['nlink_cpage_id']), CONF_WEBROOT_FRONT_URL), $freq = 'monthly');
             }
-        }
+        } */
         /* ]*/
 
         $this->endSitemapXml();
