@@ -89,6 +89,9 @@
 
 .tabs-content {
     margin: 2rem 0 0;
+    @include media-breakpoint-down(sm) {
+        margin: 1rem 0 0;
+    }
 }
 
 .tabs_panel {

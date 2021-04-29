@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "yokart",
   "version": "1.0.0",
   "description": "Updates:\r     => Tax Module update",
@@ -34,4 +35,33 @@
     "url": "https://github.com/AblySoft268/Yokart-V8/issues"
   },
   "homepage": "https://github.com/AblySoft268/Yokart-V8#readme"
+=======
+    "name": "yokart",
+    "version": "1.0.0",
+    "description": "Updates:\r     => Tax Module update",
+    "main": "",
+    "dependencies": {
+        "gulp": "^4.0.2",
+        "gulp-autoprefixer": "^7.0.1",
+        "gulp-cli": "^2.3.0",
+        "gulp-sass": "^4.1.0",
+        "gulp-sourcemaps": "^3.0.0",
+        "node-sass": "^5.0.0"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --config webpack.config.js",
+        "web-watch": "webpack --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AblySoft268/Yokart-V8.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/AblySoft268/Yokart-V8/issues"
+    },
+    "homepage": "https://github.com/AblySoft268/Yokart-V8#readme"
+>>>>>>> d2029bc69efc0592ad65cae5dc410fbd756c9739
 }

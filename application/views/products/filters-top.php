@@ -177,7 +177,7 @@ if (isset($prodcat_code)) {
                                 
                             </div>
                         </div>
-                        <span class="dash"> - </span>
+                        <span class="dash"></span>
                         <div class="price-input">
                             <div class="price-text-box input-group">
                             <div class="input-group-prepend"><span class="input-group-text"><?php echo $symbol; ?></span></div>
