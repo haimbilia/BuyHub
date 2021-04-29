@@ -618,7 +618,6 @@ $(document).on('change', '.language-js', function () {
         var dv = $('#loadForm');
         fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
             dv.html(t);
-            jscolor.installByClassName('jscolor');
         });
     };
 
@@ -956,9 +955,9 @@ $(document).on('change', '.language-js', function () {
 
     saveSpecification = function (langId, key = - 1) {
         var preqId = $("input[name='preq_id']").val();
-        var prodspec_name = $("input[name='prodspec_name[" + langId + "]']").val();
-        var prodspec_value = $("input[name='prodspec_value[" + langId + "]']").val();
-        var prodspec_group = $("input[name='prodspec_group[" + langId + "]']").val();
+        var prodspec_name = encodeURIComponent($("input[name='prodspec_name[" + langId + "]']").val());
+        var prodspec_value = encodeURIComponent($("input[name='prodspec_value[" + langId + "]']").val());
+        var prodspec_group = encodeURIComponent($("input[name='prodspec_group[" + langId + "]']").val());
         if (prodspec_name.trim() == '' || prodspec_value.trim() == '') {
             $(".erlist_specification_"+langId).show();
             return false;

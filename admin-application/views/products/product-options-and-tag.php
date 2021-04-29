@@ -24,7 +24,7 @@
                      </div>
                  </div> 
                  <div class="row">
-                     <div class="col-md-12 mb-4" id="upc-listing">
+                     <div class="col-md-12 mb-4 mt-4" id="upc-listing">
                          
                      </div>
                  </div>

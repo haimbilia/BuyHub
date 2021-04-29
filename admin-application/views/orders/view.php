@@ -318,7 +318,7 @@ if ($order['order_reward_point_used'] > 0) {
                             <?php if (array_key_exists('order_rounding_off', $order) && 0 != $order['order_rounding_off']) { ?>
                                 <tr>
                                     <td colspan="8" class="text-right">
-                                    <?php echo (0 < $order['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $adminLangId) : Labels::getLabel('LBL_Rounding_Down', $adminLangId); ?>
+                                        <?php echo (0 < $order['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $adminLangId) : Labels::getLabel('LBL_Rounding_Down', $adminLangId); ?>
                                     </td>
                                     <td class="text-right" colspan="2">
                                         </strong><?php echo CommonHelper::displayMoneyFormat($order['order_rounding_off'], true, true); ?>
@@ -517,11 +517,13 @@ if ($order['order_reward_point_used'] > 0) {
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="break-me">
-                                                        <a href="javascript:void(0);" onclick="viewPaymemntGatewayResponse('<?php echo $row['opayment_gateway_response']; ?>')">View</a>
-                                                        <?php //echo nl2br($row['opayment_gateway_response']); 
-                                                        ?>
-                                                    </div>
+                                                    <?php if (!empty($row['opayment_gateway_response'])) { ?>
+                                                        <div class="break-me">
+                                                            <a href="javascript:void(0);" onclick="viewPaymemntGatewayResponse('<?php echo $row['opayment_gateway_response']; ?>')">View</a>
+                                                            <?php //echo nl2br($row['opayment_gateway_response']); 
+                                                            ?>
+                                                        </div>
+                                                    <?php } ?>
                                                 </td>
                                                 <td>
                                                     <div class="break-me">
@@ -548,8 +550,8 @@ if ($order['order_reward_point_used'] > 0) {
                                                 </td>
                                                 <td>
                                                     <?php if (0 == FatUtility::int($row['opayment_txn_status'])) { ?>
-                                                        <a href="javascript::void(0);" onclick="approve('<?php echo $row['opayment_id']; ?>')" class="btn btn-secondary btn-sm"><?php echo Labels::getLabel("LBL_APPROVE", $adminLangId); ?></a>
-                                                        <a href="javascript::void(0);" onclick="reject('<?php echo $row['opayment_id']; ?>')" class="btn btn-outline-secondary btn-sm"><?php echo Labels::getLabel("LBL_REJECT", $adminLangId); ?></a>
+                                                        <a href="javascript:void(0);" onclick="approve('<?php echo $row['opayment_id']; ?>')" class="btn btn-secondary btn-sm"><?php echo Labels::getLabel("LBL_APPROVE", $adminLangId); ?></a>
+                                                        <a href="javascript:void(0);" onclick="reject('<?php echo $row['opayment_id']; ?>')" class="btn btn-outline-secondary btn-sm"><?php echo Labels::getLabel("LBL_REJECT", $adminLangId); ?></a>
                                                     <?php } else {
                                                         echo Labels::getLabel("LBL_N/A", $adminLangId);
                                                     } ?>

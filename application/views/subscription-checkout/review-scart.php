@@ -62,7 +62,7 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
         </div>
     </main>
 </div>
-<aside class="sidebar" role="complementary">
+<aside class="sidebar" data-close-on-click-outside=" ">
     <div class="sidebar__content">
         <div id="order-summary" class="order-summary summary-listing-js"></div>
         <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>

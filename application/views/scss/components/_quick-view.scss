@@ -28,8 +28,7 @@
     }
     .row {
         height: 100%;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
     }
     .quick-col-1 {
@@ -41,8 +40,7 @@
         overflow-y: auto;
         border-#{$start-direction}: $border;
         background: $gray-light; 
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex; 
         -webkit-box-align:flex-start;
         -ms-flex-align:flex-start; 
@@ -114,14 +112,10 @@ html.quick-view--open {
     padding: 1em;
     max-width: 450px;
     min-height: 430px;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
+
     flex-direction: column;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
 }

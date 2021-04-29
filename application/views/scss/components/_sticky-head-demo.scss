@@ -5,8 +5,7 @@
         position: sticky;
         top: 0;
         z-index: 99;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
@@ -16,15 +15,15 @@
         -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
         .restore-wrapper {
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
             >a {
-                display: -webkit-box;
-                display: -ms-flexbox;
+                
+                
                 display: flex;
-                -webkit-box-align: center;
-                -ms-flex-align: center;
+                
+                
                 align-items: center;
                 -webkit-box-orient: vertical;
                 -webkit-box-direction: normal;
@@ -42,8 +41,8 @@
                 letter-spacing: 4px;
             }
             .restore__progress {
-                display: -webkit-box;
-                display: -ms-flexbox;
+                
+                
                 display: flex;
                 height: 4px;
                 width: 100%;
@@ -55,15 +54,15 @@
                 max-width: 96px;
             }
             .restore__progress-bar {
-                display: -webkit-box;
-                display: -ms-flexbox;
+                
+                
                 display: flex;
                 -webkit-box-orient: vertical;
                 -webkit-box-direction: normal;
                 -ms-flex-direction: column;
                 flex-direction: column;
-                -webkit-box-pack: center;
-                -ms-flex-pack: center;
+                
+                
                 justify-content: center;
                 color: #fff;
                 text-align: center;
@@ -84,24 +83,22 @@
 }
 
 .switch-interface {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
     li {
         margin: 0 1rem;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         a {
             position: relative;
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
+            
+            
             align-items: center;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
+            
+            
             justify-content: center;
         }
         &.is-active {
@@ -133,14 +130,11 @@
 }
 
 .demo-cta {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
     .close-layer {
         position: relative;

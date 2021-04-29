@@ -99,7 +99,7 @@ if (null != $fld) {
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -133,6 +133,22 @@ if (null != $fld) {
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php echo $prodCatFrm->getField('rating_type')->getCaption(); ?>
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $prodCatFrm->getFieldHtml('rating_type'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?php if (null != $statusFld) { ?>
                 <div class="row">
                     <div class="col-md-6">
@@ -151,7 +167,7 @@ if (null != $fld) {
                     </div>
                 </div>
             <?php } ?>
-            
+
             <?php $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
             if (!empty($translatorSubscriptionKey) && count($otherLangData) > 0) { ?>
                 <div class="row">
@@ -300,7 +316,7 @@ echo $prodCatFrm->getFieldHtml('logo_min_height');
 echo $prodCatFrm->getFieldHtml('prodcat_parent');
 ?>
 </form>
-<?php echo $prodCatFrm->getExternalJS(); 
+<?php echo $prodCatFrm->getExternalJS();
 
 $catAutocompleteArr = [];
 foreach ($categories as $catId => $catName) {
@@ -338,10 +354,10 @@ foreach ($categories as $catId => $catName) {
             aspectRatio = 16 / 9;
         }
     });
-       
-    
-    $(document).ready(function(){
-        var catAutocompleteArr = <?php echo json_encode($catAutocompleteArr);  ?>;    
+
+
+    $(document).ready(function() {
+        var catAutocompleteArr = <?php echo json_encode($catAutocompleteArr);  ?>;
         $('input[name=\'parent_category_name\']').autocomplete({
             minLength: 0,
             'classes': {
@@ -349,19 +365,77 @@ foreach ($categories as $catId => $catName) {
             },
             source: catAutocompleteArr,
             select: function(event, ui) {
-                    $('input[name=\'prodcat_parent\']').val(ui.item.id);
+                $('input[name=\'prodcat_parent\']').val(ui.item.id);
             }
-            }).focus(function(){            
-                $(this).autocomplete('search', $(this).val())
-            });	
+        }).focus(function() {
+            $(this).autocomplete('search', $(this).val())
+        });
 
         $('input[name=\'parent_category_name\']').change(function() {
             if ($(this).val() == '') {
                 $("input[name='prodcat_parent']").val(0);
             }
         });
-    
+
     });
-    
-    
+
+
+    addRatingType = function(e) {
+        var rt_id = e.detail.tag.id;
+        var ratingtype_name = e.detail.tag.title;
+        var prodCatId = $("input[name='prodcat_id']").val();
+        if (rt_id == '') {
+            if( !confirm(langLbl.addNewRatingType) ){ return; }
+            var data = 'ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
+            fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
+                var ans = $.parseJSON(t);
+                var newRtId = ans.rtId;
+                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' + ratingtype_name + '&ratingtypelang_lang_id=<?php echo $adminLangId; ?>';
+                fcom.ajax(fcom.makeUrl('RatingTypes', 'langSetup'), dataLang, function(t2) {
+                    var ans = $.parseJSON(t2);
+                    fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + newRtId, function(t3) {
+                        $('tag[value="' + e.detail.data.value + '"]').attr('id', newRtId);
+                    });
+                });
+            });
+        } else {
+            fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
+        }
+        tagifyRatingTypes();
+    }
+
+    removeRatingType = function(e) {
+        var rt_id = e.detail.tag.id;
+        var prodCatId = $("input[name='prodcat_id']").val();
+        if('' == rt_id || '' == prodCatId){ return; }
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
+        tagifyRatingTypes();
+    }
+
+    getRatingTypeAutoComplete = function(e){
+        var keyword = e.detail.value;
+        var list = [];
+        fcom.ajax(fcom.makeUrl('ProductCategories', 'ratingTypeAutoComplete'), {keyword:keyword}, function(t) {          
+            var ans = $.parseJSON(t);
+            for (i = 0; i < ans.length; i++) {            
+                list.push({
+                    "id" : ans[i].id,
+                    "value" : ans[i].ratingtype_identifier, 
+                });
+            }
+            tagify.settings.whitelist = list;
+            tagify.loading(false).dropdown.show.call(tagify, keyword);
+        });        
+    }
+
+    tagifyRatingTypes = function() {
+        var element = 'input[name=rating_type]';
+        $(element).siblings( ".tagify" ).remove();
+        tagify = new Tagify(document.querySelector('input[name=rating_type]'), {
+           whitelist : [],
+           delimiters : "#",
+           editTags : false,
+        }).on('add', addRatingType).on('remove', removeRatingType).on('input', getRatingTypeAutoComplete);  
+    };
+    tagifyRatingTypes();
 </script>

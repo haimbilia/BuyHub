@@ -11,7 +11,6 @@ $(document).ready(function() {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('MobileAppSettings', 'appThemeForm'), '', function(t) {
             $(dv).html(t);
-            jscolor.installByClassName('jscolor');
         });
     };
 

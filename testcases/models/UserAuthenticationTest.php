@@ -137,7 +137,7 @@ class UserAuthenticationTest extends YkModelTest
     
     public function addPwdRequest()
     {
-        $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20));
+        $token = FatUtility::getRandomString(30);
         return array(
             array(array('user_id' => 'test', 'token' => $token), false), // User with invalid userid
             array(array('user_id' => 1, 'token' => 'token545'), false), // User with invalid token

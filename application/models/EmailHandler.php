@@ -150,10 +150,8 @@ class EmailHandler extends FatModel
 
         $vars += static::commonVars($langId);
 
-        foreach ($vars as $key => $val) {
-            $subject = str_replace($key, $val, $subject);
-            $body = str_replace($key, $val, $body);
-        }
+        $subject = CommonHelper::replaceStringData($subject, $vars);
+        $body = CommonHelper::replaceStringData($body, $vars);
 
         if (FatApp::getConfig('CONF_SEND_SMTP_EMAIL')) {
             if (!$sendEmail = static::sendSmtpEmail($to, $subject, $body, $extra_headers, $tpl, $langId, '', $smtp_arr, $bcc)) {
@@ -453,6 +451,25 @@ class EmailHandler extends FatModel
             return false;
         }
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
+        return true;
+    }
+    
+    public function sendAdminNewUserCreationEmail($langId, $d)
+    {
+        $tpl = 'admin_new_user_creation_email';
+
+        $vars = array(
+            '{user_full_name}' => $d['user_name'],
+            '{user_email}' => $d['user_name'],
+            '{reset_url}' => $d['link'],
+            '{days}' => $d['days'],
+            '{account_type}' => $d['account_type'],
+        );
+
+        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+            return false;
+        }
+       
         return true;
     }
 

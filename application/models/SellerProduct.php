@@ -24,13 +24,18 @@ class SellerProduct extends MyAppModel
     public const DB_TBL_RELATED_PRODUCTS_PREFIX = 'related_';
 
     public const DB_TBL_EXTERNAL_RELATIONS = 'tbl_seller_product_external_relations';
-    public const DB_TBL_EXTERNAL_RELATIONS_PREFIX = 'sperel_';
+    public const DB_TBL_EXTERNAL_RELATIONS_PREFIX = 'sperel_';    
+    
+    public const DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD = 'tbl_seller_products_to_plugin_selprod';
+    public const DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX = 'spps_';
+    
     public const MAX_RANGE_OF_MINIMUM_PURCHANGE_QTY = 9999;
 
     public const VOL_DISCOUNT_MIN_QTY = 2;
     public const VOL_DISCOUNT_MAX_QTY = 9999;
 
     public const UPDATE_OPTIONS_COUNT = 10;
+    public const INVENTORY_RESTRICT_LIMIT = 20;
 
     public function __construct($id = 0)
     {
@@ -1165,12 +1170,14 @@ class SellerProduct extends MyAppModel
             return false;
         }
 
+        if (true == MetaTag::isExists($tabsArr[$metaType]['controller'], $tabsArr[$metaType]['action'], $selprod_id, 0)) {
+            return true;
+        }
+
         $metaData['meta_controller'] = $tabsArr[$metaType]['controller'];
         $metaData['meta_action'] = $tabsArr[$metaType]['action'];
         $metaData['meta_record_id'] = $selprod_id;
         $metaData['meta_subrecord_id'] = 0;
-
-        $metaIdentifier = static::getProductDisplayTitle($selprod_id, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
 
         $meta = new MetaTag();
         $meta->assignValues($metaData);
@@ -1179,6 +1186,7 @@ class SellerProduct extends MyAppModel
             $this->error = $meta->getError();
             return false;
         }
+
         $metaId = $meta->getMainTableRecordId();
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
@@ -1237,4 +1245,19 @@ class SellerProduct extends MyAppModel
     {
         return $fulfillmentType;
     }
+    
+    public static function getProdIdByPlugin(int $pluginId, int $pluginSelProdId): int
+    {
+        $srch = new SearchBase(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
+        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_id', '=', $pluginId);
+        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_selprod_id', '=', $pluginSelProdId);
+        $srch->addFld('spps_selprod_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs); 
+        if (!$records) {
+            return 0;
+        }
+        return $records['spps_selprod_id'];
+    }
+    
 }

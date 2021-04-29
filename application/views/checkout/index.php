@@ -35,7 +35,7 @@
         <div class="main checkout-content-js">
 
         </div>
-        <aside class="sidebar">
+        <aside class="sidebar" data-close-on-click-outside=" ">
             <div class="sidebar__content">
                 <div id="order-summary" class="order-summary summary-listing-js">
 

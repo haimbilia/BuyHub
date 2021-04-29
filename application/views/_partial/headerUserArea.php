@@ -26,8 +26,7 @@ if (!$isUserLogged) {
                         </svg></i> <span>
                         <strong><?php echo Labels::getLabel('LBL_Login_/_Sign_Up', $siteLangId); ?></strong></span></a></div>
         </li> <?php
-            } ?> <?php
-            // $this->includeTemplate('guest-user/loginFormTemplate.php');
+            }
         } else {
             $userActiveTab = false;
             if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {

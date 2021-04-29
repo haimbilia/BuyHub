@@ -2,7 +2,7 @@
 if (isset($includeEditor) && $includeEditor) { ?>
     <script language="javascript" type="text/javascript" src="<?php echo CONF_WEBROOT_URL; ?>innovas/scripts/innovaeditor.js"></script>
     <script src="<?php echo CONF_WEBROOT_URL; ?>innovas/scripts/common/webfont.js" type="text/javascript"></script>
-<?php  }  ?>
+<?php } ?>
 </head>
 <?php
 $bodyClass = ($controllerName == 'Home') ? 'home' : 'inner';
@@ -43,7 +43,7 @@ if (CommonHelper::demoUrl()) {
     }
     ?>
     <?php
-    if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '')) {
+    if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
         echo FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '');
     }
     ?>

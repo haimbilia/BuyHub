@@ -124,7 +124,7 @@ class PatchUpdateController extends AdminBaseController
         }
 
         $codesArr = $taxPluginObj->getCodes(null, null, null, array(), false);
-        if (is_array($codesArr) && false === $codesArr['status']) {
+        if (is_array($codesArr) && array_key_exists('status', $codesArr) && false === $codesArr['status']) {
             FatUtility::dieWithError($codesArr['msg']);
         }
 
@@ -406,7 +406,7 @@ class PatchUpdateController extends AdminBaseController
         $qry = FatApp::getDb()->query("show tables");
         $res = FatApp::getDb()->fetchAll($qry);
         foreach ($res as $val) {
-            FatApp::getDb()->query("ALTER TABLE " . $val['Tables_in_' . $database] . " CONVERT TO CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci");
+            FatApp::getDb()->query("ALTER TABLE " . $val['Tables_in_' . $database] . " CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
             echo 'Done:- ' . $val['Tables_in_' . $database] . '<br>';
         }
         // ALTER TABLE tbl_affiliate_commission_settings MODIFY COLUMN afcommsetting_fees decimal(12,4)

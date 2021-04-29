@@ -23,7 +23,8 @@
                         return false;
                     }
                     $('#sign-up').html(t.html);
-                    startOtpInterval();
+                    $('.countdownFld--js, .resendOtp-js').parent().removeClass('d-none');
+                    startOtpInterval('.otpForm-js');
                 });
             }
         });	

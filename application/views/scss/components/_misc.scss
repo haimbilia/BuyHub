@@ -2,19 +2,13 @@ html {
     font-size: 16px;
     overflow-x: hidden;
     @include media-breakpoint-down(lg) {
-        & {
-            font-size: 15px;
-        }
+        font-size: 15px;
     }
     @include media-breakpoint-down(md) {
-        & {
-            font-size: 14px;
-        }
+        font-size: 14px;
     }
     @include media-breakpoint-down(sm) {
-        & {
-            font-size: 13px;
-        }
+        font-size: 13px;
     }
     &.pop-on {
         overflow: hidden;
@@ -187,18 +181,9 @@ a:hover {
 }
 
 .cards-message {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
     flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
     position: relative;
     padding: 0.75rem 1.25rem;
@@ -206,11 +191,7 @@ a:hover {
     color: var(--body-color);
     height: 100%;
     .cards-message-icon {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
         padding: 1.25rem 0;
         font-size: 2.5rem;
@@ -343,4 +324,35 @@ a:hover {
 
 .scroll {
     padding-#{$end-direction}: 15px;
+}
+
+.svg {
+    fill: currentColor;
+}
+
+.scroll-y {
+    overflow: hidden;
+    overflow-y: auto;
+    padding-#{$end-direction}: 0.5rem;
+    /* width */
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    /* Track */
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: rgb(180, 180, 180);
+    }
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgb(129, 129, 129);
+    }
+}
+
+.text-link {
+    font-weight: 500;
+    color: $brand-color;
 }

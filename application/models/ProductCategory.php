@@ -10,6 +10,9 @@ class ProductCategory extends MyAppModel
     public const DB_TBL_PROD_CAT_RELATIONS = 'tbl_product_category_relations';
     public const DB_TBL_PROD_CAT_REL_PREFIX = 'pcr_';
 
+    public const DB_TBL_PROD_CAT_RATING_TYPES = 'tbl_prodcat_rating_types';
+    public const DB_TBL_PROD_CAT_RT_PREFIX = 'prt_';
+
     public const REWRITE_URL_PREFIX = 'category/view/';
     public const REMOVED_OLD_IMAGE_TIME = 4;
     private $categoryTreeArr = array();
@@ -194,10 +197,10 @@ class ProductCategory extends MyAppModel
         return 1;
     }
 
-    public static function getArray($langId, $parentId = 0, $sortByName = false, $excludeCatHavingNoProducts = false, $keywords = false, $useCache = false)
+    public static function getArray($langId, $parentId = 0, $sortByName = false, $excludeCatHavingNoProducts = false, $keywords = false, $useCache = false, $parseTree = true)
     {
         if (true == $useCache) {
-            $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords;
+            $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords . '-' . $parseTree;
             $categoryArrCache = FatCache::get('categoryArrCache' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
             if ($categoryArrCache) {
                 return unserialize($categoryArrCache);
@@ -262,7 +265,9 @@ class ProductCategory extends MyAppModel
 
         $rs = $srch->getResultSet();
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
-        $categoriesArr = static::parseTree($categoriesArr, $parentId);
+        if (true == $parseTree) {
+            $categoriesArr = static::parseTree($categoriesArr, $parentId);
+        }
         if (true == $useCache) {
             FatCache::set('categoryArrCache' . $cacheKey, serialize($categoriesArr), '.txt');
         }
@@ -709,35 +714,22 @@ class ProductCategory extends MyAppModel
         return $return;
     }
 
-    public function getAutoCompleteProdCatTreeStructure($parent_id = 0, $langId = 0, $keywords = '', $level = 0, $name_prefix = '', $isActive = true, $isDeleted = true, $isForCsv = false)
+    public function getAutoCompleteProdCatTreeStructure($parent_id = 0, $langId = 0, $keywords = '', $level = 0, $namePrefix = '', $isActive = true, $isDeleted = true, $isForCsv = false)
     {
         $langId = FatUtility::int($langId);
-        $srch = static::getSearchObject(false, $langId, false);
-        //$srch->addOrder('catOrder','asc');
-        //$srch->addOrder('m.prodcat_display_order','asc');
-        $srch->addOrder('prodcat_id', 'asc');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addMultipleFields(array('prodcat_id', 'prodcat_active', 'prodcat_deleted', 'prodcat_name', 'prodcat_code'));
-        $rs = $srch->getResultSet();
-        $catRecords = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
-
 
         $srch = static::getSearchObject(false, $langId, $isActive);
+        $srch->addMultipleFields(['m.prodcat_id', 'm.prodcat_code', 'TRIM(LEADING "0" FROM substr(prodcat_code,1,6)) AS prodrootcat_id']);
         if ($langId) {
-            $srch->addFld('m.prodcat_id, COALESCE(pc_l.prodcat_name, m.prodcat_identifier) as prodcat_name');
+            $srch->addFld('COALESCE(pc_l.prodcat_name, m.prodcat_identifier) as prodcat_name');
         } else {
-            $srch->addFld('m.prodcat_id, m.prodcat_identifier as prodcat_name');
+            $srch->addFld('m.prodcat_identifier as prodcat_name');
         }
-        //$srch->addFld('GETCATORDERCODE(prodcat_id) as catOrder');
-        $srch->addFld('prodcat_ordercode as catOrder');
+
         if ($isDeleted) {
             $srch->addCondition('m.prodcat_deleted', '=', 0);
         }
 
-        if ($isActive) {
-            $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
-        }
         if ($parent_id > 0) {
             $srch->addCondition('m.prodcat_id', '=', FatUtility::int($parent_id));
         }
@@ -747,24 +739,34 @@ class ProductCategory extends MyAppModel
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addOrder('catOrder', 'asc');
+        $srch->addOrder('prodcat_ordercode', 'asc');
         $srch->addOrder('prodcat_name', 'asc');
-        //echo $srch->getQuery();
-        $rs = $srch->getResultSet();
-        $return = array();
 
-        $records = FatApp::getDb()->fetchAll($rs);
-        foreach ($records as $prodCats) {
+        /*Fetch searched parent category data */
+        $catSrch = static::getSearchObject(false, $langId, $isActive);
+        $catSrch->addFld('DISTINCT(m.prodcat_id),m.prodcat_code, COALESCE(pc_l.prodcat_name, m.prodcat_identifier) as prodcat_name');
+        $catSrch->doNotCalculateRecords();
+        $catSrch->doNotLimitRecords();
+        $catSrch->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', "m.prodcat_code like CONCAT('%',temp.prodrootcat_id,'%')", 'temp');
+        $catSrch->addOrder('m.prodcat_code');
+        $rs = $catSrch->getResultSet();
+        $catRecords = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
+        // CommonHelper::printArray($catRecords);
+
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs, 'prodcat_code');
+
+        $treeArr = [];
+        foreach ($catRecords as $row) {
+            if (!array_key_exists($row['prodcat_code'], $records)) {
+                continue;
+            }
             $level = 0;
             $seprator = '';
-            $name_prefix = '';
-            $categoryCode = substr($catRecords[$prodCats['prodcat_id']]['prodcat_code'], 0, -1);
-            $prodCat = explode("_", $categoryCode);
+            $namePrefix = '';
+            $prodCat = explode("_", substr($row['prodcat_code'], 0, -1));
+
             foreach ($prodCat as $key => $prodcatParent) {
-                // var_dump($catRecords[FatUtility::int($prodcatParent)]);
-                if ($catRecords[FatUtility::int($prodcatParent)]['prodcat_deleted'] != applicationConstants::NO || $catRecords[FatUtility::int($prodcatParent)]['prodcat_active'] != applicationConstants::ACTIVE) {
-                    break;
-                }
                 if ($level > 0) {
                     if ($isForCsv) {
                         $seprator = '->-> ';
@@ -773,15 +775,14 @@ class ProductCategory extends MyAppModel
                     }
                     $seprator = CommonHelper::renderHtml($seprator);
                 }
-                $productCatName = $catRecords[FatUtility::int($prodcatParent)]['prodcat_name'];
-
-                $name_prefix = $name_prefix . $seprator . $productCatName;
-
-                $return[$prodCats['prodcat_id']] = $name_prefix;
+                $namePrefix = $namePrefix . $seprator . $catRecords[FatUtility::int($prodcatParent)]['prodcat_name'];
+                $treeArr[$row['prodcat_id']] = $namePrefix;
                 $level++;
             }
         }
-        return $return;
+
+        $catRecords = [];
+        return $treeArr;
     }
 
     public static function getProdCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false, bool $sortByName = false, $prodCatSrchObj = false, bool $excludeCategoriesHavingNoProducts = false)
@@ -825,7 +826,6 @@ class ProductCategory extends MyAppModel
         } else {
             $prodCatSrch->addOrder('prodcat_ordercode');
         }
-
         $rs = $prodCatSrch->getResultSet();
         if ($forSelectBox) {
             $categoriesArr = FatApp::getDb()->fetchAllAssoc($rs);
@@ -878,7 +878,7 @@ class ProductCategory extends MyAppModel
         }
         return false;
     }
-    
+
     public static function recordCategoryWeightage($categoryId)
     {
         /* $categoryId =  FatUtility::int($categoryId);
@@ -1152,7 +1152,7 @@ class ProductCategory extends MyAppModel
 
         $childrens = $this->getChildrens();
         $db = FatApp::getDb();
-        foreach($childrens as $catId => $notInUse) {
+        foreach ($childrens as $catId => $notInUse) {
             if (!$db->query('CALL updateCategoryRelations(' . $catId . ')')) {
                 $this->error = $db->getError();
                 return false;
@@ -1254,7 +1254,7 @@ class ProductCategory extends MyAppModel
     }
 
     public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true)
-    {   
+    {
         $attr = [
             'm.*',
             'COALESCE(prodcat_name,m.prodcat_identifier ) as prodcat_name'
@@ -1339,7 +1339,7 @@ class ProductCategory extends MyAppModel
         $childrens = $this->getChildrens();
         $db = FatApp::getDb();
         $db->updateFromArray(static::DB_TBL, array(static::DB_TBL_PREFIX . 'parent' => $parentCatId), array('smt' => static::DB_TBL_PREFIX . 'id = ?', 'vals' => array($this->mainTableRecordId)));
-        foreach($childrens as $catId => $notInUse) {
+        foreach ($childrens as $catId => $notInUse) {
             if (!$db->query('CALL updateCategoryRelations(' . $catId . ')')) {
                 $this->error = $db->getError();
                 return false;
@@ -1500,5 +1500,85 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs, 'pcr_prodcat_id');
+    }
+
+    public function addUpdateRatingType(int $rtId)
+    {
+        if (1 > $this->mainTableRecordId || 1 > $rtId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+        $record = new TableRecord(static::DB_TBL_PROD_CAT_RATING_TYPES);
+
+        $data = [
+            static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id' => $this->mainTableRecordId,
+            static::DB_TBL_PROD_CAT_RT_PREFIX . 'ratingtype_id' => $rtId
+        ];
+
+        $record->assignValues($data);
+        if (!$record->addNew(array(), $data)) {
+            $this->error = $record->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function removeRatingType(int $rtId)
+    {
+        $db = FatApp::getDb();
+        if (1 > $this->mainTableRecordId || 1 > $rtId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+
+        if (!$db->deleteRecords(static::DB_TBL_PROD_CAT_RATING_TYPES, array('smt' => static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id = ? AND ' . static::DB_TBL_PROD_CAT_RT_PREFIX . 'ratingtype_id = ?', 'vals' => array($this->mainTableRecordId, $rtId)))) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getRatingTypes(int $langId = 0, int $isActive = -1): array
+    {
+        $langId = 1 > $langId ? $this->commonLangId : $langId;
+
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
+            return [];
+        }
+
+        $srch = self::getRatingTypesObj($langId, $isActive);
+        $srch->addCondition('prt_prodcat_id', '=', $this->mainTableRecordId);
+        $srch->addCondition('ratingtype_active', '=', applicationConstants::ACTIVE);
+        $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'ratingtype_active', 'ratingtype_default']);
+
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
+    }
+
+    public static function getRatingTypesObj(int $langId = 0, int $isActive = -1)
+    {
+        $srch = new SearchBase(static::DB_TBL_PROD_CAT_RATING_TYPES, 'prt');
+        $srch->joinTable(
+            RatingType::DB_TBL,
+            'INNER JOIN',
+            'rt.ratingtype_id = prt.prt_ratingtype_id',
+            'rt'
+        );
+        $srch->joinTable(
+            RatingType::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $langId,
+            'rt_l'
+        );
+
+        if (0 < $isActive) {
+            $srch->addCondition('ratingtype_active', '=', $isActive);
+        }
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        return $srch;
     }
 }
