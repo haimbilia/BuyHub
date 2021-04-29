@@ -1498,12 +1498,29 @@ class ProductsController extends AdminBaseController
 
     public function downloadsForm($productId)
     {
+        $productId = FatUtility::int($productId);
+        
+        if (1 > $productId) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+        
+        $product = Product::getAttributesById($productId, ['product_download_attachements_with_inventory']);
+        
+        if (false == $product) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+        
+        if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
+            FatUtility::dieWithError(Labels::getLabel('LBL_Digital_downloads_allowed_with_inventory', $this->adminLangId));
+        }
+
         $frm = $this->getDownloadForm($this->adminLangId, $productId);
         $frmData = [
             'product_id' => $productId
         ];
 
         $frm->fill($frmData);
+
         $this->set('downloadFrm', $frm);
         $this->set('adminLangId', $this->adminLangId);
         $this->_template->render(false, false, 'products/download-setup-frm.php');
@@ -1519,7 +1536,7 @@ class ProductsController extends AdminBaseController
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
         
         if (0 < count($optionCombinations)) {
-            $optionCombinations = array('all' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
+            $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
             $frm->addSelectBox(Labels::getLabel('LBL_Option', $langId), 'option_comb_id', $optionCombinations, '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();
         }
 
@@ -1529,8 +1546,8 @@ class ProductsController extends AdminBaseController
         $fld->requirements()->setRequired();
         $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
 
+        $frm->addSelectBox(Labels::getLabel('LBL_Preview_File?', $langId), 'is_preview', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'is_preview'), '')->requirements()->setRequired();
         $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_Preview_File', $langId), 'preview_file', array('id' => 'preview_file'));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->adminLangId));
         $frm->addHiddenField('', 'product_id');
         return $frm;
@@ -1538,26 +1555,93 @@ class ProductsController extends AdminBaseController
 
     public function setupDigitalDownloads()
     {
-        $post = FatApp::getPostedData();
         
-        $type = $post['download_type'];
-        $prodId = $post['product_id'];
+        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        
+        if (1 > $prodId) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+        
         /* TODO
-            => need to check downloads allowed at product level
+        => To check downloads allowed at product level
         */
 
+        $product = Product::getAttributesById($prodId, ['product_download_attachements_with_inventory']);
+        
+        if (false == $product) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+        
+        if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Digital_downloads_allowed_with_inventory', $this->adminLangId));
+        }
+        
+        $post = FatApp::getPostedData();
+        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
+        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+        
+        $digitalDownload = new DigitalDownloads($prodId);
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $productdownload = new DigitalDownloads($prodId);
-            if ($productdownload->saveDownloadReferences($post['option_comb_id'], $post['product_downloadable_link'])) {
-                FatUtility::dieJsonSuccess('Saved Successfully');
+            if ($digitalDownload->saveDownloadReferences($optionComb, $post['product_downloadable_link'])) {
+                FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId));
             } else {
-                FatUtility::dieJsonError($productdownload->getError());
+                FatUtility::dieWithError($digitalDownload->getError());
             }
         } else {
-            CommonHelper::printArray([$post], 1);
+
+            $srch = new DigitalDownloadsSearch();
+            $srch->addCondition('pdd_product_id', '=', $prodId);
+            $srch->addCondition('pdd_options_code', '=', $optionComb);
+
+            $srch->setPageSize(1);
+            $srch->doNotCalculateRecords();
+
+            $rs = $srch->getResultSet();
+            $row = FatApp::getDb()->fetch($rs);
+
+            $ddRefId = 0;
+            if (is_array($row)) {
+                $ddRefId = $row['pdd_id'];
+            }
+            
+            if (!$digitalDownload->saveDownloadReferences($optionComb, '')) {
+                FatUtility::dieWithError($digitalDownload->getError());
+            }
+
+            if (1 > $ddRefId) {
+                $ddRefId = $digitalDownload->getMainTableRecordId();
+            }
+
+            if (!is_uploaded_file($_FILES['downloadable_file']['tmp_name'])) {
+                Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+                FatUtility::dieWithError(Message::getHtml());
+            }
+            $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 1);
+            $isPreview = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
+            $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD;
+            $fileHandlerObj = new AttachedFile();
+            if (1 == $isPreview) {
+                $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW;
+                // $fileHandlerObj->deleteFile($fileType, $prodId, 0, $ddRefId, $langId);
+            }
+
+            if (!$res = $fileHandlerObj->saveAttachment(
+                $_FILES['downloadable_file']['tmp_name'],
+                $fileType,
+                $prodId,
+                $ddRefId,
+                $_FILES['downloadable_file']['name'],
+                -1,
+                false,
+                $langId
+            )) {
+                Message::addErrorMessage($fileHandlerObj->getError());
+                FatUtility::dieWithError(Message::getHtml());
+            }
+            FatUtility::dieJsonSuccess('Uploaded Successfully!!!');
         }
 
-        FatUtility::dieJsonError('Something went wrong!!!');
+        FatUtility::dieWithError($this->str_invalid_request);
     }
 
     public function getDigitalDownloadLinks()
@@ -1595,8 +1679,64 @@ class ProductsController extends AdminBaseController
 
     public function getDigitalDownloadAttachments()
     {
-        $post = FatApp::getPostedData();
+        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $optionComb = FatApp::getPostedData('option_comb', null, 0);
+        $langId = FatApp::getPostedData('lang_id', null, 0);
         
-        CommonHelper::printArray([$post], 1);
+        if (1 > $productId) {
+            FatUtility::dieJsonSuccess($this->str_invalid_request);
+        }
+        $ret['attachmentsList'] = '';
+
+        $srch = new DigitalDownloadsSearch();
+        $srch->addCondition('pdd_product_id', '=', $productId);
+        $srch->addCondition('pdd_options_code', '=', $optionComb);
+
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+
+        $ddRefId = 0;
+        if (is_array($row)) {
+            $ddRefId = $row['pdd_id'];
+        }
+
+        if (1 > $ddRefId) {
+            FatUtility::dieJsonSuccess('No Attachements');
+        }
+
+        $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $productId, $ddRefId, -1);
+        $previews = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW, $productId, $ddRefId, -1);
+
+        // CommonHelper::printArray([$attachments, $previews]);
+        $this->set('attachments', $attachments);
+        $this->set('previews', $previews);
+        $this->set('languages', Language::getAllNames());
+        echo $this->_template->render(false, false, 'products/digital-download-attachments-list.php', true);
+    }
+
+    public function deleteDigitalFile($prodId, $afileId = 0)
+    {
+        $this->objPrivilege->canEditProducts();
+        $selprodId = FatUtility::int($prodId);
+        $afileId = FatUtility::int($afileId);
+
+        if (!$prodId || !$afileId) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $prodId, $afileId)) {
+            Message::addErrorMessage($fileHandlerObj->getError());
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW, $prodId, $afileId);
+
+        $this->set('msg', Labels::getLabel('LBL_Removed_successfully', $this->adminLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 }

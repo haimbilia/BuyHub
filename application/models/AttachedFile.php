@@ -75,6 +75,8 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE = 58;
     public const FILETYPE_META_IMAGE = 59;
 
+    public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 60;
+
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
 
@@ -239,7 +241,6 @@ class AttachedFile extends MyAppModel
         if ($size > 0) {
             $srch->setPageSize($size);
         }
-        /* die($srch->getQuery()); */
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }

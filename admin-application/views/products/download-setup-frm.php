@@ -5,6 +5,9 @@ $downloadFrm->setFormTagAttribute('id', 'frmDownload');
 $fld = $downloadFrm->getField('product_downloadable_link');
 $fld->addFieldTagAttribute('id', 'product_downloadable_link');
 
+$fld = $downloadFrm->getField('downloadable_file');
+$fld->addFieldTagAttribute('onchange', 'saveDownloadFiles();');
+
 $fld = $downloadFrm->getField('btn_submit');
 $fld->addFieldTagAttribute('id', 'btn_submit');
 $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
@@ -89,6 +92,22 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6 preview-file-fld-js">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php $fld = $downloadFrm->getField('is_preview');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                            <?php echo $downloadFrm->getFieldHtml('is_preview'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-6 downloadable-file-fld-js">
                     <div class="field-set">
                         <div class="caption-wraper">
@@ -101,22 +120,6 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                         <div class="field-wraper">
                             <div class="field_cover">
                             <?php echo $downloadFrm->getFieldHtml('downloadable_file'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 preview-file-fld-js">
-                    <div class="field-set">
-                        <div class="caption-wraper">
-                            <label class="field_label">
-                                <?php $fld = $downloadFrm->getField('preview_file');
-                                echo $fld->getCaption();
-                                ?>
-                            </label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                            <?php echo $downloadFrm->getFieldHtml('preview_file'); ?>
                             </div>
                         </div>
                     </div>
@@ -137,6 +140,9 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
             </div>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
+        <div class="col-md-12">
+            <div class="row" id="digital_download_list"></div>
+        </div>
     </div>
 </div>
 <script>
