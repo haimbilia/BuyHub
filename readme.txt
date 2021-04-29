@@ -95,6 +95,7 @@ Fixes:
     => 052912 - front end> product editor> insert image option> upload button is not working in editor 
     => 052985 - when the subscription module is on then the catalog image upload /multiple inventory add limit not working properly
     => 053007 - Stripe Connect Already Have Account Issue 
+    => 053057 - When search by keyword on home getting error
 
 Enhancements :
    => Make provision to made seller
