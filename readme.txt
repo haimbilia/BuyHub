@@ -96,6 +96,7 @@ Fixes:
     => 052985 - when the subscription module is on then the catalog image upload /multiple inventory add limit not working properly
     => 053007 - Stripe Connect Already Have Account Issue 
     => 053057 - When search by keyword on home getting error
+    => 053064 - While order product commission not calculated as per subscription
 
 Enhancements :
    => Make provision to made seller
