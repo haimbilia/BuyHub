@@ -11,15 +11,8 @@ class Badge extends MyAppModel
     public const TYPE_BADGE = 1;
     public const TYPE_RIBBON = 2;
 
-    public const SHAPE_SQUARE = 1;
-    public const SHAPE_RECTANGLE = 2;
-    public const SHAPE_CIRCLE = 3;
-    public const SHAPE_TRIANGLE = 4;
-    public const SHAPE_OVAL = 5;
-    public const SHAPE_DIMOND = 6;
-    public const SHAPE_OCTAGON = 7;
-    public const SHAPE_STAR = 8;
-    public const SHAPE_HEART = 9;
+    public const SHAPE_CIRCLE = 1;
+    public const SHAPE_CAPSULE = 2;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
@@ -87,15 +80,8 @@ class Badge extends MyAppModel
     public static function getShapeTypesArr(int $langId): array
     {
         return [
-            self::SHAPE_SQUARE => Labels::getLabel('LBL_SQUARE', $langId),
-            self::SHAPE_RECTANGLE => Labels::getLabel('LBL_RECTANGLE', $langId),
             self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
-            self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
-            self::SHAPE_OVAL => Labels::getLabel('LBL_OVAL', $langId),
-            self::SHAPE_DIMOND => Labels::getLabel('LBL_DIMOND', $langId),
-            self::SHAPE_OCTAGON => Labels::getLabel('LBL_OCTAGON', $langId),
-            self::SHAPE_STAR => Labels::getLabel('LBL_STAR', $langId),
-            self::SHAPE_HEART => Labels::getLabel('LBL_HEART', $langId),
+            self::SHAPE_CAPSULE => Labels::getLabel('LBL_CAPSULE', $langId),
         ];
     }
 

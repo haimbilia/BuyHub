@@ -42,7 +42,8 @@
                     $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewBadgeLinks(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                   <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Catalog', $adminLangId); ?></a>
                       <ul>
@@ -105,8 +106,11 @@
                           <?php /* if($objPrivilege->canViewSellerCatalogRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_SELLER_CAN_REQUEST_PRODUCT', FatUtility::VAR_INT, 0)){?>
                     <li><a href="<?php echo UrlHelper::generateUrl('Users','sellerCatalogRequests');?>"><?php echo Labels::getLabel('LBL_Product_Catalog_Requests',$adminLangId);?> <?php if($catReqCount){ ?><span class='badge'>(<?php echo $catReqCount; ?>)</span><?php } ?></a></li>
                     <?php } */ ?>
-                            <?php if ($objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                          <?php if ($objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('Badges'); ?>"><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $adminLangId); ?></a></li>
+                          <?php } ?>
+                          <?php if ($objPrivilege->canViewBadgeLinks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                              <li><a href="<?php echo UrlHelper::generateUrl('BadgeLinks'); ?>"><?php echo Labels::getLabel('LBL_BADGE_LINKS', $adminLangId); ?></a></li>
                           <?php } ?>
                       </ul>
                   </li>

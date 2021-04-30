@@ -541,4 +541,39 @@ CREATE TABLE `tbl_badges_lang` ( `badgelang_badge_id` BIGINT NOT NULL ,  `badgel
 ALTER TABLE `tbl_badges_lang`
   ADD PRIMARY KEY (`badgelang_badge_id`,`badgelang_lang_id`),
   ADD UNIQUE KEY `badge_name` (`badgelang_lang_id`,`badge_name`);
+
+--
+-- Table structure for table `tbl_badge_links`
+--
+
+CREATE TABLE `tbl_badge_links` (
+  `badgelink_id` bigint NOT NULL,
+  `badgelink_badge_id` bigint NOT NULL,
+  `badgelink_record_id` bigint NOT NULL,
+  `badgelink_record_type` int NOT NULL,
+  `badgelink_condition_type` int NOT NULL,
+  `badgelink_condition_from` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `badgelink_condition_to` varchar(150) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_badge_links`
+--
+ALTER TABLE `tbl_badge_links`
+  ADD PRIMARY KEY (`badgelink_id`),
+  ADD UNIQUE KEY `badge_link_unique` (`badgelink_badge_id`,`badgelink_record_id`,`badgelink_record_type`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_badge_links`
+--
+ALTER TABLE `tbl_badge_links`
+  MODIFY `badgelink_id` bigint NOT NULL AUTO_INCREMENT;
 -- --- Badges & Ribbons --- --

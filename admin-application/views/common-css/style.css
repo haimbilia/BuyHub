@@ -12412,3 +12412,14 @@ form[name="frmShippingProfile"] {
                 align-items: center;
         font-weight: 700;
         font-size: 1.125rem; }
+
+        .color-circle {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 5px;
+          max-width: 16px;
+          flex: 0 0 16px;
+      }

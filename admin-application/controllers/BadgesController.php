@@ -256,4 +256,19 @@ class BadgesController extends AdminBaseController
         $this->set('badge_name', $translatedData[$toLangId]['badge_name']);
         $this->_template->render(false, false, 'json-success.php');
     }
+
+    public function autoComplete()
+    {
+        $pagesize = 20;
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+
+        $srch = new BadgeSearch($this->adminLangId);
+        $srch->setPageSize($pagesize);
+        if (!empty($keyword)) {
+            $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
+        }
+        $srch->addMultipleFields([Badge::DB_TBL_PREFIX . 'id as id', Badge::DB_TBL_PREFIX . 'name as name']);
+        $badges = FatApp::getDb()->fetchAll($srch->getResultSet());
+        die(json_encode(['badges' => $badges]));
+    }
 }

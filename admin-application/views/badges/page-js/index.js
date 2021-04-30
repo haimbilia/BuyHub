@@ -1,5 +1,6 @@
 $(document).ready(function () {
     searchRecords(document.frmSearch);
+
 });
 
 (function () {
@@ -43,31 +44,12 @@ $(document).ready(function () {
         $('.pagebody--js').fadeIn();
     }
 
-    langForm = function (badge_id, langId, autoFillLangData = 0) {
-        $('.tabsNav--js a').removeClass('active');
-        $('.langtab--js').removeClass('fat-inactive');
-        $('.langtab--js a').addClass('active');
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controller, 'langForm', [badge_id, langId, autoFillLangData]), '', function (t) {
-            $.systemMessage.close();
-            $('.tabs_panel--js').replaceWith(t);
-        });
-    };
-
     setup = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             reloadList();
             form(t.badge_id, t.badge_type);
-        });
-    };
-    setupLang = function (frm) {
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controller, 'langSetup'), data, function (t) {
-            reloadList();
-            $(document).trigger('close.facebox');
         });
     };
 

@@ -40,7 +40,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'name':
-                $name = array_key_exists(Badge::DB_TBL_PREFIX . 'name', $row) && !empty($row[$key]) ? $row[$key]  . ' (' . $row[Badge::DB_TBL_PREFIX . 'identifier'] . ')' : $row[Badge::DB_TBL_PREFIX . 'identifier'];
+                $name = array_key_exists(Badge::DB_TBL_PREFIX . 'name', $row) && !empty($row[$key]) ? $row[$key] : $row[Badge::DB_TBL_PREFIX . 'identifier'];
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'type':
@@ -50,7 +50,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), Badge::getShapeTypeName($row[$key], $adminLangId), true);
                 break;
             case Badge::DB_TBL_PREFIX . 'color':
-                $color = empty($row[$key]) ? Labels::getLabel('LBL_N/A', $adminLangId) : '<input class="jscolor" value="'. $row[$key] .'" readonly>';
+                $color = empty($row[$key]) ? Labels::getLabel('LBL_N/A', $adminLangId) : '<div class="d-flex align-items-center"><span class="color-circle" style="background-color:' . $row[$key] . '"></span>' . $row[$key] . '</div>';
                 $td->appendElement('plaintext', array(), $color, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
