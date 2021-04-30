@@ -1,0 +1,257 @@
+<?php
+
+class Badge extends MyAppModel
+{
+    public const DB_TBL = 'tbl_badges';
+    public const DB_TBL_PREFIX = 'badge_';
+
+    public const DB_TBL_LANG = 'tbl_badges_lang';
+    public const DB_TBL_LANG_PREFIX = 'badgelang_';
+
+    public const TYPE_BADGE = 1;
+    public const TYPE_RIBBON = 2;
+
+    public const SHAPE_SQUARE = 1;
+    public const SHAPE_RECTANGLE = 2;
+    public const SHAPE_CIRCLE = 3;
+    public const SHAPE_TRIANGLE = 4;
+    public const SHAPE_OVAL = 5;
+    public const SHAPE_DIMOND = 6;
+    public const SHAPE_OCTAGON = 7;
+    public const SHAPE_STAR = 8;
+    public const SHAPE_HEART = 9;
+
+    public const ATTR = [
+        self::DB_TBL_PREFIX . 'id',
+        self::DB_TBL_PREFIX . 'type',
+        self::DB_TBL_PREFIX . 'shape_type',
+        self::DB_TBL_PREFIX . 'color',
+        self::DB_TBL_PREFIX . 'identifier',
+        self::DB_TBL_PREFIX . 'required_approval',
+        self::DB_TBL_PREFIX . 'active'
+    ];
+
+    public const LANG_ATTR = [
+        self::DB_TBL_LANG_PREFIX . 'lang_id',
+        self::DB_TBL_PREFIX . 'name'
+    ];
+
+    /**
+     * __construct
+     *
+     * @param  int $ratingTypeId
+     * @return void
+     */
+    public function __construct(int $ratingTypeId = 0)
+    {
+        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $ratingTypeId);
+        $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
+    }
+
+    /**
+     * getTypeArr
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public static function getTypeArr(int $langId): array
+    {
+        return [
+            self::TYPE_BADGE => Labels::getLabel('LBL_BADGE', $langId),
+            self::TYPE_RIBBON => Labels::getLabel('LBL_RIBBON', $langId)
+        ];
+    }
+    
+    /**
+     * getTypeName
+     *
+     * @param  int $type
+     * @param  int $langId
+     * @return string
+     */
+    public static function getTypeName(int $type, int $langId): string
+    {
+        $arr = self::getTypeArr($langId);
+        if (!array_key_exists($type, $arr)) {
+            return '';
+        }
+        return (string) $arr[$type];
+    }
+
+    /**
+     * getShapeTypesArr
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public static function getShapeTypesArr(int $langId): array
+    {
+        return [
+            self::SHAPE_SQUARE => Labels::getLabel('LBL_SQUARE', $langId),
+            self::SHAPE_RECTANGLE => Labels::getLabel('LBL_RECTANGLE', $langId),
+            self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
+            self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
+            self::SHAPE_OVAL => Labels::getLabel('LBL_OVAL', $langId),
+            self::SHAPE_DIMOND => Labels::getLabel('LBL_DIMOND', $langId),
+            self::SHAPE_OCTAGON => Labels::getLabel('LBL_OCTAGON', $langId),
+            self::SHAPE_STAR => Labels::getLabel('LBL_STAR', $langId),
+            self::SHAPE_HEART => Labels::getLabel('LBL_HEART', $langId),
+        ];
+    }
+
+    /**
+     * getShapeTypeName
+     *
+     * @param  int $type
+     * @param  int $langId
+     * @return string
+     */
+    public static function getShapeTypeName(int $type, int $langId): string
+    {
+        $arr = self::getShapeTypesArr($langId);
+        if (!array_key_exists($type, $arr)) {
+            return '';
+        }
+        return (string) $arr[$type];
+    }
+    
+    /**
+     * getData
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public function getData(int $langId): array
+    {
+        if (1 > $this->getMainTableRecordId()) {
+            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+            return [];
+        }
+
+        $srch = new BadgeSearch($langId);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition(self::DB_TBL_PREFIX . 'id', '=', $this->getMainTableRecordId());
+        $srch->addMultipleFields(array_merge(self::ATTR, self::LANG_ATTR));
+        $srch->descOrder();
+        $rs = $srch->getResultSet();
+        
+        return (array) FatApp::getDb()->fetch($rs);
+    }
+
+    /**
+     * getAllLangData
+     *
+     * @return array
+     */
+    public function getAllLangData(): array
+    {
+        if (1 > $this->getMainTableRecordId()) {
+            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
+            return [];
+        }
+
+        $srch = new BadgeSearch();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->joinTable(
+            Badge::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'bdg_l.badgelang_badge_id = bdg.badge_id',
+            'bdg_l'
+        );
+        $srch->addCondition(self::DB_TBL_PREFIX . 'id', '=', $this->getMainTableRecordId());
+        $srch->addMultipleFields(array_merge(self::ATTR, self::LANG_ATTR));
+        $srch->descOrder();
+        $rs = $srch->getResultSet();
+        
+        return (array) FatApp::getDb()->fetchAll($rs, self::DB_TBL_LANG_PREFIX . 'lang_id');
+    }
+    
+    /**
+     * getRequiredApprovalName
+     *
+     * @param  int $status
+     * @param  int $langId
+     * @return string
+     */
+    public static function getRequiredApprovalName(int $status, int $langId): string
+    {
+        return (applicationConstants::YES == $status ? Labels::getLabel('LBL_YES', $langId) : Labels::getLabel('LBL_NO', $langId));
+    }
+    
+    /**
+     * add
+     *
+     * @param  array $post
+     * @param  int $requiredApproval
+     * @param  int $status
+     * @return bool
+     */
+    public function add(array $post, int $requiredApproval, int $status): bool
+    {
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $recordData = [];
+        foreach (Badge::ATTR as $column) {
+            switch ($column) {
+                case Badge::DB_TBL_PREFIX . 'id':
+                    continue 2;
+                    break;
+                
+                case Badge::DB_TBL_PREFIX . 'identifier':
+                        $recordData[$column] = "";
+                        if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name']) && array_key_exists($siteDefaultLangId, $post[Badge::DB_TBL_PREFIX . 'name'])) {
+                            $recordData[$column] = $post[Badge::DB_TBL_PREFIX . 'name'][$siteDefaultLangId];
+                        } else {
+                            $recordData[$column] = $post[Badge::DB_TBL_PREFIX . 'name'];
+                        }
+                    break;
+                
+                case Badge::DB_TBL_PREFIX . 'required_approval':
+                    $recordData[$column] = $requiredApproval;
+                    break;
+                    
+                case Badge::DB_TBL_PREFIX . 'active':
+                    $recordData[$column] = (0 > $status ? applicationConstants::NO : $status);
+                    break;
+                        
+                default:
+                    $recordData[$column] = array_key_exists($column, $post) ? $post[$column] : '';
+                    break;
+                
+            }
+        }
+
+        $this->assignValues($recordData);
+        if (!$this->save()) {
+            return false;
+        }
+
+        $badgeId = $this->getMainTableRecordId();
+
+        if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name'])) {
+            foreach ($post[Badge::DB_TBL_PREFIX . 'name'] as $langId => $name) {
+                if (empty($name)) {
+                    $updateLangDataobj = new TranslateLangData(self::DB_TBL_LANG);
+                    $translatedText = $updateLangDataobj->directTranslate([Badge::DB_TBL_PREFIX . 'name' => $recordData[Badge::DB_TBL_PREFIX . 'identifier']]);
+                    if (false === $translatedText) {
+                        continue;
+                    }
+                    $name = current($translatedText)[Badge::DB_TBL_PREFIX . 'name'];
+                }
+
+                $recordLangData = [
+                    Badge::DB_TBL_LANG_PREFIX . 'badge_id' => $badgeId,
+                    Badge::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
+                    Badge::DB_TBL_PREFIX . 'name' => $name
+                ];
+                
+                if (!$this->updateLangData($langId, $recordLangData)) {
+                    echo $this->getError();die;
+                    continue;
+                }
+            }
+        }
+        return true;
+    }
+}

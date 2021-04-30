@@ -611,7 +611,6 @@ function toggleBulkStatues(status, msg = '') {
 		element = '';
 	}
     element = element + 'form.actionButtons-js';
-	
     if (1 > $(element).length) {
         $.systemMessage(langLbl.actionButtonsClass, 'alert--danger', true);
         return false;

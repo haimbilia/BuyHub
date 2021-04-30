@@ -533,3 +533,12 @@ INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`)
 DROP TABLE `tbl_theme`;
 DROP TABLE `tbl_theme_colors`;
 -- --- Task 83836 - Font and Theme Color Management --- --
+
+-- --- Badges & Ribbons --- --
+CREATE TABLE `tbl_badges` ( `badge_id` BIGINT NOT NULL AUTO_INCREMENT ,  `badge_type` INT NOT NULL ,  `badge_shape_type` INT NOT NULL, `badge_color` VARCHAR(150) NOT NULL,  `badge_identifier` VARCHAR(150) NOT NULL , `badge_required_approval` TINYINT NOT NULL , `badge_active` TINYINT NOT NULL ,    PRIMARY KEY  (`badge_id`),    UNIQUE  `badge_identifier` (`badge_identifier`)) ENGINE = InnoDB;
+
+CREATE TABLE `tbl_badges_lang` ( `badgelang_badge_id` BIGINT NOT NULL ,  `badgelang_lang_id` INT NOT NULL ,  `badge_name` VARCHAR(150) NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `tbl_badges_lang`
+  ADD PRIMARY KEY (`badgelang_badge_id`,`badgelang_lang_id`),
+  ADD UNIQUE KEY `badge_name` (`badgelang_lang_id`,`badge_name`);
+-- --- Badges & Ribbons --- --
