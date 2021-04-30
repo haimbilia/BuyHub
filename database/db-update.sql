@@ -454,4 +454,26 @@ UPDATE `tbl_seller_packages` SET `spackage_type` = '2' WHERE `tbl_seller_package
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_SANDBOX_KEY/TOKEN";
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_LIVE_KEY/TOKEN";
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_TAX_SERVICES";
+INSERT INTO `tbl_language_labels` (label_key,label_caption,label_lang_id,label_type) VALUES ('LBL_{SIGN-UP}_FOR_TAXJAR_AND_GENERATE_A_NEW_TOKEN.','{sign-up} For TaxJar And Generate A New Token.',1,1) ON DUPLICATE KEY UPDATE label_caption = '{sign-up} For TaxJar And Generate A New Token.';
+
+INSERT IGNORE INTO `tbl_attached_files`(  
+    `afile_type`,
+    `afile_record_id`,
+    `afile_record_subid`,
+    `afile_lang_id`,
+    `afile_screen`,
+    `afile_physical_path`,
+    `afile_name`,
+    `afile_attribute_title`,
+    `afile_attribute_alt`,
+    `afile_aspect_ratio`,
+    `afile_display_order`,
+    `afile_downloaded_times`,
+    `afile_updated_at`
+)
+VALUES( 
+    '54',
+    (SELECT plugin_id FROM `tbl_plugins` where plugin_code ='TaxJarTax'), '0', '0', '0', '2021/04/1619761288-taxjarglyphpng', 'taxjar-glyph.png', '', '', '0', '3', '0', '2021-04-30 11:11:28');
+ALTER TABLE `tbl_system_logs` ADD `slog_module_type` INT NOT NULL AFTER `slog_id`;
+ALTER TABLE `tbl_system_logs` ADD `slog_record_id` VARCHAR(11) NOT NULL AFTER `slog_type`;
 /* TaxJar Enhancements */

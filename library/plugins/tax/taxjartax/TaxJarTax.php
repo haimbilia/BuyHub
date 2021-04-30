@@ -87,7 +87,8 @@ class TaxJarTax extends TaxBase
         $this->client = TaxJar\Client::withApiKey($apiToken);
         if (Plugin::ENV_SANDBOX == $env) {
             $this->client->setApiConfig('api_url', TaxJar\Client::SANDBOX_API_URL);
-        }
+        }        
+        $this->client->setApiConfig('index', ['x-api-version' => '2020-08-07']);
         return true;
     }
 
