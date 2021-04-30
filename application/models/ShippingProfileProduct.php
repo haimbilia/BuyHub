@@ -53,6 +53,17 @@ class ShippingProfileProduct extends MyAppModel
         return $srch;
     }
 
+    public static function getAdminShippedProdcutsObj($userInnerJoin = false)
+    {
+        $srch = new SearchBase(static::DB_TBL, 'sppro');
+        $join = (true == $userInnerJoin) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
+        $srch->joinTable(Product::DB_TBL, $join, 'tp.product_id = sppro.shippro_product_id', 'tp');
+        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN','productlang_product_id = tp.product_id	AND productlang_lang_id = ' . CommonHelper::getLangId(), 'tp_l');
+        $srch->joinTable(static::DB_TBL, 'LEFT OUTER JOIN', 'spprot.shippro_product_id = sppro.shippro_product_id and spprot.shippro_user_id = 0', 'spprot');
+        $srch->joinTable(ShippingProfile::DB_TBL, 'INNER JOIN', 'spprot.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
+        return $srch;
+    }
+
     public static function isShippingProfileLinked($productId, $userId = 0)
     {
         $productId = FatUtility::int($productId);
