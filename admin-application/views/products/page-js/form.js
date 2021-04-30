@@ -530,6 +530,10 @@ productDownloads = function(productId){
     });
 }
 
+downloadsForm = function(linkId) {
+    alert('in process');
+}
+
 saveDownloadLinks = function ()
 {
     if (!$('#frmDownload').validate()) return;
@@ -552,6 +556,9 @@ saveDownloadLinks = function ()
             return;
         }
         $.systemMessage( ans.msg,'alert alert--success' );
+        $('.product_downloadable_link').val('');
+        $('.product_preview_link').val('');
+        getDigitalDownloads();
     });
 }
 
@@ -589,6 +596,7 @@ getDigitalDownloads = function()
 {
     var productId = $('#frmDownload input[name=product_id]').val();
     var downloadType = $("#frmDownload select[name='download_type']").val();
+    var langId = $("#frmDownload select[name='lang_id']").val();
     var optionCombi = "";
     if (0 < $("#frmDownload select[name='option_comb_id']").length) {
         optionCombi = $("#frmDownload select[name='option_comb_id']").val();
@@ -597,22 +605,15 @@ getDigitalDownloads = function()
     if (optionCombi == '') {
         optionCombi = '0';
     }
-    var data = '&product_id=' + productId + '&download_type=' + downloadType + '&option_comb=' + optionCombi;
+    var data = '&product_id=' + productId + '&download_type=' + downloadType;
+    data = data + '&option_comb=' + optionCombi + '&langId=' + langId;
     
     if (downloadType == 1) {
-        fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function(t) {
-            var ans = $.parseJSON(t);
-            if( ans.status == 0 ){
-                $.systemMessage( ans.msg,'alert alert--danger' );
-                return;
-            }
-            $("#product_downloadable_link").val(ans.links);
-            $("#digital_download_list").html('');
-            $("#digital_download_list").hide();
+        fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function(res) {
+            $("#digital_download_list").html(res);
         });
     } else {
         fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function(res) {
-            $("#digital_download_list").show();
             $("#digital_download_list").html(res);
         });
     }
