@@ -6,13 +6,26 @@ $frm->developerTags['fld_default_col'] = 12;
 
 $fld = $frm->getField('auto_update_other_langs_data');
 if (null != $fld) {
-    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+	$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
+
+$iconLangFld = $frm->getField('icon_lang_id');
+if (null != $iconLangFld) {
+	$iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
+}
+
+$iconFld = $frm->getField('badge_icon');
+if (null != $iconFld) {
+	$iconFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
+	$iconFld->addFieldTagAttribute('onChange', 'iconPopupImage(this)');
+	$iconFld->htmlAfterField = '<small class="text--small">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $adminLangId), '60*60') . '</small>';
+}
+
 ?>
 <section class="section">
 	<div class="sectionhead">
-		<h4><?php echo Labels::getLabel('LBL_BADGES_SETUP', $adminLangId); ?></h4>
+		<h4><?php echo (Badge::TYPE_RIBBON == $type) ? Labels::getLabel('LBL_RIBBON_SETUP', $adminLangId) : Labels::getLabel('LBL_BADGE_SETUP', $adminLangId); ?></h4>
 		<div class="section__toolbar">
 			<a href="javascript:void(0);" onclick="backToListing();" title="Back" class="btn-clean btn-sm btn-icon btn-secondary "><i class="fas fa-arrow-left"></i></a>
 		</div>
@@ -21,93 +34,30 @@ if (null != $fld) {
 		<?php echo $frm->getFormTag();
 			echo $frm->getFieldHtml('badge_id');
 			echo $frm->getFieldHtml('badge_type');
+			echo $frm->getFieldHtml('logo_min_width');
+			echo $frm->getFieldHtml('logo_min_height');
 			?>
 			<div class="row justify-content-center">
 				<div class="col-md-8">
 					<div class="row">
-						<div class="col">
-							<h3 class="form__heading">
-								<?php echo Labels::getLabel('LBL_GENERAL', $adminLangId); ?>
-							</h3>
-						</div>
-						<div class="col-auto">
-							<?php echo $frm->getFieldHtml('btn_submit'); ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="field-set">
-								<div class="caption-wraper">
-									<label class="field_label">
-										<?php
-										$fld = $frm->getField('badge_shape_type');
-										echo $fld->getCaption();
-										?>
-										<span class="spn_must_field">*</span></label>
-								</div>
-								<div class="field-wraper">
-									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('badge_shape_type'); ?>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="field-set">
-								<div class="caption-wraper">
-									<label class="field_label">
-										<?php
-										$fld = $frm->getField('badge_name[' . $siteDefaultLangId . ']');
-										echo $fld->getCaption();
-										?>
-										<span class="spn_must_field">*</span></label>
-								</div>
-								<div class="field-wraper">
-									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('badge_name[' . $siteDefaultLangId . ']'); ?>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="field-set">
-								<div class="caption-wraper">
-									<label class="field_label">
-										<?php
-										$fld = $frm->getField('badge_required_approval');
-										echo $fld->getCaption();
-										?>
-										<span class="spn_must_field">*</span></label>
-								</div>
-								<div class="field-wraper">
-									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('badge_required_approval'); ?>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="field-set">
-								<div class="caption-wraper">
-									<label class="field_label">
-										<?php
-										$fld = $frm->getField('badge_active');
-										echo $fld->getCaption();
-										?>
-										<span class="spn_must_field">*</span></label>
-								</div>
-								<div class="field-wraper">
-									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('badge_active'); ?>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
 						<?php if (Badge::TYPE_RIBBON == $type) { ?>
+							<div class="col-md-6">
+								<div class="field-set">
+									<div class="caption-wraper">
+										<label class="field_label">
+											<?php
+											$fld = $frm->getField('badge_shape_type');
+											echo $fld->getCaption();
+											?>
+											<span class="spn_must_field">*</span></label>
+									</div>
+									<div class="field-wraper">
+										<div class="field_cover">
+											<?php echo $frm->getFieldHtml('badge_shape_type'); ?>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="col-md-6">
 								<div class="field-set">
 									<div class="caption-wraper">
@@ -125,7 +75,96 @@ if (null != $fld) {
 									</div>
 								</div>
 							</div>
+						<?php } else if (Badge::TYPE_BADGE == $type) { ?>
+							<div class="col-md-6">
+								<div class="field-set">
+									<div class="caption-wraper"><label class="field_label">
+											<?php $fld = $frm->getField('icon_lang_id');
+											echo $fld->getCaption();
+											?>
+										</label></div>
+									<div class="field-wraper">
+										<div class="field_cover">
+											<?php echo $frm->getFieldHtml('icon_lang_id'); ?>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="field-set">
+									<div class="caption-wraper">
+										<label class="field_label"></label>
+									</div>
+									<div class="field-wraper">
+										<div class="field_cover d-flex">
+											<?php echo $frm->getFieldHtml('icon_file_type');
+											echo $frm->getFieldHtml('badge_icon'); ?>
+											<div class="uploaded-img ml-2">
+											<a href="#" class="remove">X</a> 
+												<img width="40px" src="http://yokart.local.4livedemo.com/category/icon/109/0/THUMB/0?t=1608690809"/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						<?php } ?>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="field-set">
+								<div class="caption-wraper">
+									<label class="field_label">
+										<?php
+										$fld = $frm->getField('badge_name[' . $siteDefaultLangId . ']');
+										echo $fld->getCaption();
+										?>
+										<span class="spn_must_field">*</span></label>
+								</div>
+								<div class="field-wraper">
+									<div class="field_cover">
+										<?php echo $frm->getFieldHtml('badge_name[' . $siteDefaultLangId . ']'); ?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<?php if (Badge::TYPE_BADGE == $type) { ?>
+							<div class="col-md-6">
+								<div class="field-set">
+									<div class="caption-wraper">
+										<label class="field_label">
+											<?php
+											$fld = $frm->getField('badge_required_approval');
+											echo $fld->getCaption();
+											?>
+											<span class="spn_must_field">*</span></label>
+									</div>
+									<div class="field-wraper">
+										<div class="field_cover">
+											<?php echo $frm->getFieldHtml('badge_required_approval'); ?>
+										</div>
+									</div>
+								</div>
+							</div>
+					</div> <!-- Just to fix design add these 2 line inside condition. -->
+					<div class="row"> <!-- Just to fix design add these 2 line inside condition. -->
+						<?php } ?>
+						<div class="col-md-6">
+							<div class="field-set">
+								<div class="caption-wraper">
+									<label class="field_label">
+										<?php
+										$fld = $frm->getField('badge_active');
+										echo $fld->getCaption();
+										?>
+										<span class="spn_must_field">*</span></label>
+								</div>
+								<div class="field-wraper">
+									<div class="field_cover">
+										<?php echo $frm->getFieldHtml('badge_active'); ?>
+									</div>
+								</div>
+							</div>
+						</div>
 						<?php $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 						if (!empty($translatorSubscriptionKey) && count($otherLangData) > 0) { ?>
 							<div class="col-md-6">
@@ -137,7 +176,7 @@ if (null != $fld) {
 										<div class="field_cover">
 											<?php echo $frm->getFieldHtml('auto_update_other_langs_data'); ?>
 										</div>
-									</div>									
+									</div>
 								</div>
 							</div>
 						<?php } ?>
@@ -173,6 +212,11 @@ if (null != $fld) {
 							</div>
 					<?php }
 					} ?>
+					<div class="row mt-5">
+						<div class="col-auto">
+							<?php echo $frm->getFieldHtml('btn_submit'); ?>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>

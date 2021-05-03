@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 
 $headingLabel = Labels::getLabel('LBL_MANAGE_BADGES_&_RIBBONS', $adminLangId);
-$listingLabel = Labels::getLabel('LBL_BADGES_LIST', $adminLangId);
+$listingLabel = Labels::getLabel('LBL_BADGES_&_RIBBONS_LIST', $adminLangId);
 $addBadgeLabel = Labels::getLabel('LBL_ADD_BADGE', $adminLangId);
 $addRibbonLabel = Labels::getLabel('LBL_ADD_RIBBON', $adminLangId);
 
@@ -28,17 +28,25 @@ $data = [
             'attr' => [
                 'href' => 'javascript:void(0)',
                 'onclick' => 'toggleBulkStatues(1)',
-                'title' => Labels::getLabel('LBL_ACTIVE', $adminLangId)
+                'title' => Labels::getLabel('LBL_PUBLISH', $adminLangId)
             ],
-            'label' => Labels::getLabel('LBL_ACTIVE', $adminLangId)
+            'label' => Labels::getLabel('LBL_PUBLISH', $adminLangId)
         ],
         [
             'attr' => [
                 'href' => 'javascript:void(0)',
                 'onclick' => 'toggleBulkStatues(0)',
-                'title' => Labels::getLabel('LBL_IN_ACTIVE', $adminLangId)
+                'title' => Labels::getLabel('LBL_UNPUBLISH', $adminLangId)
             ],
-            'label' => Labels::getLabel('LBL_IN_ACTIVE', $adminLangId)
+            'label' => Labels::getLabel('LBL_UNPUBLISH', $adminLangId)
+        ],
+        [
+            'attr' => [
+                'href' => 'javascript:void(0)',
+                'onclick' => 'deleteSelected()',
+                'title' => Labels::getLabel('LBL_DELETE_SELECTED', $adminLangId)
+            ],
+            'label' => Labels::getLabel('LBL_DELETE_SELECTED', $adminLangId)
         ],
     ]
 ];

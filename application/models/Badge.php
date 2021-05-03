@@ -29,6 +29,11 @@ class Badge extends MyAppModel
         self::DB_TBL_PREFIX . 'name'
     ];
 
+    public const ICON_MIN_WIDTH = 50;
+    public const ICON_MIN_HEIGHT = 50;
+
+    public const REMOVED_OLD_IMAGE_TIME = 4;
+
     /**
      * __construct
      *
@@ -163,18 +168,16 @@ class Badge extends MyAppModel
      */
     public static function getRequiredApprovalName(int $status, int $langId): string
     {
-        return (applicationConstants::YES == $status ? Labels::getLabel('LBL_YES', $langId) : Labels::getLabel('LBL_NO', $langId));
+        return (applicationConstants::YES == $status ? Labels::getLabel('LBL_REQUESTED', $langId) : Labels::getLabel('LBL_OPEN', $langId));
     }
     
     /**
      * add
      *
      * @param  array $post
-     * @param  int $requiredApproval
-     * @param  int $status
      * @return bool
      */
-    public function add(array $post, int $requiredApproval, int $status): bool
+    public function add(array $post): bool
     {
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $recordData = [];
@@ -192,13 +195,9 @@ class Badge extends MyAppModel
                             $recordData[$column] = $post[Badge::DB_TBL_PREFIX . 'name'];
                         }
                     break;
-                
-                case Badge::DB_TBL_PREFIX . 'required_approval':
-                    $recordData[$column] = $requiredApproval;
-                    break;
                     
                 case Badge::DB_TBL_PREFIX . 'active':
-                    $recordData[$column] = (0 > $status ? applicationConstants::NO : $status);
+                    $recordData[$column] = (0 > $post[Badge::DB_TBL_PREFIX . 'active'] ? applicationConstants::NO : $post[Badge::DB_TBL_PREFIX . 'active']);
                     break;
                         
                 default:
@@ -240,4 +239,27 @@ class Badge extends MyAppModel
         }
         return true;
     }
+    
+    /**
+     * deleteImagesWithOutBadgeId
+     *
+     * @param  int $fileType
+     * @return bool
+     */
+    public static function deleteImagesWithOutBadgeId(int $fileType): bool
+    {
+        if (empty($fileType) || $fileType != AttachedFile::FILETYPE_BADGE) {
+            return false;
+        }
+
+        $currentDate = date('Y-m-d  H:i:s');
+        $prevDate = strtotime('-' . static::REMOVED_OLD_IMAGE_TIME . ' hour', strtotime($currentDate));
+        $prevDate = date('Y-m-d  H:i:s', $prevDate);
+        $where = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_updated_at <= ?', 'vals' => array($fileType, 0, $prevDate));
+        if (!FatApp::getDb()->deleteRecords(AttachedFile::DB_TBL, $where)) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -3,9 +3,14 @@ $(document).ready(function () {
 });
 
 $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_type"]', function () {
+    if ('' == $(this).val()) {
+        return;
+    }
+
     var selector = $('input[name="badgelink_condition_from"], input[name="badgelink_condition_to"]');
     if (CONDITION_TYPE_DATE == $(this).val()) {
-        selector.attr('readonly', 'readonly').datetimepicker({minDate: new Date()});
+        selector.attr('readonly', 'readonly').datetimepicker({minDate: new Date(),
+            dateFormat: 'yy-mm-dd'});
     } else {
         selector.removeAttr('readonly').datetimepicker("destroy");
     }
@@ -40,12 +45,16 @@ $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_ty
         });
     };
 
-    form = function (badgelink_id, type) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [badgelink_id, type]), '', function (t) {
+    form = function (badgelink_id, recordType = 0) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [badgelink_id, recordType]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
             bindBadgeNameSelect2();
             bindRecordsSelect2();
+
+            if (0 < badgelink_id) {
+                $('.addUpdateForm--js select[name="badgelink_condition_type"]').change();
+            }
         });
     };
 
@@ -59,7 +68,7 @@ $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_ty
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             reloadList();
-            form(t.badgelink_id, t.badge_type);
+            form(t.badgelink_id, t.recordType);
         });
     };
 
@@ -90,41 +99,30 @@ $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_ty
         });
     };
 
-    bulkBadgesUnlink = function (e, badgelink_id) {
-        if (!confirm(langLbl.areYouSure)) {
-            e.preventDefault();
-            return;
-        }
-
-        if (badgelink_id < 1) {
-            fcom.displayErrorMessage(langLbl.invalidRequest);
-            return false;
-        }
-        data = 'badgelink_id=' + badgelink_id;
-        fcom.ajax(fcom.makeUrl(controller, 'badgeUnlink'), data, function (res) {
-            var ans = $.parseJSON(res);
-            if (ans.status == 1) {
-                fcom.displaySuccessMessage(ans.msg);
-            } else {
-                fcom.displayErrorMessage(ans.msg);
-            }
-        });
-    };
-
     bulkBadgesUnlink = function () {
+        if (1 > $('.selectItem--js:checked').length) {
+            fcom.displayErrorMessage(langLbl.atleastOneRecord);
+            return;
+        }
         if (!confirm(langLbl.areYouSure)) {
             e.preventDefault();
             return;
         }
-        $(element).submit();
+        $('.badgesLinksList').submit();
     };
 
     bindBadgeNameSelect2 = function () {
-        $("select[name='badge_name']").select2({
+        var selector = $("select[name='badge_name']");
+        var text = selector.data('text');
+        var val = selector.data('val');
+        if ('undefined' != typeof(text) && 'undefined' != typeof(val)){
+            selector.append('<option value="' + val + '" selected="selected">' + text + '</option>');
+        }
+        selector.select2({
             closeOnSelect: true,
             dir: layoutDirection,
             allowClear: true,
-            placeholder: $("select[name='badge_name']").attr('placeholder'),
+            placeholder: selector.attr('placeholder'),
             ajax: {
                 url: fcom.makeUrl('Badges', 'autoComplete'),
                 dataType: 'json',
@@ -134,7 +132,6 @@ $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_ty
                     return { keyword: params.term };
                 },
                 processResults: function (data, params) {
-                    console.log(data.badges);
                     return { results: data.badges };
                 },
                 cache: true
@@ -181,11 +178,17 @@ $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_ty
     }
 
     bindRecordsSelect2 = function () {
-        $("select[name='record_name']").select2({
+        var selector = $("select[name='record_name']");
+        var text = selector.data('text');
+        var val = selector.data('val');
+        if ('undefined' != typeof(text) && 'undefined' != typeof(val)){
+            selector.append('<option value="' + val + '" selected="selected">' + text + '</option>');
+        }
+        selector.select2({
             closeOnSelect: true,
             dir: layoutDirection,
             allowClear: true,
-            placeholder: $("select[name='record_name']").attr('placeholder'),
+            placeholder: selector.attr('placeholder'),
             ajax: {
                 url: function () {
                     return getRecordTypeURL()

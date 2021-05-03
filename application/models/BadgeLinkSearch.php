@@ -12,16 +12,27 @@ class BadgeLinkSearch extends SearchBase
     {
         parent::__construct(BadgeLink::DB_TBL, 'blnk');
     }
-
+    
     /**
-     * addRecordTypesCondition
+     * addBadgeTypeCondition
      *
      * @param  array $typesArr
      * @return void
      */
-    public function addRecordTypesCondition(array $typesArr)
+    public function addBadgeTypeCondition(array $typesArr)
     {
-        $this->addCondition(BadgeLink::DB_TBL_PREFIX . 'record_type', 'IN',  $typesArr);
+        $this->addHaving(Badge::DB_TBL_PREFIX . 'type', 'IN',  $typesArr);
+    }
+
+    /**
+     * addRecordTypesCondition
+     *
+     * @param  array $recordTypesArr
+     * @return void
+     */
+    public function addRecordTypesCondition(array $recordTypesArr)
+    {
+        $this->addCondition(BadgeLink::DB_TBL_PREFIX . 'record_type', 'IN',  $recordTypesArr);
     }
 
     /**
@@ -67,7 +78,7 @@ class BadgeLinkSearch extends SearchBase
     {
         $this->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badgelink_badge_id = badge_id', 'bdg');
         if (0 < $langId) {
-            $this->joinTable(Badge::DB_TBL_LANG, 'INNER JOIN', 'badge_id = badgelang_badge_id AND badgelang_lang_id = ' . $langId, 'bdg_l');
+            $this->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badge_id = badgelang_badge_id AND badgelang_lang_id = ' . $langId, 'bdg_l');
         }
     }
     
@@ -79,9 +90,9 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinProduct(int $langId = 0)
     {
-        $this->joinTable(Product::DB_TBL, 'INNER JOIN', 'badgelink_record_id = product_id', 'p');
+        $this->joinTable(Product::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = product_id', 'p');
         if (0 < $langId) {
-            $this->joinTable(Product::DB_TBL_LANG, 'INNER JOIN', 'product_id = badgelang_product_id AND badgelang_lang_id = ' . $langId, 'p_l');
+            $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'product_id = productlang_product_id AND productlang_lang_id = ' . $langId, 'p_l');
         }
     }
     
@@ -93,10 +104,17 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinSellerProduct(int $langId = 0)
     {
-        $this->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'badgelink_record_id = selprod_id', 'sp');
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = selprod_id', 'sp');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'spu.credential_user_id = sp.selprod_user_id', 'spu');
+        $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT JOIN', 'selprod_id = selprodoption_selprod_id', 'spo');
+        $this->joinTable(OptionValue::DB_TBL, 'LEFT JOIN', 'selprodoption_optionvalue_id = optionvalue_id', 'optv');
+        $this->joinTable(Option::DB_TBL, 'LEFT JOIN', 'optionvalue_option_id = option_id', 'opt');
         if (0 < $langId) {
-            $this->joinTable(SellerProduct::DB_TBL_LANG, 'INNER JOIN', 'selprod_id = badgelang_selprod_id AND badgelang_lang_id = ' . $langId, 'sp_l');
+            $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT JOIN', 'selprod_id = selprodlang_selprod_id AND selprodlang_lang_id = ' . $langId, 'sp_l');
+            $this->joinTable(Option::DB_TBL_LANG, 'LEFT JOIN', 'option_id = optionlang_option_id AND optionlang_lang_id = ' . $langId, 'opt_l');
+            $this->joinTable(OptionValue::DB_TBL_LANG, 'LEFT JOIN', 'optionvaluelang_optionvalue_id = optionvalue_id AND optionvaluelang_lang_id = ' . $langId, 'optv_l');
         }
+
     }
 
     /**
@@ -107,9 +125,10 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinShop(int $langId = 0)
     {
-        $this->joinTable(Shop::DB_TBL, 'INNER JOIN', 'badgelink_record_id = shop_id', 'shp');
+        $this->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = shop_id', 'shp');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'shpu.credential_user_id = shp.shop_user_id', 'shpu');
         if (0 < $langId) {
-            $this->joinTable(Shop::DB_TBL_LANG, 'INNER JOIN', 'shop_id = badgelang_shop_id AND badgelang_lang_id = ' . $langId, 'shp_l');
+            $this->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shop_id = shoplang_shop_id AND shoplang_lang_id = ' . $langId, 'shp_l');
         }
     }
 }

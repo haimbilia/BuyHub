@@ -594,11 +594,12 @@ function formAction(frm, callback) {
         $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
         return false;
     }
-
+    
     $.systemMessage.loading();
     data = fcom.frmData(frm);
 
     fcom.updateWithAjax(frm.action, data, function (resp) {
+        console.log(callback);
         callback();
         showActionsBtns();
     });

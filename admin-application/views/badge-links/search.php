@@ -4,7 +4,7 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_BADGE_OR_RIBBON', $adminLangId),
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
-    BadgeLink::DB_TBL_PREFIX . 'record_name' => Labels::getLabel('LBL_RECORD_NAME', $adminLangId),
+    'record_name' => Labels::getLabel('LBL_RECORD_NAME', $adminLangId),
     BadgeLink::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_RECORD_TYPE', $adminLangId),
     BadgeLink::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
     BadgeLink::DB_TBL_PREFIX . 'condition_from' => Labels::getLabel('LBL_CONDITION_FROM', $adminLangId),
@@ -40,6 +40,17 @@ foreach ($arr_listing as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
+            case 'record_name':
+                $str = $row[$key];
+                if (BadgeLink::RECORD_TYPE_SELLER_PRODUCT == $row[BadgeLink::DB_TBL_PREFIX . 'record_type'] && !empty($row['option_names'])) {
+                    foreach (explode(',', $row['option_names']) as $index => $optionName) {
+                        $optionValues = explode(',', $row['option_value_names']);
+                        $str .= ' | ' . $optionName . ' : ' . $optionValues[$index];
+                    }
+                    $str .= ' | ' . $row['seller'];
+                }
+                $td->appendElement('plaintext', array(), $str, true);
+                break;
             case Badge::DB_TBL_PREFIX . 'type':
                 $td->appendElement('plaintext', array(), Badge::getTypeName($row[$key], $adminLangId), true);
                 break;
@@ -51,14 +62,15 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $function = "form(" . $row[BadgeLink::DB_TBL_PREFIX . 'id'] . ")";
+                    $function = "form(" . $row[BadgeLink::DB_TBL_PREFIX . 'id'] . ", " . $row[BadgeLink::DB_TBL_PREFIX . 'record_type'] . ")";
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_UNLINK', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLink::DB_TBL_PREFIX . 'id'] . ")"), "<i class='far fa-unlink icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLink::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {
                     $td->appendElement('plaintext', array(), Labels::getLabel('LBL_N/A', $adminLangId), true);
                 }
                 break;
             default : 
+                $td->appendElement('plaintext', array(), $row[$key], true);
                 break;
         }
     }
@@ -69,7 +81,7 @@ if (count($arr_listing) == 0) {
 }
 
 $frm = new Form('frmSearchListing');
-$frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
+$frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js badgesLinksList--js');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('BadgeLinks', 'bulkBadgesUnlink'));
 

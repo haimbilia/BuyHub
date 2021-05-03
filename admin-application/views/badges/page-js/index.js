@@ -105,4 +105,108 @@ $(document).ready(function () {
             $.systemMessage.close();
         });
     }
+
+    deleteSelected = function () {
+        if (1 > $('.selectItem--js:checked').length) {
+            fcom.displayErrorMessage(langLbl.atleastOneRecord);
+            return;
+        }
+        if (!confirm(langLbl.areYouSure)) {
+            e.preventDefault();
+            return;
+        }
+        $('.badgesList--js').attr('action', fcom.makeUrl(controller, 'deleteSelected')).submit();
+    }
+
+    deleteRecord = function (e, badge_id) {
+        if (!confirm(langLbl.areYouSure)) {
+            e.preventDefault();
+            return;
+        }
+
+        if (badge_id < 1) {
+            fcom.displayErrorMessage(langLbl.invalidRequest);
+            return false;
+        }
+        data = 'badgeIds[]=' + badge_id;
+        fcom.ajax(fcom.makeUrl(controller, 'deleteSelected'), data, function (res) {
+            var ans = $.parseJSON(res);
+            if (ans.status == 1) {
+                reloadList();
+                fcom.displaySuccessMessage(ans.msg);
+            } else {
+                fcom.displayErrorMessage(ans.msg);
+            }
+        });
+    };
+
+    iconPopupImage = function (inputBtn) {
+        if (inputBtn.files && inputBtn.files[0]) {
+            fcom.ajax(fcom.makeUrl(controller, 'imgCropper'), '', function (t) {
+                $.facebox(t, 'faceboxWidth');
+                var file = inputBtn.files[0];
+                var minWidth = $('input[name="logo_min_width"]').val();
+                var minHeight = $('input[name="logo_min_height"]').val();
+                var options = {
+                    aspectRatio: 1 / 1,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
+                    toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: 'high',
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val('');
+                return cropImage(file, options, 'uploadBadgeImages', inputBtn);
+            });
+        }
+    };
+
+    uploadBadgeImages = function (formData) {
+		var frmName = formData.get("frmName");
+		var slideScreen = 0;
+		var badgeId = $("[name='badge_id']").val();
+		var badgeType = $("[name='badge_type']").val();
+		var afileId = $("#icon-image-listing li").attr('id');
+        var langId = $("[name='icon_lang_id']").val();
+        var fileType = $("[name='icon_file_type']").val();
+        var imageType = 'icon';
+
+		formData.append('badge_id', badgeId);
+		formData.append('badge_type', badgeType);
+		formData.append('slide_screen', slideScreen);
+		formData.append('lang_id', langId);
+		formData.append('file_type', fileType);
+		formData.append('afile_id', afileId);
+		$.ajax({
+			url: fcom.makeUrl(controller, 'setUpImages'),
+			type: 'post',
+			dataType: 'json',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$('#loader-js').html(fcom.getLoader());
+			},
+			complete: function () {
+				$('#loader-js').html(fcom.getLoader());
+			},
+			success: function (ans) {
+				if (ans.status == 1) {
+					fcom.displaySuccessMessage(ans.msg);
+					categoryImages(prodcatId, imageType, slideScreen, langId);
+				} else {
+					fcom.displayErrorMessage(ans.msg);
+				}
+				$(document).trigger('close.facebox');
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
 })()

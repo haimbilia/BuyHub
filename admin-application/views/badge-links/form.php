@@ -9,6 +9,27 @@ if (null != $fld) {
     $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
     $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
+
+$fld = $frm->getField('badge_name');
+if (null != $fld && !empty($rowData)) {
+    $fld->setFieldTagAttribute('data-val', $rowData['badgelink_badge_id']);
+    $fld->setFieldTagAttribute('data-text', $rowData['badge_name']);
+}
+
+$fld = $frm->getField('record_name');
+if (null != $fld && !empty($rowData)) {
+	$recordName = $rowData['record_name'];
+	if (BadgeLink::RECORD_TYPE_SELLER_PRODUCT == $recordType && !empty($rowData['option_names'])) {
+		foreach (explode(',', $rowData['option_names']) as $index => $optionName) {
+			$optionValues = explode(',', $rowData['option_value_names']);
+			$recordName .= ' | ' . $optionName . ' : ' . $optionValues[$index];
+		}
+		$recordName .= ' | ' . $rowData['seller'];
+	}
+	
+    $fld->setFieldTagAttribute('data-val', $rowData['badgelink_record_id']);
+    $fld->setFieldTagAttribute('data-text', $recordName);
+}
 ?>
 <section class="section">
 	<div class="sectionhead">

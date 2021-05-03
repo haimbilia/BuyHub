@@ -1,5 +1,7 @@
 <?php
 
+use PhpParser\Node\Stmt\Label;
+
 class BadgeLinksController extends AdminBaseController
 {
     public function __construct($action)
@@ -22,6 +24,54 @@ class BadgeLinksController extends AdminBaseController
         $this->_template->render();
     }
 
+    private function getBadgeLinksObj()
+    {
+        $srch = new BadgeLinkSearch($this->adminLangId);
+        $srch->addMultipleFields([
+            BadgeLink::DB_TBL_PREFIX . 'id',
+            BadgeLink::DB_TBL_PREFIX . 'badge_id',
+            'badge_name',
+            'badge_type',
+            BadgeLink::DB_TBL_PREFIX . 'record_id',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_PRODUCT . ' 
+                    THEN COALESCE( p_l.product_name, p.product_identifier )
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
+                    THEN selprod_title
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SHOP . ' 
+                    THEN COALESCE( shp_l.shop_name, shp.shop_identifier )
+                ELSE TRUE
+            END) as record_name',
+            BadgeLink::DB_TBL_PREFIX . 'record_type',
+            BadgeLink::DB_TBL_PREFIX . 'condition_type',
+            BadgeLink::DB_TBL_PREFIX . 'condition_from',
+            BadgeLink::DB_TBL_PREFIX . 'condition_to',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
+                    THEN GROUP_CONCAT( option_name )
+                ELSE ""
+            END) as option_names',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
+                    THEN GROUP_CONCAT( optionvalue_name )
+                ELSE ""
+            END) as option_value_names',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '
+                    THEN spu.credential_username
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SHOP . '
+                    THEN shpu.credential_username
+                ELSE ""
+            END) as seller'
+        ]);
+        $srch->joinBadge($this->adminLangId);
+        $srch->joinProduct($this->adminLangId);
+        $srch->joinSellerProduct($this->adminLangId);
+        $srch->joinShop($this->adminLangId);
+        $srch->addGroupBy('badgelink_id');
+        return $srch;
+    }
+
     public function search()
     {
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
@@ -34,24 +84,18 @@ class BadgeLinksController extends AdminBaseController
             FatUtility::dieJsonError(current($searchForm->getValidationErrors()));
         }
 
-        $srch = new BadgeLinkSearch($this->adminLangId);
-        $srch->addMultipleFields([
-            Badge::DB_TBL_PREFIX . 'name',
-            Badge::DB_TBL_PREFIX . 'type',
-            BadgeLink::DB_TBL_PREFIX . 'record_name',
-            BadgeLink::DB_TBL_PREFIX . 'record_type',
-            BadgeLink::DB_TBL_PREFIX . 'condition_type',
-            BadgeLink::DB_TBL_PREFIX . 'condition_from',
-            BadgeLink::DB_TBL_PREFIX . 'condition_to'
-        ]);
+        $srch = $this->getBadgeLinksObj();
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->joinBadge($this->adminLangId);
-        /* $keyword = $post['keyword'];
+
+        $keyword = $post['keyword'];
         if (!empty($keyword)) {
-            $cnd = $srch->addCondition('badgelink_name', 'like', '%' . $keyword . '%');
-            $cnd->attachCondition('badgelink_identifier', 'like', '%' . $keyword . '%');
-        } */
+            $cnd = $srch->addHaving('badge_name', 'LIKE', '%' . $keyword . '%');
+            $cnd->attachCondition('record_name', 'LIKE', '%' . $keyword . '%', 'OR');
+            $cnd->attachCondition('option_names', 'LIKE', '%' . $keyword . '%', 'OR');
+            $cnd->attachCondition('option_value_names', 'LIKE', '%' . $keyword . '%', 'OR');
+        }
 
         $recordType = $post['badgelink_record_type'];
         if (!empty($recordType)) {
@@ -62,8 +106,28 @@ class BadgeLinksController extends AdminBaseController
         if (!empty($badgeLinkConditionType)) {
             $srch->addConditionTypesCondition([$badgeLinkConditionType]);
         }
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+
+        $badgeType = $post['badge_type'];
+        if (!empty($badgeType)) {
+            $srch->addBadgeTypeCondition([$badgeType]);
+        }
+
+        $badgeType = $post['badge_type'];
+        if (!empty($badgeType)) {
+            $srch->addBadgeTypeCondition([$badgeType]);
+        }
+
+        $conditionFrom = $post['badgelink_condition_from'];
+        if (!empty($conditionFrom)) {
+            $srch->addFromCondition($conditionFrom);
+        }
+
+        $conditionTo = $post['badgelink_condition_to'];
+        if (!empty($conditionTo)) {
+            $srch->addToCondition($conditionTo);
+        }
+        
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set("arr_listing", $records);
@@ -75,19 +139,22 @@ class BadgeLinksController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function form(int $badgeLinkId)
+    public function form(int $badgeLinkId, int $recordType)
     {
         $this->objPrivilege->canEditBadgeLinks();
         $frm = $this->getForm();
 
         $dataToFill = [];
         if ($badgeLinkId > 0) {
-            // $srch = new BadgeLink($badgeLinkId);
-            
+            $srch = $this->getBadgeLinksObj();
+            $srch->addCondition('badgelink_id', '=', $badgeLinkId);
+            $dataToFill = FatApp::getDb()->fetch($srch->getResultSet());
         }
         $frm->fill($dataToFill);
 
         $this->set('frm', $frm);
+        $this->set('recordType', $recordType);
+        $this->set('rowData', $dataToFill);
         $this->set('badgelink_id', $badgeLinkId);
 
         $this->_template->render(false, false);
@@ -103,16 +170,46 @@ class BadgeLinksController extends AdminBaseController
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
-        $badgeLinkId = FatApp::getPostedData('badgelink_id', FatUtility::VAR_INT, 0);
+        $conditionType = FatApp::getPostedData('badgelink_condition_type', FatUtility::VAR_INT, 0);
+        switch ($conditionType) {
+            case BadgeLink::CONDITION_TYPE_DATE:
+                $format = 'Y-m-d H:i';
+                $fromCond = FatApp::getPostedData('badgelink_condition_from', FatUtility::VAR_STRING, '');
+                $toCond = FatApp::getPostedData('badgelink_condition_to', FatUtility::VAR_STRING, '');
+                
+                /* e.g. DateTime::createFromFormat('Y-m-d H:i', '2021-03-05 13:30'); */
+                $from = DateTime::createFromFormat($format, $fromCond);
+                $to = DateTime::createFromFormat($format, $toCond);
+                if (!$from || $from->format($format) !== $fromCond || !$to || $to->format($format) !== $toCond || $fromCond > $toCond) {
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
+                }
+                break;
+            case BadgeLink::CONDITION_TYPE_ORDER:
+            case BadgeLink::CONDITION_TYPE_RATING:
+                $fromCond = FatApp::getPostedData('badgelink_condition_from', FatUtility::VAR_INT, 0);
+                $toCond = FatApp::getPostedData('badgelink_condition_to', FatUtility::VAR_INT, 0);
+                if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond) {
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
+                }
+                break;
+            
+            default:
+                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_TYPE', $this->adminLangId));
+                break;
+        }
 
+        $badgeLinkId = FatApp::getPostedData('badgelink_id', FatUtility::VAR_INT, 0);
+        
         $record = new BadgeLink($badgeLinkId);
         $record->assignValues($post);
         if (!$record->save()) {
             FatUtility::dieJsonError($record->getError());
         }
-
+        
         $badgeLinkId = $record->getMainTableRecordId();
+        $recordType = FatApp::getPostedData('badgelink_record_type', FatUtility::VAR_INT, 0);
 
+        $this->set('recordType', $recordType);
         $this->set('badgelink_id', $badgeLinkId);
         $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -123,6 +220,9 @@ class BadgeLinksController extends AdminBaseController
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
 
+        $badgeTypes = Badge::getTypeArr($this->adminLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'badge_type', $badgeTypes);
+
         $recordTypesArr = BadgeLink::getRecordTypeArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_RECORD_TYPE', $this->adminLangId), 'badgelink_record_type', $recordTypesArr);
 
@@ -130,7 +230,7 @@ class BadgeLinksController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badgelink_condition_type', $conditionTypesArr);
 
         $frm->addTextBox(Labels::getLabel('LBL_CONDITION_FROM', $this->adminLangId), 'badgelink_condition_from');
-        $frm->addTextBox(Labels::getLabel('LBL_CONDITION_FROM', $this->adminLangId), 'badgelink_condition_to');
+        $frm->addTextBox(Labels::getLabel('LBL_CONDITION_TO', $this->adminLangId), 'badgelink_condition_to');
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
@@ -145,7 +245,7 @@ class BadgeLinksController extends AdminBaseController
         $frm->addHiddenField('', 'badgelink_badge_id');
         $frm->addHiddenField('', 'badgelink_record_id');
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_BADGE_OR_RIBBON', $this->adminLangId), 'badge_name', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_BADGE_OR_RIBBON', $this->adminLangId)], '');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_BADGE_OR_RIBBON', $this->adminLangId), 'badge_name', [], '4', ['placeholder' => Labels::getLabel('LBL_SEARCH_BADGE_OR_RIBBON', $this->adminLangId)], '');
         $fld->requirement->setRequired(true);
 
         $recordTypesArr = BadgeLink::getRecordTypeArr($this->adminLangId);
@@ -180,7 +280,7 @@ class BadgeLinksController extends AdminBaseController
         }
 
         $this->unlink($badgelink_id);
-        $this->set('msg', Labels::getLabel('MSG_UNLINKED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -202,7 +302,7 @@ class BadgeLinksController extends AdminBaseController
 
             $this->unlink($badgelink_id);
         }
-        $this->set('msg', Labels::getLabel('MSG_UNLINKED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -214,6 +314,9 @@ class BadgeLinksController extends AdminBaseController
             );
         }
 
-        $brandObj = new BadgeLink($badgelink_id);
+        $obj = new BadgeLink($badgelink_id);
+        if (!$obj->deleteRecord(false)) {
+            FatUtility::dieJsonError($obj->getError());
+        }
     }
 }

@@ -19,9 +19,9 @@ $data = [
             'attr' => [
                 'href' => 'javascript:void(0)',
                 'onclick' => 'bulkBadgesUnlink()',
-                'title' => Labels::getLabel('LBL_UNLINK_BADGES', $adminLangId)
+                'title' => Labels::getLabel('LBL_DELETE_SELECTED', $adminLangId)
             ],
-            'label' => '<i class="fas fa-unlink"></i>'
+            'label' => '<i class="fas fa-trash"></i>'
         ],
     ]
 ];

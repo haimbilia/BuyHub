@@ -6,8 +6,8 @@ $arr_flds = array(
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
     Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_SHAPE', $adminLangId),
     Badge::DB_TBL_PREFIX . 'color' => Labels::getLabel('LBL_COLOR', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_REQUIRED_APPROVAL', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_STATUS', $adminLangId),
+    Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL_STATUS', $adminLangId),
+    Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_PUBLISH', $adminLangId),
     'action' => '',
 );
 
@@ -54,8 +54,11 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $color, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
-                $class = applicationConstants::YES == $row[$key] ? 'badge--unified-danger' : 'badge--unified-success'; 
-                $htm = ' <span class="badge ' . $class . ' badge--inline badge--pill">' . Badge::getRequiredApprovalName($row[$key], $adminLangId) . '</span>';
+                $class = applicationConstants::YES == $row[$key] ? 'badge--unified-danger' : 'badge--unified-brand'; 
+                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $adminLangId) . '</span>';;
+                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
+                    $htm = ' <span class="badge ' . $class . ' badge--inline badge--pill">' . Badge::getRequiredApprovalName($row[$key], $adminLangId) . '</span>';
+                }
                 $td->appendElement('plaintext', array(), $htm, true);
                 break;
 
@@ -75,6 +78,7 @@ foreach ($arr_listing as $sn => $row) {
                 if ($canEdit) {
                     $function = "form(" . $row[Badge::DB_TBL_PREFIX . 'id'] . ", " . $row[Badge::DB_TBL_PREFIX . 'type'] . ")";
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "deleteRecord(event, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {
                     $td->appendElement('plaintext', array(), Labels::getLabel('LBL_N/A', $adminLangId), true);
                 }
@@ -88,7 +92,7 @@ if (count($arr_listing) == 0) {
 }
 
 $frm = new Form('frmSearchListing');
-$frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
+$frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js badgesList--js');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Badges', 'toggleBulkStatuses'));
 $frm->addHiddenField('', 'status');
