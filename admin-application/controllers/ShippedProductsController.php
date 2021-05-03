@@ -24,15 +24,15 @@ class ShippedProductsController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : FatUtility::int($data['page']);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        $srch = ShippingProfileProduct::getAdminShippedProdcutsObj(true);
+        $srch = ShippingProfileProduct::getAdminShippedProdcutsObj($this->adminLangId);
         $srch->addCondition('product_added_by_admin_id', '=', applicationConstants::YES);
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('spprot.shippro_user_id', '=', '0');
+        $srch->addCondition('sppro.shippro_user_id', '=', '0');
         $srch->addCondition('tp.product_type', '=', Product::PRODUCT_TYPE_PHYSICAL);
         if (!empty($keyword)) {
             $srch->addCondition('tp_l.product_name', 'like', '%' . $keyword . '%');
         }
-        $srch->addMultipleFields(array('sppro.shippro_shipprofile_id, sppro.shippro_product_id, tp_l.product_name, spprof.shipprofile_name, tp.product_added_by_admin_id'));
+        $srch->addMultipleFields(array('sppro.shippro_shipprofile_id, sppro.shippro_product_id, ifnull(tp_l.product_name, tp.product_identifier) as product_name, spprof.shipprofile_name, tp.product_added_by_admin_id'));
         $srch->addGroupBy('sppro.shippro_product_id');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -45,7 +45,7 @@ class ShippedProductsController extends AdminBaseController
         $this->set('pageSize', $pageSize);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('canEdit', $this->objPrivilege->canEditShippedProducts(0, true));    
+        $this->set('canEdit', $this->objPrivilege->canEditShippedProducts(0, true));
         $this->_template->render(false, false);
     }
 
@@ -67,7 +67,7 @@ class ShippedProductsController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function updateStatus() 
+    public function updateStatus()
     {
         $this->objPrivilege->canEditShippedProducts();
         $frm = $this->productsShippingForm();
@@ -99,7 +99,7 @@ class ShippedProductsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getShippedProducts() 
+    private function getShippedProducts()
     {
         $frm = new Form('frmShippedProductsSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
@@ -118,5 +118,4 @@ class ShippedProductsController extends AdminBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
         return $frm;
     }
-
 }

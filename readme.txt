@@ -1,6 +1,3 @@
-New Feature : 
-    => 84999 : Admin shipped products listing page
-
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
     => System API version : 2.3
@@ -106,6 +103,9 @@ Fixes:
     => 052664 - admin> users> asterisk marked field shouldn't be mandatory for admin 
     => 052645 - wile adding product specifications> it's not accepting character after &
     => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
+
+New Features:
+    => Admin shipped products listing page
 
 Enhancements :
    => Make provision to made seller
