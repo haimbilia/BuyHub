@@ -24,11 +24,15 @@ class ShippedProductsController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : FatUtility::int($data['page']);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        $srch = ShippingProfileProduct::getAdminShippedProdcutsObj($this->adminLangId);
-        $srch->addCondition('product_added_by_admin_id', '=', applicationConstants::YES);
-        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('sppro.shippro_user_id', '=', '0');
-        $srch->addCondition('tp.product_type', '=', Product::PRODUCT_TYPE_PHYSICAL);
+        // $srch = ShippingProfileProduct::getAdminShippedProdcutsObj($this->adminLangId);
+        $srch = new ShippedProducts();
+        $srch->joinProduct();
+        $srch->joinProductLang($this->adminLangId);
+        $srch->joinShippingProfile();
+        $srch->addProductByAdminCondition();
+        $srch->addProductDeletedCondition();
+        $srch->addProductAdminShipCondition();
+        $srch->addPhyProductCheckCondition();
         if (!empty($keyword)) {
             $srch->addCondition('tp_l.product_name', 'like', '%' . $keyword . '%');
         }
@@ -39,6 +43,33 @@ class ShippedProductsController extends AdminBaseController
         $srch->addOrder('shippro_product_id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
+
+
+        /* Get Seller Inventory Catelog */
+        if(!empty($records)) {
+            $sellerShippingCount = [];
+            $prodIdArr = array_column($records, 'shippro_product_id');
+            foreach($prodIdArr as $kay => $prodId) {
+                $selProd = new ShippedProducts(applicationConstants::YES);
+                $selProd->joinProduct(applicationConstants::YES);
+                $selProd->joinUserTable();
+                $selProd->joinShippedBySeller();
+                $selProd->addProductDeletedCondition();
+                $selProd->addPhyProductCheckCondition();
+                $selProd->addCondition('tp.product_id', '=', $prodId);
+                $selProd->addMultipleFields(array('u.user_name'));
+                // $selProd->addGroupBy('tp.product_id');
+                $res = $selProd->getResultSet();
+                $results = FatApp::getDb()->fetchAll($res);
+            
+                // echo count($results);die;
+                // echo $selProd->getQuery();die;
+                // CommonHelper::printArray($results);die;
+
+               $records[$kay]['total_seller_ship'] = (count($results) > 0) ? count($results) : 0;
+            }
+        }
+        /* End here */
 
         $this->set("arrListing", $records);
         $this->set('page', $page);
