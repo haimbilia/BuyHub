@@ -97,6 +97,7 @@ Fixes:
     => 053007 - Stripe Connect Already Have Account Issue 
     => 053057 - When search by keyword on home getting error
     => 053064 - While order product commission not calculated as per subscription
+    => 053172 - Every time Instagram login asking for email 
 
 Enhancements :
    => Make provision to made seller
