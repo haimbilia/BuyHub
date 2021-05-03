@@ -9,7 +9,7 @@
                         <div class="col--first col-lg-6">
                             <span class="page__icon">
                                 <i class="ion-android-star"></i></span>
-                            <h5><?php echo Labels::getLabel('LBL_Shipped_Products', $adminLangId); ?> </h5>
+                            <h5><?php echo Labels::getLabel('LBL_Shipped_Products_by_Admin', $adminLangId); ?> </h5>
                             <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
                         </div>
                     </div>
@@ -27,7 +27,6 @@
 
                         $keywordFld = $frmSearch->getField('keyword');
                         $keywordFld->developerTags['col'] = 4;
-                        // $keywordFld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Search_in_Order_Id,_Customer_Name,_Customer_Username_and_Customer_Email_Id', $adminLangId) . '</small>';
 
                         $submitBtnFld = $frmSearch->getField('btn_submit');
                         $submitBtnFld->setFieldTagAttribute('class', 'btn');

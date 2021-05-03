@@ -1534,6 +1534,11 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_SHIPPED_PRODUCTS_LISTING, static::PRIVILEGE_READ, $returnResult);
     }
 
+    public function canEditShippedProducts($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPED_PRODUCTS_LISTING, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
     public function canViewTrackingRelationCode()
     {
         $plugin = new Plugin();

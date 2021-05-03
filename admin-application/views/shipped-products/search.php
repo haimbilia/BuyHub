@@ -4,6 +4,7 @@ $arr_flds = array(
     'listserial'    =>    Labels::getLabel('LBL_#', $adminLangId),
     'product_name' => Labels::getLabel('LBL_product_name', $adminLangId),
     'shipprofile_name' => Labels::getLabel('LBL_shipping_profile', $adminLangId),
+    'action' => '',
 );
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -21,6 +22,11 @@ foreach ($arrListing as $sn => $row) {
         switch ($key) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
+                break;
+            case 'action':
+                if($canEdit) {
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Change_Status', $adminLangId), "onclick" => "updateProductsShipping(" . $row['shippro_product_id'] . ", " . $row['shippro_shipprofile_id'] . ")"), '<i class="fas fa-toggle-off"></i>', true);
+                }
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

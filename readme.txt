@@ -1,4 +1,5 @@
-
+New Feature : 
+    => 84999 : Admin shipped products listing page
 
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0

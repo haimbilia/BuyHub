@@ -11,6 +11,11 @@ $(document).ready(function(){
 		searchShippedProducts(frm);
 	}
 
+	reloadList = function() {
+        var frm = document.frmShippedProductsPaging;
+        searchShippedProducts(frm);
+    }
+
 	searchShippedProducts = function(form){
 		var dv = $('#shippedProductsListing');
 		var data = '';
@@ -22,6 +27,27 @@ $(document).ready(function(){
 			dv.html(res);
 		});
 	};
+
+	updateProductsShipping = function(productId, shipProfileId) {
+		$.facebox(function() {
+			updateProductsShippingForm(productId, shipProfileId);
+		});
+	}
+
+	updateProductsShippingForm = function(productId, shipProfileId) {
+		fcom.ajax(fcom.makeUrl('ShippedProducts', 'updateProductsShipping', [productId, shipProfileId]), '', function(t) {
+			fcom.updateFaceboxContent(t);
+		});
+	};
+
+    updateStatus = function (frm){
+		if (!$(frm).validate()) { return; }
+		var data = fcom.frmData(frm);
+		fcom.updateWithAjax(fcom.makeUrl('ShippedProducts', 'updateStatus'), data, function(t) {			
+			reloadList();			
+			$(document).trigger('close.facebox');
+	    });
+    };
 
 	clearShippedProductsSearch = function(){
 		document.frmShippedProductsSearch.reset();
