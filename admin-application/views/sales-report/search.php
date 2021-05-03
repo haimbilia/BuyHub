@@ -1,14 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
+/*Only one column allowed */
+$staticFlds = ['order_date', 'op_invoice_number'];
+
 $arrFlds1 = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'order_date' => Labels::getLabel('LBL_Date', $adminLangId),
+    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'totOrders' => Labels::getLabel('LBL_Order_Placed', $adminLangId),
     /*  'orderNetAmount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId), */
 );
 $arrFlds2  = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'op_invoice_number' => Labels::getLabel('LBL_Invoice_Number', $adminLangId),
+    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     /* 'order_net_amount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId), */
 );
 $arr = array(
@@ -50,20 +53,33 @@ if (empty($orderDate)) {
 
 $tbl = new HtmlElement(
     'table',
-    array('width' => '100%', 'class' => 'table table-responsive table--hovered')
+    array('width' => '100%', 'class' => 'datatable__table')
 );
 
-$th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $val) {
-    $e = $th->appendElement('th', array(), $val);
+$th = $tbl->appendElement('thead', ['class' => 'datatable__head'])->appendElement('tr', ['class' => 'datatable__row']);
+foreach ($arr_flds as $key => $val) {
+    $cls = 'datatable_cell datatable_cell-sort datatable_cell_top';
+    if (in_array($key, $staticFlds)) {
+        $cls .= ' datatable_cell_left';
+    }
+    $e = $th->appendElement('th', ['class' => $cls], $val);
 }
+
+// $tbl->appendElement('tbody', ['class' => 'datatable__body']);
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arr_listing as $sn => $row) {
-    $tr = $tbl->appendElement('tr');
+    $tr = $tbl->appendElement('tr', ['class' => 'datatable__row', 'data-row' => $sr_no]);
 
     foreach ($arr_flds as $key => $val) {
-        $td = $tr->appendElement('td');
+        if (in_array($key, $staticFlds)) {
+            $td = $tr->appendElement('th', ['class' => 'datatable_cell datatable_cell_left']);
+            $td->appendElement('span');
+        } else {
+            $td = $tr->appendElement('td', ['class' => 'datatable_cell']);
+            $td->appendElement('span');
+        }
+
         switch ($key) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
@@ -114,14 +130,13 @@ if (count($arr_listing) == 0) {
     );
 }
 
-echo '<div class="overflow_auto">';
+
 echo $tbl->getHtml();
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
     'name' => 'frmSalesReportSearchPaging'
 ));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
-echo '</div>';
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 
 ?>
