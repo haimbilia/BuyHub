@@ -8,18 +8,16 @@ class DigitalDownloads extends MyAppModel
     public const DB_TBL_LINKS = 'tbl_product_digital_links';
     public const DB_TBL_LINKS_PREFIX = 'pdl_';
 
-    public function __construct($productId, $productOption, $id = 0)
+    public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX, $id);
-        $this->productId = $productId;
-        $this->productOption = $productOption;
     }
 
-    public function getReferenceId()
+    public function getReferenceId($productId, $productOption)
     {
         $srch = new DigitalDownloadsSearch();
-        $srch->addCondition(static::DB_TBL_PREFIX . 'product_id', '=', $this->productId);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'options_code', '=', $this->productOption);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'product_id', '=', $productId);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'options_code', '=', $productOption);
 
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords();
@@ -27,23 +25,22 @@ class DigitalDownloads extends MyAppModel
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
-        $ddRefId = 0;
-        if (is_array($row)) {
-            $ddRefId = $row['pddr_id'];
+        if (!is_array($row)) {
+            return 0;
         }
 
-        return $ddRefId;
+        return $row['pddr_id'];
     }
     
-    public function saveDownloadReferences($optionsCode)
+    public function saveReference($productId, $optionsCode)
     {
-        if ($this->productId < 1) {
+        if ($productId < 1) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 
         $dataToSave = array(
-            static::DB_TBL_PREFIX . 'product_id' => $this->productId,
+            static::DB_TBL_PREFIX . 'product_id' => $productId,
             static::DB_TBL_PREFIX . 'options_code' => $optionsCode,
         );
 
@@ -54,10 +51,10 @@ class DigitalDownloads extends MyAppModel
         return true;
     }
 
-    public function saveDownloadLinks($refId, $langId, $downloadLink, $previewLink, $id = 0)
+    public function saveLink($refId, $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
     {
         if ($refId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId) . __LINE__ . 'saveDownloadLinks';
+            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 
@@ -68,20 +65,55 @@ class DigitalDownloads extends MyAppModel
             static::DB_TBL_LINKS_PREFIX . 'preview_link' => $previewLink,
         );
 
-        if (1 > $id) {
+        if (1 > $ddLinkid) {
             if (!FatApp::getDb()->insertFromArray(static::DB_TBL_LINKS, $dataToSave)) {
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
         } else {
-            $whr = ['smt' => static::DB_TBL_LINKS_PREFIX . 'id = ?',
-                'vals' => [$id],
+            $whr = [
+                'smt' => static::DB_TBL_LINKS_PREFIX . 'id = ?',
+                'vals' => [$ddLinkid],
             ];
             if (!FatApp::getDb()->updateFromArray(static::DB_TBL_LINKS, $dataToSave, $whr)) {
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
         }
+        return true;
+    }
+
+    public function deleteLink($linkid, $refId)
+    {
+        $whr = [
+            'smt' => static::DB_TBL_LINKS_PREFIX . 'id = ? AND ' . static::DB_TBL_LINKS_PREFIX . 'record_id = ?',
+            'vals' => [$linkid, $refId],
+        ];
+
+        FatApp::getDb()->deleteRecords(static::DB_TBL_LINKS, $whr);
+
+        if (1 > FatApp::getDb()->rowsAffected()) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function deleteReference($refId)
+    {
+        $whr = [
+            'smt' => static::DB_TBL_PREFIX . 'id = ?',
+            'vals' => [$refId],
+        ];
+
+        FatApp::getDb()->deleteRecords(static::DB_TBL, $whr);
+
+        if (1 > FatApp::getDb()->rowsAffected()) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+
         return true;
     }
 

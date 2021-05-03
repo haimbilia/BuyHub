@@ -34,19 +34,27 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $lang_name, true);
                 break;
             case 'action':
-                $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
-
-                $li = $ul->appendElement("li");
-                $li->appendElement(
+                $td->appendElement(
                     "a",
                     array(
-                        'title' => Labels::getLabel('LBL_Product_Images', $adminLangId),
-                        'onclick' => 'deleteDigitalFile(' . $row['afile_record_id'] . ',' . $row['afile_id'] . ')', 'href' => 'javascript:void(0)'
+                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'title' => Labels::getLabel('LBL_Edit', $adminLangId),
+                        'onclick' => 'downloadsForm(' . $row['afile_record_id'] . ', ' . $row['afile_id'] . ')', 'href' => 'javascript:void(0);'
                     ),
-                    Labels::getLabel('LBL_Delete', $adminLangId),
+                    '<i class="fa fa-edit  icon"></i>',
                     true
                 );
-
+                $td->appendElement(
+                    "a",
+                    array(
+                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                        'onclick' => 'deleteDigitalFile(' . $row['afile_record_id'] . ', ' . $row['afile_id'] . ')', 'href' => 'javascript:void(0);'
+                    ),
+                    '<i class="fa fa-trash  icon"></i>',
+                    true
+                );
+                
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
@@ -87,19 +95,16 @@ foreach ($previews as $sn => $row) {
                 $td->appendElement('plaintext', array(), $lang_name, true);
                 break;
             case 'action':
-                $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
-
-                $li = $ul->appendElement("li");
-                $li->appendElement(
+                $td->appendElement(
                     "a",
                     array(
-                        'title' => Labels::getLabel('LBL_Product_Images', $adminLangId),
-                        'onclick' => 'deleteDigitalFile(' . $row['afile_record_id'] . ',' . $row['afile_id'] . ')', 'href' => 'javascript:void(0)'
+                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                        'onclick' => 'deleteDigitalFile(' . $row['afile_record_id'] . ', ' . $row['afile_id'] . ')', 'href' => 'javascript:void(0);'
                     ),
-                    Labels::getLabel('LBL_Delete', $adminLangId),
+                    '<i class="fa fa-trash  icon"></i>',
                     true
                 );
-
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

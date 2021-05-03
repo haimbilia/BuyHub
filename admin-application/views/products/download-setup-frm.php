@@ -8,8 +8,8 @@ $fld->addFieldTagAttribute('class', 'product_downloadable_link');
 $fld = $downloadFrm->getField('product_preview_link');
 $fld->addFieldTagAttribute('class', 'product_preview_link');
 
-// $fld = $downloadFrm->getField('downloadable_file');
-// $fld->addFieldTagAttribute('onchange', 'saveDownloadFiles();');
+$fld = $downloadFrm->getField('attachement_upload_btn');
+$fld->addFieldTagAttribute('onclick', 'saveDownloadFiles();');
 
 $fld = $downloadFrm->getField('attachment_link_btn');
 $fld->addFieldTagAttribute('id', 'attachment_link_btn');
@@ -17,7 +17,14 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
 
 ?>
 <div class="row justify-content-center">
-    <div class="col-md-12">
+    <div class="col-md-12" id="digital_download_formss">
+        <div class="err-msg" style="color:red;">
+            <?php 
+            if (0 < strlen($msg)) {
+                echo $msg;
+            }
+            ?>
+        </div>
         <?php echo $downloadFrm->getFormTag(); ?>
             <div class="row">
                 <div class="col-md-4">
@@ -130,6 +137,7 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                             <div class="caption-wraper">
                                 <label class="field_label">
                                     <?php $fld = $downloadFrm->getField('downloadable_file');
+                                    $fld->addFieldTagAttribute('class', 'downloadable_file');
                                     echo $fld->getCaption();
                                     ?>
                                 </label>
@@ -146,6 +154,7 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                             <div class="caption-wraper">
                                 <label class="field_label">
                                     <?php $fld = $downloadFrm->getField('preview_file');
+                                    $fld->addFieldTagAttribute('class', 'downloadable_file');
                                     echo $fld->getCaption();
                                     ?>
                                 </label>
@@ -172,13 +181,12 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                 </div>
             </div>
             <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('link_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
-        <div class="col-md-12">
-            <div class="row" id="digital_download_list"></div>
-        </div>
     </div>
+    <!-- <div class="col-md-12" id="digital_download_list" class="dd-list"></div> -->
 </div>
 <script>
     var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;

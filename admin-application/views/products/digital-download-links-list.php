@@ -13,11 +13,11 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
-
+// CommonHelper::printArray([$links] );
 $sr_no = 0;
 foreach ($links as $sn => $row) {
     $sr_no++;
-    $tr = $tbl->appendElement('tr');
+    $tr = $tbl->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
 
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
@@ -47,7 +47,7 @@ foreach ($links as $sn => $row) {
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
                         'title' => Labels::getLabel('LBL_Edit', $adminLangId),
-                        'onclick' => 'downloadsForm(' . $row['pdl_id'] . ')', 'href' => 'javascript:void(0);'
+                        'onclick' => 'downloadsForm(' . $row['pddr_product_id'] . ', ' . $row['pdl_id'] . ')', 'href' => 'javascript:void(0);'
                     ),
                     '<i class="fa fa-edit  icon"></i>',
                     true
@@ -73,7 +73,7 @@ foreach ($links as $sn => $row) {
 }
 
 if (empty($links)) {
-    $tr = $tbl->appendElement('tr')->appendElement('td');
+    $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
     $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $adminLangId), true);
 }
 ?>
