@@ -285,7 +285,7 @@ class Shipping
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
-                SystemLog::set($msg);
+                SystemLog::system($msg);
                 continue;
             }
             
@@ -322,7 +322,7 @@ class Shipping
                  $this->error = CommonHelper::replaceStringData($error, ['{USER}' => $user]); */
                 $msg = Labels::getLabel('MSG_MISSING_FROM_ZIP_FOR_"{PRODUCT}"._PLEASE_FROM_ADDRESS.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
-                SystemLog::set($msg);
+                SystemLog::system($msg);
                 continue;
             }
 

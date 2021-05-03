@@ -375,10 +375,10 @@ class UserAuthentication extends FatModel
             }
             if (true == $encryptPassword) {
                 if (!$this->resetUserPassword($row['user_id'], $password)) {
-                    SystemLog::set('Unable to set new hash user password');
+                    SystemLog::system('Unable to set new hash user password');
                 } else {
                     if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
-                        SystemLog::set('Unable to blank user old password');
+                        SystemLog::system('Unable to blank user old password');
                     }
                 }
             }

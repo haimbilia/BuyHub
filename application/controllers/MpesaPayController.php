@@ -181,7 +181,7 @@ class MpesaPayController extends PaymentController
                 }
             }
         }
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, $json);
+        SystemLog::transaction($json, self::KEY_NAME . "-" . $orderId);
         $msg = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
         $orderPaymentObj->addOrderPaymentComments($msg);
         return;

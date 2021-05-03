@@ -383,7 +383,7 @@ class Tax extends MyAppModel
                 $message .= '(' . $shopInfo['shop_identifier'] . ')';
                 $message .= '( Product Id-' . $productId . ')';
             }
-            SystemLog::set($message);
+            SystemLog::system($message);
             $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
             return $data = [
                 'status' => $status,
@@ -429,7 +429,7 @@ class Tax extends MyAppModel
 
             $error = '';
             if (false === PluginHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_TAX_SERVICES), $error, $langId)) {
-                SystemLog::set($error);
+                SystemLog::system($error);
                 $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
                 return $data = [
                     'status' => $status,
@@ -477,7 +477,7 @@ class Tax extends MyAppModel
 
             $taxApi = new $pluginKey($langId, $fromAddress, $toAddress);
             if (false === $taxApi->init()) {
-                SystemLog::set($taxApi->getError());
+                SystemLog::system($taxApi->getError());
                 $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
                 return $data = [
                     'status' => $status,
@@ -493,7 +493,7 @@ class Tax extends MyAppModel
             $taxRates = $taxApi->getRates($itemsArr, $shippingItems, $buyerId);
 
             if (false == $taxRates['status']) {
-                SystemLog::set($taxRates['msg'] . '( Product Id-' . $productId . ')');
+                SystemLog::system($taxRates['msg'], '( Product Id-' . $productId . ')');
                 $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
                 $data = [
                     'status' => $status,
@@ -540,7 +540,7 @@ class Tax extends MyAppModel
         }
 
         if (0 < $activatedTaxServiceId) {
-            SystemLog::set(Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId) . '( Product Id-' . $productId . ')');
+            SystemLog::system(Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId), '( Product Id-' . $productId . ')');
             $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
 
             return $data = [

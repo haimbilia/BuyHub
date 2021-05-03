@@ -2,23 +2,22 @@
 
 class SystemLog extends MyAppModel
 {
+
     public const DB_TBL = 'tbl_system_logs';
     public const DB_TBL_PREFIX = 'slog_';
-    
-    
     public const MODULE_TYPE_SYSTEM = 1;
     public const MODULE_TYPE_TRANSACTION = 2;
     public const MODULE_TYPE_PLUGIN = 3;
-
+    
     public const TYPE_ERROR = 1;
-    public const TYPE_REQUEST = 2;
-    public const TYPE_RESPONSE = 3;
+    public const TYPE_INFO = 2;
+    public const TYPE_SUCCESS = 3;
 
     public function __construct($logId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $logId);
     }
-    
+
     public static function getModuleTypes(): array
     {
         return [
@@ -27,47 +26,64 @@ class SystemLog extends MyAppModel
             self::MODULE_TYPE_PLUGIN,
         ];
     }
-    
+
     public static function getTypes(): array
     {
         return [
             self::TYPE_ERROR,
-            self::TYPE_REQUEST,
-            self::TYPE_RESPONSE,
+            self::TYPE_INFO,
+            self::TYPE_SUCCESS,            
         ];
     }
 
     public static function clearOldLog()
     {
         FatApp::getDb()->deleteRecords(
-            self::DB_TBL,
-            array(
-                'smt' => 'slog_created_at < ?',
-                'vals' => array(
-                    date('Y-m-d', strtotime("-3 Day"))
+                self::DB_TBL,
+                array(
+                    'smt' => 'slog_created_at < ?',
+                    'vals' => array(
+                        date('Y-m-d', strtotime("-5 Day"))
+                    )
                 )
-            )
         );
     }
 
-    
-    public static function set(string $msg, int $module_type = self::MODULE_TYPE_SYSTEM, int $type = self::TYPE_ERROR, $recordId = 0, string &$error = ''): bool
+    public function system(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
     {
-        if (!in_array($module_type, self::getModuleTypes()) || !in_array($type, self::getTypes()) || empty($msg)) {
+        return static::set($msg, null, self::MODULE_TYPE_SYSTEM, $type, $title = '', $error = '');
+    }
+
+    public static function plugin($request = '', $recieve = '', $titleOrPluginName = '', $type = self::TYPE_ERROR, &$error = '')
+    {
+        return self::set($request, $recieve, self::MODULE_TYPE_PLUGIN, $type, $titleOrPluginName, $error);
+    }
+
+    public static function transaction(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
+    {
+        return static::set($msg, null, self::MODULE_TYPE_TRANSACTION, $type, $title = '', $error = '');
+    }
+
+    public static function set(string $content = '', string $response = '', int $module_type = self::MODULE_TYPE_SYSTEM, int $type = self::TYPE_ERROR, $title = '', string &$error = ''): bool
+    {
+        if (!in_array($module_type, self::getModuleTypes()) || !in_array($type, self::getTypes())) {
             $error = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+        $backtrace = json_encode(end($backtrace));
 
         $data = [
             self::DB_TBL_PREFIX . 'module_type' => $module_type,
             self::DB_TBL_PREFIX . 'type' => $type,
-            self::DB_TBL_PREFIX . 'details' => $msg,
-            self::DB_TBL_PREFIX . 'record_id' => $recordId,
+            self::DB_TBL_PREFIX . 'title' => $title,
+            self::DB_TBL_PREFIX . 'content' => $data1,
+            self::DB_TBL_PREFIX . 'response' => $data2,
+            self::DB_TBL_PREFIX . 'backtrace' => $backtrace,
             self::DB_TBL_PREFIX . 'created_at' => date('Y-m-d H:i:s'),
         ];
         $self = new self();
         $self->assignValues($data);
-
         if (!$self->save()) {
             $error = $self->getError();
             return false;

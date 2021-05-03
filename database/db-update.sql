@@ -475,5 +475,29 @@ VALUES(
     '54',
     (SELECT plugin_id FROM `tbl_plugins` where plugin_code ='TaxJarTax'), '0', '0', '0', '2021/04/1619761288-taxjarglyphpng', 'taxjar-glyph.png', '', '', '0', '3', '0', '2021-04-30 11:11:28');
 ALTER TABLE `tbl_system_logs` ADD `slog_module_type` INT NOT NULL AFTER `slog_id`;
-ALTER TABLE `tbl_system_logs` ADD `slog_record_id` VARCHAR(11) NOT NULL AFTER `slog_type`;
+ALTER TABLE `tbl_system_logs` CHANGE `slog_record_id` `slog_title` VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+ALTER TABLE `tbl_system_logs` CHANGE `slog_details` `slog_data1` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+ALTER TABLE `tbl_system_logs` ADD `slog_data2` TEXT NOT NULL AFTER `slog_data1`;
+
+
+DROP TABLE tbl_transactions_failure_log;
+DROP TABLE tbl_system_logs;
+
+CREATE TABLE `tbl_system_logs` (
+  `slog_id` int NOT NULL,
+  `slog_module_type` int NOT NULL,
+  `slog_type` int NOT NULL,
+  `slog_title` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `slog_content` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `slog_response` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `slot_backtrace` text NOT NULL,
+  `slog_created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `tbl_system_logs`
+  ADD PRIMARY KEY (`slog_id`);
+
+ALTER TABLE `tbl_system_logs`
+  MODIFY `slog_id` int NOT NULL AUTO_INCREMENT;
+
 /* TaxJar Enhancements */

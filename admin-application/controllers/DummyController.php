@@ -139,5 +139,5 @@ class DummyController extends AdminBaseController
         $dataMigration = new DataMigration();
         $dataMigration->sync();
     } 
-
+  
 }
