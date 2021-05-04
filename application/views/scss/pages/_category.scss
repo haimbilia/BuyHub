@@ -32,12 +32,12 @@
                 position: absolute;
                 #{$end-direction}: 0;
                 top: 0;
-                -webkit-transition: all 0.5s linear;
+                
                 transition: all 0.5s linear;
                 -webkit-transform: scale3d(1, 1, 1);
                 transform: scale3d(1, 1, 1);
-                -webkit-filter: blur(0px);
-                -webkit-animation: fadein linear 1.5s;
+                
+                
             }
         }
         .cat-tittle {

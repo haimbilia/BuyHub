@@ -15,19 +15,6 @@
 <link rel="icon" type="image/png" sizes="16x16" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '16-16')), CONF_IMG_CACHE_TIME, '.png'); ?>">
 <link rel="manifest" href="<?php echo UrlHelper::generateUrl('Home', 'pwaManifest'); ?>">
 <?php
-$googleFontFamily = "'Poppins', sans-serif";
-
-$googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
-$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59");
-$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "#FFFFFF");
-if (!empty($googleFontFamilyUrl)) {
-    $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
-    $googleFontFamily = str_replace("+", " ", explode('-', $googleFontFamily)[0]);
-?>
-    <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
-<?php
-}
-
 if ($canonicalUrl == '') {
     if (empty(FatApp::getParameters()) && FatApp::getAction() == 'index') {
         $cName = ($controllerName == 'Home') ? '' : $controllerName;
@@ -35,15 +22,28 @@ if ($canonicalUrl == '') {
     } else {
         $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), FatApp::getParameters());
     }
-}
-?>
+} ?>
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
-<style>
-    <?php if (!empty($googleFontFamilyUrl)) { ?>body {
-        font-family: "<?php echo $googleFontFamily; ?>" !important;
-    }
+<?php $googleFontFamily = "'Poppins', sans-serif !important";
+$fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
+$googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
+$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59");
+$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "#FFFFFF");
+if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
+    $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
+    $googleFontFamily =  '"'. str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
+?>
+    <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
+<?php
+} else { ?>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<?php } ?>
 
-    <?php } ?> :root {
+<style>
+    body {
+            font-family: <?php echo $googleFontFamily; ?>;
+        }
+    :root {
         <?php if (CommonHelper::isAppUser()) { ?>--brand-color: #<?php echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
         --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
         --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;

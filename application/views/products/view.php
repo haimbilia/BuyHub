@@ -454,7 +454,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 <div class="gap"></div>
                                 <div class="sold-by bg-gray p-4 rounded">
                                     <div class="row align-items-center justify-content-between">
-                                        <div class="col">
+                                        <div class="cell cell-1">
                                             <div class="m-0 -color-light">
                                                 <?php echo Labels::getLabel('LBL_Seller', $siteLangId); ?></div>
                                             <h6 class="h6">
@@ -501,12 +501,366 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                         </div>
                     </div>
                 </div>
+                <div class="more-sellers">
+                    <ul class="responsive-table">
+                        <li class="table-header">
+                            <div class="cell cell-1">Seller</div>
+                            <div class="cell cell-2">Selling Price</div>
+                            <div class="cell cell-3">Delivery</div>
+                            <div class="cell cell-4">Services</div>
+                            <div class="cell cell-5">Action</div>
+                        </li>
+                        <li class="table-row">
+                            <div class="cell cell-1" data-label="Seller">
+                                <div class="item">
+                                    <div class="item__pic item__pic-seller">
+                                        <a href="/yokart/jeans-17"><img src="/yokart/image/shop-logo/1/1/SMALL" alt="Jeans" title="Jeans"></a>
+                                    </div>
+                                    <div class="item__description">
+                                        <div class="item__location">Punjab,India</div>
+                                        <div class="item__title"><a title="Jeans" href="/yokart/jeans-17">Chromium Gallery</a></div>
+                                        <div class="products__rating -display-inline m-0">
+                                            <i class="icn">
+                                                <svg class="svg">
+                                                    <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow" href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <span class="rate">4 </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell cell-2" data-label="Selling Price">
+                                <div class="product-price">
+                                    <span class="new_price">
+                                        $150.00 <del>$120.00</del> </span>
+                                    <br>
+                                    <span class="off_price text-success">12% Off</span>
+                                </div>
+                            </div>
+                            <div class="cell cell-3" data-label="Delivery">
+                                <p><strong>Delivery: $16.99</strong> <br>
+                                    Delivery between May 7 and May 20</p>
+                            </div>
+                            <div class="cell cell-4" data-label="Services">
+
+                                <ul class="list-services">
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li>
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#freeshipping">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="cell cell-5" data-label="">
+
+                                <div class="">
+                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
+                                                </use>
+                                            </svg>
+
+                                        </i> Ask a question</button>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="table-row">
+                            <div class="cell cell-1" data-label="Seller">
+                                <div class="item">
+                                    <div class="item__pic item__pic-seller">
+                                        <a href="/yokart/jeans-17"><img src="/yokart/image/shop-logo/1/1/SMALL" alt="Jeans" title="Jeans"></a>
+                                    </div>
+                                    <div class="item__description">
+                                        <div class="item__location">Punjab,India</div>
+                                        <div class="item__title"><a title="Jeans" href="/yokart/jeans-17">Chromium Gallery</a></div>
+                                        <div class="products__rating -display-inline m-0">
+                                            <i class="icn">
+                                                <svg class="svg">
+                                                    <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow" href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <span class="rate">4 </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell cell-2" data-label="Selling Price">
+                                <div class="product-price">
+                                    <span class="new_price">
+                                        $150.00 <del>$120.00</del> </span>
+                                    <br>
+                                    <span class="off_price text-success">12% Off</span>
+                                </div>
+                            </div>
+                            <div class="cell cell-3" data-label="Delivery">
+                                <p><strong>Delivery: $16.99</strong> <br>
+                                    Delivery between May 7 and May 20</p>
+                            </div>
+                            <div class="cell cell-4" data-label="Services">
+
+                                <ul class="list-services">
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li>
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#freeshipping">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="cell cell-5" data-label="">
+
+                                <div class="">
+                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
+                                                </use>
+                                            </svg>
+
+                                        </i> Ask a question</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="table-row">
+                            <div class="cell cell-1" data-label="Seller">
+                                <div class="item">
+                                    <div class="item__pic item__pic-seller">
+                                        <a href="/yokart/jeans-17"><img src="/yokart/image/shop-logo/1/1/SMALL" alt="Jeans" title="Jeans"></a>
+                                    </div>
+                                    <div class="item__description">
+                                        <div class="item__location">Punjab,India</div>
+                                        <div class="item__title"><a title="Jeans" href="/yokart/jeans-17">Chromium Gallery</a></div>
+                                        <div class="products__rating -display-inline m-0">
+                                            <i class="icn">
+                                                <svg class="svg">
+                                                    <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow" href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <span class="rate">4 </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell cell-2" data-label="Selling Price">
+                                <div class="product-price">
+                                    <span class="new_price">
+                                        $150.00 <del>$120.00</del> </span>
+                                    <br>
+                                    <span class="off_price text-success">12% Off</span>
+                                </div>
+                            </div>
+                            <div class="cell cell-3" data-label="Delivery">
+                                <p><strong>Delivery: $16.99</strong> <br>
+                                    Delivery between May 7 and May 20</p>
+                            </div>
+                            <div class="cell cell-4" data-label="Services">
+
+                                <ul class="list-services">
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li>
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#freeshipping">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="cell cell-5" data-label="">
+
+                                <div class="">
+                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
+                                                </use>
+                                            </svg>
+
+                                        </i> Ask a question</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="table-row">
+                            <div class="cell cell-1" data-label="Seller">
+                                <div class="item">
+                                    <div class="item__pic item__pic-seller">
+                                        <a href="/yokart/jeans-17"><img src="/yokart/image/shop-logo/1/1/SMALL" alt="Jeans" title="Jeans"></a>
+                                    </div>
+                                    <div class="item__description">
+                                        <div class="item__location">Punjab,India</div>
+                                        <div class="item__title"><a title="Jeans" href="/yokart/jeans-17">Chromium Gallery</a></div>
+                                        <div class="products__rating -display-inline m-0">
+                                            <i class="icn">
+                                                <svg class="svg">
+                                                    <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow" href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <span class="rate">4 </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell cell-2" data-label="Selling Price">
+                                <div class="product-price">
+                                    <span class="new_price">
+                                        $150.00 <del>$120.00</del> </span>
+                                    <br>
+                                    <span class="off_price text-success">12% Off</span>
+                                </div>
+                            </div>
+                            <div class="cell cell-3" data-label="Delivery">
+                                <p><strong>Delivery: $16.99</strong> <br>
+                                    Delivery between May 7 and May 20</p>
+                            </div>
+                            <div class="cell cell-4" data-label="Services">
+
+                                <ul class="list-services">
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li>
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#freeshipping">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="cell cell-5" data-label="">
+                                <div class="">
+                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
+                                                </use>
+                                            </svg>
+
+                                        </i> Ask a question</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+
                 <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?>
                 <?php $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); ?>
             </div>
             <!-- Don't remove scrollUpTo-js span -->
             <span id="scrollUpTo-js"></span>
-            <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+
             <div class="nav-detail nav-detail-js">
                 <ul>
                     <?php if (count($productSpecifications) > 0) { ?>

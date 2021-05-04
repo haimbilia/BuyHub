@@ -91,7 +91,6 @@
     .section__heading {
         color: $body-color;
         display: inline-block;
-        font-family: $family-primary;
         font-weight: 300;
         h1,
         h2,
@@ -283,7 +282,7 @@
         display: flex;
         align-items: center;
         text-decoration: none;
-        -webkit-transition: all 0.2s linear;
+        
         transition: all 0.2s linear;
         padding: 5px 0;
     }
@@ -318,8 +317,7 @@
             color: #666;
             font-size: 14px;
             padding: 0;
-            -webkit-padding-start: 30px;
-            -moz-padding-start: 30px;
+            
             padding-#{$start-direction}: 30px;
             position: relative;
             min-height: 22px;

@@ -1,9 +1,7 @@
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
   "name": "yokart",
   "version": "1.0.0",
-  "description": "Updates:\r     => Tax Module update",
+  "description": "Multivendor - Released Version : RV-9.3.0\r     => IOS/Android Buyer APP version : 2.0\r     => System API version : 2.3",
   "main": "gulpfile.js",
   "dependencies": {
     "css-loader": "^5.2.0",
@@ -16,12 +14,11 @@
     "node-sass": "^5.0.0",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",
-    "style-loader": "^2.0.0"
-  },
-  "devDependencies": {
+    "style-loader": "^2.0.0",
     "webpack": "^5.28.0",
     "webpack-cli": "^4.6.0"
   },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,79 +26,10 @@
     "type": "git",
     "url": "git+https://github.com/AblySoft268/Yokart-V8.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-=======
-  "name": "yokart-v8",
-  "version": "9.3.0",
-  "description": "Yo!Kart Multivendor Platform",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AblySoft268/Yokart-V8.git"
-  },
-  "keywords": [
-    "yokart"
-  ],
-  "author": "Yo!Kart Multivendor Platform",
-  "license": "ISC",
-  "dependencies": {
-    "@babel/core": "^7.13.14",
-    "@babel/preset-env": "^7.13.12",
-    "autoprefixer": "^9.7.3",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
-    "gulp-cli": "^2.3.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-svg-sprite": "^1.5.0",
-    "node-sass": "^5.0.0"
-  },
-  "browserslist": [
-    "last 10 versions"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js",
-    "web-watch": "webpack --watch"
-  },
->>>>>>> develop
   "bugs": {
     "url": "https://github.com/AblySoft268/Yokart-V8/issues"
   },
   "homepage": "https://github.com/AblySoft268/Yokart-V8#readme"
-<<<<<<< HEAD
-=======
-    "name": "yokart",
-    "version": "1.0.0",
-    "description": "Updates:\r     => Tax Module update",
-    "main": "",
-    "dependencies": {
-        "gulp": "^4.0.2",
-        "gulp-autoprefixer": "^7.0.1",
-        "gulp-cli": "^2.3.0",
-        "gulp-sass": "^4.1.0",
-        "gulp-sourcemaps": "^3.0.0",
-        "node-sass": "^5.0.0"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack --config webpack.config.js",
-        "web-watch": "webpack --watch"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/AblySoft268/Yokart-V8.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/AblySoft268/Yokart-V8/issues"
-    },
-    "homepage": "https://github.com/AblySoft268/Yokart-V8#readme"
->>>>>>> d2029bc69efc0592ad65cae5dc410fbd756c9739
-=======
->>>>>>> develop
 }
