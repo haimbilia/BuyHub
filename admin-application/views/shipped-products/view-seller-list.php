@@ -3,7 +3,8 @@
     <h2 class="block-title"><?php echo Labels::getLabel('LBL_Sellers_List', $adminLangId); ?></h2>
         <?php if($adminShip == false) {
                 if(!empty($sellerNameArr)) {
-                    foreach($sellerNameArr as $sellerName) { ?>
+                    foreach($sellerNameArr as $sellerName) { 
+                        $sellerData = (!empty($sellerName)) ? $sellerName : Labels::getLabel('LBL_No_Seller_who_shipped_this_product', $adminLangId); ?>
                         <p><?php echo $sellerName; ?></p>
                     <?php } ?>
             <?php }else { ?>
@@ -11,8 +12,9 @@
             <?php }
         }else {
             if(!empty($notSelShipArr)) {
-                foreach($notSelShipArr as $sellerName) { ?>
-                    <p><?php echo $sellerName; ?></p>
+                foreach($notSelShipArr as $sellerName) { 
+                    $sellerData = (!empty($sellerName)) ? $sellerName : Labels::getLabel('LBL_No_Seller_who_shipped_this_product', $adminLangId); ?>
+                    <p><?php echo $sellerData; ?></p>
                 <?php } 
             }else { ?>
                 <p><?php echo Labels::getLabel('LBL_No_Seller_who_shipped_this_product', $adminLangId); ?></p>
