@@ -12,6 +12,9 @@ class applicationConstants
     public const ON = 1;
     public const OFF = 0;
 
+    public const SORT_ASC = 'ASC';
+    public const SORT_DESC = 'DESC';
+
     public const SUCCESS = 1;
     public const FAILURE = 0;
 
@@ -146,6 +149,18 @@ class applicationConstants
         return array(
             static::DIGITAL_DOWNLOAD_FILE => Labels::getLabel('LBL_Digital_download_file', $langId),
             static::DIGITAL_DOWNLOAD_LINK => Labels::getLabel('LBL_Digital_download_link', $langId),
+        );
+    }
+
+    public static function sortOrder($langId)
+    {
+        $langId = FatUtility::int($langId);
+        if ($langId < 1) {
+            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
+        }
+        return array(
+            static::SORT_ASC => Labels::getLabel('LBL_ASCENDING', $langId),
+            static::SORT_DESC => Labels::getLabel('LBL_DESCENDING', $langId),
         );
     }
 
@@ -508,7 +523,7 @@ class applicationConstants
             case applicationConstants::CLASS_WARNING:
                 return '#ffb822';
                 break;
-            
+
             default:
                 return '#000000';
                 break;

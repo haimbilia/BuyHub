@@ -13,25 +13,28 @@
                         </div>
                     </div>
                 </div>
-                <?php if (empty($orderDate)) { ?>
-                    <section class="section searchform_filter">
-                        <div class="sectionhead">
-                            <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?>
-                            </h4>
-                        </div>
-                        <div class="sectionbody space togglewrap" style="display:none;">
-                            <?php
-                            $frmSearch->setFormTagAttribute('onsubmit', 'searchSalesReport(this); return(false);');
-                            $frmSearch->setFormTagAttribute('class', 'web_form');
-                            $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-                            $frmSearch->developerTags['fld_default_col'] = 6;
-                            echo  $frmSearch->getFormHtml();
-                            ?>
-                        </div>
-                    </section>
-                <?php  } else {
-                    echo  $frmSearch->getFormHtml();
-                } ?>
+                <section class="section searchform_filter">
+                    <div class="sectionhead">
+                        <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?>
+                        </h4>
+                    </div>
+                    <div class="sectionbody space togglewrap" style="display:none;">
+                        <?php
+                        $frmSearch->setFormTagAttribute('onsubmit', 'searchSalesReport(this); return(false);');
+                        $frmSearch->setFormTagAttribute('class', 'web_form');
+                        $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
+                        $frmSearch->developerTags['fld_default_col'] = 6;
+
+                        $sortBy = $frmSearch->getField('sortBy');
+                        $sortBy->setFieldTagAttribute('id', 'sortBy');
+
+                        $sortOrder = $frmSearch->getField('sortOrder');
+                        $sortOrder->setFieldTagAttribute('id', 'sortOrder');
+
+                        echo  $frmSearch->getFormHtml();
+                        ?>
+                    </div>
+                </section>
                 <section class="section">
                     <div class="sectionhead">
                         <h4><?php echo Labels::getLabel('LBL_Sales_Report', $adminLangId); ?>
@@ -69,7 +72,7 @@
                     </div>
                     <div class="sectionbody">
                         <div class="tablewrap">
-                            <div class="datatable datatable-sticky scroll scroll-x" id="listing">
+                            <div id="listing">
                                 <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?> </div>
                         </div>
                     </div>

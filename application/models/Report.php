@@ -214,6 +214,19 @@ class Report extends SearchBase
         $this->addCondition('order_deleted', '=', applicationConstants::NO);
     }
 
+    public function setOrderBy($key, $sortBy = 'ASC')
+    {
+        if (!array_key_exists($sortBy, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortBy = applicationConstants::SORT_ASC;
+        }
+
+        switch ($key) {
+            default:
+                $this->addOrder($key, $sortBy);
+                break;
+        }
+    }
+
     public function setGroupBy($key)
     {
         switch ($key) {
@@ -242,7 +255,7 @@ class Report extends SearchBase
     {
         // pending NetSales
         $arr = [
-            'orderDate' => 'DATE(o.order_date_added) as order_date',
+            'orderDate' => 'DATE(o.order_date_added) as orderDate',
             'totOrders' => 'ocount.totOrders',
             'totQtys' => 'SUM(op_qty) as totQtys',
             'totRefundedQtys' => 'SUM(op_refund_qty) as totRefundedQtys',

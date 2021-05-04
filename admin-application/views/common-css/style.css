@@ -12416,6 +12416,13 @@ form[name="frmShippingProfile"] {
   font-weight: 700;
   font-size: 1.125rem; }
 /*sticky table*/
+
+:root{
+  --border-color:#eee;
+  --txt-gray:#4e4e4e;
+  --bg-white:#FFF;
+}
+
   .datatable_cell {
     overflow-wrap: break-word; }
     .datatable_cell-sort {
@@ -12502,7 +12509,7 @@ form[name="frmShippingProfile"] {
     z-index: 1;
     margin: auto;
     overflow: auto;
-    height: 650px; }
+      }
     .datatable-sticky table {
       font-size: 0.9rem;
       width: 100%;
@@ -12518,13 +12525,15 @@ form[name="frmShippingProfile"] {
         font-weight: 600;
         background: var(--bg-white); }
       .datatable-sticky table tr {
-        border-bottom: solid 1px var(--border-color); }
+        border-bottom: solid 1px  var(--border-color); }
       .datatable-sticky table th,
       .datatable-sticky table td {
         padding: 1rem 25px;
         color: var(--txt-gray);
         vertical-align: top;
         font-weight: 300; }
+
+        .datatable-sticky table a{ color: var(--txt-gray);}
   
   .scroll {
     overflow: auto;
