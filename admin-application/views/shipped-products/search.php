@@ -3,7 +3,8 @@
 $arr_flds = array(
     'listserial'    =>    Labels::getLabel('LBL_#', $adminLangId),
     'product_name' => Labels::getLabel('LBL_product_name', $adminLangId),
-    'total_seller_ship' => Labels::getLabel('LBL_Shipped_By_Seller', $adminLangId),
+    'total_seller_ship' => Labels::getLabel('LBL_Products_Shipped_By_Seller', $adminLangId),
+    'total_admin_seller_ship' => Labels::getLabel('LBL_Products_Shipped_By_Admin', $adminLangId),
     'shipprofile_name' => Labels::getLabel('LBL_shipping_profile', $adminLangId),
     'action' => '',
 );
@@ -16,13 +17,17 @@ foreach ($arr_flds as $val) {
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
-    $cartData = !empty($row['order_cart_data']) ? json_decode(trim($row['order_cart_data']), true) : [];
-    $checkoutType = !empty($cartData) ? $cartData['shopping_cart']['checkout_type'] : Shipping::FULFILMENT_SHIP;
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
+                break;
+            case 'total_seller_ship':
+                $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
+                break;
+            case 'total_admin_seller_ship':
+                $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewAdminSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
                 break;
             case 'action':
                 if($canEdit) {

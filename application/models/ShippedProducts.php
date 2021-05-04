@@ -1,21 +1,19 @@
 <?php
 class ShippedProducts extends SearchBase
 {
-    public function __construct(int $selProd = 0)
+    public function __construct()
     {
-        if($selProd == applicationConstants::YES) {
-            parent::__construct(SellerProduct::DB_TBL, 'sp');
-        }else {
-            parent::__construct(ShippingProfileProduct::DB_TBL, 'sppro');
-        }
+        parent::__construct(Product::DB_TBL, 'tp');
     }
-    public function joinProduct(int $joinSellerProd = 0)
+
+    public function joinSelProdTable()
     {
-        if($joinSellerProd == applicationConstants::YES) {
-            $this->joinTable(Product::DB_TBL, 'LEFT OUTER JOIN', 'tp.product_id = sp.selprod_product_id', 'tp');
-        }else {
-            $this->joinTable(Product::DB_TBL, 'LEFT OUTER JOIN', 'tp.product_id = sppro.shippro_product_id', 'tp');
-        }
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN','sp.selprod_product_id = tp.product_id', 'sp');
+    }
+
+    public function joinShipProfileProd()
+    {
+        $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN','sppro.shippro_product_id = tp.product_id', 'sppro');
     }
 
     public function joinProductLang(int $landId = 0)

@@ -20,7 +20,7 @@
                     </div>
                     <div class="sectionbody space togglewrap" style="display:none;">
                         <?php
-                        $frmSearch->setFormTagAttribute('onsubmit', 'searchShippedProducts(this); return(false);');
+                        $frmSearch->setFormTagAttribute('onsubmit', 'searchShippedProducts(this, 1); return(false);');
                         $frmSearch->setFormTagAttribute('class', 'web_form');
                         $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
                         $frmSearch->developerTags['fld_default_col'] = 4;
