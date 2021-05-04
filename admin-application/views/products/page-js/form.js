@@ -602,6 +602,49 @@ saveDownloadFiles = function()
     });
 }
 
+attachDigitalPreviewFile = function (option, langId, refId)
+{
+    $(".option-comb-id-js").val(option);
+    $(".file-language-js").val(langId);
+    $('#frmDownload input[name=dd_link_ref_id]').val(refId);
+
+    $(".downloadable_file_input").hide();
+    $("#attachement_upload_btn").attr('onclick', 'saveDigitalPreviewFile(); return false;');
+
+
+}
+saveDigitalPreviewFile = function()
+{
+    var data = new FormData();
+    $inputs = $('#frmDownload select,#frmDownload input[type=hidden]');
+    $inputs.each(function() { data.append( this.name,$(this).val());});
+    var productId = $("input[name='product_id']").val();
+    $.each( $('#preview_file')[0].files, function(i, file) {
+        data.append('preview_file', file);
+    });
+
+    $.ajax({
+        url : fcom.makeUrl('Products', 'setupDigitalPreviewFile'),
+        type: "POST",
+        data : data,
+        processData: false,
+        contentType: false,
+        success: function(t){
+            var ans = $.parseJSON(t);
+            if( ans.status == 0 ){
+                $.systemMessage( ans.msg,'alert alert--danger' );
+                return;
+            }
+            $.systemMessage( ans.msg,'alert alert--success' );
+            downloadsForm(productId, 0, true);
+            getDigitalDownloads();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert("Error Occurred.");
+        }
+    });
+}
+
 getDigitalDownloads = function()
 {
     var productId = $('#frmDownload input[name=product_id]').val();
@@ -647,12 +690,14 @@ deleteDigitallink = function(linkId, refId)
     });
 }
 
-deleteDigitalFile = function(prod_id, afile_id)
+deleteDigitalFile = function(afile_id, prod_id)
 {
     var agree = confirm(langLbl.confirmDelete);
     if( !agree ){ return false; }
-    fcom.ajax( fcom.makeUrl( 'SellerProducts', 'deleteDigitalFile', [prod_id, afile_id] ), '' , function(t) {
-        var ans = $.parseJSON(t);
+
+    var data = '&afile_id=' + afile_id + '&ref_id=' + prod_id;
+    fcom.ajax( fcom.makeUrl( 'Products', 'deleteDigitalFile'), data , function(res) {
+        var ans = $.parseJSON(res);
         if( ans.status == 1 ){
             fcom.displaySuccessMessage(ans.msg);
         } else {

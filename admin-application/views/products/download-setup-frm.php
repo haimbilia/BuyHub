@@ -10,6 +10,7 @@ $fld->addFieldTagAttribute('class', 'product_preview_link');
 
 $fld = $downloadFrm->getField('attachement_upload_btn');
 $fld->addFieldTagAttribute('onclick', 'saveDownloadFiles();');
+$fld->addFieldTagAttribute('id', 'attachement_upload_btn');
 
 $fld = $downloadFrm->getField('attachment_link_btn');
 $fld->addFieldTagAttribute('id', 'attachment_link_btn');
@@ -132,7 +133,7 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
             </div>
             <div class="attach-files-js">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 downloadable_file_input">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">

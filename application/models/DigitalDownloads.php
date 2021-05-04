@@ -100,6 +100,32 @@ class DigitalDownloads extends MyAppModel
         return true;
     }
 
+    public function deleteAttachment($aFileId, $refId)
+    {
+        $aFileObj = new AttachedFile();
+        
+        if (false == $aFileObj->deleteFile(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $refId, $aFileId)) {
+            $this->error = $aFileObj->getError();
+            return false;
+        }
+
+        $this->deletePreviewAttachment($refId, $aFileId);
+
+        return true;
+    }
+
+    public function deletePreviewAttachment($recordId, $subRecordId)
+    {
+        $aFileObj = new AttachedFile();
+        
+        if (false == $aFileObj->deleteFile(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW, $recordId, 0, $subRecordId)) {
+            $this->error = $aFileObj->getError();
+            return false;
+        }
+
+        return true;
+    }
+
     public function deleteReference($refId)
     {
         $whr = [
@@ -115,6 +141,30 @@ class DigitalDownloads extends MyAppModel
         }
 
         return true;
+    }
+
+    public function saveAttachment($file, $fileName, $recId, $subRecId, $langId, $isPreview = false)
+    {
+        $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD;
+        if (true === $isPreview) {
+            $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW;
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        if ($res = $fileHandlerObj->saveAttachment(
+            $file,
+            $fileType,
+            $recId,
+            $subRecId,
+            $fileName,
+            -1,
+            false,
+            $langId
+        )) {
+            return $fileHandlerObj->getMainTableRecordId();
+        }
+        $this->error = $fileHandlerObj->getError();
+        return 0;
     }
 
     public static function allowedWithCatalog($productId)
