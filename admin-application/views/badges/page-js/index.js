@@ -166,47 +166,63 @@ $(document).ready(function () {
     };
 
     uploadBadgeImages = function (formData) {
-		var frmName = formData.get("frmName");
-		var slideScreen = 0;
-		var badgeId = $("[name='badge_id']").val();
-		var badgeType = $("[name='badge_type']").val();
-		var afileId = $("#icon-image-listing li").attr('id');
+        var frmName = formData.get("frmName");
+        var slideScreen = 0;
+        var badgeId = $("[name='badge_id']").val();
+        var badgeType = $("[name='badge_type']").val();
+        var afileId = $("#icon-image-listing li").attr('id');
         var langId = $("[name='icon_lang_id']").val();
         var fileType = $("[name='icon_file_type']").val();
         var imageType = 'icon';
 
-		formData.append('badge_id', badgeId);
-		formData.append('badge_type', badgeType);
-		formData.append('slide_screen', slideScreen);
-		formData.append('lang_id', langId);
-		formData.append('file_type', fileType);
-		formData.append('afile_id', afileId);
-		$.ajax({
-			url: fcom.makeUrl(controller, 'setUpImages'),
-			type: 'post',
-			dataType: 'json',
-			data: formData,
-			cache: false,
-			contentType: false,
-			processData: false,
-			beforeSend: function () {
-				$('#loader-js').html(fcom.getLoader());
-			},
-			complete: function () {
-				$('#loader-js').html(fcom.getLoader());
-			},
-			success: function (ans) {
-				if (ans.status == 1) {
-					fcom.displaySuccessMessage(ans.msg);
-					categoryImages(prodcatId, imageType, slideScreen, langId);
-				} else {
-					fcom.displayErrorMessage(ans.msg);
-				}
-				$(document).trigger('close.facebox');
-			},
-			error: function (xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
-	}
+        formData.append('badge_id', badgeId);
+        formData.append('badge_type', badgeType);
+        formData.append('slide_screen', slideScreen);
+        formData.append('lang_id', langId);
+        formData.append('file_type', fileType);
+        formData.append('afile_id', afileId);
+        $.ajax({
+            url: fcom.makeUrl(controller, 'setUpImages'),
+            type: 'post',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $('#loader-js').html(fcom.getLoader());
+            },
+            complete: function () {
+                $('#loader-js').html(fcom.getLoader());
+            },
+            success: function (ans) {
+                if (ans.status == 1) {
+                    fcom.displaySuccessMessage(ans.msg);
+                    var langId = $('.icon-language-js').val();
+                    var attachFileId = ans.attachFileId;
+                    var JSONObj = { langId: attachFileId };
+
+                    var attachmentId = $('input[name="attachment_id"]').val();
+                    if ('' != attachmentId) {
+                        // attachFileId += attachmentId + ',' + attachFileId;
+                    }
+                    $('input[name="attachment_id"]').val(attachFileId);
+
+                    var attachFileLangId = $('.icon-language-js').val();
+                    var attachmentLangId = $('input[name="attachment_id"]').val();
+                    if ('' != attachmentLangId) {
+                        attachFileLangId += attachmentLangId + ',' + attachFileLangId;
+                    }
+                    $('input[name="attachment_lang_id"]').val(attachFileLangId);
+                    // categoryImages(prodcatId, imageType, slideScreen, langId);
+                } else {
+                    fcom.displayErrorMessage(ans.msg);
+                }
+                $(document).trigger('close.facebox');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    }
 })()

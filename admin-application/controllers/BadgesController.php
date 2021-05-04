@@ -30,7 +30,8 @@ class BadgesController extends AdminBaseController
         $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
 
-        $this->_template->addJs('js/jscolor.js');
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jscolor.js'));
+        $this->_template->addCss(['css/cropper.css']);
         $this->_template->render();
     }
 
@@ -179,6 +180,8 @@ class BadgesController extends AdminBaseController
             $frm->addHiddenField('', 'logo_min_width');
             $frm->addHiddenField('', 'logo_min_height');
             $frm->addFileUpload(Labels::getLabel('LBL_UPLOAD', $this->adminLangId), 'badge_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
+            $frm->addHiddenField('', 'attachment_id');
+            $frm->addHiddenField('', 'attachment_lang_id');
         }
         
         if (Badge::TYPE_RIBBON == $type) {
@@ -370,6 +373,7 @@ class BadgesController extends AdminBaseController
         }
         
         // ProductCategory::setImageUpdatedOn($prodcat_id);  // Check if required
+        $this->set('attachFileId', $fileHandlerObj->getMainTableRecordId());
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('badge_id', $badge_id);
         $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->adminLangId));
