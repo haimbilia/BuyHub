@@ -216,13 +216,19 @@ class Badge extends MyAppModel
 
         if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name'])) {
             foreach ($post[Badge::DB_TBL_PREFIX . 'name'] as $langId => $name) {
-                if (empty($name)) {
+                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                $tranlateToOtherLang = array_key_exists('auto_update_other_langs_data', $post) ? $post['auto_update_other_langs_data'] : 0;
+                if (empty($name) && !empty($translatorSubscriptionKey) && 0 < $tranlateToOtherLang) {
                     $updateLangDataobj = new TranslateLangData(self::DB_TBL_LANG);
                     $translatedText = $updateLangDataobj->directTranslate([Badge::DB_TBL_PREFIX . 'name' => $recordData[Badge::DB_TBL_PREFIX . 'identifier']]);
                     if (false === $translatedText) {
                         continue;
                     }
                     $name = current($translatedText)[Badge::DB_TBL_PREFIX . 'name'];
+                }
+
+                if (empty($name)) {
+                    continue;
                 }
 
                 $recordLangData = [
@@ -232,7 +238,6 @@ class Badge extends MyAppModel
                 ];
                 
                 if (!$this->updateLangData($langId, $recordLangData)) {
-                    echo $this->getError();die;
                     continue;
                 }
             }

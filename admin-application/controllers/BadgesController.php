@@ -97,7 +97,9 @@ class BadgesController extends AdminBaseController
                     if (in_array($key, Badge::ATTR) && !array_key_exists($key, $dataToFill)) {
                         $dataToFill[$key] = $value;
                     } else if (in_array($key, Badge::LANG_ATTR)) {
-                        if (Badge::DB_TBL_PREFIX . 'name' == $key) { continue; }
+                        if (Badge::DB_TBL_PREFIX . 'name' == $key) {
+                            continue;
+                        }
 
                         $dataToFill[Badge::DB_TBL_PREFIX . 'name'][$value] = $data[Badge::DB_TBL_PREFIX . 'name'];
                     }
@@ -135,14 +137,25 @@ class BadgesController extends AdminBaseController
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
-
         $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $attachments = FatApp::getPostedData('attachment_ids', FatUtility::VAR_STRING, '');
 
         $record = new Badge($badgeId);
         if (!$record->add($post)) {
             FatUtility::dieJsonError($record->getError());
         }
         $badgeId = $record->getMainTableRecordId();
+
+        if (!empty($attachments)) {
+            $attachmentIdsArr = json_decode($attachments, true);
+            if (!empty($attachmentIdsArr)) {
+                foreach ($attachmentIdsArr as $langId => $aFileId) {
+                    $badgeRecord = ['afile_record_id' => $badgeId];
+                    $where = array('smt' => 'afile_id = ? AND afile_lang_id = ?', 'vals' => [$aFileId, $langId]);
+                    FatApp::getDb()->updateFromArray(AttachedFile::DB_TBL, $badgeRecord, $where);
+                }
+            }
+        }
 
         $this->set('badge_id', $badgeId);
         $this->set('badge_type', $badgeType);
@@ -180,10 +193,9 @@ class BadgesController extends AdminBaseController
             $frm->addHiddenField('', 'logo_min_width');
             $frm->addHiddenField('', 'logo_min_height');
             $frm->addFileUpload(Labels::getLabel('LBL_UPLOAD', $this->adminLangId), 'badge_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
-            $frm->addHiddenField('', 'attachment_id');
-            $frm->addHiddenField('', 'attachment_lang_id');
+            $frm->addHiddenField('', 'attachment_ids');
         }
-        
+
         if (Badge::TYPE_RIBBON == $type) {
             $badgeShapeTypes = Badge::getShapeTypesArr($this->adminLangId);
             $fld = $frm->addSelectBox(Labels::getLabel('LBL_SHAPE', $this->adminLangId), 'badge_shape_type', $badgeShapeTypes);
@@ -191,7 +203,6 @@ class BadgesController extends AdminBaseController
             $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
         }
 
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $langData = Language::getAllNames();
         foreach ($langData as $langId => $data) {
@@ -200,7 +211,8 @@ class BadgesController extends AdminBaseController
                 $fld->requirement->setRequired(true);
             }
         }
-
+        
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         unset($langData[$siteDefaultLangId]);
         if (!empty($translatorSubscriptionKey) && count($langData) > 0) {
             $frm->addCheckBox(Labels::getLabel('LBL_TRANSLATE_TO_OTHER_LANGUAGES', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
@@ -313,7 +325,7 @@ class BadgesController extends AdminBaseController
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
-        
+
         foreach ($badgeIdsArr as $badge_id) {
             if (1 > $badge_id) {
                 continue;
@@ -371,8 +383,7 @@ class BadgesController extends AdminBaseController
         )) {
             FatUtility::dieJsonError($fileHandlerObj->getError());
         }
-        
-        // ProductCategory::setImageUpdatedOn($prodcat_id);  // Check if required
+
         $this->set('attachFileId', $fileHandlerObj->getMainTableRecordId());
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('badge_id', $badge_id);
@@ -395,9 +406,21 @@ class BadgesController extends AdminBaseController
             FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
-        // ProductCategory::setImageUpdatedOn($prodCatId); // Check if required
         $this->set('imageType', $imageType);
         $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function images($badge_id, $imageType = '', $lang_id = 0, $slide_screen = 0)
+    {
+        $canEdit = $this->objPrivilege->canEditBadges(0, true);
+        $badge_id = FatUtility::int($badge_id);
+        $lang_id = FatUtility::int($lang_id);
+        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badge_id, 0, $lang_id, false);
+        $this->set('icon', $icon);
+        $this->set('imageType', $imageType);
+        $this->set('languages', Language::getAllNames());
+        $this->set('canEdit', $canEdit);
+        $this->_template->render(false, false);
     }
 }

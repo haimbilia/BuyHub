@@ -3,6 +3,12 @@ $(document).ready(function () {
 
 });
 
+$(document).on('change', '.icon-language-js', function () {
+    var badge_id = $("input[name='badge_id']").val();
+    if ('' == badge_id) { badge_id = 0; }
+    badgeImages(badge_id, 'icon', 0, $(this).val());
+});
+
 (function () {
     var dv = '#listing';
     var controller = 'Badges';
@@ -36,6 +42,11 @@ $(document).ready(function () {
         fcom.ajax(fcom.makeUrl(controller, 'form', [badge_id, type]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
+            if ('' != $("input[name='badge_id']").val()) {
+                var badge_id = $("input[name='badge_id']").val();
+                if ('' == badge_id) { badge_id = 0; }
+                badgeImages(badge_id, 'icon', 0, $('.icon-language-js').val());
+            }
         });
     };
 
@@ -169,6 +180,7 @@ $(document).ready(function () {
         var frmName = formData.get("frmName");
         var slideScreen = 0;
         var badgeId = $("[name='badge_id']").val();
+        if ('' == badgeId) { badgeId = 0; }
         var badgeType = $("[name='badge_type']").val();
         var afileId = $("#icon-image-listing li").attr('id');
         var langId = $("[name='icon_lang_id']").val();
@@ -199,22 +211,16 @@ $(document).ready(function () {
                 if (ans.status == 1) {
                     fcom.displaySuccessMessage(ans.msg);
                     var langId = $('.icon-language-js').val();
-                    var attachFileId = ans.attachFileId;
-                    var JSONObj = { langId: attachFileId };
+                    var JSONObj = { [langId]: ans.attachFileId };
 
-                    var attachmentId = $('input[name="attachment_id"]').val();
-                    if ('' != attachmentId) {
-                        // attachFileId += attachmentId + ',' + attachFileId;
+                    var attachmentIds = $('input[name="attachment_ids"]').val();
+                    if ('' != attachmentIds) {
+                        JSONObj = JSON.parse(attachmentIds);
+                        JSONObj[langId] = ans.attachFileId;
                     }
-                    $('input[name="attachment_id"]').val(attachFileId);
+                    $('input[name="attachment_ids"]').val(JSON.stringify(JSONObj));
 
-                    var attachFileLangId = $('.icon-language-js').val();
-                    var attachmentLangId = $('input[name="attachment_id"]').val();
-                    if ('' != attachmentLangId) {
-                        attachFileLangId += attachmentLangId + ',' + attachFileLangId;
-                    }
-                    $('input[name="attachment_lang_id"]').val(attachFileLangId);
-                    // categoryImages(prodcatId, imageType, slideScreen, langId);
+                    badgeImages(badgeId, imageType, slideScreen, langId);
                 } else {
                     fcom.displayErrorMessage(ans.msg);
                 }
@@ -225,4 +231,23 @@ $(document).ready(function () {
             }
         });
     }
+
+    badgeImages = function (badge_id, imageType, slide_screen, lang_id) {
+        fcom.ajax(fcom.makeUrl(controller, 'images', [badge_id, imageType, lang_id, slide_screen]), '', function (t) {
+            $('.uploadedImage--js').replaceWith(t);
+        });
+    };
+
+    deleteImage = function (fileId, badge_id, imageType, langId, slide_screen) {
+        if (!confirm(langLbl.confirmDeleteImage)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'removeImage', [fileId, badge_id, imageType, langId, slide_screen]), '', function (t) {
+            $('.uploadedImage--js').html('');
+            var attachmentIds = $('input[name="attachment_ids"]').val();
+            if ('' != attachmentIds) {
+                JSONObj = JSON.parse(attachmentIds);
+                delete JSONObj[langId];
+                $('input[name="attachment_ids"]').val(JSON.stringify(JSONObj));
+            }
+        });
+    };
 })()
