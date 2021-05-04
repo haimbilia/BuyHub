@@ -11,6 +11,11 @@ class ShippedProducts extends SearchBase
         $this->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN','sp.selprod_product_id = tp.product_id', 'sp');
     }
 
+    public function joinSellerShop()
+    {
+        $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN',' sp.selprod_user_id = shop.shop_user_id', 'shop');
+    }
+
     public function joinShipProfileProd()
     {
         $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN','sppro.shippro_product_id = tp.product_id', 'sppro');

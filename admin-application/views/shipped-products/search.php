@@ -3,8 +3,8 @@
 $arr_flds = array(
     'listserial'    =>    Labels::getLabel('LBL_#', $adminLangId),
     'product_name' => Labels::getLabel('LBL_product_name', $adminLangId),
-    'total_seller_ship' => Labels::getLabel('LBL_Products_Shipped_By_Seller', $adminLangId),
-    'total_admin_seller_ship' => Labels::getLabel('LBL_Products_Shipped_By_Admin', $adminLangId),
+    'total_seller_ship' => Labels::getLabel('LBL_Shipped_By_Seller', $adminLangId),
+    'total_admin_seller_ship' => Labels::getLabel('LBL_Shipped_By_Admin', $adminLangId),
     'shipprofile_name' => Labels::getLabel('LBL_shipping_profile', $adminLangId),
     'action' => '',
 );
@@ -24,10 +24,18 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'total_seller_ship':
-                $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
+                if($row[$key] > 0) {
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
+                }else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
                 break;
             case 'total_admin_seller_ship':
-                $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewAdminSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
+                if($row[$key] > 0) {
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewAdminSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
+                }else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
                 break;
             case 'action':
                 if($canEdit) {
