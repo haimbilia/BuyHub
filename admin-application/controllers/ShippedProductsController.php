@@ -69,7 +69,7 @@ class ShippedProductsController extends AdminBaseController
                 $allProd->addMultipleFields(array('u.user_name'));
                 $res = $allProd->getResultSet();
                 $allRecords = FatApp::getDb()->fetchAll($res);
-                $totalProductsCount = (count($allRecords) && !empty($allRecords[0]['user_name'])) ? count($allRecords) : 0;
+                $totalProductsCount = (count($allRecords) > 0 && !empty($allRecords[0]['user_name'])) ? count($allRecords) : 0;
 
                 $selProd = clone $allProd;
                 $selProd->joinShippedBySeller();
