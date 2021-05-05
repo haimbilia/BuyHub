@@ -45,6 +45,12 @@
 
                             </a>
                         </li>
+                        <li id="tab_006" style="display: block;">
+                            <a rel="tabs_006" class="tabs_006" href="javascript:void(0)" >
+                                <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
+                                <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Catalog_Inventory_Based_Downloads', $siteLangId); ?>"></i>
+                            </a>
+                        </li>
                     </ul>
 
                     <?php /* if (0 < $preqId && !User::isCatalogRequestSubmittedForApproval($preqId)) {?>
@@ -62,6 +68,7 @@
                         <div id="tabs_003" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_004" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_005" class="tabs_panel" style="display: none;"></div>
+                        <div id="tabs_006" class="tabs_panel" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -70,10 +77,25 @@
     </div>
 </main>
 <script>
+    var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
+    var PRODUCT_TYPE_PHYSICAL = '<?php echo Product::PRODUCT_TYPE_PHYSICAL; ?>';
+    var product_type =  '<?php echo $productType; ?>';
+
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
+    var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
     $(document).ready(function() {
         customCatalogProductForm(<?php echo $preqId; ?>);
+        if(product_type == PRODUCT_TYPE_DIGITAL){
+            if (0 == attachDownloadsWithInv) {
+                showDownloadTab();
+            } else {
+                hideDownloadTab();
+            }
+        } else {
+            hideDownloadTab();
+        }
+
         hideShippingTab('<?php echo $productType; ?>', '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>');
     });
 </script>

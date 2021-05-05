@@ -1028,14 +1028,17 @@ trait CustomCatalogProducts
         $this->canAddCustomCatalogProduct(true);
         $preqId = FatUtility::int($preqId);
         $productType = 0;
+        $attachDownloadsWithInv = 0;
         if (0 < $preqId) {
             $productReqContent = ProductRequest::getAttributesById($preqId, 'preq_content');
             if (!empty($productReqContent)) {
                 $productData = json_decode($productReqContent, true);
                 $productType = array_key_exists('product_type', $productData) ? $productData['product_type'] : 0;
+                $attachDownloadsWithInv = array_key_exists('product_download_attachements_with_inventory', $productData) ? $productData['product_download_attachements_with_inventory'] : 0;
             }
         }
         $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->set('preqId', $preqId);
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
 

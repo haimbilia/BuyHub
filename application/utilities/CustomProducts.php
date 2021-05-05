@@ -1434,13 +1434,19 @@ trait CustomProducts
             }
         }
 
-        $productType = Product::getAttributesById($prodId, 'product_type');
+        // $productType = Product::getAttributesById($prodId, 'product_type');
+        $prodData = Product::getAttributesById($prodId, ['product_type', 'product_download_attachements_with_inventory']);
+
+        $productType = $prodData['product_type'];
+        $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+
         $refererUrl =  CommonHelper::redirectUserReferer(true);
         $arr = array_values(array_filter(explode('/', $refererUrl)));
         array_shift($arr);
         array_shift($arr);
 
         $this->set('previousAction', (isset($arr[1])) ? $arr[1] : 'index');
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->set('productId', $prodId);
         $this->set('productType', $productType);
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));

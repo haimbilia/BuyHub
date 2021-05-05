@@ -1065,6 +1065,12 @@ class ProductsController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
+        /* TODO:
+            1) in case productid > 0 (edit product) need to check
+                a) product_download_attachements_with_inventory is yes and attachments/links added with product catalog then return with error to remove the links/files first.
+                b) a) product_download_attachements_with_inventory is no and attachments/links added with inventory then return with error to remove the links/files first.
+        */
+
         if ($post['product_download_attachements_with_inventory'] < 0 || $post['product_download_attachements_with_inventory'] > 1) {
             $post['product_download_attachements_with_inventory'] = 0;
         }
