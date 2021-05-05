@@ -1,10 +1,10 @@
 <div class="delivery-term">
     <div id="catalogToolTip">
     <h2 class="block-title"><?php echo Labels::getLabel('LBL_Sellers_List', $adminLangId); ?></h2>
-        <?php /* $arr_flds = array(
+        <?php $arr_flds = array(
             'listserial'    =>    Labels::getLabel('LBL_#', $adminLangId),
             'user_name' => Labels::getLabel('LBL_Seller_name', $adminLangId),
-            'shipprofile_name' => Labels::getLabel('LBL_shipping_profile', $adminLangId),
+            'shop_identifier' => Labels::getLabel('LBL_shop_name', $adminLangId),
         );
         $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
         $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -22,7 +22,10 @@
                         $td->appendElement('plaintext', array(), $sr_no++);
                         break;
                     case 'user_name':
-                        $td->appendElement('plaintext', array(), $row[$key], true);
+                        $td->appendElement('plaintext', array(), $sn, true);
+                        break;
+                    case 'shop_identifier':
+                        $td->appendElement('plaintext', array(), $row, true);
                         break;
                     default:
                         $td->appendElement('plaintext', array(), $row[$key], true);
@@ -30,27 +33,9 @@
                 }
             }
         }
-        if (count($sellerNameArr) == 0) {
+        if (count($allSelData) == 0) {
             $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
         }
-        echo $tbl->getHtml(); */
-        
-
-        if($adminShip == false) {
-            if(!empty($sellerNameArr)) {
-                array_unique($sellerNameArr);
-                foreach($sellerNameArr as $sellerInfo) { 
-                        // $data = array_unique($sellerInfo);
-                    ?>
-                    <p><?php echo $sellerInfo; ?></p>
-                <?php } ?>
-            <?php }
-        }else {
-            if(!empty($notSelShipArr)) {
-                foreach($notSelShipArr as $sellerInfo) { ?>
-                    <p><?php echo $sellerInfo; ?></p>
-                <?php } 
-            }
-        } ?>
+        echo $tbl->getHtml(); ?>
     </div>
 </div>

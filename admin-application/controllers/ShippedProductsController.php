@@ -108,12 +108,16 @@ class ShippedProductsController extends AdminBaseController
 
         /* Get all Products */
         $allProd = new ShippedProducts();
+        $allProd->joinShipProfileProd();
+        $allProd->joinShippingProfile();
         $allProd->joinSelProdTable();
+        $allProd->joinSellerShop();
         $allProd->joinUserTable();
         $allProd->addProductDeletedCondition();
         $allProd->addPhyProductCheckCondition();
         $allProd->addCondition('tp.product_id', '=', $productId);
-        $allProd->addMultipleFields(array('u.user_name, u.user_id'));
+        // $allProd->addCondition('sppro.shippro_user_id', '!=', '0');
+        $allProd->addMultipleFields(array('u.user_name, u.user_id, shop.shop_identifier,  spprof.shipprofile_name'));
         /* End here */
 
         /* Get Catelog shipped by seller */
@@ -121,9 +125,12 @@ class ShippedProductsController extends AdminBaseController
         $selProd->joinShippedBySeller();
         $resu = $selProd->getResultSet();
         $selRecords = FatApp::getDb()->fetchAll($resu);
-        $selArr = [];
+        $mainArr = [];
         if(!empty($selRecords)) {
             $selArr = array_unique(array_column($selRecords, 'user_name'));
+            $shopArr = array_unique(array_column($selRecords, 'shop_identifier'));
+            // $shipProdArr = array_unique(array_column($selRecords, 'shipprofile_name'));
+            $mainArr = array_combine($selArr, $shopArr);
         }
         /* End here */
 
@@ -136,15 +143,17 @@ class ShippedProductsController extends AdminBaseController
             }
             $resu = $selProd->getResultSet();
             $notShipRecords = FatApp::getDb()->fetchAll($resu);
-            $notSelShipArr = [];
+            $maindataArr = [];
             if(!empty($notShipRecords)) {
                 $notSelShipArr = array_unique(array_column($notShipRecords, 'user_name'));
+                $selshopArr = array_unique(array_column($notShipRecords, 'shop_identifier'));
+                $maindataArr = array_combine($notSelShipArr, $selshopArr);
             }
-            $this->set('notSelShipArr', $notSelShipArr);
+            $this->set('notSelShipArr', $maindataArr);
         }
         /* End here */
-
-        $this->set('sellerNameArr', $selArr);
+        $this->set('sellerNameArr', $mainArr);
+        $this->set('sellerNameArr', $mainArr);
         $this->set('adminShip', $adminShip);
         $this->set('adminLangId', $this->adminLangId);
         $this->_template->render(false, false);
