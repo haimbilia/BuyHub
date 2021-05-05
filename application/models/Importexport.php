@@ -1598,7 +1598,7 @@ class Importexport extends ImportexportCommon
             $weightUnitsArr = array_flip($weightUnitsArr);
         }
 
-        $shippingProfileArr = ShippingProfile::getProfileArr(0, true, true, true);
+        $shippingProfileArr = ShippingProfile::getProfileArr($langId, 0, true, true, true);
         $adminDefaultShipProfileId =  array_key_first($shippingProfileArr);
         $coloumArr = $this->getProductsCatalogColoumArr($langId, $sellerId, $this->actionType);
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);

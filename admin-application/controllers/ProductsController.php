@@ -1358,7 +1358,7 @@ class ProductsController extends AdminBaseController
         $frm = new Form('frmProductShipping');
         $productData = Product::getAttributesById($productId, ['product_type', 'product_seller_id']);
 
-        $shipProfileArr = ShippingProfile::getProfileArr($shippedByUserId, true, true);
+        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, $shippedByUserId, true, true);
         $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
