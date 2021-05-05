@@ -140,7 +140,7 @@ class ShopSearch extends SearchBase
         $srch = new SelProdReviewSearch();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->joinSelProdRatingByType(SelProdRating::TYPE_PRODUCT);
+        $srch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
         $srch->addGroupby('spreview_seller_user_id');
         $srch->addMultipleFields(array('count(spreview_id) as totReviews', 'spreview_seller_user_id'));
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'spreview.spreview_seller_user_id = s.shop_user_id', 'spreview');
@@ -150,12 +150,18 @@ class ShopSearch extends SearchBase
     public function addRatingsCount()
     {
         $srch = new SelProdReviewSearch();
+        $srch->joinSeller();
+        $srch->joinSellerProducts();
+        $srch->joinSelProdRating();
+        $srch->joinOrderProduct();
+        $srch->joinOrderProductShipping();
+        $srch->addMultipleFields(array('ROUND(AVG(sprating_rating),2) as avg_rating', 'spreview_seller_user_id'));
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->joinSelProdRating();
-        $srch->addCondition('sprating_rating_type', 'in', array(SelProdRating::TYPE_SELLER_SHIPPING_QUALITY, SelProdRating::TYPE_SELLER_STOCK_AVAILABILITY, SelProdRating::TYPE_SELLER_PACKAGING_QUALITY));
+        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addGroupby('spreview_seller_user_id');
-        $srch->addMultipleFields(array('avg(sprating_rating) as avg_rating', 'spreview_seller_user_id', 'sprating_rating'));
+
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'sprating.spreview_seller_user_id = s.shop_user_id', 'sprating');
         $this->addFld('IFNULL(sprating.avg_rating, 0) as totRating');
     }
