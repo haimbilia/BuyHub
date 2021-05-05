@@ -12423,3 +12423,13 @@ form[name="frmShippingProfile"] {
           max-width: 16px;
           flex: 0 0 16px;
       }
+        .color-pill {
+          width: 35px;
+          height: 16px;
+          border-radius: 10px;
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 5px;
+          max-width: 35px;
+          flex: 1 0 16px;
+      }

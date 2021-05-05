@@ -60,7 +60,8 @@ $(document).on('change', '.icon-language-js', function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             reloadList();
-            form(t.badge_id, t.badge_type);
+            // form(t.badge_id, t.badge_type);
+            backToListing();
         });
     };
 

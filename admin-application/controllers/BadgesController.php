@@ -62,10 +62,6 @@ class BadgesController extends AdminBaseController
             $srch->addTypesCondition([$badgeType]);
         }
 
-        $badgeShapeType = $post['badge_shape_type'];
-        if (!empty($badgeShapeType)) {
-            $srch->addShapeTypesCondition([$badgeShapeType]);
-        }
         $srch->descOrder();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
@@ -170,9 +166,6 @@ class BadgesController extends AdminBaseController
 
         $badgeTypes = Badge::getTypeArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'badge_type', $badgeTypes);
-
-        $badgeShapeTypes = Badge::getShapeTypesArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_SHAPE_TYPE', $this->adminLangId), 'badge_shape_type', $badgeShapeTypes);
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
@@ -301,7 +294,7 @@ class BadgesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function autoComplete()
+    public function autoComplete(int $badgeType = 0)
     {
         $pagesize = 20;
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
@@ -311,6 +304,11 @@ class BadgesController extends AdminBaseController
         if (!empty($keyword)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
         }
+
+        if (0 < $badgeType) {
+            $srch->addTypesCondition([$badgeType]);
+        }
+
         $srch->addMultipleFields([Badge::DB_TBL_PREFIX . 'id as id', Badge::DB_TBL_PREFIX . 'name as name']);
         $badges = FatApp::getDb()->fetchAll($srch->getResultSet());
         die(json_encode(['badges' => $badges]));

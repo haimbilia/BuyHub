@@ -27,3 +27,11 @@ $data = [
 ];
 
 require_once (CONF_THEME_PATH . '_partial/index-page-common.php');
+?>
+<script>
+	var RECORD_TYPE_PRODUCT = <?php echo BadgeLink::RECORD_TYPE_PRODUCT; ?>;
+	var RECORD_TYPE_SELLER_PRODUCT = <?php echo BadgeLink::RECORD_TYPE_SELLER_PRODUCT; ?>;
+	var RECORD_TYPE_SHOP = <?php echo BadgeLink::RECORD_TYPE_SHOP; ?>;
+
+	var CONDITION_TYPE_DATE = <?php echo BadgeLink::CONDITION_TYPE_DATE; ?>;
+</script>

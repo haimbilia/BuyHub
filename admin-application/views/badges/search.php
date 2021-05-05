@@ -52,12 +52,13 @@ foreach ($arr_listing as $sn => $row) {
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "MINI", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $icon['afile_name'], 'alt' => $icon['afile_name']], '', true);
                 } else {
-
+                    $color = empty($row[Badge::DB_TBL_PREFIX . 'color']) ? Labels::getLabel('LBL_N/A', $adminLangId) : '<div class="d-flex align-items-center"><span class="color-' . strtolower(Badge::getShapeTypeName($row[$key], $adminLangId)) . '" style="background-color:' . $row[Badge::DB_TBL_PREFIX . 'color'] . '"></span></div>';
+                    $td->appendElement('plaintext', [], $color, true);
                 }
                 break;
             case Badge::DB_TBL_PREFIX . 'color':
-                $color = empty($row[$key]) ? Labels::getLabel('LBL_N/A', $adminLangId) : '<div class="d-flex align-items-center"><span class="color-circle" style="background-color:' . $row[$key] . '"></span>' . $row[$key] . '</div>';
-                $td->appendElement('plaintext', [], $color, true);
+                $str = (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) ? Labels::getLabel('LBL_N/A', $adminLangId) : $row[$key];
+                $td->appendElement('plaintext', [], $str, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
                 $class = applicationConstants::YES == $row[$key] ? 'badge--unified-danger' : 'badge--unified-brand'; 

@@ -12,6 +12,9 @@ class BadgeLink extends MyAppModel
     public const CONDITION_TYPE_DATE = 1;
     public const CONDITION_TYPE_ORDER = 2;
     public const CONDITION_TYPE_RATING = 3;
+    
+    public const REC_COND_AUTO = 1;
+    public const REC_COND_MANUAL = 2;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
@@ -95,5 +98,19 @@ class BadgeLink extends MyAppModel
             return '';
         }
         return (string) $arr[$type];
+    }
+
+    /**
+     * getRecordConditionArr
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public static function getRecordConditionArr(int $langId): array
+    {
+        return [
+            self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATICALLY', $langId),
+            self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUALLY', $langId)
+        ];
     }
 }

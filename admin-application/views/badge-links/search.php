@@ -6,9 +6,6 @@ $arr_flds = array(
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
     'record_name' => Labels::getLabel('LBL_RECORD_NAME', $adminLangId),
     BadgeLink::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_RECORD_TYPE', $adminLangId),
-    BadgeLink::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
-    BadgeLink::DB_TBL_PREFIX . 'condition_from' => Labels::getLabel('LBL_CONDITION_FROM', $adminLangId),
-    BadgeLink::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $adminLangId),
     'action' => '',
 );
 
@@ -56,9 +53,6 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case BadgeLink::DB_TBL_PREFIX . 'record_type':
                 $td->appendElement('plaintext', array(), BadgeLink::getRecordTypeName($row[$key], $adminLangId), true);
-                break;
-            case BadgeLink::DB_TBL_PREFIX . 'condition_type':
-                $td->appendElement('plaintext', array(), BadgeLink::getConditionTypeName($row[$key], $adminLangId), true);
                 break;
             case 'action':
                 if ($canEdit) {

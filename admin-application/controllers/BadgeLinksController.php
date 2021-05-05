@@ -102,11 +102,6 @@ class BadgeLinksController extends AdminBaseController
             $srch->addRecordTypesCondition([$recordType]);
         }
 
-        $badgeLinkConditionType = $post['badgelink_condition_type'];
-        if (!empty($badgeLinkConditionType)) {
-            $srch->addConditionTypesCondition([$badgeLinkConditionType]);
-        }
-
         $badgeType = $post['badge_type'];
         if (!empty($badgeType)) {
             $srch->addBadgeTypeCondition([$badgeType]);
@@ -115,16 +110,6 @@ class BadgeLinksController extends AdminBaseController
         $badgeType = $post['badge_type'];
         if (!empty($badgeType)) {
             $srch->addBadgeTypeCondition([$badgeType]);
-        }
-
-        $conditionFrom = $post['badgelink_condition_from'];
-        if (!empty($conditionFrom)) {
-            $srch->addFromCondition($conditionFrom);
-        }
-
-        $conditionTo = $post['badgelink_condition_to'];
-        if (!empty($conditionTo)) {
-            $srch->addToCondition($conditionTo);
         }
         
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -226,12 +211,6 @@ class BadgeLinksController extends AdminBaseController
         $recordTypesArr = BadgeLink::getRecordTypeArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_RECORD_TYPE', $this->adminLangId), 'badgelink_record_type', $recordTypesArr);
 
-        $conditionTypesArr = BadgeLink::getConditionTypesArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badgelink_condition_type', $conditionTypesArr);
-
-        $frm->addTextBox(Labels::getLabel('LBL_CONDITION_FROM', $this->adminLangId), 'badgelink_condition_from');
-        $frm->addTextBox(Labels::getLabel('LBL_CONDITION_TO', $this->adminLangId), 'badgelink_condition_to');
-
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
@@ -245,11 +224,18 @@ class BadgeLinksController extends AdminBaseController
         $frm->addHiddenField('', 'badgelink_badge_id');
         $frm->addHiddenField('', 'badgelink_record_id');
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_BADGE_OR_RIBBON', $this->adminLangId), 'badge_name', [], '4', ['placeholder' => Labels::getLabel('LBL_SEARCH_BADGE_OR_RIBBON', $this->adminLangId)], '');
+        $typesArr = Badge::getTypeArr($this->adminLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_BADGE_OR_RIBBON', $this->adminLangId), 'badge_type', $typesArr, '', [], '');
+
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_NAME', $this->adminLangId), 'badge_name', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH...', $this->adminLangId)], '');
+        $fld->requirement->setRequired(true);
+
+        $recordCondition = BadgeLink::getRecordConditionArr($this->adminLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_RECORD_CONDITION', $this->adminLangId), 'record_condition', $recordCondition, '', [], '');
         $fld->requirement->setRequired(true);
 
         $recordTypesArr = BadgeLink::getRecordTypeArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_RECORD_TYPE', $this->adminLangId), 'badgelink_record_type', $recordTypesArr, '', [], '');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->adminLangId), 'badgelink_record_type', $recordTypesArr, '', [], '');
         $fld->requirement->setRequired(true);
 
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_RECORD_NAME', $this->adminLangId), 'record_name', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->adminLangId)], '');

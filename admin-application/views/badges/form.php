@@ -34,9 +34,11 @@ if (null != $iconFld) {
 		<?php echo $frm->getFormTag();
 		echo $frm->getFieldHtml('badge_id');
 		echo $frm->getFieldHtml('badge_type');
-		echo $frm->getFieldHtml('logo_min_width');
-		echo $frm->getFieldHtml('logo_min_height');
-		echo $frm->getFieldHtml('attachment_ids');
+		if ((Badge::TYPE_BADGE == $type)) {
+			echo $frm->getFieldHtml('logo_min_width');
+			echo $frm->getFieldHtml('logo_min_height');
+			echo $frm->getFieldHtml('attachment_ids');
+		}
 		?>
 		<div class="row justify-content-center">
 			<div class="col-md-8">

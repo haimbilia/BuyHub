@@ -12,7 +12,7 @@ class Badge extends MyAppModel
     public const TYPE_RIBBON = 2;
 
     public const SHAPE_CIRCLE = 1;
-    public const SHAPE_CAPSULE = 2;
+    public const SHAPE_PILL = 2;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
@@ -86,7 +86,7 @@ class Badge extends MyAppModel
     {
         return [
             self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
-            self::SHAPE_CAPSULE => Labels::getLabel('LBL_CAPSULE', $langId),
+            self::SHAPE_PILL => Labels::getLabel('LBL_PILL', $langId),
         ];
     }
 
