@@ -661,6 +661,7 @@ $(document).on("change", ".state", function() {
         formData.append('lang_id', langId);
         formData.append('file_type', fileType);
         formData.append('ratio_type', ratio_type);
+        formData.append('fIsAjax', 1);
         $.ajax({
             url: fcom.makeUrl('Seller', 'uploadShopImages'),
             type: 'post',
@@ -728,6 +729,7 @@ $(document).on("change", ".state", function() {
 
         formData.append('scollection_id', scollection_id);
         formData.append('lang_id', lang_id);
+        formData.append('fIsAjax', 1);
         $.ajax({
             url: fcom.makeUrl('Seller', 'uploadCollectionImage'),
             type: 'post',

@@ -99,6 +99,7 @@ Fixes:
     => 053064 - While order product commission not calculated as per subscription
     => 053172 - Every time Instagram login asking for email 
     => 053156 - admin> shipping> order level shipping text is not changing as per language /RTL
+    => 053228 - When stripe connect is not configured, uploading banner images gives error 
 
 Enhancements :
    => Make provision to made seller
