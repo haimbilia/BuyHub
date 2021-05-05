@@ -17056,6 +17056,9 @@ html.quick-view--open {
     color: #888; }
     .quantity span:hover {
       color: #000; }
+    .quantity span .icn .svg {
+      width: 11px;
+      height: 11px; }
   .quantity input, .quantity .form input[type="text"], .form .quantity input[type="text"], .quantity .form input[type="email"], .form .quantity input[type="email"], .quantity .form input[type="phone"], .form .quantity input[type="phone"], .quantity .form input[type="search"], .form .quantity input[type="search"], .quantity .form input[type="password"], .form .quantity input[type="password"], .quantity .form input[type="date"], .form .quantity input[type="date"], .quantity .form input[type="url"], .form .quantity input[type="url"], .quantity .form input[type="tel"], .form .quantity input[type="tel"], .quantity .form input[type="number"], .form .quantity input[type="number"], .quantity .form input[type="file"], .form .quantity input[type="file"], .quantity .form select, .form .quantity select, .quantity .form .custom-select, .form .quantity .custom-select, .quantity .form textarea, .form .quantity textarea {
     border: none;
     text-align: center;
@@ -17073,7 +17076,7 @@ html.quick-view--open {
       flex: 0 0 24px;
       max-width: 24px;
       background-color: #f3f4f5;
-      border-radius: 2px; }
+      border-radius: 4px; }
 
 .filters__ele {
   padding: 1.5rem;
@@ -33821,10 +33824,10 @@ input.sp-input,
   font-size: 0.875rem; }
 
 .nav-detail {
+  background-color: #f3f4f5;
   border: solid 1px #dee2e6;
   border-top: none;
   border-radius: 0 0 4px 4px;
-  background: #fff;
   display: flex;
   justify-content: center;
   position: sticky;
@@ -34244,13 +34247,22 @@ input.sp-input,
     flex: none;
     max-width: inherit;
     padding: 5px; }
+  .more-sellers .actions .btn {
+    margin-left: 10px;
+    font-size: 0.8rem;
+    color: var(--brand-color);
+    text-decoration: underline; }
 
 .responsive-table > li {
   font-size: 0.8rem;
   padding: 1rem;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 20px; }
+  @media (max-width: 991.98px) {
+    .responsive-table > li {
+      display: block; } }
 
 .responsive-table .table-header {
   font-size: 0.8rem;
@@ -34259,64 +34271,74 @@ input.sp-input,
   letter-spacing: 0.03em;
   background-color: #f3f4f5;
   border-radius: 4px; }
+  @media (max-width: 991.98px) {
+    .responsive-table .table-header {
+      display: none; } }
 
 .responsive-table .table-row {
   background-color: #fff;
   color: #000;
   border-radius: 4px;
   border: solid 1px #dee2e6;
-  color: #888; }
+  color: #888;
+  position: relative;
+  overflow: hidden; }
+  .responsive-table .table-row.is-active {
+    border-left-color: var(--brand-color); }
+    .responsive-table .table-row.is-active:before {
+      content: "";
+      background-color: var(--brand-color);
+      width: 3px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0; }
 
 .responsive-table .cell {
-  padding: 0 1rem; }
+  padding: 0 1rem;
+  overflow: hidden; }
+  .responsive-table .cell:first-child {
+    padding-left: 0; }
   .responsive-table .cell:last-child {
+    padding-right: 0;
     text-align: right; }
-
-.responsive-table .cell-1 {
-  flex-basis: 25%; }
-
-.responsive-table .cell-2 {
-  flex-basis: 15%; }
-
-.responsive-table .cell-3 {
-  flex-basis: 20%; }
-
-.responsive-table .cell-4 {
-  flex-basis: 20%; }
-
-.responsive-table .cell-5 {
-  flex-basis: 20%; }
-
-@media all and (max-width: 767px) {
-  .responsive-table .table-header {
-    display: none; }
-  .responsive-table li {
-    display: block; }
-  .responsive-table .cell {
-    flex-basis: 100%; }
-  .responsive-table .cell {
-    display: flex;
-    padding: 10px 0; }
-    .responsive-table .cell:before {
-      color: #6C7A89;
-      padding-right: 10px;
-      content: attr(data-label);
-      flex-basis: 50%;
-      text-align: right; } }
+  @media (max-width: 991.98px) {
+    .responsive-table .cell {
+      flex-basis: 100%;
+      display: flex;
+      padding: 10px 0; }
+      .responsive-table .cell:before {
+        color: #6C7A89;
+        padding-right: 10px;
+        content: attr(data-label);
+        flex-basis: 50%;
+        text-align: right; } }
+  .responsive-table .cell-1 {
+    flex-basis: 23%; }
+  .responsive-table .cell-2 {
+    flex-basis: 16%; }
+  .responsive-table .cell-3 {
+    flex-basis: 20%; }
+  .responsive-table .cell-4 {
+    flex-basis: 23%; }
+  .responsive-table .cell-5 {
+    flex-basis: 23%; }
 
 .list-services {
   display: flex; }
   .list-services li {
-    background-color: #f3f4f5;
-    padding: 12px;
+    background-color: #f9f9fa;
+    padding: 10px;
     border-radius: 50%;
     margin-right: 0.4rem;
     margin-bottom: 0.4rem; }
     .list-services li:last-child {
       margin-right: 0; }
     .list-services li .svg {
-      width: 20px;
-      height: 20px; }
+      width: 16px;
+      height: 16px; }
+    .list-services li:hover {
+      background-color: #f3f4f5; }
 
 #faqquestions {
   margin: 40px auto 0;

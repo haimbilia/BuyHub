@@ -315,11 +315,21 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                         <label class="h6"><?php echo $qtyFieldName; ?></label>
                                                         <div class="qty-wrapper">
                                                             <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                                                <span class="decrease decrease-js not-allowed"><i class="fas fa-minus"></i></span>
+                                                                <span class="decrease decrease-js not-allowed"><i class="icn">
+                                                                        <svg class="svg" width="16px" height="16px">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </i></span>
                                                                 <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                                                     <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                                                                 </div>
-                                                                <span class="increase increase-js"><i class="fas fa-plus"></i></span>
+                                                                <span class="increase increase-js"><i class="icn">
+                                                                        <svg class="svg" width="16px" height="16px">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </i></span>
                                                             </div>
                                                         </div>
 
@@ -431,11 +441,21 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                         </div>
 
                                                         <div class="qty-wrapper">
-                                                            <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>"><span class="decrease decrease-js"><i class="fas fa-minus"></i></span>
+                                                            <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>"><span class="decrease decrease-js"><i class="icn">
+                                                                        <svg class="svg" width="16px" height="16px">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </i></span>
                                                                 <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
                                                                     <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
                                                                 </div>
-                                                                <span class="increase increase-js"><i class="fas fa-plus"></i></span>
+                                                                <span class="increase increase-js"><i class="icn">
+                                                                        <svg class="svg" width="16px" height="16px">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </i></span>
                                                             </div>
                                                         </div>
                                                         <label class="checkbox">
@@ -505,12 +525,12 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                     <ul class="responsive-table">
                         <li class="table-header">
                             <div class="cell cell-1">Seller</div>
-                            <div class="cell cell-2">Selling Price</div>
+                            <div class="cell cell-2">Price</div>
                             <div class="cell cell-3">Delivery</div>
                             <div class="cell cell-4">Services</div>
-                            <div class="cell cell-5">Action</div>
+                            <div class="cell cell-5"></div>
                         </li>
-                        <li class="table-row">
+                        <li class="table-row is-active">
                             <div class="cell cell-1" data-label="Seller">
                                 <div class="item">
                                     <div class="item__pic item__pic-seller">
@@ -532,7 +552,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     </div>
                                 </div>
                             </div>
-                            <div class="cell cell-2" data-label="Selling Price">
+                            <div class="cell cell-2" data-label="Price">
                                 <div class="product-price">
                                     <span class="new_price">
                                         $150.00 <del>$120.00</del> </span>
@@ -583,8 +603,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                             </div>
                             <div class="cell cell-5" data-label="">
 
-                                <div class="">
-                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+                                <div class="actions">
+                                    <button type="button" class="btn btn-link">
                                         <i class="icn">
                                             <svg class="svg">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
@@ -592,6 +612,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             </svg>
 
                                         </i> Ask a question</button>
+
+                                    <button type="button" class="btn btn-link">
+                                        View Products</button>
+
                                 </div>
                             </div>
                         </li>
@@ -618,7 +642,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     </div>
                                 </div>
                             </div>
-                            <div class="cell cell-2" data-label="Selling Price">
+                            <div class="cell cell-2" data-label="Price">
                                 <div class="product-price">
                                     <span class="new_price">
                                         $150.00 <del>$120.00</del> </span>
@@ -669,8 +693,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                             </div>
                             <div class="cell cell-5" data-label="">
 
-                                <div class="">
-                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+                                <div class="actions">
+                                    <button type="button" class="btn btn-link">
                                         <i class="icn">
                                             <svg class="svg">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
@@ -678,6 +702,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             </svg>
 
                                         </i> Ask a question</button>
+
+                                    <button type="button" class="btn btn-link">
+                                        View Products</button>
+
                                 </div>
                             </div>
                         </li>
@@ -703,7 +731,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     </div>
                                 </div>
                             </div>
-                            <div class="cell cell-2" data-label="Selling Price">
+                            <div class="cell cell-2" data-label="Price">
                                 <div class="product-price">
                                     <span class="new_price">
                                         $150.00 <del>$120.00</del> </span>
@@ -754,8 +782,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                             </div>
                             <div class="cell cell-5" data-label="">
 
-                                <div class="">
-                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+                                <div class="actions">
+                                    <button type="button" class="btn btn-link">
                                         <i class="icn">
                                             <svg class="svg">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
@@ -763,6 +791,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             </svg>
 
                                         </i> Ask a question</button>
+
+                                    <button type="button" class="btn btn-link">
+                                        View Products</button>
+
                                 </div>
                             </div>
                         </li>
@@ -788,7 +820,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     </div>
                                 </div>
                             </div>
-                            <div class="cell cell-2" data-label="Selling Price">
+                            <div class="cell cell-2" data-label="Price">
                                 <div class="product-price">
                                     <span class="new_price">
                                         $150.00 <del>$120.00</del> </span>
@@ -838,8 +870,9 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 </ul>
                             </div>
                             <div class="cell cell-5" data-label="">
-                                <div class="">
-                                    <button type="button" class="btn btn-outline-brand btn-icon btn-sm ">
+
+                                <div class="actions">
+                                    <button type="button" class="btn btn-link">
                                         <i class="icn">
                                             <svg class="svg">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
@@ -847,6 +880,99 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             </svg>
 
                                         </i> Ask a question</button>
+
+                                    <button type="button" class="btn btn-link">
+                                        View Products</button>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="table-row">
+                            <div class="cell cell-1" data-label="Seller">
+                                <div class="item">
+                                    <div class="item__pic item__pic-seller">
+                                        <a href="/yokart/jeans-17"><img src="/yokart/image/shop-logo/1/1/SMALL" alt="Jeans" title="Jeans"></a>
+                                    </div>
+                                    <div class="item__description">
+                                        <div class="item__location">Punjab,India</div>
+                                        <div class="item__title"><a title="Jeans" href="/yokart/jeans-17">Chromium Gallery</a></div>
+                                        <div class="products__rating -display-inline m-0">
+                                            <i class="icn">
+                                                <svg class="svg">
+                                                    <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow" href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <span class="rate">4 </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell cell-2" data-label="Price">
+                                <div class="product-price">
+                                    <span class="new_price">
+                                        $150.00 <del>$120.00</del> </span>
+                                    <br>
+                                    <span class="off_price text-success">12% Off</span>
+                                </div>
+                            </div>
+                            <div class="cell cell-3" data-label="Delivery">
+                                <p><strong>Delivery: $16.99</strong> <br>
+                                    Delivery between May 7 and May 20</p>
+                            </div>
+                            <div class="cell cell-4" data-label="Services">
+
+                                <ul class="list-services">
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li> <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
+                                                </use>
+                                            </svg>
+                                        </i></li>
+                                    <li>
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#freeshipping">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="cell cell-5" data-label="">
+
+                                <div class="actions">
+                                    <button type="button" class="btn btn-link">
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#ask-question">
+                                                </use>
+                                            </svg>
+
+                                        </i> Ask a question</button>
+
+                                    <button type="button" class="btn btn-link">
+                                        View Products</button>
+
                                 </div>
                             </div>
                         </li>
@@ -979,9 +1105,9 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                     </div>
                 </div>
             </section>
-            <section class="">
+            <section class="section">
                 <?php if (isset($banners) && isset($banners['blocation_active']) && $banners['blocation_active'] && count($banners['banners'])) { ?>
-                    <div class="gap"></div>
+                   
                     <div class="row">
                         <?php
                         foreach ($banners['banners'] as $val) {

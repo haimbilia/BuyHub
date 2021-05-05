@@ -68,7 +68,7 @@
                         </div>
                         <div class="cell cell_action">
                             <button class="btn-saveforlater" type="button" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_PICKUP; ?> );">
-                               
+
                                 <i class="icn">
                                     <svg class="svg" width="20px" height="20px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#saveforlater">
@@ -149,12 +149,24 @@
                     <div class="product-quantity">
                         <div class="quantity quantity-2" data-stock="<?php echo $product['selprod_stock']; ?>">
                             <span class="decrease decrease-js shipProductsCount <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
-                                <i class="fas fa-minus"></i>
+                                <i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </i>
                             </span>
                             <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
                             </div>
-                            <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>"><i class="fas fa-plus"></i></span>
+                            <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>">
+                                <i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </i>
+                                </span>
                         </div>
                     </div>
 
@@ -163,8 +175,10 @@
                     <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
                 </div>
                 <div class="cell cell_action">
-                    <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')"><svg class="svg" width="20px" height="20px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                    <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
+
+                        <svg class="svg" width="20px" height="20px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
                             </use>
                         </svg>
                     </a>
