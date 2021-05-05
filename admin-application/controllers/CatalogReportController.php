@@ -20,6 +20,7 @@ class CatalogReportController extends AdminBaseController
         $this->objPrivilege->canViewCatalogReport();
         $flds = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($flds);
+        $frmSearch->fill(['sortBy' => 'totOrders', 'sortOrder' => 'DESC']);
         $this->set('frmSearch', $frmSearch);
         $this->_template->render();
     }
@@ -33,13 +34,12 @@ class CatalogReportController extends AdminBaseController
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderDate');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'ASC');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
         /* get Seller Order Products[ */
         /* $fields = ['totOrders',  'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount']; */
         $opSrch = new Report(0, array_keys($fields));
-        $opSrch->removeFld('product_name');
         $opSrch->joinOrders();
         $opSrch->joinPaymentMethod();
         $opSrch->joinOtherCharges(true);
@@ -55,6 +55,7 @@ class CatalogReportController extends AdminBaseController
         $opSrch->setGroupBy('product_id');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
+        $opSrch->removeFld('product_name');
         // echo  $opSrch->getQuery(); exit;
         /* ] */
 
@@ -91,8 +92,9 @@ class CatalogReportController extends AdminBaseController
                 $arr = [];
                 foreach ($fields as $key => $val) {
                     switch ($key) {
-                        case 'title':
-                            $name = $row['product_name'];
+                        case 'product_name':
+                            $name = $row['product_name'] . '(' . $row['brand_name'] . ')';
+                            $arr[] = $name;
                             break;
                         case 'grossSales':
                         case 'transactionAmount':
