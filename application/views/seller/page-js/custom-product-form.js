@@ -774,6 +774,16 @@
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupCustomProduct'), data, function (t) {
             productAttributeAndSpecificationsFrm(t.productId);
             hideShippingTab(t.productType, t.productTypeDigital);
+
+            if(t.productType == PRODUCT_TYPE_DIGITAL){
+                if ($("select[name='product_download_attachements_with_inventory']").val() == 1) {
+                    hideDownloadTab();
+                } else {
+                    showDownloadTab();
+                }
+            } else {
+                hideDownloadTab();
+            }
         });
     };
 
@@ -1354,7 +1364,6 @@ $(document).on('click', '.tabs_006', function () {
 
 $(document).on('click', '.tabs_007', function(){
     var productId = $("input[name='product_id']").val();
-    alert(productId);
     if(productId > 0){
         productDownloads(productId);
     }else{
@@ -1365,7 +1374,7 @@ $(document).on('click', '.tabs_007', function(){
 productDownloads = function(productId){
     $(".tabs_panel").html('');
     $(".tabs_panel").hide();
-    $(".tabs_nav  > li").removeClass('is-active');
+    $(".tabs_nav-js  > li").removeClass('is-active');
     $("#tabs_007").html('<div class="col-md-12" id="digital_download_form"></div> <div class="col-md-12" class="dd-list"><div class="row" id="digital_download_list"></div></div>');
     $("#tabs_007").show();
     $("a[rel='tabs_007']").parent().addClass('is-active');

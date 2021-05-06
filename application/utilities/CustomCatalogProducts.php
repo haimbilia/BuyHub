@@ -1062,6 +1062,7 @@ trait CustomCatalogProducts
             $prodcatId = $productReqRow['preq_prodcat_id'];
             $prodcatId = FatUtility::int($prodcatId);
             $productData = json_decode($productReqRow['preq_content'], true);
+            // CommonHelper::printArray([$productData], 1);
             unset($productReqRow['preq_content']);
             $productReqRow = array_merge($productReqRow, $productData, array('preq_prodcat_id' => $prodcatId));
             $productReqRow['ptc_prodcat_id'] = $prodcatId;

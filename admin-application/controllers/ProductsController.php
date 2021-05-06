@@ -1748,7 +1748,7 @@ class ProductsController extends AdminBaseController
 
         $srch->joinTable(DigitalDownloads::DB_TBL_LINKS, 'INNER JOIN', DigitalDownloads::DB_TBL_LINKS_PREFIX . 'record_id =' . DigitalDownloads::DB_TBL_PREFIX . 'id');
 
-        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'product_id', '=', $prodId);
+        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'record_id', '=', $prodId);
         if ($optionCombi != '0') {
             $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
         }
@@ -1791,7 +1791,7 @@ class ProductsController extends AdminBaseController
         
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_subid =' . DigitalDownloads::DB_TBL_PREFIX . 'id';
         
-        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'product_id', '=', $productId);
+        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'record_id', '=', $productId);
         if ($optionComb != '0') {
             $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'options_code', '=', $optionComb);
             // $srch->addCondition(AttachedFile::DB_TBL_PREFIX . 'record_subid', '=', 'pddr_id');

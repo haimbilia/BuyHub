@@ -45,7 +45,7 @@
 
                             </a>
                         </li>
-                        <li id="tab_006" style="display: block;">
+                        <li>
                             <a rel="tabs_006" class="tabs_006" href="javascript:void(0)" >
                                 <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
                                 <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Catalog_Inventory_Based_Downloads', $siteLangId); ?>"></i>

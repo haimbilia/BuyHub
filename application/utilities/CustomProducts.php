@@ -1537,10 +1537,12 @@ trait CustomProducts
             $productFrm->fill($prodData);
         }
 
+        $productType = $prodData['product_type'];
         unset($languages[$siteDefaultLangId]);
         $this->set('productFrm', $productFrm);
         $this->set('siteDefaultLangId', $siteDefaultLangId);
         $this->set('otherLanguages', $languages);
+        $this->set('productType', $productType);
         $this->_template->render(false, false);
     }
 

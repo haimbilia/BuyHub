@@ -4104,7 +4104,7 @@ class SellerController extends SellerBaseController
 
     public function productLinks($product_id)
     {
-        //$this->objPrivilege->canViewProducts();
+        $this->userPrivilege->canViewProducts();
         $product_id = FatUtility::int($product_id);
         if ($product_id == 0) {
             FatUtility::dieWithError($this->str_invalid_request);
@@ -4122,7 +4122,7 @@ class SellerController extends SellerBaseController
 
     public function updateProductLink()
     {
-        //$this->objPrivilege->canEditProducts();
+        $this->userPrivilege->canEditProducts();
         $post = FatApp::getPostedData();
         if (false === $post) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -5680,7 +5680,8 @@ class SellerController extends SellerBaseController
         $frm = $this->getDownloadForm($this->siteLangId, $productId);
         $msg = '';
         $frmData = [
-            'product_id' => $productId
+            'product_id' => $productId,
+            'preq_id' => $productId
         ];
 
         if (1 <= $linkId) {
@@ -5701,6 +5702,7 @@ class SellerController extends SellerBaseController
                 $msg = 'Invalid Link. Please refresh to get latest list!!!';
             }
         }
+        
         $frm->fill($frmData);
 
         $this->set('downloadFrm', $frm);
@@ -5741,6 +5743,7 @@ class SellerController extends SellerBaseController
         $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('LBL_Upload', $this->siteLangId));
 
         $frm->addHiddenField('', 'product_id');
+        $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'dd_link_id');
         $frm->addHiddenField('', 'dd_link_ref_id');
         return $frm;
@@ -5771,12 +5774,13 @@ class SellerController extends SellerBaseController
         $post = FatApp::getPostedData();
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+        $refType = FatApp::getPostedData('prod_ref_type', FatUtility::VAR_INT, 0);
 
         $ddObj = new DigitalDownloads();
-
-        $refId = $ddObj->getReferenceId($prodId, $optionComb);
+        
+        $refId = $ddObj->getReferenceId($prodId, $optionComb, $refType);
         if (1 > $refId) {
-            if (!$ddObj->saveReference($prodId, $optionComb)) {
+            if (!$ddObj->saveReference($prodId, $optionComb, $refType)) {
                 FatUtility::dieWithError($ddObj->getError());
             }
             $refId = $ddObj->getMainTableRecordId();
@@ -5896,6 +5900,7 @@ class SellerController extends SellerBaseController
 
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $prodRefType = FatApp::getPostedData('prod_ref_type', FatUtility::VAR_INT, 0);
 
         /* TODO
             => need to check downloads allowed at product level
@@ -5905,7 +5910,9 @@ class SellerController extends SellerBaseController
 
         $srch->joinTable(DigitalDownloads::DB_TBL_LINKS, 'INNER JOIN', DigitalDownloads::DB_TBL_LINKS_PREFIX . 'record_id =' . DigitalDownloads::DB_TBL_PREFIX . 'id');
 
-        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'product_id', '=', $prodId);
+        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'record_id', '=', $prodId);
+        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'type', '=', $prodRefType);
+        
         if ($optionCombi != '0') {
             $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
         }
@@ -5936,22 +5943,23 @@ class SellerController extends SellerBaseController
     public function getDigitalDownloadAttachments()
     {
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $optionComb = FatApp::getPostedData('option_comb', null, 0);
-        $langId = FatApp::getPostedData('langId', null, 0);
         
         if (1 > $productId) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
 
+        $optionComb = FatApp::getPostedData('option_comb', null, 0);
+        $langId = FatApp::getPostedData('langId', null, 0);
+        
         $srch = new DigitalDownloadsSearch();
         
         
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_subid =' . DigitalDownloads::DB_TBL_PREFIX . 'id';
         
-        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'product_id', '=', $productId);
+        $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'record_id', '=', $productId);
+
         if ($optionComb != '0') {
             $srch->addCondition(DigitalDownloads::DB_TBL_PREFIX . 'options_code', '=', $optionComb);
-            // $srch->addCondition(AttachedFile::DB_TBL_PREFIX . 'record_subid', '=', 'pddr_id');
         }
         
         $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
@@ -5999,7 +6007,7 @@ class SellerController extends SellerBaseController
 
     public function deleteDigitalLink($linkId, $refId)
     {
-        $this->objPrivilege->canEditProducts();
+        $this->userPrivilege->canEditProducts();
         $refId = FatUtility::int($refId);
         $linkId = FatUtility::int($linkId);
 
@@ -6026,7 +6034,7 @@ class SellerController extends SellerBaseController
 
     public function deleteDigitalFile()
     {
-        $this->objPrivilege->canEditProducts();
+        $this->userPrivilege->canEditProducts();
         $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
         $aFileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
 

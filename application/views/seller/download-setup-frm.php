@@ -182,6 +182,7 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                 </div>
             </div>
             <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('preq_id'); ?>
             <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
             <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
         </form>

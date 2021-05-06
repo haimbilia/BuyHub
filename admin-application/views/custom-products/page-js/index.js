@@ -498,4 +498,23 @@ $(document).on('change', '.language-js',function(){
         });
 	}
 	/*  End of  Product shipping  */
+
+	productDownloads = function(preq_id){
+		fcom.ajax(fcom.makeUrl('CustomProducts', 'customEanUpcForm', [ preq_id ]), '', function(t) {
+			fcom.updateFaceboxContent(t, 'faceboxWidth');
+		});
+		downloadsForm(productId, 0, true);
+	}
+	
+	downloadsForm = function(productId, linkId, getList) {
+		alert('sadfsdfvxcxcv');
+		/* var getList = getList || false;
+		var linkId = linkId || 0;
+		fcom.ajax(fcom.makeUrl('Seller', 'downloadsForm', [productId, linkId]), '', function(res){
+			$("#digital_download_form").html(res);
+			if (true == getList) {
+				getDigitalDownloads();
+			}
+		}); */
+	}
 })();

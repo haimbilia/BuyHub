@@ -47,7 +47,7 @@ foreach ($links as $sn => $row) {
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
                         'title' => Labels::getLabel('LBL_Edit', $adminLangId),
-                        'onclick' => 'downloadsForm(' . $row['pddr_product_id'] . ', ' . $row['pdl_id'] . ')', 'href' => 'javascript:void(0);'
+                        'onclick' => 'downloadsForm(' . $row['pddr_record_id'] . ', ' . $row['pdl_id'] . ')', 'href' => 'javascript:void(0);'
                     ),
                     '<i class="fa fa-edit  icon"></i>',
                     true

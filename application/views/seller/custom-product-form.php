@@ -52,7 +52,7 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
                             <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Option_Based_Media', $siteLangId); ?>"></i>
 
                         </a></li>
-                    <li id="tabs_007" style="display: block;">
+                    <li>
                         <a rel="tabs_007" class="tabs_007" href="javascript:void(0)" >
                             <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
                             <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Catalog_Inventory_Based_Downloads', $siteLangId); ?>"></i>
@@ -88,7 +88,7 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
     var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
     var product_type =  '<?php echo $productType; ?>';
     var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
-
+    
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
     $(document).ready(function() {

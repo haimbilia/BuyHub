@@ -13,11 +13,14 @@ class DigitalDownloads extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX, $id);
     }
 
-    public function getReferenceId($productId, $productOption)
+    public function getReferenceId($productId, $productOption, $refType = 0)
     {
+        $refType = FatUtility::int($refType);
+
         $srch = new DigitalDownloadsSearch();
-        $srch->addCondition(static::DB_TBL_PREFIX . 'product_id', '=', $productId);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'record_id', '=', $productId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'options_code', '=', $productOption);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'type', '=', $refType);
 
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords();
@@ -32,16 +35,19 @@ class DigitalDownloads extends MyAppModel
         return $row['pddr_id'];
     }
     
-    public function saveReference($productId, $optionsCode)
+    public function saveReference($productId, $optionsCode, $refType = 0)
     {
         if ($productId < 1) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 
+        $refType = FatUtility::int($refType);
+
         $dataToSave = array(
-            static::DB_TBL_PREFIX . 'product_id' => $productId,
+            static::DB_TBL_PREFIX . 'record_id' => $productId,
             static::DB_TBL_PREFIX . 'options_code' => $optionsCode,
+            static::DB_TBL_PREFIX . 'type' => $refType,
         );
 
         $this->assignValues($dataToSave);

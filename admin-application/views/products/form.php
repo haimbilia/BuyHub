@@ -45,7 +45,7 @@
                                      <div class="tabs-title"> <?php echo Labels::getLabel('LBL_Media', $adminLangId); ?><span><?php echo Labels::getLabel('LBL_Add_Option_Based_Media', $adminLangId); ?></span></div>
                                  </div>
                              </a></li>
-                        <li id="tab_006" style="display: block;">
+                        <li>
                             <a rel="tabs_006" class="tabs_006" href="javascript:void(0)" >
                                 <div class="tabs-head">
                                     <div class="tabs-title">

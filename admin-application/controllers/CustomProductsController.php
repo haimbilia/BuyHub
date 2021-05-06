@@ -124,6 +124,9 @@ class CustomProductsController extends AdminBaseController
         $customProductFrm = $this->getForm(0);
         $productOptions = array();
         $productTags = array();
+
+        $displayDownloadTab = false;
+
         if ($preqId > 0) {
             $row_data = ProductRequest::getAttributesById($preqId, array('preq_id', 'preq_user_id', 'preq_prodcat_id', 'preq_content', 'preq_status', 'preq_deleted', 'preq_added_on'));
             $productData = json_decode($row_data['preq_content'], true);
@@ -132,6 +135,9 @@ class CustomProductsController extends AdminBaseController
             $productOptions = !empty($row_data['product_option']) ? $row_data['product_option'] : array();
             $productTags = !(empty($row_data['product_tags'])) ? $row_data['product_tags'] : array();
 
+            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && 
+            applicationConstants::NO == $productData['product_download_attachements_with_inventory']);
+            
             /*   */
             $customProductFrm = $this->getForm(0, $productData['product_type']);
             $customProductFrm->fill($row_data);
@@ -142,6 +148,7 @@ class CustomProductsController extends AdminBaseController
         $this->set('preq_prodcat_id', $preq_prodcat_id);
         $this->set('productOptions', $productOptions);
         $this->set('productTags', $productTags);
+        $this->set('displayDownloadTab', $displayDownloadTab);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
@@ -985,17 +992,26 @@ class CustomProductsController extends AdminBaseController
         $preqId = FatUtility::int($preqId);
         $upcCodeData = array();
 
+        $displayDownloadTab = false;
         /* Validate product request belongs to current logged seller[ */
         if ($preqId) {
             $productReqRow = ProductRequest::getAttributesById($preqId);
+            // CommonHelper::printArray([$productReqRow], 1);
             if ($productReqRow == false) {
                 Message::addErrorMessage($this->str_invalid_request);
                 FatUtility::dieWithError(Message::getHtml());
             }
             $prodcat_id = $productReqRow['preq_prodcat_id'];
             $upcCodeData = json_decode($productReqRow['preq_ean_upc_code'], true);
+
+            $productReqData = json_decode($productReqRow['preq_content'],true);
+
+            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
+            applicationConstants::NO == $productReqData['product_download_attachements_with_inventory']);
+
         }
         /* ] */
+        
 
         $productOptions = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '|');
@@ -1004,6 +1020,8 @@ class CustomProductsController extends AdminBaseController
         $this->set('optionCombinations', $optionCombinations);
         $this->set('upcCodeData', $upcCodeData);
         $this->set('preqId', $preqId);
+        $this->set('displayDownloadTab', $displayDownloadTab);
+        $this->set('productType', $productReqData['product_type']);
         $this->set('preqCatId', $prodcat_id);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);

@@ -36,6 +36,8 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-6">
                 <div class="field-set">
                     <div class="caption-wraper">
@@ -52,8 +54,25 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div <?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'style="display:none;"' : '');?> class="download-attachements-js">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                            <?php $fld = $productFrm->getField('product_download_attachements_with_inventory');
+                                echo $fld->getCaption();
+                            ?>
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $productFrm->getFieldHtml('product_download_attachements_with_inventory'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <div class="row">
             <div class="col-md-6">
                 <div class="field-set">
