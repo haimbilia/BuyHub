@@ -8,7 +8,7 @@ $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_ty
     }
 
     var selector = $('input[name="badgelink_condition_from"], input[name="badgelink_condition_to"]');
-    if (CONDITION_TYPE_DATE == $(this).val()) {
+    if (COND_TYPE_DATE == $(this).val()) {
         selector.attr('readonly', 'readonly').datetimepicker({
             minDate: new Date(),
             dateFormat: 'yy-mm-dd'
@@ -16,6 +16,12 @@ $(document).on('change', '.addUpdateForm--js select[name="badgelink_condition_ty
     } else {
         selector.removeAttr('readonly').datetimepicker("destroy");
     }
+});
+
+$(document).on('change', '.addUpdateForm--js select[name="badgelink_record_type"]', function () {
+    var recordNameSelector = $(".addUpdateForm--js select[name='record_name']");
+    if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
+    $(".addUpdateForm--js select[name='record_name']").val('').trigger('change');
 });
 
 $(document).on('change', '.addUpdateForm--js select[name="badge_type"]', function () {
@@ -39,10 +45,10 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
     var parent = recordNameSelector.closest('.field-set').parent();
     if (1 == recordCondition) {
         var requirement = { required: false };
-        parent.addClass('d-none');
+        parent.hide();
     } else {
         var requirement = { required: true };
-        parent.removeClass('d-none');
+        parent.fadeIn();
     }
     recordNameSelector.attr('data-fatreq', JSON.stringify(requirement));
 });
@@ -85,13 +91,10 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
 
             if (0 < badgelink_id) {
                 $('.addUpdateForm--js select[name="badgelink_condition_type"]').change();
-                var selectedRecords = $('.addUpdateForm--js input[name="badgelink_record_ids"]').val();
-                if ('[]' != selectedRecords && '' != selectedRecords && 'undefined' != selectedRecords) {
-                    $('.addUpdateForm--js select[name="badgelink_record_type"]').attr('disabled', 'disabled');
-                }
+                $(".addUpdateForm--js input[name='badgelink_record_ids']").val(JSON.stringify($(".addUpdateForm--js select[name='record_name']").val()));
             }
             $('.addUpdateForm--js select[name="badge_type"], .addUpdateForm--js select[name="record_condition"]').change();
-            setTimeout(() => { 
+            setTimeout(() => {
                 $('.select2-search__field').each(function () {
                     $(this).attr('name', $(this).closest('.select2').siblings('select').attr('name') + '_select2-search__field');
                 });
@@ -109,7 +112,8 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             reloadList();
-            form(t.badgelink_id, t.recordType);
+            // form(t.badgelink_id, t.recordType);
+            backToListing();
         });
     };
 
@@ -134,13 +138,14 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
+                reloadList();
             } else {
                 fcom.displayErrorMessage(ans.msg);
             }
         });
     };
 
-    bulkBadgesUnlink = function () {
+    bulkBadgesUnlink = function (e) {
         if (1 > $('.selectItem--js:checked').length) {
             fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return;
@@ -149,16 +154,11 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
             e.preventDefault();
             return;
         }
-        $('.badgesLinksList').submit();
+        $('.badgesLinksList--js').submit();
     };
 
     bindBadgeNameSelect2 = function () {
         var selector = $("select[name='badge_name']");
-        var text = selector.data('text');
-        var val = selector.data('val');
-        if ('undefined' != typeof (text) && 'undefined' != typeof (val)) {
-            selector.append('<option value="' + val + '" selected="selected">' + text + '</option>');
-        }
         selector.select2({
             closeOnSelect: true,
             dir: layoutDirection,
@@ -224,15 +224,6 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
 
     bindRecordsSelect2 = function () {
         var selector = $("select[name='record_name']");
-        var text = selector.data('text');
-        var val = selector.data('val');
-        if ('undefined' != typeof (text) && 'undefined' != typeof (val)) {
-            if (-1 < val.indexOf(',')) {
-
-            } else {
-                selector.append('<option value="' + val + '" selected="selected">' + text + '</option>');
-            }
-        }
         selector.select2({
             closeOnSelect: true,
             dir: layoutDirection,
@@ -269,13 +260,8 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
                 JSONObj.push(e.params.args.data.id);
             }
             $(".addUpdateForm--js input[name='badgelink_record_ids']").val(JSON.stringify(JSONObj));
-            $('.addUpdateForm--js select[name="badgelink_record_type"]').attr('disabled', 'disabled');
         }).on('select2:unselect', function (e) {
-            var selectedRecords = JSON.stringify($("select[name='record_name']").val());
-            $(".addUpdateForm--js input[name='badgelink_record_ids']").val(selectedRecords);
-            if ('[]' == selectedRecords || '' == selectedRecords || 'undefined' == selectedRecords) {
-                $('.addUpdateForm--js select[name="badgelink_record_type"]').removeAttr('disabled');
-            }
+            $(".addUpdateForm--js input[name='badgelink_record_ids']").val(JSON.stringify($(".addUpdateForm--js select[name='record_name']").val()));
         });
     }
 })()

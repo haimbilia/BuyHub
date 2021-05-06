@@ -9,9 +9,12 @@ class BadgeLink extends MyAppModel
     public const RECORD_TYPE_SELLER_PRODUCT = 2;
     public const RECORD_TYPE_SHOP = 3;
 
-    public const CONDITION_TYPE_DATE = 1;
-    public const CONDITION_TYPE_ORDER = 2;
-    public const CONDITION_TYPE_RATING = 3;
+    public const COND_TYPE_DATE = 1;
+    public const COND_TYPE_AVG_RATING = 2;
+    public const COND_TYPE_ORDER_COMPLETION_RATE = 3;
+    public const COND_TYPE_COMPLETED_ORDERS = 4;
+    public const COND_TYPE_RETURN_ACCEPTANCE = 5; // Refund/Return Acceptance
+    public const COND_TYPE_ORDER_CANCELLED = 6; // Cancelled By Seller
     
     public const REC_COND_AUTO = 1;
     public const REC_COND_MANUAL = 2;
@@ -78,9 +81,13 @@ class BadgeLink extends MyAppModel
     public static function getConditionTypesArr(int $langId): array
     {
         return [
-            self::CONDITION_TYPE_DATE => Labels::getLabel('LBL_DATE', $langId),
-            self::CONDITION_TYPE_ORDER => Labels::getLabel('LBL_ORDER', $langId),
-            self::CONDITION_TYPE_RATING => Labels::getLabel('LBL_RATING', $langId),
+            self::COND_TYPE_DATE => Labels::getLabel('LBL_DATE', $langId),
+            self::COND_TYPE_AVG_RATING => Labels::getLabel('LBL_AVERAGE_RATING', $langId),
+            self::COND_TYPE_ORDER_COMPLETION_RATE => Labels::getLabel('LBL_ORDER_COMPLETION_RATE_(%)', $langId),
+            self::COND_TYPE_COMPLETED_ORDERS => Labels::getLabel('LBL_COMPLETED_ORDERS', $langId),
+            self::COND_TYPE_RETURN_ACCEPTANCE => Labels::getLabel('LBL_RETURN/_REFUND_ACCEPTANCE_RATE_(%)', $langId),
+            self::COND_TYPE_ORDER_CANCELLED => Labels::getLabel('LBL_ORDER_CANCELLED_BY_SELLER', $langId),
+            
         ];
     }
 
@@ -126,8 +133,10 @@ class BadgeLink extends MyAppModel
         $srch->addMultipleFields([
             BadgeLink::DB_TBL_PREFIX . 'id',
             BadgeLink::DB_TBL_PREFIX . 'badge_id',
-            'badge_name',
-            'badge_type',
+            Badge::DB_TBL_PREFIX . 'name',
+            Badge::DB_TBL_PREFIX . 'type',
+            Badge::DB_TBL_PREFIX . 'shape_type',
+            Badge::DB_TBL_PREFIX . 'color',
             BadgeLink::DB_TBL_PREFIX . 'record_ids',
             BadgeLink::DB_TBL_PREFIX . 'record_type',
             BadgeLink::DB_TBL_PREFIX . 'condition_type',

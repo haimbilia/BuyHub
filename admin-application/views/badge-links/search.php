@@ -2,10 +2,11 @@
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_BADGE_OR_RIBBON', $adminLangId),
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
-    'record_name' => Labels::getLabel('LBL_RECORD_NAME', $adminLangId),
-    BadgeLink::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_RECORD_TYPE', $adminLangId),
+    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_OBJECT', $adminLangId),
+    'record_condition' => Labels::getLabel('LBL_TRIGGER', $adminLangId),
+    BadgeLink::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
+    BadgeLink::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
     'action' => '',
 );
 
@@ -37,22 +38,34 @@ foreach ($arr_listing as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
-            case 'record_name':
-                $str = $row[$key];
-                if (BadgeLink::RECORD_TYPE_SELLER_PRODUCT == $row[BadgeLink::DB_TBL_PREFIX . 'record_type'] && !empty($row['option_names'])) {
-                    foreach (explode(',', $row['option_names']) as $index => $optionName) {
-                        $optionValues = explode(',', $row['option_value_names']);
-                        $str .= ' | ' . $optionName . ' : ' . $optionValues[$index];
-                    }
-                    $str .= ' | ' . $row['seller'];
-                }
-                $td->appendElement('plaintext', array(), $str, true);
-                break;
+            
             case Badge::DB_TBL_PREFIX . 'type':
                 $td->appendElement('plaintext', array(), Badge::getTypeName($row[$key], $adminLangId), true);
                 break;
             case BadgeLink::DB_TBL_PREFIX . 'record_type':
                 $td->appendElement('plaintext', array(), BadgeLink::getRecordTypeName($row[$key], $adminLangId), true);
+                break;
+            case 'record_condition':
+                $condition = (empty($row['badgelink_record_ids']) ? BadgeLink::REC_COND_AUTO : BadgeLink::REC_COND_MANUAL);
+                $recordCondition = BadgeLink::getRecordConditionArr($adminLangId)[$condition];
+                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordCondition . '</span>';;
+                if (BadgeLink::REC_COND_MANUAL == $condition) {
+                    $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordCondition . '</span>';
+                }
+                $td->appendElement('plaintext', array(), $htm, true);
+                break;
+            case BadgeLink::DB_TBL_PREFIX . 'condition_type':
+                $td->appendElement('plaintext', array(), BadgeLink::getConditionTypeName($row[$key], $adminLangId), true);
+                break;
+            case Badge::DB_TBL_PREFIX . 'shape_type':
+                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
+                    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLink::DB_TBL_PREFIX . 'badge_id'], 0, $adminLangId, false);
+                    $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+                    $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "MINI", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $row[Badge::DB_TBL_PREFIX . 'name'], 'alt' => $row[Badge::DB_TBL_PREFIX . 'name']], '', true);
+                } else {
+                    $color = empty($row[Badge::DB_TBL_PREFIX . 'color']) ? Labels::getLabel('LBL_N/A', $adminLangId) : '<div class="d-flex align-items-center"><span class="color-' . strtolower(Badge::getShapeTypeName($row[$key], $adminLangId)) . '" style="background-color:' . $row[Badge::DB_TBL_PREFIX . 'color'] . '" title="' . $row[Badge::DB_TBL_PREFIX . 'name'] . '"></span></div>';
+                    $td->appendElement('plaintext', [], $color, true);
+                }
                 break;
             case 'action':
                 if ($canEdit) {

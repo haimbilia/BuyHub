@@ -2,6 +2,7 @@
 
 class BadgeLinksController extends AdminBaseController
 {
+    private $recordData = [];
     public function __construct($action)
     {
         parent::__construct($action);
@@ -55,7 +56,7 @@ class BadgeLinksController extends AdminBaseController
                     $obj = Product::getSearchObject($this->adminLangId);
                     $obj->addMultipleFields([
                         'GROUP_CONCAT(product_id) as badgelink_record_ids',
-                        'GROUP_CONCAT(COALESCE( tp_l.product_name, tp.product_identifier ) SEPARATOR ", ") as record_name'
+                        'GROUP_CONCAT(COALESCE( tp_l.product_name, tp.product_identifier ) SEPARATOR ", ") as record_names'
                     ]);
                     $obj->addCondition('product_id', 'IN', $recordIdsArr);
                     $result = FatApp::getDb()->fetch($obj->getResultSet());
@@ -65,7 +66,7 @@ class BadgeLinksController extends AdminBaseController
                     $obj = SellerProduct::getSearchObject($this->adminLangId);
                     $obj->addMultipleFields([
                         'GROUP_CONCAT(selprod_id) as badgelink_record_ids',
-                        'GROUP_CONCAT(selprod_title SEPARATOR ", ") as record_name',
+                        'GROUP_CONCAT(selprod_title SEPARATOR ", ") as record_names',
                         'GROUP_CONCAT( option_name ) as option_names',
                         'GROUP_CONCAT( optionvalue_name ) as option_value_names',
                         'spu.credential_username as seller',
@@ -84,7 +85,7 @@ class BadgeLinksController extends AdminBaseController
                     $obj = Shop::getSearchObject(false, $this->adminLangId);
                     $obj->addMultipleFields([
                         'GROUP_CONCAT(shop_id) as badgelink_record_ids',
-                        'GROUP_CONCAT(COALESCE( s_l.shop_name, s.shop_identifier ) SEPARATOR ", ") as record_name'
+                        'GROUP_CONCAT(COALESCE( s_l.shop_name, s.shop_identifier ) SEPARATOR ", ") as record_names'
                     ]);
                     $obj->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'shpu.credential_user_id = s.shop_user_id', 'shpu');
                     $obj->addCondition('shop_id', 'IN', $recordIdsArr);
@@ -117,14 +118,6 @@ class BadgeLinksController extends AdminBaseController
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addHaving('badge_name', 'LIKE', '%' . $keyword . '%');
-            $cnd->attachCondition('record_name', 'LIKE', '%' . $keyword . '%', 'OR');
-            $cnd->attachCondition('option_names', 'LIKE', '%' . $keyword . '%', 'OR');
-            $cnd->attachCondition('option_value_names', 'LIKE', '%' . $keyword . '%', 'OR');
-        }
-
-        $recordType = $post['badgelink_record_type'];
-        if (!empty($recordType)) {
-            $srch->addRecordTypesCondition([$recordType]);
         }
 
         $badgeType = $post['badge_type'];
@@ -132,6 +125,24 @@ class BadgeLinksController extends AdminBaseController
             $srch->addBadgeTypeCondition([$badgeType]);
         }
 
+        $recordType = $post['badgelink_record_type']; //Link Type
+        if (!empty($recordType)) {
+            $srch->addRecordTypesCondition([$recordType]);
+        }
+
+        $trigger = $post['record_condition']; //Trigger
+        if (!empty($trigger)) {
+            if (BadgeLink::REC_COND_AUTO == $trigger) {
+                $srch->addCondition('badgelink_record_ids', '=', '');
+            } else {
+                $srch->addCondition('badgelink_record_ids', '!=', '');
+            }
+        }
+
+        $conditionType = $post['badgelink_condition_type'];
+        if (!empty($conditionType)) {
+            $srch->addConditionTypesCondition([$conditionType]);
+        }
         $records = $this->bindRecordSet(FatApp::getDb()->fetchAll($srch->getResultSet()));
 
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
@@ -154,7 +165,7 @@ class BadgeLinksController extends AdminBaseController
             $srch = BadgeLink::getBadgeLinksSearchObj($this->adminLangId);
             $srch->addCondition('badgelink_id', '=', $badgeLinkId);
             $dataToFill = $this->bindRecordSet(FatApp::getDb()->fetch($srch->getResultSet()));
-            CommonHelper::printArray($dataToFill);
+            $this->recordData = $dataToFill;
             $recordCondition = BadgeLink::REC_COND_MANUAL;
             if (empty($dataToFill['badgelink_record_ids'])) {
                 $recordCondition = BadgeLink::REC_COND_AUTO;
@@ -233,11 +244,13 @@ class BadgeLinksController extends AdminBaseController
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
 
-        $badgeTypes = Badge::getTypeArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'badge_type', $badgeTypes);
+        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'badge_type', Badge::getTypeArr($this->adminLangId));
 
-        $recordTypesArr = BadgeLink::getRecordTypeArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_RECORD_TYPE', $this->adminLangId), 'badgelink_record_type', $recordTypesArr);
+        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->adminLangId), 'badgelink_record_type', BadgeLink::getRecordTypeArr($this->adminLangId));
+        
+        $frm->addSelectBox(Labels::getLabel('LBL_TRIGGER', $this->adminLangId), 'record_condition', BadgeLink::getRecordConditionArr($this->adminLangId));
+        
+        $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badgelink_condition_type', BadgeLink::getConditionTypesArr($this->adminLangId));
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
@@ -252,24 +265,39 @@ class BadgeLinksController extends AdminBaseController
         $frm->addHiddenField('', 'badgelink_badge_id');
         $frm->addHiddenField('', 'badgelink_record_ids');
 
+        $selectedRecords = $selectedBadge = $recordIds = [];
+        $badgeId = '';
+        if (is_array($this->recordData) && 0 < count($this->recordData) && isset($this->recordData['badgelink_record_ids'])) {
+            $recordNames = explode(", ", $this->recordData['record_names']);
+            $recordIds = explode(",", $this->recordData['badgelink_record_ids']);
+            foreach ($recordIds as $index => $recordId) {
+                $recordName = $recordNames[$index];
+                if (BadgeLink::RECORD_TYPE_SELLER_PRODUCT == $this->recordData['badgelink_record_type'] && !empty($this->recordData['option_names'])) {
+                    foreach (explode(',', $this->recordData['option_names']) as $index => $optionName) {
+                        $optionValues = explode(',', $this->recordData['option_value_names']);
+                        $recordName .= ' | ' . $optionName . ' : ' . $optionValues[$index];
+                    }
+                    $recordName .= ' | ' . $this->recordData['seller'];
+                }
+                $selectedRecords[$recordId] = $recordName;
+            }
+            $selectedBadge[$this->recordData['badgelink_badge_id']] = $this->recordData['badge_name'];
+            $badgeId = $this->recordData['badgelink_badge_id'];
+        }
+
         $typesArr = Badge::getTypeArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_BADGE_OR_RIBBON', $this->adminLangId), 'badge_type', $typesArr, '', [], '');
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_NAME', $this->adminLangId), 'badge_name', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH...', $this->adminLangId)], '');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_NAME', $this->adminLangId), 'badge_name', $selectedBadge, $badgeId, ['placeholder' => Labels::getLabel('LBL_SEARCH...', $this->adminLangId)], '');
         $fld->requirement->setRequired(true);
 
         $recordCondition = BadgeLink::getRecordConditionArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_RECORD_CONDITION', $this->adminLangId), 'record_condition', $recordCondition, '', [], '');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TRIGGER', $this->adminLangId), 'record_condition', $recordCondition, '', [], '');
         $fld->requirement->setRequired(true);
 
         $recordTypesArr = BadgeLink::getRecordTypeArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->adminLangId), 'badgelink_record_type', $recordTypesArr, '', [], '');
         $fld->requirement->setRequired(true);
-
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->adminLangId), 'record_name', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->adminLangId), 'multiple' => 'multiple'], '');
-        if (BadgeLink::REC_COND_MANUAL == $recordCondition) {
-            $fld->requirement->setRequired(true);
-        }
 
         $conditionTypesArr = BadgeLink::getConditionTypesArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badgelink_condition_type', $conditionTypesArr);
@@ -277,6 +305,11 @@ class BadgeLinksController extends AdminBaseController
 
         $frm->addRequiredField(Labels::getLabel('LBL_CONDITION_FROM', $this->adminLangId), 'badgelink_condition_from');
         $frm->addRequiredField(Labels::getLabel('LBL_CONDITION_TO', $this->adminLangId), 'badgelink_condition_to');
+
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->adminLangId), 'record_name', $selectedRecords, $recordIds, ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->adminLangId), 'multiple' => 'multiple'], '');
+        if (BadgeLink::REC_COND_MANUAL == $recordCondition) {
+            $fld->requirement->setRequired(true);
+        }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
         return $frm;

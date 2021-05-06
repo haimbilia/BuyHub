@@ -18,7 +18,7 @@ $data = [
         [
             'attr' => [
                 'href' => 'javascript:void(0)',
-                'onclick' => 'bulkBadgesUnlink()',
+                'onclick' => 'bulkBadgesUnlink(this)',
                 'title' => Labels::getLabel('LBL_DELETE_SELECTED', $adminLangId)
             ],
             'label' => '<i class="fas fa-trash"></i>'
@@ -33,5 +33,10 @@ require_once (CONF_THEME_PATH . '_partial/index-page-common.php');
 	var RECORD_TYPE_SELLER_PRODUCT = <?php echo BadgeLink::RECORD_TYPE_SELLER_PRODUCT; ?>;
 	var RECORD_TYPE_SHOP = <?php echo BadgeLink::RECORD_TYPE_SHOP; ?>;
 
-	var CONDITION_TYPE_DATE = <?php echo BadgeLink::CONDITION_TYPE_DATE; ?>;
+    var COND_TYPE_DATE = <?php echo BadgeLink::COND_TYPE_DATE; ?>;
+    var COND_TYPE_AVG_RATING = <?php echo BadgeLink::COND_TYPE_AVG_RATING; ?> 
+    var COND_TYPE_ORDER_COMPLETION_RATE = <?php echo BadgeLink::COND_TYPE_ORDER_COMPLETION_RATE; ?> 
+    var COND_TYPE_COMPLETED_ORDERS = <?php echo BadgeLink::COND_TYPE_COMPLETED_ORDERS; ?> 
+    var COND_TYPE_RETURN_ACCEPTANCE = <?php echo BadgeLink::COND_TYPE_RETURN_ACCEPTANCE; ?> 
+    var COND_TYPE_ORDER_CANCELLED = <?php echo BadgeLink::COND_TYPE_ORDER_CANCELLED; ?> 
 </script>
