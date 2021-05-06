@@ -272,8 +272,8 @@
                     $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                    /* $objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true) || */
                     $objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
@@ -301,12 +301,12 @@
                           <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>"><?php echo Labels::getLabel('LBL_Shops', $adminLangId); ?></a></li>
                           <?php } ?>
-                          <?php if ($objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                          <?php /* if ($objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('TaxReport'); ?>"><?php echo Labels::getLabel('LBL_Tax', $adminLangId); ?></a></li>
                           <?php } ?>
                           <?php if ($objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('CommissionReport'); ?>"><?php echo Labels::getLabel('LBL_Commission', $adminLangId); ?></a></li>
-                          <?php } ?>
+                          <?php }  */?>
 
                           <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('TopProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Products', $adminLangId); ?></a></li>

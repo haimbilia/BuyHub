@@ -113,6 +113,7 @@ foreach ($arr_listing as $sn => $row) {
                 break;
         }
     }
+    $sr_no ++;
 }
 if (count($arr_listing) == 0) {
     $tbl->appendElement('tr')->appendElement(
