@@ -27,7 +27,7 @@ if (null != $fld && !empty($rowData)) {
 		$recordName .= ' | ' . $rowData['seller'];
 	}
 	
-    $fld->setFieldTagAttribute('data-val', $rowData['badgelink_record_id']);
+    $fld->setFieldTagAttribute('data-val', $rowData['badgelink_record_ids']);
     $fld->setFieldTagAttribute('data-text', $recordName);
 }
 ?>

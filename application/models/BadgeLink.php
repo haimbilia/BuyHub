@@ -19,7 +19,7 @@ class BadgeLink extends MyAppModel
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'badge_id',
-        self::DB_TBL_PREFIX . 'record_id',
+        self::DB_TBL_PREFIX . 'record_ids',
         self::DB_TBL_PREFIX . 'record_type',
         self::DB_TBL_PREFIX . 'condition_type',
         self::DB_TBL_PREFIX . 'condition_from',
@@ -112,5 +112,59 @@ class BadgeLink extends MyAppModel
             self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATICALLY', $langId),
             self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUALLY', $langId)
         ];
+    }
+    
+    /**
+     * getBadgeLinksSearchObj
+     *
+     * @param  int $langId
+     * @return object
+     */
+    public static function getBadgeLinksSearchObj(int $langId): object
+    {
+        $srch = new BadgeLinkSearch($langId);
+        $srch->addMultipleFields([
+            BadgeLink::DB_TBL_PREFIX . 'id',
+            BadgeLink::DB_TBL_PREFIX . 'badge_id',
+            'badge_name',
+            'badge_type',
+            BadgeLink::DB_TBL_PREFIX . 'record_ids',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_PRODUCT . ' 
+                    THEN COALESCE( p_l.product_name, p.product_identifier )
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
+                    THEN selprod_title
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SHOP . ' 
+                    THEN COALESCE( shp_l.shop_name, shp.shop_identifier )
+                ELSE TRUE
+            END) as record_name',
+            BadgeLink::DB_TBL_PREFIX . 'record_type',
+            BadgeLink::DB_TBL_PREFIX . 'condition_type',
+            BadgeLink::DB_TBL_PREFIX . 'condition_from',
+            BadgeLink::DB_TBL_PREFIX . 'condition_to',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
+                    THEN GROUP_CONCAT( option_name )
+                ELSE ""
+            END) as option_names',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
+                    THEN GROUP_CONCAT( optionvalue_name )
+                ELSE ""
+            END) as option_value_names',
+            '(CASE 
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '
+                    THEN spu.credential_username
+                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SHOP . '
+                    THEN shpu.credential_username
+                ELSE ""
+            END) as seller'
+        ]);
+        $srch->joinBadge($langId);
+        $srch->joinProduct($langId);
+        $srch->joinSellerProduct($langId);
+        $srch->joinShop($langId);
+        $srch->addGroupBy('badgelink_id');
+        return $srch;
     }
 }

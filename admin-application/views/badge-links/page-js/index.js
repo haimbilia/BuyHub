@@ -85,8 +85,17 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
 
             if (0 < badgelink_id) {
                 $('.addUpdateForm--js select[name="badgelink_condition_type"]').change();
+                var selectedRecords = $('.addUpdateForm--js input[name="badgelink_record_ids"]').val();
+                if ('[]' != selectedRecords && '' != selectedRecords && 'undefined' != selectedRecords) {
+                    $('.addUpdateForm--js select[name="badgelink_record_type"]').attr('disabled', 'disabled');
+                }
             }
             $('.addUpdateForm--js select[name="badge_type"], .addUpdateForm--js select[name="record_condition"]').change();
+            setTimeout(() => { 
+                $('.select2-search__field').each(function () {
+                    $(this).attr('name', $(this).closest('.select2').siblings('select').attr('name') + '_select2-search__field');
+                });
+            }, 200);
         });
     };
 
@@ -186,6 +195,8 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
     }
 
     getRecordTypeURL = function () {
+        var searchSelector = $(".addUpdateForm--js select[name='record_name']").siblings('.select2').find('[aria-owns]').attr('aria-owns');
+        $("#" + searchSelector).html("");
         var recordType = $('.addUpdateForm--js select[name="badgelink_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             return fcom.makeUrl('Products', 'autoComplete');
@@ -246,10 +257,21 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
                 return result.name || result.text;
             }
         }).on('select2:selecting', function (e) {
-            $("input[name='badgelink_record_id']").val(e.params.args.data.id);
+            var JSONObj = [e.params.args.data.id];
 
-        }).on('select2:unselecting', function (e) {
-            $("input[name='badgelink_record_id']").val("");
+            var badgeLinkRecordIds = $(".addUpdateForm--js input[name='badgelink_record_ids']").val();
+            if ('' != badgeLinkRecordIds) {
+                JSONObj = JSON.parse(badgeLinkRecordIds);
+                JSONObj.push(e.params.args.data.id);
+            }
+            $(".addUpdateForm--js input[name='badgelink_record_ids']").val(JSON.stringify(JSONObj));
+            $('.addUpdateForm--js select[name="badgelink_record_type"]').attr('disabled', 'disabled');
+        }).on('select2:unselect', function (e) {
+            var selectedRecords = JSON.stringify($("select[name='record_name']").val());
+            $(".addUpdateForm--js input[name='badgelink_record_ids']").val(selectedRecords);
+            if ('[]' == selectedRecords || '' == selectedRecords || 'undefined' == selectedRecords) {
+                $('.addUpdateForm--js select[name="badgelink_record_type"]').removeAttr('disabled');
+            }
         });
     }
 })()

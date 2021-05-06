@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 
-$headingLabel = Labels::getLabel('LBL_MANAGE_BADGE_LINKS', $adminLangId);
-$listingLabel = Labels::getLabel('LBL_BADGE_LINKS_LIST', $adminLangId);
+$headingLabel = Labels::getLabel('LBL_MANAGE_BADGES_&_RIBBONS_LINKS', $adminLangId);
+$listingLabel = Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS_LIST', $adminLangId);
 $data = [
     'adminLangId' => $adminLangId,
     'deleteButton' => false,
@@ -11,7 +11,7 @@ $data = [
             'attr' => [
                 'href' => 'javascript:void(0)',
                 'onclick' => 'form(0)',
-                'title' => Labels::getLabel('LBL_BIND_BADGE_LINKS', $adminLangId)
+                'title' => Labels::getLabel('LBL_BIND_BADGE_OR_RIBBON', $adminLangId)
             ],
             'label' => '<i class="fas fa-plus"></i>'
         ],

@@ -90,7 +90,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinProduct(int $langId = 0)
     {
-        $this->joinTable(Product::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = product_id', 'p');
+        $this->joinTable(Product::DB_TBL, 'LEFT JOIN', BadgeLink::DB_TBL_PREFIX . 'record_ids = product_id', 'p');
         if (0 < $langId) {
             $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'product_id = productlang_product_id AND productlang_lang_id = ' . $langId, 'p_l');
         }
@@ -104,7 +104,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinSellerProduct(int $langId = 0)
     {
-        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = selprod_id', 'sp');
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', BadgeLink::DB_TBL_PREFIX . 'record_ids = selprod_id', 'sp');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'spu.credential_user_id = sp.selprod_user_id', 'spu');
         $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT JOIN', 'selprod_id = selprodoption_selprod_id', 'spo');
         $this->joinTable(OptionValue::DB_TBL, 'LEFT JOIN', 'selprodoption_optionvalue_id = optionvalue_id', 'optv');
@@ -125,7 +125,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinShop(int $langId = 0)
     {
-        $this->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = shop_id', 'shp');
+        $this->joinTable(Shop::DB_TBL, 'LEFT JOIN', BadgeLink::DB_TBL_PREFIX . 'record_ids = shop_id', 'shp');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'shpu.credential_user_id = shp.shop_user_id', 'shpu');
         if (0 < $langId) {
             $this->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shop_id = shoplang_shop_id AND shoplang_lang_id = ' . $langId, 'shp_l');

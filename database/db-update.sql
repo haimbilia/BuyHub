@@ -547,14 +547,14 @@ ALTER TABLE `tbl_badges_lang`
 --
 
 CREATE TABLE `tbl_badge_links` (
-  `badgelink_id` bigint NOT NULL,
-  `badgelink_badge_id` bigint NOT NULL,
-  `badgelink_record_id` bigint NOT NULL,
-  `badgelink_record_type` int NOT NULL,
-  `badgelink_condition_type` int NOT NULL,
-  `badgelink_condition_from` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `badgelink_condition_to` varchar(150) COLLATE utf8mb4_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `badgelink_id` bigint(20) NOT NULL,
+  `badgelink_badge_id` bigint(20) NOT NULL,
+  `badgelink_record_ids` varchar(250) NOT NULL COMMENT 'Json array',
+  `badgelink_record_type` int(11) NOT NULL,
+  `badgelink_condition_type` int(11) NOT NULL,
+  `badgelink_condition_from` varchar(150) NOT NULL,
+  `badgelink_condition_to` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -565,7 +565,7 @@ CREATE TABLE `tbl_badge_links` (
 --
 ALTER TABLE `tbl_badge_links`
   ADD PRIMARY KEY (`badgelink_id`),
-  ADD UNIQUE KEY `badge_link_unique` (`badgelink_badge_id`,`badgelink_record_id`,`badgelink_record_type`);
+  ADD UNIQUE KEY `badge_link_unique` (`badgelink_badge_id`,`badgelink_record_ids`,`badgelink_record_type`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -575,5 +575,6 @@ ALTER TABLE `tbl_badge_links`
 -- AUTO_INCREMENT for table `tbl_badge_links`
 --
 ALTER TABLE `tbl_badge_links`
-  MODIFY `badgelink_id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `badgelink_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  
 -- --- Badges & Ribbons --- --
