@@ -101,6 +101,7 @@ Fixes:
     => 053156 - admin> shipping> order level shipping text is not changing as per language /RTL
     => 053228 - When stripe connect is not configured, uploading banner images gives error 
     => 053197 - mPesa Pament gateway payment not confirmed
+    => 053235 - buyer can't cancel the order when status is in process
 
 
 Enhancements :
