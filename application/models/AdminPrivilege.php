@@ -117,6 +117,7 @@ class AdminPrivilege
     public const SECTION_IMAGE_ATTRIBUTES = 111;
     public const SECTION_PICKUP_ADDRESSES = 112;
     public const SECTION_RATING_TYPES = 113;
+    public const SECTION_SHIPPED_PRODUCTS_LISTING = 114;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -1526,6 +1527,16 @@ class AdminPrivilege
     public function canEditPickupAddresses($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_PICKUP_ADDRESSES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewShippedProducts($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPED_PRODUCTS_LISTING, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditShippedProducts($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPED_PRODUCTS_LISTING, static::PRIVILEGE_WRITE, $returnResult);
     }
 
     public function canViewTrackingRelationCode()

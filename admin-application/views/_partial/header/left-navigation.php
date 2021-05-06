@@ -543,6 +543,10 @@
                           <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>"><?php echo Labels::getLabel('LBL_Pickup_Addresses', $adminLangId); ?></a></li>
                           <?php } ?>
+
+                          <?php if ($objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                              <li><a href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>"><?php echo Labels::getLabel('LBL_Shipped_Products', $adminLangId); ?></a></li>
+                          <?php } ?>
                       </ul>
                   </li>
               <?php } ?>
