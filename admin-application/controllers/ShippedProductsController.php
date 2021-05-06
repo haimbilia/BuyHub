@@ -26,8 +26,7 @@ class ShippedProductsController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : intval($data['page']);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        $srch = new ShippedProducts();
-        $srch->joinProductLang($this->adminLangId);
+        $srch = new ShippedProducts($this->adminLangId);
         $srch->joinShipProfileProd();
         $srch->joinShippingProfile();
         $srch->addProductByAdminCondition();
@@ -42,10 +41,10 @@ class ShippedProductsController extends AdminBaseController
         if (!empty($keyword)) {
             $srch->addCondition('tp_l.product_name', 'like', '%' . $keyword . '%');
         }
-        if(!empty($shippingProfile)) {
+        if (!empty($shippingProfile)) {
             $srch->addCondition('sppro.shippro_shipprofile_id', '=', $shippingProfile);
         }
-        if(!empty($userName)) {
+        if (!empty($userName)) {
             $srch->joinSelProdTable();
             $srch->joinUserTable();
             $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'u.user_id = uc.credential_user_id', 'uc');
@@ -57,9 +56,9 @@ class ShippedProductsController extends AdminBaseController
 
 
         /* Get Catelog shipped by Admin/seller */
-        if(!empty($records)) {
+        if (!empty($records)) {
             $prodIdArr = array_column($records, 'shippro_product_id');
-            foreach($prodIdArr as $kay => $prodId) {
+            foreach ($prodIdArr as $kay => $prodId) {
                 $allProd = new ShippedProducts();
                 $allProd->joinSelProdTable();
                 $allProd->joinUserTable();
@@ -67,6 +66,7 @@ class ShippedProductsController extends AdminBaseController
                 $allProd->addPhyProductCheckCondition();
                 $allProd->addCondition('tp.product_id', '=', $prodId);
                 $allProd->addMultipleFields(array('u.user_name'));
+                $allProd->addGroupBy('u.user_id');
                 $res = $allProd->getResultSet();
                 $allRecords = FatApp::getDb()->fetchAll($res);
                 $totalProductsCount = (count($allRecords) > 0 && !empty($allRecords[0]['user_name'])) ? count($allRecords) : 0;
@@ -76,7 +76,7 @@ class ShippedProductsController extends AdminBaseController
                 $resu = $selProd->getResultSet();
                 $results = FatApp::getDb()->fetchAll($resu);
                 $selProdCount = (count($results) > 0) ? count($results) : 0;
-     
+
                 $records[$kay]['total_seller_ship'] = $selProdCount;
                 $records[$kay]['total_admin_seller_ship'] = $totalProductsCount - $selProdCount;
                 if (count(array_filter($allRecords)) != count($allRecords)) {
@@ -96,7 +96,7 @@ class ShippedProductsController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function viewSellerList($productId, $adminShip = false) 
+    public function viewSellerList($productId, $adminShip = false)
     {
         $this->objPrivilege->canViewShippedProducts();
         $productId = FatUtility::int($productId);
@@ -126,7 +126,7 @@ class ShippedProductsController extends AdminBaseController
         $resu = $selProd->getResultSet();
         $selRecords = FatApp::getDb()->fetchAll($resu);
         $mainArr = [];
-        if(!empty($selRecords)) {
+        if (!empty($selRecords)) {
             $selArr = array_unique(array_column($selRecords, 'user_name'));
             $shopArr = array_unique(array_column($selRecords, 'shop_identifier'));
             // $shipProdArr = array_unique(array_column($selRecords, 'shipprofile_name'));
@@ -135,16 +135,16 @@ class ShippedProductsController extends AdminBaseController
         /* End here */
 
         /* Get Catelog shipped by Admin */
-        if($adminShip == true) {
+        if ($adminShip == true) {
             $userIdArr = array_unique(array_column($selRecords, 'user_id'));
             $selProd = clone $allProd;
-            if(!empty($userIdArr)) {
+            if (!empty($userIdArr)) {
                 $selProd->addCondition('sp.selprod_user_id', 'NOT IN', $userIdArr);
             }
             $resu = $selProd->getResultSet();
             $notShipRecords = FatApp::getDb()->fetchAll($resu);
             $maindataArr = [];
-            if(!empty($notShipRecords)) {
+            if (!empty($notShipRecords)) {
                 $notSelShipArr = array_unique(array_column($notShipRecords, 'user_name'));
                 $selshopArr = array_unique(array_column($notShipRecords, 'shop_identifier'));
                 $maindataArr = array_combine($notSelShipArr, $selshopArr);

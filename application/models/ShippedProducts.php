@@ -1,36 +1,34 @@
 <?php
 class ShippedProducts extends SearchBase
 {
-    public function __construct()
+    public function __construct(int $landId = 0)
     {
         parent::__construct(Product::DB_TBL, 'tp');
+        if (0 < $landId) {
+            $this->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'productlang_product_id = tp.product_id	AND productlang_lang_id = ' . $landId, 'tp_l');
+        }
     }
 
     public function joinSelProdTable()
     {
-        $this->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN','sp.selprod_product_id = tp.product_id', 'sp');
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_product_id = tp.product_id', 'sp');
     }
 
     public function joinSellerShop()
     {
-        $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN',' sp.selprod_user_id = shop.shop_user_id', 'shop');
+        $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', ' sp.selprod_user_id = shop.shop_user_id', 'shop');
     }
 
     public function joinShipProfileProd()
     {
-        $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN','sppro.shippro_product_id = tp.product_id', 'sppro');
-    }
-
-    public function joinProductLang(int $landId = 0)
-    {
-        $this->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN','productlang_product_id = tp.product_id	AND productlang_lang_id = ' . $landId, 'tp_l');
+        $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'sppro.shippro_product_id = tp.product_id', 'sppro');
     }
 
     public function joinShippingProfile()
     {
         $this->joinTable(ShippingProfile::DB_TBL, 'LEFT OUTER JOIN', 'sppro.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
     }
-    
+
     public function joinUserTable()
     {
         $this->joinTable('tbl_users', 'LEFT OUTER JOIN', 'u.user_id = sp.selprod_user_id', 'u');
