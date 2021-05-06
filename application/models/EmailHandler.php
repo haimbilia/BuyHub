@@ -556,29 +556,26 @@ class EmailHandler extends FatModel
     public function sendCatalogRequestStatusChangeNotification($langId, $d)
     {
         $tpl = 'seller_catalog_request_status_change';
-
-        $catalogRequestComments = '';
-        if ($d['scatrequest_comments'] != '') {
-            $catalogRequestComments = nl2br($d['scatrequest_comments']);
-        }
-
-        $statusArr = User::getCatalogReqStatusArr($langId);
-
+        
+        $userObj = new User($d['seller_id']);
+        $userInfo = $userObj->getSellerData($langId, array('user_id', 'ifnull(shop_name, shop_identifier) as shop_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
+               
+        $statusArr = Product::getApproveUnApproveArr($langId);        
+                
         $vars = array(
-            '{shop_name}' => $d['shop_name'],
-            '{reference_number}' => $d['scatrequest_reference'],
-            '{new_request_status}' => $statusArr[$d['scatrequest_status']],
-            '{request_comments}' => $catalogRequestComments,
+            '{shop_name}' => $userInfo['shop_name'],         
+            '{new_status}' => $statusArr[$d['status']], 
+            '{product_name}' => $d['product_name'],
         );
 
-        $receipentsInfo = User::getSubUsersReceipents($d['user_id'], 'canViewProducts');
+        $receipentsInfo = User::getSubUsersReceipents($userInfo['user_id'], 'canViewProducts');
         $bccEmails = $receipentsInfo['email'];
-        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars, '', 0, array(), $bccEmails)) {
+        if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars, '', 0, array(), $bccEmails)) {
             return false;
         }
 
         $phoneNumbers = $receipentsInfo['phone'];
-        $phoneNumbers[] = !empty($d['user_phone']) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
+        $phoneNumbers[] = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         foreach ($phoneNumbers as $phone) {
             $this->sendSms($tpl, $phone, $vars, $langId);
         }

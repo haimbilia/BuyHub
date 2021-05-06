@@ -1,5 +1,7 @@
 <?php
 
+use phpDocumentor\Reflection\PseudoTypes\True_;
+
 class CommonHelper extends FatUtility
 {
     private static $_ip;
@@ -1445,16 +1447,19 @@ class CommonHelper extends FatUtility
         return trim($string, '-');
     }
 
-    public static function recursiveDelete($str)
+    public static function recursiveDelete($str, $removeParent = false)
     {
         if (is_file($str)) {
             return @unlink($str);
         } elseif (is_dir($str)) {
             $scan = glob(rtrim($str, '/') . '/*');
             foreach ($scan as $index => $path) {
-                static::recursiveDelete($path);
+                static::recursiveDelete($path, true);
             }
-            return @rmdir($str);
+
+            if ($removeParent) {
+                return @rmdir($str);
+            }
         }
     }
 

@@ -197,7 +197,7 @@ trait SellerProducts
         }
 
         $productRow = Product::getProductDataById($this->siteLangId, $product_id, array('IFNULL(product_name, product_identifier) as product_name', 'product_active', 'product_seller_id', 'product_added_by_admin_id', 'product_cod_enabled', 'product_type', 'product_approved', 'product_min_selling_price'));
-        
+
         if (!$productRow) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
@@ -213,18 +213,18 @@ trait SellerProducts
         if (($productRow['product_seller_id'] != $this->userParentId) && $productRow['product_added_by_admin_id'] == 0) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), false);
         }
-        
+
         $productLangRow = Product::getProductDataById($this->siteLangId, $product_id, array('product_identifier'));
-        
+
         $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
 
         $availableOptionsCount = 1;
-        array_walk($productOptions, function($val) use (&$availableOptionsCount) {
+        array_walk($productOptions, function ($val) use (&$availableOptionsCount) {
             $availableOptionsCount *= count($val['optionValues']);
         });
-        
+
         $frmSellerProduct = $this->getSellerProductForm($product_id, $selprod_id, 'SELLER_PRODUCT', $availableOptionsCount);
-        
+
         $sellerProductRow = [];
         if ($selprod_id) {
             $sellerProductRow = SellerProduct::getAttributesById($selprod_id, null, true, true);
@@ -255,7 +255,7 @@ trait SellerProducts
             $sellerProductRow['selprod_cod_enabled'] = $productRow['product_cod_enabled'];
             $sellerProductRow['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($productLangRow['product_identifier']));
         }
-        
+
         $productWarranty = Product::getAttributesById($product_id, 'product_warranty', true);
         $sellerProductRow['product_warranty'] = FatUtility::int($productWarranty);
 
@@ -312,7 +312,7 @@ trait SellerProducts
 
         //$shipBySeller = SellerProduct::prodShipByseller($product_id);
         $shipBySeller = Product::isProductShippedBySeller($product_id, $productRow['product_seller_id'], UserAuthentication::getLoggedUserId());
-        
+
         $inventoryForm = $this->inventoryOptionsForm();
 
         $this->set('inventoryForm', $inventoryForm);
@@ -342,7 +342,7 @@ trait SellerProducts
         if (empty($needle)) {
             die(json_encode(['options' => []]));
         }
-        
+
         $selectedOptions = FatApp::getPostedData('selectedOptions', FatUtility::VAR_STRING, '');
         if (!empty($selectedOptions) && true === LibHelper::isJson($selectedOptions)) {
             $selectedOptions = json_decode($selectedOptions, true);
@@ -354,43 +354,42 @@ trait SellerProducts
         } else if (!empty($needle) && false !== strpos($needle, '_')) {
             $keywordData = explode('_', $needle);
         }
-        
+
         if (!empty($keywordData)) {
             $needle = $keywordData[0];
         }
-        
+
         Product::setSearchOptionName(trim($needle));
         $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
         $invOptionsArr = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
-        
+
         $availableOptions = array();
         foreach ($invOptionsArr as $optionKey => $optionValue) {
             $selProdCode = $productId . '_' . $optionKey;
             $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
             if (
-                (!empty($selProdAvailable) && !$selProdAvailable['selprod_deleted']) || 
+                (!empty($selProdAvailable) && !$selProdAvailable['selprod_deleted']) ||
                 (is_array($selectedOptions) && in_array($optionKey, $selectedOptions))
             ) {
                 continue;
             }
-            
+
             $haystack = strtolower($optionValue);
-            
+
             if (!empty($keywordData)) {
                 $keywordData = array_map('trim', $keywordData);
                 $needle = implode('_', $keywordData);
-            }
-            ;
+            };
             if (!empty($needle) && false === strpos($haystack, trim(strtolower($needle)))) {
                 continue;
             }
-            
+
             $availableOptions[] = array(
                 'id' => $optionKey,
                 'name' => str_replace("_", " | ", $optionValue)
             );
         }
-        
+
         die(json_encode(['options' => $availableOptions]));
     }
 
@@ -408,16 +407,16 @@ trait SellerProducts
     {
         $frm = new Form('frmInventoryOptionsForm');
         $frm->addSelectBox(Labels::getLabel('LBL_VARIANT/OPTION', $this->siteLangId), 'option_autocomplete', [], '', array('class' => 'optionname--js', 'placeholder' => Labels::getLabel('LBL_SELECT_OPTION', $this->siteLangId)));
-        
+
         $fld = $frm->addFloatField(Labels::getLabel('LBL_COST_PRICE', $this->siteLangId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'inv_option_cost');
         $fld->requirements()->setPositive();
-        
+
         $fld = $frm->addFloatField(Labels::getLabel('LBL_SELLING_PRICE', $this->siteLangId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'inv_option_sell_price');
         $fld->requirements()->setPositive();
 
         $frm->addRequiredField(Labels::getLabel('LBL_QUANTITY', $this->siteLangId), 'inv_option_stock');
         $frm->addRequiredField(Labels::getLabel('LBL_SKU', $this->siteLangId), 'inv_option_sku');
-        
+
         $frm->addHiddenField('', 'inv_option_name');
         $frm->addHiddenField('', 'inv_option_id');
         $frm->addHiddenField('', 'inv_option_selprod_id');
@@ -668,12 +667,12 @@ trait SellerProducts
         if (1 > $product_id) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        
+
         $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
         if (empty($productOptions)) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_NO_RECORD_FOUND', $this->siteLangId));
         }
-        
+
         $this->set('productOptions', $productOptions);
         $json['html'] = $this->_template->render(false, false, 'seller/prod-options.php', true);
         FatUtility::dieJsonSuccess($json);
@@ -683,14 +682,14 @@ trait SellerProducts
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         $post = $this->validatePostedData(FatApp::getPostedData());
-        
+
         $productOptions = Product::getProductOptions($post['selprod_product_id'], $this->siteLangId, true);
         if (empty($productOptions)) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
         }
 
         $availableOptionsCount = 1;
-        array_walk($productOptions, function($val) use (&$availableOptionsCount) {
+        array_walk($productOptions, function ($val) use (&$availableOptionsCount) {
             $availableOptionsCount *= count($val['optionValues']);
         });
 
@@ -699,7 +698,14 @@ trait SellerProducts
         $this->deleteSelProdWithoutOptions($productId, $this->userParentId);
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $error = false;
+        $prodAllowedLimit = -1;
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $prodAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
+        }
+        $productCount = SellerProduct::getActiveCount($this->userParentId);
+
         if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $availableOptionsCount) {
+
             $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
 
             foreach ($optionCombinations as $optionKey => $optionValue) {
@@ -717,12 +723,17 @@ trait SellerProducts
                 if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey]) || !isset($post['selprod_stock' . $optionKey])) {
                     continue;
                 }
+
+                if (-1 != $prodAllowedLimit && $prodAllowedLimit < $productCount) {
+                    $data_to_be_save['selprod_active'] = applicationConstants::INACTIVE;
+                }
                 $data_to_be_save['selprod_code'] = $selProdCode;
                 $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
                 $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionKey];
                 $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
                 $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey];
                 $this->addOption($selprod_id, $data_to_be_save, $optionKey);
+                $productCount++;
             }
         } else {
             $optionValue = FatApp::getPostedData('inv_option_id', FatUtility::VAR_STRING, '');
@@ -740,6 +751,11 @@ trait SellerProducts
             if (!isset($post['selprod_cost' . $optionValue]) || !isset($post['selprod_price' . $optionValue]) || !isset($post['selprod_stock' . $optionValue])) {
                 FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             }
+
+            if (-1 != $prodAllowedLimit && $prodAllowedLimit < $productCount) {
+                $data_to_be_save['selprod_active'] = applicationConstants::INACTIVE;
+            }
+
             $data_to_be_save['selprod_code'] = $selProdCode;
             $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionValue];
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionValue];
@@ -751,7 +767,9 @@ trait SellerProducts
         Product::updateMinPrices($productId);
 
         /* Return if called in other function; */
-        if (0 < $return) { return; }
+        if (0 < $return) {
+            return;
+        }
 
         if ($error) {
             FatUtility::dieWithError(Message::getHtml());
@@ -2739,11 +2757,13 @@ trait SellerProducts
         $sellerProductData = SellerProduct::getAttributesById($selprodId, array('selprod_active'));
 
         if (!$sellerProductData) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
 
         $status = ($sellerProductData['selprod_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+        if ($status == applicationConstants::ACTIVE && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && SellerProduct::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed')) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_You_have_crossed_your_package_limit', $this->siteLangId), true);
+        }
 
         $this->updateSellerProductStatus($selprodId, $status);
 
@@ -3307,7 +3327,7 @@ trait SellerProducts
         $this->set('msg', Labels::getLabel('LBL_Record_Deleted', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function isProductRewriteUrlUnique()
     {
         $selprod_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -3328,6 +3348,5 @@ trait SellerProducts
             FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
         }
         FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId));
-    }    
-    
+    }
 }

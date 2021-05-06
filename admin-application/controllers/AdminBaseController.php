@@ -390,7 +390,7 @@ class AdminBaseController extends FatController
         $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
 
         if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
-            $shipProfileArr = ShippingProfile::getProfileArr(0, true, true);
+            $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
 
             if ($type == 'REQUESTED_CATALOG_PRODUCT') {

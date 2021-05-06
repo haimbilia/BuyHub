@@ -975,6 +975,7 @@ class ConfigurationsController extends AdminBaseController
                     ''
                 );
 
+
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("LBL_Default_Paid_Order_Status", $this->adminLangId),
                     'CONF_DEFAULT_PAID_ORDER_STATUS',
@@ -984,6 +985,16 @@ class ConfigurationsController extends AdminBaseController
                     ''
                 );
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_default_child_order_status_when_an_order_is_marked_Paid.", $this->adminLangId) . "</small>";
+
+                $fld = $frm->addSelectBox(
+                    Labels::getLabel("LBL_Default_InProcess_Order_Status", $this->adminLangId),
+                    'CONF_DEFAULT_INPROCESS_ORDER_STATUS',
+                    $orderStatusArr,
+                    false,
+                    array(),
+                    ''
+                );
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_default_in-process_order_status", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("LBL_Default_Shipping_Order_Status", $this->adminLangId),

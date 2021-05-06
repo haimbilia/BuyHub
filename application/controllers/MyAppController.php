@@ -168,6 +168,8 @@ class MyAppController extends FatController
                 'resendOtp' => Labels::getLabel('LBL_RESEND_OTP?', $this->siteLangId),
                 'redirecting' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
                 'uploadImageLimit' => Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', $this->siteLangId),
+                'deleteAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
+                'unlinkAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

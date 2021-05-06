@@ -21,7 +21,7 @@
         <script src="jqueryFileTree/jqueryFileTree.js" type="text/javascript"></script>
         <link href="jqueryFileTree/jqueryFileTree.css" rel="stylesheet" type="text/css" />
         <script src="jqueryFileTree/jquery.easing.js" type="text/javascript"></script>
-        <link href="http://fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css" />
+        <link href="//fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css" />
         <script src="jquery/jquery.form.js" type="text/javascript"></script> <?php /* <link href="uploadify/uploadify.css" rel="stylesheet" type="text/css" />
     <script src="uploadify/jquery.uploadify.v2.1.4.min.js" type="text/javascript"></script>
     <script src="uploadify/swfobject.js" type="text/javascript"></script> */ ?> <script language="javascript" type="text/javascript">

@@ -1305,7 +1305,7 @@ class Orders extends MyAppModel
         } elseif (strtolower($paymentMethodCode) == 'transferbank') {
             $emailNotify = $emailObj->bankTranferOrderUpdateBuyerAdmin($orderId);
             $emailObj->newOrderBuyerAdmin($orderId, $orderInfo['order_language_id']);
-            $emailObj->newOrderVendor($orderId, 0, $paymentMethodCode);            
+            $emailObj->newOrderVendor($orderId, 0, $paymentMethodCode);
         }
         
         $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());        
@@ -1946,7 +1946,7 @@ class Orders extends MyAppModel
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")));
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-
+        $buyerAllowCancelStatuses = array_merge($buyerAllowCancelStatuses, (array) FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS"));
         return $buyerAllowCancelStatuses;
     }
 

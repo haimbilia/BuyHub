@@ -24,11 +24,11 @@ class SellerProduct extends MyAppModel
     public const DB_TBL_RELATED_PRODUCTS_PREFIX = 'related_';
 
     public const DB_TBL_EXTERNAL_RELATIONS = 'tbl_seller_product_external_relations';
-    public const DB_TBL_EXTERNAL_RELATIONS_PREFIX = 'sperel_';    
-    
+    public const DB_TBL_EXTERNAL_RELATIONS_PREFIX = 'sperel_';
+
     public const DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD = 'tbl_seller_products_to_plugin_selprod';
     public const DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX = 'spps_';
-    
+
     public const MAX_RANGE_OF_MINIMUM_PURCHANGE_QTY = 9999;
 
     public const VOL_DISCOUNT_MIN_QTY = 2;
@@ -326,7 +326,7 @@ class SellerProduct extends MyAppModel
 
         $srch->addCondition('c.prodcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('c.prodcat_deleted', '=', applicationConstants::NO);
-        
+
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
             $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'product_brand_id = brand.brand_id and brand.brand_active = ' . applicationConstants::YES . ' and brand.brand_deleted = ' . applicationConstants::NO, 'brand');
         } else {
@@ -634,7 +634,7 @@ class SellerProduct extends MyAppModel
         /* ] */
 
         $db = FatApp::getDb();
-        $sql = "SELECT commsetting_fees,
+        $sql = "SELECT commsetting_fees,commsetting_product_id,commsetting_user_id,commsetting_prodcat_id,
 			CASE
 				WHEN commsetting_product_id = '" . $product_id . "' AND commsetting_user_id = '" . $selprod_user_id . "' AND commsetting_prodcat_id IN (" . implode(",", $catIds) . ") THEN 10
   				WHEN commsetting_product_id = '" . $product_id . "' AND commsetting_user_id = '" . $selprod_user_id . "' AND commsetting_prodcat_id = '0' THEN 9
@@ -645,12 +645,18 @@ class SellerProduct extends MyAppModel
 				WHEN commsetting_product_id = 0 AND commsetting_user_id = '" . $selprod_user_id . "' AND commsetting_prodcat_id = 0 THEN 5
 
 				WHEN commsetting_product_id = 0 AND commsetting_user_id = 0 AND commsetting_prodcat_id IN (" . implode(",", $catIds) . ") THEN 4
-
+                              
 				WHEN (commsetting_product_id = '0' AND commsetting_user_id = '0' AND commsetting_prodcat_id = '0') THEN 1
 			END
        		as matches FROM " . Commission::DB_TBL . " WHERE commsetting_deleted = 0 order by matches desc, commsetting_fees desc  limit 0,1";
         $rs = $db->query($sql);
         if ($row = $db->fetch($rs)) {
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails(0, $selprod_user_id, array(OrderSubscription::DB_TBL_PREFIX . 'commission'));
+                if ($row['commsetting_product_id'] == 0 && $row['commsetting_user_id'] == 0 && $row['commsetting_prodcat_id'] == 0) {
+                    return $currentPlanData['ossubs_commission'];
+                }
+            }
             return $row['commsetting_fees'];
         }
     }
@@ -909,27 +915,27 @@ class SellerProduct extends MyAppModel
         $srch->addOrder('voldiscount_min_qty', 'ASC');
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
-    }   
-    
+    }
+
     private function rewriteUrl($keyword, $type = 'product')
     {
         if ($this->mainTableRecordId < 1) {
             return false;
-        }        
-        
-        $originalUrl = $this->getRewriteOriginalUrl($type);        
-        $seoUrl = $this->sanitizeSeoUrl($keyword,$type);        
-        
+        }
+
+        $originalUrl = $this->getRewriteOriginalUrl($type);
+        $seoUrl = $this->sanitizeSeoUrl($keyword, $type);
+
         $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl);
         return UrlRewrite::update($originalUrl, $customUrl);
-    }    
-    
+    }
+
     private function getRewriteOriginalUrl($type = 'product')
     {
         if ($this->mainTableRecordId < 1) {
             return false;
         }
-        
+
         switch (strtolower($type)) {
             case 'reviews':
                 $originalUrl = Product::PRODUCT_REVIEWS_ORGINAL_URL . $this->mainTableRecordId;
@@ -966,7 +972,7 @@ class SellerProduct extends MyAppModel
     {
         return $this->rewriteUrl($keyword, 'product');
     }
-    
+
     public function getRewriteProductOriginalUrl()
     {
         return $this->getRewriteOriginalUrl('product');
@@ -982,7 +988,7 @@ class SellerProduct extends MyAppModel
         return $this->rewriteUrl($keyword, 'moresellers');
     }
 
-    public static function getActiveCount($userId, $selprodId = 0)
+    public static function getActiveCount($userId, $selprodId = 0): int
     {
         $selprodId = FatUtility::int($selprodId);
         $userId = FatUtility::int($userId);
@@ -992,6 +998,7 @@ class SellerProduct extends MyAppModel
 
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_user_id', '=', $userId);
+        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
         if ($selprodId) {
             $srch->addCondition('selprod_id', '!=', $selprodId);
         }
@@ -1000,7 +1007,7 @@ class SellerProduct extends MyAppModel
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $records = $db->fetchAll($rs);
-        return $srch->recordCount();
+        return (int) $srch->recordCount();
     }
 
     public function joinUserWishListProducts($srch, $user_id)
@@ -1221,7 +1228,7 @@ class SellerProduct extends MyAppModel
         }
         return [];
     }
-    
+
     public static function prodShipByseller($productId)
     {
         $productId = FatUtility::int($productId);
@@ -1245,7 +1252,7 @@ class SellerProduct extends MyAppModel
     {
         return $fulfillmentType;
     }
-    
+
     public static function getProdIdByPlugin(int $pluginId, int $pluginSelProdId): int
     {
         $srch = new SearchBase(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
@@ -1253,11 +1260,10 @@ class SellerProduct extends MyAppModel
         $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_selprod_id', '=', $pluginSelProdId);
         $srch->addFld('spps_selprod_id');
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetch($rs); 
+        $records = FatApp::getDb()->fetch($rs);
         if (!$records) {
             return 0;
         }
         return $records['spps_selprod_id'];
     }
-    
 }
