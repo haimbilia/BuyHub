@@ -129,41 +129,12 @@ class BadgeLink extends MyAppModel
             'badge_name',
             'badge_type',
             BadgeLink::DB_TBL_PREFIX . 'record_ids',
-            '(CASE 
-                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_PRODUCT . ' 
-                    THEN COALESCE( p_l.product_name, p.product_identifier )
-                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
-                    THEN selprod_title
-                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SHOP . ' 
-                    THEN COALESCE( shp_l.shop_name, shp.shop_identifier )
-                ELSE TRUE
-            END) as record_name',
             BadgeLink::DB_TBL_PREFIX . 'record_type',
             BadgeLink::DB_TBL_PREFIX . 'condition_type',
             BadgeLink::DB_TBL_PREFIX . 'condition_from',
-            BadgeLink::DB_TBL_PREFIX . 'condition_to',
-            '(CASE 
-                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
-                    THEN GROUP_CONCAT( option_name )
-                ELSE ""
-            END) as option_names',
-            '(CASE 
-                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '  
-                    THEN GROUP_CONCAT( optionvalue_name )
-                ELSE ""
-            END) as option_value_names',
-            '(CASE 
-                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SELLER_PRODUCT . '
-                    THEN spu.credential_username
-                WHEN ' . BadgeLink::DB_TBL_PREFIX . 'record_type = ' . BadgeLink::RECORD_TYPE_SHOP . '
-                    THEN shpu.credential_username
-                ELSE ""
-            END) as seller'
+            BadgeLink::DB_TBL_PREFIX . 'condition_to'
         ]);
         $srch->joinBadge($langId);
-        $srch->joinProduct($langId);
-        $srch->joinSellerProduct($langId);
-        $srch->joinShop($langId);
         $srch->addGroupBy('badgelink_id');
         return $srch;
     }

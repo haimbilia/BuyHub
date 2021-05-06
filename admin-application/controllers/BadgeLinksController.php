@@ -36,6 +36,67 @@ class BadgeLinksController extends AdminBaseController
         $this->_template->render();
     }
 
+    public function bindRecordSet(array $linksResult)
+    {
+        if (false == $linksResult || empty($linksResult)) {
+            return [];
+        }
+
+        $isMultiDimensional = (count(array_filter($linksResult, 'is_array')) > 0);
+        $linksResult = $isMultiDimensional ? $linksResult : [$linksResult];
+
+        foreach ($linksResult as &$record) {
+            if (empty($record['badgelink_record_ids'])) {
+                continue;
+            }
+            $recordIdsArr = json_decode($record['badgelink_record_ids'], true);
+            switch ($record['badgelink_record_type']) {
+                case BadgeLink::RECORD_TYPE_PRODUCT:
+                    $obj = Product::getSearchObject($this->adminLangId);
+                    $obj->addMultipleFields([
+                        'GROUP_CONCAT(product_id) as badgelink_record_ids',
+                        'GROUP_CONCAT(COALESCE( tp_l.product_name, tp.product_identifier ) SEPARATOR ", ") as record_name'
+                    ]);
+                    $obj->addCondition('product_id', 'IN', $recordIdsArr);
+                    $result = FatApp::getDb()->fetch($obj->getResultSet());
+                    $record = array_merge($record, $result);
+                    break;
+                case BadgeLink::RECORD_TYPE_SELLER_PRODUCT:
+                    $obj = SellerProduct::getSearchObject($this->adminLangId);
+                    $obj->addMultipleFields([
+                        'GROUP_CONCAT(selprod_id) as badgelink_record_ids',
+                        'GROUP_CONCAT(selprod_title SEPARATOR ", ") as record_name',
+                        'GROUP_CONCAT( option_name ) as option_names',
+                        'GROUP_CONCAT( optionvalue_name ) as option_value_names',
+                        'spu.credential_username as seller',
+                    ]);
+                    $obj->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'spu.credential_user_id = sp.selprod_user_id', 'spu');
+                    $obj->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT JOIN', 'selprod_id = selprodoption_selprod_id', 'spo');
+                    $obj->joinTable(OptionValue::DB_TBL, 'LEFT JOIN', 'selprodoption_optionvalue_id = optionvalue_id', 'optv');
+                    $obj->joinTable(Option::DB_TBL, 'LEFT JOIN', 'optionvalue_option_id = option_id', 'opt');
+                    $obj->joinTable(Option::DB_TBL_LANG, 'LEFT JOIN', 'option_id = optionlang_option_id AND optionlang_lang_id = ' . $this->adminLangId, 'opt_l');
+                    $obj->joinTable(OptionValue::DB_TBL_LANG, 'LEFT JOIN', 'optionvaluelang_optionvalue_id = optionvalue_id AND optionvaluelang_lang_id = ' . $this->adminLangId, 'optv_l');
+                    $obj->addCondition('selprod_id', 'IN', $recordIdsArr);
+                    $result = FatApp::getDb()->fetch($obj->getResultSet());
+                    $record = array_merge($record, $result);
+                    break;
+                case BadgeLink::RECORD_TYPE_SHOP:
+                    $obj = Shop::getSearchObject(false, $this->adminLangId);
+                    $obj->addMultipleFields([
+                        'GROUP_CONCAT(shop_id) as badgelink_record_ids',
+                        'GROUP_CONCAT(COALESCE( s_l.shop_name, s.shop_identifier ) SEPARATOR ", ") as record_name'
+                    ]);
+                    $obj->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'shpu.credential_user_id = s.shop_user_id', 'shpu');
+                    $obj->addCondition('shop_id', 'IN', $recordIdsArr);
+                    $result = FatApp::getDb()->fetch($obj->getResultSet());
+                    $record = array_merge($record, $result);
+                    break;
+            }
+        }
+
+        return $isMultiDimensional ? $linksResult : current($linksResult);
+    }
+
     public function search()
     {
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
@@ -71,11 +132,7 @@ class BadgeLinksController extends AdminBaseController
             $srch->addBadgeTypeCondition([$badgeType]);
         }
 
-        $badgeType = $post['badge_type'];
-        if (!empty($badgeType)) {
-            $srch->addBadgeTypeCondition([$badgeType]);
-        }
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $records = $this->bindRecordSet(FatApp::getDb()->fetchAll($srch->getResultSet()));
 
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set("arr_listing", $records);
@@ -96,11 +153,12 @@ class BadgeLinksController extends AdminBaseController
         if ($badgeLinkId > 0) {
             $srch = BadgeLink::getBadgeLinksSearchObj($this->adminLangId);
             $srch->addCondition('badgelink_id', '=', $badgeLinkId);
-            $dataToFill = FatApp::getDb()->fetch($srch->getResultSet());
+            $dataToFill = $this->bindRecordSet(FatApp::getDb()->fetch($srch->getResultSet()));
+            CommonHelper::printArray($dataToFill);
             $recordCondition = BadgeLink::REC_COND_MANUAL;
             if (empty($dataToFill['badgelink_record_ids'])) {
                 $recordCondition = BadgeLink::REC_COND_AUTO;
-            }            
+            }
             $dataToFill['record_condition'] = $recordCondition;
         }
         $frm = $this->getForm($recordCondition);
@@ -117,7 +175,7 @@ class BadgeLinksController extends AdminBaseController
     public function setup()
     {
         $this->objPrivilege->canEditBadgeLinks();
-        
+
         $recordCondition = FatApp::getPostedData('record_condition', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordCondition);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -131,7 +189,7 @@ class BadgeLinksController extends AdminBaseController
                 $format = 'Y-m-d H:i';
                 $fromCond = FatApp::getPostedData('badgelink_condition_from', FatUtility::VAR_STRING, '');
                 $toCond = FatApp::getPostedData('badgelink_condition_to', FatUtility::VAR_STRING, '');
-                
+
                 /* e.g. DateTime::createFromFormat('Y-m-d H:i', '2021-03-05 13:30'); */
                 $from = DateTime::createFromFormat($format, $fromCond);
                 $to = DateTime::createFromFormat($format, $toCond);
@@ -147,20 +205,20 @@ class BadgeLinksController extends AdminBaseController
                     FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
                 }
                 break;
-            
+
             default:
                 FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_TYPE', $this->adminLangId));
                 break;
         }
 
         $badgeLinkId = FatApp::getPostedData('badgelink_id', FatUtility::VAR_INT, 0);
-        
+
         $record = new BadgeLink($badgeLinkId);
         $record->assignValues($post);
         if (!$record->save()) {
             FatUtility::dieJsonError($record->getError());
         }
-        
+
         $badgeLinkId = $record->getMainTableRecordId();
         $recordType = FatApp::getPostedData('badgelink_record_type', FatUtility::VAR_INT, 0);
 
@@ -212,7 +270,7 @@ class BadgeLinksController extends AdminBaseController
         if (BadgeLink::REC_COND_MANUAL == $recordCondition) {
             $fld->requirement->setRequired(true);
         }
-        
+
         $conditionTypesArr = BadgeLink::getConditionTypesArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badgelink_condition_type', $conditionTypesArr);
         $fld->requirement->setRequired(true);

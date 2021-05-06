@@ -227,7 +227,11 @@ $(document).on('change', '.addUpdateForm--js select[name="record_condition"]', f
         var text = selector.data('text');
         var val = selector.data('val');
         if ('undefined' != typeof (text) && 'undefined' != typeof (val)) {
-            selector.append('<option value="' + val + '" selected="selected">' + text + '</option>');
+            if (-1 < val.indexOf(',')) {
+
+            } else {
+                selector.append('<option value="' + val + '" selected="selected">' + text + '</option>');
+            }
         }
         selector.select2({
             closeOnSelect: true,
