@@ -322,3 +322,6 @@ CREATE TABLE `tbl_shipping_profile_lang` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile_id`, `shipprofilelang_lang_id`);
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
+('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
+ON DUPLICATE KEY UPDATE conf_val = 3;

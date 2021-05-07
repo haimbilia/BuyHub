@@ -2461,6 +2461,7 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'LEFT OUTER JOIN', Product::DB_PRODUCT_SPECIFICATION_PREFIX . 'id = ' . Product::DB_PRODUCT_LANG_SPECIFICATION_PREFIX . 'prodspec_id');
         $srch->addMultipleFields(array('prodspec_id', 'prodspeclang_lang_id', 'prodspec_name', 'prodspec_value', 'prodspec_group', 'product_id', 'product_identifier'));
         $srch->joinTable(Language::DB_TBL, 'INNER JOIN', 'language_id = prodspeclang_lang_id');
+        $srch->addCondition(Product::DB_PRODUCT_LANG_SPECIFICATION_PREFIX . 'lang_id', '=', $langId);
         $srch->doNotCalculateRecords();
         switch ($this->actionType) {
             case self::ACTION_ADMIN_PRODUCTS:
@@ -4949,7 +4950,8 @@ class Importexport extends ImportexportCommon
                     }
                     if (in_array($columnKey, array('optionvalue_id', 'optionvalue_identifier'))) {
                         if ('optionvalue_id' == $columnKey) {
-                            $optionValueData = OptionValue::getAttributesById($colValue, array('optionvalue_id'));
+                            $optionValueData = OptionValue::getAttributesById($colValue, array('optionvalue_id', 'optionvalue_identifier'));
+                            $optionvalue_identifier = $optionValueData['optionvalue_identifier'];
                         } else {
                             $optionvalue_identifier = $colValue;
                         }
