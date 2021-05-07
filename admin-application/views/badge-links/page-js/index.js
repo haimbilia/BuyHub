@@ -6,7 +6,6 @@ var formClass = '.addUpdateForm--js ';
 
 $(document).on('change', formClass + 'select[name="badgelink_condition_type"]', function () {
     var selector = $(formClass + 'input[name="badgelink_condition_from"], ' + formClass + 'input[name="badgelink_condition_to"]');
-    selector.removeAttr('readonly').datetimepicker("destroy");
 
     var ratePercElements = [COND_TYPE_ORDER_COMPLETION_RATE, COND_TYPE_RETURN_ACCEPTANCE, COND_TYPE_ORDER_CANCELLED];
     var toSelector = $(formClass + 'input[name="badgelink_condition_to"]');
@@ -25,12 +24,7 @@ $(document).on('change', formClass + 'select[name="badgelink_condition_type"]', 
         return;
     }
 
-    if (COND_TYPE_DATE == $(this).val()) {
-        selector.attr('readonly', 'readonly').datetimepicker({
-            minDate: new Date(),
-            dateFormat: 'yy-mm-dd'
-        });
-    } else if (-1 < jQuery.inArray(parseInt($(this).val()), ratePercElements)) {
+    if (-1 < jQuery.inArray(parseInt($(this).val()), ratePercElements)) {
         fromSelector.closest('.field-set').parent().addClass("col-md-6");
         toSelector.val('').closest('.field-set').parent().hide();
         toSelector.attr('data-fatreq', JSON.stringify({ required: false }));
@@ -62,16 +56,25 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
         1 : Automatically 
         2 : Manually 
     */
-    var recordNameSelector = $('select[name="record_name"]');
+    var recordNameSelector = $(formClass + 'select[name="record_name"]');
     var parent = recordNameSelector.closest('.field-set').parent();
+
+    var conditionSelectors = $(formClass + 'select[name="badgelink_condition_type"], ' + formClass + 'input[name="badgelink_condition_from"], ' + formClass + 'input[name="badgelink_condition_to"]');
     if (1 == recordCondition) {
         var requirement = { required: false };
         parent.hide();
+        $(formClass + 'select[name="badgelink_condition_type"]').closest('.row').hide();
+        recordNameSelector.val("").trigger('change');
+        conditionSelectors.val("").trigger('change');
+        $(formClass + "input[name='badgelink_record_ids']").val('');
     } else {
         var requirement = { required: true };
         parent.fadeIn();
+        $(formClass + 'select[name="badgelink_condition_type"]').closest('.row').fadeIn();
     }
     recordNameSelector.attr('data-fatreq', JSON.stringify(requirement));
+    conditionSelectors.attr('data-fatreq', JSON.stringify(requirement));
+
 });
 
 (function () {
@@ -115,6 +118,10 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
                 $(formClass + "input[name='badgelink_record_ids']").val(JSON.stringify($(formClass + "select[name='record_name']").val()));
             }
             $(formClass + 'select[name="badge_type"], ' + formClass + 'select[name="record_condition"]').change();
+            $(formClass + 'input[name="badgelink_from_date"], ' + formClass + 'input[name="badgelink_to_date"]').datetimepicker({
+                minDate: new Date(),
+                dateFormat: 'yy-mm-dd'
+            });
             setTimeout(() => {
                 $('.select2-search__field').each(function () {
                     $(this).attr('name', $(this).closest('.select2').siblings('select').attr('name') + '_select2-search__field');

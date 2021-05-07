@@ -24,6 +24,8 @@ class BadgeLink extends MyAppModel
         self::DB_TBL_PREFIX . 'badge_id',
         self::DB_TBL_PREFIX . 'record_ids',
         self::DB_TBL_PREFIX . 'record_type',
+        self::DB_TBL_PREFIX . 'from_date',
+        self::DB_TBL_PREFIX . 'to_date',
         self::DB_TBL_PREFIX . 'condition_type',
         self::DB_TBL_PREFIX . 'condition_from',
         self::DB_TBL_PREFIX . 'condition_to'
@@ -81,7 +83,6 @@ class BadgeLink extends MyAppModel
     public static function getConditionTypesArr(int $langId): array
     {
         return [
-            self::COND_TYPE_DATE => Labels::getLabel('LBL_DATE', $langId),
             self::COND_TYPE_AVG_RATING => Labels::getLabel('LBL_AVERAGE_RATING', $langId),
             self::COND_TYPE_ORDER_COMPLETION_RATE => Labels::getLabel('LBL_ORDER_COMPLETION_RATE_(%)', $langId),
             self::COND_TYPE_COMPLETED_ORDERS => Labels::getLabel('LBL_COMPLETED_ORDERS', $langId),
@@ -130,19 +131,16 @@ class BadgeLink extends MyAppModel
     public static function getBadgeLinksSearchObj(int $langId): object
     {
         $srch = new BadgeLinkSearch($langId);
-        $srch->addMultipleFields([
-            BadgeLink::DB_TBL_PREFIX . 'id',
-            BadgeLink::DB_TBL_PREFIX . 'badge_id',
-            Badge::DB_TBL_PREFIX . 'name',
-            Badge::DB_TBL_PREFIX . 'type',
-            Badge::DB_TBL_PREFIX . 'shape_type',
-            Badge::DB_TBL_PREFIX . 'color',
-            BadgeLink::DB_TBL_PREFIX . 'record_ids',
-            BadgeLink::DB_TBL_PREFIX . 'record_type',
-            BadgeLink::DB_TBL_PREFIX . 'condition_type',
-            BadgeLink::DB_TBL_PREFIX . 'condition_from',
-            BadgeLink::DB_TBL_PREFIX . 'condition_to'
-        ]);
+        $attr = array_merge(
+            self::ATTR,
+            [
+                Badge::DB_TBL_PREFIX . 'name',
+                Badge::DB_TBL_PREFIX . 'type',
+                Badge::DB_TBL_PREFIX . 'shape_type',
+                Badge::DB_TBL_PREFIX . 'color',
+            ]
+        );
+        $srch->addMultipleFields($attr);
         $srch->joinBadge($langId);
         $srch->addGroupBy('badgelink_id');
         return $srch;

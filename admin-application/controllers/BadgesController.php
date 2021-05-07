@@ -101,11 +101,11 @@ class BadgesController extends AdminBaseController
                     }
                 }
             }
+        }
 
-            if (Badge::TYPE_BADGE == $type) {
-                $dataToFill['logo_min_width'] = Badge::ICON_MIN_WIDTH;
-                $dataToFill['logo_min_height'] = Badge::ICON_MIN_HEIGHT;
-            }
+        if (Badge::TYPE_BADGE == $type) {
+            $dataToFill['logo_min_width'] = Badge::ICON_MIN_WIDTH;
+            $dataToFill['logo_min_height'] = Badge::ICON_MIN_HEIGHT;
         }
         $frm->fill($dataToFill);
 
@@ -179,20 +179,11 @@ class BadgesController extends AdminBaseController
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'badge_type', $type);
 
-        if (Badge::TYPE_BADGE == $type) {
-            $mediaLanguages = applicationConstants::bannerTypeArr();
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
-            $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_BADGE);
-            $frm->addHiddenField('', 'logo_min_width');
-            $frm->addHiddenField('', 'logo_min_height');
-            $frm->addFileUpload(Labels::getLabel('LBL_UPLOAD', $this->adminLangId), 'badge_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
-            $frm->addHiddenField('', 'attachment_ids');
-        }
-
         if (Badge::TYPE_RIBBON == $type) {
             $badgeShapeTypes = Badge::getShapeTypesArr($this->adminLangId);
             $fld = $frm->addSelectBox(Labels::getLabel('LBL_SHAPE', $this->adminLangId), 'badge_shape_type', $badgeShapeTypes);
             $fld->requirement->setRequired(true);
+            $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
             $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
         }
 
@@ -202,6 +193,9 @@ class BadgesController extends AdminBaseController
             $fld = $frm->addTextBox(Labels::getLabel('LBL_NAME', $this->adminLangId), 'badge_name[' . $langId . ']');
             if ($siteDefaultLangId == $langId) {
                 $fld->requirement->setRequired(true);
+            }
+            if (Badge::TYPE_RIBBON == $type) {
+                $fld->htmlAfterField = '<small>' . CommonHelper::replaceStringData(Labels::getLabel('LBL_MIN_LENGTH_{MINLEN}_CHARACTERS_AND_MAX_LENGTH_{MAXLEN}_CHARACTERS.', $this->adminLangId), ['{MINLEN}' => Badge::RIBB_TEXT_MIN_LEN, '{MAXLEN}' => Badge::RIBB_TEXT_MAX_LEN]) . '</small>';
             }
         }
         
@@ -220,6 +214,16 @@ class BadgesController extends AdminBaseController
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'badge_active', $activeInactiveArr, '', array(), '');
         $fld->requirement->setRequired(true);
+
+        if (Badge::TYPE_BADGE == $type) {
+            $mediaLanguages = applicationConstants::bannerTypeArr();
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
+            $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_BADGE);
+            $frm->addHiddenField('', 'logo_min_width');
+            $frm->addHiddenField('', 'logo_min_height');
+            $frm->addFileUpload(Labels::getLabel('LBL_UPLOAD', $this->adminLangId), 'badge_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
+            $frm->addHiddenField('', 'attachment_ids');
+        }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
         return $frm;

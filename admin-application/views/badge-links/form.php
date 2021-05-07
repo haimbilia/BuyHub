@@ -30,7 +30,7 @@ if (null != $fld) {
 ?>
 <section class="section">
 	<div class="sectionhead">
-		<h4><?php echo Labels::getLabel('LBL_BADGE_LINKS_SETUP', $adminLangId); ?></h4>
+		<h4><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS_SETUP', $adminLangId); ?></h4>
 		<div class="section__toolbar">
 			<a href="javascript:void(0);" onclick="backToListing();" title="Back" class="btn-clean btn-sm btn-icon btn-secondary "><i class="fas fa-arrow-left"></i></a>
 		</div>
