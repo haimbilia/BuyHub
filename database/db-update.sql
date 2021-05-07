@@ -589,19 +589,18 @@ ALTER TABLE `tbl_badges_lang`
   ADD UNIQUE KEY `badge_name` (`badgelang_lang_id`,`badge_name`);
 
 --
--- Table structure for table `tbl_badge_links`
+-- Table structure for table `tbl_badge_link_conditions`
 --
 
-CREATE TABLE `tbl_badge_links` (
-  `badgelink_id` bigint(20) NOT NULL,
-  `badgelink_badge_id` bigint(20) NOT NULL,
-  `badgelink_record_ids` varchar(250) NOT NULL COMMENT 'Json array',
-  `badgelink_record_type` int(11) NOT NULL,
-  `badgelink_from_date` datetime DEFAULT NULL,
-  `badgelink_to_date` datetime DEFAULT NULL,
-  `badgelink_condition_type` int(11) NOT NULL,
-  `badgelink_condition_from` varchar(150) NOT NULL,
-  `badgelink_condition_to` varchar(150) NOT NULL
+CREATE TABLE `tbl_badge_link_conditions` (
+  `blinkcond_id` bigint(20) NOT NULL,
+  `blinkcond_badge_id` bigint(20) NOT NULL,
+  `blinkcond_record_type` int(11) NOT NULL,
+  `blinkcond_from_date` datetime DEFAULT NULL,
+  `blinkcond_to_date` datetime DEFAULT NULL,
+  `blinkcond_condition_type` int(11) NOT NULL,
+  `blinkcond_condition_from` varchar(150) NOT NULL,
+  `blinkcond_condition_to` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -609,19 +608,27 @@ CREATE TABLE `tbl_badge_links` (
 --
 
 --
--- Indexes for table `tbl_badge_links`
+-- Indexes for table `tbl_badge_link_conditions`
 --
-ALTER TABLE `tbl_badge_links`
-  ADD PRIMARY KEY (`badgelink_id`);
+ALTER TABLE `tbl_badge_link_conditions`
+  ADD PRIMARY KEY (`blinkcond_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `tbl_badge_links`
+-- AUTO_INCREMENT for table `tbl_badge_link_conditions`
 --
-ALTER TABLE `tbl_badge_links`
-  MODIFY `badgelink_id` bigint(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_badge_link_conditions`
+  MODIFY `blinkcond_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- Table structure for table `tbl_badge_links`
+--
+CREATE TABLE `tbl_badge_links` (
+  `badgelink_blinkcond_id` bigint(20) NOT NULL,
+  `badgelink_record_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   
 -- --- Badges & Ribbons --- --

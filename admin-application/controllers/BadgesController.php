@@ -338,7 +338,7 @@ class BadgesController extends AdminBaseController
                 continue;
             }
 
-            if (!FatApp::getDb()->deleteRecords(BadgeLink::DB_TBL_PREFIX, array('smt' => 'badgelink_badge_id = ?', 'vals' => array($badge_id)))) {
+            if (!FatApp::getDb()->deleteRecords(BadgeLinkCondition::DB_TBL_PREFIX, array('smt' => 'blinkcond_badge_id = ?', 'vals' => array($badge_id)))) {
                 continue;
             }
         }

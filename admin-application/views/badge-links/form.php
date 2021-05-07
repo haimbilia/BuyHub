@@ -10,13 +10,13 @@ if (null != $fld) {
 	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
 
-$fld = $frm->getField('badgelink_condition_from');
+$fld = $frm->getField('blinkcond_condition_from');
 if (null != $fld) {
 	$fld->developerTags['colClassPrefix'] = 'col-md-';
 	$fld->developerTags['col'] = 3;
 }
 
-$fld = $frm->getField('badgelink_condition_to');
+$fld = $frm->getField('blinkcond_condition_to');
 if (null != $fld) {
 	$fld->developerTags['colClassPrefix'] = 'col-md-';
 	$fld->developerTags['col'] = 3;

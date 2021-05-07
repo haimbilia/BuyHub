@@ -158,7 +158,7 @@
                               <li><a href="<?php echo UrlHelper::generateUrl('Badges'); ?>"><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $adminLangId); ?></a></li>
                           <?php } ?>
                           <?php if ($objPrivilege->canViewBadgeLinks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('BadgeLinks'); ?>"><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $adminLangId); ?></a></li>
+                              <li><a href="<?php echo UrlHelper::generateUrl('BadgeLinkConditions'); ?>"><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $adminLangId); ?></a></li>
                           <?php } ?>
                       </ul>
                   </li>

@@ -5,8 +5,8 @@ $arr_flds = array(
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
     Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_OBJECT', $adminLangId),
     'record_condition' => Labels::getLabel('LBL_TRIGGER', $adminLangId),
-    BadgeLink::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
-    BadgeLink::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
     'action' => '',
 );
 
@@ -33,7 +33,7 @@ foreach ($arr_listing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="badgeLinkIds[]" value=' . $row['badgelink_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="badgeLinkIds[]" value=' . $row['blinkcond_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
@@ -42,24 +42,24 @@ foreach ($arr_listing as $sn => $row) {
             case Badge::DB_TBL_PREFIX . 'type':
                 $td->appendElement('plaintext', array(), Badge::getTypeName($row[$key], $adminLangId), true);
                 break;
-            case BadgeLink::DB_TBL_PREFIX . 'record_type':
-                $td->appendElement('plaintext', array(), BadgeLink::getRecordTypeName($row[$key], $adminLangId), true);
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
+                $td->appendElement('plaintext', array(), BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId), true);
                 break;
             case 'record_condition':
-                $condition = (empty($row['badgelink_record_ids']) || '[]' == $row['badgelink_record_ids'] ? BadgeLink::REC_COND_AUTO : BadgeLink::REC_COND_MANUAL);
-                $recordCondition = BadgeLink::getRecordConditionArr($adminLangId)[$condition];
+                $condition = (empty($row['blinkcond_record_ids']) || '[]' == $row['blinkcond_record_ids'] ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
+                $recordCondition = BadgeLinkCondition::getRecordConditionArr($adminLangId)[$condition];
                 $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordCondition . '</span>';;
-                if (BadgeLink::REC_COND_MANUAL == $condition) {
+                if (BadgeLinkCondition::REC_COND_MANUAL == $condition) {
                     $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordCondition . '</span>';
                 }
                 $td->appendElement('plaintext', array(), $htm, true);
                 break;
-            case BadgeLink::DB_TBL_PREFIX . 'condition_type':
-                $td->appendElement('plaintext', array(), BadgeLink::getConditionTypeName($row[$key], $adminLangId), true);
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
+                $td->appendElement('plaintext', array(), BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId), true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
-                    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLink::DB_TBL_PREFIX . 'badge_id'], 0, $adminLangId, false);
+                    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $adminLangId, false);
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "MINI", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $row[Badge::DB_TBL_PREFIX . 'name'], 'alt' => $row[Badge::DB_TBL_PREFIX . 'name']], '', true);
                 } else {
@@ -69,9 +69,9 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $function = "form(" . $row[BadgeLink::DB_TBL_PREFIX . 'id'] . ", " . $row[BadgeLink::DB_TBL_PREFIX . 'record_type'] . ")";
+                    $function = "form(" . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ", " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'] . ")";
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLink::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {
                     $td->appendElement('plaintext', array(), Labels::getLabel('LBL_N/A', $adminLangId), true);
                 }
@@ -90,7 +90,7 @@ if (count($arr_listing) == 0) {
 $frm = new Form('frmSearchListing');
 $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js badgesLinksList--js');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
-$frm->setFormTagAttribute('action', UrlHelper::generateUrl('BadgeLinks', 'bulkBadgesUnlink'));
+$frm->setFormTagAttribute('action', UrlHelper::generateUrl('BadgeLinkConditions', 'bulkBadgesUnlink'));
 
 echo $frm->getFormTag();
 echo $tbl->getHtml(); ?>

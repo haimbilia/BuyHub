@@ -1,9 +1,9 @@
 <?php
 
-class BadgeLink extends MyAppModel
+class BadgeLinkCondition extends MyAppModel
 {
-    public const DB_TBL = 'tbl_badge_links';
-    public const DB_TBL_PREFIX = 'badgelink_';
+    public const DB_TBL = 'tbl_badge_link_conditions';
+    public const DB_TBL_PREFIX = 'blinkcond_';
 
     public const RECORD_TYPE_PRODUCT = 1;
     public const RECORD_TYPE_SELLER_PRODUCT = 2;
@@ -130,7 +130,7 @@ class BadgeLink extends MyAppModel
      */
     public static function getBadgeLinksSearchObj(int $langId): object
     {
-        $srch = new BadgeLinkSearch($langId);
+        $srch = new BadgeLinkConditionSearch($langId);
         $attr = array_merge(
             self::ATTR,
             [
@@ -142,7 +142,7 @@ class BadgeLink extends MyAppModel
         );
         $srch->addMultipleFields($attr);
         $srch->joinBadge($langId);
-        $srch->addGroupBy('badgelink_id');
+        $srch->addGroupBy('blinkcond_id');
         return $srch;
     }
 }
