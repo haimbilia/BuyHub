@@ -451,5 +451,21 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                 $('input[name=\'ptt_taxcat_id\']').val(ui.item.id);
             }
         });
+
+        var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
+        var product_type =  '<?php echo $productType; ?>';
+        var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
+        var PRODUCT_TYPE_PHYSICAL = '<?php echo Product::PRODUCT_TYPE_PHYSICAL; ?>';
+
+        if(product_type == PRODUCT_TYPE_DIGITAL){
+            hideShippingTab();
+            if (0 == attachDownloadsWithInv) {
+                showDownloadTab();
+            } else {
+                hideDownloadTab();
+            }
+        } else {
+            hideDownloadTab();
+        }
     });
 </script>

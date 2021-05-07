@@ -1292,6 +1292,11 @@ saveDownloadFiles = function()
     $inputs = $('#frmDownload select,#frmDownload input[type=hidden]');
     $inputs.each(function() { data.append( this.name,$(this).val());});
 
+    var optionCombi = "";
+    if (0 < $("#frmDownload select[name='option_comb_id']").length) {
+        optionCombi = $("#frmDownload select[name='option_comb_id']").val();
+    }
+
     $.each( $('#downloadable_file')[0].files, function(i, file) {
         data.append('downloadable_file', file);
     });
@@ -1300,10 +1305,10 @@ saveDownloadFiles = function()
     });
 
     if (optionCombi == '') {
-        data = data + '&option_comb_id=0';
+        data.append('option_comb_id', 0);
     }
-
-    data = data + '&prod_ref_type=1';
+    
+    data.append('prod_ref_type', 1);
 
     $.ajax({
         url : fcom.makeUrl('Seller', 'setupDigitalDownloads'),

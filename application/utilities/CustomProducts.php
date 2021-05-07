@@ -1469,6 +1469,8 @@ trait CustomProducts
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $languages = Language::getAllNames();
         $productFrm = $this->getCustomProductIntialSetUpFrm($productId);
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::YES;
 
         if ($productId > 0) {
             $prodData = Product::getAttributesById($productId);
@@ -1535,14 +1537,16 @@ trait CustomProducts
             }
 
             $productFrm->fill($prodData);
+            $productType = $prodData['product_type'];
+            $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
         }
 
-        $productType = $prodData['product_type'];
         unset($languages[$siteDefaultLangId]);
         $this->set('productFrm', $productFrm);
         $this->set('siteDefaultLangId', $siteDefaultLangId);
         $this->set('otherLanguages', $languages);
         $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->_template->render(false, false);
     }
 

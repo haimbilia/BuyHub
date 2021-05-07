@@ -103,7 +103,7 @@ $productEanUpcFld->addFieldTagAttribute( 'onBlur', 'validateEanUpcCode(this.valu
                             </li>
                         <?php } ?>
                         <?php if (true == $displayDownloadTab) { ?>
-                            <li><a <?php echo ($preqId) ? "onClick='productDownloads(" . $preqId . ");'" : ""; ?> href="javascript:void(0);">
+                            <li><a <?php echo ($preqId) ? "onClick='productDownloads(" . $preqId . ", 0, 1);'" : ""; ?> href="javascript:void(0);">
                                     <?php echo Labels::getLabel('LBL_Downloads', $adminLangId); ?></a>
                             </li>
                         <?php } ?>

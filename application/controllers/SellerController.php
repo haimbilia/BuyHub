@@ -5664,13 +5664,13 @@ class SellerController extends SellerBaseController
         $productId = FatUtility::int($productId);
         
         if (1 > $productId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         
         $product = Product::getAttributesById($productId, ['product_download_attachements_with_inventory']);
         
         if (false == $product) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         
         if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
@@ -5754,7 +5754,7 @@ class SellerController extends SellerBaseController
         $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
         
         if (1 > $prodId) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         
         /* TODO
@@ -5764,7 +5764,7 @@ class SellerController extends SellerBaseController
         $product = Product::getAttributesById($prodId, ['product_download_attachements_with_inventory']);
         
         if (false == $product) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         
         if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
@@ -5792,7 +5792,7 @@ class SellerController extends SellerBaseController
             $this->setupDigitalFile($ddObj, $prodId, $refId);
         }
 
-        FatUtility::dieWithError($this->str_invalid_request);
+        FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
     }
 
     private function setupDigitalFile($ddObj, $prodId, $refId)
@@ -5836,7 +5836,7 @@ class SellerController extends SellerBaseController
         $subRecId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
         
         if (1 > $recId || 1 > $subRecId) {
-            Message::addErrorMessage($this->str_invalid_request);
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         
@@ -5945,7 +5945,7 @@ class SellerController extends SellerBaseController
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
         
         if (1 > $productId) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         $optionComb = FatApp::getPostedData('option_comb', null, 0);
