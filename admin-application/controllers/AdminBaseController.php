@@ -161,6 +161,8 @@ class AdminBaseController extends FatController
             'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
             'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->adminLangId),
             'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
+            'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
+            'rate' => Labels::getLabel('LBL_RATE(INT)', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);

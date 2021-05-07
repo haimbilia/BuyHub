@@ -37,17 +37,24 @@ class BadgeLinksController extends AdminBaseController
         $this->_template->render();
     }
 
-    public function bindRecordSet(array $linksResult)
+    private function bindRecordSet(array $linksResult)
     {
         if (false == $linksResult || empty($linksResult)) {
             return [];
         }
 
-        $isMultiDimensional = (count(array_filter($linksResult, 'is_array')) > 0);
+        $isMultiDimensional = true;
+        if (array_key_exists('badgelink_record_ids', $linksResult)) {
+            $isMultiDimensional = false;
+            if (empty($linksResult['badgelink_record_ids']) || '[]' == $linksResult['badgelink_record_ids']) {
+                return $linksResult;
+            }
+        }
+
         $linksResult = $isMultiDimensional ? $linksResult : [$linksResult];
 
         foreach ($linksResult as &$record) {
-            if (empty($record['badgelink_record_ids'])) {
+            if (empty($record['badgelink_record_ids']) || '[]' == $record['badgelink_record_ids']) {
                 continue;
             }
             $recordIdsArr = json_decode($record['badgelink_record_ids'], true);
@@ -78,6 +85,7 @@ class BadgeLinksController extends AdminBaseController
                     $obj->joinTable(Option::DB_TBL_LANG, 'LEFT JOIN', 'option_id = optionlang_option_id AND optionlang_lang_id = ' . $this->adminLangId, 'opt_l');
                     $obj->joinTable(OptionValue::DB_TBL_LANG, 'LEFT JOIN', 'optionvaluelang_optionvalue_id = optionvalue_id AND optionvaluelang_lang_id = ' . $this->adminLangId, 'optv_l');
                     $obj->addCondition('selprod_id', 'IN', $recordIdsArr);
+
                     $result = FatApp::getDb()->fetch($obj->getResultSet());
                     $record = array_merge($record, $result);
                     break;
@@ -144,7 +152,6 @@ class BadgeLinksController extends AdminBaseController
             $srch->addConditionTypesCondition([$conditionType]);
         }
         $records = $this->bindRecordSet(FatApp::getDb()->fetchAll($srch->getResultSet()));
-
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set("arr_listing", $records);
         $this->set('pageCount', $srch->pages());
@@ -167,7 +174,7 @@ class BadgeLinksController extends AdminBaseController
             $dataToFill = $this->bindRecordSet(FatApp::getDb()->fetch($srch->getResultSet()));
             $this->recordData = $dataToFill;
             $recordCondition = BadgeLink::REC_COND_MANUAL;
-            if (empty($dataToFill['badgelink_record_ids'])) {
+            if (empty($dataToFill['badgelink_record_ids']) || '[]' == $dataToFill['badgelink_record_ids']) {
                 $recordCondition = BadgeLink::REC_COND_AUTO;
             }
             $dataToFill['record_condition'] = $recordCondition;
@@ -188,7 +195,8 @@ class BadgeLinksController extends AdminBaseController
         $this->objPrivilege->canEditBadgeLinks();
 
         $recordCondition = FatApp::getPostedData('record_condition', FatUtility::VAR_INT, 0);
-        $frm = $this->getForm($recordCondition);
+        $conditionType = FatApp::getPostedData('badgelink_condition_type', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordCondition, $conditionType);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
@@ -196,7 +204,7 @@ class BadgeLinksController extends AdminBaseController
 
         $conditionType = FatApp::getPostedData('badgelink_condition_type', FatUtility::VAR_INT, 0);
         switch ($conditionType) {
-            case BadgeLink::CONDITION_TYPE_DATE:
+            case BadgeLink::COND_TYPE_DATE:
                 $format = 'Y-m-d H:i';
                 $fromCond = FatApp::getPostedData('badgelink_condition_from', FatUtility::VAR_STRING, '');
                 $toCond = FatApp::getPostedData('badgelink_condition_to', FatUtility::VAR_STRING, '');
@@ -208,13 +216,22 @@ class BadgeLinksController extends AdminBaseController
                     FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
                 }
                 break;
-            case BadgeLink::CONDITION_TYPE_ORDER:
-            case BadgeLink::CONDITION_TYPE_RATING:
+            case BadgeLink::COND_TYPE_COMPLETED_ORDERS:
+            case BadgeLink::COND_TYPE_AVG_RATING:
                 $fromCond = FatApp::getPostedData('badgelink_condition_from', FatUtility::VAR_INT, 0);
                 $toCond = FatApp::getPostedData('badgelink_condition_to', FatUtility::VAR_INT, 0);
                 if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond) {
                     FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
                 }
+                break;
+            case BadgeLink::COND_TYPE_ORDER_COMPLETION_RATE:
+            case BadgeLink::COND_TYPE_RETURN_ACCEPTANCE:
+            case BadgeLink::COND_TYPE_ORDER_CANCELLED:
+                $rate = FatApp::getPostedData('badgelink_condition_from', FatUtility::VAR_INT, 0);
+                if (0 > $rate || 100 < $rate) {
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RATE_VALUE', $this->adminLangId));
+                }
+                $post['badgelink_condition_from'] = $rate;
                 break;
 
             default:
@@ -258,7 +275,7 @@ class BadgeLinksController extends AdminBaseController
         return $frm;
     }
 
-    private function getForm(int $recordCondition)
+    private function getForm(int $recordCondition, int $conditionType = 0)
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badgelink_id');
@@ -267,19 +284,21 @@ class BadgeLinksController extends AdminBaseController
 
         $selectedRecords = $selectedBadge = $recordIds = [];
         $badgeId = '';
-        if (is_array($this->recordData) && 0 < count($this->recordData) && isset($this->recordData['badgelink_record_ids'])) {
-            $recordNames = explode(", ", $this->recordData['record_names']);
-            $recordIds = explode(",", $this->recordData['badgelink_record_ids']);
-            foreach ($recordIds as $index => $recordId) {
-                $recordName = $recordNames[$index];
-                if (BadgeLink::RECORD_TYPE_SELLER_PRODUCT == $this->recordData['badgelink_record_type'] && !empty($this->recordData['option_names'])) {
-                    foreach (explode(',', $this->recordData['option_names']) as $index => $optionName) {
-                        $optionValues = explode(',', $this->recordData['option_value_names']);
-                        $recordName .= ' | ' . $optionName . ' : ' . $optionValues[$index];
+        if (is_array($this->recordData) && 0 < count($this->recordData)) {
+            if (!empty($this->recordData['badgelink_record_ids']) && '[]' != $this->recordData['badgelink_record_ids']) {
+                $recordNames = explode(", ", $this->recordData['record_names']);
+                $recordIds = explode(",", $this->recordData['badgelink_record_ids']);
+                foreach ($recordIds as $index => $recordId) {
+                    $recordName = $recordNames[$index];
+                    if (BadgeLink::RECORD_TYPE_SELLER_PRODUCT == $this->recordData['badgelink_record_type'] && !empty($this->recordData['option_names'])) {
+                        foreach (explode(',', $this->recordData['option_names']) as $index => $optionName) {
+                            $optionValues = explode(',', $this->recordData['option_value_names']);
+                            $recordName .= ' | ' . $optionName . ' : ' . $optionValues[$index];
+                        }
+                        $recordName .= ' | ' . $this->recordData['seller'];
                     }
-                    $recordName .= ' | ' . $this->recordData['seller'];
+                    $selectedRecords[$recordId] = $recordName;
                 }
-                $selectedRecords[$recordId] = $recordName;
             }
             $selectedBadge[$this->recordData['badgelink_badge_id']] = $this->recordData['badge_name'];
             $badgeId = $this->recordData['badgelink_badge_id'];
@@ -303,8 +322,13 @@ class BadgeLinksController extends AdminBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badgelink_condition_type', $conditionTypesArr);
         $fld->requirement->setRequired(true);
 
-        $frm->addRequiredField(Labels::getLabel('LBL_CONDITION_FROM', $this->adminLangId), 'badgelink_condition_from');
-        $frm->addRequiredField(Labels::getLabel('LBL_CONDITION_TO', $this->adminLangId), 'badgelink_condition_to');
+        $frm->addRequiredField(Labels::getLabel('LBL_FROM', $this->adminLangId), 'badgelink_condition_from');
+
+        $rangeElements = [BadgeLink::COND_TYPE_DATE, BadgeLink::COND_TYPE_COMPLETED_ORDERS, BadgeLink::COND_TYPE_AVG_RATING];
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_TO', $this->adminLangId), 'badgelink_condition_to');
+        if (0 == $conditionType || in_array($conditionType, $rangeElements)) {
+            $fld->requirement->setRequired(true);
+        }
 
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->adminLangId), 'record_name', $selectedRecords, $recordIds, ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->adminLangId), 'multiple' => 'multiple'], '');
         if (BadgeLink::REC_COND_MANUAL == $recordCondition) {

@@ -46,7 +46,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), BadgeLink::getRecordTypeName($row[$key], $adminLangId), true);
                 break;
             case 'record_condition':
-                $condition = (empty($row['badgelink_record_ids']) ? BadgeLink::REC_COND_AUTO : BadgeLink::REC_COND_MANUAL);
+                $condition = (empty($row['badgelink_record_ids']) || '[]' == $row['badgelink_record_ids'] ? BadgeLink::REC_COND_AUTO : BadgeLink::REC_COND_MANUAL);
                 $recordCondition = BadgeLink::getRecordConditionArr($adminLangId)[$condition];
                 $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordCondition . '</span>';;
                 if (BadgeLink::REC_COND_MANUAL == $condition) {
