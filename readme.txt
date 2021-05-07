@@ -102,6 +102,7 @@ Fixes:
     => 053228 - When stripe connect is not configured, uploading banner images gives error 
     => 053197 - mPesa Pament gateway payment not confirmed
     => 053235 - buyer can't cancel the order when status is in process
+    => 053365 -	While sharing shop page on whatsapp then meta image not displaying
 
 
 Enhancements :
