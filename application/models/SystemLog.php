@@ -49,9 +49,9 @@ class SystemLog extends MyAppModel
         );
     }
 
-    public function system(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
+    public static function system(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
     {
-        return static::set($msg, null, self::MODULE_TYPE_SYSTEM, $type, $title = '', $error = '');
+        return static::set($msg, '', self::MODULE_TYPE_SYSTEM, $type, $title = '', $error);
     }
 
     public static function plugin($request = '', $recieve = '', $titleOrPluginName = '', $type = self::TYPE_ERROR, &$error = '')
@@ -61,7 +61,7 @@ class SystemLog extends MyAppModel
 
     public static function transaction(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
     {
-        return static::set($msg, null, self::MODULE_TYPE_TRANSACTION, $type, $title = '', $error = '');
+        return static::set($msg, null, self::MODULE_TYPE_TRANSACTION, $type, $title = '', $error);
     }
 
     public static function set(string $content = '', string $response = '', int $module_type = self::MODULE_TYPE_SYSTEM, int $type = self::TYPE_ERROR, $title = '', string &$error = ''): bool
@@ -77,8 +77,8 @@ class SystemLog extends MyAppModel
             self::DB_TBL_PREFIX . 'module_type' => $module_type,
             self::DB_TBL_PREFIX . 'type' => $type,
             self::DB_TBL_PREFIX . 'title' => $title,
-            self::DB_TBL_PREFIX . 'content' => $data1,
-            self::DB_TBL_PREFIX . 'response' => $data2,
+            self::DB_TBL_PREFIX . 'content' => $content,
+            self::DB_TBL_PREFIX . 'response' => $response,
             self::DB_TBL_PREFIX . 'backtrace' => $backtrace,
             self::DB_TBL_PREFIX . 'created_at' => date('Y-m-d H:i:s'),
         ];
