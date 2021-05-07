@@ -101,6 +101,7 @@ Fixes:
     => 053228 - When stripe connect is not configured, uploading banner images gives error 
     => 053197 - mPesa Pament gateway payment not confirmed
     => 053276 - shipping is not changing on changing address during checkout
+    => 053155 - Button labels are not changing as per language
 
 
 Enhancements :
