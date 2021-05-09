@@ -5659,7 +5659,7 @@ class SellerController extends SellerBaseController
     }
 
     /* Digital downloads*/
-    public function downloadsForm($productId, $linkId = 0)
+    public function downloadsForm($productId, $linkId = 0, $sellerProdId = 0)
     {
         $productId = FatUtility::int($productId);
         

@@ -1819,15 +1819,21 @@ trait SellerProducts
             $savedOptions[$selProdAvailable['selprod_id']] = $optionValue;
             /* ] */
         }
+        
         if ($selprod_id > 0) {
             $currentOption[$selprod_id] = (array_key_exists($selprod_id, $savedOptions)) ? $savedOptions[$selprod_id] : '';
             $savedOptions = $currentOption;
         }
+        
+        
         foreach ($savedOptions as $key => $val) {
             $sellerProductRow = SellerProduct::getAttributesById($key);
             $productRow = Product::getAttributesById($sellerProductRow['selprod_product_id'], array('product_type'));
             $data['selprod_downloadable_link' . $key] = $sellerProductRow['selprod_downloadable_link'];
         }
+        
+        // CommonHelper::printArray([$savedOptions, $data], 1);
+
         $selprodDownloadFrm->fill($data);
         $this->set('savedOptions', $savedOptions);
         $this->set('selprodDownloadFrm', $selprodDownloadFrm);
