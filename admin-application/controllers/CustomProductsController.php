@@ -1473,10 +1473,9 @@ class CustomProductsController extends AdminBaseController
         $reqData = ProductRequest::getAttributesById($preqId, array('preq_content'));
         $product = json_decode($reqData['preq_content'], true);
         
-        $optionArr = isset($product['product_option']) ? $product['product_option'] : array();
-
+        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
+        
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-        // $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
         
         if (0 < count($optionCombinations)) {
             $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
@@ -1508,9 +1507,9 @@ class CustomProductsController extends AdminBaseController
 
     public function setupDigitalDownloads()
     {
-        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
         
-        if (1 > $prodId) {
+        if (1 > $preqId ) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
         
@@ -1518,8 +1517,16 @@ class CustomProductsController extends AdminBaseController
         => To check downloads allowed at product level
         */
 
-        $product = Product::getAttributesById($prodId, ['product_download_attachements_with_inventory']);
+        $productReqRow = ProductRequest::getAttributesById($preqId);
+        // CommonHelper::printArray([$productReqRow], 1);
         
+        if ($productReqRow == false) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        
+        $product = json_decode($productReqRow['preq_content'],true);
+
         if (false == $product) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
@@ -1531,14 +1538,13 @@ class CustomProductsController extends AdminBaseController
         $post = FatApp::getPostedData();
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-        $refType = FatApp::getPostedData('prod_ref_type', FatUtility::VAR_INT, 0);
+        $refType = 1;
 
-        // CommonHelper::printArray([$refType], 1);
         $ddObj = new DigitalDownloads();
         
-        $refId = $ddObj->getReferenceId($prodId, $optionComb, $refType);
+        $refId = $ddObj->getReferenceId($preqId, $optionComb, $refType);
         if (1 > $refId) {
-            if (!$ddObj->saveReference($prodId, $optionComb, $refType)) {
+            if (!$ddObj->saveReference($preqId, $optionComb, $refType)) {
                 FatUtility::dieWithError($ddObj->getError());
             }
             $refId = $ddObj->getMainTableRecordId();
@@ -1547,7 +1553,7 @@ class CustomProductsController extends AdminBaseController
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
             $this->setupDigitalLink($ddObj, $refId);
         } else {
-            $this->setupDigitalFile($ddObj, $prodId, $refId);
+            $this->setupDigitalFile($ddObj, $preqId, $refId);
         }
 
         FatUtility::dieWithError($this->str_invalid_request);
@@ -1590,7 +1596,7 @@ class CustomProductsController extends AdminBaseController
 
     public function setupDigitalPreviewFile()
     {
-        $recId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $recId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
         $subRecId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
         
         if (1 > $recId || 1 > $subRecId) {
@@ -1693,10 +1699,10 @@ class CustomProductsController extends AdminBaseController
         $reqData = ProductRequest::getAttributesById($preqId, array('preq_content'));
         $productData = json_decode($reqData['preq_content'], true);
 
-        /* $productOptions = Product::getProductOptions($prodId, $this->adminLangId, true); */
-        $optionArr = isset($productData['product_option']) ? $productData['product_option'] : array();
-
+        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
+        
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
+
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
     
         $this->set('options', $optionCombinations);
@@ -1765,9 +1771,10 @@ class CustomProductsController extends AdminBaseController
         $productData = json_decode($reqData['preq_content'], true);
 
         /* $productOptions = Product::getProductOptions($prodId, $this->adminLangId, true); */
-        $optionArr = isset($productData['product_option']) ? $productData['product_option'] : array();
-
+        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
+        
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
+		// CommonHelper::printArray([$optionArr, ], 1);
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
         
         $this->set('options', $optionCombinations);
@@ -1777,7 +1784,8 @@ class CustomProductsController extends AdminBaseController
 
     public function deleteDigitalLink($linkId, $refId)
     {
-        $this->userPrivilege->canEditProducts();
+        $this->objPrivilege->canEditCustomProductRequests($this->admin_id, true);
+
         $refId = FatUtility::int($refId);
         $linkId = FatUtility::int($linkId);
 
@@ -1804,7 +1812,7 @@ class CustomProductsController extends AdminBaseController
 
     public function deleteDigitalFile()
     {
-        $this->userPrivilege->canEditProducts();
+        $this->objPrivilege->canEditCustomProductRequests($this->admin_id, true);
         $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
         $aFileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
 

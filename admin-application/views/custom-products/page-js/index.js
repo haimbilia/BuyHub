@@ -564,10 +564,6 @@ saveDownloadFiles = function()
     $.each( $('#preview_file')[0].files, function(i, file) {
         data.append('preview_file', file);
     });
-
-	if (optionCombi == '') {
-        data.append('option_comb_id', 0);
-    }
     
     data.append('prod_ref_type', 1);
 
@@ -608,7 +604,7 @@ saveDigitalPreviewFile = function()
     var data = new FormData();
     $inputs = $('#frmDownload select,#frmDownload input[type=hidden]');
     $inputs.each(function() { data.append( this.name,$(this).val());});
-    var productId = $("input[name='product_id']").val();
+    var preqId = $("input[name='preq_id']").val();
     $.each( $('#preview_file')[0].files, function(i, file) {
         data.append('preview_file', file);
     });
@@ -626,8 +622,8 @@ saveDigitalPreviewFile = function()
                 return;
             }
             $.systemMessage( ans.msg,'alert alert--success' );
-            downloadsForm(productId, 0, true);
-            getDigitalDownloads();
+            downloadsForm(preqId, 0, true);
+            /* getDigitalDownloads(); */
         },
         error: function(jqXHR, textStatus, errorThrown){
             alert("Error Occurred.");

@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$downloadFrm->addFormTagAttribute('class', 'web_form mt-5');
+$downloadFrm->addFormTagAttribute('class', 'form form--horizontal');
 $downloadFrm->setFormTagAttribute('id', 'frmDownload');
 
 $fld = $downloadFrm->getField('product_downloadable_link');
@@ -10,10 +10,12 @@ $fld->addFieldTagAttribute('class', 'product_preview_link');
 
 $fld = $downloadFrm->getField('attachement_upload_btn');
 $fld->addFieldTagAttribute('onclick', 'saveDownloadFiles();');
+$fld->addFieldTagAttribute('class', 'btn btn-brand');
 $fld->addFieldTagAttribute('id', 'attachement_upload_btn');
 
 $fld = $downloadFrm->getField('attachment_link_btn');
 $fld->addFieldTagAttribute('id', 'attachment_link_btn');
+$fld->addFieldTagAttribute('class', 'btn btn-brand');
 $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
 
 ?>

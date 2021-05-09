@@ -1760,7 +1760,10 @@ class ProductsController extends AdminBaseController
         $srch->doNotCalculateRecords();
 
         $srch->addOrder(DigitalDownloads::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
-
+		
+		// echo '<pre>';
+		// print_r($srch->getQuery());
+		// exit;
         $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs);
         

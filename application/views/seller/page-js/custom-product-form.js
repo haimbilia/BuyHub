@@ -1537,9 +1537,9 @@ deleteDigitallink = function(linkId, refId)
         var ans = $.parseJSON(t);
         if( ans.status == 1 ){
             $('#' + linkId + '_' + refId).remove();
-            fcom.displaySuccessMessage('deleted');
+            $.mbsmessage('Deleted', true, 'alert--success');
         } else {
-            fcom.displayErrorMessage(ans.msg);
+            $.mbsmessage(ans.msg, true, 'alert--danger');
         }
     });
 }
@@ -1553,9 +1553,9 @@ deleteDigitalFile = function(afile_id, prod_id)
     fcom.ajax( fcom.makeUrl( 'Seller', 'deleteDigitalFile'), data , function(res) {
         var ans = $.parseJSON(res);
         if( ans.status == 1 ){
-            fcom.displaySuccessMessage(ans.msg);
+            $.mbsmessage(ans.msg, true, 'alert--success');
         } else {
-            fcom.displayErrorMessage(ans.msg);
+            $.mbsmessage(ans.msg, true, 'alert--danger');
         }
         getDigitalDownloads();
     });
