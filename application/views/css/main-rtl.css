@@ -14289,6 +14289,11 @@ img.mfp-img, .post .post_media iframe.mfp-img, .post .post_media .posted-content
       opacity: 0.8; }
     .item__description .item__brand {
       font-style: italic; }
+    .item__description .item__location {
+      margin-bottom: 5px; }
+      .item__description .item__location .svg {
+        width: 14px;
+        height: 14px; }
     .item__description .item__category {
       opacity: 0.8; }
     .item__description .item__specification {
@@ -30710,6 +30715,71 @@ a.ui-button:active,
           text-decoration: underline;
           padding: 0.8rem 0; }
 
+.categories-thumb {
+  overflow: hidden; }
+  .categories-thumb a {
+    display: block;
+    padding: 0;
+    margin: 0; }
+  .categories-thumb .aspect-ratio {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto; }
+    .categories-thumb .aspect-ratio .categories-thumb-bg {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+      background-size: cover;
+      background-position: center center;
+      transition: all 1s ease-out 0s; }
+      .categories-thumb .aspect-ratio .categories-thumb-bg:after {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        background-color: rgba(0, 0, 0, 0.4);
+        transition: all 1s ease-out 0s; }
+  .categories-thumb-heading {
+    padding: 1rem;
+    padding-bottom: 0;
+    margin: 0; }
+
+.masonry {
+  display: grid;
+  grid-gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 0; }
+
+.masonry-item {
+  border-radius: 5px; }
+
+.masonry-item {
+  background-color: #f3f4f5;
+  border-radius: 5px;
+  overflow: hidden;
+  font-size: 0.8rem; }
+  .masonry-item ul {
+    padding: 0 1rem; }
+    .masonry-item ul li {
+      margin: 0.5rem 0;
+      display: block; }
+
+.masonry-item,
+.masonry-item img,
+.masonry-item .post .post_media iframe,
+.post .post_media .masonry-item iframe,
+.masonry-item .post .post_media .posted-content .posted-media .post__pic .media-wrapper img,
+.post .post_media .posted-content .posted-media .post__pic .media-wrapper .masonry-item img,
+.masonry-item .posted-content .posted-media .post__pic .media-wrapper .post .post_media img,
+.posted-content .posted-media .post__pic .media-wrapper .post .post_media .masonry-item img {
+  position: relative; }
+
 .is-checkout {
   overflow-x: hidden; }
 
@@ -34279,12 +34349,40 @@ input.sp-input,
     border-radius: 50%;
     flex: none;
     max-width: inherit;
-    padding: 5px; }
-  .more-sellers .actions .btn {
-    margin-left: 10px;
+    padding: 5px;
+    display: none; }
+  .more-sellers .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; }
+    .more-sellers .actions .btn {
+      margin: 5px 0;
+      display: block;
+      max-width: 140px;
+      width: 100%; }
+    .more-sellers .actions .btn-link {
+      color: var(--brand-color); }
+  .more-sellers .list-options {
     font-size: 0.8rem;
-    color: var(--brand-color);
-    text-decoration: underline; }
+    font-weight: 300;
+    display: flex;
+    align-items: center; }
+    .more-sellers .list-options li {
+      text-align: center;
+      margin-right: 6px;
+      width: 20px;
+      height: 20px; }
+      .more-sellers .list-options li .colors-dot {
+        margin: 0 auto;
+        width: 12px;
+        height: 12px;
+        display: block;
+        border-radius: 50%; }
+      .more-sellers .list-options li .sizes-dot {
+        font-weight: 600; }
+      .more-sellers .list-options li.more {
+        width: auto;
+        height: auto; }
 
 .responsive-table > li {
   font-size: 0.8rem;
@@ -34330,11 +34428,6 @@ input.sp-input,
 .responsive-table .cell {
   padding: 0 1rem;
   overflow: hidden; }
-  .responsive-table .cell:first-child {
-    padding-right: 0; }
-  .responsive-table .cell:last-child {
-    padding-left: 0;
-    text-align: left; }
   @media (max-width: 991.98px) {
     .responsive-table .cell {
       flex-basis: 100%;

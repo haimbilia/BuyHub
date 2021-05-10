@@ -565,6 +565,13 @@
         .item__brand {
             font-style: italic;
         }
+        .item__location { margin-bottom: 5px;
+          
+            .svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
         .item__category {
             opacity: 0.8;
         }
