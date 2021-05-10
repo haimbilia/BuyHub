@@ -170,7 +170,6 @@ class ShopsReportController extends AdminBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            echo $srch->getError();
             $arr_listing = $db->fetchAll($rs);
 
             $this->set("arr_listing", $arr_listing);
