@@ -12503,7 +12503,7 @@ form[name="frmShippingProfile"] {
   
   .datatable-sticky {
     border-top: solid 1px var(--border-color);
-    white-space: nowrap;
+    /* white-space: nowrap; */
     position: relative;
     width: 100%;
     z-index: 1;

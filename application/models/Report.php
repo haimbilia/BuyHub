@@ -122,9 +122,9 @@ class Report extends SearchBase
         $this->addFld('(SUM(IFNULL(opRewardDis.opcharge_amount, 0))) as rewardDiscount');
     }
 
-    public function addTotalOrdersCount($key = 'order_id')
+    public function addTotalOrdersCount($key = 'order_id', $opSelprodUserId = 0)
     {
-        $srch = new self();
+        $srch = new self(0, [], $this->shopSpecific);
         $srch->joinOrders();
         $srch->joinPaymentMethod();
         $srch->setPaymentStatusCondition();
@@ -132,6 +132,10 @@ class Report extends SearchBase
         $srch->excludeDeletedOrdersCondition();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+
+        if (0 < $opSelprodUserId) {
+            $srch->addCondition('op_selprod_user_id', '=', $opSelprodUserId);
+        }
 
         switch ($key) {
             case 'order_id':

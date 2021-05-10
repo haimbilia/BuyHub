@@ -22,7 +22,7 @@ foreach ($fields as $key => $val) {
     $span->appendElement('plaintext', array(), $val);
     if ($key == $sortBy) {
         $arrow = ($sortOrder == applicationConstants::SORT_ASC) ? '<i class="fas fa-arrow-down"></i>' : '<i class="fas fa-arrow-up"></i>';
-        $td->appendElement('plaintext', array(), $arrow, true);
+        $span->appendElement('plaintext', array(), $arrow, true);
     }
     $count++;
 }
@@ -113,7 +113,7 @@ foreach ($arr_listing as $sn => $row) {
                 break;
         }
     }
-    $sr_no ++;
+    $sr_no++;
 }
 if (count($arr_listing) == 0) {
     $tbl->appendElement('tr')->appendElement(
@@ -132,4 +132,10 @@ echo FatUtility::createHiddenFormFromData($postedData, array(
 ));
 
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+$this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
+<script>
+    var x = $(".container-fluid").width();
+    var actualWidth = x / 7;
+    $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
+    $('.datatable_cell_left').children('span').css('display', 'block');
+</script>
