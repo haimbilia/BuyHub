@@ -455,6 +455,7 @@ DELETE FROM tbl_language_labels WHERE label_key = "LBL_SANDBOX_KEY/TOKEN";
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_LIVE_KEY/TOKEN";
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_TAX_SERVICES";
 INSERT INTO `tbl_language_labels` (label_key,label_caption,label_lang_id,label_type) VALUES ('LBL_{SIGN-UP}_FOR_TAXJAR_AND_GENERATE_A_NEW_TOKEN.','{sign-up} For TaxJar And Generate A New Token.',1,1) ON DUPLICATE KEY UPDATE label_caption = '{sign-up} For TaxJar And Generate A New Token.';
+INSERT INTO tbl_language_labels (label_key, label_lang_id,label_caption,label_type) VALUES("LBL_API_TOKEN?_|_TAXJAR_SUPPORT.",1,"Api Token? | TaxJar Support.",1) ON DUPLICATE KEY UPDATE label_caption = "Api Token? | TaxJar Support."
 
 INSERT IGNORE INTO `tbl_attached_files`(  
     `afile_type`,
@@ -490,7 +491,7 @@ CREATE TABLE `tbl_system_logs` (
   `slog_title` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `slog_content` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `slog_response` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `slot_backtrace` text NOT NULL,
+  `slog_backtrace` text NOT NULL,
   `slog_created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -499,5 +500,22 @@ ALTER TABLE `tbl_system_logs`
 
 ALTER TABLE `tbl_system_logs`
   MODIFY `slog_id` int NOT NULL AUTO_INCREMENT;
+
+
+CREATE TABLE `tbl_order_product_plugin_specifics` (
+  `opps_op_id` int NOT NULL,
+  `opps_plugin_id` int NOT NULL,
+  `opps_synced` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_order_product_plugin_specifics`
+--
+ALTER TABLE `tbl_order_product_plugin_specifics`
+  ADD UNIQUE KEY `opps_op_id` (`opps_op_id`,`opps_plugin_id`);
 
 /* TaxJar Enhancements */

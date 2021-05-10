@@ -263,7 +263,7 @@ class Tax extends MyAppModel
      * @param  string $type
      * @return array
      */
-    private function formatAddress(array $address, string $type = ''): array
+    public static function formatAddress(array $address, string $type = ''): array
     {
         $postalCode = '';
         $line1 = '';
@@ -335,7 +335,7 @@ class Tax extends MyAppModel
      * @param bool $useCache
      * @return array
      */
-    public function calculateTaxRates(int $productId, float $prodPrice, int $sellerId, int $langId, int $qty = 1, array $extraInfo = array(), bool $useCache = false): array
+    public function calculateTaxRates(int $productId, float $prodPrice, int $sellerId, int $langId, int $qty = 1, array $extraInfo = array(), bool $useCache = true): array
     {
         $tax = 0;
         $defaultTaxName = Labels::getLabel('LBL_Tax', $langId);
@@ -442,18 +442,18 @@ class Tax extends MyAppModel
                 ];
             }
 
-            $toAddress = $this->formatAddress($extraInfo['shippingAddress']);
+            $toAddress = Tax::formatAddress($extraInfo['shippingAddress']);
 
             if ($extraInfo['shippedBySeller']) {
                 /* @todo check to get with seller_address */
                 $fields = array('shop_postalcode', 'shop_address_line_1', 'shop_address_line_2', 'shop_city', 'state_name', 'state_code', 'country_code');
                 $address = Shop::getShopAddress($shopInfo['shop_id'], true, $langId, $fields);
-                $fromAddress = $this->formatAddress($address, 'shop');
+                $fromAddress = Tax::formatAddress($address, 'shop');
             } /* else {
                 $fromAddress = Admin::getAddress($langId);
                 $shipFromStateId = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 0);
             } */
-            $toAddress = $this->formatAddress($extraInfo['shippingAddress']);
+            $toAddress = Tax::formatAddress($extraInfo['shippingAddress']);
 
             $itemsArr = [];
             $item = [
@@ -540,7 +540,7 @@ class Tax extends MyAppModel
         }
 
         if (0 < $activatedTaxServiceId) {
-            SystemLog::system(Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId), '( Product Id-' . $productId . ')');
+            SystemLog::system(Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId). '( Product Id-' . $productId . ')');
             $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
 
             return $data = [
@@ -623,7 +623,7 @@ class Tax extends MyAppModel
             /* @todo check to get with seller_address */
             $fields = array('shop_postalcode', 'shop_address_line_1', 'shop_address_line_2', 'shop_city', 'state_name', 'state_code', 'country_code');
             $address = Shop::getShopAddress($childOrderInfo['op_shop_id'], true, $langId, $fields);
-            $fromAddress = $this->formatAddress($address, 'shop');
+            $fromAddress = Tax::formatAddress($address, 'shop');
         } else {
             $fromAddress = Admin::getAddress($langId);
         }
@@ -632,7 +632,7 @@ class Tax extends MyAppModel
         $addresses = $orderObj->getOrderAddresses($childOrderInfo['order_id']);
 
         $toAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : $addresses[Orders::BILLING_ADDRESS_TYPE];
-        $toAddress = $this->formatAddress($toAddress, 'order');
+        $toAddress = Tax::ormatAddress($toAddress, 'order');
 
         $couponDiscount = isset($childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_DISCOUNT]) ? $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_DISCOUNT]['opcharge_amount'] : 0;
         $volumeDiscount = isset($childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]) ? $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount'] : 0;
@@ -686,6 +686,11 @@ class Tax extends MyAppModel
 
         if (false == $taxRates['status']) {
             $this->error = $taxRates['msg'];
+            return false;
+        }
+        
+        if (!FatApp::getDb()->insertFromArray(OrderProduct::DB_TBL_PLUGIN_SPECIFICS, array('opps_op_id' => $childOrderInfo['op_id'], 'opps_plugin_id' => $activatedTaxServiceId, 'opps_synced' => applicationConstants::YES))) {
+            $this->error = FatApp::getDb()->getError();
             return false;
         }
 

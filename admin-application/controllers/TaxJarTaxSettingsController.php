@@ -17,10 +17,15 @@ class TaxJarTaxSettingsController extends TaxSettingsController
         $tokenLink = '<a href="https://support.taxjar.com/article/160-how-do-i-get-a-taxjar-sales-tax-api-token" target="_blank">' . Labels::getLabel('LBL_API_TOKEN?_|_TAXJAR_SUPPORT.', $langId) . '</a>';
         $tokenLabel = Labels::getLabel('LBL_HOW_DO_I_GET_A_TAXJAR_{API-TOKEN}', $langId);
         $tokenLabel = CommonHelper::replaceStringData($tokenLabel, ['{API-TOKEN}' => $tokenLink]);
+        
+        $exportLink = '<a href="https://app.taxjar.com/api_sign_up" target="_blank">' . Labels::getLabel('LBL_EXPORT', $langId) . '</a>';
+        $exportLabel = Labels::getLabel('LBL_{EXPORT}_OLD_TRANSACTIONS_TO_CSV', $langId);
+        $exportLabel = CommonHelper::replaceStringData($exportLabel, ['{EXPORT}' => $exportLink]);
 
         $htmlAfterField = '<ul>
             <li>' . $signupLabel . '</li>
             <li>' . $tokenLabel . '</li>
+            <li>' . $exportLabel . '</li>                
         </ul>';
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_API_TOKEN', $langId), 'sandbox_key');

@@ -70,9 +70,9 @@ class SystemLog extends MyAppModel
             $error = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);       
         $backtrace = json_encode(end($backtrace));
-
+        
         $data = [
             self::DB_TBL_PREFIX . 'module_type' => $module_type,
             self::DB_TBL_PREFIX . 'type' => $type,
