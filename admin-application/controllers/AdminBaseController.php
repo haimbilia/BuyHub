@@ -163,6 +163,8 @@ class AdminBaseController extends FatController
             'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
             'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
             'rate' => Labels::getLabel('LBL_RATE(INT)', $this->adminLangId),
+            'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
+            'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);

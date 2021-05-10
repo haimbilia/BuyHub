@@ -22,18 +22,13 @@ if (null != $fld) {
 	$fld->developerTags['col'] = 3;
 }
 
-$fld = $frm->getField('badgelink_record_id[]');
+$fld = $frm->getField('badgelink_record_id');
 if (null != $fld) {
 	$fld->developerTags['colClassPrefix'] = 'col-md-';
 	$fld->developerTags['col'] = 12;
-	$fld->htmlAfterField = '<div class="col-md-4 recordsContainer--js p-0"></div>';
+	$fld->htmlAfterField = '<div class="recordsContainer--js p-0 box--scroller"></div>';
 }
 ?>
-<style>
-	.recordsContainer--js .select2-selection__choice {
-		width: 100%;
-	}
-</style>
 <section class="section">
 	<div class="sectionhead">
 		<h4><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS_SETUP', $adminLangId); ?></h4>

@@ -10,7 +10,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_condition_type"]', 
     var ratePercElements = [COND_TYPE_ORDER_COMPLETION_RATE, COND_TYPE_RETURN_ACCEPTANCE, COND_TYPE_ORDER_CANCELLED];
     var toSelector = $(formClass + 'input[name="blinkcond_condition_to"]');
     var fromSelector = $(formClass + 'input[name="blinkcond_condition_from"]');
-    
+
     toSelector.attr('data-fatreq', JSON.stringify({ required: true }));
     if (1 > toSelector.closest('.field-set').find('label').children('.spn_must_field').length) {
         toSelector.closest('.field-set').find('label').append('<span class="spn_must_field">*</span>');
@@ -61,19 +61,16 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
 
     var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
     if (1 == recordCondition) {
-        var requirement = { required: false };
         parent.hide();
         recordNameSelector.val("").trigger('change');
         $(formClass + 'select[name="blinkcond_condition_type"]').closest('.row').fadeIn();
         conditionSelectors.attr('data-fatreq', JSON.stringify({ required: true }));
     } else {
-        var requirement = { required: true };
         parent.fadeIn();
         conditionSelectors.val("").trigger('change');
         $(formClass + 'select[name="blinkcond_condition_type"]').closest('.row').hide();
         conditionSelectors.attr('data-fatreq', JSON.stringify({ required: false }));
     }
-    recordNameSelector.attr('data-fatreq', JSON.stringify(requirement));
 });
 
 (function () {
@@ -125,6 +122,9 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
                     $(this).attr('name', $(this).closest('.select2').siblings('select').attr('name') + '_select2-search__field');
                 });
             }, 200);
+            reloadRecordsList(blinkcond_id);
+
+            updateRecordIds();
         });
     };
 
@@ -250,12 +250,10 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
 
     bindRecordsSelect2 = function () {
         var selector = $(formClass + "select.recordIds--js");
-        var CustomSelectionAdapter = $.fn.select2.amd.require("select2/selection/customSelectionAdapter");
         selector.select2({
             tags: true,
-            selectionAdapter: CustomSelectionAdapter,
-            selectionContainer: $(formClass + '.recordsContainer--js'),
             closeOnSelect: true,
+            allowClear: true,
             dir: layoutDirection,
             placeholder: selector.attr('placeholder'),
             ajax: {
@@ -282,7 +280,86 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
             }
         }).on('select2:selecting', function (e) {
             var JSONObj = [e.params.args.data.id];
+            var badgeLinkRecordIds = $(formClass + "input[name='record_ids']").val();
+            if ('' != badgeLinkRecordIds) {
+                JSONObj = JSON.parse(badgeLinkRecordIds);
+                JSONObj.push(e.params.args.data.id);
+            }
+            $(formClass + "input[name='record_ids']").val(JSON.stringify(JSONObj));
+            setTimeout(function () {
+                selector.val('').trigger('change');
+            }, 200);
+            var badgeLinkCondId = $(formClass + "input[name='blinkcond_id']").val();
+            if ('' != badgeLinkCondId) {
+                bindLink(badgeLinkCondId, e.params.args.data.id);
+            } else {
+                var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="icon ion-close"></i></a></id><td>' + e.params.args.data.name + '</td></tr>';
+                var tbl = "";
+                if (1 > $(formClass + 'table.recordListing--js').length) {
+                    var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
+                    $(formClass + '.recordsContainer--js').html(tbl);
+                }
+                $(formClass + '.recordListing--js').append(htm);
+            }
+            $(formClass + "select[name='blinkcond_record_type']").attr('disabled', 'disabled');
         }).on('select2:unselect', function (e) {
+            updateRecordIds(e.params.args.data.id);
         });
+    }
+
+    reloadRecordsList = function (blinkcond_id, page) {
+        $(".recordsContainer--js").html(fcom.getLoader());
+        var data = 'page=' + page;
+        fcom.ajax(fcom.makeUrl(controller, 'records', [blinkcond_id]), data, function (t) {
+            $(".recordsContainer--js").html(t);
+        });
+    };
+
+    removeBadgeLinkRecord = function (e, blinkcond_id, recordId) {
+        if (!confirm(langLbl.areYouSure)) {
+            e.preventDefault();
+            return;
+        }
+
+        if (blinkcond_id < 1 || recordId < 1) {
+            fcom.displayErrorMessage(langLbl.invalidRequest);
+            return false;
+        }
+        updateRecordIds(recordId);
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'unlinkRecord', [blinkcond_id, recordId]), '', function (t) {
+            reloadRecordsList(blinkcond_id);
+        });
+    }
+
+    bindLink = function (blinkcond_id, recordId) {
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'linkRecord', [blinkcond_id, recordId]), '', function (t) {
+            reloadRecordsList(blinkcond_id);
+        });
+    }
+
+    updateRecordIds = function (removeRecordId = 0) {
+        var selectedRecords = $(formClass + "input[name='record_ids']").val();
+        if ('' != selectedRecords && 'undefined' != typeof selectedRecords) {
+            selectedRecords = $.parseJSON(selectedRecords);
+            if (removeRecordId) {
+                var index = selectedRecords.indexOf(removeRecordId);
+                if (index > -1) {
+                    selectedRecords.splice(index, 1);
+                }
+            }
+
+            $(formClass + "input[name='record_ids']").val(JSON.stringify(selectedRecords));
+            var recordType = $(formClass + "select[name='blinkcond_record_type']");
+            if (1 > selectedRecords.length) {
+                recordType.removeAttr('disabled');
+            } else {
+                recordType.attr('disabled', 'disabled');
+            }
+        }
+    }
+
+    removeRecordRow = function (element, removeRecordId) {
+        $(element).closest('tr').remove();
+        updateRecordIds(removeRecordId);
     }
 })()
