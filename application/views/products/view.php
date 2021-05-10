@@ -135,7 +135,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     <?php } ?>
                                     <div class="products__price">
                                         <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
-                                        <?php if ($product['special_price_found']) { ?>
+                                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                                             <span class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></span>
                                             <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                                         <?php } ?>

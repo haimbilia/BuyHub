@@ -59,7 +59,7 @@ $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product
                     <span class="increase increase-js"><i class="fas fa-plus"></i></span>
         </div>
         <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-            <?php if ($product['special_price_found']) { ?>
+            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                 <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
             <?php } ?>
         </div>

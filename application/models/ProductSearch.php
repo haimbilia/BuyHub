@@ -206,7 +206,7 @@ class ProductSearch extends SearchBase
             $splPriceForDate = $now;
         }
 
-        $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE, 'LEFT OUTER JOIN', 'msplpric.splprice_selprod_id = msellprod.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN msplpric.splprice_start_date AND msplpric.splprice_end_date AND msplpric.splprice_price < msellprod.selprod_price', 'msplpric');
+        $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE, 'LEFT OUTER JOIN', 'msplpric.splprice_selprod_id = msellprod.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN msplpric.splprice_start_date AND msplpric.splprice_end_date AND (msplpric.splprice_price < msellprod.selprod_price or msplpric.splprice_price > msellprod.selprod_price)', 'msplpric');
 
         $srch = new SearchBase(SellerProduct::DB_TBL, 'sprods');
 
@@ -295,7 +295,7 @@ class ProductSearch extends SearchBase
         $srch->joinTable(
             SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
             'LEFT OUTER JOIN',
-            'tsp.splprice_selprod_id = sprods.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN tsp.splprice_start_date AND tsp.splprice_end_date and tsp.splprice_price < sprods.selprod_price',
+            'tsp.splprice_selprod_id = sprods.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN tsp.splprice_start_date AND tsp.splprice_end_date and (tsp.splprice_price < sprods.selprod_price or tsp.splprice_price > sprods.selprod_price )',
             'tsp'
         );
         $srch->addCondition('sprods.selprod_active', '=', applicationConstants::ACTIVE);
@@ -345,6 +345,7 @@ class ProductSearch extends SearchBase
         }
 
         $tmpQry = $srch->getQuery();
+
         /*if (!empty($criteria['keyword'])) {
             $this->joinTable('(' . $tmpQry . ')', 'INNER JOIN', '((pricetbl.selprod_product_id = msellprod.selprod_product_id AND (splprice_price = theprice OR selprod_price = theprice)) or (selprod_title LIKE '.FatApp::getDb()->quoteVariable('%'.$criteria['keyword'].'%').'))', 'pricetbl');
         } else {

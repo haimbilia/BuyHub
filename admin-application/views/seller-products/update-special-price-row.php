@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-    $editListingFrm = new Form('editListingFrm-'.$splPriceId, array('id'=>'editListingFrm-'.$splPriceId));
+$editListingFrm = new Form('editListingFrm-' . $splPriceId, array('id' => 'editListingFrm-' . $splPriceId));
 ?>
 <tr id='row-<?php echo $splPriceId; ?>'>
     <td>
@@ -26,7 +26,7 @@
             'data-selprodid' => $data['splprice_selprod_id'],
             'data-id' => $splPriceId,
             'data-oldval' => $startDate,
-            'id' => 'splprice_start_date-'.$splPriceId,
+            'id' => 'splprice_start_date-' . $splPriceId,
             'class' => 'date_js js--splPriceCol hide sp-input',
         );
         $editListingFrm->addDateField($lbl, 'splprice_start_date', $startDate, $attr);
@@ -44,7 +44,7 @@
             'data-selprodid' => $data['splprice_selprod_id'],
             'data-id' => $splPriceId,
             'data-oldval' => $endDate,
-            'id' => 'splprice_end_date-'.$splPriceId,
+            'id' => 'splprice_end_date-' . $splPriceId,
             'class' => 'date_js js--splPriceCol hide sp-input',
         );
         $editListingFrm->addDateField($lbl, 'splprice_end_date', $endDate, $attr);
@@ -53,16 +53,17 @@
     </td>
     <td>
         <div class="js--editCol edit-hover"><?php echo CommonHelper::displayMoneyFormat($data['splprice_price']); ?></div>
-        <input type="text" data-displayoldval="<?php echo CommonHelper::displayMoneyFormat($data['splprice_price'], true, true); ?>" data-id="<?php echo $splPriceId; ?>" value="<?php echo $data['splprice_price']; ?>" data-selprodid="<?php echo $data['splprice_selprod_id']; ?>" data-oldval="<?php echo $data['splprice_price']; ?>" name="splprice_price" class="js--splPriceCol hide sp-input"/>
+        <input type="text" data-displayoldval="<?php echo CommonHelper::displayMoneyFormat($data['splprice_price'], true, true); ?>" data-id="<?php echo $splPriceId; ?>" value="<?php echo $data['splprice_price']; ?>" data-selprodid="<?php echo $data['splprice_selprod_id']; ?>" data-oldval="<?php echo $data['splprice_price']; ?>" name="splprice_price" class="js--splPriceCol hide sp-input" />
         <div class="ml-3">
-        <?php
-            $discountPrice = $data['selprod_price'] - $data['splprice_price'];
-            $discountPercentage = round(($discountPrice/$data['selprod_price'])*100, 2);
-            $discountPercentage = $discountPercentage."% ".Labels::getLabel('LBL_off', $adminLangId);
-            echo $discountPercentage; 
-        ?>
+            <?php if ($data['selprod_price'] > $data['splprice_price']) {
+                $discountPrice = $data['selprod_price'] - $data['splprice_price'];
+                $discountPercentage = round(($discountPrice / $data['selprod_price']) * 100, 2);
+                $discountPercentage = $discountPercentage . "% " . Labels::getLabel('LBL_off', $adminLangId);
+                echo $discountPercentage;
+            }
+            ?>
         </div>
-             
+
     </td>
     <td>
         <a href="javascript:void(0)" class="btn btn-clean btn-sm btn-icon" title="<?php echo Labels::getLabel('LBL_Delete', $adminLangId); ?>" onclick="deleteSellerProductSpecialPrice(<?php echo $splPriceId; ?>)"><i class='fa fa-trash  icon'></i></a>
