@@ -750,6 +750,7 @@ class ProductsController extends MyAppController
         $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
 
         $this->set('ratingAspects', $ratingAspects);
+        $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
         $this->set('canSubmitFeedback', $canSubmitFeedback);
         $this->set('upsellProducts', !empty($upsellProducts) ? $upsellProducts : array());

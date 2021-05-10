@@ -630,5 +630,5 @@ CREATE TABLE `tbl_badge_links` (
   `badgelink_blinkcond_id` bigint(20) NOT NULL,
   `badgelink_record_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-  
+
 -- --- Badges & Ribbons --- --

@@ -46,7 +46,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId), true);
                 break;
             case 'record_condition':
-                $condition = (empty($row['blinkcond_record_ids']) || '[]' == $row['blinkcond_record_ids'] ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
+                $condition = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
                 $recordCondition = BadgeLinkCondition::getRecordConditionArr($adminLangId)[$condition];
                 $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordCondition . '</span>';;
                 if (BadgeLinkCondition::REC_COND_MANUAL == $condition) {
@@ -55,7 +55,8 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $htm, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $td->appendElement('plaintext', array(), BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId), true);
+                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId) : Labels::getLabel('LBL_N/A', $adminLangId));
+                $td->appendElement('plaintext', array(), $conditionType, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {

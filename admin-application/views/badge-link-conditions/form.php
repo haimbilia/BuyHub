@@ -22,12 +22,18 @@ if (null != $fld) {
 	$fld->developerTags['col'] = 3;
 }
 
-$fld = $frm->getField('record_name');
+$fld = $frm->getField('badgelink_record_id[]');
 if (null != $fld) {
 	$fld->developerTags['colClassPrefix'] = 'col-md-';
 	$fld->developerTags['col'] = 12;
+	$fld->htmlAfterField = '<div class="col-md-4 recordsContainer--js p-0"></div>';
 }
 ?>
+<style>
+	.recordsContainer--js .select2-selection__choice {
+		width: 100%;
+	}
+</style>
 <section class="section">
 	<div class="sectionhead">
 		<h4><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS_SETUP', $adminLangId); ?></h4>
@@ -40,4 +46,5 @@ if (null != $fld) {
 			<div class="col-md-8"><?php echo $frm->getFormHtml(); ?></div>
 		</div>
 	</div>
+	<div class="foo"></div>
 </section>

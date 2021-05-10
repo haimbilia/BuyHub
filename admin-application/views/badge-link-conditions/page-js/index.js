@@ -34,9 +34,9 @@ $(document).on('change', formClass + 'select[name="blinkcond_condition_type"]', 
 });
 
 $(document).on('change', formClass + 'select[name="blinkcond_record_type"]', function () {
-    var recordNameSelector = $(formClass + "select[name='record_name']");
+    var recordNameSelector = $(formClass + "select.recordIds--js");
     if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
-    $(formClass + "select[name='record_name']").val('').trigger('change');
+    $(formClass + "select.recordIds--js").val('').trigger('change');
 });
 
 $(document).on('change', formClass + 'select[name="badge_type"]', function () {
@@ -56,25 +56,24 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
         1 : Automatically 
         2 : Manually 
     */
-    var recordNameSelector = $(formClass + 'select[name="record_name"]');
+    var recordNameSelector = $(formClass + 'select.recordIds--js');
     var parent = recordNameSelector.closest('.field-set').parent();
 
     var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
     if (1 == recordCondition) {
         var requirement = { required: false };
         parent.hide();
-        $(formClass + 'select[name="blinkcond_condition_type"]').closest('.row').hide();
         recordNameSelector.val("").trigger('change');
-        conditionSelectors.val("").trigger('change');
-        $(formClass + "input[name='blinkcond_record_ids']").val('');
+        $(formClass + 'select[name="blinkcond_condition_type"]').closest('.row').fadeIn();
+        conditionSelectors.attr('data-fatreq', JSON.stringify({ required: true }));
     } else {
         var requirement = { required: true };
         parent.fadeIn();
-        $(formClass + 'select[name="blinkcond_condition_type"]').closest('.row').fadeIn();
+        conditionSelectors.val("").trigger('change');
+        $(formClass + 'select[name="blinkcond_condition_type"]').closest('.row').hide();
+        conditionSelectors.attr('data-fatreq', JSON.stringify({ required: false }));
     }
     recordNameSelector.attr('data-fatreq', JSON.stringify(requirement));
-    conditionSelectors.attr('data-fatreq', JSON.stringify(requirement));
-
 });
 
 (function () {
@@ -115,7 +114,6 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
 
             if (0 < blinkcond_id) {
                 $(formClass + 'select[name="blinkcond_condition_type"]').change();
-                $(formClass + "input[name='blinkcond_record_ids']").val(JSON.stringify($(formClass + "select[name='record_name']").val()));
             }
             $(formClass + 'select[name="badge_type"], ' + formClass + 'select[name="record_condition"]').change();
             $(formClass + 'input[name="blinkcond_from_date"], ' + formClass + 'input[name="blinkcond_to_date"]').datetimepicker({
@@ -223,7 +221,7 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
     }
 
     getRecordTypeURL = function () {
-        var searchSelector = $(formClass + "select[name='record_name']").siblings('.select2').find('[aria-owns]').attr('aria-owns');
+        var searchSelector = $(formClass + "select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
         var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
@@ -251,11 +249,14 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
     }
 
     bindRecordsSelect2 = function () {
-        var selector = $("select[name='record_name']");
+        var selector = $(formClass + "select.recordIds--js");
+        var CustomSelectionAdapter = $.fn.select2.amd.require("select2/selection/customSelectionAdapter");
         selector.select2({
+            tags: true,
+            selectionAdapter: CustomSelectionAdapter,
+            selectionContainer: $(formClass + '.recordsContainer--js'),
             closeOnSelect: true,
             dir: layoutDirection,
-            allowClear: true,
             placeholder: selector.attr('placeholder'),
             ajax: {
                 url: function () {
@@ -281,15 +282,7 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
             }
         }).on('select2:selecting', function (e) {
             var JSONObj = [e.params.args.data.id];
-
-            var badgeLinkRecordIds = $(formClass + "input[name='blinkcond_record_ids']").val();
-            if ('' != badgeLinkRecordIds) {
-                JSONObj = JSON.parse(badgeLinkRecordIds);
-                JSONObj.push(e.params.args.data.id);
-            }
-            $(formClass + "input[name='blinkcond_record_ids']").val(JSON.stringify(JSONObj));
         }).on('select2:unselect', function (e) {
-            $(formClass + "input[name='blinkcond_record_ids']").val(JSON.stringify($(formClass + "select[name='record_name']").val()));
         });
     }
 })()

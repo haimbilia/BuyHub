@@ -4,6 +4,9 @@ class BadgeLinkCondition extends MyAppModel
 {
     public const DB_TBL = 'tbl_badge_link_conditions';
     public const DB_TBL_PREFIX = 'blinkcond_';
+    
+    public const DB_TBL_BADGE_LINKS = 'tbl_badge_links';
+    public const DB_TBL_BADGE_LINKS_PREFIX = 'badgelink_';
 
     public const RECORD_TYPE_PRODUCT = 1;
     public const RECORD_TYPE_SELLER_PRODUCT = 2;
@@ -22,7 +25,6 @@ class BadgeLinkCondition extends MyAppModel
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'badge_id',
-        self::DB_TBL_PREFIX . 'record_ids',
         self::DB_TBL_PREFIX . 'record_type',
         self::DB_TBL_PREFIX . 'from_date',
         self::DB_TBL_PREFIX . 'to_date',
@@ -126,11 +128,47 @@ class BadgeLinkCondition extends MyAppModel
      * getBadgeLinksSearchObj
      *
      * @param  int $langId
+     * @param  bool $linkRecords
      * @return object
      */
-    public static function getBadgeLinksSearchObj(int $langId): object
+    public static function getBadgeLinksSearchObj(int $langId, bool $linkRecords = false): object
     {
         $srch = new BadgeLinkConditionSearch($langId);
+
+        $recordFields = [];
+        if (true === $linkRecords) {
+            $recordFields = [
+                '(CASE 
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' 
+                        THEN COALESCE( p_l.product_name, p.product_identifier )
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '  
+                        THEN selprod_title
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' 
+                        THEN COALESCE( shp_l.shop_name, shp.shop_identifier )
+                    ELSE TRUE
+                END) as record_name',
+                '(CASE 
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '  
+                        THEN option_name
+                    ELSE ""
+                END) as option_name',
+                '(CASE 
+                        WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '  
+                            THEN optionvalue_name
+                        ELSE ""
+                END) as option_value_name',
+                '(CASE 
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '
+                        THEN spu.credential_username
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . '
+                        THEN shpu.credential_username
+                    ELSE ""
+                END) as seller'
+            ];
+        }
+
+        $recordIdsCol = (false === $linkRecords) ? 'GROUP_CONCAT(badgelink_record_id) as badgelink_record_ids' : 'badgelink_record_id';
+
         $attr = array_merge(
             self::ATTR,
             [
@@ -138,11 +176,16 @@ class BadgeLinkCondition extends MyAppModel
                 Badge::DB_TBL_PREFIX . 'type',
                 Badge::DB_TBL_PREFIX . 'shape_type',
                 Badge::DB_TBL_PREFIX . 'color',
-            ]
+                $recordIdsCol
+            ],
+            $recordFields
         );
         $srch->addMultipleFields($attr);
         $srch->joinBadge($langId);
-        $srch->addGroupBy('blinkcond_id');
+        $srch->joinBadgeLinks();
+        if (false === $linkRecords) {
+            $srch->addGroupBy('blinkcond_id');
+        }
         return $srch;
     }
 }
