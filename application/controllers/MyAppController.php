@@ -680,8 +680,7 @@ class MyAppController extends FatController
     {
         $langCode = strtolower($this->siteLangCode);
         $langCountryCode = strtoupper($this->siteLangCountryCode);
-        echo $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
-        die();
+        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {
                 return;
