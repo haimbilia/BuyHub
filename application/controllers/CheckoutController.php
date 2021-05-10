@@ -468,6 +468,8 @@ class CheckoutController extends MyAppController
             $this->cartObj->unSetShippingAddressSameAsBilling();
             $this->cartObj->unsetCartShippingAddress();
         }
+        
+        $this->cartObj->removeProductShippingMethod();
 
         $this->set('hasPhysicalProduct', $hasPhysicalProduct);
         if (true === MOBILE_APP_API_CALL) {

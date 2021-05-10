@@ -116,6 +116,8 @@ Fixes:
     => 053197 - mPesa Pament gateway payment not confirmed
     => 053235 - buyer can't cancel the order when status is in process
     => 053365 -	While sharing shop page on whatsapp then meta image not displaying
+    => 053276 - shipping is not changing on changing address during checkout
+    => 053155 - Button labels are not changing as per language
 
 
 New Features:
