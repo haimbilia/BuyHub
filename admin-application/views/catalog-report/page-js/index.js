@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	searchCatalogReport(document.frmCatalogReportSearch);
+	searchCatalogReport(document.frmCatalogReportSearch);	
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
@@ -49,6 +49,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		fcom.ajax(fcom.makeUrl('CatalogReport', 'search'), data, function (res) {
 			$(dv).html(res);
 		});
+		
 	};
 
 	exportReport = function (dateFormat) {

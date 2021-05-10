@@ -1,5 +1,7 @@
 $(document).ready(function () {
 	searchSalesReport(document.frmSalesReportSrch);
+	var x = $(".datatable").parent().width();
+	console.log(x);
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
