@@ -70,7 +70,7 @@ foreach ($attachments as $sn => $row) {
                         array(
                             'class' => 'btn btn-clean btn-sm btn-icon',
                             'title' => Labels::getLabel('LBL_Preview', $siteLangId),
-                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
+                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
                         ),
                         '<i class="fa fa-caret-square-right icon"></i>',
                         true

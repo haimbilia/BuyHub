@@ -133,4 +133,35 @@ class DummyController extends AdminBaseController
     {
         $this->_template->render(true, true);
     }
+
+    public function updatePddrIds()
+	{
+		$preqId = 4;
+		$product_id = 91;
+		$ddSrch = new DigitalDownloadsSearch();
+		$ddSrch->addCondition('pddr_record_id', '=', $preqId);
+		$ddSrch->addCondition('pddr_type', '=', 1);
+
+		$ddSrch->doNotCalculateRecords();
+		$rs = $ddSrch->getResultSet();
+		
+		$rows = FatApp::getDb()->fetchAll($rs, 'pddr_id');
+        // CommonHelper::printArray([$rows], 1);
+		if (0 < count($rows)) {
+            $db = FatApp::getDb();
+            $db->startTransaction();
+			$pddrIds = array_Keys($rows);
+			
+			$pddrIds = FatUtility::int($pddrIds);
+            // echo "UPDATE " . DigitalDownloads::DB_TBL . " SET pddr_record_id = ".$product_id.", pddr_type = 0 WHERE pddr_id IN (" . implode(',', $pddrIds) . ")";
+            // exit;
+			if (!$db->query("UPDATE " . DigitalDownloads::DB_TBL . " SET pddr_record_id = ".$product_id.", pddr_type = 0 WHERE pddr_id IN (" . implode(',', $pddrIds) . ")")) {
+				Message::addErrorMessage($db->getError());
+				$db->rollbackTransaction();
+				FatUtility::dieWithError(Message::getHtml());
+			}
+            $db->commitTransaction();
+		}
+        echo 'done';
+	}
 }

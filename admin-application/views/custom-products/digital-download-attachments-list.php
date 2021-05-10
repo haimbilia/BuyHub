@@ -1,4 +1,5 @@
 <?php
+// CommonHelper::printArray([$attachments], 1);
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'mainfile' => Labels::getLabel('LBL_File', $adminLangId),
@@ -70,7 +71,7 @@ foreach ($attachments as $sn => $row) {
                         array(
                             'class' => 'btn btn-clean btn-sm btn-icon',
                             'title' => Labels::getLabel('LBL_Preview', $adminLangId),
-                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
+                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
                         ),
                         '<i class="fa fa-caret-square-right icon"></i>',
                         true

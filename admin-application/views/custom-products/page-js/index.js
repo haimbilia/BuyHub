@@ -588,16 +588,15 @@ saveDownloadFiles = function()
     });
 }
 
-attachDigitalPreviewFile = function (option, langId, refId)
+attachDigitalPreviewFile = function (option, langId, refId, subRefId)
 {
     $(".option-comb-id-js").val(option);
     $(".file-language-js").val(langId);
-    $('#frmDownload input[name=dd_link_ref_id]').val(refId);
+    $('#frmDownload input[name=dd_link_id]').val(refId);
+    $('#frmDownload input[name=dd_link_ref_id]').val(subRefId);
 
     $(".downloadable_file_input").hide();
     $("#attachement_upload_btn").attr('onclick', 'saveDigitalPreviewFile(); return false;');
-
-
 }
 saveDigitalPreviewFile = function()
 {
