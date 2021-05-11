@@ -205,29 +205,37 @@ class EmailHandler extends FatModel
         $password = isset($smtp_arr["password"]) ? $smtp_arr["password"] : FatApp::getConfig("CONF_SMTP_PASSWORD");
         $secure = isset($smtp_arr["secure"]) ? $smtp_arr["secure"] : FatApp::getConfig("CONF_SMTP_SECURE");
         $mail = new PHPMailer(true);
-        $mail->CharSet = 'UTF-8';
-        $mail->IsSMTP();
-        $mail->SMTPAuth = true;
-        $mail->IsHTML(true);
-        $mail->Host = $host;
-        $mail->Port = $port;
-        $mail->Username = $username;
-        $mail->Password = $password;
-        $mail->SMTPSecure = $secure;
-        $mail->SMTPDebug = false;
-        $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
-        $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
-        $mail->addAddress($toAdress);
-        $mail->Subject = '=?UTF-8?B?' . base64_encode($Subject) . '?=';
-        $mail->MsgHTML($body);
+        try {
+            $mail->CharSet = 'UTF-8';
+            $mail->IsSMTP();
+            $mail->SMTPAuth = true;
+            $mail->IsHTML(true);
+            $mail->Host = $host;
+            $mail->Port = $port;
+            $mail->Username = $username;
+            $mail->Password = $password;
+            $mail->SMTPSecure = $secure;
+            $mail->SMTPDebug = false;
+            $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
+            $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
+            $mail->addAddress($toAdress);
+            $mail->Subject = '=?UTF-8?B?' . base64_encode($Subject) . '?=';
+            $mail->MsgHTML($body);
 
-        if (!empty($bcc)) {
-            foreach ($bcc as $email => $name) {
-                $mail->AddBCC($email, $name);
+            if (!empty($bcc)) {
+                foreach ($bcc as $email => $name) {
+                    $mail->AddBCC($email, $name);
+                }
             }
-        }
 
-        if (!$mail->send()) {
+            if (!$mail->send()) {
+                return false;
+            }
+        } catch (phpmailerException $e) {
+            // $e->errorMessage();
+            return false;
+        } catch (Exception $e) {
+            // $e->getMessage();
             return false;
         }
         return true;
@@ -1277,7 +1285,7 @@ class EmailHandler extends FatModel
             '{error_message}' => $data['op_invoerror_messageice_number']
         );
 
-        if (self::sendMailTpl($adminEmail, $tpl, $langId, $vars)) {
+        if (self::sendMailTpl($adminEmail, $tpl, $langId, $arrReplacements)) {
             return true;
         }
         return false;
@@ -2670,7 +2678,7 @@ class EmailHandler extends FatModel
         }
 
         try {
-            $email = EmailHandler::sendSmtpEmail(FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $subject, $body, '', $tpl, $langId, '', $smtpArr);
+            $email = EmailHandler::sendSmtpEmail(FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $subject, $body, '', $tpl, $langId);
 
             return true;
         } catch (Exception $e) {
@@ -2728,7 +2736,7 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars)) {
             return false;
         }
-        $phone = !empty($row['user_phone']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) . $row['user_phone'] : '';
+        $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         (new self())->sendSms($tpl, $phone, $vars, $langId);
         return true;
     }

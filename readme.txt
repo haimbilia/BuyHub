@@ -99,6 +99,7 @@ Fixes:
     => 053064 - While order product commission not calculated as per subscription
     => 053172 - Every time Instagram login asking for email 
     => 053197 - mPesa Pament gateway payment not confirmed
+    => 053430 - While sending SMTP email code crashed in between if unable to send email
 
 Enhancements :
    => Make provision to made seller
