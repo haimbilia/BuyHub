@@ -288,7 +288,7 @@ class Report extends SearchBase
         if (true == $shopSpecific) {
             $arr = array_merge($arr, [
                 'grossSales' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) - IFNULL(opDiscountCharges,0)) as grossSales',
-                'refundedAmount' => 'sum(if(ops.opshipping_by_seller_user_id > 0,IFNULL(op.op_refund_shipping,0),0) + if(opst.op_tax_collected_by_seller > 0,IFNULL(op.op_refund_tax,0),0) + (op_refund_qty * op_unit_price)) as refundedAmount',
+                'refundedAmount' => 'sum(IFNULL(op_refund_amount,0) - if(ops.opshipping_by_seller_user_id > 0,0,IFNULL(op.op_refund_shipping,0)) - if(opst.op_tax_collected_by_seller > 0,0,IFNULL(op.op_refund_tax,0)) ) as refundedAmount',
                 'transactionAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0) + if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0) + IFNULL(op_rounding_off,0)) as transactionAmount',
                 'refundedTaxFromSeller' => 'SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(op.op_refund_tax,0),0)) as refundedTaxFromSeller',
                 'orderNetAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0) + if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0) + IFNULL(op_rounding_off,0) - if(ops.opshipping_by_seller_user_id > 0,IFNULL(op.op_refund_shipping,0),0) - if(opst.op_tax_collected_by_seller > 0,IFNULL(op.op_refund_tax,0),0) - (op_refund_qty *op_unit_price)) as orderNetAmount',
