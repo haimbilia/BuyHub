@@ -18,7 +18,10 @@ class TaxJarTaxSettingsController extends TaxSettingsController
         $tokenLabel = Labels::getLabel('LBL_HOW_DO_I_GET_A_TAXJAR_{API-TOKEN}', $langId);
         $tokenLabel = CommonHelper::replaceStringData($tokenLabel, ['{API-TOKEN}' => $tokenLink]);
         
-        $exportLink = '<a href="https://app.taxjar.com/api_sign_up" target="_blank">' . Labels::getLabel('LBL_EXPORT', $langId) . '</a>';
+        
+        //echo $frm->getField('plugin_id')->value;
+        
+        $exportLink = '<a href="javascript:void(0)" onclick="exportSellerProducts(\''.Importexport::TYPE_ORDER_PRODUCTS.'\')">' . Labels::getLabel('LBL_EXPORT', $langId) . '</a>';
         $exportLabel = Labels::getLabel('LBL_{EXPORT}_OLD_TRANSACTIONS_TO_CSV', $langId);
         $exportLabel = CommonHelper::replaceStringData($exportLabel, ['{EXPORT}' => $exportLink]);
 

@@ -139,12 +139,5 @@ class DummyController extends AdminBaseController
         $dataMigration = new DataMigration();
         $dataMigration->sync();
     } 
-    
-    public function tt(){
-        
-        $obj = new Importexport();
-        $obj->setPluginId(1); 
-        $obj->export(16, 1, 0, null, null, null, null);
-    }
   
 }

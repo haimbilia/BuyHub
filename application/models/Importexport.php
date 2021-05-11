@@ -5778,9 +5778,9 @@ class Importexport extends ImportexportCommon
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
     }
     
-    public function getOrderProductColoumArr($langId, $userId = 0)
-    {
-        
+    public function getOrderProductColoumArr($langId)
+    {   
+        /* column which taxjar need while import */
         $arr = array(
             'provider' => 'provider',
             'op_invoice_number' => 'order_id',
@@ -5810,9 +5810,9 @@ class Importexport extends ImportexportCommon
     }
 
     public function exportOrderProducts($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
-    {
+    {        
+        /* for now only dealing for plugin taxjar */
         $userId = FatUtility::int($userId);
-
         $ocDiscountSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
 
         $ocDiscountSrch->doNotCalculateRecords();
@@ -5830,11 +5830,11 @@ class Importexport extends ImportexportCommon
         $srch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
         $srch->joinTable('(' . $ocDiscountQry . ')', 'LEFT OUTER JOIN', 'op.op_id = opdc.opcharge_op_id', 'opdc');
         $srch->addOrder('op_id', 'ASC');
-        if( 0 < $this->pluginId){
-            
+        if (0 < $this->pluginId) {
+            $srch->joinTable(OrderProduct::DB_TBL_PLUGIN_SPECIFICS, 'LEFT OUTER JOIN', 'opps.opps_op_id = op.op_id and opps_plugin_id =' . $this->pluginId, 'opps');
+            $srch->addCondition('opps.opps_op_id', 'is', 'mysql_func_NULL', 'AND', true);
+            $srch->addStatusCondition(Orders::getVendorOrderPaymentCreditedStatuses());
         }
-        
-        $srch->addStatusCondition(Orders::getVendorOrderPaymentCreditedStatuses());
         if (isset($offset) && isset($noOfRows)) {
             $srch->setPageNumber($offset);
             $srch->setPageSize($noOfRows);
@@ -5846,26 +5846,31 @@ class Importexport extends ImportexportCommon
             $srch->addCondition('op_id', '>=', $minId);
             $srch->addCondition('op_id', '<=', $maxId);
         }
+        
+        if(0 < $userId){
+            $srch->addCondition('op_selprod_user_id', '=', $userId);
+        }
 
-        $srch->addMultipleFields(array('op_id', 'order_id', 'op_shop_id','order_payment_status','op_completion_date', 'op_order_id', 'op_invoice_number', 'order_net_amount', 'order_date_added', 'ou.user_id', 'ou.user_name as buyer_name', 'op.op_qty', 'op.op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_status_id', 'op_selprod_user_id', 'opship.opcharge_amount as shipping_amount', 'opdc.discount_amount', 'optax.opcharge_amount as tax_amount','opshipping_by_seller_user_id','op_refund_shipping','op_refund_qty'));
+        $srch->addMultipleFields(array('op_id', 'order_id', 'op_shop_id', 'order_payment_status', 'op_completion_date', 'op_order_id', 'op_invoice_number', 'order_net_amount', 'order_date_added', 'ou.user_id', 'ou.user_name as buyer_name', 'op.op_qty', 'op.op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_status_id', 'op_selprod_user_id', 'opship.opcharge_amount as shipping_amount', 'opdc.discount_amount', 'optax.opcharge_amount as tax_amount', 'opshipping_by_seller_user_id', 'op_refund_shipping', 'op_refund_qty'));
+
         $rs = $srch->getResultSet();
+
         $sheetData = array();
 
         /* Sheet Heading Row [ */
-        $headingsArr = $this->getOrderProductColoumArr($langId, $userId);
+        $headingsArr = $this->getOrderProductColoumArr($langId);
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
-        
-       
+
         /* ] */
         //$data = $this->db->fetchAll($rs);
-       
+
         $toAddresses = [];
         $fromAddresses = [];
         $adminAddress = Admin::getAddress($langId);
-        
+
         $orderObj = new Orders();
-        while ($row = $this->db->fetch($rs)) {    
-            if (!isset($toAddresses[$row['order_id']])) {                
+        while ($row = $this->db->fetch($rs)) {
+            if (!isset($toAddresses[$row['order_id']])) {
                 $toAddr = $orderObj->getOrderAddresses($row['order_id']);
                 $toAddr = (!empty($toAddr[Orders::SHIPPING_ADDRESS_TYPE])) ? $toAddr[Orders::SHIPPING_ADDRESS_TYPE] : $toAddr[Orders::BILLING_ADDRESS_TYPE];
                 $toAddr = Tax::formatAddress($toAddr, 'order');
@@ -5943,7 +5948,12 @@ class Importexport extends ImportexportCommon
                         $colValue = $discount;
                         break;
                     case 'total_sale':
-                        $colValue = $row['op_unit_price'] * ($row['op_qty'] - $row['op_refund_qty']);
+                        $discount = $row['discount_amount'];
+                        if (0 < $row['op_refund_qty']) {
+                            $discountPerQty = $discount / $row['op_qty'];
+                            $discount = $discountPerQty * ($row['op_qty'] - $row['op_refund_qty']);
+                        }
+                        $colValue = ($row['op_unit_price'] * ($row['op_qty'] - $row['op_refund_qty'])) + ($row['shipping_amount'] - $row['op_refund_shipping']) - $discount;
                         break;
                     case 'sales_tax':
                         $salesTax = $row['tax_amount'];
@@ -5957,7 +5967,7 @@ class Importexport extends ImportexportCommon
 
                 $sheetData[] = $this->parseContentForExport($colValue);
             }
-           
+
             CommonHelper::writeExportDataToCSV($this->CSVfileObj, $sheetData);
         }
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);

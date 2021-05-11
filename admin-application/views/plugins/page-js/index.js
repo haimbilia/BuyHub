@@ -127,7 +127,14 @@ $(document).ready(function () {
     syncCategories = function(){        
         fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
         },{},false);
-    }
+    };
+    exportSellerProducts = function (type) {
+        var pluginId = $('#frmPlugins [name="plugin_id"]').val();
+        var frm = '<form id="formExportSellerProducts" method="post" action="'+fcom.makeUrl('ImportExport', 'exportData', [type])+'">';
+	frm = frm.concat('<input type="hidden" name="plugin_id" value="'+pluginId+'"/>');  
+	$('body').prepend(frm);
+	$('#formExportSellerProducts').submit();
+    };
 })();
 
 $(document).on('click', '.uploadFile-Js', function () {

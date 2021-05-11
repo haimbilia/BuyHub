@@ -66,6 +66,9 @@ class ImportExportController extends AdminBaseController
             case Importexport::TYPE_TAX_CATEGORY:
                 $this->objPrivilege->canViewTax();
                 break;
+            case Importexport::TYPE_ORDER_PRODUCTS:
+                $this->objPrivilege->canViewOrders();
+                break;
             default:
                 Message::addErrorMessage($this->str_invalid_request);
                 break;
