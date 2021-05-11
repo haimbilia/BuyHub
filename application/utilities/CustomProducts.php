@@ -2044,7 +2044,7 @@ trait CustomProducts
         $shipProProdData = [];
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
             $shipBy = 0;
-            $shippingProfile = ShippingProfile::getProfileArr(0, true, true, true);
+            $shippingProfile = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true, true);
             $shippingProfileId =  array_key_first($shippingProfile);
 
             $isShippingProfileLinked = ShippingProfileProduct::isShippingProfileLinked($productId);

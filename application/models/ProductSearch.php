@@ -1231,9 +1231,12 @@ class ProductSearch extends SearchBase
         $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_product_id = selprod_product_id and ' . $joinCondition, 'spprod');
     }
 
-    public function joinShippingProfile()
+    public function joinShippingProfile($langId = 0)
     {
         $this->joinTable(ShippingProfile::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
+        if (0 < $langId) {
+            $this->joinTable(ShippingProfile::DB_TBL_LANG, 'LEFT OUTER JOIN', 'spprof_l.shipprofilelang_shipprofile_id = spprof.shipprofile_id and spprof_l.shipprofilelang_lang_id = ' . $langId, 'spprof_l');
+        }
     }
 
     public function joinShippingProfileZones()

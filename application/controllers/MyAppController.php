@@ -28,6 +28,7 @@ class MyAppController extends FatController
     {
         $this->siteLangId = CommonHelper::getLangId();
         $this->siteLangCode = CommonHelper::getLangCode();
+        $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
         $this->siteCurrencyId = CommonHelper::getCurrencyId();
 
         $this->app_user['temp_user_id'] = 0;
@@ -194,6 +195,7 @@ class MyAppController extends FatController
 
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
+        $this->includeDatePickerLangJs();
 
         $this->set('isUserDashboard', false);
         $this->set('currencySymbolLeft', $currencySymbolLeft);
@@ -672,6 +674,43 @@ class MyAppController extends FatController
         $this->_template->addJs('js/product-search.js');
         $this->_template->addJs('js/ion.rangeSlider.js');
         $this->_template->addJs('js/listing-functions.js');
+    }
+    
+    public function includeDatePickerLangJs()
+    {
+        $langCode = strtolower($this->siteLangCode);
+        $langCountryCode = strtoupper($this->siteLangCountryCode);
+        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
+        if ($jsPath) {
+            if ($jsPath == 'notfound') {
+                return;
+            }
+            $this->_template->addJs($jsPath);
+            return;
+        } elseif ($jsPath == 'notfound') {
+            return;
+        }
+        $jsPath = 'js/jqueryui-i18n/datepicker-' . $langCode . '-' . $langCountryCode . '.js';
+        $filePath = CONF_APPLICATION_PATH . '/views/' . $jsPath;
+
+        $fileFound = false;
+        if (file_exists($filePath)) {
+            $fileFound = true;
+        }
+        if (false == $fileFound) {
+            $jsPath = 'js/jqueryui-i18n/datepicker-' . $langCode . '.js';
+            $filePath = CONF_APPLICATION_PATH . '/views/' . $jsPath;
+            if (file_exists($filePath)) {
+                $fileFound = true;
+            }
+        }
+
+        if (true == $fileFound) {
+            $this->_template->addJs($jsPath);
+        } else {
+            $jsPath = 'notfound';
+        }
+        FatCache::set('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, $jsPath, '.txt');
     }
 
     public function getAppTempUserId()

@@ -311,9 +311,9 @@ class SellerOrdersController extends AdminBaseController
         } else if ($opRow['plugin_code'] == 'PayAtStore') {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
         } else {
-            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type']);
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type']);            
         }
-
+        
         $data = [
             'op_id' => $op_id,
             'op_status_id' => $opRow['op_status_id'],

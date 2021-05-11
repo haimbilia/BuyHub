@@ -91,15 +91,22 @@ Fixes:
     => 052645 - wile adding product specifications> it's not accepting character after &
     => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
     => 052869 - caching directory delete issue for some server
+    => 053316 - Import export- product specification export issue in other languges
     => 052895 - when catalogue is approved from admin then no email is there for the same to seller
     => 052912 - front end> product editor> insert image option> upload button is not working in editor 
     => 052985 - when the subscription module is on then the catalog image upload /multiple inventory add limit not working properly
     => 053007 - Stripe Connect Already Have Account Issue 
     => 053057 - When search by keyword on home getting error
     => 053064 - While order product commission not calculated as per subscription
-    => 053172 - Every time Instagram login asking for email 
+    => 053156 - admin> shipping> order level shipping text is not changing as per language /RTL
+    => 053228 - When stripe connect is not configured, uploading banner images gives error 
     => 053197 - mPesa Pament gateway payment not confirmed
+    => 053235 - buyer can't cancel the order when status is in process
+    => 053365 -	While sharing shop page on whatsapp then meta image not displaying
+    => 053276 - shipping is not changing on changing address during checkout
+    => 053155 - Button labels are not changing as per language
     => 053430 - While sending SMTP email code crashed in between if unable to send email
+
 
 Enhancements :
    => Make provision to made seller
