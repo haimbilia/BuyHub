@@ -32634,7 +32634,7 @@ a.ui-button:active,
     .box--offer .offer__footer .coupon-code {
       margin-top: 10px;
       display: inline-block;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--brand-color); }
     .box--offer .offer__footer p {
       margin: 0;
@@ -33246,6 +33246,98 @@ input.sp-input,
     color: #888; }
     .v-tabs-data.is-active {
       display: block; }
+
+.datatable_cell {
+  overflow-wrap: break-word; }
+  .datatable_cell-sort {
+    cursor: pointer; }
+    .datatable_cell-sort i {
+      display: inline-block;
+      position: relative;
+      right: -10px;
+      line-height: 0;
+      vertical-align: middle;
+      font-size: 10px; }
+  .datatable_cell-sorted {
+    color: var(--brand-color) !important; }
+  .datatable_cell_top {
+    background-color: rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
+    position: sticky;
+    top: 0;
+    z-index: 2; }
+    .datatable_cell_top:first-child {
+      z-index: 5; }
+  .datatable_cell_left {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
+    overflow-wrap: break-word; }
+    .datatable_cell_left:after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: -1px;
+      width: 30px;
+      transform: translateX(100%);
+      transition: box-shadow .3s;
+      content: "";
+      pointer-events: none;
+      box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.05); }
+  .datatable_cell_right {
+    position: sticky;
+    right: 0;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
+    overflow-wrap: break-word; }
+    .datatable_cell_right::after {
+      position: absolute;
+      top: 0;
+      bottom: -1px;
+      left: 0;
+      width: 30px;
+      transform: translateX(-100%);
+      transition: box-shadow 0.3s;
+      content: '';
+      pointer-events: none;
+      box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.05); }
+
+.datatable-sticky {
+  border-top: solid 1px #dee2e6;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  margin: auto;
+  overflow: auto; }
+  .datatable-sticky table {
+    font-size: 0.8rem;
+    width: 100%;
+    min-width: 1280px;
+    margin: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: none; }
+    .datatable-sticky table thead th {
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+      background: #fff; }
+    .datatable-sticky table tr {
+      border-bottom: solid 1px #dee2e6; }
+    .datatable-sticky table th,
+    .datatable-sticky table td {
+      padding: 1rem 25px;
+      color: #888;
+      vertical-align: top;
+      font-weight: 300; }
 
 .detail-page {
   position: relative; }

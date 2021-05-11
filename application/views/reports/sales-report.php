@@ -70,7 +70,7 @@ if (empty($orderDate)) {
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body p-0">
                             <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                         </div>
                     </div>
