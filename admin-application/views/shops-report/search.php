@@ -43,18 +43,18 @@ foreach ($arr_listing as $sn => $row) {
         }
         switch ($key) {
             case 'listserial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $span->appendElement('plaintext', array(), $sr_no);
                 break;
 
             case 'shop_name':
                 $shop = $row['shop_name'];
                 $shop .= '<br/>Created On: ' . FatDate::format($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
 
-                $td->appendElement('plaintext', array(), $shop, true);
+                $span->appendElement('plaintext', array(), $shop, true);
                 break;
 
             case 'owner_name':
-                $td->appendElement('plaintext', array(), $row['owner_name'] . '<br/>(' . $row['owner_email'] . ')', true);
+                $span->appendElement('plaintext', array(), $row['owner_name'] . '<br/>(' . $row['owner_email'] . ')', true);
                 break;
 
             case 'totRating':
@@ -69,7 +69,7 @@ foreach ($arr_listing as $sn => $row) {
                   </li>';
                 }
                 $rating .= '</ul>';
-                $td->appendElement('plaintext', array(), $rating, true);
+                $span->appendElement('plaintext', array(), $rating, true);
                 break;
             case 'grossSales':
             case 'transactionAmount':
@@ -91,11 +91,11 @@ foreach ($arr_listing as $sn => $row) {
             case 'commissionCharged':
             case 'refundedCommission':
             case 'adminSalesEarnings':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
 
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $span->appendElement('plaintext', array(), $row[$key], true);
                 break;
         }
     }
