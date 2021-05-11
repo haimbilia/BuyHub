@@ -3,7 +3,12 @@
     <h4><?php echo  Labels::getLabel('LBL_CATEGORIES_LIST', $adminLangId); ?></h4>
     <div class="section__toolbar">        
         <?php if ($canEdit) { ?>
-            <a href="javascript:void(0);" onClick="categoryForm(0);" title="<?php echo  Labels::getLabel('LBL_Add_Category', $adminLangId); ?>" class="btn-clean btn-sm btn-icon btn-secondary"><i class="fas fa-plus"></i></a>
+            <a href="javascript:void(0);" onClick="categoryForm(0);" title="<?php echo  Labels::getLabel('LBL_Add_Category', $adminLangId); ?>" class="btn-clean btn-sm btn-icon btn-secondary"><i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </i></a>
         <?php } ?>
     </div>
 </div>

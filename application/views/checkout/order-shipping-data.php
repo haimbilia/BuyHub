@@ -2,9 +2,9 @@
 if (!empty($orderShippingData)) {
 ?>
 	<div class="pop-up-title"><?php echo Labels::getLabel('LBL_Shipping', $siteLangId); ?></div>
-	<ul class="list-group review-block">
+	<ul class="review-block">
 		<?php foreach ($orderShippingData as $shipData) { ?>
-			<li class="list-group-item">
+			<li>
 				<div class="review-block__content">
 					<div class="shipping-data">
 						<ul class="media-more media-more-sm show">

@@ -20,6 +20,12 @@
         &:hover {
             color: $body-color;
         }
+        .icn {
+            .svg {
+                width: 11px;
+                height: 11px;
+            }
+        }
     }
     input {
         border: none;
@@ -39,7 +45,7 @@
             flex: 0 0 24px;
             max-width: 24px;
             background-color: $bg-gray;
-            border-radius: $radius2;
+            border-radius: $radius4;
         }
     }
 }

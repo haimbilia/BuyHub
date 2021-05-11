@@ -46,7 +46,12 @@
                                                 'onclick' => 'ratingTypesForm(0, ' . $adminLangId . ')',
                                                 'title' => Labels::getLabel('LBL_ADD_RATING_TYPE', $adminLangId)
                                             ],
-                                            'label' => '<i class="fas fa-plus"></i>'
+                                            'label' => '<i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </i>'
                                         ],
                                     ]
                                 ];
