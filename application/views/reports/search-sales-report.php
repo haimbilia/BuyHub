@@ -43,7 +43,7 @@ foreach ($arrListing as $sn => $row) {
         }
         switch ($key) {
             case 'listserial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $span->appendElement('plaintext', array(), $sr_no);
                 break;
 
             case 'orderDate':
@@ -82,7 +82,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
 
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $span->appendElement('plaintext', array(), $row[$key], true);
                 break;
         }
     }
