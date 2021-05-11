@@ -173,7 +173,7 @@ class DigitalDownload extends MyAppModel
         return 0;
     }
 
-    public static function getDownloadForm($recordId, $langId)
+    public static function getDownloadForm($langId)
     {
         $frm = new Form('frmDownload');
         $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
@@ -199,6 +199,7 @@ class DigitalDownload extends MyAppModel
         $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('LBL_Upload', $langId));
 
         $frm->addHiddenField('', 'product_id');
+        $frm->addHiddenField('', 'selprod_id');
         $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'dd_link_id');
         $frm->addHiddenField('', 'dd_link_ref_id');
@@ -223,7 +224,7 @@ class DigitalDownload extends MyAppModel
         return $optionCombinations;
     }
 
-    public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $returnResult = false)
+    public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $checkWithCatalog = true, $returnResult = false)
     {
         $recordId = FatUtility::int($recordId);
         $sellerUserId = FatUtility::int($sellerUserId);
@@ -255,7 +256,7 @@ class DigitalDownload extends MyAppModel
         } else {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventroy*/
-                $sellerProduct = SellerProduct::getAttributesById($splprice_selprod_id, ['selprod_user_id', 'selprod_product_id'], false);
+                $sellerProduct = SellerProduct::getAttributesById($recordId, ['selprod_user_id', 'selprod_product_id'], false);
                 if (false == $sellerProduct) {
                     if (true == $returnResult) {
                         return false;
@@ -276,6 +277,12 @@ class DigitalDownload extends MyAppModel
             }
         }
 
+        if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
+            if (true == $returnResult) {
+                return false;
+            }
+            FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
+        }
         
         /*
         TODO: To check whether product belogs to logged seller?
@@ -296,20 +303,22 @@ class DigitalDownload extends MyAppModel
             }
         }
         
-        if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
+        if (true === $checkWithCatalog) {
+            if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
+                return true;
+            }
             if (true == $returnResult) {
                 return false;
             }
-            FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+        } else {
+            if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
+                return true;
+            }
+            if (true == $returnResult) {
+                return false;
+            }
+            FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
         }
-
-        if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
-            return true;
-        }
-
-        if (true == $returnResult) {
-            return false;
-        }
-        FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
     }
 }

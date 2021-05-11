@@ -2,6 +2,8 @@
 
 class SellerProductsController extends AdminBaseController
 {
+    use InventoryDigitalDownloads;
+
     private $canView;
     private $canEdit;
 
@@ -1704,7 +1706,7 @@ class SellerProductsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function sellerProductDownloadFrm($selProd_id = 0, $type = applicationConstants::DIGITAL_DOWNLOAD_FILE)
+    public function sellerProductDownloadFrms($selProd_id = 0, $type = applicationConstants::DIGITAL_DOWNLOAD_FILE)
     {
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($selProd_id);

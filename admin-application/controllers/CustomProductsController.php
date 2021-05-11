@@ -1446,7 +1446,7 @@ class CustomProductsController extends AdminBaseController
         
         DigitalDownload::canDo($preqId, 1);
 
-        $frm = DigitalDownload::getDownloadForm(0, $this->adminLangId);
+        $frm = DigitalDownload::getDownloadForm($this->adminLangId);
 
         $productOptions = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
@@ -1466,7 +1466,7 @@ class CustomProductsController extends AdminBaseController
 
         if (1 <= $linkId) {
             $ddSearch = new DigitalDownloadSearch();
-            $linkDetail = $ddSearch->getLinks($linkId);
+            $linkDetail = $ddSearch->getLinksById($linkId);
             $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
             if (!empty($linkDetail)) {
                 $frmData['dd_link_id'] = $linkId;

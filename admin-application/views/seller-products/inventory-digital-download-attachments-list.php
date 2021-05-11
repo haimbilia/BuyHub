@@ -1,10 +1,10 @@
 <?php
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'pdl_download_link' => Labels::getLabel('LBL_Download_Link', $siteLangId),
+    'mainfile' => Labels::getLabel('LBL_File', $siteLangId),
+    'preview' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
     // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
-    'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId),
-    'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
+    'afile_lang_id' => Labels::getLabel('LBL_Language', $siteLangId),
     'action' => Labels::getLabel('LBL_Action', $siteLangId),
 );
 
@@ -13,10 +13,11 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
+
 $sr_no = 0;
 foreach ($records as $sn => $row) {
     $sr_no++;
-    $tr = $tbl->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
+    $tr = $tbl->appendElement('tr');
 
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
@@ -24,13 +25,8 @@ foreach ($records as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
-            case 'pdl_lang_id':
-                if (array_key_exists($row['pdl_lang_id'], $languages)) {
-                    $val = $languages[$row['pdl_lang_id']];
-                } else {
-                    $val = 'Invalid language link-' . $row['pdl_lang_id'];
-                }
-                $td->appendElement('plaintext', array(), $val, true);
+            case 'preview':
+                $td->appendElement('plaintext', array(), $row['preview'], true);
                 break;
             case 'pddr_options_code':
                 if (array_key_exists($row['pddr_options_code'], $options)) {
@@ -40,29 +36,37 @@ foreach ($records as $sn => $row) {
                 }
                 $td->appendElement('plaintext', array(), $val, true);
                 break;
+            case 'afile_lang_id':
+                $lang_name = Labels::getLabel('LBL_All', $siteLangId);
+                if ($row['afile_lang_id'] > 0) {
+                    $lang_name = $languages[$row['afile_lang_id']];
+                }
+                $td->appendElement('plaintext', array(), $lang_name, true);
+                break;
             case 'action':
                 $td->appendElement(
                     "a",
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_Edit', $siteLangId),
-                        'onclick' => 'downloadsForm(' . $row['pddr_record_id'] . ', ' . $row['pdl_id'] . ')', 'href' => 'javascript:void(0);'
-                    ),
-                    '<i class="fa fa-edit  icon"></i>',
-                    true
-                );
-
-                $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
                         'title' => Labels::getLabel('LBL_Delete', $siteLangId),
-                        'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')', 'href' => 'javascript:void(0);'
+                        'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
                     ),
                     '<i class="fa fa-trash  icon"></i>',
                     true
                 );
-
+                if (empty($row['preview'])) {
+                    $td->appendElement(
+                        "a",
+                        array(
+                            'class' => 'btn btn-clean btn-sm btn-icon',
+                            'title' => Labels::getLabel('LBL_Preview', $siteLangId),
+                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
+                        ),
+                        '<i class="fa fa-caret-square-right icon"></i>',
+                        true
+                    );
+                }
+                
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
