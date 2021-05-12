@@ -214,4 +214,8 @@ Notes:
     2Checkout Payment Gateway:
         To Test Sandbox Payment Refer This: https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods
 
+    Aramex Shipping Service: 
+        Soap Client library required.
+        To Enable : https://stackoverflow.com/a/11391550
+
 

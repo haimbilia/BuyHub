@@ -636,3 +636,8 @@ ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
 ON DUPLICATE KEY UPDATE conf_val = 3;
+
+
+-- --- Aramex Shipping API--- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Aramex', '8', 'Aramex', '0', '3');
+-- --- Aramex Shipping API--- --

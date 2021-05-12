@@ -2,6 +2,8 @@
 
 class ShippingServicesBase extends PluginBase
 {
+    protected $addressArr = [];
+
     /**
      * getSystemOrder
      *
@@ -45,5 +47,17 @@ class ShippingServicesBase extends PluginBase
     public function bindLabel(array $requestParam): bool
     {
         return true;
+    }
+    
+    /**
+     * getCarriers - Used if function not created in child class.
+     * Return multidimentional array
+     * @return array
+     */
+    public function getCarriers(): array
+    {
+        return [
+            []
+        ];
     }
 }

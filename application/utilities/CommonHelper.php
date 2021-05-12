@@ -1,7 +1,5 @@
 <?php
 
-use phpDocumentor\Reflection\PseudoTypes\True_;
-
 class CommonHelper extends FatUtility
 {
     private static $_ip;
