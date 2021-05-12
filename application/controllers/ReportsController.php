@@ -622,7 +622,7 @@ class ReportsController extends SellerBaseController
                 'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
 
                 'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
-
+               
                 'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->siteLangId),
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->siteLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId),
