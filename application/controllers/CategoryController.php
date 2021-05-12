@@ -8,16 +8,20 @@ class CategoryController extends MyAppController
     }
 
     public function index()
-    {        
-		$productCategory = ProductCategory::getSearchObject(false, $this->siteLangId, true);
-        $productCategory->addOrder('m.prodcat_active', 'DESC');
-		$productCategory->addCondition('prodcat_parent', '=', 0);
-		$productCategory->addCondition('prodcat_deleted', '=', 0);
-		$productCategory->addOrder('prodcat_ordercode');
-		$productCategory->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name'));
-		$rs = $productCategory->getResultSet();
-		$categoriesArr = FatApp::getDb()->fetchAll($rs);
-        $this->set('categoriesArr', $categoriesArr);
+    {
+        $productCategory = new ProductCategory();
+        $result = $productCategory->getCategoriesByLevel($this->siteLangId, [0, 1]);
+        
+        $catWithChild = [];
+        foreach ($result as $catDetail) {
+            if (0 == $catDetail['pcr_level']) {
+                $catDetail['childrens'] = [];
+                $catWithChild[$catDetail['pcr_parent_id']] = $catDetail;
+            } else {
+                $catWithChild[$catDetail['pcr_parent_id']]['childrens'][] = $catDetail;
+            }
+        }
+        $this->set('categoriesArr', $catWithChild);
         $this->_template->render();
     }
 
@@ -86,11 +90,11 @@ class CategoryController extends MyAppController
         if ($pageSize) {
             $srch->setPageSize($pageSize);
         }
-        
+
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-        
+
         $data = array(
             'frmProductSearch' => $frm,
             'category' => $category,
@@ -120,7 +124,7 @@ class CategoryController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-        
+
         $this->set('data', $data);
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
@@ -327,7 +331,7 @@ class CategoryController extends MyAppController
         }
 
         $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, $includeChild, false, false, $prodSrchObj, true);
-        
+
         if (false === MOBILE_APP_API_CALL) {
             $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array('prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code'));
         }
