@@ -13,13 +13,14 @@ class DigitalDownload extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX, $id);
     }
 
-    public function getReferenceId($productId, $productOption, $refType = 0)
+    public function getReferenceId($recordId, $option, $refType = 0)
     {
+        $recordId = FatUtility::int($recordId);
         $refType = FatUtility::int($refType);
 
         $srch = new DigitalDownloadSearch();
-        $srch->addCondition(static::DB_TBL_PREFIX . 'record_id', '=', $productId);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'options_code', '=', $productOption);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'record_id', '=', $recordId);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'options_code', '=', $option);
         $srch->addCondition(static::DB_TBL_PREFIX . 'type', '=', $refType);
 
         $srch->setPageSize(1);
@@ -35,9 +36,11 @@ class DigitalDownload extends MyAppModel
         return $row['pddr_id'];
     }
     
-    public function saveReference($productId, $optionsCode, $refType = 0)
+    public function saveReference($recordId, $optionsCode, $refType = 0)
     {
-        if ($productId < 1) {
+        $recordId = FatUtility::int($recordId);
+
+        if ($recordId < 1) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
@@ -45,7 +48,7 @@ class DigitalDownload extends MyAppModel
         $refType = FatUtility::int($refType);
 
         $dataToSave = array(
-            static::DB_TBL_PREFIX . 'record_id' => $productId,
+            static::DB_TBL_PREFIX . 'record_id' => $recordId,
             static::DB_TBL_PREFIX . 'options_code' => $optionsCode,
             static::DB_TBL_PREFIX . 'type' => $refType,
         );
@@ -191,7 +194,6 @@ class DigitalDownload extends MyAppModel
 
         $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
 
-        // $frm->addSelectBox(Labels::getLabel('LBL_Preview_File?', $langId), 'is_preview', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'is_preview'), '')->requirements()->setRequired();
         $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
         
         $frm->addFileUpload(Labels::getLabel('LBL_Upload', $langId), 'preview_file', array('id' => 'preview_file'));
@@ -206,14 +208,14 @@ class DigitalDownload extends MyAppModel
         return $frm;
     }
 
-    public static function getProductOptionCombinations($prodId, $langId, $requestedProd = false, $addDefOption = true, $optSeparator = '_')
+    public static function getProductOptionCombinations($recordId, $langId, $requestedProd = false, $addDefOption = true, $optSeparator = '_')
     {
         $optionCombinations = [];
 
-        if(true == $requestedProd) {
-            $productOptions = ProductRequest::getProductReqOptions($preqId, $langId, true);
+        if (true == $requestedProd) {
+            $productOptions = ProductRequest::getProductReqOptions($recordId, $langId, true);
         } else {
-            $productOptions = Product::getProductOptions($prodId, $langId, true);
+            $productOptions = Product::getProductOptions($recordId, $langId, true);
         }
 
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', $optSeparator);
@@ -223,6 +225,18 @@ class DigitalDownload extends MyAppModel
         }
         return $optionCombinations;
     }
+
+    /**
+     * Name: canDo
+     * Description: Function to check whether a user can add/upload with a record
+     * Params:
+     * @recordId - Id of record for which add/upload permission is going to be checked
+     * @recordType - Type of record Id (Inventory Id (Seller Product Id), Product request Id, Product Id)
+     * @sellerUserId - user Id for which record is belongs to, It is required in case to check add/upload request from a seller. In case delete request from admin it will be zero 
+     * @checkWithCatalog - To check whether add/upload allowed with Inventory/Product
+     * @langId
+     * @returnResult - return response or die
+     */
 
     public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $checkWithCatalog = true, $returnResult = false)
     {
@@ -239,55 +253,37 @@ class DigitalDownload extends MyAppModel
             $productReqRow = ProductRequest::getAttributesById($recordId);
             
             if (false === $productReqRow) {
-                if (true == $returnResult) {
-                    return false;
-                }
-                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $langId));
+                return static::returnResponseOrDie($returnResult);
             }
             
             $product = json_decode($productReqRow['preq_content'], true);
 
             if (!$product) {
-                if (true == $returnResult) {
-                    return false;
-                }
-                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $langId));
+                return static::returnResponseOrDie($returnResult);
             }
         } else {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventroy*/
                 $sellerProduct = SellerProduct::getAttributesById($recordId, ['selprod_user_id', 'selprod_product_id'], false);
                 if (false == $sellerProduct) {
-                    if (true == $returnResult) {
-                        return false;
-                    }
-                    FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $langId));
+                    return static::returnResponseOrDie($returnResult);
                 }
                 /* $inventoryId = $recordId; Can be used id required further. As of now no need*/
                 $recordId = $sellerProduct['selprod_product_id'];
             }
 
-            $product = Product::getAttributesById($recordId, ['product_type', 'product_download_attachements_with_inventory']);
+            $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_download_attachements_with_inventory']);
         
             if (false == $product) {
-                if (true == $returnResult) {
-                    return false;
-                }
-                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $langId));
+                return static::returnResponseOrDie($returnResult);
             }
         }
 
         if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
-            if (true == $returnResult) {
-                return false;
-            }
-            FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
+            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
         }
         
-        /*
-        TODO: To check whether product belogs to logged seller?
-        sellerUserId
-        */
+        /* To check whether product belogs to logged seller? */
         if (0 < $sellerUserId) {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Invetory */
@@ -296,10 +292,7 @@ class DigitalDownload extends MyAppModel
                 $recordOwnerId = $product['product_seller_id'];
             }
             if ($recordOwnerId != $sellerUserId) {
-                if (true == $returnResult) {
-                    return false;
-                }
-                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $langId) . 'Invalid Seller');
+                return static::returnResponseOrDie($returnResult);
             }
         }
         
@@ -307,18 +300,95 @@ class DigitalDownload extends MyAppModel
             if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
                 return true;
             }
-            if (true == $returnResult) {
-                return false;
-            }
-            FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
         } else {
             if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
                 return true;
             }
-            if (true == $returnResult) {
-                return false;
-            }
-            FatUtility::dieWithError(Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
+            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
         }
+    }
+
+    /**
+     * Name: canDelete
+     * Description: Function to check whether a valid delete request
+     * Params:
+     * @recordId - Id of record for which delete permission is going to be checked
+     * @recordType - Type of record Id (Inventory Id (Seller Product Id), Product request Id, Product Id)
+     * @sellerUserId - user Id for which record is belongs to, It is required in case to check delete request from a seller. In case delete request from admin it will be zero 
+     * @langId
+     * @returnResult - return response or die
+     */
+
+    public static function canDelete($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $returnResult = false)
+    {
+        $recordId = FatUtility::int($recordId);
+        $sellerUserId = FatUtility::int($sellerUserId);
+        $langId = FatUtility::int($langId);
+
+        if (1 > $langId) {
+            $langId = CommonHelper::getLangId();
+        }
+
+        /* TODO: Need to confirm to add checks that product has been purchased? */
+
+        switch ($recordType) {
+            case Product::CATALOG_TYPE_INVENTORY:
+                /* Seller Inventroy*/
+                $sellerProduct = SellerProduct::getAttributesById($recordId, ['selprod_user_id', 'selprod_product_id'], false);
+                if (false == $sellerProduct) {
+                    return static::returnResponseOrDie($returnResult);
+                }
+
+                $recordOwnerId = $sellerProduct['selprod_user_id'];
+                break;
+            case Product::CATALOG_TYPE_REQUEST:
+                /* Marketplace requested Product - by seller*/
+                $productReqRow = ProductRequest::getAttributesById($recordId);
+                
+                if (false === $productReqRow) {
+                    return static::returnResponseOrDie($returnResult);
+                }
+                
+                $product = json_decode($productReqRow['preq_content'], true);
+
+                if (!$product) {
+                    return static::returnResponseOrDie($returnResult);
+                }
+                $recordOwnerId = $product['product_seller_id'];
+                break;
+            case Product::CATALOG_TYPE_PRIMARY:
+                $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_download_attachements_with_inventory']);
+        
+                if (false == $product) {
+                    return static::returnResponseOrDie($returnResult);
+                }
+                $recordOwnerId = $product['product_seller_id'];
+                break;
+            default:
+                if (false == $product) {
+                    return static::returnResponseOrDie($returnResult);
+                }
+                break;
+        }
+
+        /* To check whether product belogs to logged seller? */
+        if (0 < $sellerUserId) {
+            if ($recordOwnerId != $sellerUserId) {
+                return static::returnResponseOrDie($returnResult);
+            }
+        }
+        return true;
+    }
+
+    public static function returnResponseOrDie($returnResult, $message = '')
+    {
+        if (true == $returnResult) {
+            return false;
+        }
+        if ($message == '') {
+            $message = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
+        }
+        FatUtility::dieWithError($message);
     }
 }

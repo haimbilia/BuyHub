@@ -5707,8 +5707,7 @@ class SellerController extends SellerBaseController
         ];
 
         if (1 <= $linkId) {
-            $ddSearch = new DigitalDownloadSearch();
-            $linkDetail = $ddSearch->getLinksById($linkId);
+            $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
             
             $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
             if (!empty($linkDetail)) {
@@ -5883,11 +5882,8 @@ class SellerController extends SellerBaseController
         }
 
         if (1 <= $ddLinkId) {
-            $srch = new DigitalDownloadSearch();
-            $totalLinksCount = $srch->getTotalLinksCount($ddRefId);
-            
-            $srch = new DigitalDownloadSearch();
-            $totalAttachmentCount = $srch->getTotalAttachmentsCount($ddRefId);
+            $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($ddRefId);
+            $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($ddRefId);
 
             if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
                 $ddObj->deleteReference($ddRefId);
@@ -6004,29 +6000,35 @@ class SellerController extends SellerBaseController
         echo $this->_template->render(false, false, 'seller/digital-download-attachments-list.php', true);
     }
 
-    public function deleteDigitalLink($linkId, $refId)
+    public function deleteDigitalLink()
     {
         $this->userPrivilege->canEditProducts();
-        $refId = FatUtility::int($refId);
-        $linkId = FatUtility::int($linkId);
+
+        $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
+        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
 
         if (1 > $refId || 1 > $linkId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__ . __FILE__);
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $link = DigitalDownloadSearch::getLinkDetail($linkId);
+        if (1 > count($link)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__ . __FILE__);
             FatUtility::dieJsonError(Message::getHtml());
         }
         
+        DigitalDownload::canDelete($link['pddr_record_id'], $link['pddr_type'], $this->userParentId, $this->siteLangId);
+
         $ddObj = new DigitalDownload();
         
         if (!$ddObj->deleteLink($linkId, $refId)) {
             FatUtility::dieJsonError($ddObj->getError());
         }
 
-        $ddSrch = new DigitalDownloadSearch();
+        $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($refId);
 
-        $totalLinksCount = $ddSrch->getTotalLinksCount($refId);
-
-        $ddSrch = new DigitalDownloadSearch();
-        $totalAttachmentCount = $ddSrch->getTotalAttachmentsCount($refId);
+        $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($refId);
         
         if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
             $ddObj->deleteReference($refId);
@@ -6046,6 +6048,15 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        $attachment = DigitalDownloadSearch::getAttachmentDetail($aFileId);
+        
+        if (1 > count($attachment)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__ . __FILE__);
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        
+        DigitalDownload::canDelete($attachment['pddr_record_id'], $attachment['pddr_type'], $this->userParentId, $this->siteLangId);
+        
         $digDownload = new DigitalDownload();
         
         if (!$digDownload->deleteAttachment($aFileId, $refId)) {

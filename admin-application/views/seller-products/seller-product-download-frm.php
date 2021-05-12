@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$downloadFrm->addFormTagAttribute('class', 'form form--horizontal');
+
+$downloadFrm->addFormTagAttribute('class', 'web_form');
 $downloadFrm->setFormTagAttribute('id', 'frmDownload');
 
 $fld = $downloadFrm->getField('product_downloadable_link');

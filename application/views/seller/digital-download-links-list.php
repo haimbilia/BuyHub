@@ -2,7 +2,7 @@
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     'pdl_download_link' => Labels::getLabel('LBL_Download_Link', $siteLangId),
-    // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
+    'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
     'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId),
     'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
     'action' => Labels::getLabel('LBL_Action', $siteLangId),
@@ -14,7 +14,7 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 $sr_no = 0;
-foreach ($records as $sn => $row) {
+foreach ($links as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
 
@@ -71,7 +71,7 @@ foreach ($records as $sn => $row) {
     }
 }
 
-if (empty($records)) {
+if (empty($links)) {
     $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
     $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $siteLangId), true);
 }

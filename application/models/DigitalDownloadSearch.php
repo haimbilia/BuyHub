@@ -7,16 +7,30 @@ class DigitalDownloadSearch extends SearchBase
         parent::__construct(DigitalDownload::DB_TBL);
     }
 
-    public function getLinkDetailByLinkId($linkId)
+    public static function getSearchObject()
     {
-        $this->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', 'pdl_record_id = pddr_id');
-        $this->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', '=', $linkId);
+        return new SearchBase(DigitalDownload::DB_TBL);
+    }
 
-        $this->setPageSize(1);
-        $this->doNotCalculateRecords();
+    public static function getLinkDetail($linkId)
+    {
+        $linkId = FatUtility::int($linkId);
 
-        $rs = $this->getResultSet();
+        if ($linkId < 1) {
+            return [];
+        }
+
+        $srch = static::getSearchObject();
+        $srch->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', 'pdl_record_id = pddr_id');
+
+        $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', '=', $linkId);
+
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+
+        $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
+
 
         if (!is_array($row)) {
             return [];
@@ -25,23 +39,35 @@ class DigitalDownloadSearch extends SearchBase
         return $row;
     }
 
-    public function getLinksById($linkId)
+    public static function getAttachmentDetail($aFileId)
     {
+        $aFileId = FatUtility::int($aFileId);
 
-        $linkId = FatUtility::int($linkId);
-
-        if ($linkId < 1) {
+        if ($aFileId < 1) {
             return [];
         }
 
-        $this->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', 'pdl_record_id = pddr_id');
+        $srch = static::getSearchObject();
 
-        $this->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', '=', $linkId);
+        $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
+        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
 
-        $this->setPageSize(1);
-        $this->doNotCalculateRecords();
-
-        $rs = $this->getResultSet();
+        $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'id', '=', $aFileId);
+        $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
+        
+        $srch->addMultipleFields(
+            [
+                'pddr_id',
+                'pddr_record_id',
+                'pddr_type',
+                'afile.afile_id as afile_id'
+            ]
+        );
+        
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+        
+        $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
 
@@ -54,7 +80,7 @@ class DigitalDownloadSearch extends SearchBase
 
     public static function getAttachments($recordId, $recordType, $optionCombi = '0', $langId = 0)
     {
-        $srch = new SearchBase(DigitalDownload::DB_TBL);
+        $srch = static::getSearchObject();
 
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $recordId);
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $recordType);
@@ -98,7 +124,7 @@ class DigitalDownloadSearch extends SearchBase
     
     public static function getLinks($recordId, $recordType, $optionCombi = '0', $langId = 0)
     {
-        $srch = new SearchBase(DigitalDownload::DB_TBL);
+        $srch = static::getSearchObject();
 
         $srch->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', DigitalDownload::DB_TBL_LINKS_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id');
 
@@ -123,7 +149,7 @@ class DigitalDownloadSearch extends SearchBase
         return $rows;
     }
 
-    public function getTotalLinksCount($refId)
+    public static function getTotalLinksCount($refId)
     {
         $linkId = FatUtility::int($refId);
 
@@ -131,14 +157,16 @@ class DigitalDownloadSearch extends SearchBase
             return [];
         }
 
-        $this->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', 'pdl_record_id = pddr_id');
+        $srch = static::getSearchObject();
 
-        $this->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'record_id', '=', $refId);
+        $srch->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', 'pdl_record_id = pddr_id');
 
-        $this->addFld('count(pdl_id) as total');
-        $this->doNotCalculateRecords();
+        $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'record_id', '=', $refId);
 
-        $rs = $this->getResultSet();
+        $srch->addFld('count(pdl_id) as total');
+        $srch->doNotCalculateRecords();
+
+        $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
         if (!is_array($row)) {
@@ -148,7 +176,7 @@ class DigitalDownloadSearch extends SearchBase
         return $row['total'];
     }
 
-    public function getTotalAttachmentsCount($refId)
+    public static function getTotalAttachmentsCount($refId)
     {
         $linkId = FatUtility::int($refId);
 
@@ -156,17 +184,19 @@ class DigitalDownloadSearch extends SearchBase
             return [];
         }
 
-        $this->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'afile_record_id = pddr_id');
+        $srch = static::getSearchObject();
 
-        $this->addCondition(AttachedFile::DB_TBL_PREFIX . 'record_id', '=', $refId);
+        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'afile_record_id = pddr_id');
+
+        $srch->addCondition(AttachedFile::DB_TBL_PREFIX . 'record_id', '=', $refId);
         $fileTypes = [AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW];
 
-        $this->addCondition(AttachedFile::DB_TBL_PREFIX . 'type', 'IN', $fileTypes);
+        $srch->addCondition(AttachedFile::DB_TBL_PREFIX . 'type', 'IN', $fileTypes);
 
-        $this->addFld('count(afile_id) as total');
-        $this->doNotCalculateRecords();
+        $srch->addFld('count(afile_id) as total');
+        $srch->doNotCalculateRecords();
 
-        $rs = $this->getResultSet();
+        $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
         if (!is_array($row)) {

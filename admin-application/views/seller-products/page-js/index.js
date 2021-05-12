@@ -506,9 +506,12 @@ $(document).ready(function(){
 
 	sellerProductDownloadFrm = function( selprod_id, type ) {
 		fcom.displayProcessing();
-		fcom.ajax(fcom.makeUrl('SellerProducts', 'sellerProductDownloadFrm', [ selprod_id, type ]), '', function(t) {
-			fcom.updateFaceboxContent(t);
-			$("select[name='download_type']").trigger('change');
+		fcom.updateFaceboxContent('<div class="col-md-12" id="digital_download_form"></div> <div class="col-md-12" class="dd-list"><div class="row" id="digital_download_list"></div></div>');
+		
+		fcom.ajax(fcom.makeUrl('SellerProducts', 'sellerProductDownloadFrm', [selprod_id]), '', function(t) {
+			$("#digital_download_form").html(t);
+			/* $("select[name='download_type']").trigger('change'); */
+			getDigitalDownloads();
 		});
 	};
 	
@@ -529,7 +532,7 @@ $(document).ready(function(){
 		var data = '&product_id=' + productId + '&selprod_id=' + selProdId + '&download_type=' + downloadType;
 		data = data + '&option_comb=' + optionCombi + '&langId=' + langId;
 		
-		fcom.ajax(fcom.makeUrl('Seller', 'getInventoryDigitalDownloads'), data, function(res) {
+		fcom.ajax(fcom.makeUrl('SellerProducts', 'getInventoryDigitalDownloads'), data, function(res) {
 			$("#digital_download_list").html(res);
 		});
 	}
@@ -549,7 +552,7 @@ $(document).ready(function(){
 			data = data + '&option_comb_id=0';
 		}
 
-		fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function(t) {
+		fcom.ajax(fcom.makeUrl('SellerProducts', 'setupDigitalDownloads'), data, function(t) {
 			var ans = $.parseJSON(t);
 			if( ans.status == 0 ){
 				$.systemMessage( ans.msg,'alert alert--danger' );
@@ -589,7 +592,7 @@ $(document).ready(function(){
 		data.append('prod_ref_type', 1);
 
 		$.ajax({
-			url : fcom.makeUrl('Seller', 'setupDigitalDownloads'),
+			url : fcom.makeUrl('SellerProducts', 'setupDigitalDownloads'),
 			type: "POST",
 			data : data,
 			processData: false,
@@ -631,7 +634,7 @@ $(document).ready(function(){
 		});
 
 		$.ajax({
-			url : fcom.makeUrl('Seller', 'setupDigitalPreviewFile'),
+			url : fcom.makeUrl('SellerProducts', 'setupDigitalPreviewFile'),
 			type: "POST",
 			data : data,
 			processData: false,
@@ -658,7 +661,9 @@ $(document).ready(function(){
 			return false;
 		}
 		
-    	fcom.ajax( fcom.makeUrl( 'Seller', 'deleteDigitalLink', [linkId, refId] ), '', function(t) {
+		var data = '&link_id=' + linkId + '&ref_id=' + refId;
+
+    	fcom.ajax( fcom.makeUrl( 'SellerProducts', 'deleteDigitalLink'), data, function(t) {
 			var ans = $.parseJSON(t);
 			if( ans.status == 1 ){
 				$('#' + linkId + '_' + refId).remove();
@@ -675,7 +680,7 @@ $(document).ready(function(){
 		if( !agree ){ return false; }
 
 		var data = '&afile_id=' + afile_id + '&ref_id=' + prod_id;
-		fcom.ajax( fcom.makeUrl( 'Seller', 'deleteDigitalFile'), data , function(res) {
+		fcom.ajax( fcom.makeUrl( 'SellerProducts', 'deleteDigitalFile'), data , function(res) {
 			var ans = $.parseJSON(res);
 			if( ans.status == 1 ){
 				$.mbsmessage(ans.msg, true, 'alert--success');

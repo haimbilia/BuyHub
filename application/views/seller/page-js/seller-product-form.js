@@ -476,13 +476,11 @@ $(document).on('click', '.tabs_002', function(){
 			return false;
 		}
 		
-    	fcom.ajax( fcom.makeUrl( 'Seller', 'deleteDigitalLink', [linkId, refId] ), '', function(t) {
-			var ans = $.parseJSON(t);
-			if( ans.status == 1 ){
-				$('#' + linkId + '_' + refId).remove();
-				$.mbsmessage('Deleted', true, 'alert--success');
-			} else {
-				$.mbsmessage(ans.msg, true, 'alert--danger');
+		var data = '&link_id=' + linkId + '&ref_id=' + refId;
+
+		fcom.updateWithAjax( fcom.makeUrl( 'Seller', 'deleteDigitalLink'), data , function(res) {
+			if( res.status == 1 ){
+				getDigitalDownloads();
 			}
 		});
 	}
@@ -493,14 +491,10 @@ $(document).on('click', '.tabs_002', function(){
 		if( !agree ){ return false; }
 
 		var data = '&afile_id=' + afile_id + '&ref_id=' + prod_id;
-		fcom.ajax( fcom.makeUrl( 'Seller', 'deleteDigitalFile'), data , function(res) {
-			var ans = $.parseJSON(res);
-			if( ans.status == 1 ){
-				$.mbsmessage(ans.msg, true, 'alert--success');
-			} else {
-				$.mbsmessage(ans.msg, true, 'alert--danger');
+		fcom.updateWithAjax( fcom.makeUrl( 'Seller', 'deleteDigitalFile'), data , function(res) {
+			if( res.status == 1 ){
+				getDigitalDownloads();
 			}
-			getDigitalDownloads();
 		});
 	};
 

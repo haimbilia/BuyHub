@@ -1533,8 +1533,7 @@ class ProductsController extends AdminBaseController
         ];
 
         if (1 <= $linkId) {
-            $ddSearch = new DigitalDownloadSearch();
-            $linkDetail = $ddSearch->getLinksById($linkId);
+            $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
 
             $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
             if (!empty($linkDetail)) {
@@ -1682,11 +1681,8 @@ class ProductsController extends AdminBaseController
         }
 
         if (1 <= $ddLinkId) {
-            $srch = new DigitalDownloadSearch();
-            $totalLinksCount = $srch->getTotalLinksCount($ddRefId);
-
-            $srch = new DigitalDownloadSearch();
-            $totalAttachmentCount = $srch->getTotalAttachmentsCount($ddRefId);
+            $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($ddRefId);
+            $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($ddRefId);
 
             if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
                 $ddObj->deleteReference($ddRefId);
@@ -1834,11 +1830,8 @@ class ProductsController extends AdminBaseController
             FatUtility::dieJsonError($ddObj->getError());
         }
 
-        $srch = new DigitalDownloadSearch();
-        $totalLinksCount = $srch->getTotalLinksCount($refId);
-
-        $srch = new DigitalDownloadSearch();
-        $totalAttachmentCount = $srch->getTotalAttachmentsCount($refId);
+        $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($refId);
+        $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($refId);
 
         if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
             $ddObj->deleteReference($refId);

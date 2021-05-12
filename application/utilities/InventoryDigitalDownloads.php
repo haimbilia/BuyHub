@@ -4,14 +4,15 @@ trait InventoryDigitalDownloads
 {
     public function sellerProductDownloadFrm($productId, $selProdId = 0)
     {
-        $post = FatApp::getPostedData();
+        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+
+        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+            Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+        }
+        
         $productId = FatUtility::int($productId);
         $selProdId = FatUtility::int($selProdId);
-
-        if ($selProdId == 0 && !UserPrivilege::canSellerAddProductInCatalog($productId, $this->userParentId)) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Please_Upgrade_your_package_to_add_new_products", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
 
         $frm = DigitalDownload::getDownloadForm($this->siteLangId);
 

@@ -1,11 +1,11 @@
 <?php
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'mainfile' => Labels::getLabel('LBL_File', $siteLangId),
-    'preview' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
-    // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_Language', $siteLangId),
-    'action' => Labels::getLabel('LBL_Action', $siteLangId),
+    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'mainfile' => Labels::getLabel('LBL_File', $adminLangId),
+    'preview' => Labels::getLabel('LBL_Preview_Link', $adminLangId),
+    // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $adminLangId),
+    'afile_lang_id' => Labels::getLabel('LBL_Language', $adminLangId),
+    'action' => Labels::getLabel('LBL_Action', $adminLangId),
 );
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
@@ -37,7 +37,7 @@ foreach ($records as $sn => $row) {
                 $td->appendElement('plaintext', array(), $val, true);
                 break;
             case 'afile_lang_id':
-                $lang_name = Labels::getLabel('LBL_All', $siteLangId);
+                $lang_name = Labels::getLabel('LBL_All', $adminLangId);
                 if ($row['afile_lang_id'] > 0) {
                     $lang_name = $languages[$row['afile_lang_id']];
                 }
@@ -48,7 +48,7 @@ foreach ($records as $sn => $row) {
                     "a",
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_Delete', $siteLangId),
+                        'title' => Labels::getLabel('LBL_Delete', $adminLangId),
                         'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
                     ),
                     '<i class="fa fa-trash  icon"></i>',
@@ -59,7 +59,7 @@ foreach ($records as $sn => $row) {
                         "a",
                         array(
                             'class' => 'btn btn-clean btn-sm btn-icon',
-                            'title' => Labels::getLabel('LBL_Preview', $siteLangId),
+                            'title' => Labels::getLabel('LBL_Preview', $adminLangId),
                             'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
                         ),
                         '<i class="fa fa-caret-square-right icon"></i>',
@@ -77,7 +77,7 @@ foreach ($records as $sn => $row) {
 
 if (empty($records)) {
     $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $siteLangId), true);
+    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $adminLangId), true);
 }
 ?>
 <div class="col-md-12">
