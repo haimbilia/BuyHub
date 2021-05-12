@@ -276,37 +276,51 @@
                     $objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true) || */
                     $objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                   <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Reports', $adminLangId); ?></a>
                       <ul>
-                          <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>"><?php echo Labels::getLabel('LBL_Sales', $adminLangId); ?></a></li>
-                          <?php } ?>
+                          <li><a href=""><?php echo Labels::getLabel('LBL_Sales', $adminLangId); ?></a>
+                              <ul>
+                                  <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>"><?php echo Labels::getLabel('LBL_Sales_Over_Time', $adminLangId); ?></a></li>
+                                  <?php } ?>
+                                  <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>"><?php echo Labels::getLabel('LBL_Products', $adminLangId); ?></a></li>
+                                  <?php } ?>
+                                  <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Product_Varients', $adminLangId); ?></a></li>
+                                  <?php } ?>
+                                  <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>"><?php echo Labels::getLabel('LBL_Shops', $adminLangId); ?></a></li>
+                                  <?php } ?>
+                                  <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>"><?php echo Labels::getLabel('LBL_Customers', $adminLangId); ?></a></li>
+                                  <?php } ?>
+                              </ul>
+                          </li>
+
+
                           <?php if ($objPrivilege->canViewUsersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('UsersReport'); ?>"><?php echo Labels::getLabel('LBL_Buyers/Sellers', $adminLangId); ?></a></li>
                           <?php } ?>
+
+
+
                           <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>"><?php echo Labels::getLabel('LBL_Affiliates', $adminLangId); ?></a></li>
                           <?php } ?>
                           <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>"><?php echo Labels::getLabel('LBL_Advertisers', $adminLangId); ?></a></li>
                           <?php } ?>
-                          <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Products(Seller_Products)', $adminLangId); ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>"><?php echo Labels::getLabel('LBL_Products(Catalog_Wise)', $adminLangId); ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>"><?php echo Labels::getLabel('LBL_Shops', $adminLangId); ?></a></li>
-                          <?php } ?>
+
                           <?php /* if ($objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('TaxReport'); ?>"><?php echo Labels::getLabel('LBL_Tax', $adminLangId); ?></a></li>
                           <?php } ?>
                           <?php if ($objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('CommissionReport'); ?>"><?php echo Labels::getLabel('LBL_Commission', $adminLangId); ?></a></li>
-                          <?php }  */?>
+                          <?php }  */ ?>
 
                           <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('TopProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Products', $adminLangId); ?></a></li>

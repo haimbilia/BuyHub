@@ -118,6 +118,7 @@ class AdminPrivilege
     public const SECTION_PICKUP_ADDRESSES = 112;
     public const SECTION_RATING_TYPES = 113;
     public const SECTION_SHIPPED_PRODUCTS_LISTING = 114;
+    public const SECTION_BUYERS_REPORT = 115;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -1128,6 +1129,11 @@ class AdminPrivilege
     }
 
     public function canViewUsersReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BUYERS_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canViewBuyersReport($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_USERS_REPORT, static::PRIVILEGE_READ, $returnResult);
     }

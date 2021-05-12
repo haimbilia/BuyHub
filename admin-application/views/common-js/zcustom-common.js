@@ -806,3 +806,13 @@ function loadMoreImages(obj) {
     $(obj).removeClass('more-media').removeAttr('onclick');
     $(obj).nextAll().removeClass('d-none');
 }
+
+function resetReportFirstColumnWidth(ratio) {
+    if (typeof ratio == 'undefined') {
+        ratio = 7;
+    }
+    var x = $(".container-fluid").width();
+    var actualWidth = x / ratio;
+    $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
+    $('.datatable_cell_left').children('span').css('display', 'block');
+}

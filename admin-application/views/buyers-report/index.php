@@ -1,9 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$frmSearch->setFormTagAttribute('onsubmit', 'searchShopsReport(this); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this); return(false);');
 $frmSearch->setFormTagAttribute('class', 'web_form');
 $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
 $frmSearch->developerTags['fld_default_col'] = 6;
+
 $sortBy = $frmSearch->getField('sortBy');
 $sortBy->setFieldTagAttribute('id', 'sortBy');
 
@@ -11,7 +12,7 @@ $sortOrder = $frmSearch->getField('sortOrder');
 $sortOrder->setFieldTagAttribute('id', 'sortOrder');
 
 $reportsData = [
-    'pageTitle' => Labels::getLabel('LBL_Shops_Report', $adminLangId),
+    'pageTitle' => Labels::getLabel('LBL_Buyers_Report', $adminLangId),
     'adminLangId' => $adminLangId,
     'frmSearch' => $frmSearch,
     'actionButtons' => []

@@ -52,6 +52,12 @@ class Report extends SearchBase
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'seller.user_id = credential_user_id', 'seller_cred');
     }
 
+    public function joinBuyerUser()
+    {
+        $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'buyer.user_id = o.order_user_id', 'buyer');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'buyer.user_id = credential_user_id', 'buyer_cred');
+    }
+
     public function joinOtherCharges($bifurcationCharges = false, $excludeType = [])
     {
         $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
@@ -164,6 +170,12 @@ class Report extends SearchBase
                 $srch->addGroupBy('op_selprod_user_id');
                 $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.op_selprod_user_id = op.op_selprod_user_id', 'ocount');
                 break;
+            case 'order_user_id':
+                $srch->joinBuyerUser();
+                $srch->addMultipleFields(['order_user_id', 'count(DISTINCT(o.order_id)) as totOrders', 'count(DISTINCT(op.op_id)) as orderItems']);
+                $srch->addGroupBy('order_user_id');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.order_user_id = o.order_user_id', 'ocount');
+                break;
         }
     }
 
@@ -249,6 +261,10 @@ class Report extends SearchBase
                 $this->addFld('op.op_shop_id');
                 $this->addGroupBy('op.op_shop_id');
                 break;
+            case 'order_user_id':
+                $this->addFld('o.order_user_id');
+                $this->addGroupBy('o.order_user_id');
+                break;
             default:
                 $this->addGroupBy($key);
                 break;
@@ -265,6 +281,7 @@ class Report extends SearchBase
             'totRefundedQtys' => 'SUM(op_refund_qty) as totRefundedQtys',
             'netSoldQty' => 'SUM(op_qty - op_refund_qty) as netSoldQty',
             'grossSales' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges, 0) + IFNULL(op_rounding_off,0) - opDiscountCharges) as grossSales',
+            'discountTotal' => 'SUM(IFNULL(opDiscountCharges, 0)) as discountTotal',
             'transactionAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0)) as transactionAmount',
             'inventoryValue' => 'SUM(op_unit_price*op_qty) as inventoryValue',
 

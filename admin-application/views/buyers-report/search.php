@@ -29,7 +29,7 @@ foreach ($fields as $key => $val) {
 
 $tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $cls = (($sr_no % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $sr_no]);
 
@@ -46,30 +46,8 @@ foreach ($arr_listing as $sn => $row) {
                 $span->appendElement('plaintext', array(), $sr_no);
                 break;
 
-            case 'shop_name':
-                $shop = $row['shop_name'];
-                $shop .= '<br/>Created On: ' . FatDate::format($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
-
-                $span->appendElement('plaintext', array(), $shop, true);
-                break;
-
-            case 'owner_name':
-                $span->appendElement('plaintext', array(), $row['owner_name'] . '<br/>(' . $row['owner_email'] . ')', true);
-                break;
-
-            case 'totRating':
-                $rating = '<ul class="rating list-inline">';
-                for ($j = 1; $j <= 5; $j++) {
-                    $class = ($j <= round($row['totRating'])) ? "active" : "in-active";
-                    $fillColor = ($j <= round($row['totRating'])) ? "#ff3a59" : "#474747";
-                    $rating .= '<li class="' . $class . '">
-                    <svg xml:space="preserve" enable-background="new 0 0 70 70" viewBox="0 0 70 70" height="18px" width="18px" y="0px" x="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Layer_1" version="1.1">
-                    <g><path d="M51,42l5.6,24.6L35,53.6l-21.6,13L19,42L0,25.4l25.1-2.2L35,0l9.9,23.2L70,25.4L51,42z M51,42" fill="' . $fillColor . '" /></g></svg>
-
-                  </li>';
-                }
-                $rating .= '</ul>';
-                $span->appendElement('plaintext', array(), $rating, true);
+            case 'buyerName':
+                $span->appendElement('plaintext', array(), $row['buyerName'] . '<br/>(' . $row['buyerEmail'] . ')', true);
                 break;
             case 'grossSales':
             case 'transactionAmount':
@@ -101,7 +79,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no++;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement(
         'td',
         array(
@@ -115,7 +93,7 @@ echo $tbl->getHtml();
 echo '</div>';
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
-    'name' => 'frmShopsReportSearchPaging'
+    'name' => 'frmReportSearchPaging'
 ));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>

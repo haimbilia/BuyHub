@@ -636,3 +636,5 @@ ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
 ON DUPLICATE KEY UPDATE conf_val = 3;
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Catalog_Wise)';
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Seller_Products)';
