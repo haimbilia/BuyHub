@@ -46,19 +46,19 @@
     -webkit-box-align: flex-end;
     -ms-flex-align: flex-end;
     align-items: flex-end;
-    -webkit-box-pack: flex-start;
-    -ms-flex-pack: flex-start;
+    
+    
     justify-content: flex-start;
     text-align: left;
     text-anchor:flex-start
 }
 
 .ct-label.ct-horizontal.ct-end {
-    -webkit-box-align: flex-start;
-    -ms-flex-align: flex-start;
+    
+    
     align-items: flex-start;
-    -webkit-box-pack: flex-start;
-    -ms-flex-pack: flex-start;
+    
+    
     justify-content: flex-start;
     text-align: left;
     text-anchor:flex-start
@@ -79,8 +79,8 @@
     -webkit-box-align: flex-end;
     -ms-flex-align: flex-end;
     align-items: flex-end;
-    -webkit-box-pack: flex-start;
-    -ms-flex-pack: flex-start;
+    
+    
     justify-content: flex-start;
     text-align: left;
     text-anchor:flex-start
@@ -97,8 +97,8 @@
 }
 
 .ct-chart-bar .ct-label.ct-horizontal.ct-end {
-    -webkit-box-align: flex-start;
-    -ms-flex-align: flex-start;
+    
+    
     align-items: flex-start;
     
     justify-content: center;
@@ -110,19 +110,19 @@
     -webkit-box-align: flex-end;
     -ms-flex-align: flex-end;
     align-items: flex-end;
-    -webkit-box-pack: flex-start;
-    -ms-flex-pack: flex-start;
+    
+    
     justify-content: flex-start;
     text-align: left;
     text-anchor:flex-start
 }
 
 .ct-chart-bar.ct-horizontal-bars .ct-label.ct-horizontal.ct-end {
-    -webkit-box-align: flex-start;
-    -ms-flex-align: flex-start;
+    
+    
     align-items: flex-start;
-    -webkit-box-pack: flex-start;
-    -ms-flex-pack: flex-start;
+    
+    
     justify-content: flex-start;
     text-align: left;
     text-anchor:flex-start
@@ -141,8 +141,8 @@
 .ct-chart-bar.ct-horizontal-bars .ct-label.ct-vertical.ct-end {
     
     align-items: center;
-    -webkit-box-pack: flex-start;
-    -ms-flex-pack: flex-start;
+    
+    
     justify-content: flex-start;
     text-align: left;
     text-anchor: end

@@ -16,7 +16,7 @@ html {
 }
 
 body {
-    font-family: $family-primary;
+    
 }
 
 :focus {
@@ -30,7 +30,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: $family-primary;
+    
 }
 
 p {
@@ -223,7 +223,7 @@ a:hover {
     justify-content: center;
     .btn-group {
         margin: 0 2px;
-    }
+    } 
 }
 
 .custom-ui-autocomplete {
@@ -233,7 +233,7 @@ a:hover {
     overflow-y: auto;
     box-shadow: 0 0 35px 10px rgba(0, 0, 0, 0.1);
     border-radius: $radius4;
-    font-family: $family-primary !important;
+   
     font-weight: 400;
     font-size: 0.8rem !important;
     border: $border;

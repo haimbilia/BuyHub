@@ -24,7 +24,7 @@
     $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <div class="content-header row">
             <div class="col">
@@ -32,13 +32,17 @@
                 <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Seller_Options', $siteLangId); ?></h2>
             </div>
             <?php if ($canEdit) { ?>
-                <div class="col-auto">
-                    <div class="btn-group">
-                        <a class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?>" onclick="optionForm(0)" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?></a>
-                        <!-- <a href="#modal-popup" class="btn-block modaal-inline-content link" onclick="optionForm(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId);?></a> -->
-                        <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteOptions()" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?></a>
-                    </div>
+            <div class="col-auto">
+                <div class="btn-group">
+                    <a class="btn btn-outline-brand btn-sm"
+                        title="<?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?>" onclick="optionForm(0)"
+                        href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?></a>
+                    <!-- <a href="#modal-popup" class="btn-block modaal-inline-content link" onclick="optionForm(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId);?></a> -->
+                    <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"
+                        title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteOptions()"
+                        href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?></a>
                 </div>
+            </div>
             <?php }?>
         </div>
         <div class="content-body">
@@ -46,6 +50,13 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
+
+                            
+
+
+
+
+
                             <div class="replaced">
                                 <div class="row">
                                     <div class="col-lg-8">

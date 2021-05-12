@@ -15,17 +15,19 @@
     color: #fff;
     text-align: center;
     height: 100%;
-    flex: 0 0 25%;
-    max-width: 25%;
+    flex: 0 0 26%;
+    max-width: 26%;
     opacity: 1;
     transition: all 0.3s;
-}
-
-.info-item__inner h2 {
-    color: currentColor;
-    font-size: 1.8rem;
-    font-weight: 300;
-    margin-bottom: 2rem;
+    &__inner {
+        padding: 0 1rem;
+        h2 {
+            color: currentColor;
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom:1.2rem;
+        }
+    }
 }
 
 .icon-wrapper {
@@ -34,14 +36,15 @@
     flex-direction: column;
     text-transform: uppercase;
     margin-bottom: 25px;
+    .svg {
+        fill: #fff;
+        width: 80px;
+        height: 80px;
+        margin: 5px auto;
+    }
 }
 
-.icon-wrapper .svg {
-    fill: #fff;
-    width: 80px;
-    height: 80px;
-    margin: 5px auto;
-}
+ 
 
 .container-info {
     background: #000;
@@ -59,10 +62,10 @@
 .container-form {
     overflow: hidden;
     position: absolute;
-    #{$start-direction}: 25%;
+    #{$start-direction}: 26%;
     top: 0;
     transform: translateX(0 * $transform-direction);
-    width: 75%;
+    width: 74%;
     height: 100%;
     background-color: #fff;
     transition: all 0.5s;
@@ -96,7 +99,6 @@
         position: absolute;
         transform: translateX(-50% * $transform-direction);
         transition: all 0.5s;
-       
         @include media-breakpoint-down(sm) {
             & {
                 overflow: inherit;
@@ -350,7 +352,7 @@
     flex-wrap: wrap;
     //border: $border;
     //border-radius: $radius4;
-   // box-shadow: $shadow1;
+    // box-shadow: $shadow1;
     //padding:2.3rem;
     &_head {
         margin-bottom: 2rem;
