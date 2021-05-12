@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid usage');
-$optionsString = '<option value="">' . Labels::getLabel("LBL_Select_State", $adminLangId) . '</option>';
+$optionsString = '<option value="-1">' . Labels::getLabel("LBL_Select_State", $adminLangId) . '</option>';
 foreach ($statesArr as $id => $stateName) {
 	$selected = '';
 	if ($stateId == $id) {
