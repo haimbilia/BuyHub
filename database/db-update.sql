@@ -638,3 +638,4 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ON DUPLICATE KEY UPDATE conf_val = 3;
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Catalog_Wise)';
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Seller_Products)';
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Buyers/Sellers';

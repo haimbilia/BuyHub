@@ -2509,7 +2509,7 @@ body.toggled-right .rightoverlay {
     color: #000;
 }
 
-.leftmenu>li ul li.active a {
+.leftmenu>li ul li.active>a {
     font-weight: 600;
     color: #000;
 }
@@ -2517,6 +2517,15 @@ body.toggled-right .rightoverlay {
 .leftmenu>li.active ul {
     display: block;
 }
+
+.leftmenu .child ul {
+    display: block !important;
+    border-top: none;
+    border-left: none;
+    margin-left: 10px;
+}
+
+.leftmenu .active ul:before {}
 
 .section .sectionhead .actions {
     /*position: absolute;*/
@@ -12499,5 +12508,6 @@ form[name="frmShippingProfile"] {
     background: #818181;
 }
 
-
-.rating {display: flex;}
+.rating {
+    display: flex;
+}

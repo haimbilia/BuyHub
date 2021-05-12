@@ -12,7 +12,7 @@ $sortOrder = $frmSearch->getField('sortOrder');
 $sortOrder->setFieldTagAttribute('id', 'sortOrder');
 
 $reportsData = [
-    'pageTitle' => Labels::getLabel('LBL_Buyers_Report', $adminLangId),
+    'pageTitle' => Labels::getLabel('LBL_Buyers_Sales_Report', $adminLangId),
     'adminLangId' => $adminLangId,
     'frmSearch' => $frmSearch,
     'actionButtons' => []

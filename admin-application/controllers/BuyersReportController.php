@@ -11,7 +11,7 @@ class BuyersReportController extends AdminBaseController
     public function index()
     {
         $flds = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($flds);
+        $frmSearch = $this->getSearchForm($flds, );
         $frmSearch->fill(array('sortBy' => 'totOrders', 'sortOrder' => 'DESC'));
         $this->set('frmSearch', $frmSearch);
         $this->_template->render();
@@ -56,6 +56,12 @@ class BuyersReportController extends AdminBaseController
         $srch->joinTable('(' . $rSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = opq.order_user_id', 'opq');
         $srch->addMultipleFields(['u.user_name as buyerName', 'uc.credential_email as buyerEmail', 'opq.*']);
         $srch->addCondition('totOrders', '>', '0');
+
+        if (!empty($post['keyword'])) {
+            $cnd = $srch->addCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'AND');
+            $cnd->attachCondition('uc.credential_email', 'like', '%' . $post['keyword'] . '%');
+        }
+
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -65,7 +71,7 @@ class BuyersReportController extends AdminBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-        // echo $srch->getQuery(); exit;
+
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -112,7 +118,7 @@ class BuyersReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers_Sales_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
@@ -137,6 +143,8 @@ class BuyersReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
+
+        $frm->addTextBox(Labels::getLabel('LBL_Buyer_Name', $this->adminLangId), 'keyword');
 
         if (!empty($fields)) {
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');

@@ -261,6 +261,10 @@ class Report extends SearchBase
                 $this->addFld('op.op_shop_id');
                 $this->addGroupBy('op.op_shop_id');
                 break;
+            case 'op_selprod_user_id':
+                $this->addFld('op.op_selprod_user_id');
+                $this->addGroupBy('op.op_selprod_user_id');
+                break;
             case 'order_user_id':
                 $this->addFld('o.order_user_id');
                 $this->addGroupBy('o.order_user_id');
