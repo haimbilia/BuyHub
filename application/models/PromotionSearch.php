@@ -247,9 +247,9 @@ class PromotionSearch extends SearchBase
 
 
 
-        $this->addCondition('pr.promotion_start_date', '<=', date('Y-m-d 00:00:00'));
+        $this->addCondition('pr.promotion_start_date', '<=', date('Y-m-d'));
 
-        $this->addCondition('pr.promotion_end_date', '>=', date('Y-m-d 00:00:00'));
+        $this->addCondition('pr.promotion_end_date', '>=', date('Y-m-d'));
 
         /* $this->addDirectCondition("case when
         (pr.promotion_start_time <= NOW() and  pr.promotion_end_time >= NOW())

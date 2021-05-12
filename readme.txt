@@ -107,6 +107,7 @@ Fixes:
     => 053155 - Button labels are not changing as per language
     => 053430 - While sending SMTP email code crashed in between if unable to send email
     => 052088 - when product having multiple options then on quick view popup> dropdown is affecting popup
+    => 053465 - some issue with promotion
 
 
 Enhancements :
