@@ -112,6 +112,28 @@ class UserSearch extends SearchBase
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = urpbal.urp_user_id', 'urpbal');
     }
 
+    public function includeAffiliateUserRevenue()
+    {
+        $srch = Transactions::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('utxn.utxn_user_id');
+        $cnd = $srch->addCondition('utxn_type', '=', Transactions::TYPE_AFFILIATE_REFERRAL_SIGN_UP);
+        $cnd->attachCondition('utxn_type', '=', Transactions::TYPE_AFFILIATE_REFERRAL_ORDER);
+        $srch->addMultipleFields(array('utxn.utxn_user_id', 'SUM(utxn_credit) as totAffilateRevenue', 'SUM(if(utxn_type = ' . Transactions::TYPE_AFFILIATE_REFERRAL_SIGN_UP . ',utxn_credit,0)) as totAffilateSignupRevenue', 'SUM(if(utxn_type = ' . Transactions::TYPE_AFFILIATE_REFERRAL_ORDER . ',utxn_credit,0)) as totAffilateOrdersRevenue'));
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = afRev.utxn_user_id', 'afRev');
+    }
+
+    public function includeAffiliateUsersCount()
+    {
+        $srch = User::getSearchObject(true, 0, false);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('u.user_affiliate_referrer_user_id');
+        $srch->addMultipleFields(array('user_affiliate_referrer_user_id', 'COUNT(user_id) as totAffiliatedUsers'));
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = afUsr.user_affiliate_referrer_user_id', 'afUsr');
+    }
+
     public function includePromotionCharges()
     {
         $srch = new SearchBase(Promotion::DB_TBL_CHARGES, 'pc');
@@ -120,6 +142,26 @@ class UserSearch extends SearchBase
         $srch->addGroupBy('pcharge_user_id');
         $srch->addMultipleFields(['pc.pcharge_user_id', 'SUM(pc.pcharge_charged_amount) as promotionCharged']);
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = pchagres.pcharge_user_id', 'pchagres');
+    }
+
+    public function includePromotionsCount()
+    {
+        $srch = new PromotionSearch();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition('promotion_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('promotion_approved', '=', applicationConstants::YES);
+        if (0 < $this->userId) {
+            $srch->addCondition('pr.promotion_user_id', '=', $this->userId);
+        }
+        $currDate = date('Y-m-d');
+        $currTime = date('H:i');
+        $activeCond = '(promotion_start_date <= "' . $currDate . '" and (promotion_end_date >= "' . $currDate . '" or promotion_end_date = "0000-00-00"))';
+        $activeCond .= ' and (promotion_start_time <= "' . $currTime . '" and (promotion_end_time >= "' . $currTime . '" or promotion_end_time = "00:00")) and promotion_active > 0';
+
+        $srch->addMultipleFields(['pr.promotion_user_id', 'count(promotion_id) as promotionsCount', 'count(if(' . $activeCond . ',1,null)) as activePromotions']);
+        $srch->addGroupBy('pr.promotion_user_id');
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = promocount.promotion_user_id', 'promocount');
     }
 
     public function addRatingsCount()

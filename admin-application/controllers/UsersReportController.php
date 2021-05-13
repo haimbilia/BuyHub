@@ -23,9 +23,7 @@ class UsersReportController extends AdminBaseController
     {
         $usertype = FatApp::getPostedData('user_type', FatUtility::VAR_INT, User::USER_TYPE_BUYER);
         $this->validateViewPermission($usertype);
-
-        $post = FatApp::getPostedData();
-
+        
         $fields = $this->getFormColumns($usertype);
         $srchFrm = $this->getSearchForm($fields, $usertype);
 
@@ -47,7 +45,7 @@ class UsersReportController extends AdminBaseController
         $rSrch->excludeDeletedOrdersCondition();
         $rSrch->doNotCalculateRecords();
         $rSrch->doNotLimitRecords();
-        $rSrch->removeFld(['name', 'user_regdate', 'referrerName', 'user_referral_code', 'rewardsPoints', 'rewardsPointsEarned', 'rewardsPointsRedeemed', 'credential_verified', 'availableBalance', 'totRating','promotionCharged']);
+        $rSrch->removeFld(['name', 'user_regdate', 'referrerName', 'user_referral_code', 'rewardsPoints', 'rewardsPointsEarned', 'rewardsPointsRedeemed', 'credential_verified', 'availableBalance', 'totRating', 'promotionCharged']);
 
         $srch = new UserSearch();
         $srch->includeTransactionBalance();
@@ -60,6 +58,7 @@ class UsersReportController extends AdminBaseController
                 $rSrch->addTotalOrdersCount('op_selprod_user_id');
                 $rSrch->setGroupBy('op_selprod_user_id');
                 $srch->joinTable('(' . $rSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = opq.op_selprod_user_id', 'opq');
+                $srch->addFld(['pchagres.promotionCharged']);
                 break;
             default:
                 $srch->joinReferrerUser();
@@ -74,7 +73,7 @@ class UsersReportController extends AdminBaseController
                 break;
         }
 
-        $srch->addMultipleFields(['u.user_name as name', 'uc.credential_email as email', 'u.user_city', 'u.user_zip', 'u.user_address1 as user_address', 'u.user_regdate', 'u.user_referral_code', 'uc.credential_verified','pchagres.promotionCharged', 'opq.*']);
+        $srch->addMultipleFields(['u.user_name as name', 'uc.credential_email as email', 'u.user_city', 'u.user_zip', 'u.user_address1 as user_address', 'u.user_regdate', 'u.user_referral_code', 'uc.credential_verified',  'opq.*']);
 
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
@@ -92,6 +91,7 @@ class UsersReportController extends AdminBaseController
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
         }
+        
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -112,8 +112,9 @@ class UsersReportController extends AdminBaseController
                             $name = $row['name'] . "\n" . $row['email'];
                             $arr[] = $name;
                             break;
-                        case 'netSoldQty':
                         case 'orderNetAmount':
+                        case 'promotionCharged':
+                        case 'availableBalance':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
                             break;
                         default:
@@ -126,14 +127,14 @@ class UsersReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers_Sales_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers/Seller_Sales_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        
+
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
@@ -196,7 +197,7 @@ class UsersReportController extends AdminBaseController
                         'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
                         'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
                         'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
-                        'availableBalance' => Labels::getLabel('LBL_Wallet_Balance', $this->adminLangId),
+                        'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->adminLangId),
                         'promotionCharged'        =>    Labels::getLabel('LBL_Promotion_Charged', $this->adminLangId),
                         'totRating'        =>    Labels::getLabel('LBL_Rating', $this->adminLangId),
                     ];
@@ -210,7 +211,7 @@ class UsersReportController extends AdminBaseController
                         'rewardsPointsRedeemed' => Labels::getLabel('LBL_Rewards_Redeemed', $this->adminLangId),
                         'netSoldQty' => Labels::getLabel('LBL_Item_Purchased', $this->adminLangId),
                         'orderNetAmount' => Labels::getLabel('LBL_Total_Purchase', $this->adminLangId),
-                        'availableBalance' => Labels::getLabel('LBL_Wallet_Balance', $this->adminLangId)
+                        'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->adminLangId)
                     ];
                     break;
             }

@@ -357,7 +357,7 @@
                                   <?php } ?>
                               </ul>
                           </li>
-
+                         
 
                           <?php /* if ($objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('TaxReport'); ?>"><?php echo Labels::getLabel('LBL_Tax', $adminLangId); ?></a></li>

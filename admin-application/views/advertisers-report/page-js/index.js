@@ -1,45 +1,61 @@
-$(document).ready(function(){
-	searchAdvertisersReport( document.frmAdvertisersReportSearch );
+$(document).ready(function () {
+	searchAdvertisersReport(document.frmReportSearch);
 });
-(function() {
+$(document).on("click", ".headerColumnJs", function (e) {
+	var fld = $(this).attr('data-field');
+	var frm = document.frmReportSearchPaging;
+	document.getElementById("sortBy").value = fld;
+	$(frm.sortBy).val(fld);
+	if (document.getElementById("sortOrder").value == 'ASC') {
+		$(frm.sortOrder).val('DESC');
+		document.getElementById("sortOrder").value = 'DESC';
+	} else {
+		$(frm.sortOrder).val('ASC');
+		document.getElementById("sortOrder").value = 'ASC';
+	}
+	searchAdvertisersReport(frm, false);
+});
+(function () {
 	var currentPage = 1;
 	var runningAjaxReq = false;
 	var dv = '#listing';
 
-	goToSearchPage = function(page) {	
-		if(typeof page == undefined || page == null){
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
-		var frm = document.frmAdvertisersReportSearchPaging;		
+		var frm = document.frmReportSearchPaging;
 		$(frm.page).val(page);
 		searchAdvertisersReport(frm);
 	};
 
-	reloadList = function() {
-		var frm = document.frmAdvertisersReportSearchPaging;
+	reloadList = function () {
+		var frm = document.frmReportSearchPaging;
 		searchAdvertisersReport(frm);
 	};
-	
-	searchAdvertisersReport = function(form){				
+
+	searchAdvertisersReport = function (form, withloader) {
 		var data = '';
-		if ( form ) {
+		if (form) {
 			data = fcom.frmData(form);
 		}
-		
-		$(dv).html(fcom.getLoader());
-		
-		fcom.ajax(fcom.makeUrl('AdvertisersReport','search'),data,function(res){
+
+		if (typeof withloader == 'undefined' || withloader != false) {
+			$(dv).html(fcom.getLoader());
+		}
+
+		fcom.ajax(fcom.makeUrl('AdvertisersReport', 'search'), data, function (res) {
 			$(dv).html(res);
 		});
 	};
-	
-	exportReport = function(dateFormat){
-		document.frmAdvertisersReportSearch.action = fcom.makeUrl('AdvertisersReport','export');
-		document.frmAdvertisersReportSearch.submit();		
+
+	exportReport = function (dateFormat) {
+		document.frmReportSearch.action = fcom.makeUrl('AdvertisersReport', 'export');
+		document.frmReportSearch.submit();
 	}
-	
-	clearSearch = function(){
-		document.frmAdvertisersReportSearch.reset();
-		searchAdvertisersReport(document.frmAdvertisersReportSearch);
+
+	clearSearch = function () {
+		document.frmReportSearch.reset();
+		searchAdvertisersReport(document.frmReportSearch);
 	};
-})();	
+})();

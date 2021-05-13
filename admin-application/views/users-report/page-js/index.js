@@ -36,13 +36,15 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		searchUsersReport(frm);
 	};
 
-	searchUsersReport = function (form) {
+	searchUsersReport = function (form, withloader) {
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
 		}
 
-		$(dv).html(fcom.getLoader());
+		if (typeof withloader == 'undefined' || withloader != false) {
+			$(dv).html(fcom.getLoader());
+		}
 
 		fcom.ajax(fcom.makeUrl('usersReport', 'search'), data, function (res) {
 			$(dv).html(res);
