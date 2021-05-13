@@ -10,8 +10,10 @@ $sortBy->setFieldTagAttribute('id', 'sortBy');
 $sortOrder = $frmSearch->getField('sortOrder');
 $sortOrder->setFieldTagAttribute('id', 'sortOrder');
 
+$pageTitle = ($usertype == User::USER_TYPE_SELLER) ? Labels::getLabel('LBL_Sellers_Report', $adminLangId) : Labels::getLabel('LBL_Buyers_Report', $adminLangId);
+
 $reportsData = [
-    'pageTitle' => Labels::getLabel('LBL_Users_Report', $adminLangId),
+    'pageTitle' => $pageTitle,
     'adminLangId' => $adminLangId,
     'frmSearch' => $frmSearch,
     'actionButtons' => []

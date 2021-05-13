@@ -15,6 +15,7 @@ class UsersReportController extends AdminBaseController
         $frmSearch = $this->getSearchForm($flds, $usertype);
         // $frmSearch->fill(array('sortBy' => 'totOrders', 'sortOrder' => 'DESC'));
         $this->set('frmSearch', $frmSearch);
+        $this->set('usertype', $usertype);
         $this->_template->render();
     }
 
@@ -35,10 +36,9 @@ class UsersReportController extends AdminBaseController
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
-
         $shopSpecific = ($usertype == User::USER_TYPE_SELLER) ? true : false;
 
-        $rSrch = new Report(0, ['netSoldQty', 'orderNetAmount'], $shopSpecific);
+        $rSrch = new Report(0, array_keys($fields), $shopSpecific);
         $rSrch->joinOrders();
         $rSrch->joinPaymentMethod();
         $rSrch->joinOtherCharges(true);
@@ -47,8 +47,12 @@ class UsersReportController extends AdminBaseController
         $rSrch->excludeDeletedOrdersCondition();
         $rSrch->doNotCalculateRecords();
         $rSrch->doNotLimitRecords();
+        $rSrch->removeFld(['name', 'user_regdate', 'referrerName', 'user_referral_code', 'rewardsPoints', 'rewardsPointsEarned', 'rewardsPointsRedeemed', 'credential_verified', 'availableBalance', 'totRating','promotionCharged']);
 
         $srch = new UserSearch();
+        $srch->includeTransactionBalance();
+        $srch->includePromotionCharges();
+        $srch->addRatingsCount();
         switch ($usertype) {
             case  User::USER_TYPE_SELLER:
                 $rSrch->joinOrderProductTaxCharges();
@@ -70,8 +74,7 @@ class UsersReportController extends AdminBaseController
                 break;
         }
 
-
-        $srch->addMultipleFields(['u.user_name as name', 'uc.credential_email as email', 'u.user_city', 'u.user_zip', 'u.user_address1 as user_address', 'u.user_regdate', 'u.user_referral_code', 'uc.credential_verified', 'opq.*']);
+        $srch->addMultipleFields(['u.user_name as name', 'uc.credential_email as email', 'u.user_city', 'u.user_zip', 'u.user_address1 as user_address', 'u.user_regdate', 'u.user_referral_code', 'uc.credential_verified','pchagres.promotionCharged', 'opq.*']);
 
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
@@ -89,7 +92,6 @@ class UsersReportController extends AdminBaseController
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
         }
-
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -131,7 +133,7 @@ class UsersReportController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        // echo $srch->getQuery();
+        
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
@@ -143,6 +145,7 @@ class UsersReportController extends AdminBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
+        $this->set('usertype', $usertype);
         $this->_template->render(false, false);
     }
 
@@ -188,8 +191,14 @@ class UsersReportController extends AdminBaseController
                 case User::USER_TYPE_SELLER:
                     $arr = $arr + [
                         'credential_verified' => Labels::getLabel('LBL_Verified', $this->adminLangId),
-                        'netSoldQty' => Labels::getLabel('LBL_Items_Sold', $this->adminLangId),
-                        'orderNetAmount' => Labels::getLabel('LBL_Total_Purchase', $this->adminLangId)
+                        'totOrders' => Labels::getLabel('LBL_Order_Placed', $this->adminLangId),
+                        'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
+                        'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
+                        'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
+                        'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
+                        'availableBalance' => Labels::getLabel('LBL_Wallet_Balance', $this->adminLangId),
+                        'promotionCharged'        =>    Labels::getLabel('LBL_Promotion_Charged', $this->adminLangId),
+                        'totRating'        =>    Labels::getLabel('LBL_Rating', $this->adminLangId),
                     ];
                     break;
                 default:
@@ -200,7 +209,8 @@ class UsersReportController extends AdminBaseController
                         'rewardsPointsEarned' => Labels::getLabel('LBL_Rewards_Earned', $this->adminLangId),
                         'rewardsPointsRedeemed' => Labels::getLabel('LBL_Rewards_Redeemed', $this->adminLangId),
                         'netSoldQty' => Labels::getLabel('LBL_Item_Purchased', $this->adminLangId),
-                        'orderNetAmount' => Labels::getLabel('LBL_Total_Purchase', $this->adminLangId)
+                        'orderNetAmount' => Labels::getLabel('LBL_Total_Purchase', $this->adminLangId),
+                        'availableBalance' => Labels::getLabel('LBL_Wallet_Balance', $this->adminLangId)
                     ];
                     break;
             }
