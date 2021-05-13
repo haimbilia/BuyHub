@@ -39,28 +39,39 @@ class DigitalDownloadSearch extends SearchBase
         return $row;
     }
 
-    public static function getAttachmentDetail($aFileId)
+    public static function getAttachmentDetail($aFileId, $refRecordId = 0, $isPreview = 0)
     {
         $aFileId = FatUtility::int($aFileId);
+        $isPreview = FatUtility::int($isPreview);
 
         if ($aFileId < 1) {
             return [];
         }
 
         $srch = static::getSearchObject();
-
+        
+        if (0 < $refRecordId) {
+            $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $refRecordId);
+        }
+        
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
         $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
 
         $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'id', '=', $aFileId);
-        $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
+        if (1 == $isPreview) {
+            $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW);
+        } else {
+            $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
+        }
         
         $srch->addMultipleFields(
             [
                 'pddr_id',
                 'pddr_record_id',
                 'pddr_type',
-                'afile.afile_id as afile_id'
+                'afile.afile_id as afile_id',
+                'afile.afile_record_id',
+                'afile.afile_physical_path',
             ]
         );
         
@@ -69,7 +80,6 @@ class DigitalDownloadSearch extends SearchBase
         
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
-
 
         if (!is_array($row)) {
             return [];
@@ -107,6 +117,7 @@ class DigitalDownloadSearch extends SearchBase
                 'pddr_id',
                 'pddr_options_code',
                 'pa.afile_name as preview',
+                'pa.afile_id as prev_afile_id',
                 'afile.afile_record_id as afile_record_id',
                 'afile.afile_name as mainfile',
                 'afile.afile_lang_id as afile_lang_id',

@@ -1,6 +1,6 @@
 <?php
 
-trait InventoryDigitalDownloads
+trait ProductsDigitalDownloads
 {
     public function sellerProductDownloadFrm($selProdId)
     {

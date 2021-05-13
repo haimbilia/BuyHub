@@ -1,6 +1,6 @@
 <?php
 
-trait InventoryDigitalDownloads
+trait ProductDigitalDownloads
 {
     public function sellerProductDownloadFrm($productId, $selProdId = 0)
     {
@@ -43,8 +43,8 @@ trait InventoryDigitalDownloads
         }
 
         $data = [
-            'product_id' => $productId, 
-            'selprod_id' =>  $selProdId, 
+            'product_id' => $productId,
+            'selprod_id' =>  $selProdId,
         ];
         $frm->fill($data);
         $this->set('savedOptions', $savedOptions);
@@ -63,11 +63,10 @@ trait InventoryDigitalDownloads
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
 
         $prodRefType = Product::CATALOG_TYPE_INVENTORY;
-
         
-        $optionComb = FatApp::getPostedData('option_comb', FatUtility::VAR_INT, 0);
+        /* $optionComb = FatApp::getPostedData('option_comb', FatUtility::VAR_INT, 0); */
         
-        $selProdData = SellerProduct::getAttributesById($optionComb, array('selprod_code'));
+        $selProdData = SellerProduct::getAttributesById($selProdId, array('selprod_code'));
         
         $selProdOption = explode('_', $selProdData['selprod_code']);
         array_shift($selProdOption);
@@ -89,6 +88,7 @@ trait InventoryDigitalDownloads
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
         $this->set('languages', $languages);
+        $this->set('selProdId', $selProdId);
 
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
             echo $this->_template->render(false, false, 'seller/inventory-digital-download-links-list.php', true);
@@ -97,7 +97,84 @@ trait InventoryDigitalDownloads
         }
     }
 
-    public function uploadDigitalFile()
+    public function downloadInventoryAttachment($aFileId, $inventoryId, $isPreview = 0)
+    {
+        /*TODO
+            Inventory Belongs to seller
+            Option code would be inventory code (selprod_code)
+            Case 1: attachments allowed with Inventory then 
+                reference table record id would be selprod_id
+            Case 2: attachments not allowed with Inventory then 
+                reference table record id would be prod_id
+        */
+        
+        $aFileId = FatUtility::int($aFileId);
+        $inventoryId = FatUtility::int($inventoryId);
+        $isPreview = FatUtility::int($isPreview);
+
+        if (1 > $aFileId || 1 > $inventoryId) {
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'products'));
+        }
+        
+        $recordId = $inventoryId;
+        /* $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD;
+        
+        if (true == $isPreview) {
+            $fileType == AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW;
+        } */
+        
+        $selProdData = SellerProduct::getAttributesById($inventoryId, array('selprod_user_id', 'selprod_product_id'));
+        if (false == $selProdData) {
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+        }
+        
+        if ($selProdData['selprod_user_id'] !== $this->userParentId) {
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+        }
+        $msg = '';
+        if (false == DigitalDownload::allowedWithInventory($selProdData['selprod_product_id'], $msg)) {
+            $recordId = $selProdData['selprod_product_id'];
+        }
+        
+        $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $isPreview);
+        
+        if (1 > count($file)) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+        }
+        
+        if ($file['pddr_record_id'] != $recordId || $file['pddr_type'] != Product::CATALOG_TYPE_INVENTORY) {
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+        }
+        
+        if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+        }
+        
+        $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
+        AttachedFile::downloadAttachment($fileName, $file['afile_name']);
+    }
+
+    public function downloadCatalogAttachment()
+    {
+        FatUtility::dieWithError('Not Allowed');
+    }
+
+    public function downloadMyCatalogAttachment($aFileId, $catalogId, $isPreview = 0)
+    {
+        /*TODO
+            Catalog Belongs to seller
+        */
+    }
+
+
+
+
+
+
+
+
+    public function uploadDigitalFile_not_in_use()
     {
         if (!$this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true)) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
@@ -153,7 +230,7 @@ trait InventoryDigitalDownloads
         }
     }
 
-    public function deleteDigitalFile($selprodId, $afileId = 0)
+    public function deleteDigitalFile_not_in_use($selprodId, $afileId = 0)
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         $selprodId = FatUtility::int($selprodId);
@@ -182,7 +259,7 @@ trait InventoryDigitalDownloads
         FatUtility::dieJsonSuccess(Message::getHtml());
     }
 
-    public function downloadDigitalFile($aFileId, $recordId = 0, $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD)
+    public function downloadDigitalFile_not_in_use($aFileId, $recordId = 0, $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD)
     {
         $aFileId = FatUtility::int($aFileId);
         $recordId = FatUtility::int($recordId);

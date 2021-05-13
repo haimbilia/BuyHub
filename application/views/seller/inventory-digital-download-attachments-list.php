@@ -13,7 +13,7 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
-
+// CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $records], 1);
 $sr_no = 0;
 foreach ($records as $sn => $row) {
     $sr_no++;
@@ -25,8 +25,35 @@ foreach ($records as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
+            case 'mainfile':
+                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement(
+                    "a",
+                    array(
+                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'title' => Labels::getLabel('LBL_download', $siteLangId),
+                        // 'onclick' => 'downloadAttachment(' . $row['afile_id'] . ', ' . $selProdId . '); return false;',
+                        'href' => UrlHelper::generateUrl('Seller', 'downloadInventoryAttachment', array($row['afile_id'], $selProdId, 0, $row['mainfile'])),
+                        'target' => '_blank'
+                    ),
+                    '<i class="fa fa-download  icon"></i>',
+                    true
+                );
+                break;
             case 'preview':
                 $td->appendElement('plaintext', array(), $row['preview'], true);
+                $td->appendElement(
+                    "a",
+                    array(
+                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'title' => Labels::getLabel('LBL_download', $siteLangId),
+                        /* 'onclick' => 'downloadAttachment(' . $row['prev_afile_id'] . ', ' . $selProdId . ', 1)', 'href' => 'javascript:void(0);', */
+                        'href' => UrlHelper::generateUrl('Seller', 'downloadInventoryAttachment', array($row['prev_afile_id'], $selProdId, 1, $row['preview'])),
+                        'target' => '_blank'
+                    ),
+                    '<i class="fa fa-download  icon"></i>',
+                    true
+                );
                 break;
             case 'pddr_options_code':
                 if (array_key_exists($row['pddr_options_code'], $options)) {

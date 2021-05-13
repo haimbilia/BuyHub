@@ -226,6 +226,48 @@ class DigitalDownload extends MyAppModel
         return $optionCombinations;
     }
 
+    public static function canView($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0)
+    {
+        $recordId = FatUtility::int($recordId);
+        $sellerUserId = FatUtility::int($sellerUserId);
+        $langId = FatUtility::int($langId);
+        
+        if (1 > $sellerUserId) {
+            return static::returnResponseOrDie();
+        }
+        
+        if (Product::CATALOG_TYPE_REQUEST == $recordType) {
+            /* Marketplace requested Product - by seller*/
+            $productReqRow = ProductRequest::getAttributesById($recordId);
+            
+            if (false === $productReqRow) {
+                return static::returnResponseOrDie();
+            }
+            
+            $product = json_decode($productReqRow['preq_content'], true);
+
+            if (!$product) {
+                return static::returnResponseOrDie();
+            }
+        } else {
+            $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type']);
+        
+            if (false == $product) {
+                return static::returnResponseOrDie();
+            }
+        }
+
+        if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
+            return static::returnResponseOrDie(false, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
+        }
+        
+        /* To check whether product belogs to logged seller? */
+        if ($product['product_seller_id'] == $sellerUserId) {
+            return true;
+        }
+        return static::returnResponseOrDie();
+    }
+
     /**
      * Name: canDo
      * Description: Function to check whether a user can add/upload with a record
@@ -381,7 +423,7 @@ class DigitalDownload extends MyAppModel
         return true;
     }
 
-    public static function returnResponseOrDie($returnResult, $message = '')
+    public static function returnResponseOrDie($returnResult = false, $message = '')
     {
         if (true == $returnResult) {
             return false;
@@ -389,6 +431,22 @@ class DigitalDownload extends MyAppModel
         if ($message == '') {
             $message = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
         }
-        FatUtility::dieWithError($message);
+        FatUtility::dieJsonError($message);
+    }
+
+    public static function allowedWithInventory($productId)
+    {
+        $productId = FatUtility::int($productId);
+        $product = Product::getAttributesById($productId);
+
+        if (false == $product) {
+            return false;
+        }
+
+        if (0 == $product['product_download_attachements_with_inventory']) {
+            return true;
+        }
+        
+        return false;
     }
 }

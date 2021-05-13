@@ -9,7 +9,7 @@ class SellerController extends SellerBaseController
     use SellerCollections;
     use CustomCatalogProducts;
     use SellerUsers;
-    use InventoryDigitalDownloads;
+    use ProductDigitalDownloads;
 
     private $shippingService;
     private $trackingService;
@@ -5786,7 +5786,7 @@ class SellerController extends SellerBaseController
         
         if (1 > $refId) {
             if (!$ddObj->saveReference($recordId, $optionComb, $requstedProd)) {
-                FatUtility::dieWithError($ddObj->getError());
+                FatUtility::dieJsonError($ddObj->getError());
             }
             $refId = $ddObj->getMainTableRecordId();
         }
@@ -5797,7 +5797,7 @@ class SellerController extends SellerBaseController
             $this->setupDigitalFile($ddObj, $refId);
         }
 
-        FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
     }
 
     private function setupDigitalFile($ddObj, $refId)
@@ -5925,9 +5925,11 @@ class SellerController extends SellerBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         /* TODO
-            => need to check downloads allowed at product level
+            => need to check seller private custom product OR Catalog Product Requested but not approved
         */
 
+        DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
+        
         $rows = DigitalDownloadSearch::getLinks($recordId, $prodRefType, $optionCombi, $langId);
         
         $this->set('links', $rows);
@@ -5958,20 +5960,19 @@ class SellerController extends SellerBaseController
         $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
 
-        if(1 > $productId && 1 > $preqId) {
+        if (1 > $productId && 1 > $preqId) {
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
         }
 
         $recordId  = $productId;
         $prodRefType = 0;
 
-        if(0 < $preqId) {
+        if (0 < $preqId) {
             $recordId  = $preqId;
-            $prodRefType = 1;
-        } else if (0 < $selProdId) {
-            $recordId  = $selProdId;
-            $prodRefType = 2;
+            $prodRefType = Product::CATALOG_TYPE_REQUEST;
         }
+
+        DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
 
         $optionComb = FatApp::getPostedData('option_comb', null, 0);
         $langId = FatApp::getPostedData('langId', null, 0);
@@ -5983,18 +5984,14 @@ class SellerController extends SellerBaseController
         $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
         $this->set('languages', $languages);
 
-        if (2 == $prodRefType) {
-
+        if (0 < $preqId) {
+            $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
         } else {
-            if (0 < $preqId) {
-                $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-            } else {
-                $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
-            }
-            $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-            $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
+            $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
         }
-
+        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
+        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
+        
         $this->set('options', $optionCombinations);
 
         echo $this->_template->render(false, false, 'seller/digital-download-attachments-list.php', true);
@@ -6008,13 +6005,13 @@ class SellerController extends SellerBaseController
         $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
 
         if (1 > $refId || 1 > $linkId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__ . __FILE__);
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $link = DigitalDownloadSearch::getLinkDetail($linkId);
         if (1 > count($link)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__ . __FILE__);
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         
@@ -6051,7 +6048,7 @@ class SellerController extends SellerBaseController
         $attachment = DigitalDownloadSearch::getAttachmentDetail($aFileId);
         
         if (1 > count($attachment)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__ . __FILE__);
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         

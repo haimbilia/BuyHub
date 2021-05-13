@@ -2,7 +2,7 @@
 
 class SellerProductsController extends AdminBaseController
 {
-    use InventoryDigitalDownloads;
+    use ProductsDigitalDownloads;
 
     private $canView;
     private $canEdit;
