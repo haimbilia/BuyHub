@@ -1,12 +1,12 @@
 <?php
 
-class EarningsReportController extends AdminBaseController
+class SubscriptionPlanReportController extends AdminBaseController
 {
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewFinancialReport();
+        $this->objPrivilege->canViewSubscriptionReport();
     }
 
     public function index($orderDate = '')
@@ -23,29 +23,26 @@ class EarningsReportController extends AdminBaseController
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
+        $keyword = FatApp::getPostedData('keyword', null, '');
 
-        $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
-        $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
 
-        /* Promotion Charges */
-        $srch = new SearchBase(Promotion::DB_TBL_CHARGES, 'pc');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addGroupBy('Date(pcharge_date)');
-        $srch->addMultipleFields(['pc.pcharge_user_id', 'SUM(pc.pcharge_charged_amount) as promotionCharged']);
-        if (!empty($fromDate)) {
-            $srch->addCondition('u.user_regdate', '>=', $fromDate . ' 00:00:00');
+        $srch = new SellerPackagePlansSearch();
+        $srch->joinPackage($this->adminLangId);
+        $srch->includeCount();
+        $srch->addMultipleFields(['ifnull(spackage_name,spackage_identifier) as spackage_name', 'spplan_price', 'spplan_frequency', 'spackage_type', 'spplan_interval', 'activeSubscribers', 'spackageCancelled', 'spackageSold', 'spRenewalPendings', 'spRenewals']);
+        $srch->addCondition('spplan_active', '=', applicationConstants::ACTIVE);
+        $srch->addGroupBy('spplan_id');
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('spackage_identifier', 'like', '%' . $keyword . '%');
+            $cnd->attachCondition('spackage_name', 'like', '%' . $keyword . '%');
         }
 
-        if (!empty($toDate)) {
-            $srch->addCondition('u.user_regdate', '<=', $toDate . ' 23:59:59');
-        }
-
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -54,23 +51,7 @@ class EarningsReportController extends AdminBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-
-
-         /* Admin Sales Earnings */
-        $srch = new Report(0, ['adminSalesEarnings']);
-        $srch->joinOrders();
-        $srch->joinPaymentMethod();
-        $srch->joinOtherCharges(true);
-        $srch->setPaymentStatusCondition();
-        $srch->setCompletedOrdersCondition();
-        $srch->excludeDeletedOrdersCondition();
-        $srch->setGroupBy('orderDate');
-        $srch->setOrderBy($sortBy, $sortOrder);
-        $srch->setDateCondition($fromDate, $toDate);
-
-
-
-
+        
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -78,7 +59,7 @@ class EarningsReportController extends AdminBaseController
             $sheetData = array();
 
             array_push($sheetData, array_values($fields));
-
+            $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->adminLangId);
             $count = 1;
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = [];
@@ -87,18 +68,16 @@ class EarningsReportController extends AdminBaseController
                         case 'listserial':
                             $arr[] = $count;
                             break;
-                        case 'affiliateLink':
-                            $arr[] = UrlHelper::generateFullUrl('Home', 'referral', [$row['user_referral_code']], CONF_WEBROOT_FRONTEND);
-                            break;
-                        case 'name':
-                            $name = $row['name'] . "\n" . $row['email'];
-                            $arr[] = $name;
-                            break;
-                        case 'availableBalance':
-                        case 'totAffilateRevenue':
-                        case 'totAffilateSignupRevenue':
-                        case 'totAffilateOrdersRevenue':
+                        case 'spplan_price':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            break;
+                        case 'spackage_name':
+                            $name = $row['spackage_name'] . ' ';
+                            $name .= ($row['spackage_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $this->adminLangId) : Labels::getLabel("LBL_For", $this->adminLangId);
+
+                            $name .= " " . (($row['spplan_interval'] > 0) ? $row['spplan_interval'] : '')
+                                . "  " . $subcriptionPeriodArr[$row['spplan_frequency']];
+                            $arr[] = $name;
                             break;
                         default:
                             $arr[] = $row[$key];
@@ -110,14 +89,13 @@ class EarningsReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Affiliates_Report_{reportgenerationdate}", $this->adminLangId)) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Subscription_Plan_Report", $this->adminLangId) . '.csv', ',');
             exit;
         }
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
@@ -141,8 +119,7 @@ class EarningsReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addTextBox(Labels::getLabel("LBL_Name", $this->adminLangId), 'keyword');
         if (!empty($fields)) {
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
 
@@ -158,18 +135,20 @@ class EarningsReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $earningsReportsCacheVar = FatCache::get('earningsReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$earningsReportsCacheVar) {
+        $spackageReportsCacheVar = FatCache::get('spackageReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$spackageReportsCacheVar) {
             $arr = [
-                'date' => Labels::getLabel('LBL_Date', $this->adminLangId),
-                'subscriptionCharges' => Labels::getLabel('LBL_Subscription_Charges', $this->adminLangId),
-                'commisionCharges' => Labels::getLabel('LBL_Commision_Charges', $this->adminLangId),
-                'advertisementCharges' => Labels::getLabel('LBL_Advertisement_Charges', $this->adminLangId),
-                'totalEarnings' => Labels::getLabel('LBL_Total_Earnings', $this->adminLangId)
+                'spackage_name' => Labels::getLabel('LBL_Package_Name', $this->adminLangId),
+                'spackageSold' => Labels::getLabel('LBL_Sold', $this->adminLangId),
+                'activeSubscribers' => Labels::getLabel('LBL_Active_Subscribers', $this->adminLangId),
+                'spRenewalPendings' => Labels::getLabel('LBL_Pending_To_Renew', $this->adminLangId),
+                'spRenewals' => Labels::getLabel('LBL_Renewed', $this->adminLangId),
+                'spackageCancelled' => Labels::getLabel('LBL_Cancellation', $this->adminLangId),
+                'spplan_price' => Labels::getLabel('LBL_Package_Cost', $this->adminLangId)
             ];
-            FatCache::set('earningsReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('spackageReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
         } else {
-            $arr =  unserialize($earningsReportsCacheVar);
+            $arr =  unserialize($spackageReportsCacheVar);
         }
 
         return $arr;

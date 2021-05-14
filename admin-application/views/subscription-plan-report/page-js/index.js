@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	searchAdvertisersReport(document.frmReportSearch);
+	searchReport(document.frmReportSearch);
 });
 $(document).on("click", ".headerColumnJs", function (e) {
 	var fld = $(this).attr('data-field');
@@ -13,9 +13,11 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		$(frm.sortOrder).val('ASC');
 		document.getElementById("sortOrder").value = 'ASC';
 	}
-	searchAdvertisersReport(frm, false);
+	searchReport(frm, false);
 });
 (function () {
+	var currentPage = 1;
+	var runningAjaxReq = false;
 	var dv = '#listing';
 
 	goToSearchPage = function (page) {
@@ -24,15 +26,15 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		}
 		var frm = document.frmReportSearchPaging;
 		$(frm.page).val(page);
-		searchAdvertisersReport(frm);
+		searchReport(frm);
 	};
 
 	reloadList = function () {
 		var frm = document.frmReportSearchPaging;
-		searchAdvertisersReport(frm);
+		searchReport(frm);
 	};
 
-	searchAdvertisersReport = function (form, withloader) {
+	searchReport = function (form, withloader) {
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
@@ -42,18 +44,18 @@ $(document).on("click", ".headerColumnJs", function (e) {
 			$(dv).html(fcom.getLoader());
 		}
 
-		fcom.ajax(fcom.makeUrl('AdvertisersReport', 'search'), data, function (res) {
+		fcom.ajax(fcom.makeUrl('SubscriptionPlanReport', 'search'), data, function (res) {
 			$(dv).html(res);
 		});
 	};
 
 	exportReport = function (dateFormat) {
-		document.frmReportSearch.action = fcom.makeUrl('AdvertisersReport', 'export');
+		document.frmReportSearch.action = fcom.makeUrl('SubscriptionPlanReport', 'export');
 		document.frmReportSearch.submit();
 	}
 
 	clearSearch = function () {
 		document.frmReportSearch.reset();
-		searchAdvertisersReport(document.frmReportSearch);
+		searchReport(document.frmReportSearch);
 	};
 })();

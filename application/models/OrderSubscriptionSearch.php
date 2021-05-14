@@ -99,17 +99,17 @@ class OrderSubscriptionSearch extends SearchBase
         }
         $this->joinTable(SellerPackagePlans::DB_TBL, 'LEFT OUTER JOIN', 'spp.' . SellerPackagePlans::DB_TBL_PREFIX . 'id = oss.' . OrderSubscription::DB_TBL_PREFIX . 'plan_id ', 'spp');
     }
-    
+
     public function joinPackage($langId = 0)
     {
         $this->joinTable(SellerPackages::DB_TBL, 'LEFT OUTER JOIN', 'spp.spplan_spackage_id = sp.spackage_id', 'sp');
         if ($langId > 0) {
             $this->joinTable(
-                    SellerPackages::DB_TBL_LANG,
-                    'LEFT OUTER JOIN',
-                    'sp_l.' . SellerPackages::DB_TBL_LANG_PREFIX . 'spackage_id = sp.' . SellerPackages::DB_TBL_PREFIX . 'id
+                SellerPackages::DB_TBL_LANG,
+                'LEFT OUTER JOIN',
+                'sp_l.' . SellerPackages::DB_TBL_LANG_PREFIX . 'spackage_id = sp.' . SellerPackages::DB_TBL_PREFIX . 'id
 			AND sp_l.' . SellerPackages::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
-                    'sp_l'
+                'sp_l'
             );
         }
     }
@@ -180,4 +180,25 @@ class OrderSubscriptionSearch extends SearchBase
         }
         $this->addCondition('o.order_net_amount', '<=', $priceTo);
     }
+
+    public function joinOtherCharges()
+    {
+        $srch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition('opcharge_order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addMultipleFields(array('opcharge_op_id', 'sum(opcharge_amount) as op_other_charges'));
+        $srch->addGroupBy('opc.opcharge_op_id');
+
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'oss.ossubs_id = opcc.opcharge_op_id', 'opcc');
+    }
+
+   /*  public function joinWithCurrentSubscription()
+    {
+
+        $srch = new OrderSubscriptionSearch(0, true, true);
+        $srch->joinSubscription();
+        $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addCondition('ossubs_status_id', '=', OrderSubscription::ACTIVE_SUBSCRIPTION);
+    } */
 }

@@ -8,7 +8,8 @@ class OrderSubscription extends MyAppModel
     public const DB_TBL_LANG = 'tbl_order_seller_subscriptions_lang';
     public const DB_TBL_LANG_PREFIX = 'ossubslang_';
 
-    public const ACTIVE_SUBSCRIPTION = 11;
+    public const ACTIVE_SUBSCRIPTION = 11;  
+    public const CANCELLED_SUBSCRIPTION = 12;  
 
     public function __construct($id = 0)
     {

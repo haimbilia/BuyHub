@@ -1,12 +1,12 @@
 <?php
 
-class EarningsReportController extends AdminBaseController
+class SubscriptionSellerReportController extends AdminBaseController
 {
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewFinancialReport();
+        $this->objPrivilege->canViewSubscriptionReport();
     }
 
     public function index($orderDate = '')
@@ -23,29 +23,28 @@ class EarningsReportController extends AdminBaseController
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
+        $keyword = FatApp::getPostedData('keyword', null, '');
 
-        $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
-        $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
+        $srch = new OrderSubscriptionSearch($this->adminLangId, true, true);
+        $srch->joinSubscription();
+        $srch->joinOrderUser();
+        $srch->joinOtherCharges();
+        $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addGroupBy('order_user_id');
+        $srch->addMultipleFields(['user_autorenew_subscription', 'ossubs_subscription_name', 'ossubs_interval', 'ossubs_frequency', 'ossubs_type', 'ou.user_name as user_name', 'sum(ossubs_price + ifnull(op_other_charges,0)) as amountPaid', 'count(DISTINCT(if(order_renew = 1 and order_payment_status = ' . Orders::ORDER_PAYMENT_PAID . ', order_id, null))) as spRenewals', 'count(DISTINCT(if(ossubs_status_id = ' . OrderSubscription::CANCELLED_SUBSCRIPTION . ', order_id, null))) as spackageCancelled', 'ossubs_from_date', 'ossubs_till_date']);
+        /*toDo ossubs_from_date and  ossubs_till_date from last order*/
 
-        /* Promotion Charges */
-        $srch = new SearchBase(Promotion::DB_TBL_CHARGES, 'pc');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addGroupBy('Date(pcharge_date)');
-        $srch->addMultipleFields(['pc.pcharge_user_id', 'SUM(pc.pcharge_charged_amount) as promotionCharged']);
-        if (!empty($fromDate)) {
-            $srch->addCondition('u.user_regdate', '>=', $fromDate . ' 00:00:00');
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('user_name', 'like', '%' . $keyword . '%');
+            $cnd->attachCondition('ossubs_subscription_name', 'like', '%' . $keyword . '%');
         }
 
-        if (!empty($toDate)) {
-            $srch->addCondition('u.user_regdate', '<=', $toDate . ' 23:59:59');
-        }
-
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -55,22 +54,6 @@ class EarningsReportController extends AdminBaseController
                 break;
         }
 
-
-         /* Admin Sales Earnings */
-        $srch = new Report(0, ['adminSalesEarnings']);
-        $srch->joinOrders();
-        $srch->joinPaymentMethod();
-        $srch->joinOtherCharges(true);
-        $srch->setPaymentStatusCondition();
-        $srch->setCompletedOrdersCondition();
-        $srch->excludeDeletedOrdersCondition();
-        $srch->setGroupBy('orderDate');
-        $srch->setOrderBy($sortBy, $sortOrder);
-        $srch->setDateCondition($fromDate, $toDate);
-
-
-
-
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -78,7 +61,7 @@ class EarningsReportController extends AdminBaseController
             $sheetData = array();
 
             array_push($sheetData, array_values($fields));
-
+            $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->adminLangId);
             $count = 1;
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = [];
@@ -87,18 +70,20 @@ class EarningsReportController extends AdminBaseController
                         case 'listserial':
                             $arr[] = $count;
                             break;
-                        case 'affiliateLink':
-                            $arr[] = UrlHelper::generateFullUrl('Home', 'referral', [$row['user_referral_code']], CONF_WEBROOT_FRONTEND);
-                            break;
-                        case 'name':
-                            $name = $row['name'] . "\n" . $row['email'];
-                            $arr[] = $name;
-                            break;
-                        case 'availableBalance':
-                        case 'totAffilateRevenue':
-                        case 'totAffilateSignupRevenue':
-                        case 'totAffilateOrdersRevenue':
+                        case 'amountPaid':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            break;
+                        case 'ossubs_from_date':
+                        case 'ossubs_till_date':
+                            $arr[] = FatDate::format($row[$key]);
+                            break;
+                        case 'ossubs_subscription_name':
+                            $name = $row['ossubs_subscription_name'] . ' ';
+                            $name .= ($row['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $this->adminLangId) : Labels::getLabel("LBL_For", $this->adminLangId);
+
+                            $name .= " " . (($row['ossubs_interval'] > 0) ? $row['ossubs_interval'] : '')
+                                . "  " . $subcriptionPeriodArr[$row['ossubs_frequency']];
+                            $arr[] = $name;
                             break;
                         default:
                             $arr[] = $row[$key];
@@ -110,7 +95,7 @@ class EarningsReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Affiliates_Report_{reportgenerationdate}", $this->adminLangId)) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Subscription_Seller_Report", $this->adminLangId) . '.csv', ',');
             exit;
         }
 
@@ -141,8 +126,7 @@ class EarningsReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addTextBox(Labels::getLabel("LBL_Name", $this->adminLangId), 'keyword');
         if (!empty($fields)) {
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
 
@@ -158,18 +142,20 @@ class EarningsReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $earningsReportsCacheVar = FatCache::get('earningsReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$earningsReportsCacheVar) {
+        $spackageSReportsCacheVar = FatCache::get('spackageSReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$spackageSReportsCacheVar) {
             $arr = [
-                'date' => Labels::getLabel('LBL_Date', $this->adminLangId),
-                'subscriptionCharges' => Labels::getLabel('LBL_Subscription_Charges', $this->adminLangId),
-                'commisionCharges' => Labels::getLabel('LBL_Commision_Charges', $this->adminLangId),
-                'advertisementCharges' => Labels::getLabel('LBL_Advertisement_Charges', $this->adminLangId),
-                'totalEarnings' => Labels::getLabel('LBL_Total_Earnings', $this->adminLangId)
+                'user_name' => Labels::getLabel('LBL_Name', $this->adminLangId),
+                'ossubs_subscription_name' => Labels::getLabel('LBL_Package_Name', $this->adminLangId),
+                'ossubs_from_date' => Labels::getLabel('LBL_Activation_Date', $this->adminLangId),
+                'ossubs_till_date' => Labels::getLabel('LBL_Expiry_Date', $this->adminLangId),
+                'spRenewals' => Labels::getLabel('LBL_Renewed', $this->adminLangId),
+                'spackageCancelled' => Labels::getLabel('LBL_Cancellation', $this->adminLangId),
+                'amountPaid' => Labels::getLabel('LBL_Amount_paid', $this->adminLangId)
             ];
-            FatCache::set('earningsReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('spackageSReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
         } else {
-            $arr =  unserialize($earningsReportsCacheVar);
+            $arr =  unserialize($spackageSReportsCacheVar);
         }
 
         return $arr;
