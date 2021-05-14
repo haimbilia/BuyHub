@@ -81,10 +81,11 @@ if (User::isSeller()) {
 <script type="text/javascript">
     jQuery('.time').datetimepicker({
       datepicker:false,
-      format:'H:i'
+      format:'H:i',
+      step: 10      
     });
 
-    $("document").ready(function(){
+    $("document").ready(function(){       
         var PROMOTION_TYPE_BANNER = <?php echo Promotion::TYPE_BANNER; ?>;
         var PROMOTION_TYPE_SHOP = <?php echo Promotion::TYPE_SHOP; ?>;
         var PROMOTION_TYPE_PRODUCT = <?php echo Promotion::TYPE_PRODUCT; ?>;

@@ -484,7 +484,7 @@ class Cronjob extends FatModel
                 $accountSummary = $txnObj->getTransactionSummary($userId); */
                 //$balance = $accountSummary['total_earned'] - $accountSummary['total_used'];
 
-                $balance = User::getUserBalance($userId, true, false);
+                $balance = User::getUserBalance($userId);
 
                 if ($balance < $promotionClicks['total_cost']) {
                     $emailObj = new EmailHandler();

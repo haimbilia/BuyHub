@@ -612,6 +612,7 @@ class AdvertiserController extends AdvertiserBaseController
         $this->set('postedData', $post);
         $this->set('userId', $userId);
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
+        $this->set('isPpcBalanceSufficent', 0  <=  (User::getUserBalance($this->userParentId, true, true) - FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE')));    
         $this->_template->render(false, false);
     }
 

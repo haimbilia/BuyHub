@@ -9,13 +9,13 @@ class HomeController extends MyAppController
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
         $sponsoredShopsInCollection = $sponsoredProdsInCollection = [];
         $collections = $this->getCollections($productSrchObj, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
-
+        
         $sponShopLayoutCount = count($sponsoredShopsInCollection);
         $sponProdLayoutCount = count($sponsoredProdsInCollection);
         if (0 < $sponProdLayoutCount) {
             foreach ($sponsoredProdsInCollection as $indexId => $collectionId) {
                 $sponsoredProds = $this->getSponsoredProducts($productSrchObj);
-
+                
                 if (empty($sponsoredProds)) {
                     if (true === MOBILE_APP_API_CALL) {
                         unset($collections[$indexId]);
@@ -1156,16 +1156,16 @@ class HomeController extends MyAppController
         $prodObj->joinBudget();
         $prodObj->addBudgetCondition();
         $prodObj->doNotCalculateRecords();
-        $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id', 'promotion_record_id'));
+        $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id', 'promotion_record_id'));         
 
         $productSrchSponObj = clone $productSrchObj;
         $productSrchSponObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
-        $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));
-        $productSrchSponObj->addOrder('theprice', 'ASC');
+        $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));        
         $productSrchSponObj->joinSellers();
         $productSrchSponObj->joinSellerSubscription($langId);
         $productSrchSponObj->addGroupBy('selprod_id');
         $productSrchSponObj->addOrder('', 'rand()');
+        //$productSrchSponObj->addOrder('theprice', 'ASC');
         return $productSrchSponObj;
     }
 
