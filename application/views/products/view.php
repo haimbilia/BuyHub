@@ -397,7 +397,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     <?php } ?>
                                     <!-- ] -->
                                 </div>
-                                <div class="gap"></div>
+                                <?php /* <div class="gap"></div>
                                 <div class="sold-by bg-gray p-4 rounded">
                                     <div class="row align-items-center justify-content-between">
                                         <div class="cell cell-1">
@@ -430,7 +430,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             <?php } ?>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */ ?>
                             </div>
                         </div>
                     </div>
