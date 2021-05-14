@@ -357,7 +357,24 @@
                                   <?php } ?>
                               </ul>
                           </li>
-                         
+                          <?php /* if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Financial_Report', $adminLangId); ?></a>
+                                  <ul>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>"><?php echo Labels::getLabel('LBL_Earnings', $adminLangId); ?></a></li>
+
+                                  </ul>
+                              </li>
+                          <?php }  */ ?>
+
+                          <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Subscription_Report', $adminLangId); ?></a>
+                                  <ul>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>"><?php echo Labels::getLabel('LBL_By_PLAN', $adminLangId); ?></a></li>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('SubscriptionSellerReport'); ?>"><?php echo Labels::getLabel('LBL_By_Seller', $adminLangId); ?></a></li>
+
+                                  </ul>
+                              </li>
+                          <?php }  ?>
 
                           <?php /* if ($objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('TaxReport'); ?>"><?php echo Labels::getLabel('LBL_Tax', $adminLangId); ?></a></li>
