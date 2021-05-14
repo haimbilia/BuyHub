@@ -1042,7 +1042,7 @@ class ProductSearch extends SearchBase
         }
     }
 
-    public function addMoreSellerCriteria($productCode, $sellerId = 0)
+    public function addMoreSellerCriteria($productCode, $sellerId = 0, $includeSeller = false)
     {
         $sellerId = FatUtility::int($sellerId);
         if ($productCode == '') {
@@ -1062,8 +1062,10 @@ class ProductSearch extends SearchBase
         $this->doNotCalculateRecords();
         $this->doNotLimitRecords();
         $this->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        if ($sellerId > 0) {
+        if ($sellerId > 0 && false === $includeSeller) {
             $this->addCondition('selprod_user_id', '!=', $sellerId);
+        } else if ($sellerId > 0 && true === $includeSeller) {
+            $this->addCondition('selprod_user_id', '=', $sellerId);
         }
         $this->addCondition('selprod_code', '=', $productCode);
     }

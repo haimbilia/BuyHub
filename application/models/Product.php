@@ -2044,5 +2044,4 @@ END,   special_price_found ) as special_price_found'
         }
         return $records['ptpp_product_id'];
     }
-
 }

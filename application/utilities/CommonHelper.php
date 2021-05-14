@@ -1364,34 +1364,7 @@ class CommonHelper extends FatUtility
 
         $specialPrice = $product['theprice'];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
-        return $disVal = round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
-        /* $str = '';
-        $listPrice = $product['splprice_display_list_price'];
-        if( $listPrice > 0 ){
-            $disVal = $product['splprice_display_dis_val'];
-            $disVal = $disVal + 0;
-            if (($disVal * 100) % 100 > 0) {
-                $disVal = number_format($disVal, 2, '.', '');
-            }
-
-            $str .= Labels::getLabel( 'LBL_Save_{saveprice}_({offprice})', $langId );
-            if( $product['splprice_display_dis_type'] == applicationConstants::PERCENTAGE ){
-                $disVal .= '%';
-            }
-            elseif( $product['splprice_display_dis_type'] == applicationConstants::FLAT ){
-                $disVal = static::displayMoneyFormat($listPrice) ;
-            }
-
-            $arrReplacements = array(
-                '{saveprice}' => static::displayMoneyFormat($listPrice),
-                '{offprice}'=> $disVal
-            );
-
-            foreach ($arrReplacements as $key => $val) {
-                $str = str_replace($key, $val, $str);
-            }
-        }
-        return $str;*/
+        return round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
     }
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)

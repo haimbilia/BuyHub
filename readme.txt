@@ -93,6 +93,7 @@ Fixes:
     => 052450 - Separate Tracking URL and Tracking Courier if Aftership enabled
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
     => 052463 - Setup shipping of other product not working with EasyPost
+    => 053622 - Load all font family variants
 
 
 Develop
