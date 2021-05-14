@@ -21,6 +21,7 @@ class CategoryController extends MyAppController
                 $catWithChild[$catDetail['pcr_parent_id']]['childrens'][] = $catDetail;
             }
         }
+        $this->_template->addJs('js/imagesloaded.pkgd.min.js');
         $this->set('categoriesArr', $catWithChild);
         $this->_template->render();
     }
@@ -221,8 +222,8 @@ class CategoryController extends MyAppController
         $prodCatId = FatUtility::int($prodCatId);
         $langId = FatUtility::int($langId);
 
-        if ($afile_id > 0) {
-            $res = AttachedFile::getAttributesById($afile_id);
+        if ($afileId > 0) {
+            $res = AttachedFile::getAttributesById($afileId);
             if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_CATEGORY_BANNER) {
                 $file_row = $res;
             }

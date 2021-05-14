@@ -42,7 +42,6 @@
 		</div>
 	</section>
 </div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js'></script>
 <script>
 	function resizeMasonryItem(item) {
 		/* Get the grid object, its row-gap, and the size of its implicit rows */

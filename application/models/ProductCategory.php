@@ -1361,7 +1361,7 @@ class ProductCategory extends MyAppModel
     {
         $db = FatApp::getDb();
         if (!$db->query('CALL updateCategoryRelations(' . $recordId . ')')) {
-            $this->error = $db->getError();
+            echo $db->getError();die;
             return false;
         }
         return true;
