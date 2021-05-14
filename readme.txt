@@ -109,6 +109,7 @@ Fixes:
     => 052088 - when product having multiple options then on quick view popup> dropdown is affecting popup
     => 053466 - There is no deducted discount amount shown in the printed invoice of admin and seller panel even after the buyer has applied a discount coupon.
     => 053465 - some issue with promotion
+    => 053442 - "When a registered user shares any information throught contact us form: - The email is recieved by the site owner, but when the site owner tries to reply the from email i,e user email is not getting fetched. " 
 
 
 

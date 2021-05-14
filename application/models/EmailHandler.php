@@ -177,7 +177,7 @@ class EmailHandler extends FatModel
             $headers .= $extra_headers;
         }
 
-        $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");
+        $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL");
 
 
         if (!FatApp::getDb()->insertFromArray(
@@ -218,6 +218,7 @@ class EmailHandler extends FatModel
             $mail->SMTPDebug = false;
             $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
             $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
+            $mail->AddReplyTo($extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL"));
             $mail->addAddress($toAdress);
             $mail->Subject = '=?UTF-8?B?' . base64_encode($Subject) . '?=';
             $mail->MsgHTML($body);
@@ -249,11 +250,10 @@ class EmailHandler extends FatModel
 
         $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId) . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
 
-        if ($extra_headers != '') {
+        if(!is_array($extra_headers) && $extra_headers != ''){ 
             $headers .= $extra_headers;
         }
-
-        $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");
+        $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL");
 
         if (!empty($bcc)) {
             $bccEmails = implode(", ", array_keys($bcc));
@@ -716,7 +716,7 @@ class EmailHandler extends FatModel
             '{phone_number}' => ValidateElement::formatDialCode($d['phone_dcode']) . $d['phone'],
             '{message}' => nl2br($d['message'])
         );
-        if (!self::sendMailTpl($to, $tpl, $langId, $vars)) {
+        if (!self::sendMailTpl($to, $tpl, $langId, $vars, ['ReplyTo' => $d['email']])) {
             return false;
         }
         $d['phone'] = isset($d['phone']) ? ValidateElement::formatDialCode($d['phone_dcode']). $d['phone'] : '';
