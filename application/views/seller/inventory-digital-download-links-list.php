@@ -51,17 +51,18 @@ foreach ($records as $sn => $row) {
                     '<i class="fa fa-edit  icon"></i>',
                     true
                 ); */
-
-                $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_Delete', $siteLangId),
-                        'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')', 'href' => 'javascript:void(0);'
-                    ),
-                    '<i class="fa fa-trash  icon"></i>',
-                    true
-                );
+                if (true === $canDelete) {
+                    $td->appendElement(
+                        "a",
+                        array(
+                            'class' => 'btn btn-clean btn-sm btn-icon',
+                            'title' => Labels::getLabel('LBL_Delete', $siteLangId),
+                            'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')', 'href' => 'javascript:void(0);'
+                        ),
+                        '<i class="fa fa-trash  icon"></i>',
+                        true
+                    );
+                }
 
                 break;
             default:

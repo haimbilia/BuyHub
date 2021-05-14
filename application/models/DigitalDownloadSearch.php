@@ -39,7 +39,7 @@ class DigitalDownloadSearch extends SearchBase
         return $row;
     }
 
-    public static function getAttachmentDetail($aFileId, $refRecordId = 0, $isPreview = 0)
+    public static function getAttachmentDetail($aFileId, $refRecordId = 0, $refRecordType = -1, $isPreview = 0)
     {
         $aFileId = FatUtility::int($aFileId);
         $isPreview = FatUtility::int($isPreview);
@@ -52,6 +52,10 @@ class DigitalDownloadSearch extends SearchBase
         
         if (0 < $refRecordId) {
             $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $refRecordId);
+        }
+        
+        if (-1 != $refRecordType) {
+            $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $refRecordType);
         }
         
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
@@ -95,9 +99,10 @@ class DigitalDownloadSearch extends SearchBase
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $recordId);
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $recordType);
         
-        if ('0' != $optionCombi) {
+        $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+        /* if ('0' != $optionCombi) {
             $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-        }
+        } */
         
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
         $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
@@ -121,14 +126,15 @@ class DigitalDownloadSearch extends SearchBase
                 'afile.afile_record_id as afile_record_id',
                 'afile.afile_name as mainfile',
                 'afile.afile_lang_id as afile_lang_id',
-                'afile.afile_id as afile_id'
+                'afile.afile_id as afile_id',
+                'pa.afile_id as prev_afile_id'
             ]
         );
         $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
         
         $srch->doNotCalculateRecords();
         $srch->addOrder('afile.afile_updated_at', 'DESC');
-
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $srch->getQuery()], 1);
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
@@ -142,9 +148,10 @@ class DigitalDownloadSearch extends SearchBase
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $recordId);
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $recordType);
         
-        if ($optionCombi != '0') {
+        $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+        /* if ($optionCombi != '0') {
             $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-        }
+        } */
 
         if (0 < $langId) {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);
@@ -153,9 +160,9 @@ class DigitalDownloadSearch extends SearchBase
         $srch->doNotCalculateRecords();
 
         $srch->addOrder(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
-
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $srch->getQuery()], 1);
         $rs = $srch->getResultSet();
-        $rows = FatApp::getDb()->fetchAll($rs);
+        $rows = FatApp::getDb()->fetchAll($rs, 'pdl_id');
 
         return $rows;
     }
@@ -215,6 +222,85 @@ class DigitalDownloadSearch extends SearchBase
         }
 
         return $row['total'];
+    }
+
+    public static function getInventoryLinks($selProdId, $langId)
+    {
+        $selProdData = SellerProduct::getAttributesById($selProdId, ['selprod_code', 'selprod_product_id']);
+
+        if (false === $selProdData) {
+            return [];
+        }
+
+        $selProdOption = explode('_', $selProdData['selprod_code']);
+        array_shift($selProdOption);
+        if (0 < count($selProdOption)) {
+            $optionComb = implode('_', $selProdOption);
+        } else {
+            $optionComb = '0';
+        }
+
+        $product = Product::getAttributesById($selProdData['selprod_product_id'], ['product_download_attachements_with_inventory']);
+        if (false === $product) {
+            return [];
+        }
+
+        $recordId = $selProdId;
+        $productType = Product::CATALOG_TYPE_INVENTORY;
+        if (0 == $product['product_download_attachements_with_inventory']) {
+            $recordId = $selProdData['selprod_product_id'];
+            $productType = Product::CATALOG_TYPE_PRIMARY;
+        }
+
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $selProdId, $recordId, $productType, $optionComb, $langId], 1);
+        $records = static::getLinks($recordId, $productType, $optionComb, $langId);
+        $commonRecords = [];
+        if ('0' != $optionComb) {
+            $commonRecords = static::getLinks($recordId, $productType, '0', $langId);
+        }
+        $records = array_replace($records, $commonRecords);
+
+        return $records;
+    }
+    public static function getInventoryAttachments($selProdId, $langId)
+    {
+        $selProdData = SellerProduct::getAttributesById($selProdId, ['selprod_code', 'selprod_product_id']);
+
+        if (false === $selProdData) {
+            return [];
+        }
+
+        $selProdOption = explode('_', $selProdData['selprod_code']);
+        array_shift($selProdOption);
+        if (0 < count($selProdOption)) {
+            $optionComb = implode('_', $selProdOption);
+        } else {
+            $optionComb = '0';
+        }
+
+        $product = Product::getAttributesById($selProdData['selprod_product_id'], ['product_download_attachements_with_inventory']);
+
+        if (false === $product) {
+            return [];
+        }
+
+        $recordId = $selProdId;
+        $productType = Product::CATALOG_TYPE_INVENTORY;
+        if (0 == $product['product_download_attachements_with_inventory']) {
+            $recordId = $selProdData['selprod_product_id'];
+            $productType = Product::CATALOG_TYPE_PRIMARY;
+        }
+        $records = static::getAttachments($recordId, $productType, $optionComb, $langId);
+        $commonRecords = [];
+        if ('0' != $optionComb) {
+            $commonRecords = static::getAttachments($recordId, $productType, '0', $langId);
+        }
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $recordId, $productType, $optionComb, $langId], 1);
+        
+        $records = array_replace($records, $commonRecords);
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $records], 1);
+        
+        return $records;
     }
 
 }

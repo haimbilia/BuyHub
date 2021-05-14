@@ -200,6 +200,13 @@ $(document).on('change','.selprodoption_optionvalue_id',function(){
 	            $(this).trigger("change");
 	        });
 			downloadsForm(product_id, selprod_id, true);
+			getDigitalDownloads();
+			/* if (1 == canAttachDigitalDownload) {
+				downloadsForm(product_id, selprod_id, true);
+				getDigitalDownloads();
+			} else {
+				getDigitalDownloads();
+			} */
 		// });
 	};
 

@@ -161,10 +161,11 @@ trait SellerProducts
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Products'));
         }
 
-        $canAttachDigitalDownload = false;
+        $canAttachDigitalDownload = 0;
 
-        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $canAttachDigitalDownload = DigitalDownload::canDo($product_id, 0, 0, $this->siteLangId, false, true);
+        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL
+        && (true == DigitalDownload::canDo($product_id, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, false, true))) {
+            $canAttachDigitalDownload = 1;
         }
 
         /* $this->_template->addJs(array('js/jquery.datetimepicker.js'), false); */

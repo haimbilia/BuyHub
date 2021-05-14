@@ -13,7 +13,10 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
-
+$requestType = Product::CATALOG_TYPE_PRIMARY;
+if (true == $isProductRequest) {
+    $requestType = Product::CATALOG_TYPE_REQUEST;
+}
 $sr_no = 0;
 foreach ($attachments as $sn => $row) {
     $sr_no++;
@@ -32,7 +35,8 @@ foreach ($attachments as $sn => $row) {
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
                         'title' => Labels::getLabel('LBL_Delete', $siteLangId),
-                        'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                        'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $recordId, $requestType, 0, $row['mainfile'])),
+                        'target' => '_blank'
                     ),
                     '<i class="fa fa-download  icon"></i>',
                     true
@@ -45,7 +49,8 @@ foreach ($attachments as $sn => $row) {
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
                         'title' => Labels::getLabel('LBL_download', $siteLangId),
-                        'onclick' => 'downloadDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                        'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $requestType, 1, $row['preview'])),
+                        'target' => '_blank'
                     ),
                     '<i class="fa fa-download  icon"></i>',
                     true

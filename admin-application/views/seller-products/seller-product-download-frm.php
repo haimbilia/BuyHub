@@ -19,6 +19,22 @@ $fld->addFieldTagAttribute('id', 'attachment_link_btn');
 $fld->addFieldTagAttribute('class', 'btn btn-brand');
 $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
 
+if (false == $canDo) {
+    $fld = $downloadFrm->getField('product_downloadable_link');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('product_preview_link');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('attachment_link_btn');
+    $downloadFrm->removeField($fld);
+
+    $fld = $downloadFrm->getField('downloadable_file');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('preview_file');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('attachement_upload_btn');
+    $downloadFrm->removeField($fld);
+}
+
 ?>
 <div class="row justify-content-center">
     <div class="col-md-12" id="digital_download_formss">
@@ -80,6 +96,7 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                 </div>
             </div>
             <div class="attach-links-js">
+            <?php if(true == $canDo) { ?>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="field-set">
@@ -126,8 +143,10 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                         </div>
                     </div>
                 </div>
+            <?php } ?>
             </div>
             <div class="attach-files-js">
+            <?php if(true == $canDo) { ?>
                 <div class="row">
                     <div class="col-md-4 downloadable_file_input">
                         <div class="field-set">
@@ -176,6 +195,7 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
                         </div>
                     </div>
                 </div>
+            <?php } ?>
             </div>
             <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
             <?php echo $downloadFrm->getFieldHtml('selprod_id'); ?>

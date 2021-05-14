@@ -26,8 +26,33 @@ foreach ($attachments as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
+            case 'mainfile':
+                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement(
+                    "a",
+                    array(
+                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'title' => Labels::getLabel('LBL_download', $adminLangId),
+                        'href' => UrlHelper::generateUrl('CustomProducts', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
+                        'target' => '_blank'
+                    ),
+                    '<i class="fa fa-download  icon"></i>',
+                    true
+                );
+                break;
             case 'preview':
-                $td->appendElement('plaintext', array(), $row['preview'], true);
+                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement(
+                    "a",
+                    array(
+                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'title' => Labels::getLabel('LBL_download', $adminLangId),
+                        'href' => UrlHelper::generateUrl('CustomProducts', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
+                        'target' => '_blank'
+                    ),
+                    '<i class="fa fa-download  icon"></i>',
+                    true
+                );
                 break;
             case 'pddr_options_code':
                 if (array_key_exists($row['pddr_options_code'], $options)) {
@@ -45,16 +70,6 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $lang_name, true);
                 break;
             case 'action':
-                /* $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_Edit', $adminLangId),
-                        'onclick' => 'downloadsForm(' . $row['afile_record_id'] . ', ' . $row['afile_id'] . ')', 'href' => 'javascript:void(0);'
-                    ),
-                    '<i class="fa fa-edit  icon"></i>',
-                    true
-                ); */
                 $td->appendElement(
                     "a",
                     array(

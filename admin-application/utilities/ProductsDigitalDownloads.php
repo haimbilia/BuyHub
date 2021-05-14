@@ -8,13 +8,13 @@ trait ProductsDigitalDownloads
 
         $selProdId = FatUtility::int($selProdId);
 
-        DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, false);
-
+        $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, false, true);
+        
         $sellerProductRow = SellerProduct::getAttributesById($selProdId);
 
         $productId = $sellerProductRow['selprod_product_id'];
 
-        $productRow = Product::getAttributesById($productId, array('product_type'));
+        /* $product = Product::getAttributesById($productId, array('product_type')); */
 
         $frm = DigitalDownload::getDownloadForm($this->adminLangId);
 
@@ -47,6 +47,7 @@ trait ProductsDigitalDownloads
             'selprod_id' =>  $selProdId,
         ];
         $frm->fill($data);
+        $this->set('canDo', $canDo);
         $this->set('savedOptions', $savedOptions);
         $this->set('downloadFrm', $frm);
         $this->set('product_id', $productId);
@@ -56,36 +57,29 @@ trait ProductsDigitalDownloads
 
     public function getInventoryDigitalDownloads()
     {
-        $this->objPrivilege->canEditSellerProducts();
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $this->objPrivilege->canViewSellerProducts();
+        /* $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0); */
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
+        /* $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0); */
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        $prodRefType = Product::CATALOG_TYPE_INVENTORY;
-
+        /* $prodRefType = Product::CATALOG_TYPE_INVENTORY; */
         
-        $optionComb = FatApp::getPostedData('option_comb', FatUtility::VAR_INT, 0);
-        
-        $selProdData = SellerProduct::getAttributesById($optionComb, array('selprod_code'));
-        
-        $selProdOption = explode('_', $selProdData['selprod_code']);
-        array_shift($selProdOption);
-        if (0 < count($selProdOption)) {
-            $optionComb = implode('_', $selProdOption);
-        } else {
-            $optionComb = '0';
-        }
-        
-        $langId = FatApp::getPostedData('langId', null, 0);
+        /* $optionComb = FatApp::getPostedData('option_comb', FatUtility::VAR_INT, 0); */
         
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $records = DigitalDownloadSearch::getLinks($selProdId, $prodRefType, $optionComb, $langId);
+            $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
         } else {
-            $records = DigitalDownloadSearch::getAttachments($selProdId, $prodRefType, $optionComb, $langId);
+            $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
         }
         
+        $canDelete = DigitalDownload::canDelete($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, true, true);
+        
+        $this->set('canDelete', $canDelete);
         $this->set('records', $records);
+        $this->set('recordId', $selProdId);
+        $this->set('downloadrefType', Product::CATALOG_TYPE_INVENTORY);
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $languages;
         $this->set('languages', $languages);
@@ -189,7 +183,6 @@ trait ProductsDigitalDownloads
 
         $recId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
         $subRecId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
-        $requstedProd = FatApp::getPostedData('prod_ref_type', FatUtility::VAR_INT, 0);
         
         if (1 > $recId || 1 > $subRecId) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
@@ -295,5 +288,46 @@ trait ProductsDigitalDownloads
         }
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->adminLangId));
+    }
+
+    public function downloadAttachment($aFileId, $recordId, $requestType, $isPreview = 0)
+    {
+        $this->objPrivilege->canViewSellerProducts();
+        
+        $aFileId = FatUtility::int($aFileId);
+        $recordId = FatUtility::int($recordId);
+        $isPreview = FatUtility::int($isPreview);
+        $requestType = FatUtility::int($requestType);
+
+        if (1 > $aFileId || 1 > $recordId) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
+        }
+        
+        $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_product_id'));
+        
+        if (false == $selProdData) {
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->adminLangId));
+        }
+        
+        if (false == DigitalDownload::allowedWithInventory($selProdData['selprod_product_id'])) {
+            $recordId = $selProdData['selprod_product_id'];
+            $requestType = Product::CATALOG_TYPE_PRIMARY;
+        }
+
+        $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
+        if (1 > count($file)) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->adminLangId));
+        }
+        
+        if ($file['pddr_record_id'] != $recordId) {
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->adminLangId));
+        }
+        
+        if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->adminLangId));
+        }
+        
+        $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
+        AttachedFile::downloadAttachment($fileName, $file['afile_name']);
     }
 }

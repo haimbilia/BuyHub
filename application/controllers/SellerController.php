@@ -5966,9 +5966,11 @@ class SellerController extends SellerBaseController
 
         $recordId  = $productId;
         $prodRefType = 0;
-
+        $isProductRequest = false;
+        
         if (0 < $preqId) {
-            $recordId  = $preqId;
+            $isProductRequest = true;
+            $recordId = $preqId;
             $prodRefType = Product::CATALOG_TYPE_REQUEST;
         }
 
@@ -5993,6 +5995,8 @@ class SellerController extends SellerBaseController
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
         
         $this->set('options', $optionCombinations);
+        $this->set('isProductRequest', $isProductRequest);
+        $this->set('recordId', $recordId);
 
         echo $this->_template->render(false, false, 'seller/digital-download-attachments-list.php', true);
     }

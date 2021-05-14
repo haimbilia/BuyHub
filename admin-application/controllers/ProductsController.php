@@ -1791,7 +1791,8 @@ class ProductsController extends AdminBaseController
                 'afile.afile_record_id as afile_record_id',
                 'afile.afile_name as mainfile',
                 'afile.afile_lang_id as afile_lang_id',
-                'afile.afile_id as afile_id'
+                'afile.afile_id as afile_id',
+                'pa.afile_id as prev_afile_id',
             ]
         );
         $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
@@ -1809,6 +1810,9 @@ class ProductsController extends AdminBaseController
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
         $this->set('options', $optionCombinations);
+
+        $this->set('recordId', $productId);
+        $this->set('downloadrefType', Product::CATALOG_TYPE_PRIMARY);
 
         echo $this->_template->render(false, false, 'products/digital-download-attachments-list.php', true);
     }
@@ -1858,5 +1862,42 @@ class ProductsController extends AdminBaseController
         }
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->adminLangId));
+    }
+
+    public function downloadAttachment($aFileId, $recordId, $requestType, $isPreview = 0)
+    {
+        $this->objPrivilege->canViewProducts();
+        
+        $aFileId = FatUtility::int($aFileId);
+        $recordId = FatUtility::int($recordId);
+        $isPreview = FatUtility::int($isPreview);
+        $requestType = FatUtility::int($requestType);
+
+        if (1 > $aFileId || 1 > $recordId) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
+        }
+
+        $product = Product::getAttributesById($recordId, array('product_seller_id'));
+        
+        if (false == $product) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
+        }
+
+        $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
+        
+        if (1 > count($file)) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->adminLangId));
+        }
+        
+        if ($file['pddr_record_id'] != $recordId) {
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->adminLangId));
+        }
+        
+        if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->adminLangId));
+        }
+        
+        $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
+        AttachedFile::downloadAttachment($fileName, $file['afile_name']);
     }
 }

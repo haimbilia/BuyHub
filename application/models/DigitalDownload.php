@@ -41,7 +41,7 @@ class DigitalDownload extends MyAppModel
         $recordId = FatUtility::int($recordId);
 
         if ($recordId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
         }
 
@@ -63,7 +63,7 @@ class DigitalDownload extends MyAppModel
     public function saveLink($refId, $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
     {
         if ($refId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
         }
 
@@ -280,6 +280,7 @@ class DigitalDownload extends MyAppModel
      * @returnResult - return response or die
      */
 
+    // public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $returnResult = false)
     public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $checkWithCatalog = true, $returnResult = false)
     {
         $recordId = FatUtility::int($recordId);
@@ -324,11 +325,11 @@ class DigitalDownload extends MyAppModel
         if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
             return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
         }
-        
+
         /* To check whether product belogs to logged seller? */
         if (0 < $sellerUserId) {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
-                /* Seller Invetory */
+                /* Seller Inventory */
                 $recordOwnerId = $sellerProduct['selprod_user_id'];
             } else { /* Catalog product */
                 $recordOwnerId = $product['product_seller_id'];
@@ -338,6 +339,18 @@ class DigitalDownload extends MyAppModel
             }
         }
         
+        /* if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
+            if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
+                return true;
+            }
+            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
+        } else {
+            if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
+                return true;
+            }
+            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+        } */
+
         if (true === $checkWithCatalog) {
             if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
                 return true;
@@ -362,7 +375,7 @@ class DigitalDownload extends MyAppModel
      * @returnResult - return response or die
      */
 
-    public static function canDelete($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $returnResult = false)
+    public static function canDelete($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $validateAllowedWithInventory = true, $returnResult = false)
     {
         $recordId = FatUtility::int($recordId);
         $sellerUserId = FatUtility::int($sellerUserId);
@@ -381,7 +394,14 @@ class DigitalDownload extends MyAppModel
                 if (false == $sellerProduct) {
                     return static::returnResponseOrDie($returnResult);
                 }
-
+                if (true == $validateAllowedWithInventory) {
+                    $product = Product::getAttributesById($sellerProduct['selprod_product_id'], ['product_download_attachements_with_inventory']);
+                    
+                    if (false == $product) {
+                        return static::returnResponseOrDie($returnResult);
+                    }
+                }
+                
                 $recordOwnerId = $sellerProduct['selprod_user_id'];
                 break;
             case Product::CATALOG_TYPE_REQUEST:
@@ -408,15 +428,18 @@ class DigitalDownload extends MyAppModel
                 $recordOwnerId = $product['product_seller_id'];
                 break;
             default:
-                if (false == $product) {
-                    return static::returnResponseOrDie($returnResult);
-                }
+                return static::returnResponseOrDie(false);
                 break;
         }
-
+        
         /* To check whether product belogs to logged seller? */
         if (0 < $sellerUserId) {
             if ($recordOwnerId != $sellerUserId) {
+                return static::returnResponseOrDie($returnResult);
+            }
+        }
+        if (true == $validateAllowedWithInventory) {
+            if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
                 return static::returnResponseOrDie($returnResult);
             }
         }
@@ -438,12 +461,12 @@ class DigitalDownload extends MyAppModel
     {
         $productId = FatUtility::int($productId);
         $product = Product::getAttributesById($productId);
-
+        
         if (false == $product) {
-            return false;
+            static::returnResponseOrDie();
         }
 
-        if (0 == $product['product_download_attachements_with_inventory']) {
+        if (1 == $product['product_download_attachements_with_inventory']) {
             return true;
         }
         
