@@ -108,6 +108,8 @@ Fixes:
     => 053430 - While sending SMTP email code crashed in between if unable to send email
     => 052088 - when product having multiple options then on quick view popup> dropdown is affecting popup
     => 053466 - There is no deducted discount amount shown in the printed invoice of admin and seller panel even after the buyer has applied a discount coupon.
+    => 053465 - some issue with promotion
+
 
 
 Enhancements :

@@ -1413,6 +1413,7 @@ class ProductsController extends MyAppController
         $prodObj->doNotCalculateRecords();
         $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id'));
         $prodObj->addCondition('promotion_record_id', '=', $productId);
+        $prodObj->addCondition('promotion_deleted', '=', applicationConstants::NO);
         $sponsoredProducts = array();
         $productSrchObj = new ProductSearch($this->siteLangId);
         $productSrchObj->joinProductToCategory($this->siteLangId);
