@@ -112,10 +112,15 @@ foreach ($sellers as $sellerDetail) {
                 <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?>
             </div>
         <?php } ?>
-        
+        <?php 
+            $canAskQuestion = (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())) && (UserAuthentication::getLoggedUserId() != $sellerDetail['selprod_user_id'])));
+
+            $canViewDetail = (!isset($currSelprodId) || $currSelprodId != $sellerDetail['selprod_id']);
+
+        ?>
         <div class="cell cell-5" data-label="">
             <div class="actions">
-                <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())) && (UserAuthentication::getLoggedUserId() != $sellerDetail['selprod_user_id']))) { ?>
+                <?php if ($canAskQuestion) { ?>
                     <a href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($sellerDetail['shop_id'], $product['selprod_id'])); ?>" class="btn btn-link btn-sm">
                         <i class="icn">
                             <svg class="svg">
@@ -126,10 +131,11 @@ foreach ($sellers as $sellerDetail) {
                         </i><?php echo Labels::getLabel('LBL_Ask_Question', $siteLangId); ?>
                     </a>
                 <?php } ?>
-
-                <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($sellerDetail['selprod_id'])); ?>" class="btn btn-brand btn-sm">
-                    <?php echo Labels::getLabel('LBL_VIEW_DETAIL', $siteLangId); ?>
-                </a>
+                <?php if ($canViewDetail) { ?>
+                    <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($sellerDetail['selprod_id'])); ?>" class="btn btn-brand btn-sm">
+                        <?php echo Labels::getLabel('LBL_VIEW_DETAIL', $siteLangId); ?>
+                    </a>
+                <?php } ?>
             </div>
         </div>
     </li>

@@ -725,6 +725,7 @@ class ProductsController extends MyAppController
         $currSellerArr = $this->getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);
         $this->set('sellers', $currSellerArr);
         
+        $this->set('currSelprodId', $selprod_id);
         $this->set('canSubmitFeedback', $canSubmitFeedback);
         $this->set('upsellProducts', !empty($upsellProducts) ? $upsellProducts : array());
         $this->set('relatedProductsRs', !empty($relatedProductsRs) ? $relatedProductsRs : array());
