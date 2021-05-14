@@ -142,7 +142,7 @@ class GoogleFonts {
         }
         // Add to DOM
         
-        if (true === $this->willReturn) { return $html; } 
+        if (true === $this->willReturn) { return nl2br($html); } 
         
         echo nl2br($html);
     }
