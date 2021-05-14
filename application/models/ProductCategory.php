@@ -1562,26 +1562,33 @@ class ProductCategory extends MyAppModel
     public function getCategoriesByLevel(int $langId, array $level, array $attr = []): array
     {
         $catId = $this->getMainTableRecordId();
-        $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-        if (0 < $catId) {
-            $srch->addCondition('pcr_parent_id', '=', $catId);
-        }
 
+        $catSrch = self::getSearchObject(false, 0, false);
+        if (0 < $catId) {
+            $catSrch->addCondition('prodcat_id', '=', $catId);
+        }
+        $catSrch->addCondition('prodcat_parent', '=', 0);
+        $catSrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+        $catSrch->doNotCalculateRecords();
+        $catSrch->doNotLimitRecords();
+        $catSrch->addMultipleFields(['prodcat_id']);
+        
+        $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
         if (empty($attr)) {
             $attr = [
-                'prodcat_id',
-                'pcr_parent_id',
-                'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name',
-                'pcr_level'
+                'c.prodcat_id',
+                'cr.pcr_parent_id',
+                'IFNULL(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name',
+                'cr.pcr_level'
             ];
         }
         $srch->addMultipleFields($attr);
-
+        $srch->joinTable('(' . $catSrch->getQuery() . ')', 'INNER JOIN', 'cr.pcr_parent_id = prodcat_id', 'cj');
         $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = c.prodcat_id', 'c');
         $srch->joinTable(self::DB_TBL_LANG, 'LEFT JOIN', 'c_l.prodcatlang_prodcat_id = c.prodcat_id AND c_l.prodcatlang_lang_id = ' . $langId, 'c_l');
-        $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('prodcat_status', '=', self::REQUEST_APPROVED);
+        $srch->addCondition('c.prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('c.prodcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('c.prodcat_status', '=', self::REQUEST_APPROVED);
         $srch->addCondition('pcr_level', 'IN', $level);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -1589,7 +1596,7 @@ class ProductCategory extends MyAppModel
         $srch->addOrder('pcr_level');
         $srch->addOrder('pcr_prodcat_id');
         $rs = $srch->getResultSet();
-
+        
         $result = (array) FatApp::getDb()->fetchAll($rs);
         return $result;
     }
