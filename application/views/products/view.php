@@ -162,7 +162,11 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             $count = 0;
                                             foreach ($optionRows as $key => $option) {
                                                 $selectedOptionValue = $option['values'][$selectedOptionsArr[$key]]['optionvalue_name'];
-                                                $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code']; ?>
+                                                $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code']; 
+                                                if ($option['option_is_color']) {
+                                                    $selectedOptionColor = ("#" == $selectedOptionColor[0] ? $selectedOptionColor : "#" . $selectedOptionColor);
+                                                }
+                                                ?>
                                                 <div class="col-md-6 mb-3">
                                                     <div class="h6"><?php echo $option['option_name']; ?></div>
 
@@ -170,7 +174,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                         <button class="btn btn-outline-gray dropdown-toggle" type="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                                             <span>
                                                                 <?php if ($option['option_is_color']) { ?>
-                                                                    <span class="colors" style="background-color:#<?php echo $selectedOptionColor; ?>;"></span>
+                                                                    <span class="colors" style="background-color:<?php echo $selectedOptionColor; ?>;"></span>
                                                                 <?php } ?>
                                                                 <?php echo $selectedOptionValue; ?>
                                                             </span>
@@ -193,12 +197,13 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                                         <li class="nav__item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' is-active' : ' ';
                                                                                                 echo (!$optionUrl) ? ' is-disabled' : '';
                                                                                                 echo (!$isAvailable) ? 'not--available' : ''; ?>">
-                                                                            <?php if ($option['option_is_color'] && $opVal['optionvalue_color_code'] != '') { ?>
-                                                                                <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
-                                                                                                                                                                                                                                    echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (!$option['option_is_color']) ? 'selector__link' : '';
+                                                                            <?php if ($option['option_is_color'] && $opVal['optionvalue_color_code'] != '') { 
+                                                                                $color = ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] : "#" . $opVal['optionvalue_color_code']);
+                                                                                ?>
+                                                                                <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name']; echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (!$option['option_is_color']) ? 'selector__link' : '';
                                                                                                                                                                                                                                                                                                                                                                 echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' ' : ' ';
                                                                                                                                                                                                                                                                                                                                                                 echo (!$optionUrl) ? ' is-disabled' : ''; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
-                                                                                    <span class="colors" style="background-color:#<?php echo $opVal['optionvalue_color_code']; ?>;"></span><?php echo $opVal['optionvalue_name']; ?></a>
+                                                                                    <span class="colors" style="background-color:<?php echo $color; ?>;"></span><?php echo $opVal['optionvalue_name']; ?></a>
                                                                             <?php } else { ?>
                                                                                 <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
                                                                                                                                                                                                                                     echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? '' : ' ';

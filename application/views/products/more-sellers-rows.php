@@ -127,8 +127,8 @@ foreach ($sellers as $sellerDetail) {
                     </a>
                 <?php } ?>
 
-                <a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($sellerDetail['shop_id'])); ?>" class="btn btn-brand btn-sm">
-                    <?php echo Labels::getLabel('LBL_VIEW_PRODUCTS', $siteLangId); ?>
+                <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($sellerDetail['selprod_id'])); ?>" class="btn btn-brand btn-sm">
+                    <?php echo Labels::getLabel('LBL_VIEW_DETAIL', $siteLangId); ?>
                 </a>
             </div>
         </div>
