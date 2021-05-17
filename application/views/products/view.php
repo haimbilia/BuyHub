@@ -509,6 +509,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
             <div class="nav-detail nav-detail-js">
                 <ul>
+                    <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
+                        <li><a class="nav-scroll-js is-active" href="#specifications"><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></a>
+                        </li>
+                    <?php } ?>
                     <?php if (count($productSpecifications) > 0) { ?>
                         <li><a class="nav-scroll-js is-active" href="#specifications"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?></a>
                         </li>
@@ -537,6 +541,36 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             <section class="section">
                 <div class="row justify-content-center">
                     <div class="col-xl-7">
+                        <div class="section-head">
+                            <div class="section__heading" id="specifications">
+                                <h2><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></h2>
+                            </div>
+                        </div>
+                        <div class="cms bg-gray p-4 mb-4">
+                            <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']
+                                && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))) {
+                                if (count($product['preview_links'])) {
+                            ?>
+                                    <div>Links:</div>
+                            <?php   foreach ($product['preview_links'] as $keys => $link) {
+                                        echo $link['pdl_preview_link'] . '<br />';
+                                    }
+                                }
+                                if (count($product['preview_attachments'])) {
+                            ?>
+                                    <div>Attachments:</div>
+                            <?php
+                                    foreach ($product['preview_attachments'] as $keys => $attachment) {
+                                        $fileExtension = substr($attachment['preview'], strlen($attachment['preview']) - 3, strlen($attachment['preview']));
+                                        echo '<a target="_blank" href ="' . UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview'] . '" title="' . $attachment['preview'] . '">' . $attachment['preview'] . '</a>';
+                                        echo '<br />';
+                                    }
+                                }
+                            } else {
+                                echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
+                            }
+                            ?>
+                        </div>
                         <?php if (count($productSpecifications) > 0) { ?>
                             <div class="section-head">
                                 <div class="section__heading" id="specifications">

@@ -314,9 +314,9 @@ ALTER TABLE `tbl_products` ADD `product_download_attachements_with_inventory` TI
 
 CREATE TABLE `tbl_product_digital_data_relation` (
   `pddr_id` int(11) NOT NULL,
-  `pddr_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id 2)Catalog Request Id 3) Seller inventory id (selprod_id)',
-  `pddr_options_code` varchar(190) NOT NULL COMMENT '0 for all options',
-  `pddr_type` tinyint(4) NOT NULL COMMENT '0 => product id, 1=>product Request Id, 2 => seller product id (Inventory Id))'
+  `pddr_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id (pddr_id) 2) Seller inventory id',
+  `pddr_options_code` varchar(255) NOT NULL COMMENT '0 for all options',
+  `pddr_type` tinyint(4) NOT NULL COMMENT '0 => Master Catalog, 1 => catalog request'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -339,7 +339,6 @@ ALTER TABLE `tbl_product_digital_data_relation`
 --
 ALTER TABLE `tbl_product_digital_data_relation`
   MODIFY `pddr_id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
 -- -----------------------------------------------------------------------------------
 
 --
@@ -348,10 +347,10 @@ COMMIT;
 
 CREATE TABLE `tbl_product_digital_links` (
   `pdl_id` int(11) NOT NULL,
-  `pdl_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id 2) Seller inventory id',
+  `pdl_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id (pddr_id) 2) Seller inventory id',
+  `pdl_lang_id` int(11) NOT NULL,
   `pdl_download_link` varchar(255) NOT NULL,
-  `pdl_preview_link` varchar(255) NOT NULL,
-  `pdl_lang_id` int(11) NOT NULL
+  `pdl_preview_link` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Contains Digital download links which are related to a Catalog product or seller Inventory';
 
 --
@@ -373,6 +372,5 @@ ALTER TABLE `tbl_product_digital_links`
 --
 ALTER TABLE `tbl_product_digital_links`
   MODIFY `pdl_id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
 -- --- task_84719_Preview_module_for_digital_files -- ---
 

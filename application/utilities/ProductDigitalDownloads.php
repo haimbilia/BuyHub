@@ -167,7 +167,7 @@ trait ProductDigitalDownloads
                 FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
                 break;
         }
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $aFileId, $recordId, $requestType, $isPreview], 1);
+
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
         
         if (1 > count($file)) {
@@ -186,7 +186,43 @@ trait ProductDigitalDownloads
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
     }
 
+    public function downloadOpAttachment($aFileId, $recordId)
+    {
+        $aFileId = FatUtility::int($aFileId);
+        $recordId = FatUtility::int($recordId);
+        $fileType = AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD;
+        $userId = $this->userParentId;
 
+        if (1 > $aFileId || 1 > $recordId) {
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'products'));
+        }
+    
+        $srch = new OrderProductSearch(0, true);
+        $srch->addMultipleFields(array('op_id', 'op_selprod_user_id'));
+        $srch->addCondition('op_id', '=', $recordId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        if ($row == false || ($row && $row['op_selprod_user_id'] !== $userId)) {
+            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrder', array($recordId)));
+        }
+        
+        $file_row = AttachedFile::getAttributesById($aFileId);
+        if ($file_row == false || $file_row['afile_record_id'] != $recordId || $file_row['afile_type'] != $fileType) {
+            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrder', array($recordId)));
+        }
+
+        if (!file_exists(CONF_UPLOADS_PATH . $file_row['afile_physical_path'])) {
+            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrder', array($recordId)));
+        }
+
+        $fileName = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        AttachedFile::downloadAttachment($fileName, $file_row['afile_name']);
+    }
 
 
 

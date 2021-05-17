@@ -92,7 +92,7 @@ class DigitalDownloadSearch extends SearchBase
         return $row;
     }
 
-    public static function getAttachments($recordId, $recordType, $optionCombi = '0', $langId = 0)
+    public static function getAttachments($recordId, $recordType, $optionCombi = '0', $langId = 0, $attr = null)
     {
         $srch = static::getSearchObject();
 
@@ -117,19 +117,27 @@ class DigitalDownloadSearch extends SearchBase
         if (0 < $langId) {
             $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
         }
-        $srch->addMultipleFields(
-            [
-                'pddr_id',
-                'pddr_options_code',
-                'pa.afile_name as preview',
-                'pa.afile_id as prev_afile_id',
-                'afile.afile_record_id as afile_record_id',
-                'afile.afile_name as mainfile',
-                'afile.afile_lang_id as afile_lang_id',
-                'afile.afile_id as afile_id',
-                'pa.afile_id as prev_afile_id'
-            ]
-        );
+        if (null != $attr) {
+            if (is_array($attr)) {
+                $srch->addMultipleFields($attr);
+            } elseif (is_string($attr)) {
+                $srch->addFld($attr);
+            }
+        } else {
+            $srch->addMultipleFields(
+                [
+                    'pddr_id',
+                    'pddr_options_code',
+                    'pa.afile_name as preview',
+                    'pa.afile_id as prev_afile_id',
+                    'afile.afile_record_id as afile_record_id',
+                    'afile.afile_name as mainfile',
+                    'afile.afile_lang_id as afile_lang_id',
+                    'afile.afile_id as afile_id',
+                    'pa.afile_id as prev_afile_id'
+                ]
+            );
+        }
         $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
         
         $srch->doNotCalculateRecords();
@@ -139,7 +147,7 @@ class DigitalDownloadSearch extends SearchBase
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
     
-    public static function getLinks($recordId, $recordType, $optionCombi = '0', $langId = 0)
+    public static function getLinks($recordId, $recordType, $optionCombi = '0', $langId = 0, $attr = null)
     {
         $srch = static::getSearchObject();
 
@@ -155,6 +163,14 @@ class DigitalDownloadSearch extends SearchBase
 
         if (0 < $langId) {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);
+        }
+
+        if (null != $attr) {
+            if (is_array($attr)) {
+                $srch->addMultipleFields($attr);
+            } elseif (is_string($attr)) {
+                $srch->addFld($attr);
+            }
         }
 
         $srch->doNotCalculateRecords();

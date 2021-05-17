@@ -472,4 +472,21 @@ class DigitalDownload extends MyAppModel
         
         return false;
     }
+
+    public static function getProductPreviews($productId)
+    {
+        $productId = FatUtility::int($productId);
+        $product = Product::getAttributesById($productId);
+        
+        if (false == $product) {
+            static::returnResponseOrDie();
+        }
+
+        if (1 == $product['product_download_attachements_with_inventory']) {
+            return true;
+        }
+        
+        return false;
+    }
+
 }
