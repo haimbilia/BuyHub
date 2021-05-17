@@ -1548,7 +1548,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->requirements()->setInt();
                 break;
             case Configurations::FORM_PPC:
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId), 'CONF_PPC_MIN_WALLET_BALANCE');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId), 'CONF_PPC_MIN_WALLET_BALANCE');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Minimum_wallet_balance_to_start_promotion", $this->adminLangId) . '</small>';
 
                 /* $fld = $frm->addTextBox( Labels::getLabel('LBL_Wallet_Balance_Alert',$this->adminLangId), 'CONF_PPC_WALLET_BALANCE_ALERT' );
@@ -1557,13 +1557,16 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Days_Interval_to_Charge_Wallet', $this->adminLangId), 'CONF_PPC_WALLET_CHARGE_DAYS_INTERVAL');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Days_Interval_to_Charge_Wallet", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(product)', $this->adminLangId), 'CONF_CPC_PRODUCT');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(product)', $this->adminLangId), 'CONF_CPC_PRODUCT');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_Product", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(shop)', $this->adminLangId), 'CONF_CPC_SHOP');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(shop)', $this->adminLangId), 'CONF_CPC_SHOP');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_shop", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(slide)', $this->adminLangId), 'CONF_CPC_SLIDES');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(slide)', $this->adminLangId), 'CONF_CPC_SLIDES');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_slide", $this->adminLangId) . '</small>';
 
                 /* $fld = $frm->addTextBox( Labels::getLabel('LBL_Cost_Per_Click_(banner)',$this->adminLangId), 'CONF_CPC_BANNER' );
