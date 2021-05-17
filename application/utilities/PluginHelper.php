@@ -61,7 +61,7 @@ trait PluginHelper
     public function getKey(string $column): string
     {
         if (!empty($this->settings)) {
-            return isset($this->settings[$column]) ? $this->settings[$column] : '';
+            return (string) (isset($this->settings[$column]) ? $this->settings[$column] : '');
         }
 
         $this->loadPluginSettingsObj();
@@ -69,7 +69,7 @@ trait PluginHelper
             $this->error = $this->pluginSetting->getError();
             return '';
         }
-        return $value;
+        return (string) $value;
     }
 
     /**

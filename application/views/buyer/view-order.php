@@ -797,7 +797,7 @@ if (!$print) { ?>
                                                     echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
                                                     if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                         if (empty($row['oshistory_courier'])) {
-                                                            $str = !empty($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . '( ' . $row['oshistory_tracking_number'] . ' )': '';
+                                                            $str = !empty($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . ' ( ' . $row['oshistory_tracking_number'] . ' )': '';
                                                             if (empty($childOrderDetail['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
                                                                 $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
                                                             } elseif (!empty($childOrderDetail['opship_tracking_url'])) {

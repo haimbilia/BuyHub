@@ -1,14 +1,5 @@
 $(document).ready(function(){
-	$("select[name='op_status_id']").change(function(){
-		var data = 'val='+$(this).val();
-		fcom.ajax(fcom.makeUrl('SellerOrders', 'checkIsShippingMode'), data, function(t) {			
-			var response = $.parseJSON(t);
-			if (response["shipping"]){
-				$('.manualShipping-js').attr('data-fatreq', '{"required":false}');				
-			}		
-		});
-	});
-	
+    var canShipByPlugin = 1;
 	$(document).on('click','ul.linksvertical li a.redirect--js',function(event){
 		event.stopPropagation();
 	});		
@@ -88,7 +79,10 @@ function pageRedirect(op_id) {
                 $(form + " .notifyCustomer-js").val(1);
                 $(form + " input[name='tracking_number']").val(t.tracking_number);
                 canShipByPlugin = 0;
-                setTimeout(function(){ $(form).submit(); }, 200);
+                if ('' != t.tracking_number) {
+                    $(form + ' .manualShipping-js').attr('data-fatreq', '{"required":false}');
+                }
+                updateStatus($(form)[0]);
             } else {
                 window.location.reload();
             }

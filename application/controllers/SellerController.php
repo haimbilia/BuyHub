@@ -771,7 +771,8 @@ class SellerController extends SellerBaseController
         $plugin = new Plugin();
         $this->keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
         $pluginValidation = true;
-        if (!empty($this->keyName) && in_array($this->keyName, ['EasyPost'])) {
+        $allowedPlugins = in_array($this->keyName, ['EasyPost', 'Aramex']);
+        if (!empty($this->keyName) && $allowedPlugins) {
             $pluginValidation = false;
         }
 
@@ -878,12 +879,10 @@ class SellerController extends SellerBaseController
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
             if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && $pluginValidation) {
-                //if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping'] && array_key_exists('opship_tracking_url', $post)) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
-                        "opship_tracking_number" => $post['tracking_number'],
-                        //"opship_tracking_url" => $post['opship_tracking_url'],
+                        "opship_tracking_number" => $post['tracking_number']
                     ];
 
                     if (array_key_exists('opship_tracking_url', $post)) {

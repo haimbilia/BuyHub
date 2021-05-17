@@ -200,7 +200,7 @@ trait ShippingServices
         $opSrch->addCondition('op.op_id', '=', $opId);
 
         $opSrch->addMultipleFields(
-            array('op_status_id', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code')
+            array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code')
         );
 
         $opRs = $opSrch->getResultSet();
@@ -233,18 +233,22 @@ trait ShippingServices
             $opshipmentId = $data["opshipping_service_code"];
         }
 
-        if (false === $this->shippingService->loadOrder($opshipmentId)) {
-            LibHelper::dieJsonError($this->shippingService->getError());
-        }
-        $shipmentData = $this->shippingService->getResponse();
-        if (array_key_exists('orderStatus', $shipmentData) && ('shipped' == strtolower($shipmentData['orderStatus']) || 'unknown' != strtolower($shipmentData['orderStatus']))) {
-            $status = ucwords($shipmentData['orderStatus']);
-            $msg = Labels::getLabel("LBL_ALREADY_{STATUS}", $this->langId);
-            $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
-            LibHelper::dieJsonError($msg);
+        if (method_exists($this->shippingService, 'loadOrder')) {
+            if (false === $this->shippingService->loadOrder($opshipmentId)) {
+                LibHelper::dieJsonError($this->shippingService->getError());
+            }
+            $shipmentData = $this->shippingService->getResponse();
+            if (array_key_exists('orderStatus', $shipmentData) && ('shipped' == strtolower($shipmentData['orderStatus']) || 'unknown' != strtolower($shipmentData['orderStatus']))) {
+                $status = ucwords($shipmentData['orderStatus']);
+                $msg = Labels::getLabel("LBL_ALREADY_{STATUS}", $this->langId);
+                $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
+                LibHelper::dieJsonError($msg);
+            }
         }
         
         $requestParam = [
+            "op_order_id" => $data['op_order_id'],
+            "op_invoice_number" => $data['op_invoice_number'],
             "orderId" => $data['opship_orderid'],
             "op_id" => $opId,
             "opshipmentId" => $opshipmentId,
@@ -254,12 +258,12 @@ trait ShippingServices
             "notifyCustomer" => true,
             "notifySalesChannel" => true,
         ];
-
         if (false === $this->shippingService->proceedToShipment($requestParam)) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
 
         $orderInfo = $this->shippingService->getResponse();
+        
         $trackingNumber = ('ShipStationShipping' == $this->keyName) ? $data['opship_tracking_number'] : $orderInfo['tracking_code'];
         $updateData = [
             'opship_op_id' => $opId,
@@ -267,10 +271,11 @@ trait ShippingServices
             "opship_tracking_number" => $trackingNumber,
         ];
 
-        if ('ShipStationShipping' != $this->keyName) {
+
+        if (in_array($this->keyName, ['EasyPost'])) {
             $updateData["opship_tracking_url"] = $orderInfo['tracking_url'];
         }
-       
+        
         if (!$db->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
             LibHelper::dieJsonError($db->getError());
         }

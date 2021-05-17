@@ -19,17 +19,76 @@ class ShippingServicesBase extends PluginBase
         $srch = new OrderSearch($this->langId);
         $srch->joinOrderPaymentMethod();
         $srch->joinOrderBuyerUser();
-        $srch->joinOrderProduct();
+        $srch->joinOrderProduct($this->langId);
         $srch->joinOrderProductShipping();
         $srch->joinSellerProduct();
         $srch->addCondition('op.op_id', '=', $opId);
-        $srch->addMultipleFields(['order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'opshipping_label', 'opshipping_carrier_code', 'opshipping_service_code', 'op.*', 'op_product_tax_options', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'selprod_product_id', 'op_selprod_title', 'op_product_name', 'sp.selprod_product_id']);
+        $srch->addMultipleFields(['order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'opshipping_label', 'opshipping_carrier_code', 'opshipping_service_code', 'op.*', 'op_product_tax_options', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'op_selprod_title', 'op_product_name', 'sp.selprod_product_id', 'opshipping_by_seller_user_id']);
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetch($rs);
     }
+
+    /**
+     * getSellerInfo
+     *
+     * @param  mixed $sellerId
+     * @return void
+     */
+    public function getSellerInfo(int $sellerId): array
+    {
+        $userObj = new User($sellerId);
+        return (array) $userObj->getSellerData($this->langId, [
+            'user_id',
+            'ifnull(shop_name, shop_identifier) as shop_name',
+            'user_name',
+            'user_phone_dcode',
+            'user_phone',
+            'credential_email'
+        ]);
+    }
+
+    /**
+     * getBuyerInfo
+     *
+     * @param  mixed $buyerId
+     * @return void
+     */
+    public function getBuyerInfo(int $buyerId): array
+    {
+        $userObj = new User($buyerId);
+        return (array) $userObj->getUserInfo([
+            'user_id',
+            'user_name',
+            'user_phone_dcode',
+            'user_phone',
+            'credential_email'
+        ], false, false, true);
+    }
     
     /**
-     * addOrder - Used if child class not required this function.
+     * getShopAddress
+     *
+     * @param  int $sellerId
+     * @return array
+     */
+    public function getShopAddress(int $sellerId): array
+    {
+        if (0 < $sellerId) {            
+            $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
+            $fields = array('shop_postalcode as postalCode', 'shop_address_line_1 as line1', 'shop_address_line_2 as line2', 'shop_city as city', 'state_name as state', 'state_code as stateCode', 'country_code as countryCode', 'shop_phone as phone', 'shop_name', 'shop_id');
+            return (array) Shop::getShopAddress($shopId, false, $this->langId, $fields);
+        }
+
+        $adminAddress = (array) Admin::getAddress($this->langId);
+        $adminAddress['phone'] = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, 0);
+        $adminAddress['shop_name'] = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_STRING, '');
+        $adminAddress['shop_id'] = 0;
+        return $adminAddress;
+
+    }
+
+    /**
+     * addOrder - Called if child class not required this function.
      *
      * @param  mixed $opId
      * @return bool
@@ -40,7 +99,7 @@ class ShippingServicesBase extends PluginBase
     }
 
     /**
-     * bindLabel - Used if child class not required this function.
+     * bindLabel - Called if child class not required this function.
      *
      * @return bool
      */
@@ -48,9 +107,9 @@ class ShippingServicesBase extends PluginBase
     {
         return true;
     }
-    
+
     /**
-     * getCarriers - Used if function not created in child class.
+     * getCarriers - Called if child class not required this function.
      * Return multidimentional array
      * @return array
      */
@@ -59,5 +118,15 @@ class ShippingServicesBase extends PluginBase
         return [
             []
         ];
+    }
+
+    /**
+     * init - Called if child class not required this function.
+     *
+     * @return bool
+     */
+    public function init(): bool
+    {
+        return true;
     }
 }

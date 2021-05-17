@@ -619,7 +619,8 @@ class SellerOrdersController extends AdminBaseController
         $plugin = new Plugin();
         $this->keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
         $pluginValidation = true;
-        if (!empty($this->keyName) && in_array($this->keyName, ['EasyPost'])) {
+        $allowedPlugins = in_array($this->keyName, ['EasyPost', 'Aramex']);
+        if (!empty($this->keyName) && $allowedPlugins) {
             $pluginValidation = false;
         }
 
@@ -697,7 +698,6 @@ class SellerOrdersController extends AdminBaseController
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $post['tracking_number'],
-                        //    "opship_tracking_url" => $post['opship_tracking_url'],
                     ];
 
                     if (array_key_exists('opship_tracking_url', $post)) {
@@ -777,18 +777,6 @@ class SellerOrdersController extends AdminBaseController
 
         $fileName = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file_row['afile_name']);
-    }
-
-    public function checkIsShippingMode()
-    {
-        $json = array();
-        $post = FatApp::getPostedData();
-        if (isset($post["val"])) {
-            if ($post["val"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-                $json["shipping"] = 1;
-            }
-        }
-        echo json_encode($json);
     }
 
     public function CancelOrder($op_id)

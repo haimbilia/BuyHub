@@ -197,7 +197,7 @@ class Shipping
         $srch->joinShippingRates($this->langId);
         $srch->joinShippingLocations($countryId, $stateId, 0);
         $srch->addCondition('selprod_id', 'IN', $selProdIdArr);
-        $srch->addMultipleFields(array('selprod_id', 'shippro_shipprofile_id', 'shipprozone_id', 'shiprate_id', 'coalesce(shipr_l.shiprate_name, shipr.shiprate_identifier) as shiprate_name', 'shiprate_cost', 'shiprate_condition_type', 'shiprate_min_val', 'shiprate_max_val', 'psbs.psbs_user_id', 'product_id', 'shiploc_shipzone_id', 'shipprofile_default', 'shop_id', 'coalesce(shipprofile_name, shipprofile_identifier) as shipprofile_name', 'shop_postalcode', 'shiploc_country_id'));
+        $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'shippro_shipprofile_id', 'shipprozone_id', 'shiprate_id', 'coalesce(shipr_l.shiprate_name, shipr.shiprate_identifier) as shiprate_name', 'shiprate_cost', 'shiprate_condition_type', 'shiprate_min_val', 'shiprate_max_val', 'psbs.psbs_user_id', 'product_id', 'shiploc_shipzone_id', 'shipprofile_default', 'shop_id', 'coalesce(shipprofile_name, shipprofile_identifier) as shipprofile_name', 'shop_postalcode', 'shiploc_country_id'));
         if(0 < $shippedByAdminOnly){
             $srch->addFld('0 as shiippingBySeller');
         } else {
@@ -294,7 +294,7 @@ class Shipping
                 SystemLog::set($msg);
                 continue;
             }
-            
+
             $shopAddress = $rates['shopAddress'];
 
             if (method_exists($this->shippingApiObj, 'setAddressReference')) {
@@ -378,6 +378,7 @@ class Shipping
                 if (false == $shippingRates || empty($shippingRates)) {
                     continue;
                 }
+                
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
@@ -783,7 +784,7 @@ class Shipping
 
         $this->shippingApiObj = new $keyName($this->langId);
 
-        if (false === $this->shippingApiObj->init()) {
+        if (method_exists($this->shippingApiObj, 'init') && false === $this->shippingApiObj->init()) {
             $this->error = $this->shippingApiObj->getError();
             return false;
         }

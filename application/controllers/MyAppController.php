@@ -337,18 +337,6 @@ class MyAppController extends FatController
         return $nodes;
     }
 
-    public function checkIsShippingMode()
-    {
-        $json = array();
-        $post = FatApp::getPostedData();
-        if (isset($post["val"])) {
-            if ($post["val"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-                $json["shipping"] = 1;
-            }
-        }
-        echo json_encode($json);
-    }
-
     public function setUpNewsLetter()
     {
         include_once CONF_INSTALLATION_PATH . 'library/Mailchimp.php';
@@ -450,7 +438,7 @@ class MyAppController extends FatController
             $fld->requirements()->setRequired();
             $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
-    
+
             $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId)));
             $fld1->requirements()->setRequired();
             $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
@@ -692,7 +680,7 @@ class MyAppController extends FatController
         $this->_template->addJs('js/ion.rangeSlider.js');
         $this->_template->addJs('js/listing-functions.js');
     }
-    
+
     public function includeDatePickerLangJs()
     {
         $langCode = strtolower($this->siteLangCode);
