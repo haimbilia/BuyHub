@@ -315,7 +315,7 @@ class DigitalDownload extends MyAppModel
                 $recordId = $sellerProduct['selprod_product_id'];
             }
 
-            $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_download_attachements_with_inventory']);
+            $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_attachements_with_inventory']);
         
             if (false == $product) {
                 return static::returnResponseOrDie($returnResult);
@@ -340,24 +340,24 @@ class DigitalDownload extends MyAppModel
         }
         
         /* if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
-            if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
+            if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
                 return true;
             }
             return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
         } else {
-            if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
+            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
                 return true;
             }
             return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
         } */
 
         if (true === $checkWithCatalog) {
-            if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
+            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
                 return true;
             }
             return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
         } else {
-            if (applicationConstants::YES == $product['product_download_attachements_with_inventory']) {
+            if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
                 return true;
             }
             return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
@@ -395,7 +395,7 @@ class DigitalDownload extends MyAppModel
                     return static::returnResponseOrDie($returnResult);
                 }
                 if (true == $validateAllowedWithInventory) {
-                    $product = Product::getAttributesById($sellerProduct['selprod_product_id'], ['product_download_attachements_with_inventory']);
+                    $product = Product::getAttributesById($sellerProduct['selprod_product_id'], ['product_attachements_with_inventory']);
                     
                     if (false == $product) {
                         return static::returnResponseOrDie($returnResult);
@@ -420,7 +420,7 @@ class DigitalDownload extends MyAppModel
                 $recordOwnerId = $product['product_seller_id'];
                 break;
             case Product::CATALOG_TYPE_PRIMARY:
-                $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_download_attachements_with_inventory']);
+                $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_attachements_with_inventory']);
         
                 if (false == $product) {
                     return static::returnResponseOrDie($returnResult);
@@ -439,7 +439,7 @@ class DigitalDownload extends MyAppModel
             }
         }
         if (true == $validateAllowedWithInventory) {
-            if (applicationConstants::NO == $product['product_download_attachements_with_inventory']) {
+            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
                 return static::returnResponseOrDie($returnResult);
             }
         }
@@ -466,7 +466,7 @@ class DigitalDownload extends MyAppModel
             static::returnResponseOrDie();
         }
 
-        if (1 == $product['product_download_attachements_with_inventory']) {
+        if (1 == $product['product_attachements_with_inventory']) {
             return true;
         }
         
@@ -482,7 +482,7 @@ class DigitalDownload extends MyAppModel
             static::returnResponseOrDie();
         }
 
-        if (1 == $product['product_download_attachements_with_inventory']) {
+        if (1 == $product['product_attachements_with_inventory']) {
             return true;
         }
         

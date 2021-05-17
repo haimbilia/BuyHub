@@ -256,14 +256,14 @@ class DigitalDownloadSearch extends SearchBase
             $optionComb = '0';
         }
 
-        $product = Product::getAttributesById($selProdData['selprod_product_id'], ['product_download_attachements_with_inventory']);
+        $product = Product::getAttributesById($selProdData['selprod_product_id'], ['product_attachements_with_inventory']);
         if (false === $product) {
             return [];
         }
 
         $recordId = $selProdId;
         $productType = Product::CATALOG_TYPE_INVENTORY;
-        if (0 == $product['product_download_attachements_with_inventory']) {
+        if (0 == $product['product_attachements_with_inventory']) {
             $recordId = $selProdData['selprod_product_id'];
             $productType = Product::CATALOG_TYPE_PRIMARY;
         }
@@ -294,7 +294,7 @@ class DigitalDownloadSearch extends SearchBase
             $optionComb = '0';
         }
 
-        $product = Product::getAttributesById($selProdData['selprod_product_id'], ['product_download_attachements_with_inventory']);
+        $product = Product::getAttributesById($selProdData['selprod_product_id'], ['product_attachements_with_inventory']);
 
         if (false === $product) {
             return [];
@@ -302,7 +302,7 @@ class DigitalDownloadSearch extends SearchBase
 
         $recordId = $selProdId;
         $productType = Product::CATALOG_TYPE_INVENTORY;
-        if (0 == $product['product_download_attachements_with_inventory']) {
+        if (0 == $product['product_attachements_with_inventory']) {
             $recordId = $selProdData['selprod_product_id'];
             $productType = Product::CATALOG_TYPE_PRIMARY;
         }

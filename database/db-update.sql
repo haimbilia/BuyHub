@@ -306,7 +306,7 @@ UPDATE `tbl_configurations` SET `conf_val` = '<table align=\"center\" cellpaddin
 UPDATE `tbl_seller_packages` SET `spackage_type` = '2' WHERE `tbl_seller_packages`.`spackage_id` = 4;
 
 -- --- task_84719_Preview_module_for_digital_files -- ---
-ALTER TABLE `tbl_products` ADD `product_download_attachements_with_inventory` TINYINT(1) NOT NULL DEFAULT '0' AFTER `product_type`;
+ALTER TABLE `tbl_products` ADD `product_attachements_with_inventory` TINYINT(1) NOT NULL DEFAULT '0' AFTER `product_type`;
 
 --
 -- Table structure for table `tbl_product_digital_data_relation`

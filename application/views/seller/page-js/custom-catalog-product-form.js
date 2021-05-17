@@ -914,7 +914,7 @@ $(document).on('change', '.language-js', function () {
             hideShippingTab(t.productType, t.productTypeDigital);
 
             if(t.productType == PRODUCT_TYPE_DIGITAL){
-                if ($("select[name='product_download_attachements_with_inventory']").val() == 1) {
+                if ($("select[name='product_attachements_with_inventory']").val() == 1) {
                     hideDownloadTab();
                 } else {
                     showDownloadTab();

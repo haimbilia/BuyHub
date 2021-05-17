@@ -1034,7 +1034,7 @@ trait CustomCatalogProducts
             if (!empty($productReqContent)) {
                 $productData = json_decode($productReqContent, true);
                 $productType = array_key_exists('product_type', $productData) ? $productData['product_type'] : 0;
-                $attachDownloadsWithInv = array_key_exists('product_download_attachements_with_inventory', $productData) ? $productData['product_download_attachements_with_inventory'] : 0;
+                $attachDownloadsWithInv = array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : 0;
             }
         }
         $this->set('productType', $productType);

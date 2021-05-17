@@ -1435,10 +1435,10 @@ trait CustomProducts
         }
 
         // $productType = Product::getAttributesById($prodId, 'product_type');
-        $prodData = Product::getAttributesById($prodId, ['product_type', 'product_download_attachements_with_inventory']);
+        $prodData = Product::getAttributesById($prodId, ['product_type', 'product_attachements_with_inventory']);
 
         $productType = $prodData['product_type'];
-        $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+        $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
 
         $refererUrl =  CommonHelper::redirectUserReferer(true);
         $arr = array_values(array_filter(explode('/', $refererUrl)));
@@ -1538,7 +1538,7 @@ trait CustomProducts
 
             $productFrm->fill($prodData);
             $productType = $prodData['product_type'];
-            $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+            $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
         }
 
         unset($languages[$siteDefaultLangId]);

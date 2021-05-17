@@ -136,7 +136,7 @@ class CustomProductsController extends AdminBaseController
             $productTags = !(empty($row_data['product_tags'])) ? $row_data['product_tags'] : array();
 
             $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && 
-            applicationConstants::NO == $productData['product_download_attachements_with_inventory']);
+            applicationConstants::NO == $productData['product_attachements_with_inventory']);
             
             /*   */
             $customProductFrm = $this->getForm(0, $productData['product_type']);
@@ -1030,7 +1030,7 @@ class CustomProductsController extends AdminBaseController
             $productReqData = json_decode($productReqRow['preq_content'],true);
 
             $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
-            applicationConstants::NO == $productReqData['product_download_attachements_with_inventory']);
+            applicationConstants::NO == $productReqData['product_attachements_with_inventory']);
 
         }
         /* ] */

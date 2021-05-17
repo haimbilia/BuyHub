@@ -445,7 +445,7 @@ class Orders extends MyAppModel
 
                 /* Saving of digital download data[ */
                 
-                // $product['product_download_attachements_with_inventory'] = 1;
+                // $product['product_attachements_with_inventory'] = 1;
 
                 if ($product['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                     $db->deleteRecords(
@@ -466,7 +466,7 @@ class Orders extends MyAppModel
 
                     $recordId = $product['op_selprod_id'];
                     $productType = Product::CATALOG_TYPE_INVENTORY;
-                    if (0 == $product['product_download_attachements_with_inventory']) {
+                    if (0 == $product['product_attachements_with_inventory']) {
                         $recordId = $product['selprod_product_id'];
                         $productType = Product::CATALOG_TYPE_PRIMARY;
                     }

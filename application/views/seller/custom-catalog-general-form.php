@@ -64,14 +64,14 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     <div class="caption-wraper">
                         <label class="field_label">
                             <?php
-                            $fld = $productFrm->getField('product_download_attachements_with_inventory');
+                            $fld = $productFrm->getField('product_attachements_with_inventory');
                             echo $fld->getCaption();
                             ?>
                         </label>
                     </div>
                     <div class="field-wraper">
                         <div class="field_cover">
-                            <?php echo $productFrm->getFieldHtml('product_download_attachements_with_inventory'); ?>
+                            <?php echo $productFrm->getFieldHtml('product_attachements_with_inventory'); ?>
                         </div>
                     </div>
                 </div>

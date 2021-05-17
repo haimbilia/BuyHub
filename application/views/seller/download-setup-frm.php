@@ -206,7 +206,7 @@ $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
             $(".attach-links-js").show();
         }
     });
-    $("select[name='product_download_attachements_with_inventory']").change(function() {
+    $("select[name='product_attachements_with_inventory']").change(function() {
         if ($(this).val() == <?php echo applicationConstants::YES; ?>) {
             $(".others_frm_elem").hide();
         } else {
