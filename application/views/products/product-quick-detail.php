@@ -63,7 +63,7 @@
                                     </button>
                                     <?php if ($option['values']) { ?>
                                         <div class="dropdown-menu dropdown-menu-anim">
-                                            <ul class="nav nav-block">
+                                            <ul class="nav nav-block" data-simplebar="init" style="max-height:130px;">
                                                 <?php foreach ($option['values'] as $opVal) {
                                                     $isAvailable = true;
                                                     if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {

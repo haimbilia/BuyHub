@@ -119,6 +119,12 @@ Fixes:
     => 053365 -	While sharing shop page on whatsapp then meta image not displaying
     => 053276 - shipping is not changing on changing address during checkout
     => 053155 - Button labels are not changing as per language
+    => 053430 - While sending SMTP email code crashed in between if unable to send email
+    => 052088 - when product having multiple options then on quick view popup> dropdown is affecting popup
+    => 053466 - There is no deducted discount amount shown in the printed invoice of admin and seller panel even after the buyer has applied a discount coupon.
+    => 053465 - some issue with promotion
+    => 053442 - "When a registered user shares any information throught contact us form: - The email is recieved by the site owner, but when the site owner tries to reply the from email i,e user email is not getting fetched. " 
+    => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
 
 
 New Features:
