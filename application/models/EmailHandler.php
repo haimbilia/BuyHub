@@ -250,10 +250,14 @@ class EmailHandler extends FatModel
 
         $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId) . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
 
-        if(!is_array($extra_headers) && $extra_headers != ''){ 
+        if (!is_array($extra_headers) && $extra_headers != '') {
             $headers .= $extra_headers;
         }
-        $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL");
+
+        $replyTo = $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL", FatUtility::VAR_STRING, '');
+        if (!empty($replyTo)) {
+            $headers .= "\r\nReply-to: " . $replyTo;
+        }
 
         if (!empty($bcc)) {
             $bccEmails = implode(", ", array_keys($bcc));
@@ -545,15 +549,15 @@ class EmailHandler extends FatModel
     public function sendCatalogRequestStatusChangeNotification($langId, $d)
     {
         $tpl = 'seller_catalog_request_status_change';
-        
+
         $userObj = new User($d['seller_id']);
         $userInfo = $userObj->getSellerData($langId, array('user_id', 'ifnull(shop_name, shop_identifier) as shop_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
-               
-        $statusArr = Product::getApproveUnApproveArr($langId);        
-                
+
+        $statusArr = Product::getApproveUnApproveArr($langId);
+
         $vars = array(
-            '{shop_name}' => $userInfo['shop_name'],         
-            '{new_status}' => $statusArr[$d['status']], 
+            '{shop_name}' => $userInfo['shop_name'],
+            '{new_status}' => $statusArr[$d['status']],
             '{product_name}' => $d['product_name'],
         );
 
@@ -719,7 +723,7 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($to, $tpl, $langId, $vars, ['ReplyTo' => $d['email']])) {
             return false;
         }
-        $d['phone'] = isset($d['phone']) ? ValidateElement::formatDialCode($d['phone_dcode']). $d['phone'] : '';
+        $d['phone'] = isset($d['phone']) ? ValidateElement::formatDialCode($d['phone_dcode']) . $d['phone'] : '';
         $this->sendSms($tpl, $d['phone'], $vars, $langId);
         return true;
     }
@@ -1367,12 +1371,12 @@ class EmailHandler extends FatModel
         $url = '<a href="' . $url . '">' . Labels::getLabel('Msg_click_here', $langId) . '</a>';
 
         $statusArr = Transactions::getWithdrawlStatusArr($langId);
-        
+
         $tpl = new FatTemplate('', '');
         $tpl->set('siteLangId', $langId);
         $tpl->set('data', $withdrawalRequestData);
         $withdrawalDetailsTableFormatHtml = $tpl->render(false, false, '_partial/emails/withdrawal-request-details-email.php', true);
-        
+
         $arrReplacements = array(
             '{request_id}' => $formattedRequestValue,
             '{username}' => $withdrawalRequestData['user_username'],

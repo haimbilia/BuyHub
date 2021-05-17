@@ -78,9 +78,10 @@ class CommonHelper extends FatUtility
             self::$_currency_id,
             array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
         );
-        
+
         $langData = Language::getAttributesById(
-            self::$_lang_id,['language_country_code','language_code']
+            self::$_lang_id,
+            ['language_country_code', 'language_code']
         );
 
         self::$_lang_code = $langData['language_code'];
@@ -116,7 +117,7 @@ class CommonHelper extends FatUtility
     {
         return self::$_lang_code;
     }
-    
+
     public static function getLangCountryCode()
     {
         return self::$_lang_country_code;
@@ -392,8 +393,8 @@ class CommonHelper extends FatUtility
         if ($requestRow['op_commission_include_tax'] && $taxPerQty /* && FatApp::getConfig('CONF_COMMISSION_INCLUDING_TAX', FatUtility::VAR_INT, 0) */) {
             $commissionCostValue = $commissionCostValue + $taxPerQty;
         }
-
-        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost) {
+         
+        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0)) {
             $commissionCostValue = $commissionCostValue + $perUnitShippingCost;
         }
 

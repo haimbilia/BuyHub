@@ -1927,7 +1927,7 @@ class Orders extends MyAppModel
 
     public function getVendorAllowedUpdateOrderStatuses($fetchForDigitalProduct = false, $fetchForCOD = false, $fetchForPayPickup = false)
     {
-        $processingStatuses = array_merge(unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")), (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_merge(unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")), (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0), (array) FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0));
