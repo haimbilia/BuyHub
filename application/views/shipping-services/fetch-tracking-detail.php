@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage . '); ?>
 
 <ul class="timeline" id="timeline">
-    <?php if (!empty($trackingData) && array_key_exists('detail', $trackingData) && is_array($trackingData['detail'])) { ?>
+    <?php if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty(array_filter($trackingData['detail']))) { ?>
         <?php foreach ($trackingData['detail'] as $data) { ?>
             <li class="event" data-date="<?php echo FatDate::format($data['dateTime'], true); ?>">
                 <div>

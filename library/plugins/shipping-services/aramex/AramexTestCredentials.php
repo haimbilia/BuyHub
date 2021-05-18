@@ -16,25 +16,7 @@ $this->settings = [
 
 switch ($this->serviceRequest) {
     case self::REQUEST_SHIPPING:
-        $this->settings += [
-            'AccountCountryCode' => 'KW',
-            'AccountEntity' => 'KWI',
-            'AccountNumber' => '203615',
-            'AccountPin' => '664165',
-            'UserName' => 'aramex@dummyid.com',
-            'Password' => 'a62vf#hcLfMLa8y'
-        ];
-        break;
     case self::REQUEST_TRACKING:
-        $this->settings += [
-            'AccountCountryCode' => 'KW',
-            'AccountEntity' => 'KWI',
-            'AccountNumber' => '203615',
-            'AccountPin' => '664165',
-            'UserName' => 'aramex@dummyid.com',
-            'Password' => 'a62vf#hcLfMLa8y'
-        ];
-        break;
     case self::REQUEST_RATE:
         $this->settings += [
             'AccountCountryCode' => 'KW',

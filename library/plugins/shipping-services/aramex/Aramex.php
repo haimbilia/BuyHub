@@ -548,7 +548,7 @@ class Aramex extends ShippingServicesBase
 
         $trackingDetail = $this->getResponse();
         $description = $dateTime = $location = $comments = "";
-        if (!empty($trackingDetail)) {
+        if (!empty($trackingDetail) && array_key_exists('TrackingResults', $trackingDetail)) {
             $trackingResult = $trackingDetail['TrackingResults']['KeyValueOfstringArrayOfTrackingResultmFAkxlpY']['Value']['TrackingResult'];
             $description = $trackingResult['UpdateDescription'];
             $dateTime = $trackingResult['UpdateDateTime'];
