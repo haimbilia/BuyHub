@@ -11,4 +11,12 @@ $(document).ready(function () {
             setTimeout(function(){ location.reload(true); }, 2000);
         });
     };
+
+    fetchTrackingDetail = function (trackingId, opInvoiceId) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
+                $.facebox(res, 'medium-fb-width');
+            });
+        });
+    }
 })();

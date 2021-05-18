@@ -9,8 +9,8 @@ class Aramex extends ShippingServicesBase
 
     private const REQUEST_RATE = 1;
     private const REQUEST_SHIPPING = 2;
-    private const REQUEST_TRACKING = 3;
-    private const REQUEST_VALIDATE_ADDRESS = 4;
+    private const REQUEST_VALIDATE_ADDRESS = 3;
+    private const REQUEST_TRACKING = 4;
 
     private $resp;
     private $soapClient;
@@ -512,6 +512,43 @@ class Aramex extends ShippingServicesBase
         }
         FatApp::redirectUser($labelData['Shipments']['ProcessedShipment']['ShipmentLabel']['LabelURL']);
     }
+    
+    /**
+     * canFetchTrackingDetail
+     *
+     * @return bool
+     */
+    public function canFetchTrackingDetail(): bool
+    {
+        return true;
+    }
+    
+    /**
+     * fetchTrackingDetail
+     *
+     * @param  string $trackingId
+     * @param  string $orderInvoiceId
+     * @return void
+     */
+    public function fetchTrackingDetail(string $trackingId, string $orderInvoiceId)
+    {
+        $this->setServiceRequest(self::REQUEST_TRACKING);
+
+        $requestParam = [
+            'ClientInfo' => $this->getClientInfo(),
+            'Transaction' => [
+				'Reference1' => $orderInvoiceId
+            ],
+			'Shipments' => [$trackingId]
+        ];
+
+        if (false === $this->doRequest($requestParam)) {
+            // return [];
+        }
+
+        $detail = $this->getResponse();
+        CommonHelper::printArray($detail, true);
+    }
 
     /**
      * getResponse
@@ -544,6 +581,9 @@ class Aramex extends ShippingServicesBase
                     break;
                 case self::REQUEST_SHIPPING:
                     $resp = $soapClient->CreateShipments($requestParam);
+                    break;
+                case self::REQUEST_TRACKING:
+                    $resp = $soapClient->TrackShipments($requestParam);
                     break;
 
                 default:

@@ -31,8 +31,8 @@ switch ($this->serviceRequest) {
             'AccountEntity' => 'KWI',
             'AccountNumber' => '203615',
             'AccountPin' => '664165',
-            'UserName' => 'testingapi@aramex.com',
-            'Password' => 'R123456789$r'
+            'UserName' => 'yokart@fatbit.com',
+            'Password' => 'a62vf#hcLfMLa8y'
         ];
         break;
     case self::REQUEST_RATE:
