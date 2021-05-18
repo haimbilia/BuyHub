@@ -171,7 +171,7 @@ $(document).on('change','.selprodoption_optionvalue_id',function(){
                 }
                 if (i == varients.length) {
                     if(productType === PRODUCT_TYPE_DIGITAL){
-                        sellerProductDownloadFrm(t.product_id, 0);
+						sellerProductDownloadFrm(t.product_id, 0);
                         return;
                     }
                     setTimeout(function() {  location.reload(); }, 1000);
@@ -183,7 +183,7 @@ $(document).on('change','.selprodoption_optionvalue_id',function(){
             $.mbsmessage(counterString, false, 'alert--process alert'); 
         }
         if (i == (varients.length - 1)) {
-            setTimeout(function() { window.location.href = fcom.makeUrl('Seller', 'products'); }, 1000);
+            /* setTimeout(function() { window.location.href = fcom.makeUrl('Seller', 'products'); }, 1000); */
         }
 	};
 
@@ -346,6 +346,7 @@ $(document).on('click', '.tabs_002', function(){
 		var optionCombi = "";
 		if (0 < $("#frmDownload select[name='option_comb_id']").length) {
 			optionCombi = $("#frmDownload select[name='option_comb_id']").val();
+			selProdId = $("#frmDownload select[name='option_comb_id']").val();
 		}
 
 		if (optionCombi == '') {
@@ -372,6 +373,8 @@ $(document).on('click', '.tabs_002', function(){
 
 		if (optionCombi == '') {
 			data = data + '&option_comb_id=0';
+		}  else {
+			data = data + '&selprod_id=' + optionCombi;
 		}
 
 		fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function(t) {
@@ -409,6 +412,8 @@ $(document).on('click', '.tabs_002', function(){
 
 		if (optionCombi == '') {
 			data.append('option_comb_id', 0);
+		} else {
+			data.append('selprod_id', optionCombi);
 		}
 		
 		data.append('prod_ref_type', 1);

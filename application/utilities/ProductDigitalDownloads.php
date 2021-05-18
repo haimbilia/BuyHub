@@ -10,11 +10,17 @@ trait ProductDigitalDownloads
             Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
-        
-        $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, false, true);
-
         $productId = FatUtility::int($productId);
         $selProdId = FatUtility::int($selProdId);
+        
+        if (0 < $selProdId) {
+            $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, false, true);
+            $sellerProductRow = SellerProduct::getAttributesById($selProdId);
+            $productId = $sellerProductRow['selprod_product_id'];
+        } else {
+            $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, false, true);
+        }
+        
 
         $frm = DigitalDownload::getDownloadForm($this->siteLangId);
 

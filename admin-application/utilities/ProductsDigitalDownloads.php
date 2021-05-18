@@ -34,7 +34,7 @@ trait ProductsDigitalDownloads
         }
         $currentOption[$selProdId] = (array_key_exists($selProdId, $savedOptions)) ? $savedOptions[$selProdId] : '';
         $savedOptions = $currentOption;
-        
+
         $fld = $frm->getField('option_comb_id');
         if (1 > count($savedOptions)) {
             $frm->removeField($fld);

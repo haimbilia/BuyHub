@@ -5747,6 +5747,8 @@ class SellerController extends SellerBaseController
         $requstedProd = Product::CATALOG_TYPE_PRIMARY;
         $recordId = $prodId;
         
+        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+        
         if (0 < $selProdId) {
             $requstedProd = Product::CATALOG_TYPE_INVENTORY;
             $recordId = $selProdId;
@@ -5757,7 +5759,6 @@ class SellerController extends SellerBaseController
             }
         }
         
-        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
         if (Product::CATALOG_TYPE_INVENTORY == $requstedProd) {
             DigitalDownload::canDo($recordId, $requstedProd, 0, $this->siteLangId, false);
 

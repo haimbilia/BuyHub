@@ -1437,8 +1437,13 @@ trait CustomProducts
         // $productType = Product::getAttributesById($prodId, 'product_type');
         $prodData = Product::getAttributesById($prodId, ['product_type', 'product_attachements_with_inventory']);
 
-        $productType = $prodData['product_type'];
-        $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::NO;
+        
+        if ($prodData) {
+            $productType = $prodData['product_type'];
+            $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+        }
 
         $refererUrl =  CommonHelper::redirectUserReferer(true);
         $arr = array_values(array_filter(explode('/', $refererUrl)));
