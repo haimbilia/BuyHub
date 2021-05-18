@@ -238,7 +238,7 @@ class ConfigurationsController extends AdminBaseController
                 FatUtility::dieJsonError(Message::getHtml());
             }
         }
-        
+
         if (!$record->update($post)) {
             Message::addErrorMessage($record->getError());
             FatUtility::dieJsonError(Message::getHtml());
@@ -572,13 +572,13 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
                 $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Telephone', $this->adminLangId), 'CONF_SITE_PHONE', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                $phnFld->htmlAfterField='<small>'.Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+                $phnFld->htmlAfterField = '<small>' . Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</small>';
                 $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_format.', $this->adminLangId));
 
                 $frm->addHiddenField('', 'CONF_SITE_FAX_dcode');
                 $faxFld = $frm->addTextBox(Labels::getLabel('LBL_Fax', $this->adminLangId), 'CONF_SITE_FAX', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                $faxFld->htmlAfterField='<small>'.Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</small>';
+                $faxFld->htmlAfterField = '<small>' . Labels::getLabel('LBL_e.g.', $this->adminLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</small>';
                 $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_format.', $this->adminLangId));
 
                 $cpagesArr = ContentPage::getPagesForSelectBox($this->adminLangId);
@@ -944,6 +944,7 @@ class ConfigurationsController extends AdminBaseController
                     ''
                 );
 
+
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("LBL_Default_Paid_Order_Status", $this->adminLangId),
                     'CONF_DEFAULT_PAID_ORDER_STATUS',
@@ -953,6 +954,16 @@ class ConfigurationsController extends AdminBaseController
                     ''
                 );
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_default_child_order_status_when_an_order_is_marked_Paid.", $this->adminLangId) . "</small>";
+
+                $fld = $frm->addSelectBox(
+                    Labels::getLabel("LBL_Default_InProcess_Order_Status", $this->adminLangId),
+                    'CONF_DEFAULT_INPROCESS_ORDER_STATUS',
+                    $orderStatusArr,
+                    false,
+                    array(),
+                    ''
+                );
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_default_in-process_order_status", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("LBL_Default_Shipping_Order_Status", $this->adminLangId),
@@ -1537,7 +1548,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->requirements()->setInt();
                 break;
             case Configurations::FORM_PPC:
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId), 'CONF_PPC_MIN_WALLET_BALANCE');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId), 'CONF_PPC_MIN_WALLET_BALANCE');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Minimum_wallet_balance_to_start_promotion", $this->adminLangId) . '</small>';
 
                 /* $fld = $frm->addTextBox( Labels::getLabel('LBL_Wallet_Balance_Alert',$this->adminLangId), 'CONF_PPC_WALLET_BALANCE_ALERT' );
@@ -1546,13 +1557,16 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Days_Interval_to_Charge_Wallet', $this->adminLangId), 'CONF_PPC_WALLET_CHARGE_DAYS_INTERVAL');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Days_Interval_to_Charge_Wallet", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(product)', $this->adminLangId), 'CONF_CPC_PRODUCT');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(product)', $this->adminLangId), 'CONF_CPC_PRODUCT');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_Product", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(shop)', $this->adminLangId), 'CONF_CPC_SHOP');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(shop)', $this->adminLangId), 'CONF_CPC_SHOP');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_shop", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(slide)', $this->adminLangId), 'CONF_CPC_SLIDES');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(slide)', $this->adminLangId), 'CONF_CPC_SLIDES');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_slide", $this->adminLangId) . '</small>';
 
                 /* $fld = $frm->addTextBox( Labels::getLabel('LBL_Cost_Per_Click_(banner)',$this->adminLangId), 'CONF_CPC_BANNER' );
@@ -1783,7 +1797,7 @@ class ConfigurationsController extends AdminBaseController
                     $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeSocialFeedImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="social_feed_image" id="social_feed_image" data-min_width = "160" data-min_height = "240" data-file_type=' . AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE . ' value="Upload file"><small>'.Labels::getLabel('LBL_Dimensions', $this->adminLangId).' 160*240</small></div>';
+                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="social_feed_image" id="social_feed_image" data-min_width = "160" data-min_height = "240" data-file_type=' . AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->adminLangId) . ' 160*240</small></div>';
 
 
 
@@ -1817,7 +1831,7 @@ class ConfigurationsController extends AdminBaseController
                     $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeWatermarkImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="watermark_image" id="watermark_image" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_WATERMARK_IMAGE . ' value="Upload file"><small>'.Labels::getLabel('LBL_Dimensions', $this->adminLangId).' 168*37</small></div>';
+                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="watermark_image" id="watermark_image" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_WATERMARK_IMAGE . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->adminLangId) . ' 168*37</small></div>';
 
 
                 $ul->htmlAfterField .= '<div class="col-md-4  mb-5"> <h3>' . Labels::getLabel('LBL_Select_Apple_Touch_Icon', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
@@ -1841,7 +1855,7 @@ class ConfigurationsController extends AdminBaseController
                     $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeMobileLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="mobile_logo" id="mobile_logo" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_MOBILE_LOGO . ' value="Upload file"><small>'.Labels::getLabel('LBL_Dimensions', $this->adminLangId).' 168*37</small></div>';
+                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="mobile_logo" id="mobile_logo" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_MOBILE_LOGO . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->adminLangId) . ' 168*37</small></div>';
                 //
                 // $ul->htmlAfterField .= '<li>'.Labels::getLabel('LBL_Select_Categories_Background_Image', $this->adminLangId) . '<div class="logoWrap"><div class="uploaded--image">';
                 //
@@ -1892,7 +1906,7 @@ class ConfigurationsController extends AdminBaseController
                     $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="purchase_discount" id="purchase_discount" data-min_width = "120" data-min_height = "120" data-file_type=' . AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE . ' value="Upload file"><small>'.Labels::getLabel('LBL_Dimensions', $this->adminLangId).' 120*120</small></div>';
+                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="purchase_discount" id="purchase_discount" data-min_width = "120" data-min_height = "120" data-file_type=' . AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->adminLangId) . ' 120*120</small></div>';
 
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <h3>' . Labels::getLabel('LBL_SELECT_META_IMAGE', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 

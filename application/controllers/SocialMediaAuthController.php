@@ -69,7 +69,7 @@ class SocialMediaAuthController extends PluginBaseController
             $this->_template->render(true, true, 'guest-user/login.php');
         }
         
-        if (empty($email) && empty($userInfo['user_phone'])) {
+        if (empty($userInfo['credential_email']) && empty($userInfo['user_phone'])) {
             if (true == SmsArchive::canSendSms()) {
                 $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
             } else {

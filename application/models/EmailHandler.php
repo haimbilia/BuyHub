@@ -177,7 +177,7 @@ class EmailHandler extends FatModel
             $headers .= $extra_headers;
         }
 
-        $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");
+        $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL");
 
 
         if (!FatApp::getDb()->insertFromArray(
@@ -205,29 +205,38 @@ class EmailHandler extends FatModel
         $password = isset($smtp_arr["password"]) ? $smtp_arr["password"] : FatApp::getConfig("CONF_SMTP_PASSWORD");
         $secure = isset($smtp_arr["secure"]) ? $smtp_arr["secure"] : FatApp::getConfig("CONF_SMTP_SECURE");
         $mail = new PHPMailer(true);
-        $mail->CharSet = 'UTF-8';
-        $mail->IsSMTP();
-        $mail->SMTPAuth = true;
-        $mail->IsHTML(true);
-        $mail->Host = $host;
-        $mail->Port = $port;
-        $mail->Username = $username;
-        $mail->Password = $password;
-        $mail->SMTPSecure = $secure;
-        $mail->SMTPDebug = false;
-        $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
-        $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
-        $mail->addAddress($toAdress);
-        $mail->Subject = '=?UTF-8?B?' . base64_encode($Subject) . '?=';
-        $mail->MsgHTML($body);
+        try {
+            $mail->CharSet = 'UTF-8';
+            $mail->IsSMTP();
+            $mail->SMTPAuth = true;
+            $mail->IsHTML(true);
+            $mail->Host = $host;
+            $mail->Port = $port;
+            $mail->Username = $username;
+            $mail->Password = $password;
+            $mail->SMTPSecure = $secure;
+            $mail->SMTPDebug = false;
+            $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
+            $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
+            $mail->AddReplyTo($extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL"));
+            $mail->addAddress($toAdress);
+            $mail->Subject = '=?UTF-8?B?' . base64_encode($Subject) . '?=';
+            $mail->MsgHTML($body);
 
-        if (!empty($bcc)) {
-            foreach ($bcc as $email => $name) {
-                $mail->AddBCC($email, $name);
+            if (!empty($bcc)) {
+                foreach ($bcc as $email => $name) {
+                    $mail->AddBCC($email, $name);
+                }
             }
-        }
 
-        if (!$mail->send()) {
+            if (!$mail->send()) {
+                return false;
+            }
+        } catch (phpmailerException $e) {
+            // $e->errorMessage();
+            return false;
+        } catch (Exception $e) {
+            // $e->getMessage();
             return false;
         }
         return true;
@@ -241,11 +250,14 @@ class EmailHandler extends FatModel
 
         $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId) . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
 
-        if ($extra_headers != '') {
+        if (!is_array($extra_headers) && $extra_headers != '') {
             $headers .= $extra_headers;
         }
 
-        $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");
+        $replyTo = $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL", FatUtility::VAR_STRING, '');
+        if (!empty($replyTo)) {
+            $headers .= "\r\nReply-to: " . $replyTo;
+        }
 
         if (!empty($bcc)) {
             $bccEmails = implode(", ", array_keys($bcc));
@@ -538,28 +550,25 @@ class EmailHandler extends FatModel
     {
         $tpl = 'seller_catalog_request_status_change';
 
-        $catalogRequestComments = '';
-        if ($d['scatrequest_comments'] != '') {
-            $catalogRequestComments = nl2br($d['scatrequest_comments']);
-        }
+        $userObj = new User($d['seller_id']);
+        $userInfo = $userObj->getSellerData($langId, array('user_id', 'ifnull(shop_name, shop_identifier) as shop_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
 
-        $statusArr = User::getCatalogReqStatusArr($langId);
+        $statusArr = Product::getApproveUnApproveArr($langId);
 
         $vars = array(
-            '{shop_name}' => $d['shop_name'],
-            '{reference_number}' => $d['scatrequest_reference'],
-            '{new_request_status}' => $statusArr[$d['scatrequest_status']],
-            '{request_comments}' => $catalogRequestComments,
+            '{shop_name}' => $userInfo['shop_name'],
+            '{new_status}' => $statusArr[$d['status']],
+            '{product_name}' => $d['product_name'],
         );
 
-        $receipentsInfo = User::getSubUsersReceipents($d['user_id'], 'canViewProducts');
+        $receipentsInfo = User::getSubUsersReceipents($userInfo['user_id'], 'canViewProducts');
         $bccEmails = $receipentsInfo['email'];
-        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars, '', 0, array(), $bccEmails)) {
+        if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars, '', 0, array(), $bccEmails)) {
             return false;
         }
 
         $phoneNumbers = $receipentsInfo['phone'];
-        $phoneNumbers[] = !empty($d['user_phone']) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
+        $phoneNumbers[] = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         foreach ($phoneNumbers as $phone) {
             $this->sendSms($tpl, $phone, $vars, $langId);
         }
@@ -711,10 +720,10 @@ class EmailHandler extends FatModel
             '{phone_number}' => ValidateElement::formatDialCode($d['phone_dcode']) . $d['phone'],
             '{message}' => nl2br($d['message'])
         );
-        if (!self::sendMailTpl($to, $tpl, $langId, $vars)) {
+        if (!self::sendMailTpl($to, $tpl, $langId, $vars, ['ReplyTo' => $d['email']])) {
             return false;
         }
-        $d['phone'] = isset($d['phone']) ? ValidateElement::formatDialCode($d['phone_dcode']). $d['phone'] : '';
+        $d['phone'] = isset($d['phone']) ? ValidateElement::formatDialCode($d['phone_dcode']) . $d['phone'] : '';
         $this->sendSms($tpl, $d['phone'], $vars, $langId);
         return true;
     }
@@ -1280,7 +1289,7 @@ class EmailHandler extends FatModel
             '{error_message}' => $data['op_invoerror_messageice_number']
         );
 
-        if (self::sendMailTpl($adminEmail, $tpl, $langId, $vars)) {
+        if (self::sendMailTpl($adminEmail, $tpl, $langId, $arrReplacements)) {
             return true;
         }
         return false;
@@ -1362,12 +1371,12 @@ class EmailHandler extends FatModel
         $url = '<a href="' . $url . '">' . Labels::getLabel('Msg_click_here', $langId) . '</a>';
 
         $statusArr = Transactions::getWithdrawlStatusArr($langId);
-        
+
         $tpl = new FatTemplate('', '');
         $tpl->set('siteLangId', $langId);
         $tpl->set('data', $withdrawalRequestData);
         $withdrawalDetailsTableFormatHtml = $tpl->render(false, false, '_partial/emails/withdrawal-request-details-email.php', true);
-        
+
         $arrReplacements = array(
             '{request_id}' => $formattedRequestValue,
             '{username}' => $withdrawalRequestData['user_username'],
@@ -2673,7 +2682,7 @@ class EmailHandler extends FatModel
         }
 
         try {
-            $email = EmailHandler::sendSmtpEmail(FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $subject, $body, '', $tpl, $langId, '', $smtpArr);
+            $email = EmailHandler::sendSmtpEmail(FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $subject, $body, '', $tpl, $langId);
 
             return true;
         } catch (Exception $e) {
@@ -2731,7 +2740,7 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars)) {
             return false;
         }
-        $phone = !empty($row['user_phone']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) . $row['user_phone'] : '';
+        $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         (new self())->sendSms($tpl, $phone, $vars, $langId);
         return true;
     }

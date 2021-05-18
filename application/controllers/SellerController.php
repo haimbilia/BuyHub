@@ -3995,7 +3995,7 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmCustomProduct');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Shipping_country', $this->siteLangId), 'shipping_country');
 
-        $shipProfileArr = ShippingProfile::getProfileArr($this->userParentId, true, true);
+        $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, $this->userParentId, true, true);
         $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [])->requirements()->setRequired();
 
         /* if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
@@ -5304,7 +5304,7 @@ class SellerController extends SellerBaseController
         }
 
         if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
-            $shipProfileArr = ShippingProfile::getProfileArr($userId, true, true);
+            $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, $userId, true, true);
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr)->requirements()->setRequired();
         }
         if ($productType == Product::PRODUCT_TYPE_PHYSICAL) {

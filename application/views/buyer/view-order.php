@@ -82,7 +82,7 @@ if (!$print) { ?>
                                     <?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId); ?>">
                                     <i class="fas fa-arrow-left"></i>
                                 </a>
-                                <a target="_blank" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Buyer', 'viewInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Buyer', 'viewInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-brand btn-sm no-print" title="
+                                <a target="_blank" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Buyer', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-brand btn-sm no-print" title="
                                     <?php echo Labels::getLabel('LBL_Print', $siteLangId); ?>">
                                     <i class="fas fa-print"></i>
                                 </a>

@@ -28,6 +28,7 @@ class MyAppController extends FatController
     {
         $this->siteLangId = CommonHelper::getLangId();
         $this->siteLangCode = CommonHelper::getLangCode();
+        $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
         $this->siteCurrencyId = CommonHelper::getCurrencyId();
 
         $this->app_user['temp_user_id'] = 0;
@@ -161,6 +162,16 @@ class MyAppController extends FatController
                 'changePickup' => Labels::getLabel('LBL_CHANGE_PICKUP', $this->siteLangId),
                 'selectProduct' => Labels::getLabel('LBL_PLEASE_SELECT_PRODUCT', $this->siteLangId),
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
+                'waitingForResponse' => Labels::getLabel('MSG_WAITING_FOR_PAYMENT_RESPONSE..', $this->siteLangId),
+                'updatingRecord' => Labels::getLabel('MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', $this->siteLangId),
+                'requiredFields' => Labels::getLabel('MSG_PLEASE_FILL_REQUIRED_FIELDS', $this->siteLangId),
+                'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->siteLangId),
+                'typeToSearch' => Labels::getLabel('MSG_TYPE_TO_SEARCH..', $this->siteLangId),
+                'resendOtp' => Labels::getLabel('LBL_RESEND_OTP?', $this->siteLangId),
+                'redirecting' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
+                'uploadImageLimit' => Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', $this->siteLangId),
+                'deleteAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
+                'unlinkAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
@@ -184,6 +195,7 @@ class MyAppController extends FatController
 
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
+        $this->includeDatePickerLangJs();
 
         $this->set('isUserDashboard', false);
         $this->set('currencySymbolLeft', $currencySymbolLeft);
@@ -662,6 +674,43 @@ class MyAppController extends FatController
         $this->_template->addJs('js/product-search.js');
         $this->_template->addJs('js/ion.rangeSlider.js');
         $this->_template->addJs('js/listing-functions.js');
+    }
+    
+    public function includeDatePickerLangJs()
+    {
+        $langCode = strtolower($this->siteLangCode);
+        $langCountryCode = strtoupper($this->siteLangCountryCode);
+        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
+        if ($jsPath) {
+            if ($jsPath == 'notfound') {
+                return;
+            }
+            $this->_template->addJs($jsPath);
+            return;
+        } elseif ($jsPath == 'notfound') {
+            return;
+        }
+        $jsPath = 'js/jqueryui-i18n/datepicker-' . $langCode . '-' . $langCountryCode . '.js';
+        $filePath = CONF_APPLICATION_PATH . '/views/' . $jsPath;
+
+        $fileFound = false;
+        if (file_exists($filePath)) {
+            $fileFound = true;
+        }
+        if (false == $fileFound) {
+            $jsPath = 'js/jqueryui-i18n/datepicker-' . $langCode . '.js';
+            $filePath = CONF_APPLICATION_PATH . '/views/' . $jsPath;
+            if (file_exists($filePath)) {
+                $fileFound = true;
+            }
+        }
+
+        if (true == $fileFound) {
+            $this->_template->addJs($jsPath);
+        } else {
+            $jsPath = 'notfound';
+        }
+        FatCache::set('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, $jsPath, '.txt');
     }
 
     public function getAppTempUserId()

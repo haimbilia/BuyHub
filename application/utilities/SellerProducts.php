@@ -508,6 +508,15 @@ trait SellerProducts
         $this->deleteSelProdWithoutOptions($productId, $this->userParentId);
         $error = false;
         $selprod_id = 0;
+        
+        $prodAllowedLimit = -1;
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $prodAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed') - SellerProduct::getActiveCount($this->userParentId);
+            if(0 > $prodAllowedLimit ){
+               $prodAllowedLimit = 0; 
+            }
+        }
+        $productCount = 0; 
         foreach ($optionCombinations as $optionKey => $optionValue) {
             /* Check if product already added for this option [ */
             $selProdCode = $post['selprod_code'] . $optionKey;
@@ -528,14 +537,20 @@ trait SellerProducts
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionKey];
             $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
             $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey];
+            
+            if (-1 < $prodAllowedLimit && $prodAllowedLimit <= $productCount) {
+                $data_to_be_save['selprod_active'] = applicationConstants::INACTIVE;
+            }
 
             $sellerProdObj = new SellerProduct();
             $sellerProdObj->assignValues($data_to_be_save);
             if (!$sellerProdObj->save()) {
                 Message::addErrorMessage(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
-            }
+            }            
             $selprod_id = $sellerProdObj->getMainTableRecordId();
+            
+            $productCount++;                                             
 
             /* save options data, if any [ */
             $options = array();
@@ -2373,12 +2388,14 @@ trait SellerProducts
 
         $sellerProductData = SellerProduct::getAttributesById($selprodId, array('selprod_active'));
 
-        if (!$sellerProductData) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+        if (!$sellerProductData) {    
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
-
-        $status = ($sellerProductData['selprod_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+        
+        $status = ($sellerProductData['selprod_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;        
+        if ($status == applicationConstants::ACTIVE && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && SellerProduct::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed')) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_You_have_crossed_your_package_limit', $this->siteLangId), true);
+        }
 
         $this->updateSellerProductStatus($selprodId, $status);
 

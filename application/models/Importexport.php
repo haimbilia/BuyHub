@@ -1598,7 +1598,7 @@ class Importexport extends ImportexportCommon
             $weightUnitsArr = array_flip($weightUnitsArr);
         }
 
-        $shippingProfileArr = ShippingProfile::getProfileArr(0, true, true, true);
+        $shippingProfileArr = ShippingProfile::getProfileArr($langId, 0, true, true, true);
         $adminDefaultShipProfileId =  array_key_first($shippingProfileArr);
         $coloumArr = $this->getProductsCatalogColoumArr($langId, $sellerId, $this->actionType);
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
@@ -2461,6 +2461,7 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'LEFT OUTER JOIN', Product::DB_PRODUCT_SPECIFICATION_PREFIX . 'id = ' . Product::DB_PRODUCT_LANG_SPECIFICATION_PREFIX . 'prodspec_id');
         $srch->addMultipleFields(array('prodspec_id', 'prodspeclang_lang_id', 'prodspec_name', 'prodspec_value', 'prodspec_group', 'product_id', 'product_identifier'));
         $srch->joinTable(Language::DB_TBL, 'INNER JOIN', 'language_id = prodspeclang_lang_id');
+        $srch->addCondition(Product::DB_PRODUCT_LANG_SPECIFICATION_PREFIX . 'lang_id', '=', $langId);
         $srch->doNotCalculateRecords();
         switch ($this->actionType) {
             case self::ACTION_ADMIN_PRODUCTS:
@@ -2989,6 +2990,11 @@ class Importexport extends ImportexportCommon
 
         $errInSheet = false;
         $breakForeach = false;
+        
+        if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $allowed_images = SellerPackages::getAllowedLimit($userId, $langId, 'ossubs_products_allowed');
+            $optionLangCombinationImgCount = [];
+        }
         while (($row = $this->getFileRow($csvFilePointer)) !== false) {
             $rowIndex++;
 
@@ -3114,7 +3120,16 @@ class Importexport extends ImportexportCommon
                 }
             }
 
-            if (false === $errorInRow && count($prodCatalogMediaArr)) {
+            if (false === $errorInRow && count($prodCatalogMediaArr)) {                
+                if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                    $combinationkey = $prodCatalogMediaArr['afile_record_id'] . "-" . $prodCatalogMediaArr['afile_lang_id'] . "-" . $prodCatalogMediaArr['afile_record_subid'];
+                    $optionLangCombinationImgCount[$combinationkey] = isset($optionLangCombinationImgCount[$combinationkey]) ? $optionLangCombinationImgCount[$combinationkey] + 1 : 1;
+                    if ($optionLangCombinationImgCount[$combinationkey] > $allowed_images) {
+                        $errMsg = Labels::getLabel("MSG_You_have_crossed_your_package_limit.", $langId);
+                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, $errMsg));
+                        continue;
+                    }
+                }
                 unset($prodCatalogMediaArr['option_identifier']);
                 unset($prodCatalogMediaArr['option_id']);
                 $fileType = AttachedFile::FILETYPE_PRODUCT_IMAGE;
@@ -4935,7 +4950,8 @@ class Importexport extends ImportexportCommon
                     }
                     if (in_array($columnKey, array('optionvalue_id', 'optionvalue_identifier'))) {
                         if ('optionvalue_id' == $columnKey) {
-                            $optionValueData = OptionValue::getAttributesById($colValue, array('optionvalue_id'));
+                            $optionValueData = OptionValue::getAttributesById($colValue, array('optionvalue_id', 'optionvalue_identifier'));
+                            $optionvalue_identifier = $optionValueData['optionvalue_identifier'];
                         } else {
                             $optionvalue_identifier = $colValue;
                         }

@@ -422,7 +422,11 @@ class StripeConnectPayController extends PaymentController
     public function distribute()
     {
         if (false === $this->stripeConnect->init()) {
-            return;
+            $error = [
+                'msg' => $this->stripeConnect->getError()
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), json_encode($error));
+            CommonHelper::printArray($error, true);
         }
 
         $payloadStr = @file_get_contents('php://input');
@@ -434,7 +438,7 @@ class StripeConnectPayController extends PaymentController
                 'response' => $payload,
             ];
             TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), json_encode($error));
-            return;
+            CommonHelper::printArray($error, true);
         }
         
         $orderId = isset($payload['data']['object']['metadata']['order_id']) ? $payload['data']['object']['metadata']['order_id'] : '';
@@ -449,7 +453,7 @@ class StripeConnectPayController extends PaymentController
                 'response' => $payload,
             ];
             TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $recordId, json_encode($error));
-            return;
+            CommonHelper::printArray($error, true);
         }
 
         $paymentIntendId = isset($payload['data']['object']['id']) ? $payload['data']['object']['id'] : '';
@@ -459,7 +463,7 @@ class StripeConnectPayController extends PaymentController
                 'response' => $payload,
             ];
             TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-            return;
+            CommonHelper::printArray($error, true);
         }
 
         $this->orderId = $orderId;
@@ -470,7 +474,7 @@ class StripeConnectPayController extends PaymentController
                 'response' => $payload,
             ];
             TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-            return;
+            CommonHelper::printArray($error, true);
         }
 
         $chargeResponse = isset($payload['data']['object']['charges']['data']) ? current($payload['data']['object']['charges']['data']) : [];
@@ -480,7 +484,7 @@ class StripeConnectPayController extends PaymentController
                 'response' => $payload,
             ];
             TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-            return;
+            CommonHelper::printArray($error, true);
         }
 
         $chargeId = $chargeResponse['id'];
@@ -556,6 +560,11 @@ class StripeConnectPayController extends PaymentController
                 $resp = $this->stripeConnect->getResponse();
 
                 if (empty($resp->id)) {
+                    $error = [
+                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER', $this->siteLangId),
+                        'response' => $resp,
+                    ];
+                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
                     continue;
                 }
 
@@ -580,11 +589,21 @@ class StripeConnectPayController extends PaymentController
                 $charge['description'] = $discountComments;
                 $charge['metadata']['source_transaction'] = $chargeId;
                 if (false === $this->stripeConnect->doTransfer($charge)) {
+                    $error = [
+                        'msg' => $this->stripeConnect->getError(),
+                        'response' => $this->stripeConnect->getResponse(),
+                    ];
+                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
                     continue;
                 }
 
                 $resp = $this->stripeConnect->getResponse();
                 if (empty($resp->id)) {
+                    $error = [
+                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER_PENDING_AMOUNT', $this->siteLangId),
+                        'response' => $resp,
+                    ];
+                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
                     continue;
                 }
 

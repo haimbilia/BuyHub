@@ -491,7 +491,7 @@ trait CustomProducts
 
         $productOptionId = ($option_id == 0) ? -1 : $option_id;
 
-        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $productOptionId, $this->siteLangId, true, '', $allowed_images);
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $productOptionId, $lang_id, false, '', $allowed_images);
         if ($images) {
             $productImagesArr += $images;
         }
@@ -2061,7 +2061,7 @@ trait CustomProducts
         $shipProProdData = [];
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
             $shipBy = 0;
-            $shippingProfile = ShippingProfile::getProfileArr(0, true, true, true);
+            $shippingProfile = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true, true);
             $shippingProfileId =  array_key_first($shippingProfile);
 
             $isShippingProfileLinked = ShippingProfileProduct::isShippingProfileLinked($productId);

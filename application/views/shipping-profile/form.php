@@ -31,7 +31,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                     <div class="card">
                         <div class="card-body pt-4 pl-4 pr-4 pb-4">
                             <?php echo $frm->getFormTag();
-                            $pNameFld = $frm->getField('shipprofile_name');
+                            $pNameFld = $frm->getField('shipprofile_name['.$siteDefaultLangId.']');
                             $pNameFld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Customers_won't_see_this", $siteLangId) . "</span>";
                             $pNameFld->addFieldTagAttribute('class', 'form-control');
                             ?>
@@ -39,12 +39,15 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                                 <div class="col-md-8">
                                     <div class="form-group mb-0">
                                         <?php
+                                        /*
                                         if (!empty($profileData) && $profileData['shipprofile_default'] == 1) {
                                             $pNameFld->addFieldTagAttribute('readonly', 'true');
                                             $pNameFld->addFieldTagAttribute('disabled', 'true');
                                         }
+                                         * 
+                                         */
 
-                                        echo $frm->getFieldHtml('shipprofile_name'); ?>
+                                        echo $pNameFld->getHtml(); ?>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -52,14 +55,64 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                                         <?php
                                         echo $frm->getFieldHtml('shipprofile_id');
                                         echo $frm->getFieldHtml('shipprofile_user_id');
+                                        echo $frm->getFieldHtml('btn_submit');
+                                        /*
                                         if (empty($profileData) || ((isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1))) {
                                             echo $frm->getFieldHtml('btn_submit');
                                         }
+                                         * 
+                                         */
 
                                         ?>
                                     </div>
                                 </div>
                             </div>
+                             <?php 
+                                if (!empty($languages)) {
+                                ?>
+                                <div class="accordion my-4" id="specification-accordion">
+                                    <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                        <span>
+                                            <?php                                          
+                                            echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                                        </span>
+                                    </h6>                                                  
+                                            <div id="collapse-1" class="collapse collapse-js" aria-labelledby="headingOne" data-parent="#specification-accordion">
+                                                <div class="p-4 mb-4 bg-gray rounded">                                 
+                                                <div class="row">
+                                                    <?php
+                                                    foreach ($languages as $langId => $data) {
+                                                        if ($siteDefaultLangId == $langId) {
+                                                            continue;
+                                                        }
+                                                        $layout = Language::getLayoutDirection($langId);
+                                                        ?>
+                                                        <div class="col-md-6" dir="<?php echo $layout; ?>">
+                                                            <div class="field-set">
+                                                                <div class="caption-wraper">
+                                                                    <label class="field_label">
+                                                                    <?php $fld = $frm->getField('shipprofile_name[' . $langId . ']');
+                                                                    echo $fld->getCaption();
+                                                                    ?>                       
+                                                                    </label>
+                                                                </div>
+                                                                <div class="field-wraper">
+                                                                    <div class="field_cover">
+                                                                        <?php echo $fld->getHtml(); ?>                         
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>                      
+                                                    <?php } ?>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                                }
+                                ?>
                             </form>
                             <?php echo $frm->getExternalJs(); ?>
 
