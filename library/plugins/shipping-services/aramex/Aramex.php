@@ -528,9 +528,9 @@ class Aramex extends ShippingServicesBase
      *
      * @param  string $trackingId
      * @param  string $orderInvoiceId
-     * @return void
+     * @return array
      */
-    public function fetchTrackingDetail(string $trackingId, string $orderInvoiceId)
+    public function fetchTrackingDetail(string $trackingId, string $orderInvoiceId): array
     {
         $this->setServiceRequest(self::REQUEST_TRACKING);
 
@@ -543,11 +543,30 @@ class Aramex extends ShippingServicesBase
         ];
 
         if (false === $this->doRequest($requestParam)) {
-            // return [];
+            return [];
         }
 
-        $detail = $this->getResponse();
-        CommonHelper::printArray($detail, true);
+        $trackingDetail = $this->getResponse();
+        $description = $dateTime = $location = $comments = "";
+        if (!empty($trackingDetail)) {
+            $trackingResult = $trackingDetail['TrackingResults']['KeyValueOfstringArrayOfTrackingResultmFAkxlpY']['Value']['TrackingResult'];
+            $description = $trackingResult['UpdateDescription'];
+            $dateTime = $trackingResult['UpdateDateTime'];
+            $location = $trackingResult['UpdateLocation'];
+            $comments = $trackingResult['Comments'];
+        }
+
+        return [
+            'detail' => [
+                [
+                    'description' => $description,
+                    'dateTime' => $dateTime,
+                    'location' => $location,
+                    'comments' => $comments
+                ]
+            ],
+            'response' => $trackingDetail,
+        ];
     }
 
     /**

@@ -88,6 +88,14 @@ $(document).ready(function () {
         $('.courierBlk--js').addClass('d-none');
         $('.courierFld--js').attr('data-fatreq', '{"required": false}');
     }
+
+    fetchTrackingDetail = function (trackingId, opInvoiceId) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
+                $.facebox(res, 'medium-fb-width');
+            });
+        });
+    }
 })();
 
 function pageRedirect(op_id) {

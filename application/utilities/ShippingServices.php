@@ -359,4 +359,21 @@ trait ShippingServices
             LibHelper::dieJsonError($opObj->getError());
         }
     }
+
+    
+    /**
+     * fetchTrackingDetail
+     *
+     * @param  string $trackingId
+     * @param  string $opInvoiceId
+     * @return void
+     */
+    public function fetchTrackingDetail(string $trackingId, string $opInvoiceId)
+    {
+        $this->init();
+
+        $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $opInvoiceId);
+        $this->set('trackingData', $trackingData);
+        $this->_template->render(false,false);
+    }
 }

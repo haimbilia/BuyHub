@@ -16,19 +16,4 @@ class ShippingServicesController extends SellerBaseController
         $this->langId = $this->siteLangId;
         $this->init();
     }
-    
-    /**
-     * fetchTrackingDetail
-     *
-     * @param  string $trackingId
-     * @param  string $opInvoiceId
-     * @return void
-     */
-    public function fetchTrackingDetail(string $trackingId, string $opInvoiceId)
-    {
-        $this->init();
-
-        $trackingData = $this->shippingService->fetchTrackingDetail($trackingId, $opInvoiceId);
-        CommonHelper::printArray($trackingData);
-    }
 }

@@ -462,10 +462,14 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                                 echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
                                                 if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                     if (empty($row['oshistory_courier'])) {
-                                                        $str = !empty($orderDetail['opship_tracking_number']) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . ' ( ' . $orderDetail['opship_tracking_number'] . ' )' : '';
-                                                        if (empty($orderDetail['opship_tracking_url']) && !empty($orderDetail['opship_tracking_number'])) {
+                                                        $trackingNumber = $orderDetail['opship_tracking_number'];
+                                                        if (true === Shipping::canFetchTrackingDetail()) {
+                                                            $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $orderDetail['op_invoice_number'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . $trackingNumber . '</a>';
+                                                        }
+                                                        $str = !empty($trackingNumber) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . ' ( ' . $trackingNumber . ' )' : '';
+                                                        if (empty($orderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
                                                             $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $orderDetail["opshipping_label"]) . "</em>";
-                                                        } elseif (!empty($orderDetail['opship_tracking_url']) && !empty($orderDetail['opship_tracking_number'])) {
+                                                        } elseif (!empty($orderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
                                                             $trackingUrls = (array) explode(', ', $orderDetail['opship_tracking_url']);
                                                             $str .= '<br>';
                                                             foreach ($trackingUrls as $url) {

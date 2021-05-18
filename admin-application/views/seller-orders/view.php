@@ -556,10 +556,14 @@ if (!empty($order['opship_tracking_url'])) {
                                             echo ' ' . (($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($adminLangId, '')) . ' ';
                                             if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                 if (empty($row['oshistory_courier'])) {
-                                                    $str = !empty($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $adminLangId) . ' ' . $row['oshistory_tracking_number'] : '';
-                                                    if (empty($order['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
+                                                    $trackingNumber = $row['oshistory_tracking_number'];
+                                                    if (true === Shipping::canFetchTrackingDetail()) {
+                                                        $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $row['op_invoice_number'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $adminLangId) . '">' . $trackingNumber . '</a>';
+                                                    }
+                                                    $str = !empty($trackingNumber) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $adminLangId) . ' ' . $trackingNumber : '';
+                                                    if (empty($order['opship_tracking_url']) && !empty($trackingNumber)) {
                                                         $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($adminLangId, $order["opshipping_label"]) . "</em>";
-                                                    } elseif (!empty($order['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
+                                                    } elseif (!empty($order['opship_tracking_url']) && !empty($trackingNumber)) {
                                                         $trackingUrls = (array) explode(', ', $order['opship_tracking_url']);
                                                         $str .= '<br>';
                                                         foreach ($trackingUrls as $url) {
