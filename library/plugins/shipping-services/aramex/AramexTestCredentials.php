@@ -21,7 +21,7 @@ switch ($this->serviceRequest) {
             'AccountEntity' => 'KWI',
             'AccountNumber' => '203615',
             'AccountPin' => '664165',
-            'UserName' => 'yokart@fatbit.com',
+            'UserName' => 'aramex@dummyid.com',
             'Password' => 'a62vf#hcLfMLa8y'
         ];
         break;
@@ -31,7 +31,7 @@ switch ($this->serviceRequest) {
             'AccountEntity' => 'KWI',
             'AccountNumber' => '203615',
             'AccountPin' => '664165',
-            'UserName' => 'yokart@fatbit.com',
+            'UserName' => 'aramex@dummyid.com',
             'Password' => 'a62vf#hcLfMLa8y'
         ];
         break;
@@ -41,7 +41,7 @@ switch ($this->serviceRequest) {
             'AccountEntity' => 'KWI',
             'AccountNumber' => '203615',
             'AccountPin' => '664165',
-            'UserName' => 'yokart@fatbit.com',
+            'UserName' => 'aramex@dummyid.com',
             'Password' => 'a62vf#hcLfMLa8y'
         ];
         break;
