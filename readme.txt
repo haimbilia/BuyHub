@@ -224,3 +224,9 @@ Notes:
         To Test Sandbox Payment Refer This: https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods
 
 
+=======================================
+
+Released Version:
+
+Tasks:
+    task-84719 Preview module for digital files

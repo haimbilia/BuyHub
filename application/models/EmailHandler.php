@@ -177,7 +177,7 @@ class EmailHandler extends FatModel
             $headers .= $extra_headers;
         }
 
-        $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL");
+        $headers .= "\r\nReply-to: " . (isset($extra_headers['ReplyTo']) ? $extra_headers['ReplyTo'] : FatApp::getConfig("CONF_REPLY_TO_EMAIL"));
 
 
         if (!FatApp::getDb()->insertFromArray(
@@ -253,8 +253,8 @@ class EmailHandler extends FatModel
         if (!is_array($extra_headers) && $extra_headers != '') {
             $headers .= $extra_headers;
         }
-
-        $replyTo = $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL", FatUtility::VAR_STRING, '');
+        
+        $replyTo = (isset($extra_headers['ReplyTo']) ? $extra_headers['ReplyTo'] : FatApp::getConfig("CONF_REPLY_TO_EMAIL"));
         if (!empty($replyTo)) {
             $headers .= "\r\nReply-to: " . $replyTo;
         }

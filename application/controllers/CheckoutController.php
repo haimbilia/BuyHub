@@ -878,7 +878,8 @@ class CheckoutController extends MyAppController
             'selprod_condition', 'selprod_code',
             'special_price_found', 'theprice', 'shop_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(brand_name, brand_identifier) as brand_name', 'shop_name',
             'seller_user.user_name as shop_onwer_name', 'seller_user_cred.credential_username as shop_owner_username',
-            'seller_user.user_phone_dcode as shop_owner_phone_dcode', 'seller_user.user_phone as shop_owner_phone', 'seller_user_cred.credential_email as shop_owner_email', 'selprod_download_validity_in_days', 'selprod_max_download_times', 'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age', 'prodcat_id'
+            'seller_user.user_phone_dcode as shop_owner_phone_dcode', 'seller_user.user_phone as shop_owner_phone', 'seller_user_cred.credential_email as shop_owner_email', 'selprod_download_validity_in_days', 'selprod_max_download_times', 'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age',
+            'prodcat_id', 'product_attachements_with_inventory', 'selprod_product_id'
         );
         $prodSrch->addMultipleFields($fields);
         $rs = $prodSrch->getResultSet();
@@ -1404,6 +1405,8 @@ class CheckoutController extends MyAppController
                         'op_prodcat_id' => $productInfo['prodcat_id'],
                     ],
                     'op_rounding_off' => $cartProduct['rounding_off'],
+                    'selprod_product_id' => $productInfo['selprod_product_id'],
+                    'product_attachements_with_inventory' => $productInfo['product_attachements_with_inventory'],
                 );
 
                 $order_affiliate_user_id = isset($cartProduct['affiliate_user_id']) ? $cartProduct['affiliate_user_id'] : '';

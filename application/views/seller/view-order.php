@@ -519,8 +519,8 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                             $lang_name = $languages[$row['afile_lang_id']];
                                         }
 
-                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
-                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
+                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
+                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
 
                                         $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
                                         if ($row['expiry_date'] != '') {
