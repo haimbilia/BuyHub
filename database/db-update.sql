@@ -616,6 +616,7 @@ op.op_refund_tax = view_refund_order.refund_tax;
 DROP VIEW view_refund_order;
 
 -- --- query to update refund order data --- --
+
 UPDATE `tbl_email_templates` SET `etpl_replacements` = '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{product_name} Product Name <br>\r\n{new_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
 UPDATE `tbl_email_templates` SET `etpl_body` = '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                           \r\n								                           \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog {new_status}</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n												                                              Your catalog {product_name} has been {new_status} on {website_name}.</td>                                    \r\n										</tr> \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table> ' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
 UPDATE `tbl_email_templates` SET `etpl_name` = 'Seller - Catalog  Status Change' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
@@ -636,6 +637,73 @@ ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
 ON DUPLICATE KEY UPDATE conf_val = 3;
+
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Catalog_Wise)';
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Seller_Products)';
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Buyers/Sellers';
+
+-- --- task_84719_Preview_module_for_digital_files -- ---
+ALTER TABLE `tbl_products` ADD `product_attachements_with_inventory` TINYINT(1) NOT NULL DEFAULT '0' AFTER `product_type`;
+
+--
+-- Table structure for table `tbl_product_digital_data_relation`
+--
+
+CREATE TABLE `tbl_product_digital_data_relation` (
+  `pddr_id` int(11) NOT NULL,
+  `pddr_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id (pddr_id) 2) Seller inventory id',
+  `pddr_options_code` varchar(255) NOT NULL COMMENT '0 for all options',
+  `pddr_type` tinyint(4) NOT NULL COMMENT '0 => Master Catalog, 1 => catalog request'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_product_digital_data_relation`
+--
+
+ALTER TABLE `tbl_product_digital_data_relation`
+  ADD PRIMARY KEY (`pddr_id`),
+  ADD UNIQUE KEY `pdd_options_code` (`pddr_record_id`,`pddr_options_code`,`pddr_type`) USING BTREE;
+
+--
+-- AUTO_INCREMENT for table `tbl_product_digital_data_relation`
+--
+ALTER TABLE `tbl_product_digital_data_relation`
+  MODIFY `pddr_id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+--
+-- Table structure for table `tbl_product_digital_links`
+--
+
+CREATE TABLE `tbl_product_digital_links` (
+  `pdl_id` int(11) NOT NULL,
+  `pdl_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id (pddr_id) 2) Seller inventory id',
+  `pdl_lang_id` int(11) NOT NULL,
+  `pdl_download_link` varchar(255) NOT NULL,
+  `pdl_preview_link` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Contains Digital download links which are related to a Catalog product or seller Inventory';
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_product_digital_links`
+--
+ALTER TABLE `tbl_product_digital_links`
+  ADD PRIMARY KEY (`pdl_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_product_digital_links`
+--
+ALTER TABLE `tbl_product_digital_links`
+  MODIFY `pdl_id` int(11) NOT NULL AUTO_INCREMENT;
+-- --- task_84719_Preview_module_for_digital_files -- ---

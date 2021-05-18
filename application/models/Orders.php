@@ -295,6 +295,7 @@ class Orders extends MyAppModel
 
     private function addUpdateProductOrder($data = array(), $langId = 1)
     {
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $data], 1);
         $db = FatApp::getDb();
 
         $ordersLangData = [];
@@ -446,6 +447,9 @@ class Orders extends MyAppModel
                 }
 
                 /* Saving of digital download data[ */
+                
+                // $product['product_attachements_with_inventory'] = 1;
+
                 if ($product['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                     $db->deleteRecords(
                         AttachedFile::DB_TBL,
@@ -454,7 +458,24 @@ class Orders extends MyAppModel
                             'vals' => array(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op_id)
                         )
                     );
-                    $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $product['op_selprod_id'], 0, -1);
+
+                    $selProdOption = explode('_', $product['op_selprod_code']);
+                    array_shift($selProdOption);
+                    if (0 < count($selProdOption)) {
+                        $optionComb = implode('_', $selProdOption);
+                    } else {
+                        $optionComb = '0';
+                    }
+
+                    $recordId = $product['op_selprod_id'];
+                    $productType = Product::CATALOG_TYPE_INVENTORY;
+                    if (0 == $product['product_attachements_with_inventory']) {
+                        $recordId = $product['selprod_product_id'];
+                        $productType = Product::CATALOG_TYPE_PRIMARY;
+                    }
+
+                    /* TODO Get all download main files references and save */
+                    /* $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $product['op_selprod_id'], 0, -1);
                     if (!empty($attachments)) {
                         foreach ($attachments as $digitalFile) {
                             unset($digitalFile['afile_id']);
@@ -466,13 +487,68 @@ class Orders extends MyAppModel
                                 return false;
                             }
                         }
-                    }
-                }
-                /*]*/
+                    } */
+                    $attrs = [
+                        'pddr_id',
+                        'pddr_options_code',
+                        'afile.afile_record_id as afile_record_id',
+                        'afile.afile_name as mainfile',
+                        'afile.afile_lang_id as afile_lang_id',
+                        'afile.afile_id as afile_id',
+                        'afile.afile_physical_path as mainfile_physical_path',
+                    ];
 
-                /* Saving of digital download Links[ */
-                if ($product['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-                    $linkData = array();
+                    $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb, 0, $attrs);
+                    
+                    if ('0' != $optionComb) {
+                        $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0', 0, $attrs);
+                        $records = array_replace($records, $commonRecords);
+                    }
+                    
+                    if (0 < count($records)) {
+                        foreach ($records as $digitalFile) {
+                            unset($digitalFile['afile_id']);
+                            $dataToSave = [];
+                            $dataToSave['afile_record_id'] = $op_id;
+                            $dataToSave['afile_screen'] = 0;
+                            $dataToSave['afile_physical_path'] = $digitalFile['mainfile_physical_path'];
+                            $dataToSave['afile_name'] = $digitalFile['mainfile'];
+                            $dataToSave['afile_downloaded_times'] = 0;
+                            $dataToSave['afile_updated_at'] = date('Y-m-d H:i:s');
+                            $dataToSave['afile_type'] = AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD;
+                            if (!$db->insertFromArray(AttachedFile::DB_TBL, $dataToSave)) {
+                                $db->rollbackTransaction();
+                                $this->error = $db->getError();
+                                return false;
+                            }
+                        }
+                    }
+                    /*]*/
+                    
+                    /* Saving of digital download Links[ */
+                    /* TODO Get all download main links and save*/
+                    
+                    $records = [];
+                    
+                    $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb);
+                    
+                    if ('0' != $optionComb) {
+                        $commonRecords = DigitalDownloadSearch::getLinks($recordId, $productType, '0');
+                        $records = array_replace($records, $commonRecords);
+                    }
+                    if (0 < count($records)) {
+                        foreach ($records as $link) {
+                            $linkData['opddl_op_id'] = $op_id;
+                            $linkData['opddl_downloadable_link'] = $link['pdl_download_link'];
+                            if (!$db->insertFromArray(OrderProductDigitalLinks::DB_TBL, $linkData)) {
+                                $db->rollbackTransaction();
+                                $this->error = $opLangRecordObj->getError();
+                                return false;
+                            }
+                        }
+                    }
+
+                    /* $linkData = array();
                     $sellerProduct = SellerProduct::getAttributesById($product['op_selprod_id'], array('selprod_downloadable_link'), false);
                     $downlodableLinks = preg_split("/\n|,/", $sellerProduct['selprod_downloadable_link']);
                     foreach ($downlodableLinks as $link) {
@@ -486,7 +562,8 @@ class Orders extends MyAppModel
                             $this->error = $opLangRecordObj->getError();
                             return false;
                         }
-                    }
+                    } */
+                    /*]*/
                 }
                 /*]*/
 

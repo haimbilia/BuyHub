@@ -134,6 +134,8 @@ class ProductRequest extends MyAppModel
                 $data[] = $row;
             }
             return $data;
+        } else {
+            return [];
         }
     }
 
