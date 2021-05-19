@@ -2,6 +2,8 @@
 
 class SellerProductsController extends AdminBaseController
 {
+    use ProductsDigitalDownloads;
+
     private $canView;
     private $canEdit;
 
@@ -1654,7 +1656,7 @@ class SellerProductsController extends AdminBaseController
         return $frm;
     }
 
-    public function uploadDigitalFile()
+    /* public function uploadDigitalFile()
     {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
@@ -1667,7 +1669,7 @@ class SellerProductsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         if ($download_type == applicationConstants::DIGITAL_DOWNLOAD_FILE) {
-            /* $afile_name = FatApp::getPostedData('afile_name', FatUtility::VAR_STRING, '' ); */
+            // $afile_name = FatApp::getPostedData('afile_name', FatUtility::VAR_STRING, '' );
             if (!is_uploaded_file($_FILES['downloadable_file']['tmp_name'])) {
                 Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
                 FatUtility::dieJsonError(Message::getHtml());
@@ -1702,9 +1704,9 @@ class SellerProductsController extends AdminBaseController
 
         $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
+    } */
 
-    public function sellerProductDownloadFrm($selProd_id = 0, $type = applicationConstants::DIGITAL_DOWNLOAD_FILE)
+    /* public function sellerProductDownloadFrms($selProd_id = 0, $type = applicationConstants::DIGITAL_DOWNLOAD_FILE)
     {
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($selProd_id);
@@ -1728,9 +1730,9 @@ class SellerProductsController extends AdminBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('activeTab', 'DOWNLOADS');
         $this->_template->render(false, false);
-    }
+    } */
 
-    public function deleteDigitalFile($selprodId, $afileId = 0)
+    /* public function deleteDigitalFile($selprodId, $afileId = 0)
     {
         $this->objPrivilege->canEditSellerProducts();
         $selprodId = FatUtility::int($selprodId);
@@ -1749,7 +1751,7 @@ class SellerProductsController extends AdminBaseController
 
         $this->set('msg', Labels::getLabel('LBL_Removed_successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
+    } */
 
     /* private function getDownloadForm($langId){
     $frm = new Form('frmDownload');
@@ -1764,7 +1766,7 @@ class SellerProductsController extends AdminBaseController
     return $frm;
     } */
 
-    private function getDownloadForm($langId)
+    /* private function getDownloadForm($langId)
     {
         $frm = new Form('frmDownload');
         $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
@@ -1782,7 +1784,7 @@ class SellerProductsController extends AdminBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->adminLangId));
         $frm->addHiddenField('', 'selprod_id');
         return $frm;
-    }
+    } */
 
     public function searchPoliciesToLink()
     {

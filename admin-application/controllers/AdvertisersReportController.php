@@ -9,7 +9,7 @@ class AdvertisersReportController extends AdminBaseController
         $this->objPrivilege->canViewAdvertisersReport();
     }
 
-    public function index($orderDate = '')
+    public function index()
     {
         $flds = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($flds);

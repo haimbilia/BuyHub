@@ -141,6 +141,7 @@ Enhancements :
    => Performance optimization
    => Upgrades in GEO location module to configure default location.  
    => Price surge based on special price. 
+   => Admin Reports.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
@@ -225,3 +226,9 @@ Notes:
         To Test Sandbox Payment Refer This: https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods
 
 
+=======================================
+
+Released Version:
+
+Tasks:
+    task-84719 Preview module for digital files

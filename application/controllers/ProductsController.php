@@ -446,7 +446,7 @@ class ProductsController extends MyAppController
                 'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
                 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
                 'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age', 'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type'
+                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age', 'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -475,6 +475,44 @@ class ProductsController extends MyAppController
         }
 
         $selProdReviewObj = $this->getSelProdReviewObj();
+
+        if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
+            $selProdOption = explode('_', $product['selprod_code']);
+            array_shift($selProdOption);
+            if (0 < count($selProdOption)) {
+                $optionComb = implode('_', $selProdOption);
+            } else {
+                $optionComb = '0';
+            }
+
+            $recordId = $selprod_id;
+            $productType = Product::CATALOG_TYPE_INVENTORY;
+            if (0 == $product['product_attachements_with_inventory']) {
+                $recordId = $product['selprod_product_id'];
+                $productType = Product::CATALOG_TYPE_PRIMARY;
+            }
+
+            $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb);
+
+            if ('0' != $optionComb) {
+                $commonRecords = DigitalDownloadSearch::getLinks($recordId, $productType, '0');
+                $records = array_replace($records, $commonRecords);
+            }
+
+            $product['preview_links'] = $records;
+
+            $records = [];
+
+            $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb);
+
+            if ('0' != $optionComb) {
+                $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0');
+                $records = array_replace($records, $commonRecords);
+            }
+
+            $product['preview_attachments'] = $records;
+        }
+
         /* over all catalog product reviews */
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
         $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5'));
@@ -2057,5 +2095,40 @@ class ProductsController extends MyAppController
             );
         }
         die(json_encode($json));
+    }
+
+    public function downloadPreview($aFileId, $recordId)
+    {
+        $aFileId = FatUtility::int($aFileId);
+        $recordId = FatUtility::int($recordId);
+        $requestType = Product::CATALOG_TYPE_INVENTORY;
+
+        $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_product_id'));
+        if (false == $selProdData) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
+        }
+        
+        if (false == DigitalDownload::allowedWithInventory($selProdData['selprod_product_id'])) {
+            $recordId = $selProdData['selprod_product_id'];
+            $requestType = Product::CATALOG_TYPE_PRIMARY;
+        }
+        
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $aFileId, $recordId, $requestType], 1);
+        $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, 1);
+        if (1 > count($file)) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+        }
+        
+        if ($file['pddr_record_id'] != $recordId) {
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+        }
+        
+        if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+        }
+        
+        $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
+        AttachedFile::downloadAttachment($fileName, $file['afile_name']);
+
     }
 }

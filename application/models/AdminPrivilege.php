@@ -121,6 +121,7 @@ class AdminPrivilege
     public const SECTION_BUYERS_REPORT = 115;
     public const SECTION_SELLERS_REPORT = 116;
     public const SECTION_SUBSCRIPTION_REPORT = 117;
+    public const SECTION_FINANCIAL_REPORT = 117;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -1139,6 +1140,10 @@ class AdminPrivilege
     public function canViewSubscriptionReport($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_SUBSCRIPTION_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+    public function canViewFinancialReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_FINANCIAL_REPORT, static::PRIVILEGE_READ, $returnResult);
     }
 
     public function canViewBuyersReport($adminId = 0, $returnResult = false)

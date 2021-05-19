@@ -1434,13 +1434,24 @@ trait CustomProducts
             }
         }
 
-        $productType = Product::getAttributesById($prodId, 'product_type');
+        // $productType = Product::getAttributesById($prodId, 'product_type');
+        $prodData = Product::getAttributesById($prodId, ['product_type', 'product_attachements_with_inventory']);
+
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::NO;
+        
+        if ($prodData) {
+            $productType = $prodData['product_type'];
+            $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+        }
+
         $refererUrl =  CommonHelper::redirectUserReferer(true);
         $arr = array_values(array_filter(explode('/', $refererUrl)));
         array_shift($arr);
         array_shift($arr);
 
         $this->set('previousAction', (isset($arr[1])) ? $arr[1] : 'index');
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->set('productId', $prodId);
         $this->set('productType', $productType);
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
@@ -1464,6 +1475,8 @@ trait CustomProducts
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $languages = Language::getAllNames();
         $productFrm = $this->getCustomProductIntialSetUpFrm($productId);
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::YES;
 
         if ($productId > 0) {
             $prodData = Product::getAttributesById($productId);
@@ -1530,12 +1543,16 @@ trait CustomProducts
             }
 
             $productFrm->fill($prodData);
+            $productType = $prodData['product_type'];
+            $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
         }
 
         unset($languages[$siteDefaultLangId]);
         $this->set('productFrm', $productFrm);
         $this->set('siteDefaultLangId', $siteDefaultLangId);
         $this->set('otherLanguages', $languages);
+        $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->_template->render(false, false);
     }
 

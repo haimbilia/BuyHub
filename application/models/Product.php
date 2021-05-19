@@ -67,6 +67,10 @@ class Product extends MyAppModel
 
     public static $optionValueName = '';
 
+    public const CATALOG_TYPE_PRIMARY = 0;
+    public const CATALOG_TYPE_REQUEST = 1;
+    public const CATALOG_TYPE_INVENTORY = 2;
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
