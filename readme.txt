@@ -113,7 +113,8 @@ Fixes:
     => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
     => 053673  - Allow seller to cancel COD orders.
     => 053451 - missing country code plugin with phone number field
-    => 053462 - Instagram login not working after configuration, gives erro
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
 
 
 Enhancements :
