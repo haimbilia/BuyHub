@@ -707,3 +707,86 @@ ALTER TABLE `tbl_product_digital_links`
 ALTER TABLE `tbl_product_digital_links`
   MODIFY `pdl_id` int(11) NOT NULL AUTO_INCREMENT;
 -- --- task_84719_Preview_module_for_digital_files -- ---
+
+UPDATE `tbl_email_templates` SET `etpl_replacements` = '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{product_name} Product Name <br>\r\n{new_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+UPDATE `tbl_email_templates` SET `etpl_body` = '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                           \r\n								                           \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog {new_status}</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n												                                              Your catalog {product_name} has been {new_status} on {website_name}.</td>                                    \r\n										</tr> \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table> ' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+UPDATE `tbl_email_templates` SET `etpl_name` = 'Seller - Catalog  Status Change' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+UPDATE `tbl_email_templates` SET `etpl_subject` = 'Your Catalog {product_name} {new_status} at {website_name}' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+
+UPDATE `tbl_sms_templates` SET `stpl_body` = 'Hello {shop_name},\r\nYour catalog {product_name} has been {new_status} on {website_name}\r\n\r\n{SITE_NAME} Team' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
+UPDATE `tbl_sms_templates` SET `stpl_replacements` = '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"New Status\", \"variable\":\"{new_status}\"},{\"title\":\"Product Name\", \"variable\":\"{product_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
+
+ALTER TABLE `tbl_shipping_profile` CHANGE `shipprofile_name` `shipprofile_identifier` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+CREATE TABLE `tbl_shipping_profile_lang` (
+  `shipprofilelang_shipprofile_id` int NOT NULL,
+  `shipprofilelang_lang_id` int NOT NULL,
+  `shipprofile_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile_id`, `shipprofilelang_lang_id`);
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
+('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
+ON DUPLICATE KEY UPDATE conf_val = 3;
+
+
+--------------------------------------------------
+
+-- --- task_84719_Preview_module_for_digital_files -- ---
+--- Update tbl_attached_files table ---
+DROP VIEW IF EXISTS pddr_files_view;
+
+CREATE VIEW pddr_files_view AS select tbl_seller_products.selprod_id, selprod_product_id, selprod_code, SUBSTRING(selprod_code, INSTR(selprod_code, '_') + 1) as new_selprodcode
+FROM tbl_seller_products
+INNER JOIN tbl_attached_files ON afile_type = 42 AND afile_record_id = tbl_seller_products.selprod_id
+INNER JOIN tbl_products ON product_id = selprod_product_id AND product_type = 2;
+
+INSERT INTO tbl_product_digital_data_relation (pddr_record_id, pddr_options_code, pddr_type) 
+SELECT selprod_id, new_selprodcode, 2 FROM pddr_files_view ON DUPLICATE KEY UPDATE pddr_record_id = selprod_id;
+
+UPDATE tbl_attached_files as afile
+INNER JOIN pddr_files_view as v ON selprod_id = afile_record_id
+INNER JOIN tbl_product_digital_data_relation as pddr ON pddr_record_id = afile_record_id AND v.new_selprodcode = pddr.pddr_options_code 
+SET afile.afile_record_id = pddr_id;
+
+DROP VIEW IF EXISTS pddr_files_view;
+
+-----------------------------------------------------------------------------------------
+--- Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
+
+UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',');
+
+DROP VIEW IF EXISTS pddr_links_view;
+
+CREATE VIEW pddr_links_view AS select tbl_seller_products.selprod_id, selprod_product_id, selprod_code, SUBSTRING(selprod_code, INSTR(selprod_code, '_') + 1) as new_selprodcode,
+SUBSTRING_INDEX(SUBSTRING_INDEX(tbl_seller_products.selprod_downloadable_link, ',', numbers.n), ',', -1) link, 0 as pddr
+from
+(select 1 n union all
+ select 2 union all select 3 union all
+ select 4 union all select 5) numbers INNER JOIN tbl_seller_products
+on CHAR_LENGTH(tbl_seller_products.selprod_downloadable_link)
+   -CHAR_LENGTH(REPLACE(tbl_seller_products.selprod_downloadable_link, ',', ''))>=numbers.n-1 and CHAR_LENGTH(tbl_seller_products.selprod_downloadable_link) > 0    
+order by
+selprod_id, n;
+
+INSERT INTO tbl_product_digital_data_relation (pddr_record_id, pddr_options_code, pddr_type) 
+SELECT selprod_id, new_selprodcode, 2 FROM pddr_links_view ON DUPLICATE KEY UPDATE pddr_record_id = selprod_id;
+
+ALTER TABLE `tbl_product_digital_links` ADD `pdl_selprod_code` VARCHAR(255) NOT NULL AFTER `pdl_preview_link`;
+ALTER TABLE `tbl_product_digital_links` ADD `pdl_selprod_id` VARCHAR(255) NOT NULL AFTER `pdl_preview_link`;
+
+INSERT INTO tbl_product_digital_links (pdl_record_id, pdl_lang_id, pdl_download_link, pdl_selprod_code, pdl_selprod_id)
+SELECT 0, 0, link, new_selprodcode, selprod_id FROM pddr_links_view;
+
+UPDATE tbl_product_digital_links INNER JOIN  tbl_product_digital_data_relation ON pdl_selprod_id = pddr_record_id AND pdl_selprod_code =  pddr_options_code AND pddr_type = 2 SET pdl_record_id = pddr_id;
+
+DROP VIEW IF EXISTS pddr_links_view;
+-----------------------------------------------------------------------------------------
+ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_id`;
+ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_code`;
+
+ALTER TABLE `tbl_seller_products` DROP `selprod_downloadable_link`;
+
+UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options_code = '', 0, ifnull(pddr_options_code,0));
+-----------------------------------------------------------------------------------------
+-- --- task_84719_Preview_module_for_digital_files -- ---
