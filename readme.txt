@@ -115,6 +115,7 @@ Fixes:
     => 053451 - missing country code plugin with phone number field
     => 053462 - Instagram login not working after configuration, gives error
     => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
 
 
 Enhancements :
