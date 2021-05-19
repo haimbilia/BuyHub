@@ -81,6 +81,9 @@ class AdminBaseController extends FatController
         $this->str_setup_successful = Labels::getLabel('LBL_Setup_Successful', $this->adminLangId);
         $this->str_export_successfull = Labels::getLabel('LBL_Export_Successful', $this->adminLangId);
         $this->str_add_update_record = $this->str_update_record;
+        
+        $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
+        $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
         $jsVariables = array(
             'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->adminLangId),
@@ -161,7 +164,9 @@ class AdminBaseController extends FatController
             'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->adminLangId),
             'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
             'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
-            'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),     
+            'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
+            'defaultCountryCode' => $defaultCountryCode,
+            'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);

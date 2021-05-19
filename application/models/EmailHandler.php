@@ -383,7 +383,7 @@ class EmailHandler extends FatModel
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {
             return false;
         }
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
 
@@ -397,7 +397,7 @@ class EmailHandler extends FatModel
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {
             return false;
         }
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
 
@@ -413,7 +413,7 @@ class EmailHandler extends FatModel
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {
             return false;
         }
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
 
@@ -516,7 +516,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
 
@@ -707,7 +707,7 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($to, $tpl, $langId, $vars)) {
             return false;
         }
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
 
@@ -813,7 +813,7 @@ class EmailHandler extends FatModel
 
             if ($includeAdmin && FatApp::getConfig('CONF_NEW_ORDER_EMAIL', FatUtility::VAR_INT, 1)) {
                 $this->sendMailToAdminAndAdditionalEmails("admin_order_email", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-                $this->sendSms("admin_order_email", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+                $this->sendSms("admin_order_email", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
             }
             self::sendMailTpl($userInfo['credential_email'], "customer_order_email", $langId, $arrReplacements);
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
@@ -899,7 +899,7 @@ class EmailHandler extends FatModel
             );
 
             $this->sendMailToAdminAndAdditionalEmails("primary_order_payment_status_change_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-            $this->sendSms("primary_order_payment_status_change_admin", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+            $this->sendSms("primary_order_payment_status_change_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
             $notiArrReplacements = array(
                 '{ORDERID}' => $arrReplacements['{invoice_number}'],
@@ -948,7 +948,7 @@ class EmailHandler extends FatModel
             );
 
             $this->sendMailToAdminAndAdditionalEmails("primary_order_payment_status_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-            $this->sendSms("primary_order_payment_status_admin", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+            $this->sendSms("primary_order_payment_status_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
             self::sendMailTpl($userInfo["credential_email"], "primary_order_payment_status_buyer", $orderDetail['order_language_id'], $arrReplacements);
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
@@ -981,7 +981,7 @@ class EmailHandler extends FatModel
             );
 
             $this->sendMailToAdminAndAdditionalEmails("primary_order_bank_transfer_payment_status_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-            $this->sendSms("primary_order_bank_transfer_payment_status_admin", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+            $this->sendSms("primary_order_bank_transfer_payment_status_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
             self::sendMailTpl($userInfo["credential_email"], "primary_order_bank_transfer_payment_status_buyer", $orderDetail['order_language_id'], $arrReplacements);
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
@@ -1159,7 +1159,7 @@ class EmailHandler extends FatModel
 
         $orderObj = new Orders();
         $orderComment = $orderObj->getOrderComments($langId, array("id" => $commentId, "buyer_id" => $buyerId), 1); /*1 no of records*/
-
+        
         if ($orderComment && $orderComment["oshistory_customer_notified"]) {
             $msgComments = '';
 
@@ -1193,7 +1193,7 @@ class EmailHandler extends FatModel
                 '{shipment_information}' => "<br/><br/>" . $shipmentInformation,
             );
             self::sendMailTpl($orderComment["buyer_email"], "child_order_status_change", $langId, $arrReplacements);
-            $this->sendSms("child_order_status_change", $orderComment["buyer_phone"], $arrReplacements, $langId);
+            $this->sendSms("child_order_status_change", ValidateElement::formatDialCode($orderComment['buyer_phone_dcode']) . $orderComment["buyer_phone"], $arrReplacements, $langId);
             $replaceVal = array(
                 '{INVOICE}' => $orderComment["op_invoice_number"],
                 '{PRODUCT}' => $orderComment["op_product_name"],
@@ -1272,7 +1272,7 @@ class EmailHandler extends FatModel
                 '{shipment_information}' => "<br/><br/>" . $shipmentInformation,
             );
             self::sendMailTpl($orderComment["seller_email"], "child_order_status_change", $langId, $arrReplacements);
-            $this->sendSms("child_order_status_change", $orderComment["seller_phone"], $arrReplacements, $langId);
+            $this->sendSms("child_order_status_change", ValidateElement::formatDialCode($orderComment['seller_phone_dcode']) . $orderComment["seller_phone"], $arrReplacements, $langId);
             return true;
         } else {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
@@ -1398,7 +1398,7 @@ class EmailHandler extends FatModel
             $this->sendMailToAdminAndAdditionalEmails("withdrawal_request_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
 
             $tpl = 'withdrawal_request_admin';
-            $phone = FatApp::getConfig('CONF_SITE_PHONE');
+            $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
         } else {
             self::sendMailTpl($withdrawalRequestData["user_email"], "withdrawal_request_approved_declined", $langId, $arrReplacements);
 
@@ -1465,7 +1465,8 @@ class EmailHandler extends FatModel
 
         $uData = User::getAttributesById($message["message_to"], ['user_phone_dcode', 'user_phone']);
         if (!empty($uData)) {
-            $this->sendSms("send_message", implode("", $uData), $arrReplacements, $langId);
+            $phone = ValidateElement::formatDialCode($uData['user_phone_dcode']) . $uData['user_phone'];
+            $this->sendSms("send_message", $phone, $arrReplacements, $langId);
         }
 
         $notificationObj = new Notifications();
@@ -1529,7 +1530,7 @@ class EmailHandler extends FatModel
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_Admin", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
         $appNotification = CommonHelper::replaceStringData(Labels::getLabel('INV_RECEIVED_CANCELLATION_FOR_INVOICE_{invoicenumber}', $langId), array('{invoicenumber}' => $sellerOrderAnchor), true);
 
@@ -1672,7 +1673,7 @@ class EmailHandler extends FatModel
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_Admin", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails("product_return", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-        $this->sendSms("product_return", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+        $this->sendSms("product_return", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
         return true;
     }
 
@@ -1798,7 +1799,7 @@ class EmailHandler extends FatModel
             $arrReplacements["{click_here}"] = $adminReturnRequestUrl;
 
             $this->sendMailToAdminAndAdditionalEmails("return_request_message_user", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-            $this->sendSms("return_request_message_user", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+            $this->sendSms("return_request_message_user", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
         }
         /* ] */
         return true;
@@ -1999,7 +2000,7 @@ class EmailHandler extends FatModel
             $arrReplacements["{user_full_name}"] = "Admin";
 
             $this->sendMailToAdminAndAdditionalEmails("return_request_status_change_notification", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-            $this->sendSms("return_request_status_change_notification", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+            $this->sendSms("return_request_status_change_notification", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
         }
         /* ] */
         return true;
@@ -2138,7 +2139,7 @@ class EmailHandler extends FatModel
         );
 
         $this->sendMailToAdminAndAdditionalEmails("report_shop", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-        $this->sendSms("report_shop", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+        $this->sendSms("report_shop", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
         return true;
     }
 
@@ -2176,7 +2177,10 @@ class EmailHandler extends FatModel
             return false;
         }
         $uData = User::getAttributesById($d['bpcomment_user_id'], ['user_phone_dcode', 'user_phone']);
-        $this->sendSms($tpl, implode("", $uData), $vars, $langId);
+        if (is_array($uData) && 0 < count($uData)) {
+            $phone = ValidateElement::formatDialCode($uData['user_phone_dcode']) . $uData['user_phone'];
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
         return true;
     }
 
@@ -2298,7 +2302,7 @@ class EmailHandler extends FatModel
         }
 
         self::sendMailTpl($to, "admin_notification_abusive_review_posted", $langId, $arrReplacements);
-        $this->sendSms("admin_notification_abusive_review_posted", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+        $this->sendSms("admin_notification_abusive_review_posted", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
         return true;
     }
 
@@ -2444,8 +2448,10 @@ class EmailHandler extends FatModel
         $srch->addCondition('uc.credential_email', '=', $receiverEmail);
         $rs = $srch->getResultSet();
         $receiverData = FatApp::getDb()->fetch($rs);
-        $this->sendSms($tpl, implode("", $receiverData), $vars, $langId);
-
+        if (is_array($receiverData) && count($receiverData)) {
+            $phone = ValidateElement::formatDialCode($receiverData['user_phone_dcode']) . $receiverData['user_phone'];
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
         return true;
     }
 
@@ -2529,7 +2535,7 @@ class EmailHandler extends FatModel
             );
 
             $this->sendMailToAdminAndAdditionalEmails("new_subscription_purchase_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-            $this->sendSms("new_subscription_purchase_admin", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+            $this->sendSms("new_subscription_purchase_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
             self::sendMailTpl($userInfo["credential_email"], "new_subscription_purchase", $orderDetail['order_language_id'], $arrReplacements);
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
@@ -2571,7 +2577,7 @@ class EmailHandler extends FatModel
             );
 
             $this->sendMailToAdminAndAdditionalEmails("subscription_renew_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-            $this->sendSms("subscription_renew_admin", FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
+            $this->sendSms("subscription_renew_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
             self::sendMailTpl($userInfo["credential_email"], "subscription_renew_user", $orderDetail['order_language_id'], $arrReplacements);
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
@@ -2760,7 +2766,7 @@ class EmailHandler extends FatModel
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {
             return false;
         }
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
 
@@ -2908,7 +2914,7 @@ class EmailHandler extends FatModel
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {
             return false;
         }
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
 
@@ -3036,7 +3042,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $this->sendSms($tpl, FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
 
         /* Send Success Notification To Buyer With Bank Transfer Order Placed.  */
         $msg = Labels::getLabel('APP_ORDER_#{ORDER-ID}_PLACED_USING_BANK_TRANFER_PAYMENT_METHOD', $langId);
