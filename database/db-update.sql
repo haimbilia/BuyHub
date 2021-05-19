@@ -394,3 +394,65 @@ ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
 ON DUPLICATE KEY UPDATE conf_val = 3;
+
+
+--------------------------------------------------
+
+-- --- task_84719_Preview_module_for_digital_files -- ---
+--- Update tbl_attached_files table ---
+DROP VIEW IF EXISTS pddr_files_view;
+
+CREATE VIEW pddr_files_view AS select tbl_seller_products.selprod_id, selprod_product_id, selprod_code, SUBSTRING(selprod_code, INSTR(selprod_code, '_') + 1) as new_selprodcode
+FROM tbl_seller_products
+INNER JOIN tbl_attached_files ON afile_type = 42 AND afile_record_id = tbl_seller_products.selprod_id
+INNER JOIN tbl_products ON product_id = selprod_product_id AND product_type = 2;
+
+INSERT INTO tbl_product_digital_data_relation (pddr_record_id, pddr_options_code, pddr_type) 
+SELECT selprod_id, new_selprodcode, 2 FROM pddr_files_view ON DUPLICATE KEY UPDATE pddr_record_id = selprod_id;
+
+UPDATE tbl_attached_files as afile
+INNER JOIN pddr_files_view as v ON selprod_id = afile_record_id
+INNER JOIN tbl_product_digital_data_relation as pddr ON pddr_record_id = afile_record_id AND v.new_selprodcode = pddr.pddr_options_code 
+SET afile.afile_record_id = pddr_id;
+
+DROP VIEW IF EXISTS pddr_files_view;
+
+-----------------------------------------------------------------------------------------
+--- Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
+
+UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',');
+
+DROP VIEW IF EXISTS pddr_links_view;
+
+CREATE VIEW pddr_links_view AS select tbl_seller_products.selprod_id, selprod_product_id, selprod_code, SUBSTRING(selprod_code, INSTR(selprod_code, '_') + 1) as new_selprodcode,
+SUBSTRING_INDEX(SUBSTRING_INDEX(tbl_seller_products.selprod_downloadable_link, ',', numbers.n), ',', -1) link, 0 as pddr
+from
+(select 1 n union all
+ select 2 union all select 3 union all
+ select 4 union all select 5) numbers INNER JOIN tbl_seller_products
+on CHAR_LENGTH(tbl_seller_products.selprod_downloadable_link)
+   -CHAR_LENGTH(REPLACE(tbl_seller_products.selprod_downloadable_link, ',', ''))>=numbers.n-1 and CHAR_LENGTH(tbl_seller_products.selprod_downloadable_link) > 0    
+order by
+selprod_id, n;
+
+INSERT INTO tbl_product_digital_data_relation (pddr_record_id, pddr_options_code, pddr_type) 
+SELECT selprod_id, new_selprodcode, 2 FROM pddr_links_view ON DUPLICATE KEY UPDATE pddr_record_id = selprod_id;
+
+ALTER TABLE `tbl_product_digital_links` ADD `pdl_selprod_code` VARCHAR(255) NOT NULL AFTER `pdl_preview_link`;
+ALTER TABLE `tbl_product_digital_links` ADD `pdl_selprod_id` VARCHAR(255) NOT NULL AFTER `pdl_preview_link`;
+
+INSERT INTO tbl_product_digital_links (pdl_record_id, pdl_lang_id, pdl_download_link, pdl_selprod_code, pdl_selprod_id)
+SELECT 0, 0, link, new_selprodcode, selprod_id FROM pddr_links_view;
+
+UPDATE tbl_product_digital_links INNER JOIN  tbl_product_digital_data_relation ON pdl_selprod_id = pddr_record_id AND pdl_selprod_code =  pddr_options_code AND pddr_type = 2 SET pdl_record_id = pddr_id;
+
+DROP VIEW IF EXISTS pddr_links_view;
+-----------------------------------------------------------------------------------------
+ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_id`;
+ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_code`;
+
+ALTER TABLE `tbl_seller_products` DROP `selprod_downloadable_link`;
+
+UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options_code = '', 0, ifnull(pddr_options_code,0));
+-----------------------------------------------------------------------------------------
+-- --- task_84719_Preview_module_for_digital_files -- ---
