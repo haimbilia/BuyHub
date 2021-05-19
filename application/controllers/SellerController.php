@@ -581,20 +581,28 @@ class SellerController extends SellerBaseController
         }
 
         $digitalDownloads = array();
+        $digitalDownloadLinks = array();
+        $canAttachMoreFiles = false;
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
+            $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
+
+            $allowedDigDownloadStatuses = Orders::getBuyerAllowedDigitalDownloadStatues();
+            
+            if (in_array($orderDetail['op_status_id'], $allowedDigDownloadStatuses)) {
+                $canAttachMoreFiles = true;
+                $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->siteLangId);
+                $moreAttachmentsFrm->fill(['op_id' => $orderDetail['op_id']]);
+                $this->set('moreAttachmentsFrm', $moreAttachmentsFrm);
+            }
         }
 
-        $digitalDownloadLinks = array();
-        if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
-        }
-        // CommonHelper::printArray($orderDetail);
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
         $this->set('shippedBySeller', $shippedBySeller);
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
+        $this->set('canAttachMoreFiles', $canAttachMoreFiles);
         $this->set('languages', Language::getAllNames());
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('frm', $frm);

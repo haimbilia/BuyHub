@@ -349,16 +349,32 @@ class SellerOrdersController extends AdminBaseController
             $shippingUserFrm->fill($shippingUserdata);
             $this->set('shippingUserFrm', $shippingUserFrm);
         }
-
+        
         $digitalDownloads = array();
+        $digitalDownloadLinks = array();
+        $canAttachMoreFiles = false;
         if ($opRow['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+            $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
+            $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
+
+            $allowedDigDownloadStatuses = Orders::getBuyerAllowedDigitalDownloadStatues();
+            
+            if (in_array($opRow['op_status_id'], $allowedDigDownloadStatuses)) {
+                $canAttachMoreFiles = true;
+                $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->adminLangId);
+                $moreAttachmentsFrm->fill(['op_id' => $opRow['op_id']]);
+                $this->set('moreAttachmentsFrm', $moreAttachmentsFrm);
+            }
+        }
+
+        /* if ($opRow['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
         }
 
         $digitalDownloadLinks = array();
         if ($opRow['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
-        }
+        } */
 
         $opChargesLog = new OrderProductChargeLog($op_id);
         $taxOptions = $opChargesLog->getData($this->adminLangId);
@@ -371,6 +387,8 @@ class SellerOrdersController extends AdminBaseController
         $this->set('orderStatuses', $orderStatuses);
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
+        $this->set('canAttachMoreFiles', $canAttachMoreFiles);
+
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
         $this->set('displayForm', (in_array($opRow['op_status_id'], $processingStatuses) && $this->canEdit && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED));
         $this->set('displayShippingUserForm', $displayShippingUserForm);
@@ -1081,5 +1099,59 @@ class SellerOrdersController extends AdminBaseController
 
         $this->set('trackingInfo', $trackingInfo);
         $this->_template->render(false, false);
+    }
+
+    public function setupAdditionalOpAttachment()
+    {
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        if (1 > $opId) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId) . __LINE__);
+        }
+
+        $opSrch = OrderProduct::getSearchObject();
+
+        $opSrch->addCondition('op_id', '=', $opId);
+        $opSrch->addCondition('op_product_type', '=', Product::PRODUCT_TYPE_DIGITAL);
+
+        $opSrch->addMultipleFields(['op_status_id', 'op_selprod_user_id']);
+
+        $opSrch->doNotCalculateRecords();
+        $opSrch->setPageSize(1);
+
+        $rs = $opSrch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (!is_array($row)) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
+        }
+
+        $allowedDigDownloadStatuses = Orders::getBuyerAllowedDigitalDownloadStatues();
+            
+        if (!in_array($row['op_status_id'], $allowedDigDownloadStatuses)) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
+        }
+        
+        if (!isset($_FILES['additional_attachment']['tmp_name'])
+            || !is_uploaded_file($_FILES['additional_attachment']['tmp_name'])
+        ) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $fileHandlerObj = new AttachedFile();
+
+        if ($fileHandlerObj->saveAttachment(
+            $_FILES['additional_attachment']['tmp_name'],
+            AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD,
+            $opId,
+            0,
+            $_FILES['additional_attachment']['name'],
+            -1,
+            false,
+            0
+        )) {
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_File_uploaded_successfully', $this->adminLangId));
+        }
+
+        FatUtility::dieJsonError($fileHandlerObj->getError());
     }
 }

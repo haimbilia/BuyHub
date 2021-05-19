@@ -1442,7 +1442,7 @@ trait CustomProducts
         
         if ($prodData) {
             $productType = $prodData['product_type'];
-            $attachDownloadsWithInv = $prodData['product_download_attachements_with_inventory'];
+            $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
         }
 
         $refererUrl =  CommonHelper::redirectUserReferer(true);
