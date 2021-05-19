@@ -254,13 +254,10 @@ class ProductsController extends MyAppController
                 $conditionSrch->setPageSize(1);
                 $conditionSrch->addMultipleFields(array('selprod_condition'));
                 $conditionSrch->addCondition('selprod_condition', '=', $key);
-                /* if needs to show product counts under any condition[ */
-                //$conditionSrch->addFld('count(selprod_condition) as totalProducts');
-                /* ] */
                 $conditionRs = $conditionSrch->getResultSet();
                 $conditionArr = $db->fetch($conditionRs);
                 if (!empty($conditionArr)) {
-                    $conditionsArr[] = $db->fetch($conditionRs);
+                    $conditionsArr[] = $conditionArr;
                 }
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
@@ -349,7 +346,7 @@ class ProductsController extends MyAppController
                 $shopCatFilters = true;
             }
         }
-
+        
         $this->set('productFiltersArr', $productFiltersArr);
         $this->set('headerFormParamsAssocArr', $headerFormParamsAssocArr);
         $this->set('categoriesArr', $categoriesArr);

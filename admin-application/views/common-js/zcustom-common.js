@@ -1,8 +1,4 @@
 $(document).ready(function () {
-    // setTimeout(function () {
-    //     stylePhoneNumberFld('.phone-js');
-    // }, 1000);
-
     $(document).on('keypress', 'input.zip-js', function (e) {
         var regex = new RegExp("^[a-zA-Z0-9]+$");
         var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -24,7 +20,8 @@ $(document).ready(function () {
         }
     };
 
-    $(document).ajaxComplete(function() {
+    $(document).ajaxComplete(function () {
+
         stylePhoneNumberFld('.phone-js');
         installJsColor();
     });

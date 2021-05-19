@@ -130,7 +130,9 @@ Fixes:
     => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
     => 053673  - Allow seller to cancel COD orders.
     => 053501 - seller> unable to define slots for pickup- getting error 
-
+    => 053763 - admin> users> add button> icon is not there
+    => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
+    => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
 
 New Features:
     => Admin shipped products listing page
