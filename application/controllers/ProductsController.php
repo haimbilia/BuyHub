@@ -792,7 +792,7 @@ class ProductsController extends MyAppController
         /* Recommnended Products [ */
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
         $recommendedProducts = $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
-        $this->set('recommendedProducts', $recommendedProducts);
+        $this->set('recommendedProducts', (array) $recommendedProducts);
         /* ]  */
 
         if (User::checkPersonalizedCookiesEnabled() == true) {
@@ -809,7 +809,7 @@ class ProductsController extends MyAppController
                 unset($recentlyViewed[$selprod_id]);
             }
             $recentlyViewed = $this->getRecentlyViewedProductsDetail($recentlyViewed);
-            $this->set('recentlyViewed', $recentlyViewed);
+            $this->set('recentlyViewed', (array) $recentlyViewed);
         }
 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
