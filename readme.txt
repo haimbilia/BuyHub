@@ -128,7 +128,7 @@ Fixes:
     => 053673  - Allow seller to cancel COD orders.
     => 053779 - seller> reports> currency symbol is missing in tax and shipping column
     => 053782 - admin> reports> sales reports> on accessing reports for particular date> there needs to be filter to search on basis of invoice or order by time (latest on top and vice versa)
-
+    => 053816 - admin> reports> buyers report>sorting is not working
 
 New Features:
     => Admin shipped products listing page
