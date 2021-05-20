@@ -790,3 +790,6 @@ ALTER TABLE `tbl_seller_products` DROP `selprod_downloadable_link`;
 UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options_code = '', 0, ifnull(pddr_options_code,0));
 -----------------------------------------------------------------------------------------
 -- --- task_84719_Preview_module_for_digital_files -- ---
+
+
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Qnb', '13', 'Qnb', '0', '1');
