@@ -514,19 +514,13 @@ class ReportsController extends SellerBaseController
                         case 'grossSales':
                         case 'transactionAmount':
                         case 'inventoryValue':
-                        case 'taxTotal':
                         case 'adminTaxTotal':
                         case 'sellerTaxTotal':
-                        case 'shippingTotal':
                         case 'sellerShippingTotal':
-                        case 'adminShippingTotal':
-                        case 'discountTotal':
-                        case 'couponDiscount':
                         case 'volumeDiscount':
-                        case 'rewardDiscount':
                         case 'refundedAmount':
-                        case 'refundedShipping':
-                        case 'refundedTax':
+                        case 'refundedShippingFromSeller':
+                        case 'refundedTaxFromSeller':
                         case 'orderNetAmount':
                         case 'commissionCharged':
                         case 'refundedCommission':
@@ -549,7 +543,7 @@ class ReportsController extends SellerBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
-        
+
         $arrListing = FatApp::getDb()->fetchAll($rs);
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
@@ -622,7 +616,7 @@ class ReportsController extends SellerBaseController
                 'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
 
                 'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
-               
+
                 'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->siteLangId),
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->siteLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId),
