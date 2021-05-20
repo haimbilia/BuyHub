@@ -508,12 +508,12 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                 $('.addRowBtn' + day + '-js').remove();
             }
 
-            var addRowBtnHtml = '<button type="button" name="btn_add_row[' + day + ']" onclick="addTimeSlotRow(' + day + ')" class="btn btn-brand btn-sm js-slot-add-' + day + ' addRowBtn' + day + '-js d-none"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></button>';
+            var addRowBtnHtml = '<button type="button" name="btn_add_row[' + day + ']" onclick="addTimeSlotRow(' + day + ')" class="btn btn-brand btn-sm js-slot-add-' + day + ' addRowBtn' + day + '-js d-none"><i class="icn">'+
+                                    '<svg class="svg" width="16px" height="16px">'+
+                                        '<use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">'+
+                                        '</use>'+
+                                    '</svg>'+
+                                '</i></button>';
 
             var html = "<div class='row row-" + count + " js-added-rows-" + day + "'><div class='col-md-2'></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml + "</div><div class='col-md-4 js-to_time_" + day + "'>" + toTimeHtml + "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover btn-group'><button class='btn btn-outline-brand btn-sm' type='button' name='btn_remove_row' data-day='" + day + "'><i class='fas fa-minus'></i></button>" + addRowBtnHtml + "</div></div></div></div></div>";
 
@@ -647,24 +647,24 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
         $(this).parentsUntil('.row').parent().remove();
 
         if (0 < $('.js-added-rows-' + day + ':last [name="btn_remove_row"]').length) {
-            var addRowBtnHtml = '<button type="button" name="btn_add_row[' + day + ']" onclick="addTimeSlotRow(' + day + ')" class="btn btn-brand js-slot-add-' + day + ' addRowBtn' + day + '-js"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></button>';
+            var addRowBtnHtml = '<button type="button" name="btn_add_row[' + day + ']" onclick="addTimeSlotRow(' + day + ')" class="btn btn-brand js-slot-add-' + day + ' addRowBtn' + day + '-js"><i class="icn">'+
+                                    '<svg class="svg" width="16px" height="16px">'+
+                                        '<use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">'+
+                                        '</use>'+
+                                    '</svg>'+
+                                '</i></button>';
 
             if (1 > $('.js-added-rows-' + day + ':last .addRowBtn' + day + '-js').length) {
                 $('.js-added-rows-' + day + ':last [name="btn_remove_row"]').after(addRowBtnHtml);
             }
 
         } else if (0 < $('.addRowBtnBlock' + day + '-js').length) {
-            var addRowBtnHtml = '<button type="button" name="btn_add_row[' + day + ']" onclick="addTimeSlotRow(' + day + ')" class="btn btn-brand js-slot-add-' + day + ' addRowBtn' + day + '-js mt-4"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></button>';
+            var addRowBtnHtml = '<button type="button" name="btn_add_row[' + day + ']" onclick="addTimeSlotRow(' + day + ')" class="btn btn-brand js-slot-add-' + day + ' addRowBtn' + day + '-js mt-4"><i class="icn">'+
+                                    '<svg class="svg" width="16px" height="16px">'+
+                                        '<use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">'+
+                                        '</use>'+
+                                    '</svg>'+
+                                '</i></button>';
             $('.addRowBtnBlock' + day + '-js').html(addRowBtnHtml);
         }
     })
