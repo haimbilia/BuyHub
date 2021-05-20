@@ -275,8 +275,8 @@ class DigitalDownload extends MyAppModel
      * @recordId - Id of record for which add/upload permission is going to be checked
      * @recordType - Type of record Id (Inventory Id (Seller Product Id), Product request Id, Product Id)
      * @sellerUserId - user Id for which record is belongs to, It is required in case to check add/upload request from a seller. In case delete request from admin it will be zero 
-     * @checkWithCatalog - To check whether add/upload allowed with Inventory/Product
      * @langId
+     * @checkWithCatalog - To check whether add/upload allowed with Inventory/Product
      * @returnResult - return response or die
      */
 
@@ -303,6 +303,9 @@ class DigitalDownload extends MyAppModel
 
             if (!$product) {
                 return static::returnResponseOrDie($returnResult);
+            }
+            if (!array_key_exists('product_attachements_with_inventory', $product)) {
+                $product['product_attachements_with_inventory'] = applicationConstants::YES;
             }
         } else {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {

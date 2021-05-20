@@ -1452,6 +1452,13 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addHtml('', 'GoogleFontsAPI', '<h3>' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $this->adminLangId), 'CONF_GOOGLE_FONTS_API_KEY');
+
+                /* JW player Settings */
+                $frm->addHtml('', 'JWPlayerSettings', '<h3>' . Labels::getLabel("LBL_JW_Player_Settings", $this->adminLangId) . '</h3>');
+
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_JW_Player_Key", $this->adminLangId), 'CONF_JW_PLAYER_KEY');
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_key_provided_by_JW_PLAYER", $this->adminLangId) . "</small>";
+                /* JW player Settings */
                 break;
             case Configurations::FORM_REFERAL:
                 $fld = $frm->addRadioButtons(

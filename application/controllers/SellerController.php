@@ -5980,7 +5980,7 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage($ddObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        FatUtility::dieJsonSuccess('Uploaded Successfully!!!');
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
     }
 
     private function setupDigitalLink($ddObj, $refId)

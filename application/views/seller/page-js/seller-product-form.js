@@ -450,7 +450,8 @@ $(document).on('click', '.tabs_002', function(){
 		var data = new FormData();
 		$inputs = $('#frmDownload select,#frmDownload input[type=hidden]');
 		$inputs.each(function() { data.append( this.name,$(this).val());});
-		var preqId = $("input[name='preq_id']").val();
+		var prodId = $("input[name='product_id']").val();
+		var selProdId = $("input[name='selprod_id']").val();
 		$.each( $('#preview_file')[0].files, function(i, file) {
 			data.append('preview_file', file);
 		});
@@ -468,7 +469,7 @@ $(document).on('click', '.tabs_002', function(){
 					return;
 				}
 				$.systemMessage( ans.msg,'alert alert--success' );
-				downloadsForm(preqId, 0, true);
+				downloadsForm(prodId, selProdId, true);
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				alert("Error Occurred.");

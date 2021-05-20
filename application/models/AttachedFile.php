@@ -1025,4 +1025,42 @@ class AttachedFile extends MyAppModel
         }
         return $message;
     }
+
+    public static function getProductVideoUrl($afileId)
+    {
+        $mediaPath = '';
+
+        $res = static::getAttributesById($afileId);
+
+        if (false === $res){
+            return $mediaPath;
+        } 
+        
+        if ($res['afile_type'] !== static::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW) {
+            return $mediaPath;
+        }
+
+        $mediaPath =  LibHelper::generateFullUrl('image', 'productVideo', array($afileId)) . '?' . time();
+        /* if (defined('S3_SECRET') && !empty(S3_SECRET)) {
+            $mediaPath = self::FILETYPE_PRODUCT_VIDEOS_PATH . $file_row['afile_physical_path'];
+        } */ 
+
+        return $mediaPath;
+    }
+    
+    public static function getVideo($path)
+    {
+        if (empty($path)) {
+            return '';
+        }
+        $path = CONF_UPLOADS_PATH. $path;
+
+        header("Content-Type: video/mp4");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Accept-Ranges: bytes");
+        header("Content-Length: " . filesize($path));
+        return readfile($path);
+    }
+
 }

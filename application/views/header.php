@@ -49,6 +49,10 @@ $this->includeTemplate('_partial/header/commonHeadMiddle.php', $commonHeadData, 
 /* This is not included in common head, because, if we are adding any css/js from any controller then that file is not included[ */
 echo $this->getJsCssIncludeHtml(!CONF_DEVELOPMENT_MODE);
 /* ] */
+?>
+<script type="text/javascript" src="https://cdn.jwplayer.com/libraries/p48IAWDW.js"></script>
+<script type="text/javascript">jwplayer.key='<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, '');?>';</script>
+<?php
 
 $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, false);
 

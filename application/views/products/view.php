@@ -507,27 +507,34 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                         <div class="cms bg-gray p-4 mb-4">
                             <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']
                                 && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))) {
-                                if (count($product['preview_links'])) {
+                                if (0 < count($product['preview_links'])) {
                             ?>
                                     <div>Links:</div>
                             <?php   foreach ($product['preview_links'] as $keys => $link) {
                                         echo $link['pdl_preview_link'] . '<br />';
                                     }
                                 }
-                                if (count($product['preview_attachments'])) {
+                                if (0 < count($product['preview_attachments'])) {
                             ?>
                                     <div>Attachments:</div>
                             <?php
                                     foreach ($product['preview_attachments'] as $keys => $attachment) {
-                                        $fileExtension = substr($attachment['preview'], strlen($attachment['preview']) - 3, strlen($attachment['preview']));
-                                        echo '<a target="_blank" href ="' . UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview'] . '" title="' . $attachment['preview'] . '">' . $attachment['preview'] . '</a>';
-                                        echo '<br />';
+                                        if (0 < strlen($attachment['preview'])) {
+                                            $fileExtension = substr($attachment['preview'], strlen($attachment['preview']) - 3, strlen($attachment['preview']));
+                                            $videoPath = AttachedFile::getProductVideoUrl($attachment['prev_afile_id']);
+                                            echo $attachment['preview'] . ' <a href ="javascript:void(0);" title="' . $attachment['preview'] . '" onclick="playVideo(\'' . $videoPath . '\'); return false;"><i class="fa fa-caret-square-right icon"></i></a>';
+                                            echo '<br />';
+                                        }
                                     }
                                 }
                             } else {
                                 echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
                             }
                             ?>
+                            <div id="videoSourceWrapper" style="width: 100%;margin:auto;display:block;max-width: 500px;">
+                                <div id="videoSource"></div>
+                            </div>
+
                         </div>
                         <?php if (count($productSpecifications) > 0) { ?>
                             <div class="section-head">
@@ -798,3 +805,23 @@ $(function() {
 
 <!--Here is the facebook OG for this product  -->
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
+
+<!-- JWPlayer -->
+<script type="text/JavaScript">
+    function playVideo(videoPath)
+    {
+        jwplayer("videoSource").setup({
+            file: videoPath,
+            title: "My Cool Trailer",
+            type: "mp4",
+            events: {
+                onTime: function (object) {
+                    if (object.position > object.duration - 1) {
+                        this.pause();
+                    }
+                }
+            }
+        }).play();        
+    }
+</script>
+<!-- JWPlayer -->
