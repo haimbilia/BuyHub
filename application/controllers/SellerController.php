@@ -587,9 +587,7 @@ class SellerController extends SellerBaseController
             $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
             $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
 
-            $allowedDigDownloadStatuses = Orders::getBuyerAllowedDigitalDownloadStatues();
-            
-            if (in_array($orderDetail['op_status_id'], $allowedDigDownloadStatuses)) {
+            if (DigitalOrderProduct::canAttachMoreFiles($orderDetail['op_status_id'])) {
                 $canAttachMoreFiles = true;
                 $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->siteLangId);
                 $moreAttachmentsFrm->fill(['op_id' => $orderDetail['op_id']]);

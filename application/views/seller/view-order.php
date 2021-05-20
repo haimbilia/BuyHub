@@ -497,14 +497,15 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                     <?php } ?>
                     <?php if (true === $canAttachMoreFiles) { ?>
                         <span class="gap"></span>
-                        <div class="section--repeated js-scrollable table-wrap">
+                        <div class="section--repeated no-print">
                             <h5><?php echo Labels::getLabel('LBL_Add_more_attachments', $siteLangId); ?></h5>
                             <?php 
                             $moreAttachmentsFrm->setFormTagAttribute('class', 'form');
                             $moreAttachmentsFrm->setFormTagAttribute('id', 'additional_attachments');
                             $fld = $moreAttachmentsFrm->getField('downloadable_file');
                             $fld->setFieldTagAttribute('onchange', 'uploadAdditionalAttachment(this); return false;');
-                            echo $moreAttachmentsFrm->getFormHtml(); ?>
+                            echo $moreAttachmentsFrm->getFormHtml();
+                            ?>
                         </div>
                     <?php } ?>
                     <span class="gap"></span>

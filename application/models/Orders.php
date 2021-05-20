@@ -2774,7 +2774,7 @@ class Orders extends MyAppModel
         $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_order_id', '=', $pluginOrderId);
         $srch->addFld('opo_order_id');
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetch($rs); 
+        $records = FatApp::getDb()->fetch($rs);
         if (!$records) {
             return 0;
         }

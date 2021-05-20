@@ -357,9 +357,7 @@ class SellerOrdersController extends AdminBaseController
             $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
             $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
 
-            $allowedDigDownloadStatuses = Orders::getBuyerAllowedDigitalDownloadStatues();
-            
-            if (in_array($opRow['op_status_id'], $allowedDigDownloadStatuses)) {
+            if (DigitalOrderProduct::canAttachMoreFiles($opRow['op_status_id'])) {
                 $canAttachMoreFiles = true;
                 $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->adminLangId);
                 $moreAttachmentsFrm->fill(['op_id' => $opRow['op_id']]);
@@ -1120,13 +1118,12 @@ class SellerOrdersController extends AdminBaseController
 
         $rs = $opSrch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
+
         if (!is_array($row)) {
             FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
         }
 
-        $allowedDigDownloadStatuses = Orders::getBuyerAllowedDigitalDownloadStatues();
-            
-        if (!in_array($row['op_status_id'], $allowedDigDownloadStatuses)) {
+        if (!DigitalOrderProduct::canAttachMoreFiles($row['op_status_id'])) {
             FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
         }
         
