@@ -53,7 +53,7 @@ class PatchUpdateController extends AdminBaseController
         foreach ($taxCatArr as $taxCatId => $cat) {
             $srch = TaxRuleLocation::getSearchObject();
             $srch->addCondition('taxruleloc_taxcat_id', '=', $taxCatId);
-            $srch->addCondition('taxruleloc_country_id', '=', $countryId);
+            $srch->addCondition('taxruleloc_to_country_id', '=', $countryId);
             $res = $srch->getResultSet();
             $locationsData = FatApp::getDb()->fetch($res);
             if ($locationsData == false) {
@@ -62,8 +62,7 @@ class PatchUpdateController extends AdminBaseController
                 $taxRuleObj = new TaxRule($ruleId);
                 $rule['taxrule_taxcat_id'] = $taxCatId;
                 $rule['taxrule_name'] = Labels::getLabel('LBL_Zero_Tax', CommonHelper::getLangId());
-                $rule['taxrule_taxstr_id'] = $structureId;
-                $rule['taxrule_rate'] = 0;
+                $rule['taxrule_taxstr_id'] = $structureId;        
                 $taxRuleObj->assignValues($rule);
                 if (!$taxRuleObj->save()) {
                     Message::addErrorMessage($taxRuleObj->getError());
@@ -71,14 +70,21 @@ class PatchUpdateController extends AdminBaseController
                 }
 
                 $ruleId = $taxRuleObj->getMainTableRecordId();
+                
+                if (!$taxRuleObj->addUpdateRate(0)) {        
+                    FatUtility::dieJsonError($taxRuleObj->getError());
+                }
+                
                 /* [ update location data */
                 $locData = array(
                     'taxruleloc_taxcat_id' => $taxCatId,
                     'taxruleloc_taxrule_id' => $ruleId,
-                    'taxruleloc_country_id' => $countryId,
-                    'taxruleloc_state_id' => $stateId,
+                    'taxruleloc_from_country_id' => $countryId,
+                    'taxruleloc_from_state_id' => $stateId,
+                    'taxruleloc_to_country_id' => $countryId,
+                    'taxruleloc_to_state_id' => $stateId,
                     'taxruleloc_type' => TaxRule::TYPE_ALL_STATES,
-                    'taxruleloc_unique' => 1
+                    /*'taxruleloc_unique' => 1*/
                 );
                 $locObj = new TaxRuleLocation();
                 if (!$locObj->updateLocations($locData)) {
@@ -86,13 +92,11 @@ class PatchUpdateController extends AdminBaseController
                     FatUtility::dieJsonError(Message::getHtml());
                 }
 
-                $combinedTax = array(
-                    'taxruledet_taxrule_id' => $ruleId,
+                $combinedTax = array(                
                     'taxruledet_taxstr_id' => $structureId,
                     'taxruledet_rate' => 0,
-                );
-                $taxRuleComObj = new TaxRuleCombined(0);
-                $taxRuleComObj->assignValues($combinedTax);
+                );              
+                $taxRuleObj->addUpdateCombinedTax($combinedTax, 0);
                 if (!$taxRuleComObj->save()) {
                     Message::addErrorMessage($locObj->getError());
                     FatUtility::dieJsonError(Message::getHtml());
@@ -402,7 +406,7 @@ class PatchUpdateController extends AdminBaseController
         $qry = FatApp::getDb()->query("show tables");
         $res = FatApp::getDb()->fetchAll($qry);
         foreach ($res as $val) {
-            FatApp::getDb()->query("ALTER TABLE " . $val['Tables_in_' . $database] . " CONVERT TO CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci");
+            FatApp::getDb()->query("ALTER TABLE " . $val['Tables_in_' . $database] . " CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
             echo 'Done:- ' . $val['Tables_in_' . $database] . '<br>';
         }
         // ALTER TABLE tbl_affiliate_commission_settings MODIFY COLUMN afcommsetting_fees decimal(12,4)

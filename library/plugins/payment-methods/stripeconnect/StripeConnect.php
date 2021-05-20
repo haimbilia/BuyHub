@@ -74,6 +74,7 @@ class StripeConnect extends PaymentMethodBase
         $this->requiredKeys();
     }
 
+
     /**
      * requiredKeys
      *
@@ -82,7 +83,7 @@ class StripeConnect extends PaymentMethodBase
     public function requiredKeys()
     {
         $this->env = FatUtility::int($this->getKey('env'));
-        if (0 < $this->env) {
+        if (Plugin::ENV_PRODUCTION == $this->env) {
             $this->liveMode = "live_";
             $this->requiredKeys = [
                 'env',
@@ -99,7 +100,7 @@ class StripeConnect extends PaymentMethodBase
      * @param int $userId
      * @return void
      */
-    public function init(int $userId = 0, $isSeller = false)
+    public function init(int $userId = 0, bool $isSeller = false)
     {
         if (false == $this->validateSettings()) {
             return false;

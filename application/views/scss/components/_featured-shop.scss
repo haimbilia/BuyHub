@@ -11,14 +11,12 @@
         text-align: center;
         background: $gray-light;
         position: relative;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
+        
+        
         justify-content: center;
         flex-direction: column;
         border-radius: $radius4;
@@ -26,9 +24,9 @@
         overflow: hidden;
         border: solid 1px transparent;
         height: 100%;
-        -webkit-transition: all 0.2s linear;
+        
         transition: all 0.2s linear;
-        -webkit-animation: slideRight 600ms ease both;
+        
         animation: slideRight 600ms ease both;
         border: solid 1px transparent;
         padding: 2rem 0;
@@ -55,14 +53,14 @@
             margin-bottom: 1rem;
             position: relative;
             border: $border;
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
+            
+            
             align-items: center;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
+            
+            
             justify-content: center;
             padding: 1rem;
             @include media-breakpoint-down(sm) {

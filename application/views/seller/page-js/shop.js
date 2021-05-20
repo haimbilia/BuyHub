@@ -117,7 +117,6 @@ $(document).on("change", ".state", function() {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopForm', [tab]), '', function(t) {
             $(dv).html(t);
-            jscolor.installByClassName("jscolor");
             if ('' != tab) {
                 $('.' + tab).click();
                 var url = self.location.href;
@@ -199,14 +198,6 @@ $(document).on("change", ".state", function() {
             $(el).parent().addClass('is-active');
         });
     };
-    themeColor = function(el) {
-        $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopThemeColor'), '', function(t) {
-            $(dv).html(t);
-            jscolor.installByClassName("jscolor");
-
-        });
-    };
 
     setTemplate = function(ltemplateId) {
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setTemplate', [ltemplateId]), '', function(t) {
@@ -220,14 +211,6 @@ $(document).on("change", ".state", function() {
     		$(dv).append(res);
     	});
     }; */
-
-    setUpThemeColor = function(frm) {
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('seller', 'setupThemeColor'), data, function(t) {
-            $.mbsmessage.close();
-        });
-    };
 
     removeShopImage = function(BannerId, langId, imageType, slide_screen) {
         var agree = confirm(langLbl.confirmRemove);
@@ -436,16 +419,16 @@ $(document).on("change", ".state", function() {
         });
     };
 
-    resetDefaultCurrentTemplate = function() {
-        var agree = confirm(langLbl.confirmReset);
-        if (!agree) {
-            return false;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'resetDefaultThemeColor'), '', function(t) {
-            $.mbsmessage.close();
-            themeColor();
-        });
-    };
+    // resetDefaultCurrentTemplate = function() {
+    //     var agree = confirm(langLbl.confirmReset);
+    //     if (!agree) {
+    //         return false;
+    //     }
+    //     fcom.updateWithAjax(fcom.makeUrl('Seller', 'resetDefaultThemeColor'), '', function(t) {
+    //         $.mbsmessage.close();
+    //         themeColor();
+    //     });
+    // };
 
     returnAddressForm = function() {
         $(dv).html(fcom.getLoader());

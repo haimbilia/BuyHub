@@ -2,14 +2,8 @@
     .main-bar-blog {
         padding: 0.6rem 0;
         .header-blog-inner {
-            display: -webkit-box;
-            display: -ms-flexbox;
             display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
             align-items: center;
-            -webkit-box-pack: justify;
-            -ms-flex-pack: justify;
             justify-content: space-between;
         }
         .container {
@@ -23,11 +17,7 @@
         }
     }
     .backto {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
         margin-#{$start-direction}: 20px;
         a {
@@ -88,7 +78,6 @@
                     position: relative;
                     #{$start-direction}: auto;
                     top: auto;
-                    -webkit-transform: translate(0, 0);
                     transform: translate(0, 0);
                     padding: 15px;
                     max-width: none;
@@ -151,8 +140,6 @@
         }
     }
     .post_category {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
         margin-bottom: 0.5rem;
         -ms-flex-wrap: wrap;
@@ -161,8 +148,6 @@
     .post_category li {
         &:first-child {
             border-#{$start-direction}: none;
-            -webkit-padding-start: 0;
-            -moz-padding-start: 0;
             padding-#{$start-direction}: 0;
             margin-#{$start-direction}: 0;
         }
@@ -284,20 +269,12 @@
 
 .form-subscribe {
     margin: 1rem auto;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     width: 100%;
     input {
         &[type="text"] {
-            -webkit-box-flex: 1;
-            -ms-flex: 1;
             flex: 1;
             background: #fff;
             height: 3.5rem;
@@ -345,11 +322,7 @@
 }
 
 .posted-by {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
     margin-bottom: 2rem;
     color: lighten($body-color, 50%);
@@ -489,7 +462,6 @@
                         top: 13px;
                         padding: 15px 15px 15px 40px;
                         border-radius: $radius2;
-                        -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.62);
                         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.62);
                     }
                 }
@@ -523,11 +495,7 @@
 .post__author {
     margin: 2rem 0;
     .media {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-align:flex-start;
-        -ms-flex-align:flex-start;
         align-items: flex-start;
     }
     .media__image {
@@ -563,8 +531,8 @@
         border-bottom: none;
     }
     &.odd {
-        -webkit-padding-start: 110px;
-        -moz-padding-start: 110px;
+        
+        
         padding-#{$start-direction}: 110px;
     }
 }
@@ -577,8 +545,6 @@
 
 .comment-meta {
     padding: 2rem;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     border-top: $border;
     .avatar {
@@ -593,8 +559,6 @@
 }
 
 .comment-by {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
     cite {
         display: block;
@@ -642,7 +606,6 @@
         flex-direction: column;
         input {
             &[type="text"] {
-                -webkit-box-flex: 0;
                 -ms-flex: none;
                 flex: none;
                 border-radius: 50px;
@@ -650,7 +613,6 @@
                 text-align: center;
             }
             &[type="submit"] {
-                -webkit-box-flex: 0;
                 -ms-flex: none;
                 flex: none;
                 border-radius: 50px;
@@ -664,20 +626,12 @@
 .tabs-blog {
     background: #fff;
     overflow: hidden;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.05);
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.05);
     li {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
         flex: 1;
         a {
             display: block;
@@ -719,11 +673,7 @@
 }
 
 .pagination-blog {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
     margin: 3rem 0;
 }

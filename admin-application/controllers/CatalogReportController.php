@@ -4,7 +4,7 @@ class CatalogReportController extends AdminBaseController
 {
     private $canView;
     private $canEdit;
-    
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -14,83 +14,119 @@ class CatalogReportController extends AdminBaseController
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
     }
-    
+
     public function index()
     {
         $this->objPrivilege->canViewCatalogReport();
-        $frmSearch = $this->getSearchForm();
+        $flds = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($flds);
+        $frmSearch->fill(['sortBy' => 'totOrders', 'sortOrder' => 'DESC']);
         $this->set('frmSearch', $frmSearch);
         $this->_template->render();
     }
-    
+
     public function search($type = false)
     {
         $this->objPrivilege->canViewProductsReport();
         $db = FatApp::getDb();
-        
-        $srchFrm = $this->getSearchForm();
+        $fields = $this->getFormColumns();
+        $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        
-        
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
+
         /* get Seller Order Products[ */
-        $opSrch = new OrderProductSearch($this->adminLangId, true);
+        /* $fields = ['totOrders',  'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount']; */
+        $opSrch = new Report(0, array_keys($fields));
+        $opSrch->joinOrders();
         $opSrch->joinPaymentMethod();
-        $opSrch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_TAX, 'optax');
-        $opSrch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
+        $opSrch->joinOtherCharges(true);
+        $opSrch->joinOrderProductTaxCharges();
+        $opSrch->joinOrderProductShipCharges();
+        $opSrch->joinOrderProductDicountCharges();
+        $opSrch->joinOrderProductVolumeCharges();
+        $opSrch->joinOrderProductRewardCharges();
+        $opSrch->setPaymentStatusCondition();
+        $opSrch->setCompletedOrdersCondition();
+        $opSrch->excludeDeletedOrdersCondition();
+        $opSrch->addTotalOrdersCount('product_id');
+        $opSrch->setGroupBy('product_id');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $cnd = $opSrch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID, 'OR');
-        $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-        
-        $opSrch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-        $opSrch->addMultipleFields(
-            array( 'SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) ) as op_product_id', 'COUNT(op_order_id) as totOrders', 'SUM(op_qty - op_refund_qty) as totSoldQty',
-            'SUM( (op_unit_price * op_qty) - (op_unit_price * op_refund_qty) ) as total', '(SUM(opship.opcharge_amount - op_refund_shipping)) as shippingTotal', '(SUM(optax.opcharge_amount - (optax.opcharge_amount/op_qty * op_refund_qty))) as taxTotal', 'SUM(op_commission_charged - op_refund_commission) as commission' )
-        );
-        $opSrch->addGroupBy('op_product_id');
-        
+        $opSrch->removeFld('product_name');
+        // echo  $opSrch->getQuery(); exit;
         /* ] */
-        
+
+        $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'opq.*'];
         $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
         $srch->joinBrands($this->adminLangId, false, true);
         $srch->joinProductToCategory();
-        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = opq.op_product_id', 'opq');
-        $srch->addMultipleFields(array( 'product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'IFNULL(totOrders, 0) as totOrders', 'IFNULL(totSoldQty, 0) as totSoldQty', 'opq.total', 'opq.shippingTotal', 'opq.taxTotal', 'opq.commission', ));
-        $srch->addGroupBy('product_id');
-        $srch->addOrder('product_name');
+        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = opq.product_id', 'opq');
+        $srch->addMultipleFields($selectedFlds);
+        $srch->addGroupBy('p.product_id');
+
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
         if (!empty($keyword)) {
             $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
         }
-        
+
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
+        }
+
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array('Title', 'No. of Orders', 'Sold Qty', 'Total(A)', 'Shipping(B)', 'Tax(C)', 'Total(A+B+C)', 'Commission');
-            array_push($sheetData, $arr);
+            array_push($sheetData, array_values($fields));
             while ($row = $db->fetch($rs)) {
-                $name = $row['product_name'];
-                
-                
-                if ($row['brand_name'] != '') {
-                    $name .= "\nBrand: " . $row['brand_name'];
+                $arr = [];
+                foreach ($fields as $key => $val) {
+                    switch ($key) {
+                        case 'product_name':
+                            $name = $row['product_name'] . '(' . $row['brand_name'] . ')';
+                            $arr[] = $name;
+                            break;
+                        case 'grossSales':
+                        case 'transactionAmount':
+                        case 'inventoryValue':
+                        case 'taxTotal':
+                        case 'adminTaxTotal':
+                        case 'sellerTaxTotal':
+                        case 'shippingTotal':
+                        case 'sellerShippingTotal':
+                        case 'adminShippingTotal':
+                        case 'discountTotal':
+                        case 'couponDiscount':
+                        case 'volumeDiscount':
+                        case 'rewardDiscount':
+                        case 'refundedAmount':
+                        case 'refundedShipping':
+                        case 'refundedTax':
+                        case 'orderNetAmount':
+                        case 'commissionCharged':
+                        case 'refundedCommission':
+                        case 'adminSalesEarnings':
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            break;
+                        default:
+                            $arr[] = $row[$key];
+                            break;
+                    }
                 }
-                
-                $total = CommonHelper::displayMoneyFormat($row['total'], true, true);
-                $shipping = CommonHelper::displayMoneyFormat($row['shippingTotal'], true, true);
-                $tax = CommonHelper::displayMoneyFormat($row['taxTotal'], true, true);
-                $subTotal = $row['total'] + $row['shippingTotal'] + $row['taxTotal'];
-                $subTotal = CommonHelper::displayMoneyFormat($subTotal, true, true);
-                $commission = CommonHelper::displayMoneyFormat($row['commission'], true, true);
-                
-                $arr = array($name, $row['totOrders'], $row['totSoldQty'], $total, $shipping, $tax, $subTotal, $commission );
+
                 array_push($sheetData, $arr);
             }
-        
+
             CommonHelper::convertToCsv($sheetData, 'Catalog_Report_' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
@@ -104,23 +140,77 @@ class CatalogReportController extends AdminBaseController
             $this->set('page', $page);
             $this->set('pageSize', $pageSize);
             $this->set('postedData', $post);
+            $this->set('sortBy', $sortBy);
+            $this->set('sortOrder', $sortOrder);
+            $this->set('fields', $fields);
             $this->_template->render(false, false);
         }
     }
-    
+
     public function export()
     {
         $this->search('export');
     }
-    
-    private function getSearchForm()
+
+    private function getSearchForm($fields = [])
     {
         $frm = new Form('frmCatalogReportSearch');
         $frm->addHiddenField('', 'page', 1);
+
+        if (!empty($fields)) {
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
+
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+        }
+
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
+    }
+
+    private function getFormColumns()
+    {
+        $catalogReportCacheVar = FatCache::get('catalogReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$catalogReportCacheVar) {
+            $arr = [
+                'product_name'    =>    Labels::getLabel('LBL_Product', $this->adminLangId),
+                'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->adminLangId),
+                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
+                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
+                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->adminLangId),
+                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->adminLangId),
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
+                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->adminLangId),
+
+                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
+                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $this->adminLangId),
+                'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->adminLangId),
+
+                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
+                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $this->adminLangId),
+                'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->adminLangId),
+
+                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
+                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
+                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
+
+                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
+                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
+                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
+
+                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
+
+                'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->adminLangId),
+                'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->adminLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId)
+            ];
+            FatCache::set('catalogReportCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+        } else {
+            $arr =  unserialize($catalogReportCacheVar);
+        }
+
+        return $arr;
     }
 }

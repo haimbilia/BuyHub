@@ -8,8 +8,6 @@
                         <div class="col--first col-lg-6">
                             <span class="page__icon"><i class="ion-android-star"></i></span>
                             <h5><?php echo Labels::getLabel('LBL_Catalog_Report', $adminLangId); ?>
-                                <br /><strong><?php echo Labels::getLabel('LBL_Note', $adminLangId); ?>:
-                                </strong><?php echo Labels::getLabel('LBL_We_have_not_considered_impact_of_discounts_in_this_report.', $adminLangId); ?>
                             </h5>
                             <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
                         </div>
@@ -29,6 +27,12 @@
                             $frmSearch->setFormTagAttribute('class', 'web_form');
                             $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
                             $frmSearch->developerTags['fld_default_col'] = 6;
+                            $sortBy = $frmSearch->getField('sortBy');
+                            $sortBy->setFieldTagAttribute('id', 'sortBy');
+    
+                            $sortOrder = $frmSearch->getField('sortOrder');
+                            $sortOrder->setFieldTagAttribute('id', 'sortOrder');
+
                             echo  $frmSearch->getFormHtml();
                         ?>
                     </div>

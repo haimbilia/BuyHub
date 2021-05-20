@@ -147,7 +147,6 @@ $(document).ready(function () {
 
         fcom.ajax(fcom.makeUrl('EmailTemplates', 'settingsForm', [langId, autoFillLangData]), '', function(t) {
             fcom.updateFaceboxContent(t);
-            jscolor.installByClassName('jscolor');
             fcom.setEditorLayout(langId);
             fcom.resetFaceboxHeight();
             var frm = $('#facebox form')[0];

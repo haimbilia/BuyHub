@@ -1,13 +1,16 @@
-
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
     => System API version : 2.3
 
 New Feature : 
     => 82248 : DPO Payment Gateway Integration
+    => 82892 : Easypost Shipping API Integration
+    =>  Shopify sync module for SV seller
 
-Updates : 
-    => 83842 : Out of stock fixes
+Updates:
+    => Tax Module update
+    => Admin can create users 
+    => 83842 : Out of stock fixes    
 
 Fixes:
     => 047746 - Get current location not working
@@ -88,6 +91,17 @@ Fixes:
     => 052413 - Removed settings for recurring discount in case of subscription.
     => 052352 - getting double loader while making payment 
     => 052450 - Separate Tracking URL and Tracking Courier if Aftership enabled
+    => 052459 - Repeat Fetched Rates from EasyPost API Plugin
+    => 052463 - Setup shipping of other product not working with EasyPost
+    => 053622 - Load all font family variants
+
+
+Develop
+
+Fixes:
+    => 052651 - on using comma as currency separator it's not impacting in text areas 
+    => 052654 - Admin can create seller/buyer/advertiser/affiliate account from back-end - Not working
+    => 052664 - admin> users> asterisk marked field shouldn't be mandatory for admin 
     => 052645 - wile adding product specifications> it's not accepting character after &
     => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
     => 052869 - caching directory delete issue for some server
@@ -112,14 +126,23 @@ Fixes:
     => 053442 - "When a registered user shares any information throught contact us form: - The email is recieved by the site owner, but when the site owner tries to reply the from email i,e user email is not getting fetched. " 
     => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
     => 053673  - Allow seller to cancel COD orders.
+    => 053763 - admin> users> add button> icon is not there
+    => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
+    => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
 
+
+New Features:
+    => Admin shipped products listing page
 
 Enhancements :
    => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.
-   => Performance optimization   
+   => Performance optimization
+   => Upgrades in GEO location module to configure default location.  
+   => Price surge based on special price. 
+   => Admin Reports.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
@@ -145,6 +168,9 @@ Notes:
 
         => Composer should be installed on server to run the stripe connect module: composer.json on root of the project has details to download the required libraries in root's vendor folder.
         => Run command "composer update" at root of the project to update composer and fetch all dependennt libraries: 
+
+    Configuration :
+        => Please configure Ready For Pickup Order Statuses.
 
     Stripe Connect Installation :
 

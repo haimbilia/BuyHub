@@ -4,7 +4,6 @@ class MyAppController extends FatController
 {
     public $app_user = array();
     public $appToken = '';
-    public $themeDetail = '';
 
     public function __construct($action)
     {
@@ -137,8 +136,8 @@ class MyAppController extends FatController
                 'defaultCountryCode' => $defaultCountryCode,
                 'scrollable' => Labels::getLabel('LBL_SCROLLABLE', $this->siteLangId),
                 'quantityAdjusted' => Labels::getLabel('MSG_MAX_QUANTITY_THAT_CAN_BE_PURCHASED_IS_{QTY}._SO,_YOUR_REQUESTED_QUANTITY_IS_ADJUSTED_TO_{QTY}.', $this->siteLangId),
-                'withUsernameOrEmail' => Labels::getLabel('LBL_USE_EMAIL_INSTEAD', $this->siteLangId),
-                'withPhoneNumber' => Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD', $this->siteLangId),
+                'withUsernameOrEmail' => Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $this->siteLangId),
+                'withPhoneNumber' => Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $this->siteLangId),
                 'otpInterval' => User::OTP_INTERVAL,
                 'captchaSiteKey' => FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, ''),
                 'allowedFileSize' => LibHelper::getMaximumFileUploadSize(),
@@ -182,7 +181,7 @@ class MyAppController extends FatController
         } else {
             $jsVariables =  unserialize($jsVariablesCache);
         }
-        
+
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
 
         $themeId = FatApp::getConfig('CONF_FRONT_THEME', FatUtility::VAR_INT, 1);
@@ -191,7 +190,18 @@ class MyAppController extends FatController
             $themeId = $_SESSION['preview_theme'];
         }
 
-        $this->themeDetail = ThemeColor::getById($themeId, $this->siteLangId, false, true);
+        if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+            setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), "/"); // 86400 = 1 day
+            setcookie('_ykGeoLng', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96), time() + (86400 * 30), "/"); // 86400 = 1 day
+            setcookie('_ykGeoStateCode', FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, ''), time() + (86400 * 30), "/"); // 86400 = 1 day
+            setcookie('_ykGeoCountryCode', FatApp::getConfig('CONF_GEO_DEFAULT_COUNTRY', FatUtility::VAR_STRING, ''), time() + (86400 * 30), "/"); // 86400 = 1 day
+            setcookie('_ykGeoZip', FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0), time() + (86400 * 30), "/"); // 86400 = 1 day
+            $address = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
+            if (empty($address)) {
+                $address = FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0) . '-' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, '');
+            }
+            setcookie('_ykGeoAddress', $address, time() + (86400 * 30), "/"); // 86400 = 1 day
+        }
 
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
@@ -200,7 +210,6 @@ class MyAppController extends FatController
         $this->set('isUserDashboard', false);
         $this->set('currencySymbolLeft', $currencySymbolLeft);
         $this->set('currencySymbolRight', $currencySymbolRight);
-        $this->set('themeDetail', $this->themeDetail);
         $this->set('jsVariables', $jsVariables);
         $this->set('controllerName', $controllerName);
         $this->set('isAppUser', CommonHelper::isAppUser());
@@ -399,6 +408,15 @@ class MyAppController extends FatController
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName, array('placeholder' => Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'data-alt-placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId)));
         $pwd = $frm->addPasswordField(Labels::getLabel('LBL_Password', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('LBL_Password', $siteLangId)));
         $pwd->requirements()->setRequired();
+
+        if (SmsArchive::canSendSms(SmsTemplate::LOGIN)) {
+            $attr = ['maxlength' => 1, 'size' => 1, 'placeholder' => '*'];
+            for ($i = 0; $i < User::OTP_LENGTH; $i++) {
+                $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
+            }
+            $frm->addHiddenField('', 'loginWithOtp', 0);
+        }
+
         $frm->addCheckbox(Labels::getLabel('LBL_Remember_Me', $siteLangId), 'remember_me', 1, array(), '', 0);
         $frm->addHtml('', 'forgot', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_LOGIN', $siteLangId));
@@ -428,16 +446,15 @@ class MyAppController extends FatController
             if (false === MOBILE_APP_API_CALL) {
                 $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
             }
+            $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $siteLangId), 'user_password', '', array('placeholder' => Labels::getLabel('LBL_PASSWORD', $siteLangId)));
+            $fld->requirements()->setRequired();
+            $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
+            $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
+    
+            $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId)));
+            $fld1->requirements()->setRequired();
+            $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
         }
-
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $siteLangId), 'user_password', '', array('placeholder' => Labels::getLabel('LBL_PASSWORD', $siteLangId)));
-        $fld->requirements()->setRequired();
-        $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
-        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
-
-        $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId)));
-        $fld1->requirements()->setRequired();
-        $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
 
         $fld = $frm->addCheckBox('', 'agree', 1);
         $fld->requirements()->setRequired();
@@ -490,11 +507,11 @@ class MyAppController extends FatController
         $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
         $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
-        
+
         $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
+        $phnFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</span>';
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addHiddenField('', 'addr_id');

@@ -46,7 +46,7 @@ $(document).ready(function(){
         });
     };
 
-    /* ShipStation */
+    /* ShippingServices */
     generateLabel = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
             window.location.reload();
@@ -72,6 +72,7 @@ $(document).ready(function(){
             if (0 < $(form).length) {
                 $(form + " .status-js").val(orderShippedStatus).change();
                 $(form + " .notifyCustomer-js").val(1);
+                $(form + " input[name='tracking_number']").val(t.tracking_number);
                 canShipByPlugin = 0;
                 setTimeout(function(){ $(form).submit(); }, 200);
             } else {
@@ -79,15 +80,14 @@ $(document).ready(function(){
             }
         });
     }
+    /* ShippingServices */
     /* ShipStation */
-
     courierFld = function () {
         $('.courierBlk--js').removeClass('d-none');
         $('.courierFld--js').attr('data-fatreq', '{"required": true}');
         $('.trackingUrlBlk--js').addClass('d-none');
         $('.trackingUrlFld--js').attr('data-fatreq', '{"required": false}');
     }
-
     trackingUrlFld = function () {
         $('.trackingUrlBlk--js').removeClass('d-none');
         $('.trackingUrlFld--js').attr('data-fatreq', '{"required": true}');

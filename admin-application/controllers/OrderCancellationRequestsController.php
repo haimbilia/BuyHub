@@ -169,20 +169,20 @@
                 FatUtility::dieJsonError(Message::getHtml());
             }
 
-            $srch = new OrderCancelRequestSearch($this->adminLangId);
-            $srch->joinOrderProducts();
-            $srch->joinOrders();
-            $srch->addCondition('ocrequest_id', '=', $ocrequest_id);
-            $srch->addCondition('ocrequest_status', '=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING);
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
-            $srch->addMultipleFields(array('op_id', 'ocrequest_id', 'ocrequest_status', 'ocrequest_op_id', 'o.order_language_id', 'op_status_id', 'order_pmethod_id'));
-            $rs = $srch->getResultSet();
-            $row = FatApp::getDb()->fetch($rs);
-            if (!$row) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_or_Status_is_already_Approved_or_Declined!', $this->adminLangId));
-                FatUtility::dieJsonError(Message::getHtml());
-            }
+        $srch = new OrderCancelRequestSearch($this->adminLangId);
+        $srch->joinOrderProducts();
+        $srch->joinOrders();
+        $srch->addCondition('ocrequest_id', '=', $ocrequest_id);
+        $srch->addCondition('ocrequest_status', '=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(array('op_id', 'ocrequest_id', 'ocrequest_status', 'ocrequest_op_id', 'o.order_language_id', 'op_status_id', 'order_pmethod_id','op_selprod_id','op_order_id'));
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (!$row) {
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_or_Status_is_already_Approved_or_Declined!', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
 
             $db = FatApp::getDb();
             $db->startTransaction();

@@ -177,7 +177,7 @@ class EmailHandler extends FatModel
             $headers .= $extra_headers;
         }
 
-        $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL");
+        $headers .= "\r\nReply-to: " . (isset($extra_headers['ReplyTo']) ? $extra_headers['ReplyTo'] : FatApp::getConfig("CONF_REPLY_TO_EMAIL"));
 
 
         if (!FatApp::getDb()->insertFromArray(
@@ -253,8 +253,8 @@ class EmailHandler extends FatModel
         if (!is_array($extra_headers) && $extra_headers != '') {
             $headers .= $extra_headers;
         }
-
-        $replyTo = $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL", FatUtility::VAR_STRING, '');
+        
+        $replyTo = (isset($extra_headers['ReplyTo']) ? $extra_headers['ReplyTo'] : FatApp::getConfig("CONF_REPLY_TO_EMAIL"));
         if (!empty($replyTo)) {
             $headers .= "\r\nReply-to: " . $replyTo;
         }
@@ -463,6 +463,25 @@ class EmailHandler extends FatModel
             return false;
         }
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
+        return true;
+    }
+    
+    public function sendAdminNewUserCreationEmail($langId, $d)
+    {
+        $tpl = 'admin_new_user_creation_email';
+
+        $vars = array(
+            '{user_full_name}' => $d['user_name'],
+            '{user_email}' => $d['user_name'],
+            '{reset_url}' => $d['link'],
+            '{days}' => $d['days'],
+            '{account_type}' => $d['account_type'],
+        );
+
+        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+            return false;
+        }
+       
         return true;
     }
 

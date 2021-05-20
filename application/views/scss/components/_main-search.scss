@@ -1,9 +1,8 @@
 .main-search {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
+    
+   
     flex: 1;
     @include media-breakpoint-down(lg) {
         & {
@@ -27,14 +26,14 @@
         }
         .icn {
             vertical-align: top;
-            display: -webkit-box;
-            display: -ms-flexbox;
+            
+            
             display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
+            
+            
             align-items: center;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
+            
+            
             justify-content: center;
             width: 20px;
             height: 20px;
@@ -53,25 +52,23 @@
 }
 
 .form--search {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
+    
+   
     flex: 1;
     margin: 15px auto;
     max-width: 850px;
     .main-search-form {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         flex: 1;
         width: 100%;
         .main-search__field {
             position: relative;
             width: 100%;
-            -webkit-box-flex: 1;
-            -ms-flex: 1;
+            
+           
             flex: 1;
             .close-layer {
                 top: 2px;
@@ -114,11 +111,9 @@
         background: #fff;
         opacity: 0;
         visibility: hidden;
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+
         align-items: center;
         max-width: 100%;
         pointer-events: none;
@@ -241,9 +236,9 @@
     bottom: auto;
     z-index: 10;
     padding: 1rem;
-    display: -webkit-box;
+    
     display: -webkit-flex;
-    display: -ms-flexbox;
+    
     display: flex;
     box-shadow: 0 0 35px 10px rgba(0, 0, 0, 0.1);
     border-radius: $radius4;
@@ -263,11 +258,11 @@
     }
     .text-suggestions {
         -webkit-flex: 1;
-        -ms-flex: 1;
+       
         flex: 1;
-        display: -webkit-box;
+        
         display: -webkit-flex;
-        display: -ms-flexbox;
+        
         display: flex;
         -webkit-flex-direction: column;
         -ms-flex-direction: column;
@@ -276,17 +271,11 @@
         li {
             padding-bottom: 8px;
             transition: all 0.2s ease-in-out;
-            -moz-transition: all 0.2s ease-in-out;
-            -webkit-transition: all 0.2s ease-in-out;
-            -ms-transition: all 0.2s ease-in-out;
-            -o-transition: all 0.2s ease-in-outs;
+            
             a {
                 display: block;
                 position: relative;
-                -webkit-transition: all .2s linear;
-                -moz-transition: all .2s linear;
-                -ms-transition: all .2s linear;
-                -o-transition: all .2s linear;
+                
                 transition: all .2s linear;
                 &:before {
                     visibility: hidden;
@@ -302,10 +291,7 @@
                     border-top: 1px solid currentColor;
                     border-right: 1px solid currentColor;
                     transform: rotate(45deg);
-                    -webkit-transition: all .2s linear;
-                    -moz-transition: all .2s linear;
-                    -ms-transition: all .2s linear;
-                    -o-transition: all .2s linear;
+                     
                     transition: all .2s linear;
                 }
                 &:hover {

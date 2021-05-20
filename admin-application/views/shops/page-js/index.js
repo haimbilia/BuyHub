@@ -129,12 +129,12 @@ $(document).on('change', '.collection-language-js', function () {
         });
     };
 
-    getStatesByCountryCode = function (countryCode, stateCode, dv, idCol = 'state_id') {
+    /* getStatesByCountryCode = function (countryCode, stateCode, dv, idCol = 'state_id') {
         fcom.ajax(fcom.makeUrl('Shops', 'getStatesByCountryCode', [countryCode, stateCode, idCol]), '', function (res) {
             $(dv).empty();
             $(dv).append(res);
         });
-    };
+    }; */
 
     shopMediaForm = function (shopId) {
         fcom.displayProcessing();

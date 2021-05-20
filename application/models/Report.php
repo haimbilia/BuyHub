@@ -1,7 +1,350 @@
 <?php
 
-class Report extends MyAppModel
+class Report extends SearchBase
 {
+    private $langId;
+    private $ordersTableJoined;
+    private $attr = [];
+    private $shopSpecific = false;
+
+    public function __construct($langId = 0, $attr = [], $shopSpecific = false)
+    {
+        parent::__construct(Orders::DB_TBL_ORDER_PRODUCTS, 'op');
+        $this->langId = FatUtility::int($langId);
+        $this->ordersTableJoined = false;
+        $this->shopSpecific = $shopSpecific;
+        $this->setFields($attr, $shopSpecific);
+    }
+
+    public function joinSettings()
+    {
+        $this->joinTable(OrderProduct::DB_TBL_SETTINGS, 'LEFT OUTER JOIN', 'op.op_id = opst.opsetting_op_id', 'opst');
+    }
+
+    public function joinOrders()
+    {
+        if ($this->ordersTableJoined) {
+            trigger_error('Orders Table is already joined', E_USER_ERROR);
+        }
+        $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = op.op_order_id', 'o');
+        $this->ordersTableJoined = true;
+    }
+
+    public function joinPaymentMethod(int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = $this->langId;
+        }
+
+        if (!$this->ordersTableJoined) {
+            trigger_error('Please use joinOrders() first, then try to join joinPaymentMethod()', E_USER_ERROR);
+        }
+
+        $this->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'o.order_pmethod_id = pm.plugin_id', 'pm');
+        if ($langId) {
+            $this->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pm.plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
+        }
+    }
+
+    public function joinSellerUser()
+    {
+        $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'seller.user_id = op.op_selprod_user_id', 'seller');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'seller.user_id = credential_user_id', 'seller_cred');
+    }
+
+    public function joinBuyerUser()
+    {
+        $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'buyer.user_id = o.order_user_id', 'buyer');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'buyer.user_id = credential_user_id', 'buyer_cred');
+    }
+
+    public function joinOtherCharges($bifurcationCharges = false, $excludeType = [])
+    {
+        $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
+        $ocSrch->doNotCalculateRecords();
+        $ocSrch->doNotLimitRecords();
+        $ocSrch->addGroupBy('opc.opcharge_op_id');
+        $ocSrch->addMultipleFields(['opcharge_op_id', 'sum(opc.opcharge_amount) as op_other_charges']);
+        if ($bifurcationCharges) {
+            $ocSrch->addFld('SUM(CASE WHEN opc.opcharge_amount<0 THEN opc.opcharge_amount ELSE 0 END) as opDiscountCharges');
+            $ocSrch->addFld('SUM(CASE WHEN opc.opcharge_amount>0 THEN opc.opcharge_amount ELSE 0 END) as opNonDiscountCharges');
+        }
+
+        if (!empty($excludeType)) {
+            $ocSrch->addCondition('opcharge_type', 'not in', $excludeType);
+        }
+
+        if (empty($excludeType) && $this->shopSpecific) {
+            $excludeType = [
+                OrderProduct::CHARGE_TYPE_TAX,
+                OrderProduct::CHARGE_TYPE_SHIPPING,
+                OrderProduct::CHARGE_TYPE_DISCOUNT,
+                OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT
+            ];
+            $ocSrch->addCondition('opcharge_type', 'not in', $excludeType);
+        }
+
+        $this->joinTable('(' . $ocSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
+    }
+
+    public function joinOrderProductCharges($type, $alias = 'opc_temp')
+    {
+        $this->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', $alias . '.opcharge_op_id = op.op_id and ' . $alias . '.opcharge_type = ' . $type, $alias);
+    }
+
+    public function joinOrderProductTaxCharges()
+    {
+        $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_TAX, 'optax');
+        $this->joinSettings();
+        $this->addFld('(SUM(IFNULL(optax.opcharge_amount,0))) as taxTotal');
+        $this->addFld('SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0)) as sellerTaxTotal');
+        $this->addFld('SUM(if(opst.op_tax_collected_by_seller = 0,IFNULL(optax.opcharge_amount,0),0)) as adminTaxTotal');
+    }
+
+    public function joinOrderProductShipCharges()
+    {
+        $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
+        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFt JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+        $this->addFld('(SUM(IFNULL(opship.opcharge_amount,0))) as shippingTotal');
+        $this->addFld('SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0)) as sellerShippingTotal');
+        $this->addFld('SUM(if(ops.opshipping_by_seller_user_id = 0,IFNULL(opship.opcharge_amount,0),0)) as adminShippingTotal');
+    }
+
+    public function joinOrderProductDicountCharges()
+    {
+        $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_DISCOUNT, 'opDis');
+        $this->addFld('(SUM(IFNULL(opDis.opcharge_amount,0))) as couponDiscount');
+    }
+
+    public function joinOrderProductVolumeCharges()
+    {
+        $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, 'opVolDis');
+        $this->addFld('(SUM(IFNULL(opVolDis.opcharge_amount, 0))) as volumeDiscount');
+    }
+
+    public function joinOrderProductRewardCharges()
+    {
+        $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT, 'opRewardDis');
+        $this->addFld('(SUM(IFNULL(opRewardDis.opcharge_amount, 0))) as rewardDiscount');
+    }
+
+    public function addTotalOrdersCount($key = 'order_id', $opSelprodUserId = 0)
+    {
+        $srch = new self(0, [], $this->shopSpecific);
+        $srch->joinOrders();
+        $srch->joinPaymentMethod();
+        $srch->setPaymentStatusCondition();
+        $srch->setCompletedOrdersCondition();
+        $srch->excludeDeletedOrdersCondition();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+
+        if (0 < $opSelprodUserId) {
+            $srch->addCondition('op_selprod_user_id', '=', $opSelprodUserId);
+        }
+
+        switch ($key) {
+            case 'order_id':
+                $srch->addMultipleFields(['o.order_id', 'count(DISTINCT(op.op_id)) as totOrders']);
+                $srch->addGroupBy('o.order_id');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.order_id = o.order_id', 'ocount');
+                break;
+            case 'product_id':
+                $srch->addMultipleFields(['SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) ) as product_id', 'count(DISTINCT(op.op_id)) as totOrders']);
+                $srch->addGroupBy('product_id');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.product_id = SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) )', 'ocount');
+                break;
+            case 'selprod_id':
+                $srch->addMultipleFields(['op.op_selprod_id', 'count(DISTINCT(op.op_id)) as totOrders']);
+                $srch->addGroupBy('op.op_selprod_id');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.op_selprod_id = op.op_selprod_id', 'ocount');
+                break;
+            case 'order_date_added':
+                $srch->addMultipleFields(['DATE(o.order_date_added) as order_date_added', 'count(DISTINCT(o.order_id)) as totOrders']);
+                $srch->addGroupBy('DATE(o.order_date_added)');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.order_date_added = DATE(o.order_date_added)', 'ocount');
+                break;
+            case 'op_selprod_user_id':
+                $srch->joinSellerUser();
+                $srch->addMultipleFields(['op_selprod_user_id', 'count(DISTINCT(op.op_id)) as totOrders']);
+                $srch->addGroupBy('op_selprod_user_id');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.op_selprod_user_id = op.op_selprod_user_id', 'ocount');
+                break;
+            case 'order_user_id':
+                $srch->joinBuyerUser();
+                $srch->addMultipleFields(['order_user_id', 'count(DISTINCT(o.order_id)) as totOrders', 'count(DISTINCT(op.op_id)) as orderItems']);
+                $srch->addGroupBy('order_user_id');
+                $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.order_user_id = o.order_user_id', 'ocount');
+                break;
+        }
+    }
+
+    public function addStatusCondition($op_status, $orderPaymentCancel = false)
+    {
+        if (is_array($op_status)) {
+            if (!empty($op_status)) {
+                $cnd = $this->addCondition('op.op_status_id', 'IN', $op_status);
+            } else {
+                $cnd = $this->addCondition('op.op_status_id', '=', 0);
+            }
+        } else {
+            $op_status_id = FatUtility::int($op_status);
+            $cnd = $this->addCondition('op.op_status_id', '=', $op_status_id);
+        }
+
+        if (true === $orderPaymentCancel) {
+            $cnd->attachCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_CANCELLED, 'OR');
+        }
+    }
+
+
+    public function setDateCondition($from = '', $to = '')
+    {
+        if (!empty($from)) {
+            $this->addCondition('o.order_date_added', '>=', $from . ' 00:00:00');
+        }
+
+        if (!empty($to)) {
+            $this->addCondition('o.order_date_added', '<=', $to . ' 23:59:59');
+        }
+    }
+
+    public function setPaymentStatusCondition($paymentStatus = Orders::ORDER_PAYMENT_PAID)
+    {
+        $cnd = $this->addCondition('o.order_payment_status', '=', $paymentStatus);
+        $cnd->attachCondition('pm.plugin_code', '=', 'cashondelivery');
+        $cnd->attachCondition('pm.plugin_code', '=', 'payatstore');
+    }
+
+    public function setCompletedOrdersCondition()
+    {
+        $this->addStatusCondition(unserialize(FatApp::getConfig('CONF_COMPLETED_ORDER_STATUS')));
+        /* $completedStatus = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS", FatUtility::VAR_STRING, ''));
+        $cancelledStatus = [FatApp::getConfig('CONF_DEFAULT_CANCEL_ORDER_STATUS')];
+        $refundCompletedStatus = array_diff($completedStatus, $cancelledStatus);
+        $this->addStatusCondition($refundCompletedStatus); */
+    }
+
+    public function excludeDeletedOrdersCondition()
+    {
+        $this->addCondition('order_deleted', '=', applicationConstants::NO);
+    }
+
+    public function setOrderBy($key, $sortBy = 'ASC')
+    {
+        if (!array_key_exists($sortBy, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortBy = applicationConstants::SORT_ASC;
+        }
+
+        switch ($key) {
+            default:
+                $this->addOrder($key, $sortBy);
+                break;
+        }
+    }
+
+    public function setGroupBy($key)
+    {
+        switch ($key) {
+            case 'orderDate':
+                $this->addGroupBy('DATE(o.order_date_added)');
+                break;
+            case 'product_id':
+                $this->addFld('SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) ) as product_id');
+                $this->addGroupBy('product_id');
+                break;
+            case 'selprod_id':
+                $this->addFld('op.op_selprod_id');
+                $this->addGroupBy('op.op_selprod_id');
+                break;
+            case 'shop_id':
+                $this->addFld('op.op_shop_id');
+                $this->addGroupBy('op.op_shop_id');
+                break;
+            case 'op_selprod_user_id':
+                $this->addFld('op.op_selprod_user_id');
+                $this->addGroupBy('op.op_selprod_user_id');
+                break;
+            case 'order_user_id':
+                $this->addFld('o.order_user_id');
+                $this->addGroupBy('o.order_user_id');
+                break;
+            default:
+                $this->addGroupBy($key);
+                break;
+        }
+    }
+
+    public static function getFields($fields = [], $shopSpecific = false)
+    {
+        // pending NetSales
+        $arr = [
+            'orderDate' => 'DATE(o.order_date_added) as orderDate',
+            'totOrders' => 'ocount.totOrders',
+            'totQtys' => 'SUM(op_qty) as totQtys',
+            'totRefundedQtys' => 'SUM(op_refund_qty) as totRefundedQtys',
+            'netSoldQty' => 'SUM(op_qty - op_refund_qty) as netSoldQty',
+            'grossSales' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges, 0) + IFNULL(op_rounding_off,0) - opDiscountCharges) as grossSales',
+            'discountTotal' => 'SUM(IFNULL(opDiscountCharges, 0)) as discountTotal',
+            'transactionAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0)) as transactionAmount',
+            'inventoryValue' => 'SUM(op_unit_price*op_qty) as inventoryValue',
+
+            'refundedAmount' => 'sum(IFNULL(op_refund_amount,0)) as refundedAmount',
+            'refundedShipping' => '(SUM(IFNULL(op_refund_shipping,0))) as refundedShipping',
+            'refundedTax' => 'SUM(IFNULL(op_refund_tax,0)) as refundedTax',
+
+            'commissionCharged' => 'sum(IFNULL(op_commission_charged,0)) as commissionCharged',
+            'refundedCommission' => 'sum(IFNULL(op_refund_commission,0)) as refundedCommission',
+            'affiliateCommissionCharged' => 'sum(IFNULL(op_affiliate_commission_charged,0)) as affiliateCommissionCharged',
+            'refundedAffiliateCommission' => '(SUM(IFNULL(op_refund_shipping,0))) as refundedAffiliateCommission',
+            'adminSalesEarnings' => 'sum((IFNULL(op_commission_charged,0) - IFNULL(op_refund_commission,0))) as adminSalesEarnings',
+
+            'orderNetAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - IFNULL(op_refund_amount,0)) as orderNetAmount',
+            'unitPrice' => 'SUM(op_unit_price*op_qty)/sum(op_qty) as unitPrice',
+            'roundingOff' => 'op_rounding_off',
+            'op_other_charges' => 'sum(IFNULL(op_other_charges,0)) as op_other_charges'
+
+        ];
+
+        if (true == $shopSpecific) {
+            $arr = array_merge($arr, [
+                'grossSales' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) - IFNULL(opDiscountCharges,0)) as grossSales',
+                'refundedAmount' => 'sum(IFNULL(op_refund_amount,0) - if(ops.opshipping_by_seller_user_id > 0,0,IFNULL(op.op_refund_shipping,0)) - if(opst.op_tax_collected_by_seller > 0,0,IFNULL(op.op_refund_tax,0)) ) as refundedAmount',
+                'transactionAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0) + if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0) + IFNULL(op_rounding_off,0)) as transactionAmount',
+                'refundedTaxFromSeller' => 'SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(op.op_refund_tax,0),0)) as refundedTaxFromSeller',
+                'orderNetAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0) + if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0) + IFNULL(op_rounding_off,0) - (IFNULL(op_refund_amount,0) - if(opst.op_tax_collected_by_seller > 0,0,IFNULL(op.op_refund_tax,0)))) as orderNetAmount',
+                'refundedShippingFromSeller' => 'SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(op.op_refund_shipping,0),0)) as refundedShippingFromSeller'
+            ]);
+        }
+
+        if (empty($fields)) {
+            return array_values($arr);
+        }
+
+        $fields = array_diff($fields, ['taxTotal', 'shippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'opDiscountCharges', 'opNonDiscountCharges', 'sellerShippingTotal', 'adminShippingTotal', 'sellerTaxTotal', 'adminTaxTotal']);
+
+        $flds = [];
+        foreach ($fields as $key) {
+            if (!array_key_exists($key, $arr)) {
+                $flds[] = $key;
+                continue;
+            }
+            $flds[] = $arr[$key];
+        }
+
+        return $flds;
+    }
+
+    private function setFields($fields = [], $shopSpecific = false)
+    {
+        if (empty($fields)) {
+            return;
+        }
+        $this->attr[] = array_merge($this->attr, self::getFields($fields, $shopSpecific));
+        $this->addMultipleFields($this->attr);
+    }
+
+
     public static function salesReportObject($langId = 0, $joinSeller = false, $attr = array())
     {
         $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');

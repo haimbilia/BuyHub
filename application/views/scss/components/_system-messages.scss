@@ -224,7 +224,7 @@
     border: 1px solid transparent;
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
+   
     animation-fill-mode: both;
     -webkit-animation-name: fadeInDown;
     animation-name: fadeInDown
@@ -434,22 +434,22 @@
 
 @-webkit-keyframes load8 {
     0% {
-        -webkit-transform: rotate(0deg);
+        
         transform: rotate(0deg);
     }
     100% {
-        -webkit-transform: rotate(360deg);
+        
         transform: rotate(360deg);
     }
 }
 
 @keyframes load8 {
     0% {
-        -webkit-transform: rotate(0deg);
+        
         transform: rotate(0deg);
     }
     100% {
-        -webkit-transform: rotate(360deg);
+        
         transform: rotate(360deg);
     }
 }

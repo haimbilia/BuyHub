@@ -1,14 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <main class="main__content">
     <div id="shipping-summary" class="step active" role="step:3">
-        <ul class="list-group review-block">
-            <li class="list-group-item">
+        <ul class="review-block">
+            <li>
                 <div class="review-block__label">
                     <?php if ($hasPhysicalProd) {
                         echo Labels::getLabel('LBL_Shipping_to:', $siteLangId);
                     } else {
                         echo Labels::getLabel('LBL_Billing_to:', $siteLangId);
                     } ?>
+
+                    <div class="review-block__link" role="cell">
+                        <a class="link" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                    </div>
                 </div>
                 <div class="review-block__content" role="cell">
                     <div class="delivery-address">
@@ -19,16 +23,14 @@
                         </p>
                         <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?></p>
 
-                        <?php if (strlen($addresses['addr_phone']) > 0) { 
+                        <?php if (strlen($addresses['addr_phone']) > 0) {
                             $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
-                            ?>
+                        ?>
                             <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                         <?php } ?>
                     </div>
                 </div>
-                <div class="review-block__link" role="cell">
-                    <a class="link" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
-                </div>
+
             </li>
         </ul>
 

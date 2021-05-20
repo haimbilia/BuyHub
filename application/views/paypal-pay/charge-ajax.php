@@ -19,24 +19,25 @@
             },
             //=== Call your server to create an order
             createOrder: function(data, actions) {
-                $.mbsmessage(langLbl.requestProcessing, false, 'alert--process');
+                $.systemMessage(langLbl.requestProcessing, 'alert--process', false);
                 return fetch(fcom.makeUrl('PaypalPay', 'createOrder', ['<?php echo $orderInfo['id']; ?>']), {
                     method: "POST",
                 }).then(function(res) {
                     return res.json();
                 }).then(function(data) {
+                    $.systemMessage(langLbl.waitingForResponse, 'alert--process', false);
                     if (!data.success && (data.message || data.msg)) {
                         var msg = typeof data.msg != 'undefined' ? data.msg : data.message;
-                        $.mbsmessage(msg, true, 'alert--danger');
+                        $.systemMessage(msg, 'alert--danger', true);
                         return;
                     }
-                    $.mbsmessage.close();
+                    $.systemMessage.close();
                     return data.id;
                 });
             },
             //=== Call your server to save the transaction
             onApprove: function(data, actions) {
-                $.mbsmessage(langLbl.requestProcessing, false, 'alert--process');
+                $.systemMessage(langLbl.waitingForResponse, 'alert--process', false);
                 return fetch(fcom.makeUrl('PaypalPay', 'captureOrder', [data.orderID]), {
                     method: "POST",
                 }).then(function(res) {
@@ -48,11 +49,14 @@
                         url: fcom.makeUrl('PaypalPay', 'callback', ['<?php echo $orderInfo['id']; ?>']),
                         data: data,
                         dataType: 'json',
+                        beforeSend: function() {
+                            $.systemMessage(langLbl.updatingRecord, 'alert--info', false);
+                        },
                         success: function(resp) {
                             if (1 > resp.status) {
-                                $.mbsmessage(resp.msg, true, 'alert--danger');
+                                $.systemMessage(resp.msg, 'alert--danger', false);
                             } else {
-                                $.mbsmessage(resp.msg, true, 'alert--success');
+                                $.systemMessage(resp.msg, 'alert--success', false);
                                 setTimeout(function() {
                                     window.location.href = resp.redirecUrl;
                                 }, 100);

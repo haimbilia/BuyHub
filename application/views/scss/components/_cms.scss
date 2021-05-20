@@ -81,25 +81,16 @@
 .section-head {
     width: 100%;
     margin-bottom: 1rem;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     &.section--head--center {
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
         justify-content: center;
         text-align: center;
     }
     .section__heading {
         color: $body-color;
         display: inline-block;
-        font-family: $family-primary;
         font-weight: 300;
         h1,
         h2,
@@ -288,14 +279,10 @@
         position: relative;
         font-size: 0.9em;
         font-weight: 400;
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
         text-decoration: none;
-        -webkit-transition: all 0.2s linear;
+        
         transition: all 0.2s linear;
         padding: 5px 0;
     }
@@ -312,8 +299,6 @@
         li {
             font-size: 0.95em;
             margin: 4px 0;
-            -webkit-padding-start: 0;
-            -moz-padding-start: 0;
             padding-#{$start-direction}: 0;
         }
     }
@@ -332,8 +317,7 @@
             color: #666;
             font-size: 14px;
             padding: 0;
-            -webkit-padding-start: 30px;
-            -moz-padding-start: 30px;
+            
             padding-#{$start-direction}: 30px;
             position: relative;
             min-height: 22px;
@@ -401,11 +385,7 @@
     position: relative;
     background-color: #fff;
     margin-#{$start-direction}: 5px;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -449,11 +429,7 @@
 }
 
 .promotion-area ul {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
     flex-wrap: wrap;
     @include media-breakpoint-down(md) {

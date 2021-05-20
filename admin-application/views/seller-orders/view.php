@@ -77,7 +77,10 @@ if (!empty($order['opship_tracking_url'])) {
                             ];
 
                             if (!$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
-                                if (empty($order['opship_response']) && empty($order['opship_tracking_number'])) {
+                                $plugin = new Plugin();
+                                $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+
+                                if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && 'EasyPost' != $keyName) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -86,23 +89,30 @@ if (!empty($order['opship_tracking_url'])) {
                                         ],
                                         'label' => '<i class="fas fa-file-download"></i>'
                                     ];
-                                } elseif (!empty($order['opship_response'])) {
+                                } elseif (!empty($order['opr_response']) && (!empty($order['opship_tracking_url']) || 'EasyPost' != $keyName)) {
+                                    $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
+                                    $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
                                     $data['otherButtons'][] = [
                                         'attr' => [
-                                            'href' => UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$order['op_id']]),
+                                            'href' => UrlHelper::generateUrl("ShippingServices", $method, [$order['op_id']]),
                                             'target' => "_blank",
-                                            'title' => Labels::getLabel('LBL_PREVIEW_LABEL', $adminLangId)
+                                            'title' => Labels::getLabel($title, $adminLangId)
                                         ],
                                         'label' => '<i class="fas fa-file-export"></i>'
                                     ];
                                 }
 
-                                if (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opship_response'])) {
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || 'EasyPost' == $keyName) && empty($order['opship_tracking_number'])) {
+                                    if ('EasyPost' == $keyName) {
+                                        $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
+                                    } else {
+                                        $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId);
+                                    }
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
                                             'onclick' => 'proceedToShipment(' . $order['op_id'] . ')',
-                                            'title' => Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId)
+                                            'title' => $label
                                         ],
                                         'label' => '<i class="fas fa-shipping-fast"></i>'
                                     ];
@@ -558,7 +568,12 @@ if (!empty($order['opship_tracking_url'])) {
                                                     if (empty($order['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
                                                         $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($adminLangId, $order["opshipping_label"]) . "</em>";
                                                     } elseif (!empty($order['opship_tracking_url']) && !empty($row['oshistory_tracking_number'])) {
-                                                        $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $order['opship_tracking_url'] . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $adminLangId) . "</a>";
+                                                        $trackingUrls = (array) explode(', ', $order['opship_tracking_url']);
+                                                        $str .= '<br>';
+                                                        foreach ($trackingUrls as $url) {
+                                                            $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $url . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $adminLangId) . "</a>";
+                                                        }
+                                                        
                                                     }
                                                     echo $str;
                                                 } else {

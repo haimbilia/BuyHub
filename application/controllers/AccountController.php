@@ -296,7 +296,7 @@ class AccountController extends LoggedUserController
         }
 
         $userObj = new User($userId);
-        $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password'));
+        $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_password_old'));
         $rs = $srch->getResultSet();
 
         $data = FatApp::getDb()->fetch($rs, 'user_id');
@@ -306,9 +306,17 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        if ($data['credential_password'] != UserAuthentication::encryptPassword($post['current_password'])) {
-            $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
-            FatUtility::dieJsonError($message);
+        if (empty($data['credential_password'])) {
+            $currentEncPassword = UserAuthentication::encryptPassword($post['current_password'], true);
+            if ($currentEncPassword !== $data['credential_password_old']) {
+                $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
+                FatUtility::dieJsonError($message);
+            }
+        } else {
+            if (false == password_verify($post['current_password'], $data['credential_password'])) {
+                $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
+                FatUtility::dieJsonError($message);
+            }
         }
 
         if (!$userObj->setLoginPassword($post['new_password'])) {
@@ -1080,6 +1088,13 @@ class AccountController extends LoggedUserController
         }
 
         /* CommonHelper::printArray($post);  */
+        if (CommonHelper::isFieldEncrypted($post['user_dob']) == true) {
+            unset($post['user_dob']);
+        }
+        if (CommonHelper::isFieldEncrypted($post['user_phone']) == true) {
+            unset($post['user_phone']);
+        }
+
         $user_state_id = FatApp::getPostedData('user_state_id', FatUtility::VAR_INT, 0);
         $post = $frm->getFormDataFromArray($post);
 
@@ -1309,7 +1324,7 @@ class AccountController extends LoggedUserController
             $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
-        
+
         $phone = array_key_exists('user_phone', $data) ? $data['user_phone'] : '';
         $dialCode = array_key_exists('user_phone_dcode', $data) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $arr = array(
@@ -1775,7 +1790,7 @@ class AccountController extends LoggedUserController
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -1903,7 +1918,7 @@ class AccountController extends LoggedUserController
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -2805,7 +2820,7 @@ class AccountController extends LoggedUserController
         $phoneFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
-        $phoneFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId).': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
+        $phoneFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</span>';
 
         if (User::isAffiliate()) {
             $frm->addTextBox(Labels::getLabel('LBL_Company', $this->siteLangId), 'uextra_company_name');
@@ -3884,7 +3899,72 @@ class AccountController extends LoggedUserController
         FatUtility::dieJsonSuccess($json);
     }
     /* Cards Management */
-    
+
+    public function cookiesPreferencesForm()
+    {
+        $userId = UserAuthentication::getLoggedUserId(true);
+        $user = new User($userId);
+        $data = $user->getUserSelectedCookies();
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', ['cookiesPreferencesInfo' => (object) $data]);
+            $this->_template->render();
+        }
+
+        $frm = $this->getCookiesPreferencesForm();
+        if ($data != false) {
+            $frm->fill($data);
+        }
+
+        $this->set('frm', $frm);
+        $this->_template->render(false, false);
+    }
+
+    private function getCookiesPreferencesForm()
+    {
+        $frm = new Form('frmCookiesPreferences');
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Functional_Cookies_Information', $this->siteLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->siteLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Personalise_Cookies_Information', $this->siteLangId) . '</div>';;
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        return $frm;
+    }
+
+    public function updateCookiesPreferences()
+    {
+        $post = FatApp::getPostedData();
+        if (1 > count($post) && true === MOBILE_APP_API_CALL) {
+            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+        }
+
+        $frm = $this->getCookiesPreferencesForm();
+        $post = $frm->getFormDataFromArray($post);
+        if (false === $post) {
+            $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
+            FatUtility::dieJsonError($message);
+        }
+
+        $data = [
+            'ucp_statistical' => FatApp::getPostedData('ucp_statistical', FatUtility::VAR_INT, 0),
+            'ucp_personalized' => FatApp::getPostedData('ucp_personalized', FatUtility::VAR_INT, 0)
+        ];
+        $userId = UserAuthentication::getLoggedUserId(true);
+        $user = new User($userId);
+        if (!$user->updateCookiesPreferences($data)) {
+            $message = Labels::getLabel($user->getError(), $this->siteLangId);
+            FatUtility::dieJsonError($message);
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     public function viewBuyerOrderInvoice($orderId, $opId = 0)
     {
         if (!$orderId) {

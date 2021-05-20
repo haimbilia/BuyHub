@@ -29,11 +29,11 @@ $(document).ready(function(){
 		searchOrders(document.frmOrderSrch);
     };
     
-    /* ShipStation */
+    /* Shipping Services */
     generateLabel = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
             window.location.reload();
         });
     }
-    /* ShipStation */
+    /* Shipping Services */
 })();

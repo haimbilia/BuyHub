@@ -29,6 +29,9 @@ class Orders extends MyAppModel
 
     public const DB_TBL_CHARGES = 'tbl_order_product_charges';
     public const DB_TBL_CHARGES_PREFIX = 'opcharge_';
+    
+    public const DB_ORDER_TO_PLUGIN_ORDER = 'tbl_orders_to_plugin_order';
+    public const DB_ORDER_TO_PLUGIN_ORDER_PREFIX = 'opo_';
 
     public const BILLING_ADDRESS_TYPE = 1;
     public const SHIPPING_ADDRESS_TYPE = 2;
@@ -1381,13 +1384,26 @@ class Orders extends MyAppModel
             $emailObj->newOrderBuyerAdmin($orderId, $orderInfo['order_language_id']);
             $emailObj->newOrderVendor($orderId, 0, $paymentMethodCode);
         }
+        
+        $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());        
+        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()),$orderInfo['order_user_id']);
+            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_PURCHASE);
+            foreach ($subOrders as $op) {
+                $productTitle = ($op['op_selprod_title']) ? $op['op_selprod_title'] : $op['op_product_name'];
+                $et->addProduct($op['op_selprod_id'], $productTitle, '', $op['op_brand_name'], $op['op_qty'], $op["op_unit_price"]);
+            }
+            $et->addTransaction($orderInfo['order_id'], $orderInfo['order_net_amount'], array_sum(array_column($subOrders, 'op_actual_shipping_charges')), $orderInfo['order_tax_charged'], $orderInfo['order_currency_code']);
+            $et->sendRequest();
+        }
 
         // If order Payment status is 0 then becomes greater than 0 mail to Vendors and Update Child Order Status to Paid & Give Referral Reward Points
         if (!$orderInfo['order_payment_status'] && ($orderPaymentStatus > 0)) {
             $emailObj->newOrderVendor($orderId);
             $emailObj->newOrderBuyerAdmin($orderId, $orderInfo['order_language_id']);
 
-            $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type']);
+            /*$subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type']); */
             foreach ($subOrders as $subkey => $subval) {
                 $this->addChildProductOrderHistory($subval["op_id"], $orderInfo['order_language_id'], FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0), '', true);
                 if ($subval['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -1682,6 +1698,33 @@ class Orders extends MyAppModel
                 }
                 /* ]*/
             }
+            
+            $opRefundArr = array(
+                'op_refund_qty' => $childOrderInfo["op_qty"],
+                'op_refund_amount' => $txnAmount,
+                'op_refund_commission' => $childOrderInfo["op_commission_charged"],
+                'op_refund_shipping' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+                'op_refund_affiliate_commission' => $childOrderInfo["op_affiliate_commission_charged"],
+                'op_refund_tax' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+            );
+            if (!$db->updateFromArray(
+                            Orders::DB_TBL_ORDER_PRODUCTS,
+                            $opRefundArr,
+                            array('smt' => 'op_id = ? ', 'vals' => array($op_id))
+                    )) {
+                $this->error = $db->getError();
+                return false;
+            }
+            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId),$childOrderInfo['order_user_id']);
+                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
+                $et->addProduct($childOrderInfo['op_selprod_id']);
+                $et->addTransaction($childOrderInfo['op_order_id']);
+                $et->addEvent('Ecommerce', 'Refund');
+                $et->sendRequest();
+            }
+            
         }
         /* ] */
 
@@ -1764,7 +1807,16 @@ class Orders extends MyAppModel
                     }
                 }
                 /* ]*/
-            }
+            }            
+            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
+                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
+                $et->addProduct($childOrderInfo['op_selprod_id'], $childOrderInfo['op_refund_qty']);
+                $et->addTransaction($childOrderInfo['op_order_id']);
+                $et->addEvent('Ecommerce', 'Refund');
+                $et->sendRequest();
+            }            
         }
         /* ] */
 
@@ -2427,7 +2479,8 @@ class Orders extends MyAppModel
     private function generateOrderId()
     {
         $order_id = 'O';
-        $order_id .= mt_rand(1000000000, 9999999999);
+        $order_id .= mt_rand(1000000000,9999999999);
+
         if ($this->checkUniqueOrderId($order_id)) {
             return $order_id;
         } else {
@@ -2712,5 +2765,19 @@ class Orders extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+    
+    public static function getOrderIdByPlugin(int $pluginId, int $pluginOrderId): string
+    {
+        $srch = new SearchBase(static::DB_ORDER_TO_PLUGIN_ORDER);
+        $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_id', '=', $pluginId);
+        $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_order_id', '=', $pluginOrderId);
+        $srch->addFld('opo_order_id');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs); 
+        if (!$records) {
+            return 0;
+        }
+        return $records['opo_order_id'];
     }
 }

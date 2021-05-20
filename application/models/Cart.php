@@ -11,6 +11,7 @@ class Cart extends FatModel
     private $includeTax = true;
     private $pageType = 0;
     private $discounts = 0;
+    private $selectedShippingService = [];
 
     public const DB_TBL = 'tbl_user_cart';
     public const DB_TBL_PREFIX = 'usercart_';
@@ -463,9 +464,18 @@ class Cart extends FatModel
 
                     $taxOptions = [];
                     if (array_key_exists('options', $taxData)) {
-                        foreach ($taxData['options'] as $optionId => $optionval) {
+                        /* foreach ($taxData['options'] as $optionId => $optionval) {
                             if (0 < $optionval['value']) {
                                 $taxOptions[$optionval['name']] = isset($taxOptions[$optionval['name']]) ? ($taxOptions[$optionval['name']] + $optionval['value']) : $optionval['value'];
+                            }
+                        } */
+                        if (array_key_exists('options', $taxData)) {
+                            foreach ($taxData['options'] as $optionId => $optionval) {
+                                $prodTaxOptions[$sellerProductRow['selprod_id']][$optionId] = $optionval;
+                                if (isset($optionval['value']) && 0 < $optionval['value']) {
+                                    $taxOptions[$optionval['name']]['value'] = isset($taxOptions[$optionval['name']]['value']) ? ($taxOptions[$optionval['name']]['value'] + $optionval['value']) : $optionval['value'];
+                                    $taxOptions[$optionval['name']]['title'] = CommonHelper::displayTaxPercantage($optionval);
+                                }
                             }
                         }
                     }
@@ -568,8 +578,9 @@ class Cart extends FatModel
             'product_id', 'product_type', 'product_length', 'product_width', 'product_height', 'product_ship_free',
             'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_fulfillment_type',
             'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
-            'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units'
+            'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
+            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'
         ));
 
         if ($siteLangId) {
@@ -603,6 +614,8 @@ class Cart extends FatModel
         $sellerProductRow['actualPrice'] =  $sellerProductRow['theprice'];
         $extraData = [];
         if ($this->includeTax == true) {
+            $shipFromStateId = $sellerProductRow['shop_state_id'];
+            $shipFromCountryId = $sellerProductRow['shop_country_id'];
             $shipToStateId = 0;
             $shipToCountryId = 0;
             if ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -630,7 +643,14 @@ class Cart extends FatModel
                 $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$sellerProductRow['selprod_id']];
                 $shippingCost = ROUND(($shippingDurationRow['mshipapi_cost']), 2);
             }
+
             $isProductShippedBySeller = Product::isProductShippedBySeller($sellerProductRow['product_id'], $sellerProductRow['product_seller_id'], $sellerProductRow['selprod_user_id']);
+
+            if (!$isProductShippedBySeller) {
+                $shipFromCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
+                $shipFromStateId = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 0);
+            }
+
             $extraData = array(
                 'billingAddress' => isset($sellerProductRow['billing_address']) ? $sellerProductRow['billing_address'] : '',
                 'shippingAddress' => $shippingAddressDetail,
@@ -642,9 +662,13 @@ class Cart extends FatModel
 
         if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && $this->includeTax == true) {
             $tax = new Tax();
-            $taxCategoryRow = $tax->getTaxRates($sellerProductRow['product_id'], $sellerProductRow['selprod_user_id'], $siteLangId, $shipToCountryId, $shipToStateId);
-            if (array_key_exists('taxrule_rate', $taxCategoryRow) && 0 == Tax::getActivatedServiceId()) {
-                $sellerProductRow['theprice'] = round($sellerProductRow['theprice'] / (1 + ($taxCategoryRow['taxrule_rate'] / 100)), 2);
+            $tax->setFromCountryId($shipFromCountryId);
+            $tax->setFromStateId($shipFromStateId);
+            $tax->setToCountryId($shipToCountryId);
+            $tax->setToStateId($shipToStateId);
+            $taxCategoryRow = $tax->getTaxRates($sellerProductRow['product_id'], $sellerProductRow['selprod_user_id'], $siteLangId);           
+            if (array_key_exists('trr_rate', $taxCategoryRow) && 0 == Tax::getActivatedServiceId()) {
+                $sellerProductRow['theprice'] = round($sellerProductRow['theprice'] / (1 + ($taxCategoryRow['trr_rate'] / 100)), 2);
             } else {
                 $taxObj = new Tax();
                 $taxData = $taxObj->calculateTaxRates($sellerProductRow['product_id'], $sellerProductRow['theprice'], $sellerProductRow['selprod_user_id'], $siteLangId, $quantity, $extraData, $this->cartCache);
@@ -801,7 +825,14 @@ class Cart extends FatModel
                     $found = true;
                     unset($this->SYSTEM_ARR['cart'][$cartKey]);
                     $this->updateTempStockHold($product['selprod_id'], 0, 0);
-                    if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {
+                    if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {                        
+                        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+                        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {                
+                            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', commonHelper::getLangId()), $this->cart_user_id);
+                            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REMOVE_FROM_CART);
+                            $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 0);
+                            $et->sendRequest();
+                        }
                         if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
                             AbandonedCart::saveAbandonedCart($this->cart_user_id, $product['selprod_id'], $product['quantity'], AbandonedCart::ACTION_DELETED);
                         }
@@ -1841,6 +1872,11 @@ class Cart extends FatModel
         return $product_rates;
     }
 
+    public function setselectedShipping(array $selectedShippingService)
+    {
+        $this->selectedShippingService = $selectedShippingService; /* Selected Shipping Service */
+    }
+
     public function getShippingRates()
     {
         $shippingOptions = $this->getShippingOptions();
@@ -1850,8 +1886,8 @@ class Cart extends FatModel
 
         $shippedByArr = array_keys($shippingOptions);
         $shippingRates = [];
-        foreach ($shippedByArr as $hippedBy) {
-            foreach ($shippingOptions[$hippedBy] as $level => $levelItems) {
+        foreach ($shippedByArr as $shippedBy) {
+            foreach ($shippingOptions[$shippedBy] as $level => $levelItems) {
                 $rates = isset($levelItems['rates']) ? $levelItems['rates'] : [];
                 if (count($rates) <= 0) {
                     continue;
@@ -1861,7 +1897,7 @@ class Cart extends FatModel
                     $shippingRates[$name] =  $rates;
                 } else if (isset($levelItems['products'])) {
                     foreach ($levelItems['products'] as $product) {
-                        if (count($rates[$product['selprod_id']]) <= 0) {
+                        if (!array_key_exists($product['selprod_id'], $rates) || count($rates[$product['selprod_id']]) <= 0) {
                             continue;
                         }
                         $name = current($rates[$product['selprod_id']])['code'];
@@ -1947,6 +1983,10 @@ class Cart extends FatModel
             $shippingAddressDetail =  $address->getData(Address::TYPE_USER, $this->cart_user_id);
 
             $shipping = new Shipping($this->cart_lang_id);
+            if (is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
+                $shipping->setSelectedShipping($this->selectedShippingService);
+            }
+
             $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo);
             $shippedByArr = $response['data'];
         }
@@ -2121,4 +2161,12 @@ class Cart extends FatModel
     {
         $this->includeTax = false;
     }
+    
+    public function getQtyBySelProdId($selprod_id)
+    {
+        $key = static::CART_KEY_PREFIX_PRODUCT . $selprod_id;
+        $key = base64_encode(json_encode($key));
+        return $this->SYSTEM_ARR['cart'][$key] ?? 0;
+    }
+
 }

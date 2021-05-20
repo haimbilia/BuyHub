@@ -12,8 +12,8 @@ class ProductCategoriesController extends AdminBaseController
     {
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
         $this->set("canEdit", $canEdit);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jquery-sortable-lists.js'));
-        $this->_template->addCss('css/cropper.css');
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addCss(['css/cropper.css', 'css/tagify.css']);
         $this->_template->render();
     }
 
@@ -22,7 +22,7 @@ class ProductCategoriesController extends AdminBaseController
         $prodCat = new ProductCategory();
         $records = (array) $prodCat->getCategories(true, true);
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
-        
+
         $this->set("arr_listing", $records);
         $this->set("canEdit", $canEdit);
         $this->_template->render(false, false);
@@ -105,7 +105,14 @@ class ProductCategoriesController extends AdminBaseController
             }
             $data['parent_category_name'] = $categories[$data['prodcat_parent']] ?? '';
 
-            $data = array_merge($data, $catNameArr);
+            $prodCat = new ProductCategory($prodCatId);
+            $ratingTypes = array();
+            foreach ($prodCat->getRatingTypes() as $key => $data) {
+                $ratingTypes[$key]['id'] = $data['ratingtype_id'];
+                $ratingTypes[$key]['value'] = $data['ratingtype_name'];
+            }
+            $ratingTypes = ['rating_type' => json_encode($ratingTypes)];
+            $data = array_merge($data, $catNameArr, $ratingTypes);
         }
         $prodCatFrm->fill($data);
         $mediaLanguages = applicationConstants::bannerTypeArr();
@@ -146,6 +153,8 @@ class ProductCategoriesController extends AdminBaseController
         if (0 < $productReq) {
             $frm->addRadioButtons(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'prodcat_status', $yesNoArr, '1', array());
         }
+
+        $frm->addTextBox(Labels::getLabel('LBL_RATING_TYPES', $this->adminLangId), 'rating_type');
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $langData = Language::getAllNames();
@@ -501,7 +510,7 @@ class ProductCategoriesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = ProductCategory::getSearchObject(false, $this->adminLangId, false, ProductCategory::REQUEST_PENDING);        
+        $srch = ProductCategory::getSearchObject(false, $this->adminLangId, false, ProductCategory::REQUEST_PENDING);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = prodcat_seller_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
@@ -522,7 +531,7 @@ class ProductCategoriesController extends AdminBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();        
+        $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arr_listing", $records);
@@ -540,5 +549,68 @@ class ProductCategoriesController extends AdminBaseController
         $obj = new ProductCategory($catId);
         $json['data'] = array_keys($obj->getParents());
         CommonHelper::dieJsonSuccess($json);
+    }
+
+    public function updateRatingTypes()
+    {
+        $this->objPrivilege->canEditProductCategories();
+        $prodCatId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
+        $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
+        if ($prodCatId < 1 || $rtId < 1) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+        $prodCat = new ProductCategory($prodCatId);
+        if (!$prodCat->addUpdateRatingType($rtId)) {
+            FatUtility::dieWithError($prodCat->getError());
+        }
+
+        $this->set('msg', Labels::getLabel('LBL_UPDATED', $this->adminLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function removeRatingType()
+    {
+        $this->objPrivilege->canEditProductCategories();
+        $prodCatId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
+        $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
+        if ($prodCatId < 1 || $rtId < 1) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+
+        $prodCat = new ProductCategory($prodCatId);
+        if (!$prodCat->removeRatingType($rtId)) {
+            FatUtility::dieWithError($prodCat->getError());
+        }
+
+        $this->set('msg', Labels::getLabel('LBL_REMOVED', $this->adminLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function ratingTypeAutoComplete()
+    {
+        $this->objPrivilege->canEditProductCategories();
+        /* $pagesize = 10; */
+        $post = FatApp::getPostedData();
+
+        $srch = new RatingTypeSearch($this->adminLangId);
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('ratingtype_name', 'like', '%' . $keyword . '%');
+            $cnd->attachCondition('ratingtype_identifier', 'like', '%' . $keyword . '%');
+        }
+        $srch->addCondition('ratingtype_active', '=', applicationConstants::YES);
+        $rs = $srch->getResultSet();
+        $options = FatApp::getDb()->fetchAll($rs, 'ratingtype_id');
+
+        $json = array();
+        foreach ($options as $key => $option) {
+            $identifer = array_key_exists('ratingtype_name', $option) && !empty($option['ratingtype_name']) ? $option['ratingtype_name'] : $option['ratingtype_identifier'];
+            $json[] = array(
+                'id' => $key,
+                'name' => $identifer,
+                'ratingtype_identifier' => $identifer
+            );
+        }
+        die(json_encode($json));
     }
 }

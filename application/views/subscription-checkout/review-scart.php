@@ -10,9 +10,9 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
             <div class="step__section">
                 <div class="step__section__head"><?php echo Labels::getLabel('LBL_Review_Order', $siteLangId); ?></div>
                 <?php if (count($subscriptions)) { ?>
-                    <ul class="list-group list-cart list-cart-page list-shippings">
+                    <ul class="list-cart list-cart-page list-shippings">
                         <?php foreach ($subscriptions as $subscription) { ?>
-                            <li class="list-group-item">
+                            <li>
                                 <div class="product-profile">
                                     <div class="product-profile__data">
                                         <div class="title">
@@ -62,7 +62,7 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
         </div>
     </main>
 </div>
-<aside class="sidebar" role="complementary">
+<aside class="sidebar" data-close-on-click-outside=" ">
     <div class="sidebar__content">
         <div id="order-summary" class="order-summary summary-listing-js"></div>
         <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>

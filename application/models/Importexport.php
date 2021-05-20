@@ -4113,7 +4113,7 @@ class Importexport extends ImportexportCommon
                             $rs = $prodSrch->getResultSet();
                             $productArr[$selProdId] = FatApp::getDb()->fetch($rs);
                         }
-                    } else if ('splprice_price' == $columnKey) {
+                    } /* else if ('splprice_price' == $columnKey) {
                         if ($colValue < $productArr[$selProdId]['product_min_selling_price'] || $colValue >= $productArr[$selProdId]['selprod_price']) {
                             $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $langId);
                             $minSellingPrice = CommonHelper::displayMoneyFormat($productArr[$selProdId]['product_min_selling_price'], false, true, true);
@@ -4122,7 +4122,7 @@ class Importexport extends ImportexportCommon
                             $errMsg = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
                             $invalid = true;
                         }
-                    } else if ('splprice_start_date' == $columnKey) {
+                    } */ else if ('splprice_start_date' == $columnKey) {
                         if (strtotime($colValue) < strtotime($productArr[$selProdId]['selprod_available_from'])) {
                             $str = Labels::getLabel('MSG_Special_Price_Date_Must_Be_Greater_Or_Than_Equal_To_{availablefrom}', $langId);
                             $errMsg = CommonHelper::replaceStringData($str, array('{availablefrom}' => date('Y-m-d', strtotime($productArr[$selProdId]['selprod_available_from']))));

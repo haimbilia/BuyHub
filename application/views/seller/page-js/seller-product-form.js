@@ -1,7 +1,3 @@
-$(document).ready(function(){
-	sellerProductForm(product_id,selprod_id);
-});
-
 $(document).on('change','.selprodoption_optionvalue_id',function(){
 	var frm = document.frmSellerProduct;
 	var data = fcom.frmData(frm);
@@ -320,7 +316,6 @@ $(document).on('change','.selprodoption_optionvalue_id',function(){
 			}
 		});
 	};
-
 })();
 
 $(document).on('click', '.tabs_001', function(){

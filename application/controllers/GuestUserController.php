@@ -3,7 +3,7 @@
 class GuestUserController extends MyAppController
 {
     public function loginForm($isRegisterForm = 0)
-    {
+    {   
         /* if(UserAuthentication::doCookieLogin()){
         FatApp::redirectUser(UrlHelper::generateUrl('account'));
         } */
@@ -27,7 +27,8 @@ class GuestUserController extends MyAppController
         $this->registerFormDetail($isRegisterForm);
 
         $this->set('loginData', $loginData);
-        $this->_template->render();
+        $this->set('exculdeMainHeaderDiv', true);
+        $this->_template->render(true, false);
     }
 
     public function registerFormDetail($isRegisterForm, $signUpWithPhone = 0)
@@ -41,11 +42,21 @@ class GuestUserController extends MyAppController
         } else {
             $termsAndConditionsLinkHref = 'javascript:void(0)';
         }
+        
+        $privacyPolicyLinkHref = 'javascript:void(0)';
+        $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
+        $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
+        if (!empty($cpage) && is_array($cpage)) {
+            $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+        } 
+        
         $registerdata = array(
             'registerFrm' => $registerFrm,
             'termsAndConditionsLinkHref' => $termsAndConditionsLinkHref,
             'siteLangId' => $this->siteLangId,
             'signUpWithPhone' => $signUpWithPhone,
+            'privacyPolicyLinkHref' => $privacyPolicyLinkHref,
         );
         $isRegisterForm = FatUtility::int($isRegisterForm);
 
@@ -77,15 +88,35 @@ class GuestUserController extends MyAppController
         if (true === MOBILE_APP_API_CALL && 1 > $userType) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
+
+        $password = FatApp::getPostedData('password');
+
         $userName = FatApp::getPostedData('username');
         $dialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
+
+        $loginWithOtp = FatApp::getPostedData('loginWithOtp', FatUtility::VAR_INT, 0);
+        if (0 < $loginWithOtp) {
+            $post = FatApp::getPostedData();
+            $authentication->setLoginWithOtp($dialCode, $userName);
+            if (true === MOBILE_APP_API_CALL) {
+                if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
+                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                }
+                $password = $post['upv_otp'];
+            } else {
+                if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
+                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                }
+                $password = implode("", $post['upv_otp']);
+            }
+        }
 
         $withPhone = empty($dialCode) ? false : true;
         if (!empty($dialCode) && false === strpos($userName, $dialCode)) {
             $userName = trim($dialCode) . trim($userName);
         }
 
-        if (!$authentication->login($userName, FatApp::getPostedData('password'), $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
+        if (!$authentication->login($userName, $password, $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
             $message = Labels::getLabel($authentication->getError(), $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
@@ -93,7 +124,18 @@ class GuestUserController extends MyAppController
         $this->app_user['temp_user_id'] = 0;
 
         $userId = UserAuthentication::getLoggedUserId();
-
+        
+        $user = new User($userId);
+        $userSelectedCookies = $user->getUserSelectedCookies();
+        if(CommonHelper::checkCookiesEnabledSession() && empty($userSelectedCookies)){
+            //$user = new User($userId);            
+            $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
+            $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
+            if(!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)){
+                FatUtility::dieJsonError($user->getError());
+            }
+        }
+        
         if (true === MOBILE_APP_API_CALL) {
             $uObj = new User($userId);
             if (!$token = $uObj->setMobileAppToken()) {
@@ -709,7 +751,7 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
         }
 
-        $token = UserAuthentication::encryptPassword(FatUtility::getRandomString(20));
+        $token = FatUtility::getRandomString(30);
         $row['token'] = $token;
 
         $recordId = 0 < $withPhone ? $row['user_id'] : 0;
@@ -868,7 +910,14 @@ class GuestUserController extends MyAppController
             Message::addErrorMessage($userAuthObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
         }
-
+        $userObj = new User($userId);
+        $user = $userObj->getUserInfo(array('credential_password','credential_username'), false, false);
+        if (!$user) {
+            Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }        
+        $this->set('user_password', $user['credential_password']);
+        $this->set('credential_username', $user['credential_username']);
         $frm = $this->getResetPwdForm($userId, trim($token));
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::RESET_PAGE_RIGHT_BLOCK, $this->siteLangId);
@@ -916,6 +965,11 @@ class GuestUserController extends MyAppController
         if (!$userAuthObj->resetUserPassword($userId, $newPwd)) {
             FatUtility::dieJsonError($userAuthObj->getError());
         }
+        
+        $userObj = new User($userId);
+        if(!$userObj->verifyAccount()){
+            FatUtility::dieJsonError($userObj->getError());
+        }
 
         $email = new EmailHandler();
 
@@ -951,6 +1005,25 @@ class GuestUserController extends MyAppController
             $this->_template->render(false, false, 'json-success.php');
         }
         $this->otpForm($userId);
+    }
+
+    public function getLoginOtp()
+    {
+        $phone = FatApp::getPostedData('username', FatUtility::VAR_INT, 0);
+        $phoneDialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
+
+        if (1 > $phone || '' == $phoneDialCode) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $phoneDialCode = false === strpos($phoneDialCode, '+') ? '+' . trim($phoneDialCode) : trim($phoneDialCode);
+        $userPhone = $phoneDialCode . $phone;
+        $user = new User();
+        $row = $user->checkUserByPhoneOrUserName($userPhone, $userPhone);
+        if (empty($row)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId)); 
+        }
+        $this->resendOtp($row['user_id'], 1);
     }
 
     public function otpForm($userId = 0)
@@ -1074,7 +1147,7 @@ class GuestUserController extends MyAppController
     }
 
     public function logout()
-    {
+    {   
         UserAuthentication::logout();
         if (true === MOBILE_APP_API_CALL) {
             $fcmToken = FatApp::getPostedData('fcmToken', FatUtility::VAR_STRING, '');
@@ -1117,6 +1190,7 @@ class GuestUserController extends MyAppController
     private function getResetPwdForm($uId, $token)
     {
         $frm = new Form('frmResetPwd');
+        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'user_name');
         $fld_np = $frm->addPasswordField(Labels::getLabel('LBL_NEW_PASSWORD', $this->siteLangId), 'new_pwd');
         $fld_np->htmlAfterField = '<p class="note">' . sprintf(Labels::getLabel('LBL_Example_password', $this->siteLangId), 'User@123') . '</p>';
         $fld_np->requirements()->setRequired();

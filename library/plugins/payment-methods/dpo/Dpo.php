@@ -250,8 +250,8 @@ class Dpo extends PaymentMethodBase
         $xml = new SimpleXMLElement($this->getResponse());
 
         if ($xml->Result[0] != '000') {
-            $msg = Labels::getLabel('LBL_PAYMENT_ERROR_CODE:_{ERROR_CODE},_{ERROR_DESCRIPTION}.', $this->langId);
-            $this->error = CommonHelper::replaceStringData($msg, ['{ERROR_CODE}' => $xml->Result[0], '{ERROR_DESCRIPTION}' => $xml->ResultExplanation[0]]);
+            $msg = Labels::getLabel('LBL_PAYMENT_ERROR_CODE:_{ERROR-CODE},_{ERROR-DESCRIPTION}.', $this->langId);
+            $this->error = CommonHelper::replaceStringData($msg, ['{ERROR-CODE}' => $xml->Result[0], '{ERROR-DESCRIPTION}' => $xml->ResultExplanation[0]]);
             return false;
         }
 
@@ -279,8 +279,8 @@ class Dpo extends PaymentMethodBase
         if ($tokenResponse->Result[0] != '000') {
             $errorCode = $tokenResponse->Result[0];
             $errorDesc = $tokenResponse->ResultExplanation[0];
-            $msg = Labels::getLabel('LBL_PAYMENT_ERROR_CODE:_{ERROR_CODE},_{ERROR_DESCRIPTION}.', $this->langId);
-            $this->error = CommonHelper::replaceStringData($msg, ['{ERROR_CODE}' => $errorCode, '{ERROR_DESCRIPTION}' => $errorDesc]);
+            $msg = Labels::getLabel('LBL_PAYMENT_ERROR_CODE:_{ERROR-CODE},_{ERROR-DESCRIPTION}.', $this->langId);
+            $this->error = CommonHelper::replaceStringData($msg, ['{ERROR-CODE}' => $errorCode, '{ERROR-DESCRIPTION}' => $errorDesc]);
             return false;
         }
 

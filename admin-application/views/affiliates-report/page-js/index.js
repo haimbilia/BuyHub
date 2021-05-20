@@ -1,45 +1,63 @@
-$(document).ready(function(){
-	searchAffiliatesReport(document.frmAffiliatesReportSearch);
+$(document).ready(function () {
+	searchAffiliatesReport(document.frmReportSearch);
 });
-(function() {
+
+$(document).on("click", ".headerColumnJs", function (e) {
+	var fld = $(this).attr('data-field');
+	var frm = document.frmReportSearchPaging;
+	document.getElementById("sortBy").value = fld;
+	$(frm.sortBy).val(fld);
+	if (document.getElementById("sortOrder").value == 'ASC') {
+		$(frm.sortOrder).val('DESC');
+		document.getElementById("sortOrder").value = 'DESC';
+	} else {
+		$(frm.sortOrder).val('ASC');
+		document.getElementById("sortOrder").value = 'ASC';
+	}
+	searchAffiliatesReport(frm, false);
+});
+
+(function () {
 	var currentPage = 1;
 	var runningAjaxReq = false;
 	var dv = '#listing';
 
-	goToSearchPage = function(page) {	
-		if(typeof page == undefined || page == null){
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
-		var frm = document.frmAffiliatesReportSearchPaging;		
+		var frm = document.frmReportSearchPaging;
 		$(frm.page).val(page);
 		searchAffiliatesReport(frm);
 	};
 
-	reloadList = function() {
-		var frm = document.frmAffiliatesReportSearchPaging;
+	reloadList = function () {
+		var frm = document.frmReportSearchPaging;
 		searchAffiliatesReport(frm);
 	};
-	
-	searchAffiliatesReport = function(form){				
+
+	searchAffiliatesReport = function (form, withloader) {
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
 		}
-		
-		$(dv).html(fcom.getLoader());
-		
-		fcom.ajax(fcom.makeUrl('AffiliatesReport','search'),data,function(res){
+
+		if (typeof withloader == 'undefined' || withloader != false) {
+			$(dv).html(fcom.getLoader());
+		}
+
+		fcom.ajax(fcom.makeUrl('AffiliatesReport', 'search'), data, function (res) {
 			$(dv).html(res);
 		});
 	};
-	
-	exportReport = function(dateFormat){
-		document.frmAffiliatesReportSearch.action = fcom.makeUrl('AffiliatesReport','export');
-		document.frmAffiliatesReportSearch.submit();		
+
+	exportReport = function (dateFormat) {
+		document.frmReportSearch.action = fcom.makeUrl('AffiliatesReport', 'export');
+		document.frmReportSearch.submit();
 	}
-	
-	clearSearch = function(){
-		document.frmAffiliatesReportSearch.reset();
-		searchAffiliatesReport(document.frmAffiliatesReportSearch);
+
+	clearSearch = function () {
+		document.frmReportSearch.reset();
+		searchAffiliatesReport(document.frmReportSearch);
 	};
-})();	
+})();

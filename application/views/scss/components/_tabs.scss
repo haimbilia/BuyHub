@@ -1,19 +1,17 @@
 .tabs {
-    font-family: $family-primary;
+    
     margin: 0 auto;
     display: block;
     text-align: center;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
     position: relative;
     width: 100%;
     color: $body-color;
     ul {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
@@ -89,6 +87,9 @@
 
 .tabs-content {
     margin: 2rem 0 0;
+    @include media-breakpoint-down(sm) {
+        margin: 1rem 0 0;
+    }
 }
 
 .tabs_panel {
@@ -190,4 +191,59 @@
     background: none;
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+
+.v-tabs {
+    display: flex;
+
+    &-list {
+        flex: 0 0 30%;
+        max-width: 30%;
+        margin-#{$end-direction}: 20px;
+
+        li {
+            background-color: $gray-light;
+            border-radius: 5px;
+            display: block;
+            margin-bottom: 15px;
+            padding: 0 1rem;
+            line-height: 50px;
+            font-size: 0.85rem;
+            position: relative;
+            &.is-active {
+                background-color: $brand-color;
+                color: $brand-color-inverse;
+                a {
+                    color: currentColor;
+                }
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    top: 50%;
+                    width: 0;
+                    height: 0;
+                    border: 8px solid transparent;
+                    border-#{$start-direction}-color: $brand-color;
+                    border-#{$end-direction}: 0;
+                    margin-top: -8px;
+                    margin-#{$end-direction}: -8px;
+                }
+            }
+            a {
+                display: block;
+            }
+        }
+    }
+    &-data {
+        display: none;
+        flex: 1;
+        padding: 0 1rem;
+        font-size: 0.8rem;
+        color: $txt-gray;
+        &.is-active {
+            display: block;
+        }
+    }
 }

@@ -90,21 +90,21 @@ class TaxStructure extends MyAppModel
         }
         return $combinedTaxStructure;
     }
-   
     /**
-     * getCombinedTaxesByParent
-     *
-     * @param  mixed $langId
+     * 
+     * @param int $langId
+     * @param int $ruleId
+     * @param int $userId
      * @return array
-     */
-    public function getCombinedTaxesByParent(int $langId, int $ruleId): array
+     */   
+    public function getCombinedTaxesByParent(int $langId, int $ruleId , int $userId = 0): array
     {
         $srch = static::getSearchObject($langId);
-        $srch->joinTable(TaxRuleCombined::DB_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id and taxruledet_taxrule_id = ' . $ruleId);
-        $srch->addMultipleFields(array('taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxruledet_rate', 'taxruledet_id'));
+        $srch->joinTable(TaxRule::DB_DETAIL_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id and taxruledet_taxrule_id = ' . $ruleId . ' and taxruledet_user_id =' . $userId);
+        $srch->addMultipleFields(array('taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxruledet_rate'));
         $srch->addCondition('taxstr_parent', '=', $this->mainTableRecordId);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->doNotLimitRecords();      
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
