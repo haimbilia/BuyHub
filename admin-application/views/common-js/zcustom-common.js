@@ -21,7 +21,6 @@ $(document).ready(function () {
     };
 
     $(document).ajaxComplete(function () {
-
         stylePhoneNumberFld('.phone-js');
         installJsColor();
     });
