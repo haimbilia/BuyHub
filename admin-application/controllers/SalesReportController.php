@@ -67,6 +67,12 @@ class SalesReportController extends AdminBaseController
             $srch->addTotalOrdersCount('order_date_added');
             $srch->addFld('totOrders');
         } else {
+            $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+            if (!empty($keyword)) {
+                $cnd = $srch->addCondition('op_invoice_number', 'like', '%' . $keyword . '%');
+                $cnd->attachCondition('order_id', 'like', '%' . $keyword . '%');
+            }
+
             $this->set('orderDate', $orderDate);
             $srch->setGroupBy('op_invoice_number');
             $srch->addFld('op_invoice_number');
@@ -126,7 +132,7 @@ class SalesReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, 'Sales_Report_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Sales_Report', $this->siteLangId) . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
@@ -154,16 +160,19 @@ class SalesReportController extends AdminBaseController
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
 
+        if (empty($orderDate)) {
+            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        } else {
+            $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->adminLangId), 'keyword');
+        }
+
         if (!empty($fields)) {
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
 
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
         }
 
-        if (empty($orderDate)) {
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        }
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
@@ -212,7 +221,10 @@ class SalesReportController extends AdminBaseController
 
         if (!empty($orderDate)) {
             unset($arr['orderDate']);
-            $arr = ['op_invoice_number' => Labels::getLabel('LBL_invoice_number', $this->adminLangId)] + $arr;
+            $arr = [
+                'op_invoice_number' => Labels::getLabel('LBL_invoice_number', $this->adminLangId),
+                'order_date_added' => Labels::getLabel('LBL_Date', $this->adminLangId),
+            ] + $arr;
         }
 
         return $arr;

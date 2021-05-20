@@ -127,6 +127,7 @@ Fixes:
     => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
     => 053673  - Allow seller to cancel COD orders.
     => 053779 - seller> reports> currency symbol is missing in tax and shipping column
+    => 053782 - admin> reports> sales reports> on accessing reports for particular date> there needs to be filter to search on basis of invoice or order by time (latest on top and vice versa)
 
 
 New Features:

@@ -237,6 +237,10 @@ class Report extends SearchBase
         }
 
         switch ($key) {
+            case 'op_invoice_number':
+                $this->addOrder('o.order_id', $sortBy);
+                $this->addOrder($key, $sortBy);
+                break;
             default:
                 $this->addOrder($key, $sortBy);
                 break;

@@ -485,6 +485,12 @@ class ReportsController extends SellerBaseController
             $srch->addTotalOrdersCount('order_date_added', $userId);
             $srch->addFld('totOrders');
         } else {
+            $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+            if (!empty($keyword)) {
+                $cnd = $srch->addCondition('op_invoice_number', 'like', '%' . $keyword . '%');
+                $cnd->attachCondition('order_id', 'like', '%' . $keyword . '%');
+            }
+
             $this->set('orderDate', $orderDate);
             $srch->setGroupBy('op_invoice_number');
             $srch->addFld('op_invoice_number');
@@ -568,8 +574,10 @@ class ReportsController extends SellerBaseController
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
         if (empty($orderDate)) {
-            $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        } else {
+            $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
         }
 
         if (!empty($fields)) {
@@ -629,7 +637,10 @@ class ReportsController extends SellerBaseController
         if (!empty($orderDate)) {
             unset($arr['orderDate']);
             unset($arr['totOrders']);
-            $arr = ['op_invoice_number' => Labels::getLabel('LBL_invoice_number', $this->siteLangId)] + $arr;
+            $arr = [
+                'op_invoice_number' => Labels::getLabel('LBL_invoice_number', $this->siteLangId),
+                'order_date_added' => Labels::getLabel('LBL_Date', $this->siteLangId),
+            ] + $arr;
         }
 
         return $arr;
