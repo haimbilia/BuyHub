@@ -1087,11 +1087,13 @@ class AccountController extends LoggedUserController
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
         }
 
-        /* CommonHelper::printArray($post);  */
-        if (CommonHelper::isFieldEncrypted($post['user_dob']) == true) {
+        $dob = FatApp::getPostedData('user_dob', FatUtility::VAR_STRING, '');
+        if (CommonHelper::isFieldEncrypted($dob) == true) {
             unset($post['user_dob']);
         }
-        if (CommonHelper::isFieldEncrypted($post['user_phone']) == true) {
+        
+        $userphone = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, 0);
+        if (CommonHelper::isFieldEncrypted($userphone) == true) {
             unset($post['user_phone']);
         }
 
