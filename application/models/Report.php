@@ -166,7 +166,7 @@ class Report extends SearchBase
                 break;
             case 'op_selprod_user_id':
                 $srch->joinSellerUser();
-                $srch->addMultipleFields(['op_selprod_user_id', 'count(DISTINCT(op.op_id)) as totOrders']);
+                $srch->addMultipleFields(['op_selprod_user_id', 'count(DISTINCT(o.order_id)) as totOrders']);
                 $srch->addGroupBy('op_selprod_user_id');
                 $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.op_selprod_user_id = op.op_selprod_user_id', 'ocount');
                 break;
