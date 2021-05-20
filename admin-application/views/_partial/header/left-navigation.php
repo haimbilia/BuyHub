@@ -360,7 +360,7 @@
                           <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Financial_Report', $adminLangId); ?></a>
                                   <ul>
-                                      <?php /* <li><a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>"><?php echo Labels::getLabel('LBL_Earnings', $adminLangId); ?></a></li> */ ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>"><?php echo Labels::getLabel('LBL_Earnings', $adminLangId); ?></a></li>
                                       <li><a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>"><?php echo Labels::getLabel('LBL_Products', $adminLangId); ?></a></li>
 
                                   </ul>
