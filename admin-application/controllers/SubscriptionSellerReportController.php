@@ -71,7 +71,7 @@ class SubscriptionSellerReportController extends AdminBaseController
                             $arr[] = $count;
                             break;
                         case 'amountPaid':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         case 'ossubs_from_date':
                         case 'ossubs_till_date':

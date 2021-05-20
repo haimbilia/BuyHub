@@ -91,6 +91,16 @@ class UsersReportController extends AdminBaseController
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
         }
+
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
+        }
         
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -115,7 +125,7 @@ class UsersReportController extends AdminBaseController
                         case 'orderNetAmount':
                         case 'promotionCharged':
                         case 'availableBalance':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];

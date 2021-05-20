@@ -94,6 +94,9 @@ Fixes:
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
     => 052463 - Setup shipping of other product not working with EasyPost
     => 053622 - Load all font family variants
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
 
 
 Develop
@@ -126,11 +129,16 @@ Fixes:
     => 053442 - "When a registered user shares any information throught contact us form: - The email is recieved by the site owner, but when the site owner tries to reply the from email i,e user email is not getting fetched. " 
     => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
     => 053673  - Allow seller to cancel COD orders.
+    => 053779 - seller> reports> currency symbol is missing in tax and shipping column
+    => 053782 - admin> reports> sales reports> on accessing reports for particular date> there needs to be filter to search on basis of invoice or order by time (latest on top and vice versa)
+    => 053816 - admin> reports> buyers report>sorting is not working
+    => 053823 - seller reports> total order count is listing of child orders while on seller end it's counting parent order.
+    => 053833 - currency symbol changed to euro (€) is not populating on exporting reports
+    => 053501 - seller> unable to define slots for pickup- getting error 
     => 053763 - admin> users> add button> icon is not there
     => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
     => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
     => 053861 - In Side bar only number of items displayed.
-
 
 New Features:
     => Admin shipped products listing page

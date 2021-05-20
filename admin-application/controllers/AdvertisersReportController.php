@@ -87,7 +87,7 @@ class AdvertisersReportController extends AdminBaseController
                             break;
                         case 'availableBalance':
                         case 'promotionCharged':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];
