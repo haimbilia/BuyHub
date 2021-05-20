@@ -125,7 +125,7 @@ class UsersReportController extends AdminBaseController
                         case 'orderNetAmount':
                         case 'promotionCharged':
                         case 'availableBalance':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];

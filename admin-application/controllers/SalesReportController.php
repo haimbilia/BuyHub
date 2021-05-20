@@ -120,7 +120,7 @@ class SalesReportController extends AdminBaseController
                         case 'commissionCharged':
                         case 'refundedCommission':
                         case 'adminSalesEarnings':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];

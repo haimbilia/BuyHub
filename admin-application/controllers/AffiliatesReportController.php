@@ -86,7 +86,7 @@ class AffiliatesReportController extends AdminBaseController
                         case 'totAffilateRevenue':
                         case 'totAffilateSignupRevenue':
                         case 'totAffilateOrdersRevenue':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];

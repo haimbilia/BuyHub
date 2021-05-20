@@ -69,7 +69,7 @@ class SubscriptionPlanReportController extends AdminBaseController
                             $arr[] = $count;
                             break;
                         case 'spplan_price':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         case 'spackage_name':
                             $name = $row['spackage_name'] . ' ';
