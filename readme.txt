@@ -140,6 +140,7 @@ Fixes:
     => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
     => 053861 - In Side bar only number of items displayed.
     => 053883 - pickup slots are not getting listed on front end while placing order on selection of address
+    => 053882 - getting error on product detail page under recommended products
 
 New Features:
     => Admin shipped products listing page
