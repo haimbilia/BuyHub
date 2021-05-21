@@ -801,7 +801,7 @@ class ProductsController extends MyAppController
         //$this->setRecentlyViewedItem($selprod_id);
 
         if (false === MOBILE_APP_API_CALL) {
-            $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/xzoom.js', 'js/magnific-popup.js'));
+            $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/xzoom.js', 'js/magnific-popup.js', 'js/jw-player.js'));
         } else {
             $recentlyViewed = FatApp::getPostedData('recentlyViewed');
             $recentlyViewed = is_array($recentlyViewed) && 0 < count($recentlyViewed) ? FatUtility::int($recentlyViewed) : array();
@@ -2110,7 +2110,6 @@ class ProductsController extends MyAppController
             $requestType = Product::CATALOG_TYPE_PRIMARY;
         }
         
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $aFileId, $recordId, $requestType], 1);
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, 1);
         if (1 > count($file)) {
             FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));

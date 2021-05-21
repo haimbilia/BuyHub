@@ -468,7 +468,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             <div class="nav-detail nav-detail-js">
                 <ul>
                     <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
-                        <li><a class="nav-scroll-js is-active" href="#specifications"><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></a>
+                        <li>
+                            <a class="nav-scroll-js is-active" href="#specifications">
+                                <?php echo Labels::getLabel('LBL_FILES', $siteLangId); ?>
+                            </a>
                         </li>
                     <?php } ?>
                     <?php if (count($productSpecifications) > 0) { ?>
@@ -501,7 +504,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                     <div class="col-xl-7">
                         <div class="section-head">
                             <div class="section__heading" id="specifications">
-                                <h2><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></h2>
+                                <h2><?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?></h2>
                             </div>
                         </div>
                         <div class="cms bg-gray p-4 mb-4">
@@ -509,21 +512,33 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))) {
                                 if (0 < count($product['preview_links'])) {
                             ?>
-                                    <div>Links:</div>
+                                    <div class="prod-ext-links"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
                             <?php   foreach ($product['preview_links'] as $keys => $link) {
                                         echo $link['pdl_preview_link'] . '<br />';
                                     }
                                 }
                                 if (0 < count($product['preview_attachments'])) {
                             ?>
-                                    <div>Attachments:</div>
+                                    <div class="prod-attached-files"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></div>
                             <?php
                                     foreach ($product['preview_attachments'] as $keys => $attachment) {
                                         if (0 < strlen($attachment['preview'])) {
-                                            $fileExtension = substr($attachment['preview'], strlen($attachment['preview']) - 3, strlen($attachment['preview']));
-                                            $videoPath = AttachedFile::getProductVideoUrl($attachment['prev_afile_id']);
-                                            echo $attachment['preview'] . ' <a href ="javascript:void(0);" title="' . $attachment['preview'] . '" onclick="playVideo(\'' . $videoPath . '\'); return false;"><i class="fa fa-caret-square-right icon"></i></a>';
-                                            echo '<br />';
+
+                                            $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
+                                            $fileExt = strtolower($fileExt);
+
+                                            $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
+                            ?>
+                                            <?php echo $attachment['preview']; ?>
+                                            <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
+                                                <a class="play-preview" href ="javascript:void(0);" title="<?php echo $attachment['preview'];?>" onclick="playVideo('<?php echo $videoPath;?>', '<?php echo $fileExt;?>'); return false;">
+                                                    <i class="fa fa-caret-square-right icon"></i>
+                                                </a>
+                                            <?php } ?>
+                                            <a class="download--preview" target="_blank" href ="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
+                                                <i class="fa fa-download icon"></i>
+                                            </a><br />
+                            <?php
                                         }
                                     }
                                 }
@@ -531,10 +546,6 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
                             }
                             ?>
-                            <div id="videoSourceWrapper" style="width: 100%;margin:auto;display:block;max-width: 500px;">
-                                <div id="videoSource"></div>
-                            </div>
-
                         </div>
                         <?php if (count($productSpecifications) > 0) { ?>
                             <div class="section-head">
@@ -808,20 +819,6 @@ $(function() {
 
 <!-- JWPlayer -->
 <script type="text/JavaScript">
-    function playVideo(videoPath)
-    {
-        jwplayer("videoSource").setup({
-            file: videoPath,
-            title: "My Cool Trailer",
-            type: "mp4",
-            events: {
-                onTime: function (object) {
-                    if (object.position > object.duration - 1) {
-                        this.pause();
-                    }
-                }
-            }
-        }).play();        
-    }
+    jwplayer.key='<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, '');?>';
 </script>
 <!-- JWPlayer -->

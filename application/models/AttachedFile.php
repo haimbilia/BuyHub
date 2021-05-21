@@ -1026,7 +1026,7 @@ class AttachedFile extends MyAppModel
         return $message;
     }
 
-    public static function getProductVideoUrl($afileId)
+    public static function getProductPreviewVideoUrl($afileId)
     {
         $mediaPath = '';
 
@@ -1055,9 +1055,10 @@ class AttachedFile extends MyAppModel
         }
         $path = CONF_UPLOADS_PATH. $path;
 
-        header("Content-Type: video/mp4");
+        $fileMimeType = mime_content_type($path);
+        header("Content-Type: " . $fileMimeType);
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        /* header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); */
         header("Accept-Ranges: bytes");
         header("Content-Length: " . filesize($path));
         return readfile($path);
