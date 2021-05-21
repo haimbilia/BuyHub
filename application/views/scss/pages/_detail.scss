@@ -56,6 +56,12 @@
             word-break: break-all;
             word-break: break-word;
             hyphens: auto;
+            display: flex;
+            align-items: flex-start;
+            .badges {
+                margin-top: 6px;
+                margin-#{$end-direction}: 8px;
+            }
         }
         .favourite-wrapper-detail {
             display: flex;
@@ -146,6 +152,7 @@
 
 .dropdown-options {
     .dropdown-toggle {
+        font-size: 0.8rem;
         width: 100%;
         text-align:#{$start-direction};
         display: flex;
@@ -174,6 +181,9 @@
     .is-active {
         background: $bg-gray;
         color: $body-color;
+    }
+    .dropdown-menu {
+        max-height: 300px;
     }
 }
 
@@ -1494,7 +1504,7 @@
         }
         &:last-child {
             //padding-#{$end-direction}: 0;
-           // text-align: #{$end-direction};
+            // text-align: #{$end-direction};
         }
         @include media-breakpoint-down(md) {
             flex-basis: 100%;
