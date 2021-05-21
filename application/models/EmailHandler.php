@@ -173,12 +173,14 @@ class EmailHandler extends FatModel
 
         $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId, FatUtility::VAR_STRING, '') . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
 
-        if ($extra_headers != '') {
-            $headers .= $extra_headers;
+        if(is_array($extra_headers) && isset($extra_headers['ReplyTo'])){
+             $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'];
+        }else{
+           $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL"); 
+            if ($extra_headers != '') {
+                $headers .= $extra_headers;
+            }
         }
-
-        $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL");
-
 
         if (!FatApp::getDb()->insertFromArray(
             'tbl_email_archives',
@@ -218,7 +220,9 @@ class EmailHandler extends FatModel
             $mail->SMTPDebug = false;
             $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
             $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
-            $mail->AddReplyTo($extra_headers['ReplyTo'] ?? FatApp::getConfig("CONF_REPLY_TO_EMAIL"));
+            if (is_array($extra_headers) && isset($extra_headers['ReplyTo'])) {
+                $mail->AddReplyTo($extra_headers['ReplyTo']);
+            }
             $mail->addAddress($toAdress);
             $mail->Subject = '=?UTF-8?B?' . base64_encode($Subject) . '?=';
             $mail->MsgHTML($body);
