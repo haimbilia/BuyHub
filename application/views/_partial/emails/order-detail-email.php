@@ -27,6 +27,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                             $volumeDiscountTotal = 0;
                                             $rewardPointDiscount = 0;
                                             $roundingOff = 0;
+                                            $selProdTotalPrice = 0;
                                             foreach ($orderProductsData as $addrKey => $orderProducts) {
                                                 $productHtml = '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fff;padding: 10px 0;">';
                                                 $pickupHtml = '';
@@ -49,6 +50,8 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                         $shippingTotal = $shippingTotal + $shippingPrice;
                                                         $discountTotal = $discountTotal + abs($discountedPrice);
                                                         $total =  $total + $opCustomerBuyingPrice + $shippingPrice;
+                                                        
+                                                        $selProdTotalPrice += $val['op_selprod_price'] * $val["op_qty"];
 
                                                         $prodOrBatchUrl = 'javascript:void(0)';
                                                         $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($val['selprod_product_id'], "SMALL", $val['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
@@ -225,7 +228,15 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                     $str .= '<tr>
                                                 <td style="padding: color#000;font-size: 16px;padding: 10px 0 0 0;font-weight: 600;">' . Labels::getLabel('LBL_ORDER_TOTAL', $siteLangId) . '</td>
                                                 <td style="padding: color#000;font-size: 16px;padding: 10px 0 0 0;font-weight: 600;text-align: right;">' . CommonHelper::displayMoneyFormat($netAmount) . '</td>
-                                            </tr>
+                                            </tr>';
+                                    $totalSaving = ($selProdTotalPrice - $cartTotal) + $discountTotal + $volumeDiscountTotal;
+                                    if(0 < $totalSaving){
+                                        $str .='<tr>
+                                                    <td style="padding: color#000;font-size: 16px;padding: 10px 0 0 0;font-weight: 600;">' . Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId) . '</td>
+                                                    <td style="padding: color#000;font-size: 16px;padding: 10px 0 0 0;font-weight: 600;text-align: right;">' .CommonHelper::displayMoneyFormat($totalSaving) . '</td>
+                                                </tr>'; 
+                                    }
+                                    $str .='
                                 </table>
                             </td>
                         </tr>
