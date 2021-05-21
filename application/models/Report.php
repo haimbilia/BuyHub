@@ -128,6 +128,16 @@ class Report extends SearchBase
         $this->addFld('(SUM(IFNULL(opRewardDis.opcharge_amount, 0))) as rewardDiscount');
     }
 
+    public function joinOrderUserAddress($addrType = Orders::BILLING_ADDRESS_TYPE)
+    {
+        $this->joinTable(Orders::DB_TBL_ORDER_USER_ADDRESS, 'LEFT JOIN', 'o.order_id = oaddr.oua_order_id and oua_type = ' . $addrType, 'oaddr');
+    }
+
+    public function joinOrderPayments($txnStatus = Orders::ORDER_PAYMENT_PAID)
+    {
+        $this->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'o.order_id = opaym.opayment_order_id and opaym.opayment_txn_status = ' . $txnStatus, 'opaym');
+    }
+
     public function addTotalOrdersCount($key = 'order_id', $opSelprodUserId = 0)
     {
         $srch = new self(0, [], $this->shopSpecific);
@@ -252,6 +262,9 @@ class Report extends SearchBase
         switch ($key) {
             case 'orderDate':
                 $this->addGroupBy('DATE(o.order_date_added)');
+                break;
+            case 'order_id':
+                $this->addGroupBy('o.order_id');
                 break;
             case 'product_id':
                 $this->addFld('SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) ) as product_id');
