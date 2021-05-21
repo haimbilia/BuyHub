@@ -30,7 +30,7 @@
                     </div>
                     <div class="gap"></div>
                     <div class="products__price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
-                        <?php if ($product['special_price_found']) { ?>
+                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                             <span class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></span> <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                         <?php } ?>
                     </div>
@@ -117,8 +117,7 @@
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                                     </use>
                                                 </svg><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
-                </div>
-                     
+                </div>          
                      
                 <?php } else {
                     echo $frmBuyProduct->getFormTag();

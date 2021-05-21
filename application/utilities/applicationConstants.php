@@ -12,6 +12,9 @@ class applicationConstants
     public const ON = 1;
     public const OFF = 0;
 
+    public const SORT_ASC = 'ASC';
+    public const SORT_DESC = 'DESC';
+
     public const SUCCESS = 1;
     public const FAILURE = 0;
 
@@ -146,6 +149,18 @@ class applicationConstants
         return array(
             static::DIGITAL_DOWNLOAD_FILE => Labels::getLabel('LBL_Digital_download_file', $langId),
             static::DIGITAL_DOWNLOAD_LINK => Labels::getLabel('LBL_Digital_download_link', $langId),
+        );
+    }
+
+    public static function sortOrder($langId)
+    {
+        $langId = FatUtility::int($langId);
+        if ($langId < 1) {
+            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
+        }
+        return array(
+            static::SORT_ASC => Labels::getLabel('LBL_ASCENDING', $langId),
+            static::SORT_DESC => Labels::getLabel('LBL_DESCENDING', $langId),
         );
     }
 
@@ -289,13 +304,29 @@ class applicationConstants
 
     public static function allowedMimeTypes()
     {
-        return array('text/plain', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg+xml', 'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/rar', 'application/x-rar', 'application/x-rar-compressed', 'application/octet-stream', 'audio/mpeg', 'video/quicktime', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'text/plain', 'image/x-icon', 'video/mp4');
+        $mimeTypes = array('text/plain', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg+xml', 'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/rar', 'application/x-rar', 'application/x-rar-compressed', 'application/octet-stream', 'audio/mpeg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'text/plain', 'image/x-icon');
+
+        return array_merge($mimeTypes, static::allowedVideoMimeTypes());
     }
 
     public static function allowedFileExtensions()
     {
-        return array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'qt', 'mov', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx', 'mp4');
+        $extensions = array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx');
+
+        return array_merge($extensions, static::allowedVideoFileExtensions());
+
     }
+
+    public static function allowedVideoFileExtensions()
+    {
+        return array('qt', 'mov', 'mp4');
+    }
+
+    public static function allowedVideoMimeTypes()
+    {
+        return array('video/quicktime', 'video/mp4', 'video/x-m4v');
+    }
+
 
     public static function getBlogPostStatusArr($langId)
     {
@@ -508,7 +539,7 @@ class applicationConstants
             case applicationConstants::CLASS_WARNING:
                 return '#ffb822';
                 break;
-            
+
             default:
                 return '#000000';
                 break;

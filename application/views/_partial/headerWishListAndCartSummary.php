@@ -18,7 +18,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
     </a>
     <div class="side-cart" id="side-cart" data-close-on-click-outside-cart="side-cart">
         <div class="side-cart_head">
-            <h6><strong>View bag (5)</strong></h6>
+            <h6><strong><?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?>(<?php echo $totalCartItems; ?>)</strong></h6>
 
             <a href="javascript:void(0)" class="close-layer" data-target-close-cart="side-cart"></a>
         </div>
@@ -56,13 +56,13 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
 
 
                                     <div class="cell cell_price">
-                                    <div class="product-price">
-                                        <span class="new_price">
-                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?> </span>
-                                        <?php if ($product['special_price_found']) { ?>
-                                            <span class="off_price text-success"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
-                                        <?php } ?>
-                                    </div>
+                                        <div class="product-price">
+                                            <span class="new_price">
+                                                <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?> </span>
+                                            <?php if ($product['special_price_found']) { ?>
+                                                <span class="off_price text-success"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                            <?php } ?>
+                                        </div>
                                     </div>
 
                                     <div class="cell cell_action">

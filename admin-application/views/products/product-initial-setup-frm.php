@@ -38,7 +38,7 @@ if($prodCatId > 0){
                      </div>
                  </div>
              </div>
-             <div class="col-md-6">
+             <div class="<?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'col-md-6' : 'col-md-3');?>" id="prod-type-js">
                  <div class="field-set">
                      <div class="caption-wraper">
                         <label class="field_label">
@@ -54,7 +54,23 @@ if($prodCatId > 0){
                      </div>
                  </div>
              </div>
-         </div>
+            <div <?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'style="display:none;"' : '');?> class="col-md-3 download-attachements-js">
+                <div class="field-set">
+                    <div class="caption-wraper">
+                        <label class="field_label">
+                        <?php $fld = $productFrm->getField('product_attachements_with_inventory');
+                            echo $fld->getCaption();
+                        ?>
+                        </label>
+                    </div>
+                    <div class="field-wraper">
+                        <div class="field_cover">
+                            <?php echo $productFrm->getFieldHtml('product_attachements_with_inventory'); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
          
          <div class="row">
              <div class="col-md-6">
@@ -407,6 +423,22 @@ $(document).ready(function(){
             $("input[name='ptc_prodcat_id']").val(0);
         }
     });
+
+    $('select[name=\'product_type\']').change(function() {
+        if ($(this).val() == 2) {
+            $("#prod-type-js").removeClass('col-md-6');
+            $("#prod-type-js").addClass('col-md-3');
+            $(".download-attachements-js").show();
+        } else {
+            $("#prod-type-js").removeClass('col-md-3');
+            if(!$("#prod-type-js").hasClass('col-md-6')) {
+                $("#prod-type-js").addClass('col-md-6');
+            }
+            $(".download-attachements-js").hide();
+        }
+    });
+
+    
     
     $('input[name=\'taxcat_name\']').autocomplete({
         'classes': {
