@@ -139,6 +139,7 @@ Fixes:
     => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
     => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
     => 053861 - In Side bar only number of items displayed.
+    => 053883 - pickup slots are not getting listed on front end while placing order on selection of address
 
 New Features:
     => Admin shipped products listing page
