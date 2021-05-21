@@ -62,7 +62,7 @@
                                         </span>
                                     </button>
                                     <?php if ($option['values']) { ?>
-                                        <div class="dropdown-menu dropdown-menu-anim">
+                                        <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
                                             <ul class="nav nav-block">
                                                 <?php foreach ($option['values'] as $opVal) {
                                                     $isAvailable = true;

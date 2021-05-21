@@ -55,14 +55,17 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     <div class="">
                                         <div class="products__title">
                                             <div>
-                                                <h1><?php echo $product['selprod_title']; ?></h1>
+                                                <h1>
+                                                    <img class="badges" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges.svg" width="26px" height="26px" alt="">
+                                                    <?php echo $product['selprod_title']; ?>
+                                                </h1>
                                                 <div class="favourite-wrapper favourite-wrapper-detail ">
                                                     <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
                                                     <div class="dropdown">
                                                         <a class="no-after share-icon" data-display="static" href="javascript:void(0)" data-toggle="dropdown">
                                                             <i class="icn">
                                                                 <svg class="svg">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
                                                                     </use>
                                                                 </svg>
                                                             </i>
@@ -176,7 +179,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                             </span>
                                                         </button>
                                                         <?php if ($option['values']) { ?>
-                                                            <div class="dropdown-menu dropdown-menu-anim">
+                                                            <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
                                                                 <ul class="nav nav-block">
                                                                     <?php foreach ($option['values'] as $opVal) {
                                                                         $isAvailable = true;
@@ -755,7 +758,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 
                                 </div>
                             </div>
-                        </li>     <li class="table-row">
+                        </li>
+                        <li class="table-row">
                             <div class="cell cell-1" data-label="Seller">
                                 <div class="item">
                                     <div class="item__pic item__pic-seller">
@@ -866,7 +870,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 
                                 </div>
                             </div>
-                        </li>     <li class="table-row">
+                        </li>
+                        <li class="table-row">
                             <div class="cell cell-1" data-label="Seller">
                                 <div class="item">
                                     <div class="item__pic item__pic-seller">
@@ -977,7 +982,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 
                                 </div>
                             </div>
-                        </li>     <li class="table-row">
+                        </li>
+                        <li class="table-row">
                             <div class="cell cell-1" data-label="Seller">
                                 <div class="item">
                                     <div class="item__pic item__pic-seller">
@@ -1088,7 +1094,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 
                                 </div>
                             </div>
-                        </li>     <li class="table-row">
+                        </li>
+                        <li class="table-row">
                             <div class="cell cell-1" data-label="Seller">
                                 <div class="item">
                                     <div class="item__pic item__pic-seller">
@@ -1201,7 +1208,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                             </div>
                         </li>
 
-                       
+
                     </ul>
                 </div>
 

@@ -1,0 +1,120 @@
+.badges {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 9;
+    font-size: 0.8rem;
+    &-1 {
+        background: $secondary-color;
+        color: $secondary-color-inverse;
+        border-radius: $radius4; 
+        padding: 4px 8px;
+    }
+    &-2 {
+        background: url(images/retina/badges/bg-badges-1.svg) no-repeat center;
+        background-size:70px ;
+        color: #fff;
+        padding: 4px 8px;
+        top: 0;
+        right: 0;
+        width: 70px;
+        height: 70px;
+        padding-top: 8px;
+        .text {
+            transform: rotate( 45deg);
+            position: absolute;
+            left: 8px;
+            right: 0;
+            line-height: 28px;
+            text-transform: uppercase;
+        }
+    }
+}
+
+.snip1326 {
+    font-family: 'Raleway', Arial, sans-serif;
+    position: relative;
+    color: #bdbdbd;
+    margin: 0px 15px 50px;
+    max-width: 300px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.snip1326 h1,
+.snip1326 h5 {
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.snip1326 h1 {
+    font-family: 'Fjalla One', Arial, sans-serif;
+    font-size: 2.4em;
+    position: relative;
+}
+
+.snip1326 h1:before {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border: 5px solid #bdbdbd;
+    left: 50%;
+    top: 50%;
+    -webkit-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: rotate(45deg) translate(-50%, -50%);
+    transform: rotate(45deg) translate(-50%, -50%);
+    border-radius: 10%;
+}
+
+.snip1326 h5 {
+    font-size: 0.7em;
+    font-weight: 800;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.snip1326 h5:after {
+    position: absolute;
+    content: '';
+    width: 135px;
+    height: 3px;
+    bottom: -15px;
+    background-color: #bdbdbd;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.snip1326 .icon {
+    position: relative;
+    display: inline-block;
+}
+
+.snip1326 .icon:before,
+.snip1326 .icon:after {
+    position: absolute;
+    height: 3px;
+    content: '';
+    background: #bdbdbd;
+    width: 42px;
+    top: 50%;
+}
+
+.snip1326 .icon:before {
+    left: -50px;
+}
+
+.snip1326 .icon:after {
+    right: -50px;
+}
+
+.snip1326 i {
+    font-size: 3.6em;
+    color: #bdbdbd;
+}
