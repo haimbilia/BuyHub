@@ -204,7 +204,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-7">
                                                 <div class="bg-gray rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h5>
-                                                    <ul class="list-cart list-cart-checkout">
+                                                    <ul class="list-cart list-cart-page">
                                                         <?php
                                                         $shippingCharges = $subTotal = 0;
                                                         if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
@@ -257,8 +257,8 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-5">
                                                 <div class="bg-gray rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h5>
-                                                    <div class="cart-total">
-                                                        <ul class="mt-4">
+                                                    <div class="cart-summary">
+                                                        <ul class="">
                                                             <?php if (0 < $subTotal) { ?>
                                                                 <li>
                                                                     <span class="label">
