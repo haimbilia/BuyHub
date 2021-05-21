@@ -142,6 +142,7 @@ Fixes:
     => 053883 - pickup slots are not getting listed on front end while placing order on selection of address
     => 053882 - getting error on product detail page under recommended products
     => 053817 - on registration screen> logo is not displaying
+    => 053832 - rating star color is different in admin and front end
 
 New Features:
     => Admin shipped products listing page
