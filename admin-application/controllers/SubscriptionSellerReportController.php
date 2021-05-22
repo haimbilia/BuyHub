@@ -126,7 +126,7 @@ class SubscriptionSellerReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addTextBox(Labels::getLabel("LBL_Name", $this->adminLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->adminLangId), 'keyword');
         if (!empty($fields)) {
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
 

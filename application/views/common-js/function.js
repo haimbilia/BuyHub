@@ -87,7 +87,7 @@ $('[ripple]').on('click', function (e) {
 $(document).ready(function () {
     $(".tabs-content-js").hide();
     $(".tabs--flat-js li:first").addClass("is-active").show();
-    $(".tabs-content-js:first").show();
+    $(".section").find(".tabs-content-js:first").show();
     $(".tabs--flat-js li").click(function () {
         $(this).parent().find("li").removeClass("is-active");
         $(this).addClass("is-active");

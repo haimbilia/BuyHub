@@ -10,7 +10,8 @@ New Feature :
 Updates:
     => Tax Module update
     => Admin can create users 
-    => 83842 : Out of stock fixes    
+    => 83842 : Out of stock fixes 
+    => Display Total Savings on Checkout page
 
 Fixes:
     => 047746 - Get current location not working
@@ -97,7 +98,11 @@ Fixes:
     => 053451 - missing country code plugin with phone number field
     => 053462 - Instagram login not working after configuration, gives error
     => 053757 - when order status is changed then sms are not triggering to buyer for the same
-
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
 
 Develop
 
