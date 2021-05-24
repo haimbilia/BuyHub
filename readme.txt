@@ -148,6 +148,7 @@ Fixes:
     => 053882 - getting error on product detail page under recommended products
     => 053817 - on registration screen> logo is not displaying
     => 053832 - rating star color is different in admin and front end
+    => 053932 - while placing order> when no coupon or discount is there then getting entry on name of saving
 
 New Features:
     => Admin shipped products listing page
