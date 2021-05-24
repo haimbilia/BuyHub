@@ -1,6 +1,6 @@
 <?php 
 if (isset($collection['testimonials']) && count($collection['testimonials']) > 0) { ?>
-    <section class="section" style="background-color:var(--secondary-color);color:var(--secondary-color-inverse);">
+    <section class="section bg-second">
         <div class="container">
             <div class="section-head section--white--head section--head--center">
                 <div class="section__heading">

@@ -1,75 +1,91 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
-<?php $arrFlds1 = array(
-    'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'order_date' => Labels::getLabel('LBL_Date', $siteLangId),
-    'totOrders' => Labels::getLabel('LBL_No._of_Orders', $siteLangId),
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+echo '<div class="datatable datatable-sticky scroll scroll-x">';
+$tbl = new HtmlElement(
+    'table',
+    array('width' => '100%', 'class' => 'datatable__table')
 );
-$arrFlds2  = array(
-    'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'op_invoice_number' => Labels::getLabel('LBL_Invoice_Number', $siteLangId),
-);
-$arr = array(
-    'totQtys' => Labels::getLabel('LBL_No._of_Qty', $siteLangId),
-    'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $siteLangId),
-    'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $siteLangId),
-    'orderNetAmount' => Labels::getLabel('LBL_Order_Net_Amount', $siteLangId),
-    'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $siteLangId),
-    'shippingTotal' => Labels::getLabel('LBL_Shipping_Charges', $siteLangId),
-    'totalRefundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $siteLangId),
-    'totalSalesEarnings' => Labels::getLabel('LBL_Commission_Charges', $siteLangId)
-);
-if (empty($orderDate)) {
-    $arr_flds = array_merge($arrFlds1, $arr);
-} else {
-    $arr_flds = array_merge($arrFlds2, $arr);
+
+$th = $tbl->appendElement('thead', ['class' => 'datatable__head'])->appendElement('tr', ['class' => 'datatable__row']);
+$count = 0;
+$staticFlds = [];
+foreach ($fields as $key => $val) {
+    $cls = 'datatable_cell datatable_cell-sort datatable_cell_top headerColumnJs';
+    if (0 == $count) {
+        $staticFlds = [$key];
+        $cls .= ' datatable_cell_left';
+    }
+
+    $cls .= ($key == $sortBy) ? ' datatable_cell-sorted' : '';
+
+    $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key]);
+    $span = $td->appendElement('span');
+    $span->appendElement('plaintext', array(), $val);
+    if ($key == $sortBy) {
+        $arrow = ($sortOrder == applicationConstants::SORT_ASC) ? '<i class="fas fa-arrow-down"></i>' : '<i class="fas fa-arrow-up"></i>';
+        $span->appendElement('plaintext', array(), $arrow, true);
+    }
+    $count++;
 }
 
-$tbl = new HtmlElement('table', array('class' => 'table'));
-$th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-foreach ($arr_flds as $val) {
-    $e = $th->appendElement('th', array(), $val);
-}
-
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
+$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $tr = $tbl->appendElement('tr', array('class' => ''));
+    $cls = (($sr_no % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $sr_no]);
 
-    foreach ($arr_flds as $key => $val) {
-        $td = $tr->appendElement('td');
+    foreach ($fields as $key => $val) {
+        if (in_array($key, $staticFlds)) {
+            $td = $tr->appendElement('th', ['class' => 'datatable_cell datatable_cell_left']);
+            $span = $td->appendElement('span');
+        } else {
+            $td = $tr->appendElement('td', ['class' => 'datatable_cell']);
+            $span = $td->appendElement('span');
+        }
         switch ($key) {
             case 'listserial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $span->appendElement('plaintext', array(), $sr_no);
                 break;
 
-            case 'order_date':
-                $td->appendElement('plaintext', array(), '<a href="' . UrlHelper::generateUrl(
+            case 'orderDate':
+                $span->appendElement('plaintext', array(), '<a href="' . UrlHelper::generateUrl(
                     'Reports',
                     'salesReport',
                     array($row[$key])
                 ) . '">' . FatDate::format($row[$key]) . '</a>', true);
                 break;
+            case 'order_net_amount':
+                $amt = CommonHelper::orderProductAmount($row);
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($amt, true, true));
+                break;
 
-            case 'totalSalesEarnings':
-            case 'totalRefundedAmount':
-            case 'inventoryValue':
+            case 'grossSales':
+            case 'transactionAmount':
+            case 'inventoryValue':           
+            case 'adminTaxTotal':
+            case 'sellerTaxTotal':
+            case 'sellerShippingTotal':            
+            case 'volumeDiscount':
+            case 'refundedAmount':
+            case 'refundedShippingFromSeller':
+            case 'refundedTaxFromSeller':           
             case 'orderNetAmount':
-            case 'taxTotal':
-            case 'shippingTotal':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+            case 'commissionCharged':
+            case 'refundedCommission':
+            case 'adminSalesEarnings':
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
 
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $span->appendElement('plaintext', array(), $row[$key], true);
                 break;
         }
     }
 
-    $sr_no--;
+    $sr_no++;
 }
 echo $tbl->getHtml();
 if (count($arrListing) == 0) {
-    
+
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
 } ?>
@@ -77,4 +93,10 @@ if (count($arrListing) == 0) {
 <?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSalesReportSrchPaging', 'method' => 'post'));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSalesReportSearchPage');
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+$this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
+<script>
+	var x = $(".card-body").width();
+	var actualWidth = x / 7;
+	$('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
+	$('.datatable_cell_left').children('span').css('display', 'block');
+</script>

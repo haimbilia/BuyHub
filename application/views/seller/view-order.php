@@ -58,6 +58,10 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
 								<?php echo Labels::getLabel('LBL_Print', $siteLangId); ?>">
                                 <i class="fas fa-print"></i>
                             </a>
+                            <a target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'],$orderDetail['op_id']]); ?>" class="btn btn-outline-brand btn-sm no-print" title="
+				<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>">
+                                <i class="fas fa-print"></i>
+                            </a>
                             <?php if ($shippedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
                                 $opId = $orderDetail['op_id'];
                                 $plugin = new Plugin();
@@ -515,8 +519,8 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                             $lang_name = $languages[$row['afile_lang_id']];
                                         }
 
-                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
-                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
+                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
+                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
 
                                         $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
                                         if ($row['expiry_date'] != '') {

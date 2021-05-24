@@ -1,118 +1,247 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<section class="section">
-    <div class="sectionhead">
-        <h4><?php echo Labels::getLabel('LBL_Digital_Downloads', $adminLangId); ?></h4>
-    </div>
-    <div class="sectionbody space">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="tabs_nav_container responsive flat">
-                    <?php /* require_once('sellerCatalogProductTop.php'); */ ?>
-                    <div class="tabs_panel_wrap ">
-                        <?php
-                        $selprodDownloadFrm->setFormTagAttribute('id', 'frmDownload');
-                        $selprodDownloadFrm->setFormTagAttribute('class', 'web_form');
-                        $selprodDownloadFrm->developerTags['colClassPrefix'] = 'col-md-';
-                        $selprodDownloadFrm->developerTags['fld_default_col'] = 8;
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-                        $langFld = $selprodDownloadFrm->getField('lang_id');
-                        $langFld->setWrapperAttribute('class', 'lang_fld');
+$downloadFrm->addFormTagAttribute('class', 'web_form');
+$downloadFrm->setFormTagAttribute('id', 'frmDownload');
 
-                        $downloadableLinkFld = $selprodDownloadFrm->getField('selprod_downloadable_link');
-                        $downloadableLinkFld->setWrapperAttribute('class', 'downloadable_link_fld');
+$fld = $downloadFrm->getField('product_downloadable_link');
+$fld->addFieldTagAttribute('class', 'product_downloadable_link');
 
-                        $downloadableFileFld = $selprodDownloadFrm->getField('downloadable_file');
-                        $downloadableFileFld->setWrapperAttribute('class', 'downloadable_file_fld');
-                        $downloadableFileFld->setFieldTagAttribute('onchange', 'setUpSellerProductDownloads(' . applicationConstants::DIGITAL_DOWNLOAD_FILE . '); return false;');
+$fld = $downloadFrm->getField('product_preview_link');
+$fld->addFieldTagAttribute('class', 'product_preview_link');
 
-                        $submitButton = $selprodDownloadFrm->getField('btn_submit');
-                        $submitButton->setWrapperAttribute('class', 'submit_button');
-                        $submitButton->setFieldTagAttribute('onClick', 'setUpSellerProductDownloads(' . applicationConstants::DIGITAL_DOWNLOAD_FILE . '); return false;');
+$fld = $downloadFrm->getField('attachement_upload_btn');
+$fld->addFieldTagAttribute('onclick', 'saveDownloadFiles();');
+$fld->addFieldTagAttribute('class', 'btn btn-brand');
+$fld->addFieldTagAttribute('id', 'attachement_upload_btn');
 
-                        echo $selprodDownloadFrm->getFormHtml(); ?>
-                        <div class="col-md-12 filesList">
-                            <?php
-                            $arr_flds = array(
-                                'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-                                'afile_name' => Labels::getLabel('LBL_File', $adminLangId),
-                                'afile_lang_id' => Labels::getLabel('LBL_Language', $adminLangId),
-                                'action' => Labels::getLabel('LBL_Action', $adminLangId),
-                            );
+$fld = $downloadFrm->getField('attachment_link_btn');
+$fld->addFieldTagAttribute('id', 'attachment_link_btn');
+$fld->addFieldTagAttribute('class', 'btn btn-brand');
+$fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
 
-                            $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
-                            $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
-                            foreach ($arr_flds as $val) {
-                                $e = $th->appendElement('th', array(), $val);
-                            }
+if (false == $canDo) {
+    $fld = $downloadFrm->getField('product_downloadable_link');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('product_preview_link');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('attachment_link_btn');
+    $downloadFrm->removeField($fld);
 
-                            $sr_no = 0;
-                            foreach ($attachments as $sn => $row) {
-                                $sr_no++;
-                                $tr = $tbl->appendElement('tr');
+    $fld = $downloadFrm->getField('downloadable_file');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('preview_file');
+    $downloadFrm->removeField($fld);
+    $fld = $downloadFrm->getField('attachement_upload_btn');
+    $downloadFrm->removeField($fld);
+}
 
-                                foreach ($arr_flds as $key => $val) {
-                                    $td = $tr->appendElement('td');
-                                    switch ($key) {
-                                        case 'listserial':
-                                            $td->appendElement('plaintext', array(), $sr_no, true);
-                                            break;
-                                        case 'afile_lang_id':
-                                            $lang_name = Labels::getLabel('LBL_All', $adminLangId);
-                                            if ($row['afile_lang_id'] > 0) {
-                                                $lang_name = $languages[$row['afile_lang_id']];
-                                            }
-                                            $td->appendElement('plaintext', array(), $lang_name, true);
-                                            break;
-                                        case 'action':
-                                            $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
-
-                                            $li = $ul->appendElement("li");
-                                            $li->appendElement(
-                                                "a",
-                                                array(
-                                                    'title' => Labels::getLabel('LBL_Product_Images', $adminLangId),
-                                                    'onclick' => 'deleteDigitalFile(' . $row['afile_record_id'] . ',' . $row['afile_id'] . ')', 'href' => 'javascript:void(0)'
-                                                ),
-                                                Labels::getLabel('LBL_Delete', $adminLangId),
-                                                true
-                                            );
-
-                                            break;
-                                        default:
-                                            $td->appendElement('plaintext', array(), $row[$key], true);
-                                            break;
-                                    }
-                                }
-                            }
-                            if (!empty($attachments)) {
-                                echo $tbl->getHtml();
-                            }
-                            ?>
+?>
+<div class="row justify-content-center">
+    <div class="col-md-12" id="digital_download_formss">
+        <?php echo $downloadFrm->getFormTag(); ?>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php $fld = $downloadFrm->getField('download_type');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                            <?php echo $downloadFrm->getFieldHtml('download_type'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php $fld = $downloadFrm->getField('option_comb_id');
+                if ($fld) {
+                ?>
+                    <div class="col-md-4">
+                        <div class="field-set">
+                            <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php $fld = $downloadFrm->getField('option_comb_id');
+                                    echo $fld->getCaption();
+                                    ?>
+                                </label>
+                                <span class="spn_must_field">*</span>
+                            </div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                <?php echo $downloadFrm->getFieldHtml('option_comb_id'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php $fld = $downloadFrm->getField('lang_id');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                            <?php echo $downloadFrm->getFieldHtml('lang_id'); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="attach-links-js">
+            <?php if(true == $canDo) { ?>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="field-set">
+                            <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php 
+                                    $fld = $downloadFrm->getField('product_downloadable_link');
+                                    echo $fld->getCaption();
+                                    ?>
+                                </label>
+                            </div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                <?php echo $downloadFrm->getFieldHtml('product_downloadable_link'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="field-set">
+                            <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php 
+                                    $fld = $downloadFrm->getField('product_preview_link');
+                                    echo $fld->getCaption();
+                                    ?>
+                                </label>
+                            </div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                <?php echo $downloadFrm->getFieldHtml('product_preview_link'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            </div>
+            <div class="attach-files-js">
+            <?php if(true == $canDo) { ?>
+                <div class="row">
+                    <div class="col-md-4 downloadable_file_input">
+                        <div class="field-set">
+                            <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php $fld = $downloadFrm->getField('downloadable_file');
+                                    $fld->addFieldTagAttribute('class', 'downloadable_file');
+                                    echo $fld->getCaption();
+                                    ?>
+                                </label>
+                            </div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                <?php echo $downloadFrm->getFieldHtml('downloadable_file'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="field-set">
+                            <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php $fld = $downloadFrm->getField('preview_file');
+                                    $fld->addFieldTagAttribute('class', 'downloadable_file');
+                                    echo $fld->getCaption();
+                                    ?>
+                                </label>
+                            </div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                <?php echo $downloadFrm->getFieldHtml('preview_file'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                    <?php
+                                    echo $downloadFrm->getFieldHtml('attachement_upload_btn');
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            </div>
+            <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('selprod_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
+        </form>
+        <?php echo $downloadFrm->getExternalJS(); ?>
     </div>
-</section>
-
-<script type="text/javascript">
+    <!-- <div class="col-md-12" id="digital_download_list" class="dd-list"></div> -->
+</div>
+<script>
     var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;
     var DIGITAL_DOWNLOAD_LINK = <?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>;
-
     $("select[name='download_type']").change(function() {
         if ($(this).val() == DIGITAL_DOWNLOAD_FILE) {
-            $(".lang_fld").show();
-            $(".downloadable_file_fld").show();
+            $(".attach-links-js").hide();
+            $(".attach-files-js").show();
             $(".filesList").show();
-            $(".downloadable_link_fld").hide();
-            $(".submit_button").hide();
         } else {
-            $(".lang_fld").hide();
-            $(".downloadable_file_fld").hide();
+            $(".attach-files-js").hide();
             $(".filesList").hide();
-            $(".downloadable_link_fld").show();
-            $(".submit_button").show();
+            $(".attach-links-js").show();
         }
     });
+    $("select[name='product_attachements_with_inventory']").change(function() {
+        if ($(this).val() == <?php echo applicationConstants::YES; ?>) {
+            $(".others_frm_elem").hide();
+        } else {
+            $(".others_frm_elem").show();
+        }
+    });
+
+    $(document).ready(function(){
+        $("select[name='download_type']").trigger('change');
+        
+        $("select[name='option_comb_id']").on('change', function() {
+            getDigitalDownloads();
+        });
+
+        $("select[name='download_type']").on('change', function() {
+            getDigitalDownloads();
+        });
+
+        $("select[name='lang_id']").on('change', function() {
+            getDigitalDownloads();
+        });
+    });
+
 </script>

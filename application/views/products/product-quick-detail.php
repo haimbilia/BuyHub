@@ -30,7 +30,7 @@
                     </div>
                     <div class="gap"></div>
                     <div class="products__price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
-                        <?php if ($product['special_price_found']) { ?>
+                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                             <span class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></span> <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                         <?php } ?>
                     </div>
@@ -62,7 +62,7 @@
                                         </span>
                                     </button>
                                     <?php if ($option['values']) { ?>
-                                        <div class="dropdown-menu dropdown-menu-anim">
+                                        <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
                                             <ul class="nav nav-block">
                                                 <?php foreach ($option['values'] as $opVal) {
                                                     $isAvailable = true;
@@ -117,8 +117,7 @@
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                                     </use>
                                                 </svg><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
-                </div>
-                     
+                </div>          
                      
                 <?php } else {
                     echo $frmBuyProduct->getFormTag();
@@ -135,11 +134,21 @@
                         <div class="col-auto">
                         <div class="qty-wrapper">
                             <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <span class="decrease decrease-js not-allowed"><i class="fas fa-minus"></i></span>
+                                <span class="decrease decrease-js not-allowed"><i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </i></span>
                                 <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                     <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                                 </div>
-                                <span class="increase increase-js"><i class="fas fa-plus"></i></span>
+                                <span class="increase increase-js"><i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </i></span>
                             </div>
                         </div>
                         </div>

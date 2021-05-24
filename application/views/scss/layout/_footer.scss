@@ -15,7 +15,7 @@
         font-size: 1em;
         font-weight: 500;
         padding: 5px 0;
-        font-family: $family-primary;
+        
         margin-bottom: 20px;
         @include media-breakpoint-down(sm) {
             & {
@@ -184,7 +184,7 @@
         font-size: 1em;
         font-weight: 500;
         padding: 5px 0;
-        font-family: $family-primary;
+        
         margin-bottom: 15px;
         p {
             margin: 0;
@@ -356,8 +356,7 @@
 
 .accordion_triger span:after {
     content: "+";
-    -webkit-padding-start: 5px;
-    -moz-padding-start: 5px;
+    
     padding-#{$start-direction}: 5px;
 }
 
@@ -387,8 +386,7 @@
 
 .footerSubCategories li:after {
     content: "|";
-    -webkit-padding-start: 2px;
-    -moz-padding-start: 2px;
+    
     padding-#{$start-direction}: 2px;
 }
 

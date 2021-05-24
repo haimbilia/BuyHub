@@ -459,7 +459,7 @@ class Cronjob extends FatModel
         $prmSrch->addMultipleFields(array('promotion_id', 'promotion_user_id ', "IFNULL(MAX(pcharge_end_piclick_id),0) as end_click_id", "IFNULL(MAX(pcharge_end_date),'0000-00-00') as charge_till_date"));
         $rs = $prmSrch->getResultSet();
         $promotions = FatApp::getDb()->fetchAll($rs);
-
+        
         $prmObj = new Promotion();
         foreach ($promotions as $pKey => $pVal) {
             $promotionId = $pVal['promotion_id'];
@@ -476,7 +476,7 @@ class Cronjob extends FatModel
 
             $rs = $prChargeSummary->getResultSet();
             $promotionClicks = FatApp::getDb()->fetch($rs);
-
+            
             if ($promotionClicks) {
                 // Get User Wallet Balance
                 $userId = $pVal['promotion_user_id'];
@@ -484,26 +484,26 @@ class Cronjob extends FatModel
                 $accountSummary = $txnObj->getTransactionSummary($userId); */
                 //$balance = $accountSummary['total_earned'] - $accountSummary['total_used'];
 
-                $balance = User::getUserBalance($userId, true, false);
+                $balance = User::getUserBalance($userId);
 
                 if ($balance < $promotionClicks['total_cost']) {
                     $emailObj = new EmailHandler();
                     $emailObj->sendLowBalancePromotionalNotification(FatApp::getConfig('CONF_DEFAULT_SITE_LANG'), $pVal['promotion_user_id'], $balance);
-                    continue;
+                    //continue;
                 }
 
 
                 if ($promotionClicks['total_cost'] > 0) {
-                    $data = array(
-                    'user_id' => $pVal['promotion_user_id'],
-                    'promotion_id' => $promotionId,
-                    'total_cost' => $promotionClicks['total_cost'],
-                    'total_clicks' => $promotionClicks['total_clicks'],
-                    'start_click_id' => $promotionClicks['start_click_id'],
-                    'end_click_id' => $promotionClicks['end_click_id'],
-                    'start_click_date' => $promotionClicks['start_click_date'],
-                    'end_click_date' => $promotionClicks['end_click_date'],
-                    );
+                        $data = array(
+                        'user_id' => $pVal['promotion_user_id'],
+                        'promotion_id' => $promotionId,
+                        'total_cost' => $promotionClicks['total_cost'],
+                        'total_clicks' => $promotionClicks['total_clicks'],
+                        'start_click_id' => $promotionClicks['start_click_id'],
+                        'end_click_id' => $promotionClicks['end_click_id'],
+                        'start_click_date' => $promotionClicks['start_click_date'],
+                        'end_click_date' => $promotionClicks['end_click_date'],
+                        );
 
                     $prmObj->addUpdatePromotionCharges($data, FatApp::getConfig('CONF_DEFAULT_SITE_LANG'));
                 }

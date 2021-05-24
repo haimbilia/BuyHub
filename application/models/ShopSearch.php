@@ -122,6 +122,61 @@ class ShopSearch extends SearchBase
             $this->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
         }
     }
+
+    public function addProductsCount()
+    {
+        $srch = new ProductSearch(0);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('selprod_user_id');
+        $srch->joinSellerProducts();
+        $srch->addMultipleFields(array('count(selprod_id) as totStoreProducts', 'selprod_user_id'));
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'spc.selprod_user_id = s.shop_user_id', 'spc');
+        $this->addFld('IFNULL(spc.totStoreProducts, 0) as totProducts');
+    }
+
+    public function addReviewsCount()
+    {
+        $srch = new SelProdReviewSearch();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
+        $srch->addGroupby('spreview_seller_user_id');
+        $srch->addMultipleFields(array('count(spreview_id) as totReviews', 'spreview_seller_user_id'));
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'spreview.spreview_seller_user_id = s.shop_user_id', 'spreview');
+        $this->addFld('IFNULL(spreview.totReviews, 0) as totReviews');
+    }
+
+    public function addRatingsCount()
+    {
+        $srch = new SelProdReviewSearch();
+        $srch->joinSeller();
+        $srch->joinSellerProducts();
+        $srch->joinSelProdRating();
+        $srch->joinOrderProduct();
+        $srch->joinOrderProductShipping();
+        $srch->addMultipleFields(array('ROUND(AVG(sprating_rating),2) as avg_rating', 'spreview_seller_user_id'));
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addGroupby('spreview_seller_user_id');
+
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'sprating.spreview_seller_user_id = s.shop_user_id', 'sprating');
+        $this->addFld('IFNULL(sprating.avg_rating, 0) as totRating');
+    }
+
+    public function addFavoritesCount()
+    {
+        $srch = new UserFavoriteShopSearch();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('ufs_shop_id');
+        $srch->addMultipleFields(array('ufs_shop_id', 'count(ufs_user_id) as totalFavorites'));
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 's.shop_id = ufsq.ufs_shop_id', 'ufsq');
+        $this->addFld('IFNULL(ufsq.totalFavorites, 0) as totalFavorites');
+    }
+
     /* public function joinShopOwnerCountry( $langId = 0, $isActive = true ){
     $langId = FatUtility::int($langId);
     $this->joinTable( Countries::DB_TBL, 'LEFT OUTER JOIN', 'u.user_country_id = user_c.country_id', 'user_c' );

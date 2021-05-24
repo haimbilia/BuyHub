@@ -32,8 +32,7 @@
 }
 
 .media>li .grid--fourth {
-    -webkit-padding-end: 0;
-    -moz-padding-end: 0;
+    
     padding-#{$end-direction}: 0;
     float: right;
 }
@@ -74,8 +73,7 @@
 }
 
 .media--small>li {
-    -webkit-padding-start: 65px;
-    -moz-padding-start: 65px;
+    
     padding-#{$start-direction}: 65px;
     /* &:first-child{padding-top: 0;}*/
 }

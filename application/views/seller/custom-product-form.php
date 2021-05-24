@@ -52,6 +52,12 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
                             <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Option_Based_Media', $siteLangId); ?>"></i>
 
                         </a></li>
+                    <li>
+                        <a rel="tabs_007" class="tabs_007" href="javascript:void(0)" >
+                            <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
+                            <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Catalog_Inventory_Based_Downloads', $siteLangId); ?>"></i>
+                        </a>
+                    </li>
                     <?php if ($displayInventoryTab == true) { ?>
                         <li><a rel="tabs_006" class="tabs_006" href="javascript:void(0)"> <?php echo Labels::getLabel('LBL_Inventory', $siteLangId); ?>
                                 <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Inventory', $siteLangId); ?>"></i></a></li>
@@ -67,6 +73,7 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
                         <div id="tabs_003" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_004" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_005" class="tabs_panel" style="display: none;"></div>
+                        <div id="tabs_007" class="tabs_panel" style="display: none;"></div>
                         <?php if ($displayInventoryTab == true) { ?>
                             <div id="tabs_006" class="tabs_panel" style="display: none;"> </div>
                         <?php } ?>
@@ -78,6 +85,10 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
     </div>
 </main>
 <script>
+    var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
+    var product_type =  '<?php echo $productType; ?>';
+    var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
+    
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
     $(document).ready(function() {
@@ -89,5 +100,16 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
 
         customProductForm('<?php echo $productId; ?>');
         hideShippingTab('<?php echo $productType; ?>', '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>');
+
+        if(product_type == PRODUCT_TYPE_DIGITAL){
+            if (0 == attachDownloadsWithInv) {
+                showDownloadTab();
+            } else {
+                hideDownloadTab();
+            }
+        } else {
+            hideDownloadTab();
+        }
+        
     });
 </script>

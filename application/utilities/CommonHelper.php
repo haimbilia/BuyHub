@@ -1,11 +1,14 @@
 <?php
 
+use phpDocumentor\Reflection\PseudoTypes\True_;
+
 class CommonHelper extends FatUtility
 {
     private static $_ip;
     private static $_user_agent;
     private static $_lang_id;
     private static $_lang_code;
+    private static $_lang_country_code;
     private static $_layout_direction;
     private static $_currency_id;
     private static $_currency_symbol_left;
@@ -76,10 +79,13 @@ class CommonHelper extends FatUtility
             array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
         );
 
-        self::$_lang_code = Language::getAttributesById(
+        $langData = Language::getAttributesById(
             self::$_lang_id,
-            'language_code'
+            ['language_country_code', 'language_code']
         );
+
+        self::$_lang_code = $langData['language_code'];
+        self::$_lang_country_code = $langData['language_country_code'];
 
         self::$_currency_symbol_left = $currencyData['currency_symbol_left'];
         self::$_currency_symbol_right = $currencyData['currency_symbol_right'];
@@ -110,6 +116,11 @@ class CommonHelper extends FatUtility
     public static function getLangCode()
     {
         return self::$_lang_code;
+    }
+
+    public static function getLangCountryCode()
+    {
+        return self::$_lang_country_code;
     }
 
     public static function getLayoutDirection()
@@ -382,8 +393,8 @@ class CommonHelper extends FatUtility
         if ($requestRow['op_commission_include_tax'] && $taxPerQty /* && FatApp::getConfig('CONF_COMMISSION_INCLUDING_TAX', FatUtility::VAR_INT, 0) */) {
             $commissionCostValue = $commissionCostValue + $taxPerQty;
         }
-
-        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost) {
+         
+        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0)) {
             $commissionCostValue = $commissionCostValue + $perUnitShippingCost;
         }
 
@@ -532,7 +543,7 @@ class CommonHelper extends FatUtility
     {
         //$currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyValue = self::getCurrencyValue();
-        $defaultCurrencyValue = $val / $currencyValue;
+        $defaultCurrencyValue = ((float) $val) / $currencyValue;
         return static::displayMoneyFormat($defaultCurrencyValue, $format, true, $displaySymbol);
     }
 
@@ -1354,34 +1365,7 @@ class CommonHelper extends FatUtility
 
         $specialPrice = $product['theprice'];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
-        return $disVal = round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
-        /* $str = '';
-        $listPrice = $product['splprice_display_list_price'];
-        if( $listPrice > 0 ){
-            $disVal = $product['splprice_display_dis_val'];
-            $disVal = $disVal + 0;
-            if (($disVal * 100) % 100 > 0) {
-                $disVal = number_format($disVal, 2, '.', '');
-            }
-
-            $str .= Labels::getLabel( 'LBL_Save_{saveprice}_({offprice})', $langId );
-            if( $product['splprice_display_dis_type'] == applicationConstants::PERCENTAGE ){
-                $disVal .= '%';
-            }
-            elseif( $product['splprice_display_dis_type'] == applicationConstants::FLAT ){
-                $disVal = static::displayMoneyFormat($listPrice) ;
-            }
-
-            $arrReplacements = array(
-                '{saveprice}' => static::displayMoneyFormat($listPrice),
-                '{offprice}'=> $disVal
-            );
-
-            foreach ($arrReplacements as $key => $val) {
-                $str = str_replace($key, $val, $str);
-            }
-        }
-        return $str;*/
+        return round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
     }
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)
@@ -1445,16 +1429,19 @@ class CommonHelper extends FatUtility
         return trim($string, '-');
     }
 
-    public static function recursiveDelete($str)
+    public static function recursiveDelete($str, $removeParent = false)
     {
         if (is_file($str)) {
             return @unlink($str);
         } elseif (is_dir($str)) {
             $scan = glob(rtrim($str, '/') . '/*');
             foreach ($scan as $index => $path) {
-                static::recursiveDelete($path);
+                static::recursiveDelete($path, true);
             }
-            return @rmdir($str);
+
+            if ($removeParent) {
+                return @rmdir($str);
+            }
         }
     }
 
