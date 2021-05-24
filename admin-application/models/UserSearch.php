@@ -41,15 +41,15 @@ class UserSearch extends SearchBase
 
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = tqub.utxn_user_id', 'tqub');
 
-        $userBalance = 'tqub.walletAmount';
+        $userBalance = 'ifnull(tqub.walletAmount, 0)';
         if ($excludePendingWidrawReq) {
             $this->includePendingWithdrawReq($excludeProcessedWidrawReq);
-            $userBalance .= ' - wrqb.pendingWithdrawalAmount';
+            $userBalance .= ' - ifnull(wrqb.pendingWithdrawalAmount, 0)';
         }
 
         if ($excludePromotion) {
             $this->includePromotionWalletToBeCharged();
-            $userBalance .= ' - pmCharge.pendingPromotionCost';
+            $userBalance .= ' - ifnull(pmCharge.pendingPromotionCost, 0)';
         }
 
         $this->addFld('(' . $userBalance . ') as availableBalance');

@@ -140,6 +140,7 @@ Fixes:
     => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
     => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
     => 053861 - In Side bar only number of items displayed.
+    => 053822 - seller reports> balance is not populating
 
 New Features:
     => Admin shipped products listing page
