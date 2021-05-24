@@ -632,7 +632,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Timezone', $this->adminLangId), 'CONF_TIMEZONE', Configurations::dateTimeZoneArr(), false, array(), '');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_Current", $this->adminLangId) . ' <span id="currentDate">' . CommonHelper::currentDateTime(null, true) . '</span></small>';
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+                $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'CONF_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
@@ -816,7 +816,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $this->adminLangId) . "</small>";
 
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true, 'country_code');
+                $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true, 'country_code');
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'CONF_GEO_DEFAULT_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));

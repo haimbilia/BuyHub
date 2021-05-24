@@ -692,7 +692,7 @@ class TaxController extends AdminBaseController
 
         /* [ TAX CATEGORY RULE LOCATIONS FORM */
         $countryObj = new Countries();
-        $countriesOptions = $countryObj->getCountriesArr($this->adminLangId, true);
+        $countriesOptions = $countryObj->getCountriesAssocArr($this->adminLangId, true);
         $countriesOptions = array(-1 => Labels::getLabel('LBL_Rest_of_the_world', $this->adminLangId)) + $countriesOptions;
         array_walk($countriesOptions, function (&$v) {
             $v = str_replace("'", "\'", trim($v));

@@ -88,7 +88,7 @@ class PickupAddressesController extends AdminBaseController
         $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $langId), 'addr_address2');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($langId);
+        $countriesArr = $countryObj->getCountriesAssocArr($langId);
         $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
