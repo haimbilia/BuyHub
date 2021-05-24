@@ -117,6 +117,7 @@ Fixes:
     => 053757 - when order status is changed then sms are not triggering to buyer for the same
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053978 - Forget password label language issue in admin
 
 
 Enhancements :
