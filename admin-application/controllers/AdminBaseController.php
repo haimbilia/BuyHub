@@ -169,6 +169,10 @@ class AdminBaseController extends FatController
             'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
             'defaultCountryCode' => $defaultCountryCode,
             'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
+            'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
+            'rate' => Labels::getLabel('LBL_RATE(INT)', $this->adminLangId),
+            'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
+            'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);

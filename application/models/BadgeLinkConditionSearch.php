@@ -1,7 +1,9 @@
 <?php
 
-class BadgeLinkSearch extends SearchBase
+class BadgeLinkConditionSearch extends SearchBase
 {
+    private $badgeLinksJoin = false;
+
     /**
      * __construct
      *
@@ -10,7 +12,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function __construct()
     {
-        parent::__construct(BadgeLink::DB_TBL, 'blnk');
+        parent::__construct(BadgeLinkCondition::DB_TBL, 'blnk');
     }
     
     /**
@@ -32,7 +34,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function addRecordTypesCondition(array $recordTypesArr)
     {
-        $this->addCondition(BadgeLink::DB_TBL_PREFIX . 'record_type', 'IN',  $recordTypesArr);
+        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', 'IN',  $recordTypesArr);
     }
 
     /**
@@ -43,7 +45,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function addConditionTypesCondition(array $conditionTypesArr)
     {
-        $this->addCondition(BadgeLink::DB_TBL_PREFIX . 'condition_type', 'IN',  $conditionTypesArr);
+        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type', 'IN',  $conditionTypesArr);
     }
 
     /**
@@ -54,7 +56,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function addFromCondition(string $from, string $operator = '<=')
     {
-        $this->addCondition(BadgeLink::DB_TBL_PREFIX . 'condition_from', $operator,  $from);
+        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from', $operator,  $from);
     }
 
     /**
@@ -65,7 +67,7 @@ class BadgeLinkSearch extends SearchBase
      */
     public function addToCondition(string $to, string $operator = '>=')
     {
-        $this->addCondition(BadgeLink::DB_TBL_PREFIX . 'condition_to', $operator,  $to);
+        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to', $operator,  $to);
     }
     
     /**
@@ -76,10 +78,21 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinBadge(int $langId = 0)
     {
-        $this->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badgelink_badge_id = badge_id', 'bdg');
+        $this->joinTable(Badge::DB_TBL, 'INNER JOIN', 'blinkcond_badge_id = badge_id', 'bdg');
         if (0 < $langId) {
             $this->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badge_id = badgelang_badge_id AND badgelang_lang_id = ' . $langId, 'bdg_l');
         }
+    }
+
+    /**
+     * joinBadgeLinks
+     *
+     * @return void
+     */
+    public function joinBadgeLinks()
+    {
+        $this->badgeLinksJoin = true;
+        $this->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, 'LEFT JOIN', 'badgelink_blinkcond_id = blinkcond_id', 'blc');
     }
     
     /**
@@ -90,6 +103,10 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinProduct(int $langId = 0)
     {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
         $this->joinTable(Product::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = product_id', 'p');
         if (0 < $langId) {
             $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'product_id = productlang_product_id AND productlang_lang_id = ' . $langId, 'p_l');
@@ -104,6 +121,10 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinSellerProduct(int $langId = 0)
     {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
         $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = selprod_id', 'sp');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'spu.credential_user_id = sp.selprod_user_id', 'spu');
         $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT JOIN', 'selprod_id = selprodoption_selprod_id', 'spo');
@@ -125,6 +146,10 @@ class BadgeLinkSearch extends SearchBase
      */
     public function joinShop(int $langId = 0)
     {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
         $this->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = shop_id', 'shp');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'shpu.credential_user_id = shp.shop_user_id', 'shpu');
         if (0 < $langId) {

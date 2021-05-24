@@ -12,12 +12,13 @@ class Badge extends MyAppModel
     public const TYPE_RIBBON = 2;
 
     public const SHAPE_CIRCLE = 1;
-    public const SHAPE_CAPSULE = 2;
+    public const SHAPE_PILL = 2;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'type',
         self::DB_TBL_PREFIX . 'shape_type',
+        self::DB_TBL_PREFIX . 'display_inside',
         self::DB_TBL_PREFIX . 'color',
         self::DB_TBL_PREFIX . 'identifier',
         self::DB_TBL_PREFIX . 'required_approval',
@@ -31,6 +32,11 @@ class Badge extends MyAppModel
 
     public const ICON_MIN_WIDTH = 50;
     public const ICON_MIN_HEIGHT = 50;
+
+     /* For Ribbon */
+    public const RIBB_TEXT_MIN_LEN = 2;
+    public const RIBB_TEXT_MAX_LEN = 10;
+     /* For Ribbon */
 
     public const REMOVED_OLD_IMAGE_TIME = 4;
 
@@ -86,7 +92,7 @@ class Badge extends MyAppModel
     {
         return [
             self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
-            self::SHAPE_CAPSULE => Labels::getLabel('LBL_CAPSULE', $langId),
+            self::SHAPE_PILL => Labels::getLabel('LBL_PILL', $langId),
         ];
     }
 
@@ -194,6 +200,18 @@ class Badge extends MyAppModel
                         } else {
                             $recordData[$column] = $post[Badge::DB_TBL_PREFIX . 'name'];
                         }
+
+                        if (self::TYPE_RIBBON == $post[self::DB_TBL_PREFIX . 'type']) {
+                            if (self::RIBB_TEXT_MIN_LEN > strlen($recordData[$column])) {
+                                $this->error = Labels::getLabel('LBL_INVALID_MIN_LENGTH', $siteDefaultLangId);
+                                return false; 
+                            }
+
+                            if (self::RIBB_TEXT_MAX_LEN < strlen($recordData[$column])) {
+                                $recordData[$column] = substr($recordData[$column], 0, (self::RIBB_TEXT_MAX_LEN - 1));
+                            }
+                        }
+
                     break;
                     
                 case Badge::DB_TBL_PREFIX . 'active':
@@ -206,7 +224,7 @@ class Badge extends MyAppModel
                 
             }
         }
-
+        
         $this->assignValues($recordData);
         if (!$this->save()) {
             return false;
@@ -215,14 +233,33 @@ class Badge extends MyAppModel
         $badgeId = $this->getMainTableRecordId();
 
         if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name'])) {
+            $langNames = Language::getAllNames();
             foreach ($post[Badge::DB_TBL_PREFIX . 'name'] as $langId => $name) {
-                if (empty($name)) {
+                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                $tranlateToOtherLang = array_key_exists('auto_update_other_langs_data', $post) ? $post['auto_update_other_langs_data'] : 0;
+                if (empty($name) && !empty($translatorSubscriptionKey) && 0 < $tranlateToOtherLang) {
                     $updateLangDataobj = new TranslateLangData(self::DB_TBL_LANG);
                     $translatedText = $updateLangDataobj->directTranslate([Badge::DB_TBL_PREFIX . 'name' => $recordData[Badge::DB_TBL_PREFIX . 'identifier']]);
                     if (false === $translatedText) {
                         continue;
                     }
                     $name = current($translatedText)[Badge::DB_TBL_PREFIX . 'name'];
+                }
+
+                if (empty($name)) {
+                    continue;
+                }
+
+                if (self::TYPE_RIBBON == $post[self::DB_TBL_PREFIX . 'type']) {
+                    if (self::RIBB_TEXT_MIN_LEN > strlen($name)) {
+                        $this->error = Labels::getLabel('LBL_INVALID_LENGTH_OF_{LANG}_NAME', $langId);
+                        $this->error = CommonHelper::replaceStringData($this->error, ['{LANG}' => $langNames[$langId]]);
+                        return false; 
+                    }
+
+                    if (self::RIBB_TEXT_MAX_LEN < strlen($name)) {
+                        $name = substr($name, 0, (self::RIBB_TEXT_MAX_LEN - 1));
+                    }
                 }
 
                 $recordLangData = [
@@ -232,8 +269,7 @@ class Badge extends MyAppModel
                 ];
                 
                 if (!$this->updateLangData($langId, $recordLangData)) {
-                    echo $this->getError();die;
-                    continue;
+                    return false;
                 }
             }
         }

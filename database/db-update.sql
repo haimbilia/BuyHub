@@ -764,38 +764,105 @@ UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options
 ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
 -- --- Display Total Savings on Checkout page  --- --
 
--- --- Badges & Ribbons --- --
-CREATE TABLE `tbl_badges` ( `badge_id` BIGINT NOT NULL AUTO_INCREMENT ,  `badge_type` INT NOT NULL ,  `badge_shape_type` INT NOT NULL, `badge_color` VARCHAR(150) NOT NULL,  `badge_identifier` VARCHAR(150) NOT NULL , `badge_required_approval` TINYINT NOT NULL , `badge_active` TINYINT NOT NULL ,    PRIMARY KEY  (`badge_id`),    UNIQUE  `badge_identifier` (`badge_identifier`)) ENGINE = InnoDB;
 
-CREATE TABLE `tbl_badges_lang` ( `badgelang_badge_id` BIGINT NOT NULL ,  `badgelang_lang_id` INT NOT NULL ,  `badge_name` VARCHAR(150) NOT NULL ) ENGINE = InnoDB;
+-- --- Badges & Ribbons --- --
+--
+-- Table structure for table `tbl_badges`
+--
+
+CREATE TABLE `tbl_badges` (
+  `badge_id` bigint(20) NOT NULL,
+  `badge_type` int(11) NOT NULL,
+  `badge_display_inside` tinyint(4) NOT NULL,
+  `badge_shape_type` int(11) NOT NULL,
+  `badge_color` varchar(150) NOT NULL,
+  `badge_identifier` varchar(150) NOT NULL,
+  `badge_required_approval` tinyint(4) NOT NULL,
+  `badge_active` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_badges`
+--
+ALTER TABLE `tbl_badges`
+  ADD PRIMARY KEY (`badge_id`),
+  ADD UNIQUE KEY `badge_identifier` (`badge_identifier`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_badges`
+--
+ALTER TABLE `tbl_badges`
+  MODIFY `badge_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- Table structure for table `tbl_badges_lang`
+--  
+
+CREATE TABLE `tbl_badges_lang` ( 
+  `badgelang_badge_id` BIGINT NOT NULL ,  
+  `badgelang_lang_id` INT NOT NULL ,  
+  `badge_name` VARCHAR(150) NOT NULL 
+) ENGINE = InnoDB;
+
+--
+-- Indexes for table `tbl_badges_lang`
+--
 ALTER TABLE `tbl_badges_lang`
   ADD PRIMARY KEY (`badgelang_badge_id`,`badgelang_lang_id`),
   ADD UNIQUE KEY `badge_name` (`badgelang_lang_id`,`badge_name`);
 
 --
+-- Table structure for table `tbl_badge_link_conditions`
+--
+
+CREATE TABLE `tbl_badge_link_conditions` (
+  `blinkcond_id` bigint(20) NOT NULL,
+  `blinkcond_badge_id` bigint(20) NOT NULL,
+  `blinkcond_record_type` int(11) NOT NULL,
+  `blinkcond_from_date` datetime DEFAULT NULL,
+  `blinkcond_to_date` datetime DEFAULT NULL,
+  `blinkcond_condition_type` int(11) NOT NULL,
+  `blinkcond_condition_from` varchar(150) NOT NULL,
+  `blinkcond_condition_to` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_badge_link_conditions`
+--
+ALTER TABLE `tbl_badge_link_conditions`
+  ADD PRIMARY KEY (`blinkcond_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_badge_link_conditions`
+--
+ALTER TABLE `tbl_badge_link_conditions`
+  MODIFY `blinkcond_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- Table structure for table `tbl_badge_links`
 --
-
 CREATE TABLE `tbl_badge_links` (
-  `badgelink_id` bigint NOT NULL,
-  `badgelink_badge_id` bigint NOT NULL,
-  `badgelink_record_id` bigint NOT NULL,
-  `badgelink_record_type` int NOT NULL,
-  `badgelink_condition_type` int NOT NULL,
-  `badgelink_condition_from` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `badgelink_condition_to` varchar(150) COLLATE utf8mb4_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `badgelink_blinkcond_id` bigint(20) NOT NULL,
+  `badgelink_record_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Indexes for table `tbl_badge_links`
---
-ALTER TABLE `tbl_badge_links`
-  ADD PRIMARY KEY (`badgelink_id`),
-  ADD UNIQUE KEY `badge_link_unique` (`badgelink_badge_id`,`badgelink_record_id`,`badgelink_record_type`);
-
---
--- AUTO_INCREMENT for table `tbl_badge_links`
---
 ALTER TABLE `tbl_badge_links`
   MODIFY `badgelink_id` bigint NOT NULL AUTO_INCREMENT;
+
 -- --- Badges & Ribbons --- --

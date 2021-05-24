@@ -65,10 +65,6 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_BRAND_IMAGE = 52;
     public const FILETYPE_SHOP_COLLECTION_IMAGE = 53;
     public const FILETYPE_PLUGIN_LOGO = 54;
-    public const FILETYPE_PRODCAT_IMAGE_PATH = 'category/';
-    public const FILETYPE_PRODUCT_IMAGE_PATH = 'product/';
-    public const FILETYPE_BLOG_POST_IMAGE_PATH = 'blog-post/';
-    public const FILETYPE_BULK_IMAGES_PATH = 'bulk-images/';
     public const FILETYPE_APP_MAIN_SCREEN_IMAGE = 55;
     public const FILETYPE_APP_LOGO = 56;
     public const FILETYPE_PUSH_NOTIFICATION_IMAGE = 57;
@@ -84,6 +80,12 @@ class AttachedFile extends MyAppModel
 
     public const RATIO_TYPE_SQUARE = 1;
     public const RATIO_TYPE_RECTANGULAR = 2;
+    
+    public const FILETYPE_PRODCAT_IMAGE_PATH = 'category/';
+    public const FILETYPE_PRODUCT_IMAGE_PATH = 'product/';
+    public const FILETYPE_BLOG_POST_IMAGE_PATH = 'blog-post/';
+    public const FILETYPE_BULK_IMAGES_PATH = 'bulk-images/';
+    public const FILETYPE_BADGE_IMAGE_PATH = 'badge-images/';
 
     public function __construct($fileId = 0)
     {
@@ -449,6 +451,9 @@ class AttachedFile extends MyAppModel
                 break;
             case self::FILETYPE_BULK_IMAGES:
                 $path .= self::FILETYPE_BULK_IMAGES_PATH;
+                break;
+            case self::FILETYPE_BADGE:
+                $path .= self::FILETYPE_BADGE_IMAGE_PATH;
                 break;
         }
         /* ] */
