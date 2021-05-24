@@ -2832,7 +2832,7 @@ class AccountController extends LoggedUserController
         }
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->siteLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirement->setRequired(true);
 

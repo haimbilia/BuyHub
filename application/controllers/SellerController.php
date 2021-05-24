@@ -3691,7 +3691,7 @@ class SellerController extends SellerBaseController
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->siteLangId, true, 'country_code');
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true, 'country_code');
         $fld = $frm->addSelectBox(Labels::getLabel('Lbl_Country', $this->siteLangId), 'shop_country_code', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('Lbl_Select', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
@@ -4893,7 +4893,7 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmReturnAddress');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->siteLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
 
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'ura_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirement->setRequired(true);
@@ -5635,7 +5635,7 @@ class SellerController extends SellerBaseController
         $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $this->siteLangId), 'addr_address2');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->siteLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);

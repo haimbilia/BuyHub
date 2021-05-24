@@ -9,13 +9,13 @@ class HomeController extends MyAppController
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
         $sponsoredShopsInCollection = $sponsoredProdsInCollection = [];
         $collections = $this->getCollections($productSrchObj, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
-        
+
         $sponShopLayoutCount = count($sponsoredShopsInCollection);
         $sponProdLayoutCount = count($sponsoredProdsInCollection);
         if (0 < $sponProdLayoutCount) {
             foreach ($sponsoredProdsInCollection as $indexId => $collectionId) {
                 $sponsoredProds = $this->getSponsoredProducts($productSrchObj);
-                
+
                 if (empty($sponsoredProds)) {
                     if (true === MOBILE_APP_API_CALL) {
                         unset($collections[$indexId]);
@@ -1156,11 +1156,11 @@ class HomeController extends MyAppController
         $prodObj->joinBudget();
         $prodObj->addBudgetCondition();
         $prodObj->doNotCalculateRecords();
-        $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id', 'promotion_record_id'));         
+        $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id', 'promotion_record_id'));
 
         $productSrchSponObj = clone $productSrchObj;
         $productSrchSponObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
-        $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));        
+        $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));
         $productSrchSponObj->joinSellers();
         $productSrchSponObj->joinSellerSubscription($langId);
         $productSrchSponObj->addGroupBy('selprod_id');
@@ -1268,8 +1268,12 @@ class HomeController extends MyAppController
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->siteLangId);
         $arr_country = array();
-        foreach ($countriesArr as $key => $val) {
-            $arr_country[] = array("id" => $key, 'name' => $val);
+        foreach ($countriesArr as $country) {
+            $arr_country[] = [
+                "id" => $country['country_id'],
+                'name' => $country['country_name'],
+                'country_code' => $country['country_code'],
+            ];
         }
         $this->set('countries', $arr_country);
         $this->_template->render();
@@ -1387,7 +1391,7 @@ class HomeController extends MyAppController
                     'src' => $iconUrl,
                     'sizes' => $val . 'x' . $val,
                     'type' => 'image/png',
-                    'purpose'=> 'any maskable'
+                    'purpose' => 'any maskable'
                 ];
                 $arr['icons'][] = $icons;
             }
