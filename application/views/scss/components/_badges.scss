@@ -7,28 +7,95 @@
     &-1 {
         background: $secondary-color;
         color: $secondary-color-inverse;
-        border-radius: $radius4; 
-        padding: 4px 8px; 
+        border-radius: $radius4;
+        padding: 4px 8px;
     }
     &-2 {
-        background: url(images/retina/badges/bg-badges-1.svg) no-repeat center;
-        background-size:70px ;
+        background: url(images/retina/badges/bg-badges-2.svg) no-repeat center;
+        background-size: 70px;
         color: #fff;
         padding: 4px 8px;
         top: 0;
         right: 0;
-        width: 70px;
+        width: 70px; 
         height: 70px;
         padding-top: 8px;
-        .text {
+        .text { font-weight: 600;
             transform: rotate( 45deg);
             position: absolute;
             left: 8px;
             right: 0;
             line-height: 28px;
             text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
+    &-3 {
+        background: url(images/retina/badges/bg-badges-3.svg) no-repeat center;
+        background-size: 60px;
+        color: #fff;
+        top: 1rem;
+        right:1rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .text {
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &-4 {
+        background: url(images/retina/badges/bg-badges-4.svg) no-repeat center;
+        background-size: 60px;
+        color: #fff;
+        padding: 4px 8px;
+        top: 1rem;
+        right:1rem;
+        width: 60px; 
+        height: 60px;
+        padding-top: 8px;
+        .text {font-weight: 600;
+            transform: rotate( 45deg);
+            position: absolute;
+            left: 8px;
+            right: 0;
+            line-height: 28px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &-5 {
+        background: url(images/retina/badges/bg-badges-5.svg) no-repeat center;
+        background-size: 60px;
+        color: #fff;
+        top: 1rem;
+        right:1rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .text { line-height: 1;
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+
 }
 
 .snip1326 {
@@ -64,10 +131,7 @@
     border: 5px solid #bdbdbd;
     left: 50%;
     top: 50%;
-    -webkit-transform-origin: 0 0;
-    -ms-transform-origin: 0 0;
     transform-origin: 0 0;
-    -webkit-transform: rotate(45deg) translate(-50%, -50%);
     transform: rotate(45deg) translate(-50%, -50%);
     border-radius: 10%;
 }

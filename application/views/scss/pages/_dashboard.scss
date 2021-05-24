@@ -2149,3 +2149,11 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
     }
 }
+
+.feedback-block {
+    &_content {
+        background: $bg-gray;
+        border-radius: $radius4;
+        padding: 2rem;
+    }
+}

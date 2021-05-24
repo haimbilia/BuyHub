@@ -11,10 +11,10 @@
 <?php } */ ?>
 <div class="order-summary__sections">
     <div class="order-summary__section order-summary__section--product-list">
-        <div class="order-summary__section__content scroll-y">
+        <div class="order-summary__section__content scroll scroll-y">
             <!-- List group -->
 
-            <ul class="list-cart list-cart-page">
+            <ul class="list-cart list-cart-checkout">
                 <?php foreach ($products as $product) {
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                 ?>
@@ -56,7 +56,7 @@
             <div class="cart-summary">
                 <ul>
                     <li>
-                        <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="mleft-auto"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
+                        <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
                     </li>
                     <?php if ($cartSummary['cartVolumeDiscount']) { ?>
                         <li>
@@ -111,6 +111,12 @@
                         <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
                     </li>
+                    <?php if(0 < $cartSummary['totalSaving']){ ?>
+                    <li class="text-success">
+                        <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
+                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
+                    </li>
+                    <?php } ?>
 
                 </ul>
                 <?php /*  ?><p class="earn-points"><svg class="svg" width="20px" height="20px">

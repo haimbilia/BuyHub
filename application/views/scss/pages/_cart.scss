@@ -17,8 +17,9 @@
             }
             &.hightlighted {
                 font-weight: 500;
-                border-top: $border;
+                border-top: $border; 
             }
+            &.text-success{ color: $success-color;}
         }
     }
 }
@@ -185,6 +186,7 @@
     }
     &-checkout {
         border: none;
+        background: none;
         li {
             background: none;
             border: none;

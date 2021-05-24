@@ -251,7 +251,7 @@ if (!$print) { ?>
                                             ?>
                                         </p>
                                     <?php } ?>                                        
-                                    <p>
+                                    <p class="text-success">
                                        <?php if(0 < $totalSaving ){ ?>     
                                         <strong>
                                             <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
@@ -276,7 +276,7 @@ if (!$print) { ?>
                                     <?php echo $orderDetail['order_id']; ?>
                                 </p>
                                 <?php if(0 < $totalSaving) { ?>
-                                <p>
+                                <p class="text-success">
                                     <strong>
                                         <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
                                     </strong>
