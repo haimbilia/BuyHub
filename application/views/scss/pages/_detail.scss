@@ -4,7 +4,7 @@
         content: "";
         position: absolute;
         #{$start-direction}: 0;
-        #{$end-direction}: 0;
+        #{$end-direction}: 0; 
         top: 0;
         background: $bg-gray;
         height: 226px;

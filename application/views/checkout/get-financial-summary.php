@@ -14,7 +14,7 @@
         <div class="order-summary__section__content scroll-y">
             <!-- List group -->
 
-            <ul class="list-cart list-cart-checkout">
+            <ul class="list-cart list-cart-page">
                 <?php foreach ($products as $product) {
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                 ?>
@@ -111,12 +111,6 @@
                         <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
                     </li>
-                    <?php if(0 < $cartSummary['totalSaving']){ ?>
-                    <li class="list-group-item hightlighted">
-                        <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
-                        <span class="mleft-auto"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
-                    </li>
-                    <?php } ?>
 
                 </ul>
                 <?php /*  ?><p class="earn-points"><svg class="svg" width="20px" height="20px">
