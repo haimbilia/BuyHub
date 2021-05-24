@@ -149,6 +149,7 @@ Fixes:
     => 053817 - on registration screen> logo is not displaying
     => 053832 - rating star color is different in admin and front end
     => 053932 - while placing order> when no coupon or discount is there then getting entry on name of saving
+    => 053954 - Not storing Product unit price so in report data not coming
 
 New Features:
     => Admin shipped products listing page
