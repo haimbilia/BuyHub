@@ -377,7 +377,21 @@ class Tax extends MyAppModel
         $this->setToStateId($shipToStateId);
         $taxCategoryRow = $this->getTaxRates($productId, $sellerId, $langId);
 
-        if (empty($taxCategoryRow)) {
+        if (empty($taxCategoryRow)) {           
+            $taxDetail = self::getTaxCatByProductId($productId,0,1,['taxcat_code','taxcat_name','taxcat_identifier']); 
+            $taxCatName = !empty($taxDetail['taxcat_name']) ? $taxDetail['taxcat_name'] : $taxDetail['taxcat_identifier'];
+            $taxCatCode = !empty($taxDetail['taxcat_code']) ? $taxDetail['taxcat_code'] : $taxCatName;
+            
+            $data = [
+                'status' => true,
+                'tax' => 0,
+                'optionsSum' => 0,
+                'rate' => 0,
+                'taxCode' => $taxCatCode,
+                'options' => []
+            ];         
+            return $data;
+            /*
             $message = Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId);
             if (isset($shopInfo['shop_identifier'])) {
                 $message .= '(' . $shopInfo['shop_identifier'] . ')';
@@ -394,6 +408,8 @@ class Tax extends MyAppModel
                 'taxCode' => '',
                 'options' => []
             ];
+             * 
+             */
         }
         $taxCatName = !empty($taxCategoryRow['taxcat_name']) ? $taxCategoryRow['taxcat_name'] : $taxCategoryRow['taxcat_identifier'];
         $taxCatCode = !empty($taxCategoryRow['taxcat_code']) ? $taxCategoryRow['taxcat_code'] : $taxCatName;
