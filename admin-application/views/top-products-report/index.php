@@ -25,6 +25,9 @@
                     </div>
                     <div class="sectionbody space togglewrap" style="display:none;">
                         <?php
+                            $keywordFld = $frmSearch->getField('keyword');
+                            $keywordFld->htmlAfterField = '<small>' . Labels::getLabel('LBL_SEARCH_IN', $adminLangId) . " " . Labels::getLabel('LBL_Custom_Title', $adminLangId) . ", " . Labels::getLabel('LBL_Options', $adminLangId) . ", " . Labels::getLabel('LBL_Brand', $adminLangId) . ", " . Labels::getLabel('LBL_Shop', $adminLangId) . '</small>';
+
                             $frmSearch->setFormTagAttribute('onsubmit', 'searchTopProductsReport(this); return(false);');
                             $frmSearch->setFormTagAttribute('class', 'web_form');
                             $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
