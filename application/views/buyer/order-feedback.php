@@ -28,9 +28,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <?php echo Labels::getLabel('LBL_PRODUCT_FEEDBACK', $siteLangId); ?></h5>
                                 <div class="feedback-block_content">
 
-                                    <div class="item">
+                                    <div class="item mb-3">
                                         <div class="item__pic">
-                                            <a href="/yokart/iphone-7-25"><img src="/yokart/image/product/5/EXTRA-SMALL/25/0/1" alt="iPhone 7" title="iPhone 7"></a>
+                                            <a href="/yokart/iphone-7-25"><img src="/yokart/image/product/5/25/0/1" alt="iPhone 7" title="iPhone 7"></a>
                                         </div>
                                         <div class="item__description">
                                             <div class="item__category"><a href="/yokart/chromium-gallery">Chromium
@@ -58,14 +58,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             </h6>
                                         </div>
                                     </div> -->
-                                    <div class="rating-listing">
+                                    <div class="rating-listing mb-4">
                                         <?php foreach ($ratingAspects as $ratingTypeId => $ratingTypeLabel) {
                                             if (in_array($ratingTypeId, [RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
                                                 continue;
                                             }
                                         ?>
                                             <div class="rating">
-                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
+                                                <!-- <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span> -->
                                                 <div class="rating-action" data-rating="0">
                                                     <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                         <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -152,8 +152,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <h5 class="card-title ">
                                             <?php echo Labels::getLabel('LBL_SELLER_FEEDBACK', $siteLangId); ?></h5>
                                         <div class="feedback-block_content">
-                                            <div class="shop-rating-wrap mb-4">
-                                                <div class="shop-card pb-3">
+                                            <div class="shop-rating-wrap">
+                                                <div class="shop-card">
                                                     <div class="shop-card__img">
                                                         <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL')); ?>" />
                                                     </div>
@@ -168,7 +168,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <div class="rating-listing">
                                                     <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                                         <div class="rating">
-                                                            <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
+                                                            <!-- <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span> -->
                                                             <div class="rating-action" data-rating="0">
                                                                 <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                                     <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -190,17 +190,15 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <!--shop-rating-wrap-->
                                 <?php }
                                 if (!empty($deliveryRatingTypesArr)) { ?>
-                                    <div class="feedback-block">
+                                    <div class="feedback-block mt-5">
                                         <h5 class="card-title ">
                                             <?php echo Labels::getLabel('LBL_DELIVERY_FEEDBACK', $siteLangId); ?></h5>
-
-
-                                        <div class="feedback-block_content">
-                                            <div class="shop-rating-wrap mb-4">
+                                       <div class="feedback-block_content">
+                                            <div class="shop-rating-wrap">
                                                 <div class="rating-listing">
                                                     <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                                         <div class="rating pb-0">
-                                                            <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
+                                                            <!-- <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span> -->
                                                             <div class="rating-action" data-rating="0">
                                                                 <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                                     <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -223,7 +221,10 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <?php } ?>
                             </div>
                         <?php } ?>
-                        <div class="col-md-12">
+                       
+                    </div>
+                    <div class="row mt-4">
+                    <div class="col-md-12 ">
                             <div class="field-set">
                                 <div class="field-wraper">
                                     <div class="field_cover">
@@ -241,7 +242,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        </div>
                     </form>
                     <?php echo $frm->getExternalJS(); ?>
                 </div>

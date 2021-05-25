@@ -17722,6 +17722,37 @@ html.quick-view--open {
   .scroll-x {
     overflow-x: auto; }
 
+.file__upload {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: #888;
+  border: solid 1px #dee2e6;
+  padding: .45rem 1rem;
+  border-radius: .25rem;
+  font-size: .8rem; }
+  .file__upload:hover {
+    cursor: pointer;
+    color: var(--primary-color); }
+  .file__upload input[type="file"], .file__upload .form select[type="file"], .form .file__upload select[type="file"], .file__upload .form .custom-select[type="file"], .form .file__upload .custom-select[type="file"], .file__upload .form textarea[type="file"], .form .file__upload textarea[type="file"] {
+    position: absolute;
+    border: none;
+    opacity: 0;
+    padding: 0;
+    cursor: pointer; }
+  .file__upload span {
+    font-size: .875rem;
+    color: currentColor; }
+    .file__upload span svg {
+      fill: currentColor; }
+    .file__upload span.upload-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: .25rem; }
+
 .animated {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
@@ -33511,10 +33542,33 @@ input.sp-input,
       vertical-align: top;
       font-weight: 300; }
 
+.feedback-block .card-title {
+  margin-bottom: 1rem; }
+
 .feedback-block_content {
-  background: #f3f4f5;
+  background: #fbfcfc;
   border-radius: 4px;
-  padding: 2rem; }
+  border: solid 1px #e7eaed;
+  padding: 1.5rem; }
+  .feedback-block_content .item .item__pic {
+    max-width: 100px;
+    flex: 0 0 100px; }
+
+.feedback-block .rating-listing .rating {
+  --size: 1.5rem;
+  --space: 0.4rem; }
+
+.shop-card {
+  display: flex;
+  flex-direction: column; }
+  .shop-card__img {
+    border: solid 1px #dee2e6;
+    border-radius: 4px;
+    padding: 2rem;
+    background: #fff; }
+  .shop-card__detail {
+    margin: 1rem 0;
+    font-size: 0.8rem; }
 
 .detail-page {
   position: relative; }
@@ -34565,38 +34619,6 @@ input.sp-input,
       align-items: center;
       font-weight: 700;
       font-size: 1.125rem; }
-
-.file__upload {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  color: #000;
-  cursor: pointer;
-  border: 1px solid currentColor;
-  padding: .45rem 1rem;
-  border-radius: .25rem;
-  margin: .875rem 0;
-  font-size: .875rem; }
-  .file__upload:hover {
-    color: var(--primary-color); }
-  .file__upload input[type="file"], .file__upload .form select[type="file"], .form .file__upload select[type="file"], .file__upload .form .custom-select[type="file"], .form .file__upload .custom-select[type="file"], .file__upload .form textarea[type="file"], .form .file__upload textarea[type="file"] {
-    position: absolute;
-    border: none;
-    opacity: 0;
-    padding: 0;
-    cursor: pointer; }
-  .file__upload span {
-    font-size: .875rem;
-    color: currentColor; }
-    .file__upload span svg {
-      fill: currentColor; }
-    .file__upload span.upload-icon {
-      width: 1.5rem;
-      height: 1.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-left: .25rem; }
 
 .ratedby-list {
   display: flex;

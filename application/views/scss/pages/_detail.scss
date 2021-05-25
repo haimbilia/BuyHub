@@ -1328,43 +1328,6 @@
     }
 }
 
-.file__upload {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    color: $body-color;
-    cursor: pointer;
-    border: 1px solid currentColor;
-    padding: .45rem 1rem;
-    border-radius: .25rem;
-    margin: .875rem 0;
-    font-size: .875rem;
-    &:hover {
-        color: $primary-color;
-    }
-    input[type="file"] {
-        position: absolute;
-        border: none;
-        opacity: 0;
-        padding: 0;
-        cursor: pointer;
-    }
-    span {
-        font-size: .875rem;
-        color: currentColor;
-        svg {
-            fill: currentColor;
-        }
-        &.upload-icon {
-            width: 1.5rem;
-            height: 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-#{$end-direction}: .25rem;
-        }
-    }
-}
 
 .ratedby-list {
     display: flex;
