@@ -533,7 +533,7 @@ class StripeConnectPayController extends PaymentController
             
             $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
             $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
-            Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $comments, $op['op_id']);
+            Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
 
             if (!empty($accountId)) {
                 $charge = [
