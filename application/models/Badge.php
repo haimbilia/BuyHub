@@ -11,8 +11,12 @@ class Badge extends MyAppModel
     public const TYPE_BADGE = 1;
     public const TYPE_RIBBON = 2;
 
+    /* Used in case of Ribbons */
     public const SHAPE_CIRCLE = 1;
-    public const SHAPE_PILL = 2;
+    public const SHAPE_STRIP = 2;
+    public const SHAPE_STAR = 3;
+    public const SHAPE_TRIANGLE = 4;
+    public const SHAPE_SQUARE = 5;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
@@ -30,8 +34,8 @@ class Badge extends MyAppModel
         self::DB_TBL_PREFIX . 'name'
     ];
 
-    public const ICON_MIN_WIDTH = 50;
-    public const ICON_MIN_HEIGHT = 50;
+    public const ICON_MIN_WIDTH = 26;
+    public const ICON_MIN_HEIGHT = 26;
 
      /* For Ribbon */
     public const RIBB_TEXT_MIN_LEN = 2;
@@ -92,7 +96,10 @@ class Badge extends MyAppModel
     {
         return [
             self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
-            self::SHAPE_PILL => Labels::getLabel('LBL_PILL', $langId),
+            self::SHAPE_STRIP => Labels::getLabel('LBL_STRIP', $langId),
+            self::SHAPE_STAR => Labels::getLabel('LBL_STAR', $langId),
+            self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
+            self::SHAPE_SQUARE => Labels::getLabel('LBL_SQUARE', $langId),
         ];
     }
 

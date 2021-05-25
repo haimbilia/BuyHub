@@ -1,6 +1,5 @@
 $(document).ready(function () {
     searchRecords(document.frmSearch);
-
 });
 
 $(document).on('change', '.icon-language-js', function () {
@@ -222,6 +221,7 @@ $(document).on('change', '.icon-language-js', function () {
                     $('input[name="attachment_ids"]').val(JSON.stringify(JSONObj));
 
                     badgeImages(badgeId, imageType, slideScreen, langId);
+                    reloadList();
                 } else {
                     fcom.displayErrorMessage(ans.msg);
                 }
