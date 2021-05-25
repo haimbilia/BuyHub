@@ -3,7 +3,7 @@ $canCancelOrder = true;
 $canReturnRefund = true;
 $canReviewOrders = false;
 $canSubmitFeedback = false;
-$selProdTotalPrice = 0;
+$selProdTotalSpecialPrice = 0;
 
 if (true == $primaryOrder) {
     if ($childOrderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -19,15 +19,16 @@ if (true == $primaryOrder) {
     }
 
     $canSubmitFeedback = Orders::canSubmitFeedback($childOrderDetail['order_user_id'], $childOrderDetail['order_id'], $childOrderDetail['op_selprod_id']);
-    $selProdTotalPrice += $childOrderDetail['op_selprod_price'] * $childOrderDetail["op_qty"];      
+    $selProdTotalSpecialPrice += $childOrderDetail['op_special_price'] * $childOrderDetail["op_qty"];      
+   
 }else{
     $firstOrderInfo = current($childOrderDetail);
     $cartTotal = 0;
     foreach ($childOrderDetail as $childOrder) {
-        $selProdTotalPrice += $childOrder['op_selprod_price'] * $childOrder["op_qty"];
+        $selProdTotalSpecialPrice += $childOrder['op_special_price'] * $childOrder["op_qty"];
         $cartTotal += $childOrder["op_unit_price"] * $childOrder["op_qty"];
     }  
-    $totalSaving = ($selProdTotalPrice - $cartTotal) + $firstOrderInfo['order_discount_total'] + $firstOrderInfo['order_volume_discount_total'];
+    $totalSaving = $selProdTotalSpecialPrice + $firstOrderInfo['order_discount_total'] + $firstOrderInfo['order_volume_discount_total'];
 }
 
 $orderStatusArr = Orders::getOrderPaymentStatusArr($siteLangId);
@@ -93,7 +94,7 @@ if (!$print) { ?>
                                     <?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId); ?>">
                                     <i class="fas fa-arrow-left"></i>
                                 </a>
-                                <a target="_blank" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Buyer', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-brand btn-sm no-print" title="
+                                <a target="_blank" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-brand btn-sm no-print" title="
                                     <?php echo Labels::getLabel('LBL_Print', $siteLangId); ?>">
                                     <i class="fas fa-print"></i>
                                 </a>
@@ -112,7 +113,7 @@ if (!$print) { ?>
                         $cartTotal = CommonHelper::orderProductAmount($childOrderDetail, 'CART_TOTAL');
                         $disc = CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT');
                         $volumeDiscount = CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT');
-                        $totalSaving = ($selProdTotalPrice - $cartTotal) + abs($disc) + abs($volumeDiscount);
+                        $totalSaving = $selProdTotalSpecialPrice + abs($disc) + abs($volumeDiscount);
                         ?>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 mb-4">
@@ -250,9 +251,9 @@ if (!$print) { ?>
                                             echo  $date . ' ' . $fromTime . ' - ' . $toTime;
                                             ?>
                                         </p>
-                                    <?php } ?>                                        
-                                    <p>
-                                       <?php if(0 < $totalSaving ){ ?>     
+                                    <?php } ?>    
+                                    <?php if(0 < $totalSaving ){ ?> 
+                                    <p class="text-success">                                          
                                         <strong>
                                             <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
                                         </strong>
@@ -276,7 +277,7 @@ if (!$print) { ?>
                                     <?php echo $orderDetail['order_id']; ?>
                                 </p>
                                 <?php if(0 < $totalSaving) { ?>
-                                <p>
+                                <p class="text-success">
                                     <strong>
                                         <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
                                     </strong>

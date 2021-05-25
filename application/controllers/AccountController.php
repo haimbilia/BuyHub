@@ -3989,6 +3989,7 @@ class AccountController extends LoggedUserController
         $srch->joinShopCountry();
         $srch->joinShopState();
         $srch->addOrderProductCharges();
+        $srch->joinOrderProductSpecifics();
         $srch->addCondition('order_id', '=', $orderId);
         if (0 < $opId) {
             $srch->addCondition('op_id', '=', $opId);

@@ -1352,14 +1352,15 @@ class CheckoutController extends MyAppController
                 if(FatApp::getConfig('CONF_TAX_COLLECTED_BY_SELLER',FatUtility::VAR_INT,0)){
                 $taxCollectedBySeller = applicationConstants::YES;
                 } */
-
+                
                 $orderData['products'][CART::CART_KEY_PREFIX_PRODUCT . $productInfo['selprod_id']] = array(
                     'op_selprod_id' => $productInfo['selprod_id'],
                     'op_is_batch' => 0,
                     'op_selprod_user_id' => $productInfo['selprod_user_id'],
                     'op_selprod_code' => $productInfo['selprod_code'],
                     'op_qty' => $cartProduct['quantity'],
-                    'op_unit_price' => $cartProduct['theprice'],          
+                    'op_unit_price' => $cartProduct['theprice'],   
+                    'op_unit_cost' => $cartProduct['selprod_cost'],
                     'op_selprod_price' => $cartProduct['selprod_price'],
                     'op_selprod_sku' => $productInfo['selprod_sku'],
                     'op_selprod_condition' => $productInfo['selprod_condition'],
@@ -1403,6 +1404,7 @@ class CheckoutController extends MyAppController
                         'op_selprod_cancellation_age' => $productInfo['cancellation_age'],
                         'op_product_warranty' => $productInfo['product_warranty'],
                         'op_prodcat_id' => $productInfo['prodcat_id'],
+                        'op_special_price' => 0 < $cartProduct['special_price_found'] ? $cartProduct['selprod_price'] - $cartProduct['actualPrice'] : 0,
                     ],
                     'op_rounding_off' => $cartProduct['rounding_off'],
                     'selprod_product_id' => $productInfo['selprod_product_id'],
