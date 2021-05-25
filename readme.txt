@@ -154,6 +154,7 @@ Fixes:
     => 053985 - Stripe connect unable to debit site commission
     => 053850 - admin> advertiser report> data is not populating.
     => 053849 - admin> advertiser report> keyword search needs to be there in filter
+    => 053751 - after applying filters and exporting file in reports> all data is exporting instead of filtered data
 
 New Features:
     => Admin shipped products listing page
