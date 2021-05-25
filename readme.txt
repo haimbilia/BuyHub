@@ -153,6 +153,7 @@ Fixes:
     => 053954 - Not storing Product unit price so in report data not coming
     => 053985 - Stripe connect unable to debit site commission
     => 053850 - admin> advertiser report> data is not populating.
+    => 053849 - admin> advertiser report> keyword search needs to be there in filter
 
 New Features:
     => Admin shipped products listing page
