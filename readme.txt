@@ -156,6 +156,7 @@ Fixes:
     => 053849 - admin> advertiser report> keyword search needs to be there in filter
     => 053751 - after applying filters and exporting file in reports> all data is exporting instead of filtered data
     => 053935 - when buyer purchases multiple qty (incl. tax) then on seller end in transactions it's listing $1000.02 and under reports it's listing $1000 and on buyer end it's listing $0.01 as rounding off amount
+    => 053948 - getting invalid slot when buyer changes date for pickup (admin's place)
 
 New Features:
     => Admin shipped products listing page
