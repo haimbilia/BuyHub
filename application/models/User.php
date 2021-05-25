@@ -2678,7 +2678,7 @@ class User extends MyAppModel
                 return false;
             }
 
-            if (empty($row['credential_email']) || applicationConstants::YES > $row['credential_email']) {
+            if (empty($row['credential_email']) || applicationConstants::YES > $row['credential_verified']) {
                 $assignValues = [
                     static::DB_TBL_CRED_PREFIX . 'user_id' => $row['user_id'],
                     static::DB_TBL_CRED_PREFIX . 'email' => $email,

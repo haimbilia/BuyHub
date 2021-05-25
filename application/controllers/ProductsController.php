@@ -1176,7 +1176,7 @@ class ProductsController extends MyAppController
             $prodSrchObj->joinSellers();
             $prodSrchObj->setGeoAddress();
             $prodSrchObj->joinShops();
-            $prodSrchObj->validateAndJoinDeliveryLocation(false, false);
+            /*$prodSrchObj->validateAndJoinDeliveryLocation(false, false);*/
             $prodSrchObj->joinBrands($this->siteLangId);
 
             $prodSrchObj->joinSellerSubscription(0, false, true);
@@ -1184,6 +1184,7 @@ class ProductsController extends MyAppController
             $prodSrchObj->doNotCalculateRecords();
 
             $brandSrch = clone $prodSrchObj;
+            $brandSrch->validateAndJoinDeliveryLocation(false, false);
             $brandSrch->joinProductToCategory($this->siteLangId);
             $brandSrch->addMultipleFields(array('brand_id', 'COALESCE(tb_l.brand_name, brand.brand_identifier) as brand_name', 'if(LOCATE("' . $keyword . '", COALESCE(tb_l.brand_name, brand.brand_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(tb_l.brand_name, brand.brand_identifier)), 99) as level'));
             //$brandSrch->addKeywordSearch($keyword, false, false);
@@ -1205,6 +1206,7 @@ class ProductsController extends MyAppController
             $catSrch->joinProductToCategory();
             $catSrch->joinCategoryRelationWithChild();
             $catSrch->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
+            $catSrch->validateAndJoinDeliveryLocation(false, false);
             $catSrch->doNotCalculateRecords();
             $catSrch->doNotLimitRecords();
             // echo $catSrch->getQuery();
@@ -1239,6 +1241,7 @@ class ProductsController extends MyAppController
             $tags = FatApp::getDb()->fetchAll($rs);
             $prodArr = [];
             if (empty($tags)) {
+                $prodSrchObj->validateAndJoinDeliveryLocation(false, false);
                 $prodSrchObj->setPageSize(10);
                 $prodSrchObj->joinProductToCategory($this->siteLangId);
                 $prodSrchObj->addMultipleFields(array('selprod_id', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'COALESCE(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'if(LOCATE("' . $keyword . '", COALESCE(selprod_title, product_name, product_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(selprod_title, product_name, product_identifier)), 99) as level'));
@@ -1410,6 +1413,7 @@ class ProductsController extends MyAppController
         $prodObj->doNotCalculateRecords();
         $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id'));
         $prodObj->addCondition('promotion_record_id', '=', $productId);
+        $prodObj->addCondition('promotion_deleted', '=', applicationConstants::NO);
         $sponsoredProducts = array();
         $productSrchObj = new ProductSearch($this->siteLangId);
         $productSrchObj->joinProductToCategory($this->siteLangId);

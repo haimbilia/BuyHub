@@ -91,11 +91,35 @@ Fixes:
     => 052645 - wile adding product specifications> it's not accepting character after &
     => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
     => 052869 - caching directory delete issue for some server
+    => 053316 - Import export- product specification export issue in other languges
     => 052895 - when catalogue is approved from admin then no email is there for the same to seller
     => 052912 - front end> product editor> insert image option> upload button is not working in editor 
     => 052985 - when the subscription module is on then the catalog image upload /multiple inventory add limit not working properly
     => 053007 - Stripe Connect Already Have Account Issue 
+    => 053057 - When search by keyword on home getting error
+    => 053064 - While order product commission not calculated as per subscription
+    => 053156 - admin> shipping> order level shipping text is not changing as per language /RTL
+    => 053228 - When stripe connect is not configured, uploading banner images gives error 
+    => 053197 - mPesa Pament gateway payment not confirmed
+    => 053235 - buyer can't cancel the order when status is in process
+    => 053365 -	While sharing shop page on whatsapp then meta image not displaying
+    => 053276 - shipping is not changing on changing address during checkout
+    => 053155 - Button labels are not changing as per language
+    => 053430 - While sending SMTP email code crashed in between if unable to send email
+    => 052088 - when product having multiple options then on quick view popup> dropdown is affecting popup
+    => 053466 - There is no deducted discount amount shown in the printed invoice of admin and seller panel even after the buyer has applied a discount coupon.
+    => 053465 - some issue with promotion
+    => 053442 - "When a registered user shares any information throught contact us form: - The email is recieved by the site owner, but when the site owner tries to reply the from email i,e user email is not getting fetched. " 
+    => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
+    => 053673  - Allow seller to cancel COD orders.
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053978 - Forget password label language issue in admin
     => 053985 - Stripe connect unable to debit site commission
+
 
 Enhancements :
    => Make provision to made seller

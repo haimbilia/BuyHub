@@ -67,6 +67,14 @@ if (!empty($order['opship_tracking_url'])) {
                                 ],
                                 'label' => '<i class="fas fa-print"></i>'
                             ];
+                            $data['otherButtons'][] = [
+                                'attr' => [
+                                    'href' => Fatutility::generateUrl('Orders', 'viewBuyerOrderInvoice', [$order['order_id'],$order['op_id']]),
+                                    'target' => '_blank',
+                                    'title' => Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $adminLangId)
+                                ],
+                                'label' => '<i class="fas fa-print"></i>'
+                            ];
 
                             if (!$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
                                 if (empty($order['opship_response']) && empty($order['opship_tracking_number'])) {

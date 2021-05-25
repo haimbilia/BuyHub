@@ -312,3 +312,16 @@ UPDATE `tbl_email_templates` SET `etpl_subject` = 'Your Catalog {product_name} {
 
 UPDATE `tbl_sms_templates` SET `stpl_body` = 'Hello {shop_name},\r\nYour catalog {product_name} has been {new_status} on {website_name}\r\n\r\n{SITE_NAME} Team' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
 UPDATE `tbl_sms_templates` SET `stpl_replacements` = '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"New Status\", \"variable\":\"{new_status}\"},{\"title\":\"Product Name\", \"variable\":\"{product_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
+
+ALTER TABLE `tbl_shipping_profile` CHANGE `shipprofile_name` `shipprofile_identifier` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+CREATE TABLE `tbl_shipping_profile_lang` (
+  `shipprofilelang_shipprofile_id` int NOT NULL,
+  `shipprofilelang_lang_id` int NOT NULL,
+  `shipprofile_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile_id`, `shipprofilelang_lang_id`);
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
+('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
+ON DUPLICATE KEY UPDATE conf_val = 3;

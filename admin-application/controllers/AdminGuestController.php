@@ -25,7 +25,8 @@ class AdminGuestController extends FatController
 
         $jsVariables = array(
         'processing' => Labels::getLabel('LBL_Processing...', $this->adminLangId),
-        'isMandatory' => Labels::getLabel('LBL_is_mandatory', $this->adminLangId)
+        'isMandatory' => Labels::getLabel('LBL_is_mandatory', $this->adminLangId),
+        'pleaseEnterValidEmailId' => Labels::getLabel('VLBL_Please_enter_valid_email_ID_for', $this->adminLangId)
         );
         if (CommonHelper::demoUrl() == true) {
             $this->_template->addCss('css/demo.css');

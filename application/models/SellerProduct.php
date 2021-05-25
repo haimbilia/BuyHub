@@ -629,7 +629,7 @@ class SellerProduct extends MyAppModel
         /* ] */
 
         $db = FatApp::getDb();
-        $sql = "SELECT commsetting_fees,
+        $sql = "SELECT commsetting_fees,commsetting_product_id,commsetting_user_id,commsetting_prodcat_id,
 			CASE
 				WHEN commsetting_product_id = '" . $product_id . "' AND commsetting_user_id = '" . $selprod_user_id . "' AND commsetting_prodcat_id IN (" . implode(",", $catIds) . ") THEN 10
   				WHEN commsetting_product_id = '" . $product_id . "' AND commsetting_user_id = '" . $selprod_user_id . "' AND commsetting_prodcat_id = '0' THEN 9
@@ -640,12 +640,18 @@ class SellerProduct extends MyAppModel
 				WHEN commsetting_product_id = 0 AND commsetting_user_id = '" . $selprod_user_id . "' AND commsetting_prodcat_id = 0 THEN 5
 
 				WHEN commsetting_product_id = 0 AND commsetting_user_id = 0 AND commsetting_prodcat_id IN (" . implode(",", $catIds) . ") THEN 4
-
+                              
 				WHEN (commsetting_product_id = '0' AND commsetting_user_id = '0' AND commsetting_prodcat_id = '0') THEN 1
 			END
        		as matches FROM " . Commission::DB_TBL . " WHERE commsetting_deleted = 0 order by matches desc, commsetting_fees desc  limit 0,1";
         $rs = $db->query($sql);
         if ($row = $db->fetch($rs)) {
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails(0, $selprod_user_id, array(OrderSubscription::DB_TBL_PREFIX . 'commission'));                
+                if ($row['commsetting_product_id'] == 0 && $row['commsetting_user_id'] == 0 && $row['commsetting_prodcat_id'] == 0) {
+                    return $currentPlanData['ossubs_commission'];
+                }
+            }
             return $row['commsetting_fees'];
         }
     }
