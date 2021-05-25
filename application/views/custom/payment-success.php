@@ -204,7 +204,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-7">
                                                 <div class="bg-gray rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h5>
-                                                    <ul class="list-cart list-cart-checkout">
+                                                    <ul class="list-cart list-cart-page">
                                                         <?php
                                                         $shippingCharges = $subTotal = 0;
                                                         $selProdTotalPrice = 0;
@@ -214,7 +214,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                 $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['op_shop_id']));
                                                                 $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "MINI", $product['op_selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                                                                 $productTitle =  ($product['op_selprod_title']) ? $product['op_selprod_title'] : $product['op_product_name'];
-                                                                $selProdTotalPrice += $product['op_selprod_price'] * $product["op_qty"];    
+                                                                $selProdTotalPrice += $product['op_selprod_price'] * $product["op_qty"];
                                                         ?>
                                                                 <li>
                                                                     <div class="cell cell_product">
@@ -259,8 +259,8 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-5">
                                                 <div class="bg-gray rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h5>
-                                                    <div class="cart-total">
-                                                        <ul class="mt-4">
+                                                    <div class="cart-summary">
+                                                        <ul class="">
                                                             <?php if (0 < $subTotal) { ?>
                                                                 <li>
                                                                     <span class="label">
@@ -314,15 +314,15 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                             <li class="hightlighted">
                                                                 <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId); ?></span>
                                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount']); ?></span>
-                                                            </li> 
+                                                            </li>
                                                             <?php
                                                             $totalSaving = ($selProdTotalPrice - $subTotal) + $orderInfo['order_discount_total'] + $orderInfo['order_volume_discount_total'];
-                                                            if (0 < $totalSaving) { ?>                                                            
-                                                                <li class="list-group-item hightlighted">
+                                                            if (0 < $totalSaving) { ?>
+                                                                <li class="text-success">
                                                                     <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
                                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($totalSaving); ?></span>
                                                                 </li>
-                                                            <?php } ?> 
+                                                            <?php } ?>
 
                                                         </ul>
                                                     </div>

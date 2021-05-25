@@ -36,13 +36,7 @@
     height: auto;
     .products__title {
         display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        @include media-breakpoint-down(md) {
-            & {
-                flex-direction: column;
-            }
-        }
+        flex-direction: column;
         a {
             color: inherit;
         }
@@ -56,12 +50,13 @@
             word-break: break-all;
             word-break: break-word;
             hyphens: auto;
-            display: flex;
-            align-items: flex-start;
-            .badges {
-                margin-top: 6px;
-                margin-#{$end-direction}: 8px;
-            }
+            margin-bottom: 1.5rem;
+            //display: flex;
+            //align-items: center;
+        }
+        &_badge {
+            margin-top: 4px;
+            margin-#{$end-direction}: 8px;
         }
         .favourite-wrapper-detail {
             display: flex;
@@ -76,18 +71,13 @@
     }
     .products-reviews {
         display: flex;
-        -webkit-box-orient: vertical;
-        flex-direction: column;
         align-items: center;
-        border: solid 1px #323232;
-        border-radius: $radius4;
-        padding: 0.5rem;
-        min-width: 110px;
-        margin-#{$start-direction}: 10px;
-        @include media-breakpoint-down(md) {
-            & {
-                margin: 1rem 0;
-            }
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+        .products__rating {
+            margin: 0;
+            padding: 0;
+            margin-#{$end-direction}: 1rem;
         }
     }
     .brand-data {
@@ -1338,43 +1328,6 @@
     }
 }
 
-.file__upload {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    color: $body-color;
-    cursor: pointer;
-    border: 1px solid currentColor;
-    padding: .45rem 1rem;
-    border-radius: .25rem;
-    margin: .875rem 0;
-    font-size: .875rem;
-    &:hover {
-        color: $primary-color;
-    }
-    input[type="file"] {
-        position: absolute;
-        border: none;
-        opacity: 0;
-        padding: 0;
-        cursor: pointer;
-    }
-    span {
-        font-size: .875rem;
-        color: currentColor;
-        svg {
-            fill: currentColor;
-        }
-        &.upload-icon {
-            width: 1.5rem;
-            height: 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-#{$end-direction}: .25rem;
-        }
-    }
-}
 
 .ratedby-list {
     display: flex;
@@ -1404,6 +1357,9 @@
         padding: 5px;
         display: none;
     }
+    .item__title {
+        margin-bottom: 0.5rem;
+    }
     .actions {
         display: flex;
         flex-direction: column;
@@ -1423,11 +1379,13 @@
         font-weight: 300;
         display: flex;
         align-items: center;
-        li {
+        >li {
             text-align: center;
             margin-right: 6px;
-            width: 20px;
-            height: 20px;
+            // width: 20px;
+            // height: 20px;
+            display: flex;
+            align-items: center;
             .colors-dot {
                 margin: 0 auto;
                 width: 12px;
@@ -1452,7 +1410,7 @@
         //border-radius: $radius4;
         padding: 1rem;
         display: flex;
-        align-items: center;
+        //align-items: center;
         justify-content: space-between;
         margin-bottom: 20px;
         @include media-breakpoint-down(md) {
@@ -1522,10 +1480,10 @@
             flex-basis: 23%;
         }
         &-2 {
-            flex-basis: 16%;
+            flex-basis: 10%;
         }
         &-3 {
-            flex-basis: 20%;
+            flex-basis: 26%;
         }
         &-4 {
             flex-basis: 23%;
@@ -1555,5 +1513,43 @@
         &:hover {
             background-color: $bg-gray;
         }
+    }
+}
+
+.share-via {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    &-list {
+        display: flex;
+        align-items: center;
+        li {
+            margin-#{$end-direction}: 10px;
+            margin-bottom: 5px;
+            &:last-child {
+                margin-#{$end-direction}: 0
+            }
+            a {
+                text-align: center;
+                border: $border;
+                border-radius: 50%;
+                width: 48px;
+                height: 48px;
+                display: block;
+                color: $txt-gray;
+                padding: 10px;
+                .svg {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}
+
+.detail-content {
+    margin-bottom: 5rem;
+    h2 {
+        font-size: 1.5rem !important;
     }
 }

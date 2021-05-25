@@ -41,7 +41,7 @@
         <?php /* if (isset($cartSummary['taxOptions']) && !empty($cartSummary['taxOptions'])) {
         foreach ($cartSummary['taxOptions'] as $taxName => $taxVal) { ?>
             <li class="list-group-item ">
-                <span class="label"><?php echo $taxVal['title']; ?></span> <span class="mleft-auto"><?php echo CommonHelper::displayMoneyFormat($taxVal['value']); ?></span>
+                <span class="label"><?php echo $taxVal['title']; ?></span> <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxVal['value']); ?></span>
             </li>
     <?php   }
     } */ ?>

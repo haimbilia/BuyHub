@@ -321,35 +321,10 @@ a:hover {
         font-size: inherit;
     }
 }
-
-.scroll {
-    padding-#{$end-direction}: 15px;
-}
+ 
 
 .svg {
     fill: currentColor;
-}
-
-.scroll-y {
-    overflow: hidden;
-    overflow-y: auto;
-    padding-#{$end-direction}: 0.5rem;
-    /* width */
-    &::-webkit-scrollbar {
-        width: 8px;
-    }
-    /* Track */
-    &::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-        background: rgb(180, 180, 180);
-    }
-    /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover {
-        background: rgb(129, 129, 129);
-    }
 }
 
 .text-link {
