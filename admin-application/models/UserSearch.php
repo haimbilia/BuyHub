@@ -73,7 +73,7 @@ class UserSearch extends SearchBase
 
         $prChargeSummary->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'p.promotion_id = pcs.promotion_id and pci.picharge_id > pcs.endClickId', 'pcs');
         $prChargeSummary->addGroupBy('p.promotion_user_id');
-        $prChargeSummary->addMultipleFields(['p.promotion_user_id', 'sum(picharge_cost) as pendingPromotionCost']);
+        $prChargeSummary->addMultipleFields(['p.promotion_user_id', 'sum(IFNULL(picharge_cost, 0)) as pendingPromotionCost']);
         $prChargeSummary->doNotLimitRecords();
         $prChargeSummary->doNotCalculateRecords();
 
@@ -140,7 +140,7 @@ class UserSearch extends SearchBase
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addGroupBy('pcharge_user_id');
-        $srch->addMultipleFields(['pc.pcharge_user_id', 'SUM(pc.pcharge_charged_amount) as promotionCharged']);
+        $srch->addMultipleFields(['pc.pcharge_user_id', 'SUM(IFNULL(pc.pcharge_charged_amount, 0)) as promotionCharged']);
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = pchagres.pcharge_user_id', 'pchagres');
     }
 

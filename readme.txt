@@ -152,6 +152,7 @@ Fixes:
     => 053932 - while placing order> when no coupon or discount is there then getting entry on name of saving
     => 053954 - Not storing Product unit price so in report data not coming
     => 053985 - Stripe connect unable to debit site commission
+    => 053850 - admin> advertiser report> data is not populating.
 
 New Features:
     => Admin shipped products listing page
