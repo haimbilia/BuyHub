@@ -325,3 +325,6 @@ ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
 ON DUPLICATE KEY UPDATE conf_val = 3;
+
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_%';
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_%';
