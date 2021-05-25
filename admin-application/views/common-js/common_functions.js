@@ -355,7 +355,10 @@ $(document).ready(function () {
     /* for Accordian */
     //Set default open/close settings
     $('.accordiancontent').hide(); //Hide/close all containers
-    $('.accordians_container').find('.accordianhead:first').addClass('active').next().show(); //Add "active" class to first trigger, then show/open the immediate next container
+    
+    if($('.accordians_container:first').attr('data-isdefaulthidden') == undefined){
+        $('.accordians_container').find('.accordianhead:first').addClass('active').next().show(); //Add "active" class to first trigger, then show/open the immediate next container
+    }
 
     //On Click
     //$('.accordianhead').click(function() {

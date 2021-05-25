@@ -53,7 +53,7 @@
                                     </div>
                                 </td>
                                 <td><span class="item__price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?> </span>
-                                    <?php if ($product['special_price_found']) { ?>
+                                    <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                                         <span class="text--normal text--normal-secondary"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                                     <?php } ?>
                                 </td>

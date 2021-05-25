@@ -1161,11 +1161,11 @@ class HomeController extends MyAppController
         $productSrchSponObj = clone $productSrchObj;
         $productSrchSponObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
         $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));
-        $productSrchSponObj->addOrder('theprice', 'ASC');
         $productSrchSponObj->joinSellers();
         $productSrchSponObj->joinSellerSubscription($langId);
         $productSrchSponObj->addGroupBy('selprod_id');
         $productSrchSponObj->addOrder('', 'rand()');
+        //$productSrchSponObj->addOrder('theprice', 'ASC');
         return $productSrchSponObj;
     }
 
@@ -1268,8 +1268,12 @@ class HomeController extends MyAppController
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->siteLangId);
         $arr_country = array();
-        foreach ($countriesArr as $key => $val) {
-            $arr_country[] = array("id" => $key, 'name' => $val);
+        foreach ($countriesArr as $country) {
+            $arr_country[] = [
+                "id" => $country['country_id'],
+                'name' => $country['country_name'],
+                'country_code' => $country['country_code'],
+            ];
         }
         $this->set('countries', $arr_country);
         $this->_template->render();
@@ -1377,8 +1381,8 @@ class HomeController extends MyAppController
                 "lang" => $this->siteLangCode,
                 "start_url" => CONF_WEBROOT_URL,
                 "display" => "standalone",
-                "background_color" => isset($this->themeDetail[ThemeColor::TYPE_BODY]) ? '#' . $this->themeDetail[ThemeColor::TYPE_BODY] : '',
-                "theme_color" => isset($this->themeDetail[ThemeColor::TYPE_BRAND]) ? '#' . $this->themeDetail[ThemeColor::TYPE_BRAND] : '',
+                "background_color" => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"),
+                "theme_color" => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"),
             );
 
             foreach ($iconsArr as $key => $val) {
@@ -1386,7 +1390,8 @@ class HomeController extends MyAppController
                 $icons = [
                     'src' => $iconUrl,
                     'sizes' => $val . 'x' . $val,
-                    'type' => 'image/png'
+                    'type' => 'image/png',
+                    'purpose' => 'any maskable'
                 ];
                 $arr['icons'][] = $icons;
             }

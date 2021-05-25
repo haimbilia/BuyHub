@@ -1,88 +1,109 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
-$arrFlds1 = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    'order_date' => Labels::getLabel('LBL_Date', $adminLangId),
-    'totOrders' => Labels::getLabel('LBL_No._of_Orders', $adminLangId),
-    'orderNetAmount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId),
-);
-$arrFlds2  = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    'op_invoice_number' => Labels::getLabel('LBL_Invoice_Number', $adminLangId),
-    'order_net_amount' => Labels::getLabel('LBL_Order_Net_Amount', $adminLangId),
-);
-$arr = array(
-    'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $adminLangId),
-    'totQtys' => Labels::getLabel('LBL_No._of_Qty', $adminLangId),
-    'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $adminLangId),
-    'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $adminLangId),
-    'shippingTotal' => Labels::getLabel('LBL_Shipping_Charges', $adminLangId),
-    'totalRefundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $adminLangId),
-    'totalSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $adminLangId)
-);
-if (empty($orderDate)) {
-    $arr_flds = array_merge($arrFlds1, $arr);
-} else {
-    $arr_flds = array_merge($arrFlds2, $arr);
-}
-
-
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+echo '<div class="datatable datatable-sticky scroll scroll-x">';
 $tbl = new HtmlElement(
     'table',
-    array('width' => '100%', 'class' => 'table table-responsive table--hovered')
+    array('width' => '100%', 'class' => 'datatable__table')
 );
 
-$th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $val) {
-    $e = $th->appendElement('th', array(), $val);
+$th = $tbl->appendElement('thead', ['class' => 'datatable__head'])->appendElement('tr', ['class' => 'datatable__row']);
+$count = 0;
+$staticFlds = [];
+foreach ($fields as $key => $val) {
+    $cls = 'datatable_cell datatable_cell-sort datatable_cell_top headerColumnJs';
+    if (0 == $count) {
+        $staticFlds = [$key];
+        $cls .= ' datatable_cell_left';
+    }
+
+    $cls .= ($key == $sortBy) ? ' datatable_cell-sorted' :'';
+
+    $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key]);
+    $span = $td->appendElement('span');
+    $span->appendElement('plaintext', array(), $val);
+    if ($key == $sortBy) {
+        $arrow = ($sortOrder == applicationConstants::SORT_ASC) ? '<i class="fas fa-arrow-down"></i>' : '<i class="fas fa-arrow-up"></i>';
+        $span->appendElement('plaintext', array(), $arrow, true);
+    }
+    $count++;
 }
+
+$tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arr_listing as $sn => $row) {
-    $tr = $tbl->appendElement('tr');
+    $cls = (($sr_no % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $sr_no]);
 
-    foreach ($arr_flds as $key => $val) {
-        $td = $tr->appendElement('td');
+    foreach ($fields as $key => $val) {
+        if (in_array($key, $staticFlds)) {
+            $td = $tr->appendElement('th', ['class' => 'datatable_cell datatable_cell_left']);
+            $span = $td->appendElement('span');
+        } else {
+            $td = $tr->appendElement('td', ['class' => 'datatable_cell']);
+            $span = $td->appendElement('span');
+        }
+
         switch ($key) {
             case 'listserial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $span->appendElement('plaintext', array(), $sr_no);
                 break;
-            case 'order_date':
-                $td->appendElement('plaintext', array(), '<a href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . FatDate::format($row[$key]) . '</a>', true);
+            case 'orderDate':
+                $span->appendElement('plaintext', array(), '<a href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . FatDate::format($row[$key]) . '</a>', true);
                 break;
             case 'order_net_amount':
                 $amt = CommonHelper::orderProductAmount($row);
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($amt, true, true));
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($amt, true, true));
                 break;
-            case 'totalSalesEarnings':
-            case 'totalRefundedAmount':
+            case 'grossSales':
+            case 'transactionAmount':
             case 'inventoryValue':
-            case 'orderNetAmount':
             case 'taxTotal':
+            case 'adminTaxTotal':
+            case 'sellerTaxTotal':
             case 'shippingTotal':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+            case 'sellerShippingTotal':
+            case 'adminShippingTotal':
+            case 'discountTotal':
+            case 'couponDiscount':
+            case 'volumeDiscount':
+            case 'rewardDiscount':
+            case 'refundedAmount':
+            case 'refundedShipping':
+            case 'refundedTax':
+            case 'orderNetAmount':
+            case 'commissionCharged':
+            case 'refundedCommission':
+            case 'adminSalesEarnings':
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $span->appendElement('plaintext', array(), $row[$key], true);
                 break;
         }
     }
-    $sr_no--;
+    $sr_no++;
 }
 if (count($arr_listing) == 0) {
     $tbl->appendElement('tr')->appendElement(
         'td',
         array(
-            'colspan' => count($arr_flds)
+            'colspan' => count($fields)
         ),
         Labels::getLabel('LBL_No_Records_Found', $adminLangId)
     );
 }
+
 echo $tbl->getHtml();
+echo '</div>';
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
     'name' => 'frmSalesReportSearchPaging'
 ));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-?>
+$this->includeTemplate('_partial/pagination.php', $pagingArr, false);?>
+<script>
+	var x = $(".container-fluid").width();
+	var actualWidth = x / 7;
+	$('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
+	$('.datatable_cell_left').children('span').css('display', 'block');
+</script>

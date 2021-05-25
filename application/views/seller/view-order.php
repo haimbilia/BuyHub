@@ -58,6 +58,10 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
 								<?php echo Labels::getLabel('LBL_Print', $siteLangId); ?>">
                                 <i class="fas fa-print"></i>
                             </a>
+                            <a target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'],$orderDetail['op_id']]); ?>" class="btn btn-outline-brand btn-sm no-print" title="
+				<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>">
+                                <i class="fas fa-print"></i>
+                            </a>
                             <?php if ($shippedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
                                 $opId = $orderDetail['op_id'];
                                 $plugin = new Plugin();
@@ -397,23 +401,36 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             $fld1->setFieldTagAttribute('class', 'notifyCustomer-js');
                             $fld1->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 
-                            $fld = $frm->getField('tracking_number');
-                            if (null != $fld) {
-                                $fld->developerTags['col'] = 6;
-                            }
-
+                            
                             if (null != $manualFld) {
                                 $manualFld->setFieldTagAttribute('class', 'manualShipping-js fieldsVisibility-js');
                                 $manualFld->developerTags['col'] = 4;
 
+                                $fld = $frm->getField('tracking_number');
+                                $fld->developerTags['col'] = 4;
+
                                 $fld = $frm->getField('opship_tracking_url');
+                                $courierFld = $frm->getField('oshistory_courier');
                                 if (null != $fld) {
-                                    $fld->developerTags['col'] = 6;
+                                    $fld->developerTags['col'] = 4;
+                                    $fld->setWrapperAttribute('class', 'trackingUrlBlk--js');
+                                    $fld->setFieldTagAttribute('class', 'trackingUrlFld--js');
+                                    if (null != $courierFld) {
+                                        $fld->htmlAfterField = '<a href="javascript:void(0)" onclick="courierFld()" class="link"><small>' . Labels::getLabel(
+                                            'LBL_OR_SELECT_COURIER_?',
+                                            $siteLangId
+                                        ) . '</small></a>';
+                                    }
                                 }
-                                
-                                $fld = $frm->getField('oshistory_courier');
-                                if (null != $fld) {
-                                    $fld->developerTags['col'] = 6;
+
+                                if (null != $courierFld) {
+                                    $courierFld->developerTags['col'] = 4;
+                                    $courierFld->setWrapperAttribute('class', 'courierBlk--js d-none');
+                                    $courierFld->setFieldTagAttribute('class', 'courierFld--js');
+                                    $courierFld->htmlAfterField = '<a href="javascript:void(0)" onclick="trackingUrlFld()" class="link"><small>' . Labels::getLabel(
+                                        'LBL_OR_TRACK_THROUGH_URL_?',
+                                        $siteLangId
+                                    ) . '</small></a>';
                                 }
                             }
 
@@ -502,8 +519,8 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                             $lang_name = $languages[$row['afile_lang_id']];
                                         }
 
-                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
-                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
+                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
+                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
 
                                         $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
                                         if ($row['expiry_date'] != '') {

@@ -1,11 +1,3 @@
-
-Updates:
-    => Tax Module update
-    => Admin can create users 
-
-Features:
-    - Shopify sync module for SV seller
-
 Multivendor - Released Version : RV-9.3.0
     => IOS/Android Buyer APP version : 2.0
     => System API version : 2.3
@@ -13,6 +5,13 @@ Multivendor - Released Version : RV-9.3.0
 New Feature : 
     => 82248 : DPO Payment Gateway Integration
     => 82892 : Easypost Shipping API Integration
+    =>  Shopify sync module for SV seller
+
+Updates:
+    => Tax Module update
+    => Admin can create users 
+    => 83842 : Out of stock fixes 
+    => Display Total Savings on Checkout page
 
 Fixes:
     => 047746 - Get current location not working
@@ -73,15 +72,109 @@ Fixes:
     => 051476 - getting error of duplicate entry on editing meta tags of shops in admin
     => 051573 - Product search is not working when we Activate Geo Location and shipping plugin.
     => 051615 - Sponsered shop doesn't refelect on homepage after being promoted from the advertiser side.
+    => 051651 - Top - header menu are not aligned properly
+    => 051594 - non verified user (*deleted) is proceeding for checkout and getting error - session expire
+    => 051691 - on stripe connect unable to load form loading coming on seller end
+    => 051694 - Loader image coming on product images even after it fully loaded
+    => 051716 - Shipping by admin - seller is able to change order status
+    => 051974 - Showing error while syncing by activating TaxZar plugin. 
+    => 051960 - Google shoping feed settings not displaying
+    => 051979 - Error Displayed : Undefined index status TaxZar Syncing    
+    => 051967 - No category search results show up when parent/subcategory is searched which is not directly linked with the product. Only the category linked with a product shows up in search results    
+    => 052015 - Order Id duplicacy issue when multiple user place order with same time frame.
+    => 051973 - tax invoice UI got distorted
+    => 051994 - Digital product can be linked to shipping profiles
+    => 044068 - When an order is placed with Bank transfer as payment method, the Buyer doesn't receive any order placement email notification
+    => 052142 - Same order showing multiple times when digital product having multiple links and multiple files
+    => 052242 - social login icons changed from admin not reflecting on front end
+    => 052110 - when otp is sent over email to buyer then in email> username is not populating
+    => 052317	Request For Category- Seller dashboard when only one language activated
+    => 052413 - Removed settings for recurring discount in case of subscription.
+    => 052352 - getting double loader while making payment 
+    => 052450 - Separate Tracking URL and Tracking Courier if Aftership enabled
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
     => 052463 - Setup shipping of other product not working with EasyPost
-    
+    => 053622 - Load all font family variants
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+
+Develop
+
+Fixes:
+    => 052651 - on using comma as currency separator it's not impacting in text areas 
+    => 052654 - Admin can create seller/buyer/advertiser/affiliate account from back-end - Not working
+    => 052664 - admin> users> asterisk marked field shouldn't be mandatory for admin 
+    => 052645 - wile adding product specifications> it's not accepting character after &
+    => 052781 - When product not attached to brand then getting error while getting coupon list on cart page
+    => 052869 - caching directory delete issue for some server
+    => 053316 - Import export- product specification export issue in other languges
+    => 052895 - when catalogue is approved from admin then no email is there for the same to seller
+    => 052912 - front end> product editor> insert image option> upload button is not working in editor 
+    => 052985 - when the subscription module is on then the catalog image upload /multiple inventory add limit not working properly
+    => 053007 - Stripe Connect Already Have Account Issue 
+    => 053057 - When search by keyword on home getting error
+    => 053064 - While order product commission not calculated as per subscription
+    => 053156 - admin> shipping> order level shipping text is not changing as per language /RTL
+    => 053228 - When stripe connect is not configured, uploading banner images gives error 
+    => 053197 - mPesa Pament gateway payment not confirmed
+    => 053235 - buyer can't cancel the order when status is in process
+    => 053365 -	While sharing shop page on whatsapp then meta image not displaying
+    => 053276 - shipping is not changing on changing address during checkout
+    => 053155 - Button labels are not changing as per language
+    => 053430 - While sending SMTP email code crashed in between if unable to send email
+    => 052088 - when product having multiple options then on quick view popup> dropdown is affecting popup
+    => 053466 - There is no deducted discount amount shown in the printed invoice of admin and seller panel even after the buyer has applied a discount coupon.
+    => 053465 - some issue with promotion
+    => 053442 - "When a registered user shares any information throught contact us form: - The email is recieved by the site owner, but when the site owner tries to reply the from email i,e user email is not getting fetched. " 
+    => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
+    => 053673  - Allow seller to cancel COD orders.
+    => 053779 - seller> reports> currency symbol is missing in tax and shipping column
+    => 053782 - admin> reports> sales reports> on accessing reports for particular date> there needs to be filter to search on basis of invoice or order by time (latest on top and vice versa)
+    => 053816 - admin> reports> buyers report>sorting is not working
+    => 053823 - seller reports> total order count is listing of child orders while on seller end it's counting parent order.
+    => 053833 - currency symbol changed to euro (€) is not populating on exporting reports
+    => 053501 - seller> unable to define slots for pickup- getting error 
+    => 053763 - admin> users> add button> icon is not there
+    => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
+    => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
+    => 053861 - In Side bar only number of items displayed.
+    => 053822 - seller reports> balance is not populating
+    => 053883 - pickup slots are not getting listed on front end while placing order on selection of address
+    => 053882 - getting error on product detail page under recommended products
+    => 053817 - on registration screen> logo is not displaying
+    => 053832 - rating star color is different in admin and front end
+    => 053932 - while placing order> when no coupon or discount is there then getting entry on name of saving
+    => 053954 - Not storing Product unit price so in report data not coming
+    => 053985 - Stripe connect unable to debit site commission
+    => 053850 - admin> advertiser report> data is not populating.
+    => 053849 - admin> advertiser report> keyword search needs to be there in filter
+    => 053751 - after applying filters and exporting file in reports> all data is exporting instead of filtered data
+
+New Features:
+    => Admin shipped products listing page
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053978 - Forget password label language issue in admin
+
+
 Enhancements :
    => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.
    => Performance optimization
+   => Upgrades in GEO location module to configure default location.  
+   => Price surge based on special price. 
+   => Admin Reports.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
@@ -107,6 +200,9 @@ Notes:
 
         => Composer should be installed on server to run the stripe connect module: composer.json on root of the project has details to download the required libraries in root's vendor folder.
         => Run command "composer update" at root of the project to update composer and fetch all dependennt libraries: 
+
+    Configuration :
+        => Please configure Ready For Pickup Order Statuses.
 
     Stripe Connect Installation :
 
@@ -163,3 +259,9 @@ Notes:
         To Test Sandbox Payment Refer This: https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods
 
 
+=======================================
+
+Released Version:
+
+Tasks:
+    task-84719 Preview module for digital files

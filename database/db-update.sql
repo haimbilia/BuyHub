@@ -388,7 +388,7 @@ ALTER TABLE `tbl_plugin_to_user`
 -- --- Shopify --- --
 
 INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, 'LBL_SET_PASSWORD_MSG', '1', 'To set your password enter a new password below', '1');
-INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_DEFAULT_CURRENCY_SEPARATOR', '.', '0');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_DEFAULT_CURRENCY_SEPARATOR', '.', '0');
 
 
 -- --- Mollie Payment Gateway--- --
@@ -397,7 +397,7 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 
 -- --- Payfast Payment Gateway--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Payfast', '13', 'Payfast', '0', '24');
-INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_PAYFAST_PASSPHRASE_DESCRIPTION', 1, 'The passphrase is considered a secret between the merchant and PayFast and should never be sent or given out.<br>The merchant may set their own passphrase by:<br> 1. Login to PayFast using their merchant credentials.<br> 2. Clicking on "Settings", and then "Edit" under the Security Pass Phrase section.<br> 3. Inputting the desired passphrase and click "Update"', 1),
 ('LBL_PAYFAST_SIGNATURE_DESCRIPTION', 1, 'System generated MD5 signature. It will generate automatically while checkout using "Payfast".', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
@@ -420,20 +420,353 @@ CREATE TABLE `tbl_user_cookies_preferences` (
 ALTER TABLE `tbl_user_cookies_preferences`
   ADD PRIMARY KEY (`ucp_user_id`);
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY", "1", "I Agree To The %s And %s", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY", "1", "I Agree To The %s And %s", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_What_is_a_cookie_Information", "1", "A cookie is a small text file that is stored in a dedicated location on your computer, tablet, smartphone or other device when you use your browser to visit an online service. A cookie allows its sender to identify the device on which it is stored during the period of validity of consent, which does not exceed 13 months.\r\n\r\nYou may accept or reject the cookies listed below using the check box provided.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_What_is_a_cookie_Information", "1", "A cookie is a small text file that is stored in a dedicated location on your computer, tablet, smartphone or other device when you use your browser to visit an online service. A cookie allows its sender to identify the device on which it is stored during the period of validity of consent, which does not exceed 13 months.\r\n\r\nYou may accept or reject the cookies listed below using the check box provided.", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_Functional_Cookies_Information", "1", "These cookies are required for optimum operation of the website, and cannot be configured. They allow us to offer you the key functions of the website (language used, display resolution, account access, shopping bag, wish list, etc.), provide you with online advice and secure our website against any attempted fraud.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_Functional_Cookies_Information", "1", "These cookies are required for optimum operation of the website, and cannot be configured. They allow us to offer you the key functions of the website (language used, display resolution, account access, shopping bag, wish list, etc.), provide you with online advice and secure our website against any attempted fraud.", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION", "1", "These cookies are used to measure and analyse our website audience (visitor volume, pages viewed, average browsing time, etc.) to help us improve its performance. By accepting these cookies, you are helping us to improve our website.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION", "1", "These cookies are used to measure and analyse our website audience (visitor volume, pages viewed, average browsing time, etc.) to help us improve its performance. By accepting these cookies, you are helping us to improve our website.", "2");
 
-INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_PERSONALISE_COOKIES_INFORMATION", "1", "These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.", "2");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_PERSONALISE_COOKIES_INFORMATION", "1", "These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.", "2");
 ALTER TABLE `tbl_admin` CHANGE `admin_password` `admin_password_old` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
 ALTER TABLE `tbl_admin` ADD `admin_password` VARCHAR(100) NOT NULL AFTER `admin_password_old`;
 ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
 -- --- task_81779_advanced_GDPR_module --- --
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'ERR_USER_INACTIVE_OR_DELTED';
+
+UPDATE
+    tbl_email_templates
+SET
+    etpl_body =
+REPLACE
+    (
+        etpl_body,
+        "style=\"background:#ff3a59;\"",
+        ""
+    );
+
+UPDATE `tbl_configurations` SET `conf_val` = '<table align=\"center\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%; margin:auto;\">\r\n                        <tr>\r\n                            <td style=\"background:#fff;vertical-align:top;text-align: center;\">\r\n                                <table cellpadding=\"0\" cellspacing=\"0\" style=\"width: 100%;\">\r\n                                    <tr>\r\n                                        <td style=\"color:#999;padding:30px 30px;\">\r\n                                            Get in touch if you have any questions regarding our Services.<br /> Feel free to contact us 24/7. We are here to help.<br />\r\n                                            <br /> All the best,<br /> The {website_name} Team<br />\r\n                                        </td>\r\n                                    </tr>\r\n                                </table>\r\n                            </td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td style=\"padding: 30px 30px;background:rgba(0,0,0,0.04); text-align: center;\">\r\n                                <h4 style=\"font-size:20px; color:#000;margin: 0;\">Need more help?</h4>\r\n                                <a href=\"{contact_us_url}\" style=\"color:#ff3a59;\">We are here, ready to talk</a>\r\n                                <br> <br>\r\n                                {social_media_icons}\r\n                            </td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td style=\"padding:0; text-align: center; font-size:13px; color:#999;vertical-align:top; line-height:20px;padding: 10px;\">\r\n                                {website_name} Inc.\r\n                            </td>\r\n                        </tr>\r\n                    </table>' WHERE `tbl_configurations`.`conf_name` = 'CONF_EMAIL_TEMPLATE_FOOTER_HTML1';
+UPDATE `tbl_seller_packages` SET `spackage_type` = '2' WHERE `tbl_seller_packages`.`spackage_id` = 4;
+
+ALTER TABLE `tbl_affiliate_commission_settings` CHANGE `afcommsetting_fees` `afcommsetting_fees` DECIMAL(12,2) NOT NULL;
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('admin_new_user_creation_email', '1', 'New Account Created By Admin', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Welcome to {website_name}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            <a href=\"{website_url}\">{website_name}</a> admin has created an {account_type} account for you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">To access and verify your account please visit the link given below. Your email address will be your username. \r\n                                            Please note that the link is valid for next {days} days.<br />\r\n                                            <a href=\"{reset_url}\">{reset_url}</a>.</td>\r\n                                    </tr>\r\n\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{user_email} User Email <br>\r\n{account_type} Account Type <br>\r\n{days} Days after which link expire\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', '1');
+
+/* Shop And Product Ratings */
+--
+-- Table structure for table `tbl_rating_types`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_rating_types` (
+  `ratingtype_id` bigint NOT NULL,
+  `ratingtype_identifier` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ratingtype_type` tinyint(4) NOT NULL,
+  `ratingtype_default` tinyint NOT NULL,
+  `ratingtype_active` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `tbl_rating_types`
+--
+
+INSERT INTO `tbl_rating_types` (`ratingtype_id`, `ratingtype_identifier`, `ratingtype_type`, `ratingtype_default`, `ratingtype_active`) VALUES
+(1, 'Product', 1, 1, 1),
+(2, 'Shop', 2, 1, 1),
+(3, 'Delivery', 3, 1, 1),
+(4, 'Stock Availability', 4, 0, 1),
+(5, 'Packaging Quality', 4, 0, 1);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_rating_types`
+--
+ALTER TABLE `tbl_rating_types`
+  ADD PRIMARY KEY (`ratingtype_id`),
+  ADD UNIQUE KEY `ratingtype_identifier` (`ratingtype_identifier`) USING BTREE;
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_rating_types`
+--
+ALTER TABLE `tbl_rating_types`
+  MODIFY `ratingtype_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+CREATE TABLE IF NOT EXISTS `tbl_rating_types_lang` ( `ratingtypelang_ratingtype_id` BIGINT NOT NULL ,  `ratingtypelang_lang_id` INT NOT NULL ,  `ratingtype_name` VARCHAR(150) NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `tbl_rating_types_lang`
+  ADD PRIMARY KEY (`ratingtypelang_ratingtype_id`,`ratingtypelang_lang_id`),
+  ADD UNIQUE KEY `ratingtype_name` (`ratingtypelang_lang_id`,`ratingtype_name`);
+
+CREATE TABLE IF NOT EXISTS `tbl_prodcat_rating_types` ( `prt_prodcat_id` BIGINT NOT NULL ,  `prt_ratingtype_id` BIGINT NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `tbl_prodcat_rating_types` ADD PRIMARY KEY (`prt_prodcat_id`,`prt_ratingtype_id`);
+
+ALTER TABLE `tbl_order_product_specifics` ADD `op_prodcat_id` BIGINT NOT NULL AFTER `op_product_warranty`;
+UPDATE tbl_order_product_specifics tops
+INNER JOIN tbl_order_products op ON op.op_id = tops.ops_op_id
+INNER JOIN tbl_product_to_category ptc ON ptc.ptc_product_id = SUBSTRING( op.op_selprod_code, 1, (LOCATE( "_", op.op_selprod_code ) - 1 ) )
+SET tops.op_prodcat_id = ptc.ptc_prodcat_id;
+
+ALTER TABLE `tbl_seller_product_rating` CHANGE `sprating_rating_type` `sprating_ratingtype_id` BIGINT NOT NULL;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '5' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 4;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 3;
+UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
+/* Shop And Product Ratings */
+
+DELETE FROM tbl_language_labels WHERE label_key = "ERR_USER_INACTIVE_OR_DELTED";
+
+INSERT IGNORE INTO `tbl_orders_status` (`orderstatus_id`, `orderstatus_identifier`, `orderstatus_color_class`, `orderstatus_type`, `orderstatus_priority`, `orderstatus_is_active`, `orderstatus_is_digital`) VALUES (NULL, 'Ready For Pickup', NULL, '1', '6', '1', '');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES ('CONF_PICKUP_READY_ORDER_STATUS', 0);
+UPDATE `tbl_configurations` SET `conf_val` = (select orderstatus_id from tbl_orders_status where orderstatus_identifier = 'Ready For Pickup') WHERE `tbl_configurations`.`conf_name` = 'CONF_PICKUP_READY_ORDER_STATUS';
+
+
+-- --- Task 83836 - Font and Theme Color Management --- --
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_FONT_FAMILY', 'Poppins-regular', '1');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR', '#ff3a59', '1');
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_THEME_COLOR_INVERSE', '#fff', '1');
+DROP TABLE `tbl_theme`;
+DROP TABLE `tbl_theme_colors`;
+-- --- Task 83836 - Font and Theme Color Management --- --
+
+ALTER TABLE `tbl_order_products` ADD `op_refund_tax` DECIMAL(10,2) NOT NULL AFTER `op_refund_shipping`;
+
+-- --- query to update cancel order data --- --
+
+CREATE VIEW view_cancel_order AS SELECT
+    op.op_id,
+    op.op_invoice_number,
+    op.op_qty,
+    op.op_commission_charged,
+    op.op_affiliate_commission_charged,
+    (
+        (op.op_unit_price * op.op_qty) + SUM(opc.opcharge_amount) + op.op_rounding_off
+    ) AS txnAmount,
+    SUM(
+        CASE WHEN opc.opcharge_type = 3 THEN opc.opcharge_amount ELSE 0
+    END
+) AS shipping,
+SUM(
+CASE WHEN opc.opcharge_type = 1 THEN opc.opcharge_amount ELSE 0
+END
+) AS tax
+FROM
+`tbl_order_cancel_requests` ocr
+INNER JOIN  
+tbl_order_products as op on op.op_id = ocr.ocrequest_op_id and ocr.ocrequest_status = 1
+LEFT OUTER JOIN `tbl_order_product_charges` AS opc
+ON
+opc.opcharge_op_id = op.op_id 
+WHERE
+op_refund_amount = 0
+GROUP BY
+op_id;    
+
+UPDATE tbl_order_products op
+INNER JOIN  
+view_cancel_order on op.op_id = view_cancel_order.op_id
+SET
+op.op_refund_qty = view_cancel_order.op_qty,
+op.op_refund_amount = view_cancel_order.txnAmount,
+op.op_refund_commission = view_cancel_order.op_commission_charged,
+op.op_refund_shipping = view_cancel_order.shipping,
+op.op_refund_tax = view_cancel_order.tax,
+op.op_refund_affiliate_commission = view_cancel_order.op_affiliate_commission_charged;
+
+DROP VIEW view_cancel_order;
+
+-- --- query to update cancel order data --- --
+
+-- --- query to update refund order data --- --
+CREATE VIEW view_refund_order AS SELECT
+    orrequest_op_id,
+    LEAST(
+        (
+            (
+                opc.opcharge_amount / op.op_qty
+            ) * orrequest_qty
+        ),
+        opc.opcharge_amount
+    ) AS refund_tax
+FROM
+    `tbl_order_return_requests` orrequest
+LEFT OUTER JOIN `tbl_order_products` AS op
+ON
+    orrequest.orrequest_op_id = op.op_id
+LEFT OUTER JOIN `tbl_orders` AS o
+ON
+    op_order_id = order_id
+INNER JOIN `tbl_order_product_charges` AS opc
+ON
+    opc.opcharge_op_id = op.op_id AND opcharge_type = 1
+WHERE
+    orrequest_status = 2 AND op_refund_tax = 0;
+
+UPDATE tbl_order_products op
+INNER JOIN  
+view_refund_order on op.op_id = view_refund_order.orrequest_op_id
+SET
+op.op_refund_tax = view_refund_order.refund_tax;
+
+DROP VIEW view_refund_order;
+
+-- --- query to update refund order data --- --
+
+UPDATE `tbl_email_templates` SET `etpl_replacements` = '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{product_name} Product Name <br>\r\n{new_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+UPDATE `tbl_email_templates` SET `etpl_body` = '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                           \r\n								                           \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog {new_status}</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n												                                              Your catalog {product_name} has been {new_status} on {website_name}.</td>                                    \r\n										</tr> \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table> ' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+UPDATE `tbl_email_templates` SET `etpl_name` = 'Seller - Catalog  Status Change' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+UPDATE `tbl_email_templates` SET `etpl_subject` = 'Your Catalog {product_name} {new_status} at {website_name}' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+
+UPDATE `tbl_sms_templates` SET `stpl_body` = 'Hello {shop_name},\r\nYour catalog {product_name} has been {new_status} on {website_name}\r\n\r\n{SITE_NAME} Team' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
+UPDATE `tbl_sms_templates` SET `stpl_replacements` = '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"New Status\", \"variable\":\"{new_status}\"},{\"title\":\"Product Name\", \"variable\":\"{product_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
+
+ALTER TABLE `tbl_shipping_profile` CHANGE `shipprofile_name` `shipprofile_identifier` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+CREATE TABLE `tbl_shipping_profile_lang` (
+  `shipprofilelang_shipprofile_id` int NOT NULL,
+  `shipprofilelang_lang_id` int NOT NULL,
+  `shipprofile_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile_id`, `shipprofilelang_lang_id`);
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
+('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
+ON DUPLICATE KEY UPDATE conf_val = 3;
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Catalog_Wise)';
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Products(Seller_Products)';
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_Buyers/Sellers';
+
+-- --- task_84719_Preview_module_for_digital_files -- ---
+ALTER TABLE `tbl_products` ADD `product_attachements_with_inventory` TINYINT(1) NOT NULL DEFAULT '0' AFTER `product_type`;
+
+--
+-- Table structure for table `tbl_product_digital_data_relation`
+--
+
+CREATE TABLE `tbl_product_digital_data_relation` (
+  `pddr_id` int(11) NOT NULL,
+  `pddr_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id (pddr_id) 2) Seller inventory id',
+  `pddr_options_code` varchar(255) NOT NULL COMMENT '0 for all options',
+  `pddr_type` tinyint(4) NOT NULL COMMENT '0 => Master Catalog, 1 => catalog request'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_product_digital_data_relation`
+--
+
+ALTER TABLE `tbl_product_digital_data_relation`
+  ADD PRIMARY KEY (`pddr_id`),
+  ADD UNIQUE KEY `pdd_options_code` (`pddr_record_id`,`pddr_options_code`,`pddr_type`) USING BTREE;
+
+--
+-- AUTO_INCREMENT for table `tbl_product_digital_data_relation`
+--
+ALTER TABLE `tbl_product_digital_data_relation`
+  MODIFY `pddr_id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+--
+-- Table structure for table `tbl_product_digital_links`
+--
+
+CREATE TABLE `tbl_product_digital_links` (
+  `pdl_id` int(11) NOT NULL,
+  `pdl_record_id` int(11) NOT NULL COMMENT 'anyone of following: 1) Catalog id (pddr_id) 2) Seller inventory id',
+  `pdl_lang_id` int(11) NOT NULL,
+  `pdl_download_link` varchar(255) NOT NULL,
+  `pdl_preview_link` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Contains Digital download links which are related to a Catalog product or seller Inventory';
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_product_digital_links`
+--
+ALTER TABLE `tbl_product_digital_links`
+  ADD PRIMARY KEY (`pdl_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_product_digital_links`
+--
+ALTER TABLE `tbl_product_digital_links`
+  MODIFY `pdl_id` int(11) NOT NULL AUTO_INCREMENT;
+
+-- Update tbl_attached_files table ---
+DROP VIEW IF EXISTS pddr_files_view;
+
+CREATE VIEW pddr_files_view AS select tbl_seller_products.selprod_id, selprod_product_id, selprod_code, SUBSTRING(selprod_code, INSTR(selprod_code, '_') + 1) as new_selprodcode
+FROM tbl_seller_products
+INNER JOIN tbl_attached_files ON afile_type = 42 AND afile_record_id = tbl_seller_products.selprod_id
+INNER JOIN tbl_products ON product_id = selprod_product_id AND product_type = 2;
+
+INSERT INTO tbl_product_digital_data_relation (pddr_record_id, pddr_options_code, pddr_type) 
+SELECT selprod_id, new_selprodcode, 2 FROM pddr_files_view ON DUPLICATE KEY UPDATE pddr_record_id = selprod_id;
+
+UPDATE tbl_attached_files as afile
+INNER JOIN pddr_files_view as v ON selprod_id = afile_record_id
+INNER JOIN tbl_product_digital_data_relation as pddr ON pddr_record_id = afile_record_id AND v.new_selprodcode = pddr.pddr_options_code 
+SET afile.afile_record_id = pddr_id;
+
+DROP VIEW IF EXISTS pddr_files_view;
+--  Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
+
+UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',');
+
+DROP VIEW IF EXISTS pddr_links_view;
+
+CREATE VIEW pddr_links_view AS select tbl_seller_products.selprod_id, selprod_product_id, selprod_code, SUBSTRING(selprod_code, INSTR(selprod_code, '_') + 1) as new_selprodcode,
+SUBSTRING_INDEX(SUBSTRING_INDEX(tbl_seller_products.selprod_downloadable_link, ',', numbers.n), ',', -1) link, 0 as pddr
+from
+(select 1 n union all
+ select 2 union all select 3 union all
+ select 4 union all select 5) numbers INNER JOIN tbl_seller_products
+on CHAR_LENGTH(tbl_seller_products.selprod_downloadable_link)
+   -CHAR_LENGTH(REPLACE(tbl_seller_products.selprod_downloadable_link, ',', ''))>=numbers.n-1 and CHAR_LENGTH(tbl_seller_products.selprod_downloadable_link) > 0    
+order by
+selprod_id, n;
+
+INSERT INTO tbl_product_digital_data_relation (pddr_record_id, pddr_options_code, pddr_type) 
+SELECT selprod_id, new_selprodcode, 2 FROM pddr_links_view ON DUPLICATE KEY UPDATE pddr_record_id = selprod_id;
+
+ALTER TABLE `tbl_product_digital_links` ADD `pdl_selprod_code` VARCHAR(255) NOT NULL AFTER `pdl_preview_link`;
+ALTER TABLE `tbl_product_digital_links` ADD `pdl_selprod_id` VARCHAR(255) NOT NULL AFTER `pdl_preview_link`;
+
+INSERT INTO tbl_product_digital_links (pdl_record_id, pdl_lang_id, pdl_download_link, pdl_selprod_code, pdl_selprod_id)
+SELECT 0, 0, link, new_selprodcode, selprod_id FROM pddr_links_view;
+
+UPDATE tbl_product_digital_links INNER JOIN  tbl_product_digital_data_relation ON pdl_selprod_id = pddr_record_id AND pdl_selprod_code =  pddr_options_code AND pddr_type = 2 SET pdl_record_id = pddr_id;
+
+DROP VIEW IF EXISTS pddr_links_view;
+
+ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_id`;
+ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_code`;
+
+ALTER TABLE `tbl_seller_products` DROP `selprod_downloadable_link`;
+
+UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options_code = '', 0, ifnull(pddr_options_code,0));
+-- --- task_84719_Preview_module_for_digital_files -- ---
+-- --- Display Total Savings on Checkout page  --- --
+ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
+ALTER TABLE `tbl_order_product_specifics` ADD `op_special_price` DECIMAL(10,2) NOT NULL AFTER `op_prodcat_id`;
+-- --- Display Total Savings on Checkout page  --- --
+
 
 -- --------EasyECom---------- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'EasyEcom', '12', 'EasyEcom', '0', '1');

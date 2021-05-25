@@ -422,47 +422,69 @@ class StripeConnectPayController extends PaymentController
     public function distribute()
     {
         if (false === $this->stripeConnect->init()) {
-            return;
+            $error = [
+                'msg' => $this->stripeConnect->getError()
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), json_encode($error));
+            CommonHelper::printArray($error, true);
         }
 
         $payloadStr = @file_get_contents('php://input');
         $payload = json_decode($payloadStr, true);
 
         if (empty($payload)) {
-            // $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
-            return;
+            $error = [
+                'msg' => Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId),
+                'response' => $payload,
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), json_encode($error));
+            CommonHelper::printArray($error, true);
         }
         
         $orderId = isset($payload['data']['object']['metadata']['order_id']) ? $payload['data']['object']['metadata']['order_id'] : '';
         $status = isset($payload['data']['object']['status']) ? $payload['data']['object']['status'] : Labels::getLabel("MSG_FAILURE", $this->siteLangId);
         if ($payload['type'] != "payment_intent.succeeded") {
-            // $msg = Labels::getLabel('MSG_UNABLE_TO_CHARGE_:_{STATUS}', $this->siteLangId);
-            // $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
+            $msg = Labels::getLabel('MSG_UNABLE_TO_CHARGE_:_{STATUS}', $this->siteLangId);
+            $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
             $recordId = empty($orderId) ? time() : $orderId;
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $recordId, $payloadStr);
-            return;
+            
+            $error = [
+                'msg' => $msg,
+                'response' => $payload,
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $recordId, json_encode($error));
+            CommonHelper::printArray($error, true);
         }
 
         $paymentIntendId = isset($payload['data']['object']['id']) ? $payload['data']['object']['id'] : '';
         if (empty($orderId) || empty($paymentIntendId)) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), $payloadStr);
-            // $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
-            return;
+            $error = [
+                'msg' => Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId),
+                'response' => $payload,
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+            CommonHelper::printArray($error, true);
         }
 
         $this->orderId = $orderId;
         $this->orderInfo = $this->getOrderInfo($this->orderId);
         if ($this->orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            // $msg = Labels::getLabel('MSG_INVALID_ORDER._ALREADY_PAID_OR_CANCELLED', $this->siteLangId);
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, $payloadStr);
-            return;
+            $error = [
+                'msg' => Labels::getLabel('MSG_INVALID_ORDER._ALREADY_PAID_OR_CANCELLED', $this->siteLangId),
+                'response' => $payload,
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+            CommonHelper::printArray($error, true);
         }
 
         $chargeResponse = isset($payload['data']['object']['charges']['data']) ? current($payload['data']['object']['charges']['data']) : [];
         if (empty($chargeResponse)) {
-            // $msg = Labels::getLabel('MSG_INVALID_ORDER_CHARGE', $this->siteLangId);
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, $payloadStr);
-            return;
+            $error = [
+                'msg' => Labels::getLabel('MSG_INVALID_ORDER_CHARGE', $this->siteLangId),
+                'response' => $payload,
+            ];
+            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+            CommonHelper::printArray($error, true);
         }
 
         $chargeId = $chargeResponse['id'];
@@ -512,6 +534,10 @@ class StripeConnectPayController extends PaymentController
             $comments = Labels::getLabel($msg, $this->siteLangId);
             $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
             Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $netSellerAmount, $this->siteLangId, $comments, $op['op_id']);
+            
+            $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
+            $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
+            Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
 
             if (!empty($accountId)) {
                 $charge = [
@@ -527,12 +553,22 @@ class StripeConnectPayController extends PaymentController
                 ];
 
                 if (false === $this->stripeConnect->doTransfer($charge)) {
-                    return;
+                    $error = [
+                        'msg' => $this->stripeConnect->getError(),
+                        'response' => $charge,
+                    ];
+                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                    continue;
                 }
 
                 $resp = $this->stripeConnect->getResponse();
 
                 if (empty($resp->id)) {
+                    $error = [
+                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER', $this->siteLangId),
+                        'response' => $resp,
+                    ];
+                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
                     continue;
                 }
 
@@ -540,10 +576,6 @@ class StripeConnectPayController extends PaymentController
                 $comments = $comments . ' ' . Labels::getLabel('MSG_TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
                 $comments = CommonHelper::replaceStringData($comments, ['{account-id}' => $accountId]);
                 Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, $firstTransferAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
-
-                $comments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
-                $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
-                Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $comments, $op['op_id']);
             }
 
             if (0 < $pendingTransferAmount) {
@@ -557,11 +589,21 @@ class StripeConnectPayController extends PaymentController
                 $charge['description'] = $discountComments;
                 $charge['metadata']['source_transaction'] = $chargeId;
                 if (false === $this->stripeConnect->doTransfer($charge)) {
-                    return;
+                    $error = [
+                        'msg' => $this->stripeConnect->getError(),
+                        'response' => $this->stripeConnect->getResponse(),
+                    ];
+                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                    continue;
                 }
 
                 $resp = $this->stripeConnect->getResponse();
                 if (empty($resp->id)) {
+                    $error = [
+                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER_PENDING_AMOUNT', $this->siteLangId),
+                        'response' => $resp,
+                    ];
+                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
                     continue;
                 }
 

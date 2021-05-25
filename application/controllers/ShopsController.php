@@ -363,7 +363,7 @@ class ShopsController extends MyAppController
             $socialShareContent = array(
                 'title' => $shop['shop_name'],
                 'description' => $description,
-                'image' => UrlHelper::generateFullUrl('image', 'shopBanner', array($shop['shop_id'], $this->siteLangId, 'wide')),
+                'image' => UrlHelper::generateFullUrl('image', 'shopLogo', array($shop['shop_id'], $this->siteLangId)),
             );
             $this->set('socialShareContent', $socialShareContent);
         }

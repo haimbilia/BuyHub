@@ -93,7 +93,7 @@
             #{$start-direction}: -280px;
             bottom: 0;
             overflow-y: auto;
-            -webkit-transform: translate3d(0, 0, 0);
+            
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             width: 280px;
@@ -166,11 +166,9 @@
 .seller-slogan {
     position: relative;
     height: 100%;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     padding: 1rem 0;
     .seller-slogan-txt {
@@ -275,14 +273,11 @@
 }
 
 .pricing-structure ul {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     align-items: center;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -340,8 +335,7 @@
 .registeration-process {
     margin: 1rem 0;
     ul {
-        display: -webkit-box;
-        display: -ms-flexbox;
+
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -395,7 +389,7 @@
             #{$start-direction}: -280px;
             bottom: 0;
             overflow-y: auto;
-            -webkit-transform: translate3d(0, 0, 0);
+            
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             width: 280px;

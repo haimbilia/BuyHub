@@ -62,6 +62,15 @@ class PluginCommon extends MyAppModel
         'CashOnDelivery',
         'PayAtStore'
     ];
+    
+    public const HAVING_SEPARATE_ICON = [
+        self::TYPE_SPLIT_PAYMENT_METHOD,
+        self::TYPE_REGULAR_PAYMENT_METHOD
+    ];
+
+    public const HAVING_DESCRIPTION = [
+        self::TYPE_ADVERTISEMENT_FEED
+    ];
 
     public const ATTRS = [
         self::DB_TBL_PREFIX . 'id',

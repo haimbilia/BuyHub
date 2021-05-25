@@ -39,6 +39,9 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-6">
                 <div class="field-set">
                     <div class="caption-wraper">
@@ -56,8 +59,24 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="field-set">
+                    <div class="caption-wraper">
+                        <label class="field_label">
+                            <?php
+                            $fld = $productFrm->getField('product_attachements_with_inventory');
+                            echo $fld->getCaption();
+                            ?>
+                        </label>
+                    </div>
+                    <div class="field-wraper">
+                        <div class="field_cover">
+                            <?php echo $productFrm->getFieldHtml('product_attachements_with_inventory'); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <div class="row">
             <div class="col-md-6">
                 <div class="field-set">
@@ -383,6 +402,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
         });
 
         $('input[name=\'category_name\']').autocomplete({
+            minLength: 2,
             'classes': {
                 "ui-autocomplete": "custom-ui-autocomplete"
             },

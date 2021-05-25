@@ -7,7 +7,6 @@ $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 ?>
 <div class="">
     <p><strong><?php echo sprintf(Labels::getLabel('LBL_Pay_using_Payment_Method', $siteLangId), $paymentMethod["plugin_name"]) ?>:</strong></p><br />
-    <p><?php echo $paymentMethod["plugin_description"] ?></p><br />
     <?php
     if (!isset($error)) {
         echo $frm->getFormHtml();

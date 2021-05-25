@@ -30,17 +30,17 @@ class ShippingProfileController extends AdminBaseController
         $prodCountSrch->addMultipleFields(array("COUNT(*) as totalProducts, shippro_shipprofile_id"));
         $prodCountQuery = $prodCountSrch->getQuery();
         
-        $srch = ShippingProfile::getSearchObject();
+        $srch = ShippingProfile::getSearchObject($this->adminLangId);
         $srch->addCondition('sprofile.shipprofile_user_id', '=', 0); /* only admin added profiles */
         $srch->joinTable('('. $prodCountQuery .')', 'LEFT OUTER JOIN', 'sproduct.shippro_shipprofile_id = sprofile.shipprofile_id', 'sproduct');
         
-        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts'));
+        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts','IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
         
         $srch->addOrder('shipprofile_default', 'DESC');
-        $srch->addOrder('shipprofile_id', 'ASC');
-        
+        $srch->addOrder('shipprofile_id', 'ASC');       
         if (!empty($post['keyword'])) {
-            $srch->addCondition('sprofile.shipprofile_name', 'like', '%'.$post['keyword'].'%');
+            $cnd = $srch->addCondition('sprofile_l.shipprofile_name', 'like', '%'.$post['keyword'].'%');
+            $cnd->attachCondition('sprofile.shipprofile_identifier', 'like', '%' . $post['keyword'] . '%');
         }
         
         $srch->setPageNumber($page);
@@ -72,19 +72,28 @@ class ShippingProfileController extends AdminBaseController
         $frm = $this->getForm($profileId);
         $data = [];
         $productCount = 0;
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         if (0 < $profileId) {
             $data = ShippingProfile::getAttributesById($profileId);
             if (empty($data)) {
                 FatUtility::dieWithError($this->str_invalid_request);
-            }
-            
+            }            
             if ($data['shipprofile_user_id'] != 0) {
                 Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
             
+            $spObj = new ShippingProfile();        
+            foreach (Language::getAllNames() as $langId => $langName) {
+                $profileName = $spObj->getAttributesByLangId($langId, $profileId, 'shipprofile_name');
+                if (!empty($profileName)) {
+                    $data['shipprofile_name'][$langId] = $profileName;
+                }
+            } 
+            if(empty($data['shipprofile_name'][$siteDefaultLangId])){
+                $data['shipprofile_name'][$siteDefaultLangId] = $data['shipprofile_identifier'];
+            } 
             $frm->fill($data);
-
             $prodCountSrch = new SearchBase(ShippingProfileProduct::DB_TBL, 'selsppro');
             $prodCountSrch->doNotCalculateRecords();
             $prodCountSrch->doNotLimitRecords();
@@ -96,6 +105,8 @@ class ShippingProfileController extends AdminBaseController
         $this->set('profileData', $data);
         $this->set('productCount', $productCount);
         $this->set('frm', $frm);
+        $this->set('siteDefaultLangId', $siteDefaultLangId);
+        $this->set('languages', Language::getAllNames());
         $this->_template->render();
     }
     
@@ -111,6 +122,9 @@ class ShippingProfileController extends AdminBaseController
 
         $profileId = $post['shipprofile_id'];
         unset($post['shipprofile_id']);
+        
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $post['shipprofile_identifier'] = $post['shipprofile_name'][$siteDefaultLangId] ?? '';
 
         $spObj = new ShippingProfile($profileId);
         $spObj->assignValues($post);
@@ -118,6 +132,16 @@ class ShippingProfileController extends AdminBaseController
         if (!$spObj->save()) {
             Message::addErrorMessage($spObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
+        }        
+        $languages = Language::getAllNames();
+        foreach ($post['shipprofile_name'] as $langId => $profileName) {                       
+            if(empty($profileName)){
+                continue;
+            }
+            if (!$spObj->updateLangData($langId, ['shipprofile_name'=> $profileName])) {
+                Message::addErrorMessage($spObj->getError());
+                FatUtility::dieWithError(Message::getHtml());
+            }
         }
         
         if (1 > $profileId) {
@@ -231,8 +255,16 @@ class ShippingProfileController extends AdminBaseController
         $profileId = FatUtility::int($profileId);
         $frm = new Form('frmShippingProfile');
         $frm->addHiddenField('', 'shipprofile_id', $profileId);
-        $frm->addHiddenField('', 'shipprofile_user_id', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->adminLangId), 'shipprofile_name');
+        $frm->addHiddenField('', 'shipprofile_user_id', 0);   
+        $languages = Language::getAllNames();
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        foreach ($languages as $langId => $langName) {
+            if ($langId == $siteDefaultLangId) {
+                $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->adminLangId), 'shipprofile_name[' . $langId . ']');
+            } else {
+                $frm->addTextBox(Labels::getLabel('LBL_Profile_Name', $this->adminLangId) . ' ' . $langName, 'shipprofile_name[' . $langId . ']');
+            }
+        }        
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }

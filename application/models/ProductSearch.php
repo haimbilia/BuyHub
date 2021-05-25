@@ -206,7 +206,7 @@ class ProductSearch extends SearchBase
             $splPriceForDate = $now;
         }
 
-        $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE, 'LEFT OUTER JOIN', 'msplpric.splprice_selprod_id = msellprod.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN msplpric.splprice_start_date AND msplpric.splprice_end_date AND msplpric.splprice_price < msellprod.selprod_price', 'msplpric');
+        $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE, 'LEFT OUTER JOIN', 'msplpric.splprice_selprod_id = msellprod.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN msplpric.splprice_start_date AND msplpric.splprice_end_date AND (msplpric.splprice_price < msellprod.selprod_price or msplpric.splprice_price > msellprod.selprod_price)', 'msplpric');
 
         $srch = new SearchBase(SellerProduct::DB_TBL, 'sprods');
 
@@ -282,11 +282,11 @@ class ProductSearch extends SearchBase
         if (array_key_exists('price-min-range', $criteria)) {
             $currCurrencyId = isset($criteria['currency_id']) ? $criteria['currency_id'] : FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
             $minPriceRange = CommonHelper::convertExistingToOtherCurrency($currCurrencyId, $criteria['price-min-range'], FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1), false);
-//            $minPriceRange = floor($criteria['price-min-range']);
+            //            $minPriceRange = floor($criteria['price-min-range']);
         } elseif (array_key_exists('min_price_range', $criteria)) {
             $currCurrencyId = isset($criteria['currency_id']) ? $criteria['currency_id'] : FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
             $minPriceRange = CommonHelper::convertExistingToOtherCurrency($currCurrencyId, $criteria['min_price_range'], FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1), false);
-//            $minPriceRange = floor($criteria['min_price_range']);
+            //            $minPriceRange = floor($criteria['min_price_range']);
         }
         if (0 < $minPriceRange) {
             $srch->addDirectCondition('COALESCE(tsp.splprice_price, sprods.selprod_price) >= ' . $minPriceRange);
@@ -295,7 +295,7 @@ class ProductSearch extends SearchBase
         $srch->joinTable(
             SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
             'LEFT OUTER JOIN',
-            'tsp.splprice_selprod_id = sprods.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN tsp.splprice_start_date AND tsp.splprice_end_date and tsp.splprice_price < sprods.selprod_price',
+            'tsp.splprice_selprod_id = sprods.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN tsp.splprice_start_date AND tsp.splprice_end_date and (tsp.splprice_price < sprods.selprod_price or tsp.splprice_price > sprods.selprod_price )',
             'tsp'
         );
         $srch->addCondition('sprods.selprod_active', '=', applicationConstants::ACTIVE);
@@ -345,6 +345,7 @@ class ProductSearch extends SearchBase
         }
 
         $tmpQry = $srch->getQuery();
+
         /*if (!empty($criteria['keyword'])) {
             $this->joinTable('(' . $tmpQry . ')', 'INNER JOIN', '((pricetbl.selprod_product_id = msellprod.selprod_product_id AND (splprice_price = theprice OR selprod_price = theprice)) or (selprod_title LIKE '.FatApp::getDb()->quoteVariable('%'.$criteria['keyword'].'%').'))', 'pricetbl');
         } else {
@@ -437,10 +438,8 @@ class ProductSearch extends SearchBase
     $this->joinTable( OptionValue::DB_TBL, 'LEFT OUTER JOIN', 'tspo.selprodoption_optionvalue_id = opval.optionvalue_id', 'opval' );
     $this->joinTable( Option::DB_TBL, 'LEFT OUTER JOIN', 'opval.optionvalue_option_id = op.option_id', 'op' );
     $this->addGroupBy('tspo.selprodoption_selprod_id');
-
     // $this->addMultipleFields(array('GROUP_CONCAT( selprodoption_option_id ) as option_ids', 'GROUP_CONCAT( selprodoption_optionvalue_id ) as option_value_ids'));
     // 'GROUP_CONCAT( option_name ) as option_names', 'GROUP_CONCAT( optionvalue_name ) as option_value_names'
-
     if( $this->langId ){
     $this->joinTable( Option::DB_TBL.'_lang', 'LEFT OUTER JOIN', 'op.option_id = op_l.optionlang_option_id AND op_l.optionlang_lang_id = '. $this->langId, 'op_l' );
     $this->joinTable( OptionValue::DB_TBL.'_lang', 'LEFT OUTER JOIN', 'opval.optionvalue_id = opval_l.optionvaluelang_optionvalue_id AND opval_l.optionvaluelang_lang_id = '. $this->langId, 'opval_l' );
@@ -998,7 +997,6 @@ class ProductSearch extends SearchBase
     /* public function addUPCCondition($upc){
     $this->addCondition('product_upc', 'like', $upc );
     }
-
     public function addISBNCondition($isbn){
     $this->addCondition('product_isbn', 'like', $isbn );
     } */
@@ -1044,7 +1042,7 @@ class ProductSearch extends SearchBase
         }
     }
 
-    public function addMoreSellerCriteria($productCode, $sellerId = 0)
+    public function addMoreSellerCriteria($productCode, $sellerId = 0, $includeSeller = false)
     {
         $sellerId = FatUtility::int($sellerId);
         if ($productCode == '') {
@@ -1064,8 +1062,10 @@ class ProductSearch extends SearchBase
         $this->doNotCalculateRecords();
         $this->doNotLimitRecords();
         $this->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        if ($sellerId > 0) {
+        if ($sellerId > 0 && false === $includeSeller) {
             $this->addCondition('selprod_user_id', '!=', $sellerId);
+        } else if ($sellerId > 0 && true === $includeSeller) {
+            $this->addCondition('selprod_user_id', '=', $sellerId);
         }
         $this->addCondition('selprod_code', '=', $productCode);
     }
@@ -1093,7 +1093,7 @@ class ProductSearch extends SearchBase
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -1192,13 +1192,10 @@ class ProductSearch extends SearchBase
     if ($this->langId && 1 > $langId) {
             $langId = $this->langId;
         }
-
     $this->joinTable( OptionValue::DB_TBL, 'LEFT OUTER JOIN', "selprod_code LIKE CONCAT('%_', ov.optionvalue_id)" , 'ov' );
     $this->joinTable( Option::DB_TBL, 'INNER JOIN', 'spo.option_id = ov.optionvalue_option_id', 'spo' );
-
     if( $langId ){
     $this->joinTable( OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = '.$langId, 'ov_lang' );
-
     $this->joinTable( Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'spo.option_id = spo_lang.optionlang_option_id AND spo_lang.optionlang_lang_id = '.$langId, 'spo_lang' );
     }
     } */
@@ -1237,9 +1234,12 @@ class ProductSearch extends SearchBase
         $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_product_id = selprod_product_id and ' . $joinCondition, 'spprod');
     }
 
-    public function joinShippingProfile()
+    public function joinShippingProfile($langId = 0)
     {
         $this->joinTable(ShippingProfile::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
+        if (0 < $langId) {
+            $this->joinTable(ShippingProfile::DB_TBL_LANG, 'LEFT OUTER JOIN', 'spprof_l.shipprofilelang_shipprofile_id = spprof.shipprofile_id and spprof_l.shipprofilelang_lang_id = ' . $langId, 'spprof_l');
+        }
     }
 
     public function joinShippingProfileZones()
@@ -1282,7 +1282,7 @@ class ProductSearch extends SearchBase
         $this->joinTable('(' . $srch->getQuery() . ')', $joinCondition, 'shiploc.shiploc_shipzone_id = shippz.shipprozone_shipzone_id', 'shiploc');
     }
 
-    public function validateAndJoinDeliveryLocation($includeShipingProfileCheck = false)
+    public function validateAndJoinDeliveryLocation($includeShipingProfileCheck = false, $addAvailableInLocation = true)
     {
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             $prodGeoCondition = FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0);
@@ -1293,8 +1293,10 @@ class ProductSearch extends SearchBase
                         $this->joinDeliveryLocations();
                         if (true == $includeShipingProfileCheck) {
                             $this->addHaving('shippingProfile', 'IS NOT', 'mysql_func_null', 'and', true);
-                            $this->addFld('1 as availableInLocation');
-                        } else {
+                            if ($addAvailableInLocation) {
+                                $this->addFld('1 as availableInLocation');
+                            }
+                        } else if ($addAvailableInLocation) {
                             $this->addFld('if(p.product_type = ' . Product::PRODUCT_TYPE_PHYSICAL . ', ifnull(shipprofile.shippro_product_id,0), 1) as availableInLocation');
                         }
                     }
@@ -1303,8 +1305,10 @@ class ProductSearch extends SearchBase
                 case applicationConstants::BASED_ON_RADIUS:
                     if (array_key_exists('ykGeoLat', $this->geoAddress) && $this->geoAddress['ykGeoLat'] != '' && array_key_exists('ykGeoLng', $this->geoAddress) && $this->geoAddress['ykGeoLng'] != '') {
                         $distanceInMiles = FatApp::getConfig('CONF_RADIUS_DISTANCE_IN_MILES', FatUtility::VAR_INT, 10);
-                        $this->addFld('if(shop.distance <= ' . $distanceInMiles .  ', 1, 0) as availableInLocation');
-                    } else {
+                        if ($addAvailableInLocation) {
+                            $this->addFld('if(shop.distance <= ' . $distanceInMiles .  ', 1, 0) as availableInLocation');
+                        }
+                    } else if ($addAvailableInLocation) {
                         $this->addFld('0 as availableInLocation');
                     }
                     break;
@@ -1312,10 +1316,12 @@ class ProductSearch extends SearchBase
 
                     break;
                 default:
-                    $this->addFld('1 as availableInLocation');
+                    if ($addAvailableInLocation) {
+                        $this->addFld('1 as availableInLocation');
+                    }
                     break;
             }
-        } else {
+        } else if ($addAvailableInLocation) {
             $this->addFld('1 as availableInLocation');
         }
     }

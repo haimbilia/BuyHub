@@ -259,6 +259,16 @@ class Address extends MyAppModel
                     'ykGeoCountryCode' => isset($_COOKIE['_ykGeoCountryCode']) ? $_COOKIE['_ykGeoCountryCode'] : '',
                     'ykGeoAddress' => isset($_COOKIE['_ykGeoAddress']) ? $_COOKIE['_ykGeoAddress'] : '',
                 ];
+                if (FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                    $address = [
+                        'ykGeoLat' => isset($_COOKIE['_ykGeoLat']) ? $_COOKIE['_ykGeoLat'] : FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72),
+                        'ykGeoLng' => isset($_COOKIE['_ykGeoLng']) ? $_COOKIE['_ykGeoLng'] : FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96),
+                        'ykGeoZip' => isset($_COOKIE['_ykGeoZip']) ? $_COOKIE['_ykGeoZip'] : FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0),
+                        'ykGeoStateCode' => isset($_COOKIE['_ykGeoStateCode']) ? $_COOKIE['_ykGeoStateCode'] : FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, ''),
+                        'ykGeoCountryCode' => isset($_COOKIE['_ykGeoCountryCode']) ? $_COOKIE['_ykGeoCountryCode'] : FatApp::getConfig('CONF_GEO_DEFAULT_COUNTRY', FatUtility::VAR_STRING, ''),
+                        'ykGeoAddress' => isset($_COOKIE['_ykGeoAddress']) ? $_COOKIE['_ykGeoAddress'] : FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, ''),
+                    ];
+                }
             }
 
             if (true === MOBILE_APP_API_CALL) {
@@ -270,6 +280,17 @@ class Address extends MyAppModel
                     'ykGeoCountryCode' => isset($_SERVER['HTTP_X_YK_COUNTRY_CODE']) ? $_SERVER['HTTP_X_YK_COUNTRY_CODE'] : '',
                     'ykGeoAddress' => isset($_SERVER['HTTP_X_YK_ADDRESS']) ? $_SERVER['HTTP_X_YK_ADDRESS'] : '',
                 ];
+
+                if (FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                    $address = [
+                        'ykGeoLat' => isset($_SERVER['HTTP_X_YK_LAT']) ? $_SERVER['HTTP_X_YK_LAT'] : FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72),
+                        'ykGeoLng' => isset($_SERVER['HTTP_X_YK_LNG']) ? $_SERVER['HTTP_X_YK_LNG'] : FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96),
+                        'ykGeoZip' => isset($_SERVER['HTTP_X_YK_ZIP']) ? $_SERVER['HTTP_X_YK_ZIP'] : FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0),
+                        'ykGeoStateCode' => isset($_SERVER['HTTP_X_YK_STATE_CODE']) ? $_SERVER['HTTP_X_YK_STATE_CODE'] : FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, ''),
+                        'ykGeoCountryCode' => isset($_SERVER['HTTP_X_YK_COUNTRY_CODE']) ? $_SERVER['HTTP_X_YK_COUNTRY_CODE'] : FatApp::getConfig('CONF_GEO_DEFAULT_COUNTRY', FatUtility::VAR_STRING, ''),
+                        'ykGeoAddress' => isset($_SERVER['HTTP_X_YK_ADDRESS']) ? $_SERVER['HTTP_X_YK_ADDRESS'] : FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, ''),
+                    ];
+                }
             }
         }
 

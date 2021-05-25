@@ -1,105 +1,123 @@
-$(document).ready(function(){
-	searchShopsReport( document.frmShopsReportSearch );
+$(document).ready(function () {
+	searchShopsReport(document.frmShopsReportSearch);
 
 	$('input[name=\'shop_name\']').autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
-        },
-		'source': function(request, response) {
+		'classes': {
+			"ui-autocomplete": "custom-ui-autocomplete"
+		},
+		'source': function (request, response) {
 			$.ajax({
 				url: fcom.makeUrl('Shops', 'autoComplete'),
-				data: { keyword: request['term'], fIsAjax:1},
+				data: { keyword: request['term'], fIsAjax: 1 },
 				dataType: 'json',
 				type: 'post',
-				success: function(json) {
-					response($.map(json, function(item) {
+				success: function (json) {
+					response($.map(json, function (item) {
 						return { label: item['name'], value: item['name'], id: item['id'] };
 					}));
 				},
 			});
 		},
-		'select': function(event, ui) {
-			$("input[name='shop_id']").val( ui.item.id );
+		'select': function (event, ui) {
+			$("input[name='shop_id']").val(ui.item.id);
 		}
 	});
 
 	$('input[name=\'user_name\']').autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
-        },
-		'source': function(request, response) {
+		'classes': {
+			"ui-autocomplete": "custom-ui-autocomplete"
+		},
+		'source': function (request, response) {
 			$.ajax({
 				url: fcom.makeUrl('Users', 'autoCompleteJson'),
-				data: { keyword: request['term'], fIsAjax:1},
+				data: { keyword: request['term'], fIsAjax: 1 },
 				dataType: 'json',
 				type: 'post',
-				success: function(json) {
-					response($.map(json, function(item) {
+				success: function (json) {
+					response($.map(json, function (item) {
 						return { label: item['name'], value: item['name'], id: item['id'] };
 					}));
 				},
 			});
 		},
-		'select': function(event, ui) {
-			$("input[name='shop_user_id']").val( ui.item.id );
+		'select': function (event, ui) {
+			$("input[name='shop_user_id']").val(ui.item.id);
 		}
 	});
 
-	$('input[name=\'shop_name\']').keyup(function(){
-		if( $(this).val() == "" ){
+	$('input[name=\'shop_name\']').keyup(function () {
+		if ($(this).val() == "") {
 			$("input[name='shop_id']").val(0);
 		}
 	});
 
-	$('input[name=\'user_name\']').keyup(function(){
-		if( $(this).val() == "" ){
+	$('input[name=\'user_name\']').keyup(function () {
+		if ($(this).val() == "") {
 			$("input[name='shop_user_id']").val(0);
 		}
 	});
 
 });
-(function() {
+
+$(document).on("click", ".headerColumnJs", function (e) {
+	var fld = $(this).attr('data-field');
+	var frm = document.frmShopsReportSearchPaging;
+	document.getElementById("sortBy").value = fld;
+	$(frm.sortBy).val(fld);
+	if (document.getElementById("sortOrder").value == 'ASC') {
+		$(frm.sortOrder).val('DESC');
+		document.getElementById("sortOrder").value = 'DESC';
+	} else {
+		$(frm.sortOrder).val('ASC');
+		document.getElementById("sortOrder").value = 'ASC';
+	}
+	searchShopsReport(frm, false);
+});
+
+(function () {
 	var currentPage = 1;
 	var runningAjaxReq = false;
 	var dv = '#listing';
 
-	goToSearchPage = function(page) {
-		if( typeof page == undefined || page == null ){
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
 		var frm = document.frmShopsReportSearchPaging;
-		$( frm.page ).val( page );
-		searchShopsReport( frm );
+		$(frm.page).val(page);
+		searchShopsReport(frm);
 	};
 
-	reloadList = function() {
+	reloadList = function () {
 		var frm = document.frmShopsReportSearchPaging;
 		searchShopsReport(frm);
 	};
 
-	searchShopsReport = function(form){
+	searchShopsReport = function (form, withloader) {
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
 		}
 
-		$(dv).html(fcom.getLoader());
+		if (typeof withloader == 'undefined' || withloader != false) {
+			$(dv).html(fcom.getLoader());
+		}
 
-		fcom.ajax(fcom.makeUrl('ShopsReport','search'),data,function(res){
+		fcom.ajax(fcom.makeUrl('ShopsReport', 'search'), data, function (res) {
 			$(dv).html(res);
 		});
 	};
 
-	exportReport = function(dateFormat){
+	exportReport = function (dateFormat) {
 		// document.frmShopsReportSearch.action = fcom.makeUrl('ShopsReport','export');
 		// document.frmShopsReportSearch.submit();
-		location.href = fcom.makeUrl('ShopsReport','export');
+		location.href = fcom.makeUrl('ShopsReport', 'export');
 	}
 
-	clearSearch = function(){
+	clearSearch = function () {
 		document.frmShopsReportSearch.shop_id.value = '0';
 		document.frmShopsReportSearch.shop_user_id.value = '0';
 		document.frmShopsReportSearch.reset();
-		searchShopsReport( document.frmShopsReportSearch );
+		searchShopsReport(document.frmShopsReportSearch);
 	};
 })();

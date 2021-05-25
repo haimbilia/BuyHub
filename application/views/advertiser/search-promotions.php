@@ -64,12 +64,15 @@ foreach ($arr_listing as $sn => $row) {
             case 'promotion_end_date':
                 $txt = '';
                 if ($row[$key] < date("Y-m-d")) {
-                    $txt .= Labels::getLabel('LBL_Expired', $siteLangId);
-                } else {
-                    if ($row['promotion_start_date'] >= date("Y-m-d")) {
-                        $txt .= Labels::getLabel('LBL_RUNNING', $siteLangId);
+                    $txt = Labels::getLabel('LBL_Expired', $siteLangId);
+                } else { 
+                    if($row['promotion_start_date'] <= date("Y-m-d") && $row['promotion_end_date'] >= date("Y-m-d")  && $row['promotion_start_time'] <= date('H:i') && $row['promotion_end_time'] >= date('H:i')) {
+                        $txt = Labels::getLabel('LBL_RUNNING', $siteLangId);
+                        if(!$isPpcBalanceSufficent){
+                            $txt = Labels::getLabel('LBL_LOW_BALANCE', $siteLangId);
+                        }                        
                     } else {
-                        $txt .= Labels::getLabel('LBL_SCHEDULED', $siteLangId);
+                        $txt = Labels::getLabel('LBL_SCHEDULED', $siteLangId);
                     }
                 }
                 $td->appendElement('plaintext', array(), $txt, true);

@@ -2,7 +2,7 @@
 
 
 $data = array(
-    'reviewsList' => $reviewsList,
+    'reviewsList' => array_values($reviewsList),
     'page' => $page,
     'pageCount' => $pageCount,
     'postedData' => $postedData,

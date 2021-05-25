@@ -113,6 +113,12 @@ class AdvertiserController extends AdvertiserBaseController
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
+        }       
+        
+        $minimumWithdrawLimit = FatApp::getConfig("CONF_PPC_MIN_WALLET_BALANCE", FatUtility::VAR_INT, 0);
+        if (User::getUserBalance($this->userParentId) < $minimumWithdrawLimit) {
+            Message::addErrorMessage(str_replace("{amount}", CommonHelper::displayMoneyFormat($minimumWithdrawLimit), Labels::getLabel('MSG_YOUR_ACCOUNT_BALANCE_HAS_TO_BE_GREATER_THAN_{amount}_TO_CREATE_PROMOTIONS.', $this->siteLangId)));
+            FatUtility::dieWithError(Message::getHtml());
         }
 
         $promotion_record_id = 0;
@@ -606,6 +612,7 @@ class AdvertiserController extends AdvertiserBaseController
         $this->set('postedData', $post);
         $this->set('userId', $userId);
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
+        $this->set('isPpcBalanceSufficent', 0  <=  (User::getUserBalance($this->userParentId, true, true) - FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE')));    
         $this->_template->render(false, false);
     }
 

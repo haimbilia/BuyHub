@@ -88,8 +88,7 @@ if (isset($client_secret)) { ?>
                             if ('' != stripeToken && 'undefined' != typeof stripeToken) {
                                 return;
                             }
-
-                            $.systemMessage(langLbl.processing, 'alert--process');
+                            $.mbsmessage(langLbl.processing, true, 'alert--process');
                             // prop('disabled', true);
                             $('.alert--danger').remove();
 
@@ -111,7 +110,6 @@ if (isset($client_secret)) { ?>
                                 if (_numberValue != '' && _cvvValue != '' && _expMonthValue != '' && _expYearValue != '') {
                                     $submit = false;
                                     _this.find('input[type=submit]').val(_this.find('input[type=submit]').data('processing-text'));
-
                                     Stripe.createToken({
                                         number: _numberValue,
                                         cvc: _cvvValue,

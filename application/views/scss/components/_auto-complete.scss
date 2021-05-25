@@ -29,7 +29,7 @@
     -webkit-box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.1);
     position: absolute;
-    -webkit-transform: scale(0);
+    
     transform: scale(0);
     opacity: 0;
     filter: alpha(opacity=0);
@@ -38,7 +38,7 @@
     -webkit-transform-origin: top right;
     transform-origin: top right;
     /*active*/
-    -webkit-transform: scale(1);
+    
     transform: scale(1);
     opacity: 1;
     filter: alpha(opacity=100);

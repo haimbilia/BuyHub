@@ -49,7 +49,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'adsbatch_target_country_id':
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($siteLangId);
+                $countriesArr = $countryObj->getCountriesAssocArr($siteLangId);
                 $td->appendElement('plaintext', array(), $countriesArr[$row[$key]], true);
                 break;
             case 'adsbatch_expired_on':

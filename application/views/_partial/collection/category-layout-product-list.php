@@ -1,17 +1,18 @@
-<div id="tabUl" class="tabs tabs--flat-js justify-content-md-center">
+<div id="tabUl" class="tabs tabs--flat-js justify-content-md-center tabs--mobileview">
     <ul>
         <?php foreach ($collection['categories'] as $key => $category) { ?>
-            <li class=""><a href="#tb-<?php echo $key; ?>"><?php echo $category['catData']['prodcat_name']; ?></a>
+            <li class=""><a href="#tb-<?php echo $key."-".$collection['collection_id'];; ?>"><?php echo $category['catData']['prodcat_name']; ?></a>
             </li>
         <?php } ?>
     </ul>
 </div>
 <?php foreach ($collection['categories'] as $key => $category) { ?>
-    <div id="tb-<?php echo $key; ?>" class="tabs-content tabs-content-js" style="display: block;">
+
+    <div id="tb-<?php echo $key."-".$collection['collection_id'];; ?>" class="tabs-content tabs-content-js" style="display: block;">
         <div class="ft-pro-wrapper">
             <?php $i = 1;
             foreach ($category['products'] as $key => $product) { ?>
-                <div class="ft-pro ft-pro-<?php echo $i; ?>">
+                <div class="items">
                     <?php $prodImgSize = 'MEDIUM'; ?>
 
                     <!--product tile-->
@@ -36,15 +37,12 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="content-overlay"></div>
-                        <div class="content-details">
-                            <div class="">
-
-                                <div class="products__title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?>
-                                    </a></div>
-                                <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
-                            </div>
-
+                        <div class="products__footer">
+                                <div class="products__title">
+                                    <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?>
+                                    </a>
+                                </div>
+                                <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>   
                         </div>
                     </div>
                     <!--/product tile-->

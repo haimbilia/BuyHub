@@ -491,7 +491,7 @@ trait CustomProducts
 
         $productOptionId = ($option_id == 0) ? -1 : $option_id;
 
-        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $productOptionId, $this->siteLangId, true, '', $allowed_images);
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $productOptionId, $lang_id, false, '', $allowed_images);
         if ($images) {
             $productImagesArr += $images;
         }
@@ -1434,18 +1434,30 @@ trait CustomProducts
             }
         }
 
-        $productType = Product::getAttributesById($prodId, 'product_type');
+        // $productType = Product::getAttributesById($prodId, 'product_type');
+        $prodData = Product::getAttributesById($prodId, ['product_type', 'product_attachements_with_inventory']);
+
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::NO;
+        
+        if ($prodData) {
+            $productType = $prodData['product_type'];
+            $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
+        }
+
         $refererUrl =  CommonHelper::redirectUserReferer(true);
         $arr = array_values(array_filter(explode('/', $refererUrl)));
         array_shift($arr);
         array_shift($arr);
 
         $this->set('previousAction', (isset($arr[1])) ? $arr[1] : 'index');
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->set('productId', $prodId);
         $this->set('productType', $productType);
-        $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
         $this->set("includeEditor", true);
         $this->set('displayInventoryTab', $displayInventoryTab);
+        $this->_template->addCss(array('custom/page-css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -1463,6 +1475,8 @@ trait CustomProducts
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $languages = Language::getAllNames();
         $productFrm = $this->getCustomProductIntialSetUpFrm($productId);
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::YES;
 
         if ($productId > 0) {
             $prodData = Product::getAttributesById($productId);
@@ -1529,12 +1543,16 @@ trait CustomProducts
             }
 
             $productFrm->fill($prodData);
+            $productType = $prodData['product_type'];
+            $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
         }
 
         unset($languages[$siteDefaultLangId]);
         $this->set('productFrm', $productFrm);
         $this->set('siteDefaultLangId', $siteDefaultLangId);
         $this->set('otherLanguages', $languages);
+        $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->_template->render(false, false);
     }
 
@@ -2001,6 +2019,13 @@ trait CustomProducts
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+
+        $prodType = Product::getAttributesById($productId, 'product_type');
+        if (!empty($prodType) && Product::PRODUCT_TYPE_DIGITAL == $prodType) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
+        }
+
+
         $frm = $this->getProductShippingFrm($productId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
@@ -2037,7 +2062,7 @@ trait CustomProducts
         $shipProProdData = [];
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
             $shipBy = 0;
-            $shippingProfile = ShippingProfile::getProfileArr(0, true, true, true);
+            $shippingProfile = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true, true);
             $shippingProfileId =  array_key_first($shippingProfile);
 
             $isShippingProfileLinked = ShippingProfileProduct::isShippingProfileLinked($productId);

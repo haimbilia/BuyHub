@@ -13,7 +13,7 @@
             #{$start-direction}: -280px;
             bottom: 0;
             overflow-y: auto;
-            -webkit-transform: translate3d(0, 0, 0);
+            
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             width: 280px;
@@ -40,11 +40,7 @@
     margin-bottom: 2rem;
     .page-sort {
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
-        -webkit-box-pack: end;
-        -ms-flex-pack: end;
         justify-content: flex-end;
         @include media-breakpoint-down(md) {
             & {
@@ -52,11 +48,7 @@
             }
         }
         ul {
-            -webkit-box-align: center;
-            -ms-flex-align: center;
             align-items: center;
-            display: -webkit-box;
-            display: -ms-flexbox;
             display: flex;
             li {
                 position: relative;
@@ -107,9 +99,7 @@
                 position: absolute;
                 #{$end-direction}: 10px;
                 top: calc(50% - 2px);
-                -webkit-transform: rotate(90deg);
                 transform: rotate(90deg);
-                -webkit-transition: all 0.2s ease-in-out;
                 transition: all 0.2s ease-in-out;
                 width: 10px;
             }
@@ -124,7 +114,7 @@
             }
             &.active {
                 &:before {
-                    -webkit-transform: rotate(0deg);
+                    
                     transform: rotate(0deg);
                 }
             }
@@ -287,9 +277,7 @@
     position: absolute;
     #{$end-direction}: calc(50% - 5px);
     top: calc(50% - 2px);
-    -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
-    -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
     width: 10px;
 }
@@ -305,7 +293,7 @@
 }
 
 .cat-accordion .acc-trigger.is--active:before {
-    -webkit-transform: rotate(0deg);
+    
     transform: rotate(0deg);
 }
 
@@ -375,11 +363,7 @@
 }
 
 .slide__fields {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -409,8 +393,7 @@
     font-size: 13px;
     #{$start-direction}: 5px;
     margin-#{$end-direction}: 3px;
-    -webkit-padding-start: 3px;
-    -moz-padding-start: 3px;
+    
     padding-#{$start-direction}: 3px;
     position: absolute;
     top: 10px;
@@ -423,7 +406,19 @@
 
 .filter-content .dash {
     display: inline-block;
-    padding: 6px;
+    padding: 2px;
+    position: relative;
+    width: 35px;
+    flex: 0 0 35px;
+    text-align: center;
+    &:after {
+        content: "";
+        height: 2px;
+        width: 14px;
+        background-color: $body-color;
+        display: inline-block;
+        vertical-align: middle;
+    }
 }
 
 .brands-list li {
@@ -575,11 +570,7 @@
     margin: 0 auto;
     margin-bottom: 15px;
     form {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
         background: #fff;
         border: $border;

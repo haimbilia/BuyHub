@@ -187,7 +187,7 @@ if (isset($prodcat_code)) {
                         
                     </div>
                 </div>
-                <span class="dash"> - </span>
+                <span class="dash"></span>
                 <div class="price-input">
                     <div class="price-text-box input-group">
                     <div class="input-group-prepend"><span class="input-group-text"><?php echo $symbol; ?></span></div>                                
@@ -298,18 +298,18 @@ if (isset($prodcat_code)) {
                 <div class="sidebar-widget__body collapse show"  id="condition" >
                     <ul class="list-vertical">
                         <?php foreach ($conditionsArr as $condition) {
-                if (empty($condition) || $condition['selprod_condition'] == 0) {
-                    continue;
-                } ?>
-                        <li><label class="checkbox condition"
-                                id="condition_<?php echo $condition['selprod_condition']; ?>"><input
-                                    value="<?php echo $condition['selprod_condition']; ?>" name="conditions"
-                                    type="checkbox" <?php if (in_array($condition['selprod_condition'], $conditionsCheckedArr)) {
-                    echo "checked='true'";
-                } ?>><i class="input-helper"></i><?php echo Product::getConditionArr($siteLangId)[$condition['selprod_condition']]; ?>
-                            </label></li>
-                        <?php
-            } ?>
+                            if (empty($condition) || $condition['selprod_condition'] == 0) {
+                                continue;
+                            } ?>
+                                    <li><label class="checkbox condition"
+                                            id="condition_<?php echo $condition['selprod_condition']; ?>"><input
+                                                value="<?php echo $condition['selprod_condition']; ?>" name="conditions"
+                                                type="checkbox" <?php if (in_array($condition['selprod_condition'], $conditionsCheckedArr)) {
+                                echo "checked='true'";
+                            } ?>><i class="input-helper"></i><?php echo Product::getConditionArr($siteLangId)[$condition['selprod_condition']]; ?>
+                                        </label></li>
+                                    <?php
+                        } ?>
                     </ul>
                 </div>
             </div>

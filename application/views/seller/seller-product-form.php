@@ -46,6 +46,8 @@
 <script>
 var product_id = <?php echo $product_id ;?>;
 var selprod_id = <?php echo $selprod_id ;?>;
+var canAttachDigitalDownload = <?php echo $canAttachDigitalDownload ;?>;
+
 $(document).ready(function () {
     sellerProductForm(product_id, selprod_id);
 });

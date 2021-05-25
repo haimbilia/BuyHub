@@ -1,7 +1,7 @@
 <?php
 
 class Plugin extends PluginCommon
-{    
+{   
     public function __construct(int $id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);

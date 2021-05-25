@@ -47,6 +47,7 @@ class UsersController extends AdminBaseController
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true);
+        $srch->addFld(User::DB_TBL_CRED_PREFIX . 'password');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'user_id = shop.shop_user_id OR user_parent = shop.shop_user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
         $srch->addOrder('u.user_id', 'DESC');
@@ -145,7 +146,7 @@ class UsersController extends AdminBaseController
         }
         $userAuthObj = new UserAuthentication();       
         if (!$userAuthObj->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false, true) === true) {
-            Message::addErrorMessage($userObj->getError());
+            Message::addErrorMessage($userAuthObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
         }
 
@@ -280,12 +281,12 @@ class UsersController extends AdminBaseController
             $stateId = $data['user_state_id'];
             $frmUser->fill($data);
             $userParent = $data['user_parent'];
+            $this->set('data', $data);
         }
         $this->set('userParent', $userParent);
         $this->set('user_id', $user_id);
         $this->set('stateId', $stateId);
-        $this->set('frmUser', $frmUser);
-        $this->set('data', $data);
+        $this->set('frmUser', $frmUser);        
         $this->_template->render(false, false);
     }
 
@@ -1941,6 +1942,43 @@ class UsersController extends AdminBaseController
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
+    
+    public function resendSetPasswordEmail()
+    {
+        $this->objPrivilege->canEditUsers();
+        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+        if (1 > $userId) {
+            FatUtility::dieWithError($this->str_invalid_request_id);
+        }
+
+        $userObj = new User($userId);
+        $user = $userObj->getUserInfo(['user_name', 'credential_email', 'user_is_supplier', 'user_is_affiliate','user_is_advertiser'], true, false);
+        if (!$user) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+
+        $userType = User::USER_TYPE_BUYER;
+        if ($user['user_is_supplier'] == 1) {
+            $userType = User::USER_TYPE_SELLER;
+        } elseif ($user['user_is_affiliate'] == 1) {
+            $userType = User::USER_TYPE_AFFILIATE;
+        } elseif ($user['user_is_advertiser'] == 1) {
+            $userType = User::USER_TYPE_ADVERTISER;
+        }
+
+        $userData = [
+            'user_name' => $user['user_name'],
+            'user_email' => $user['credential_email'],
+            'user_id' => $userId,
+            'account_type' => User::getUserTypesArr($this->adminLangId)[$userType]
+        ];
+
+        if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
+            FatUtility::dieJsonError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id));
+        }
+        $this->set('msg', Labels::getLabel("MSG_Email_Sent_Successful", $this->admin_id));
+        $this->_template->render(false, false, 'json-success.php');
+    }
 
     /* public function image($userId, $sizeType = '', $afile_id = 0){
     $default_image = 'user_deafult_image.jpg';
@@ -2105,11 +2143,11 @@ class UsersController extends AdminBaseController
         }
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $fld->requirement->setRequired(true);
+        //$fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $frm->addTextBox(Labels::getLabel('LBL_City', $this->adminLangId), 'user_city');
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
@@ -2235,7 +2273,7 @@ class UsersController extends AdminBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_City', $this->adminLangId), 'addr_city');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($langId);
+        $countriesArr = $countryObj->getCountriesAssocArr($langId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 

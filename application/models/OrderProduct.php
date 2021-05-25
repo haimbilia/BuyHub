@@ -242,4 +242,21 @@ class OrderProduct extends MyAppModel
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }
+
+    public function getSpecifics()
+    {
+        if ($this->mainTableRecordId < 1) {
+            return [];
+        }
+        $srch = new OrderProductSearch(0, true);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['op_selprod_return_age', 'op_selprod_cancellation_age', 'op_product_warranty', 'op_prodcat_id']
+        );
+        $srch->joinOrderProductSpecifics();
+        $srch->addCondition('op.op_id', '=', $this->mainTableRecordId);
+
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetch($rs);
+    }
 }
