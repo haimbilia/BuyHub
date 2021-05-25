@@ -1159,6 +1159,7 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_COMMISSION:
                 /* $frm->addHtml('','Commission','<h3>'.Labels::getLabel("LBL_Commission",$this->adminLangId) . '</h3>'); */
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Maximum_Site_Commission", $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COMMISSION', '');
+                $fld->requirements()->setFloatPositive();
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_maximum_commission/Fees_that_will_be_charged_on_a_particular_product.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_shipping", $this->adminLangId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);

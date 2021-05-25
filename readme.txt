@@ -148,9 +148,17 @@ Fixes:
     => 053882 - getting error on product detail page under recommended products
     => 053817 - on registration screen> logo is not displaying
     => 053832 - rating star color is different in admin and front end
+    => 053985 - Stripe connect unable to debit site commission
 
 New Features:
     => Admin shipped products listing page
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053978 - Forget password label language issue in admin
+
 
 Enhancements :
    => Make provision to made seller
