@@ -307,19 +307,19 @@ class Statistics extends MyAppModel
 
                 $srchObj1 = clone $srch;
                 $srchObj1->addFld(array('1 AS num_days'));
-                $srchObj1->addDirectCondition('DATE(op_completion_date) = DATE(NOW())');
+                $srchObj1->addDirectCondition('DATE(order_date_added) = DATE(NOW())');
 
                 $srchObj7 = clone $srch;
                 $srchObj7->addFld(array('7 AS num_days'));
-                $srchObj7->addDirectCondition('YEARWEEK(op_completion_date) = YEARWEEK(NOW())');
+                $srchObj7->addDirectCondition('YEARWEEK(order_date_added) = YEARWEEK(NOW())');
 
                 $srchObj30 = clone $srch;
                 $srchObj30->addFld(array('30 AS num_days'));
-                $srchObj30->addDirectCondition('MONTH(op_completion_date)=MONTH(NOW())');
+                $srchObj30->addDirectCondition('MONTH(order_date_added)=MONTH(NOW())');
 
                 $srchObj90 = clone $srch;
                 $srchObj90->addFld(array('90 AS num_days'));
-                $srchObj90->addDirectCondition('op_completion_date>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)');
+                $srchObj90->addDirectCondition('order_date_added>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)');
 
                 $srchObjAll = clone $srch;
                 $srchObjAll->addFld(array('-1 AS num_days'));
