@@ -258,7 +258,7 @@ class DigitalDownload extends MyAppModel
         }
 
         if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
-            return static::returnResponseOrDie(false, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
+            return static::returnResponseOrDie(false, false, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
         }
         
         /* To check whether product belogs to logged seller? */
@@ -276,12 +276,12 @@ class DigitalDownload extends MyAppModel
      * @recordType - Type of record Id (Inventory Id (Seller Product Id), Product request Id, Product Id)
      * @sellerUserId - user Id for which record is belongs to, It is required in case to check add/upload request from a seller. In case delete request from admin it will be zero 
      * @langId
-     * @checkWithCatalog - To check whether add/upload allowed with Inventory/Product
+     * @validateAllowedWithInventory - To check whether add/upload allowed with Inventory/Product
      * @returnResult - return response or die
      */
 
     // public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $returnResult = false)
-    public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $checkWithCatalog = true, $returnResult = false)
+    public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $validateAllowedWithInventory = true, $returnResult = false)
     {
         $recordId = FatUtility::int($recordId);
         $sellerUserId = FatUtility::int($sellerUserId);
@@ -290,7 +290,7 @@ class DigitalDownload extends MyAppModel
         if (1 > $langId) {
             $langId = CommonHelper::getLangId();
         }
-
+        
         if (Product::CATALOG_TYPE_REQUEST == $recordType) {
             /* Marketplace requested Product - by seller*/
             $productReqRow = ProductRequest::getAttributesById($recordId);
@@ -299,6 +299,10 @@ class DigitalDownload extends MyAppModel
                 return static::returnResponseOrDie($returnResult);
             }
             
+            if ($productReqRow['preq_status'] == ProductRequest::STATUS_APPROVED || $productReqRow['preq_deleted'] == applicationConstants::YES) {
+                return static::returnResponseOrDie($returnResult, false);
+            }
+
             $product = json_decode($productReqRow['preq_content'], true);
 
             if (!$product) {
@@ -326,7 +330,7 @@ class DigitalDownload extends MyAppModel
         }
 
         if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
-            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
+            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
         }
 
         /* To check whether product belogs to logged seller? */
@@ -353,18 +357,32 @@ class DigitalDownload extends MyAppModel
             }
             return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
         } */
-
-        if (true === $checkWithCatalog) {
-            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
-                return true;
+        if (true == $validateAllowedWithInventory) {
+            if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
+                return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+            } else {
+                return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
             }
-            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+        }
+        
+        
+        if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
+            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+        } else {
+            return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $langId));
+        }
+
+        /* if (true === $checkWithCatalog) {
+            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
+                return static::returnResponseOrDie(true, true);
+            }
+            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
         } else {
             if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
-                return true;
+                return static::returnResponseOrDie(true, true);
             }
-            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
-        }
+            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
+        } */
     }
 
     /**
@@ -415,6 +433,10 @@ class DigitalDownload extends MyAppModel
                     return static::returnResponseOrDie($returnResult);
                 }
                 
+                if ($productReqRow['preq_status'] == ProductRequest::STATUS_APPROVED || $productReqRow['preq_deleted'] == applicationConstants::YES) {
+                    return static::returnResponseOrDie($returnResult);
+                }
+
                 $product = json_decode($productReqRow['preq_content'], true);
 
                 if (!$product) {
@@ -441,21 +463,31 @@ class DigitalDownload extends MyAppModel
                 return static::returnResponseOrDie($returnResult);
             }
         }
-        if (true == $validateAllowedWithInventory) {
+        /* if (true == $validateAllowedWithInventory) {
             if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
                 return static::returnResponseOrDie($returnResult);
             }
         }
-        return true;
+        return true; */
+
+        if (true == $validateAllowedWithInventory) {
+            if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
+                return static::returnResponseOrDie(true, true);
+            } else {
+                return static::returnResponseOrDie(true, false);
+            }
+        }
+        return static::returnResponseOrDie(true, true);
     }
 
-    public static function returnResponseOrDie($returnResult = false, $message = '')
+    public static function returnResponseOrDie($returnResult = false, $response = false, $message = '')
     {
         if (true == $returnResult) {
-            return false;
+            return $response;
         }
+
         if ($message == '') {
-            $message = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
+            $message = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId()) . __LINE__;
         }
         FatUtility::dieJsonError($message);
     }

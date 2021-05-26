@@ -14,11 +14,11 @@ trait ProductDigitalDownloads
         $selProdId = FatUtility::int($selProdId);
         
         if (0 < $selProdId) {
-            $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, false, true);
+            $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, $this->userParentId, $this->siteLangId, true, true);
             $sellerProductRow = SellerProduct::getAttributesById($selProdId);
             $productId = $sellerProductRow['selprod_product_id'];
         } else {
-            $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, false, true);
+            $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, true, true);
         }
         
 
@@ -26,6 +26,7 @@ trait ProductDigitalDownloads
 
         $savedOptions = array();
         $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
+        
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
         
         foreach ($optionCombinations as $optionKey => $optionValue) {
@@ -38,10 +39,12 @@ trait ProductDigitalDownloads
             $savedOptions[$selProdAvailable['selprod_id']] = $optionValue;
             /* ] */
         }
+        
         if ($selProdId > 0) {
             $currentOption[$selProdId] = (array_key_exists($selProdId, $savedOptions)) ? $savedOptions[$selProdId] : '';
             $savedOptions = $currentOption;
         }
+        $savedOptions = array_filter($savedOptions);
         
         $fld = $frm->getField('option_comb_id');
         if (1 > count($savedOptions)) {
@@ -100,9 +103,11 @@ trait ProductDigitalDownloads
         }
 
         $canDelete = DigitalDownload::canDelete($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);
+        $canDoDigDownload = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, $this->userParentId, $this->siteLangId, true, true);
 
         $this->set('records', $records);
         $this->set('canDelete', $canDelete);
+        $this->set('canDoDigDownload', $canDoDigDownload);
         $this->set('recordId', $selProdId);
         $this->set('downloadrefType', Product::CATALOG_TYPE_INVENTORY);
 

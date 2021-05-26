@@ -171,6 +171,7 @@ class MyAppController extends FatController
                 'uploadImageLimit' => Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', $this->siteLangId),
                 'deleteAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
                 'unlinkAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
+                'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
@@ -497,7 +498,7 @@ class MyAppController extends FatController
         $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $siteLangId), 'addr_address2');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($siteLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('LBL_Select', $siteLangId));
         $fld->requirement->setRequired(true);
 

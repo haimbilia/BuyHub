@@ -253,7 +253,7 @@
                                                                 <td style="padding:10px;text-align: center;font-size:12px;"><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
                                                                 <?php $couponDiscount = CommonHelper::orderProductAmount($childOrder, 'DISCOUNT');
                                                                 $volumeDiscount = CommonHelper::orderProductAmount($childOrder, 'VOLUME_DISCOUNT');
-                                                                $totalSavings = $couponDiscount + $volumeDiscount; ?>
+                                                                $totalSavings = $childOrder['op_special_price'] + $couponDiscount + $volumeDiscount; ?>
                                                                 <td style="padding:10px;text-align: center;font-size:12px;">
                                                                     <?php echo CommonHelper::displayMoneyFormat($totalSavings); ?>
                                                                 </td>

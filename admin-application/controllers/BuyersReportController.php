@@ -106,7 +106,7 @@ class BuyersReportController extends AdminBaseController
                         case 'refundedTax':
                         case 'orderNetAmount':
 
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];

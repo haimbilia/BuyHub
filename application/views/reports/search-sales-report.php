@@ -60,20 +60,14 @@ foreach ($arrListing as $sn => $row) {
 
             case 'grossSales':
             case 'transactionAmount':
-            case 'inventoryValue':
-            case 'taxTotal':
+            case 'inventoryValue':           
             case 'adminTaxTotal':
             case 'sellerTaxTotal':
-            case 'shippingTotal':
-            case 'sellerShippingTotal':
-            case 'adminShippingTotal':
-            case 'discountTotal':
-            case 'couponDiscount':
+            case 'sellerShippingTotal':            
             case 'volumeDiscount':
-            case 'rewardDiscount':
             case 'refundedAmount':
-            case 'refundedShipping':
-            case 'refundedTax':
+            case 'refundedShippingFromSeller':
+            case 'refundedTaxFromSeller':           
             case 'orderNetAmount':
             case 'commissionCharged':
             case 'refundedCommission':

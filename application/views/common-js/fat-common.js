@@ -133,6 +133,7 @@ var fcom = {
 			}
 			var o = $.extend(true, {fOutMode:'json'}, options);
 			this.ajax(url, data, function(ans) {
+				fcom.closeAlertMessage();
 				if (ans.status != 1) {
 					$(document).trigger('close.mbsmessage');
 					$.systemMessage(ans.msg,'alert--danger');

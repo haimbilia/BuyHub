@@ -791,7 +791,8 @@ class ProductsController extends MyAppController
 
         /* Recommnended Products [ */
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
-        $recommendedProducts = $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
+        $recommendedProducts = (array) $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
+        $recommendedProducts = (0 < count(array_filter($recommendedProducts)) ? array_filter($recommendedProducts) : []);
         $this->set('recommendedProducts', $recommendedProducts);
         /* ]  */
 
@@ -808,7 +809,9 @@ class ProductsController extends MyAppController
             if (in_array($selprod_id, $recentlyViewed)) {
                 unset($recentlyViewed[$selprod_id]);
             }
-            $recentlyViewed = $this->getRecentlyViewedProductsDetail($recentlyViewed);
+
+            $recentlyViewed = (array) $this->getRecentlyViewedProductsDetail($recentlyViewed);
+            $recentlyViewed = (0 < count(array_filter($recentlyViewed)) ? array_filter($recentlyViewed) : []);
             $this->set('recentlyViewed', $recentlyViewed);
         }
 

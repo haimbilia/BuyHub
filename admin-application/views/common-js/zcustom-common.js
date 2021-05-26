@@ -10,7 +10,7 @@ $(document).ready(function () {
         return false;
     });
     $('[data-toggle="tooltip"]').tooltip();
-
+        
     var installJsColor = function () {
         if (0 < $('.jscolor').length) {
             $('.jscolor').each(function () {
@@ -19,7 +19,6 @@ $(document).ready(function () {
             jscolor.install();
         }
     };
-    installJsColor();
 
     $(document).ajaxComplete(function () {
         stylePhoneNumberFld('.phone-js');
@@ -131,7 +130,11 @@ $(document).ready(function () {
                 cls = 'alert--danger';
             }
             $.systemMessage(msg, cls, autoclose);
-        }
+        },
+
+        closeAlertMessage: function(msg, cls, autoclose) {
+            $.systemMessage.close();
+        },
     });
 
     $(document).bind('reveal.facebox', function () {
@@ -728,8 +731,8 @@ function queryStringToJSON(qs) {
 
 function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = false) {
     var inputList = document.querySelectorAll(element);
-    var country = '' == langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode;
-    inputList.forEach(function (input) {
+    var country = ('' == langLbl.defaultCountryCode || 'undefined' == typeof langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode);
+    inputList.forEach(function(input) {
         if (true == destroy) {
             $(input).removeAttr('style');
             var clone = input.cloneNode(true);
@@ -741,7 +744,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
             $(input).addClass('hasFlag-js');
             var elementName = ($(input).attr('name') + '_dcode');
             var dialCodeElement = $('input[name="' + elementName + '"]');
-            if (0 < dialCodeElement.length && '' != dialCodeElement.val()) {
+            if (0 < dialCodeElement.length && '' != dialCodeElement.val() && 'undefined' != typeof dialCodeElement.val()) {
                 var elementVal = dialCodeElement.val();
                 var countryCodePos = elementVal.indexOf('-');
                 if (0 < countryCodePos) {
@@ -758,8 +761,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
 
             var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
             if (0 < dialCodeElement.length) {
-                dialCodeElement.insertAfter(input);
-                if ('' == dialCodeElement.val()) {
+                if (typeof iti.getSelectedCountryData().dialCode !== 'undefined' && '' == dialCodeElement.val()) {
                     dialCodeElement.val(dCode);
                 }
             } else {
@@ -773,8 +775,11 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
             input.addEventListener('countrychange', function (e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
                     var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
-                    var parent = $(input).parent();
-                    parent.find('input[name="' + elementName + '"]').val(dCode);
+                    if ($('input[name="' + elementName + '"]').length < 1) {
+                        $.systemMessage($(input).attr('name') + " " + langLbl.dialCodeFieldNotFound, 'alert-danger');
+                        return;
+                    }
+                    $('input[name="' + elementName + '"]').val(dCode);
                 }
             });
         }

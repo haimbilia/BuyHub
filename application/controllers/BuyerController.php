@@ -171,7 +171,7 @@ class BuyerController extends BuyerBaseController
 
         $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
 
-        $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);        
         $srch->joinOrderProductShipment();
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
@@ -180,6 +180,7 @@ class BuyerController extends BuyerBaseController
         $srch->addOrderProductCharges();
         $srch->joinShippingCharges();
         $srch->joinAddress();
+        $srch->joinOrderProductSpecifics();
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '=', $orderId);
 
@@ -209,7 +210,7 @@ class BuyerController extends BuyerBaseController
             );
             $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request'));
         }
-
+        
         $rs = $srch->getResultSet();
 
         $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
