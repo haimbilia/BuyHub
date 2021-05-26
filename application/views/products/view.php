@@ -139,7 +139,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                 <button class="btn btn-outline-gray dropdown-toggle" type="button"
                                                     data-toggle="dropdown" data-display="static" aria-haspopup="true"
                                                     aria-expanded="false">
-                                                    <span>
+                                                    <span class="test"> 
                                                         <?php if ($option['option_is_color']) { ?>
                                                         <span class="colors"
                                                             style="background-color:<?php echo $selectedOptionColor; ?>;"></span>
@@ -706,8 +706,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             </div>
             <?php } ?>
 
-
-            <div id="itemRatings">
+           <div id="itemRatings">
             <div class="detail-content">
                 <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                 <?php echo $frmReviewSearch->getFormHtml(); ?>
