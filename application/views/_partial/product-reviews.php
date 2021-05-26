@@ -73,7 +73,7 @@ if (!empty($reviews)) {
 </div>
 
 <div class="listing__all"></div>
-<div id="loadMoreReviewsBtnDiv" class="align-center"></div>
+<div id="loadMoreReviewsBtnDiv" class="text-center"></div>
 
 <script>
 var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
