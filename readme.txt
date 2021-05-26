@@ -120,6 +120,7 @@ Fixes:
     => 053978 - Forget password label language issue in admin
     => 053985 - Stripe connect unable to debit site commission
     => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
+    => 054137 - Issue in product refund stats
 
 
 Enhancements :
