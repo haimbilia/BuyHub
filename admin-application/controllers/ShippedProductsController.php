@@ -216,7 +216,7 @@ class ShippedProductsController extends AdminBaseController
         $frm = new Form('frmShippedProductsSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, true, true);        
+        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
         $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
@@ -228,7 +228,7 @@ class ShippedProductsController extends AdminBaseController
     private function productsShippingForm()
     {
         $frm = new Form('productsShippingForm');
-        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, true, true);
+        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0,  true, true);
         $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'productId', 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
