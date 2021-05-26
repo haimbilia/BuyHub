@@ -379,8 +379,11 @@ class Tax extends MyAppModel
 
         if (empty($taxCategoryRow)) {           
             $taxDetail = self::getTaxCatByProductId($productId,0,1,['taxcat_code','taxcat_name','taxcat_identifier']); 
-            $taxCatName = !empty($taxDetail['taxcat_name']) ? $taxDetail['taxcat_name'] : $taxDetail['taxcat_identifier'];
-            $taxCatCode = !empty($taxDetail['taxcat_code']) ? $taxDetail['taxcat_code'] : $taxCatName;
+            $taxCatCode = "";
+            if (!empty($taxDetail)) {
+                $taxCatName = !empty($taxDetail['taxcat_name']) ? $taxDetail['taxcat_name'] : $taxDetail['taxcat_identifier'];
+                $taxCatCode = !empty($taxDetail['taxcat_code']) ? $taxDetail['taxcat_code'] : $taxCatName;
+            }
             
             $data = [
                 'status' => true,

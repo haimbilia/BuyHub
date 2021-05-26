@@ -132,7 +132,7 @@ class SalesReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Sales_Report', $this->siteLangId) . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Sales_Report', $this->adminLangId) . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
