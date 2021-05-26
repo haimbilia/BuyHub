@@ -5331,7 +5331,7 @@ class SellerController extends SellerBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $this->siteLangId), 'product_identifier');
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', Product::getProductTypes($this->siteLangId), Product::PRODUCT_TYPE_PHYSICAL, array(), '');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->siteLangId), 'product_attachements_with_inventory', (array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId)), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_attachements_at_inventory_level', $this->siteLangId), 'product_attachements_with_inventory', (array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId)), '', array(), '');
 
         $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand', $this->siteLangId), 'brand_name');
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
@@ -5785,16 +5785,16 @@ class SellerController extends SellerBaseController
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
         }
         
-        $requstedProd = 0;
+        $requstedProd = Product::CATALOG_TYPE_PRIMARY;
         $recordId = $productId;
         
         if (0 < $preqId) {
             $recordId = $preqId;
-            $requstedProd = 1;
+            $requstedProd = Product::CATALOG_TYPE_REQUEST;
         }
 
-        DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId);
-
+        $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
+        
         $frm = DigitalDownload::getDownloadForm($this->siteLangId);
         
         if (0 < $preqId) {
@@ -5840,6 +5840,7 @@ class SellerController extends SellerBaseController
         $frm->fill($frmData);
 
         $this->set('downloadFrm', $frm);
+        $this->set('canDo', $canDo);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'seller/download-setup-frm.php');
@@ -5873,8 +5874,12 @@ class SellerController extends SellerBaseController
         }
         
         if (Product::CATALOG_TYPE_INVENTORY == $requstedProd) {
-            DigitalDownload::canDo($recordId, $requstedProd, 0, $this->siteLangId, false);
+            $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true, true);
 
+            if (false === $canDo) {
+                Message::addErrorMessage(Labels::getLabel("LBL_Attachments_or_links_Not_allowed_with_inventory", $this->siteLangId));
+                FatUtility::dieJsonError(Message::getHtml());
+            }
             $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code'));
             if ($selProdData == false || ($selProdData && $selProdData['selprod_user_id'] !== $this->userParentId)) {
                 Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
@@ -5888,7 +5893,13 @@ class SellerController extends SellerBaseController
                 $optionComb = '0';
             }
         } else {
-            DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId);
+            $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
+
+            if (false === $canDo) {
+                Message::addErrorMessage(Labels::getLabel("LBL_Attachments_or_links_allowed_with_inventory", $this->siteLangId));
+                FatUtility::dieJsonError(Message::getHtml());
+            }
+
         }
         
         /* $post = FatApp::getPostedData(); */

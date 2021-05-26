@@ -5,8 +5,11 @@ $arr_flds = array(
     'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
     // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
     'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId),
-    'action' => Labels::getLabel('LBL_Action', $siteLangId),
 );
+
+if (true === $canDoDigDownload) {
+    $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);
+}
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
