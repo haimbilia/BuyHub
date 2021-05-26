@@ -3,7 +3,7 @@ class ShippingProfile extends MyAppModel
 {
     const DB_TBL = 'tbl_shipping_profile';
     const DB_TBL_PREFIX = 'shipprofile_';
-    
+
     public const DB_TBL_LANG = 'tbl_shipping_profile_lang';
     public const DB_TBL_LANG_PREFIX = 'shipprofilelang_';
 
@@ -16,7 +16,7 @@ class ShippingProfile extends MyAppModel
     public static function getSearchObject($langId = 0, $isActive = false)
     {
         $srch = new SearchBase(static::DB_TBL, 'sprofile');
-        
+
         if ($langId > 0) {
             $srch->joinTable(
                 static::DB_TBL_LANG,
@@ -32,7 +32,7 @@ class ShippingProfile extends MyAppModel
         return $srch;
     }
 
-    public static function  getProfileArr($langId, $userId, $assoc = true, $isActive = false, $default = false)
+    public static function  getProfileArr(int $langId, $userId, $assoc = true, $isActive = false, $default = false)
     {
         $srch = self::getSearchObject($langId, $isActive);
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
@@ -49,7 +49,7 @@ class ShippingProfile extends MyAppModel
         if (true == $default) {
             $srch->addCondition('shipprofile_default', '=', applicationConstants::YES);
         }
-
+        
         if ($assoc) {
             return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         } else {
@@ -131,7 +131,7 @@ class ShippingProfile extends MyAppModel
 
         return $shipProZoneId;
     }
-    
+
     public static function getShippingZoneArr(int $userId): array
     {
         $shippingZoneSrch = ShippingZone::getSearchObject();
@@ -206,7 +206,7 @@ class ShippingProfile extends MyAppModel
         if (true == $createDefaultRates && 0 < $shipProZoneId && 0 < $shippingProfileId) {
             self::setDefaultRates($shipProZoneId, $shippingProfileId);
         }
-        
+
         if (0 < $shippingProfileId && true == $createDefaultShipProfile) {
             $srch = new ProductSearch(CommonHelper::getLangId(), null, null, false, false);
             $srch->joinProductShippedBySeller($userId);
