@@ -97,7 +97,7 @@ class ShippedProductsController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditShippedProducts(0, true));
         $this->_template->render(false, false);
     }
-
+    
     public function viewSellerList($productId, $adminShip = false)
     {
         $this->objPrivilege->canViewShippedProducts();
@@ -107,55 +107,39 @@ class ShippedProductsController extends AdminBaseController
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
+        $data = FatApp::getPostedData();
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1); 
+        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
         /* Get all Products */
-        $allProd = new ShippedProducts($this->adminLangId);
-        $allProd->joinShipProfileProd();
-        $allProd->joinShippingProfile();
-        $allProd->joinSelProdTable();
-        $allProd->joinSellerShop();
-        $allProd->joinUserTable();
-        $allProd->addProductDeletedCondition();
-        $allProd->addPhyProductCheckCondition();
-        $allProd->addCondition('tp.product_id', '=', $productId);
-        // $allProd->addCondition('sppro.shippro_user_id', '!=', '0');
-        $allProd->addMultipleFields(array('u.user_name, u.user_id, shop.shop_identifier,  COALESCE(spprof_l.shipprofile_name, spprof.shipprofile_identifier) as shipprofile_name'));
-        /* End here */
-
-        /* Get Catelog shipped by seller */
-        $selProd = clone $allProd;
-        $selProd->joinShippedBySeller();
-        $resu = $selProd->getResultSet();
-        $selRecords = FatApp::getDb()->fetchAll($resu);
-        $mainArr = [];
-        if (!empty($selRecords)) {
-            $selArr = array_unique(array_column($selRecords, 'user_name'));
-            $shopArr = array_unique(array_column($selRecords, 'shop_identifier'));
-            // $shipProdArr = array_unique(array_column($selRecords, 'shipprofile_name'));
-            $mainArr = array_combine($selArr, $shopArr);
+        $srch = new ShippedProducts($this->adminLangId);
+        $srch->joinShipProfileProd();
+        $srch->joinShippingProfile();
+        $srch->joinSelProdTable();
+        $srch->joinSellerShop();
+        $srch->joinUserTable();
+        $srch->addProductDeletedCondition();
+        $srch->addPhyProductCheckCondition();
+        $srch->addCondition('tp.product_id', '=', $productId);      
+        $srch->addMultipleFields(array('u.user_name, u.user_id, shop.shop_identifier'));
+        $srch->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT OUTER JOIN', 'psbs.psbs_product_id = tp.product_id and psbs.psbs_user_id = sp.selprod_user_id', 'psbs');
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addGroupBy('u.user_id');
+        
+        if( true == $adminShip){
+            $srch->addCondition('psbs.psbs_product_id', 'is', 'mysql_func_NULL', 'AND', true);
+        }else{
+            $srch->addCondition('psbs.psbs_product_id', 'is not', 'mysql_func_NULL', 'AND', true);
         }
-        /* End here */
-
-        /* Get Catelog shipped by Admin */
-        if ($adminShip == true) {
-            $userIdArr = array_unique(array_column($selRecords, 'user_id'));
-            $selProd = clone $allProd;
-            if (!empty($userIdArr)) {
-                $selProd->addCondition('sp.selprod_user_id', 'NOT IN', $userIdArr);
-            }
-            $resu = $selProd->getResultSet();
-            $notShipRecords = FatApp::getDb()->fetchAll($resu);
-            $maindataArr = [];
-            if (!empty($notShipRecords)) {
-                $notSelShipArr = array_unique(array_column($notShipRecords, 'user_name'));
-                $selshopArr = array_unique(array_column($notShipRecords, 'shop_identifier'));
-                $maindataArr = array_combine($notSelShipArr, $selshopArr);
-            }
-            $this->set('notSelShipArr', $maindataArr);
-        }
-        /* End here */
-        $this->set('sellerNameArr', $mainArr);
-        $this->set('sellerNameArr', $mainArr);
+        
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+   
+        $this->set("arrListing", $records);
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
         $this->set('adminShip', $adminShip);
         $this->set('adminLangId', $this->adminLangId);
         $this->_template->render(false, false);
