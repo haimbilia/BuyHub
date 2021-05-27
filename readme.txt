@@ -122,6 +122,7 @@ Fixes:
     => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
     => 054137 - Issue in product refund stats
     => 054183 - on admin order cancellation page roundoff error coming
+    => 054242 - paystack gateway not supporting ZAR currency
 
 
 Enhancements :
