@@ -317,7 +317,10 @@
                     $objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                   <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Reports', $adminLangId); ?></a>
                       <ul>
@@ -363,8 +366,8 @@
                                       <li><a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>"><?php echo Labels::getLabel('LBL_Earnings', $adminLangId); ?></a></li>
                                       <li><a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>"><?php echo Labels::getLabel('LBL_Profit_by_Products', $adminLangId); ?></a></li>
                                       <li><a href="<?php echo UrlHelper::generateUrl('PreferredPaymentMethod'); ?>"><?php echo Labels::getLabel('LBL_Preferred_Payment_Method', $adminLangId); ?></a></li>
-                                      <?php /*  ?> <li><a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>"><?php echo Labels::getLabel('LBL_Payout', $adminLangId); ?></a></li>
-<?php  */?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>"><?php echo Labels::getLabel('LBL_Payout', $adminLangId); ?></a></li>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>"><?php echo Labels::getLabel('LBL_Transaction_Report', $adminLangId); ?></a></li>
                                   </ul>
                               </li>
                           <?php }  ?>
@@ -385,19 +388,23 @@
                           <?php if ($objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('CommissionReport'); ?>"><?php echo Labels::getLabel('LBL_Commission', $adminLangId); ?></a></li>
                           <?php }  */ ?>
+                          <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Performance_Report', $adminLangId); ?></a>
+                              <ul>
+                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('TopProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Products', $adminLangId); ?></a></li>
+                                  <?php }    ?>
+                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('BadProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Most_Refunded_Products', $adminLangId); ?></a></li>
+                                  <?php }    ?>
+                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('TopCategoriesReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Categories', $adminLangId); ?></a></li>
+                                  <?php }    ?>
+                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('BadCategoriesReport'); ?>"><?php echo Labels::getLabel('LBL_Bad_Categories', $adminLangId); ?></a></li>
+                                  <?php }    ?>
+                              </ul>
+                          </li>
 
-                          <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('TopProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Products', $adminLangId); ?></a></li>
-                          <?php }    ?>
-                          <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('BadProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Most_Refunded_Products', $adminLangId); ?></a></li>
-                          <?php }    ?>
-                          <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('TopCategoriesReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Categories', $adminLangId); ?></a></li>
-                          <?php }    ?>
-                          <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('BadCategoriesReport'); ?>"><?php echo Labels::getLabel('LBL_Bad_Categories', $adminLangId); ?></a></li>
-                          <?php }    ?>
                           <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>"><?php echo Labels::getLabel('LBL_Discount_Coupons', $adminLangId); ?></a></li>
                           <?php }    ?>
