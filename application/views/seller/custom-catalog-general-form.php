@@ -39,10 +39,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
+            <div class="<?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'col-md-6' : 'col-md-3');?>" id="prod-type-js">
                 <div class="field-set">
                     <div class="caption-wraper">
                         <label class="field_label">
@@ -59,7 +56,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div <?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'style="display:none;"' : '');?> class="col-md-3 download-attachements-js">
                 <div class="field-set">
                     <div class="caption-wraper">
                         <label class="field_label">
@@ -456,6 +453,23 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             },
             select: function(event, ui) {
                     $('input[name=\'ptt_taxcat_id\']').val(ui.item.id);
+            }
+        });
+
+        var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
+        var PRODUCT_TYPE_PHYSICAL = '<?php echo Product::PRODUCT_TYPE_PHYSICAL; ?>';
+
+        $('select[name=\'product_type\']').change(function() {
+            if ($(this).val() == PRODUCT_TYPE_DIGITAL) {
+                $("#prod-type-js").removeClass('col-md-6');
+                $("#prod-type-js").addClass('col-md-3');
+                $(".download-attachements-js").show();
+            } else {
+                $("#prod-type-js").removeClass('col-md-3');
+                if(!$("#prod-type-js").hasClass('col-md-6')) {
+                    $("#prod-type-js").addClass('col-md-6');
+                }
+                $(".download-attachements-js").hide();
             }
         });
     });

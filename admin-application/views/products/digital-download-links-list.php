@@ -42,7 +42,7 @@ foreach ($links as $sn => $row) {
                 $td->appendElement('plaintext', array(), $val, true);
                 break;
             case 'action':
-                $td->appendElement(
+                /* $td->appendElement(
                     "a",
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
@@ -51,7 +51,7 @@ foreach ($links as $sn => $row) {
                     ),
                     '<i class="fa fa-edit  icon"></i>',
                     true
-                );
+                ); */
 
                 $td->appendElement(
                     "a",

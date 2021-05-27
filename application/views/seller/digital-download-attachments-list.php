@@ -33,7 +33,7 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement(
                     "a",
                     array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'class' => 'btn',
                         'title' => Labels::getLabel('LBL_Delete', $siteLangId),
                         'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $recordId, $requestType, 0, $row['mainfile'])),
                         'target' => '_blank'
@@ -43,18 +43,22 @@ foreach ($attachments as $sn => $row) {
                 );
                 break;
             case 'preview':
-                $td->appendElement('plaintext', array(), $row[$key], true);
-                $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_download', $siteLangId),
-                        'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $requestType, 1, $row['preview'])),
-                        'target' => '_blank'
-                    ),
-                    '<i class="fa fa-download  icon"></i>',
-                    true
-                );
+                if (0 < $row['prev_afile_id']) {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                    $td->appendElement(
+                        "a",
+                        array(
+                            'class' => 'btn',
+                            'title' => Labels::getLabel('LBL_download', $siteLangId),
+                            'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $requestType, 1, $row['preview'])),
+                            'target' => '_blank'
+                        ),
+                        '<i class="fa fa-download  icon"></i>',
+                        true
+                    );
+                } else {
+                    $td->appendElement('plaintext', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
+                }
                 break;
             case 'pddr_options_code':
                 if (array_key_exists($row['pddr_options_code'], $options)) {

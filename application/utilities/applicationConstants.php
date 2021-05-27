@@ -319,12 +319,12 @@ class applicationConstants
 
     public static function allowedVideoFileExtensions()
     {
-        return array('qt', 'mov', 'mp4');
+        return array(/* 'qt',  */ 'mov', 'mp4', 'webm');
     }
 
     public static function allowedVideoMimeTypes()
     {
-        return array('video/quicktime', 'video/mp4', 'video/x-m4v');
+        return array('video/quicktime', 'video/mp4', 'video/x-m4v', 'video/webm');
     }
 
 

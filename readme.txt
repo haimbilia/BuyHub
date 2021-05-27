@@ -271,3 +271,4 @@ Released Version:
 
 Tasks:
     task-84719 Preview module for digital files
+    task-85619 Adding files when digital order is delivered

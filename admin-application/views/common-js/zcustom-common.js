@@ -130,7 +130,11 @@ $(document).ready(function () {
                 cls = 'alert--danger';
             }
             $.systemMessage(msg, cls, autoclose);
-        }
+        },
+
+        closeAlertMessage: function(msg, cls, autoclose) {
+            $.systemMessage.close();
+        },
     });
 
     $(document).bind('reveal.facebox', function () {
