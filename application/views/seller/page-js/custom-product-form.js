@@ -1419,7 +1419,7 @@ saveDownloadLinks = function ()
         data = data + '&option_comb_id=0';
     }
 
-    fcom.displayProcessing(langLbl.requestProcessing);
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
     fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function(t) {
         var ans = $.parseJSON(t);
@@ -1449,7 +1449,7 @@ saveDownloadFiles = function()
         data.append('preview_file', file);
     });
 
-    fcom.displayProcessing(langLbl.requestProcessing);
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
     $.ajax({
         url : fcom.makeUrl('Seller', 'setupDigitalDownloads'),
@@ -1494,7 +1494,7 @@ saveDigitalPreviewFile = function()
         data.append('preview_file', file);
     });
 
-    fcom.displayProcessing(langLbl.requestProcessing);
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
     $.ajax({
         url : fcom.makeUrl('Seller', 'setupDigitalPreviewFile'),

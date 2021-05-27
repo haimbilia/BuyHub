@@ -374,7 +374,7 @@ $(document).on('click', '.tabs_002', function(){
 			data = data + '&selprod_id=' + optionCombi;
 		}
 
-		fcom.displayProcessing(langLbl.requestProcessing);
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
 		fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function(t) {
 			var ans = $.parseJSON(t);
@@ -417,8 +417,8 @@ $(document).on('click', '.tabs_002', function(){
 		
 		data.append('prod_ref_type', 1);
 
-		fcom.displayProcessing(langLbl.requestProcessing);
-
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+		
 		$.ajax({
 			url : fcom.makeUrl('Seller', 'setupDigitalDownloads'),
 			type: "POST",
@@ -464,6 +464,8 @@ $(document).on('click', '.tabs_002', function(){
 			data.append('preview_file', file);
 		});
 
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+
 		$.ajax({
 			url : fcom.makeUrl('Seller', 'setupDigitalPreviewFile'),
 			type: "POST",
@@ -476,7 +478,7 @@ $(document).on('click', '.tabs_002', function(){
 					fcom.displayErrorMessage(ans.msg);
 					return;
 				}
-				$.systemMessage( ans.msg,'alert alert--success' );
+				fcom.displaySuccessMessage(ans.msg);
 				downloadsForm(prodId, selProdId, true);
 			},
 			error: function(jqXHR, textStatus, errorThrown){
