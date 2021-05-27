@@ -105,18 +105,18 @@
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['roundingOff']); ?></span>
                         </li>
                     <?php } ?>
-                    <?php $orderNetAmt = $cartSummary['orderNetAmount'];
-                    /* if (0 == $shippingAddress) $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];  */ ?>
-                    <li class="hightlighted">
-                        <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
-                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
-                    </li>
                     <?php if(0 < $cartSummary['totalSaving']){ ?>
                     <li class="list-group-item hightlighted">
                         <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
                         <span class="mleft-auto"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
                     </li>
                     <?php } ?>
+                    <?php $orderNetAmt = $cartSummary['orderNetAmount'];
+                    /* if (0 == $shippingAddress) $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];  */ ?>
+                    <li class="hightlighted">
+                        <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
+                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
+                    </li>                    
 
                 </ul>
                 <?php /*  ?><p class="earn-points"><svg class="svg" width="20px" height="20px">
