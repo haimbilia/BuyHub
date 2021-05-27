@@ -1963,10 +1963,6 @@ class ConfigurationsController extends AdminBaseController
 
                 break;
 
-            case Configurations::FORM_PPC:
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_products_home_page_caption', $this->adminLangId), 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_' . $langId);
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_shops_home_page_caption', $this->adminLangId), 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_' . $langId);
-                break;
             case Configurations::FORM_SERVER:
                 $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Maintenance_Text', $this->adminLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
                 $fld->requirements()->setRequired(true);
