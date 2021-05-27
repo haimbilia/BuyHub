@@ -2143,7 +2143,7 @@ class UsersController extends AdminBaseController
         }
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->adminLangId));
         //$fld->requirement->setRequired(true);
 
@@ -2273,7 +2273,7 @@ class UsersController extends AdminBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_City', $this->adminLangId), 'addr_city');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($langId);
+        $countriesArr = $countryObj->getCountriesAssocArr($langId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 

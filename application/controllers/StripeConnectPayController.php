@@ -534,6 +534,10 @@ class StripeConnectPayController extends PaymentController
             $comments = Labels::getLabel($msg, $this->siteLangId);
             $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
             Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $netSellerAmount, $this->siteLangId, $comments, $op['op_id']);
+            
+            $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
+            $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
+            Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
 
             if (!empty($accountId)) {
                 $charge = [
@@ -572,10 +576,6 @@ class StripeConnectPayController extends PaymentController
                 $comments = $comments . ' ' . Labels::getLabel('MSG_TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
                 $comments = CommonHelper::replaceStringData($comments, ['{account-id}' => $accountId]);
                 Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, $firstTransferAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
-
-                $comments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
-                $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
-                Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $comments, $op['op_id']);
             }
 
             if (0 < $pendingTransferAmount) {

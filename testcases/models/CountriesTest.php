@@ -72,25 +72,25 @@ class CountriesTest extends YkModelTest
     /**
      * @test
      *
-     * @dataProvider feedGetCountriesArr
+     * @dataProvider feedGetCountriesAssocArr
      * @param  int $langId
      * @param  int $isActive
      * @param  string $idCol
      * @return void
      */
-    public function getCountriesArr($expected, $langId, $isActive, $idCol = 'country_id')
+    public function getCountriesAssocArr($expected, $langId, $isActive, $idCol = 'country_id')
     {
         $this->expectedReturnType(YkAppTest::TYPE_ARRAY);
-        $result = $this->execute($this->class, [], 'getCountriesArr', [$langId, $isActive, $idCol]);
+        $result = $this->execute($this->class, [], 'getCountriesAssocArr', [$langId, $isActive, $idCol]);
         $this->assertIsArray($result);
         $this->assertEquals($expected, count($result));
     }    
     /**
-     * feedGetCountriesArr
+     * feedgetCountriesAssocArr
      *
      * @return array
     */
-    public function feedGetCountriesArr()
+    public function feedGetCountriesAssocArr()
     {  
         return [
             [2, 1, 'test'],   //Valid langId, Invalid isActive

@@ -543,7 +543,7 @@ class CommonHelper extends FatUtility
     {
         //$currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyValue = self::getCurrencyValue();
-        $defaultCurrencyValue = $val / $currencyValue;
+        $defaultCurrencyValue = ((float) $val) / $currencyValue;
         return static::displayMoneyFormat($defaultCurrencyValue, $format, true, $displaySymbol);
     }
 

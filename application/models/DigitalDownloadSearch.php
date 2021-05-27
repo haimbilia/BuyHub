@@ -92,17 +92,21 @@ class DigitalDownloadSearch extends SearchBase
         return $row;
     }
 
-    public static function getAttachments($recordId, $recordType, $optionCombi = '0', $langId = 0, $attr = null)
+    public static function getAttachments($recordId, $recordType, $optionCombi = null, $langId = 0, $attr = null)
     {
         $srch = static::getSearchObject();
 
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $recordId);
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $recordType);
         
-        $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-        /* if ('0' != $optionCombi) {
-            $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-        } */
+        /* $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi); */
+        if (null != $optionCombi) {
+            if (is_array($optionCombi)) {
+                $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
+            } elseif(is_string($optionCombi) && '0' != $optionCombi) {
+                $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+            }
+        }
         
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
         $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
@@ -147,7 +151,7 @@ class DigitalDownloadSearch extends SearchBase
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
     
-    public static function getLinks($recordId, $recordType, $optionCombi = '0', $langId = 0, $attr = null)
+    public static function getLinks($recordId, $recordType, $optionCombi = null, $langId = 0, $attr = null)
     {
         $srch = static::getSearchObject();
 
@@ -156,10 +160,14 @@ class DigitalDownloadSearch extends SearchBase
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $recordId);
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $recordType);
         
-        $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-        /* if ($optionCombi != '0') {
-            $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-        } */
+        /* $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi); */
+        if (null != $optionCombi) {
+            if (is_array($optionCombi)) {
+                $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
+            } elseif(is_string($optionCombi) && '0' != $optionCombi) {
+                $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+            }
+        }
 
         if (0 < $langId) {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);

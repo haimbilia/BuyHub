@@ -13,6 +13,7 @@ class EarningsReportController extends AdminBaseController
     {
         $flds = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($flds);
+        $frmSearch->fill(array('sortBy' => 'date', 'sortOrder' => 'DESC'));
         $this->set('frmSearch', $frmSearch);
         $this->_template->render();
     }
@@ -25,24 +26,61 @@ class EarningsReportController extends AdminBaseController
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'date');
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
         $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
 
         /* Promotion Charges */
-        $srch = new SearchBase(Promotion::DB_TBL_CHARGES, 'pc');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addGroupBy('Date(pcharge_date)');
-        $srch->addMultipleFields(['pc.pcharge_user_id', 'SUM(pc.pcharge_charged_amount) as promotionCharged']);
+        $pSrch = new SearchBase(Promotion::DB_TBL_CHARGES, 'pc');
+        $pSrch->doNotCalculateRecords();
+        $pSrch->doNotLimitRecords();
+        $pSrch->addGroupBy('Date(pc.pcharge_date)');
+        $pSrch->addMultipleFields(['Date(pc.pcharge_date) as date']);
+
+        /* Admin Sales Earnings */
+        $opSrch = new Report();
+        $opSrch->addMultipleFields(['DATE(o.order_date_added) as date']);
+        $opSrch->joinOrders();
+        $opSrch->joinPaymentMethod();
+        $opSrch->joinOtherCharges(true);
+        $opSrch->setPaymentStatusCondition();
+        $opSrch->setCompletedOrdersCondition();
+        $opSrch->excludeDeletedOrdersCondition();
+        $opSrch->setGroupBy('DATE(o.order_date_added)');
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opSrch->setDateCondition($fromDate, $toDate);;
+
+        /* Subscription earning */
+        $sSrch = new OrderSubscriptionSearch($this->adminLangId, true, true);
+        $sSrch->joinSubscription();
+        $sSrch->joinOrderUser();
+        $sSrch->joinOtherCharges();
+        $sSrch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $sSrch->addGroupBy('DATE(o.order_date_added)');
+        $sSrch->addMultipleFields(['DATE(o.order_date_added) as date']);
+        $sSrch->doNotCalculateRecords();
+        $sSrch->doNotLimitRecords();
+
+        $query = $pSrch->getQuery() . ' UNION ALL ' . $opSrch->getQuery() . ' UNION ALL ' . $sSrch->getQuery();
+        $srch = new SearchBase("(" . $query . ") as tmp");
+        $srch->addMultipleFields(['tmp.date', 'psrch.promotionCharged', 'opSrch.adminSalesEarnings', 'sSrch.amountPaid', 'ifnull(psrch.promotionCharged,0) + ifnull(opSrch.adminSalesEarnings,0) + ifnull(sSrch.amountPaid,0) as totalEarning']);
+        $pSrch->addMultipleFields(['SUM(pc.pcharge_charged_amount) as promotionCharged']);
+        $opSrch->addMultipleFields(['sum((IFNULL(op_commission_charged,0) - IFNULL(op_refund_commission,0))) as adminSalesEarnings']);
+        $sSrch->addMultipleFields(['sum(ossubs_price + ifnull(op_other_charges,0)) as amountPaid']);      
+        $srch->joinTable('(' . $pSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = psrch.date', 'psrch');
+        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = opSrch.date', 'opSrch');
+        $srch->joinTable('(' . $sSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = sSrch.date', 'sSrch');
+        $srch->addGroupBy('date');
+        
         if (!empty($fromDate)) {
-            $srch->addCondition('u.user_regdate', '>=', $fromDate . ' 00:00:00');
+            $srch->addCondition('tmp.date', '>=', $fromDate . ' 00:00:00');
         }
 
         if (!empty($toDate)) {
-            $srch->addCondition('u.user_regdate', '<=', $toDate . ' 23:59:59');
+            $srch->addCondition('tmp.date', '<=', $toDate . ' 23:59:59');
         }
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
@@ -54,22 +92,6 @@ class EarningsReportController extends AdminBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-
-
-         /* Admin Sales Earnings */
-        $srch = new Report(0, ['adminSalesEarnings']);
-        $srch->joinOrders();
-        $srch->joinPaymentMethod();
-        $srch->joinOtherCharges(true);
-        $srch->setPaymentStatusCondition();
-        $srch->setCompletedOrdersCondition();
-        $srch->excludeDeletedOrdersCondition();
-        $srch->setGroupBy('orderDate');
-        $srch->setOrderBy($sortBy, $sortOrder);
-        $srch->setDateCondition($fromDate, $toDate);
-
-
-
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -87,17 +109,9 @@ class EarningsReportController extends AdminBaseController
                         case 'listserial':
                             $arr[] = $count;
                             break;
-                        case 'affiliateLink':
-                            $arr[] = UrlHelper::generateFullUrl('Home', 'referral', [$row['user_referral_code']], CONF_WEBROOT_FRONTEND);
-                            break;
-                        case 'name':
-                            $name = $row['name'] . "\n" . $row['email'];
-                            $arr[] = $name;
-                            break;
-                        case 'availableBalance':
-                        case 'totAffilateRevenue':
-                        case 'totAffilateSignupRevenue':
-                        case 'totAffilateOrdersRevenue':
+                        case 'amountPaid':
+                        case 'promotionCharged':
+                        case 'adminSalesEarnings':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
                             break;
                         default:
@@ -110,14 +124,14 @@ class EarningsReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Affiliates_Report_{reportgenerationdate}", $this->adminLangId)) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Earnings_Report', $this->siteLangId) . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-
+        echo $srch->getError();
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
@@ -162,10 +176,10 @@ class EarningsReportController extends AdminBaseController
         if (!$earningsReportsCacheVar) {
             $arr = [
                 'date' => Labels::getLabel('LBL_Date', $this->adminLangId),
-                'subscriptionCharges' => Labels::getLabel('LBL_Subscription_Charges', $this->adminLangId),
-                'commisionCharges' => Labels::getLabel('LBL_Commision_Charges', $this->adminLangId),
-                'advertisementCharges' => Labels::getLabel('LBL_Advertisement_Charges', $this->adminLangId),
-                'totalEarnings' => Labels::getLabel('LBL_Total_Earnings', $this->adminLangId)
+                'amountPaid' => Labels::getLabel('LBL_Subscription_Charges', $this->adminLangId),
+                'promotionCharged' => Labels::getLabel('LBL_Advertisement_Charges', $this->adminLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId),
+                'totalEarning' => Labels::getLabel('LBL_Total_Earnings', $this->adminLangId),
             ];
             FatCache::set('earningsReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
         } else {

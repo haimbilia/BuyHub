@@ -48,6 +48,15 @@
                     <?php //if (count($levelItems['products']) > 0 && $pickUpBy == 0) {
                     if (isset($levelItems['products']) && count($levelItems['products']) > 0 && $pickUpBy == 0) {
                         $productData = current($levelItems['products']);
+                        $seletedSlotId = '';
+                        $seletedSlotDate = '';
+                        $seletedAddrId = '';
+                        if (!empty($levelItems['pickup_address'])) { 
+                            $address = $levelItems['pickup_address'];
+                            $seletedSlotId = $address['time_slot_id'];
+                            $seletedSlotDate = $address['time_slot_date'];
+                            $seletedAddrId = $address['addr_id'];                        
+                        }
                     ?>
                         <li class="shipping-select">
                             <div class="shop-name">
@@ -61,7 +70,7 @@
 
                                 <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>" data-addr-id="<?php echo $seletedAddrId; ?>">
                                     <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
-                                    <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotDate; ?>">
+                                    <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
                                     <?php if (count($levelItems['pickup_options']) > 0) { ?>
                                         <a class="text-link mr-2 pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, 0)">
                                             <?php
@@ -128,7 +137,7 @@
                                             </h6>
                                             <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>" data-addr-id="<?php echo $seletedAddrId; ?>">
                                                 <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
-                                                <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotDate; ?>">
+                                                <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
                                                 <?php if (count($levelItems['pickup_options']) > 0) { ?>
                                                     <a class="text-link mr-2 pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $product['shop_id']; ?>)">
                                                         <?php

@@ -71,7 +71,7 @@ class SubscriptionSellerReportController extends AdminBaseController
                             $arr[] = $count;
                             break;
                         case 'amountPaid':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         case 'ossubs_from_date':
                         case 'ossubs_till_date':
@@ -126,7 +126,7 @@ class SubscriptionSellerReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addTextBox(Labels::getLabel("LBL_Name", $this->adminLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->adminLangId), 'keyword');
         if (!empty($fields)) {
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
 

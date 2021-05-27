@@ -254,13 +254,10 @@ class ProductsController extends MyAppController
                 $conditionSrch->setPageSize(1);
                 $conditionSrch->addMultipleFields(array('selprod_condition'));
                 $conditionSrch->addCondition('selprod_condition', '=', $key);
-                /* if needs to show product counts under any condition[ */
-                //$conditionSrch->addFld('count(selprod_condition) as totalProducts');
-                /* ] */
                 $conditionRs = $conditionSrch->getResultSet();
                 $conditionArr = $db->fetch($conditionRs);
                 if (!empty($conditionArr)) {
-                    $conditionsArr[] = $db->fetch($conditionRs);
+                    $conditionsArr[] = $conditionArr;
                 }
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
@@ -349,7 +346,7 @@ class ProductsController extends MyAppController
                 $shopCatFilters = true;
             }
         }
-
+        
         $this->set('productFiltersArr', $productFiltersArr);
         $this->set('headerFormParamsAssocArr', $headerFormParamsAssocArr);
         $this->set('categoriesArr', $categoriesArr);
@@ -794,7 +791,8 @@ class ProductsController extends MyAppController
 
         /* Recommnended Products [ */
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
-        $recommendedProducts = $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
+        $recommendedProducts = (array) $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
+        $recommendedProducts = (0 < count(array_filter($recommendedProducts)) ? array_filter($recommendedProducts) : []);
         $this->set('recommendedProducts', $recommendedProducts);
         /* ]  */
 
@@ -804,14 +802,16 @@ class ProductsController extends MyAppController
         //$this->setRecentlyViewedItem($selprod_id);
 
         if (false === MOBILE_APP_API_CALL) {
-            $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/xzoom.js', 'js/magnific-popup.js'));
+            $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/xzoom.js', 'js/magnific-popup.js', 'js/jw-player.js'));
         } else {
             $recentlyViewed = FatApp::getPostedData('recentlyViewed');
             $recentlyViewed = is_array($recentlyViewed) && 0 < count($recentlyViewed) ? FatUtility::int($recentlyViewed) : array();
             if (in_array($selprod_id, $recentlyViewed)) {
                 unset($recentlyViewed[$selprod_id]);
             }
-            $recentlyViewed = $this->getRecentlyViewedProductsDetail($recentlyViewed);
+
+            $recentlyViewed = (array) $this->getRecentlyViewedProductsDetail($recentlyViewed);
+            $recentlyViewed = (0 < count(array_filter($recentlyViewed)) ? array_filter($recentlyViewed) : []);
             $this->set('recentlyViewed', $recentlyViewed);
         }
 
@@ -2113,7 +2113,6 @@ class ProductsController extends MyAppController
             $requestType = Product::CATALOG_TYPE_PRIMARY;
         }
         
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $aFileId, $recordId, $requestType], 1);
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, 1);
         if (1 > count($file)) {
             FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));

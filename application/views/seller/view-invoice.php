@@ -208,7 +208,7 @@
                                                 <table width="100%" border="0" cellpadding="10px" cellspacing="0">
                                                     <tbody>
                                                         <tr>
-                                                            <th style="padding:10px; font-size:12px;text-align: left; border-bottom:1px solid #ddd; "><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
+                                                            <th style="padding:10px; font-size:12px;text-align: left; border-bottom:1px solid #ddd; " colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1: 2;  ?>"><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
                                                             <?php if ($orderDetail['op_tax_collected_by_seller']) { ?>
                                                                 <th style="padding:10px; font-size:12px;text-align: center; border-bottom:1px solid #ddd;">
                                                                     <?php if (FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
@@ -225,7 +225,7 @@
                                                         </tr>
                                                         <tr>
                                                             <?php $volumeDiscount = CommonHelper::orderProductAmount($orderDetail, 'VOLUME_DISCOUNT'); ?>
-                                                            <td style="padding:10px; font-size:12px;text-align: left;">
+                                                            <td style="padding:10px; font-size:12px;text-align: left;" colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1: 2;  ?>">
                                                                 <?php
                                                                 echo ($orderDetail['op_selprod_title'] != '') ? $orderDetail['op_selprod_title'] : $orderDetail['op_product_name'];
                                                                 echo '<br>';
@@ -354,7 +354,7 @@
                                                     <table width="100%" border="0" cellpadding="10px" cellspacing="0" style="">
                                                         <tbody>
                                                             <tr>
-                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="4"><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
+                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="<?php echo (2 + count($orderDetail['taxOptions']) );?> "><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
                                                             </tr>
                                                             <tr>
                                                                 <th style="padding:10px; font-size:12px;border:1px solid #ddd;"><?php echo Labels::getLabel('LBL_Tax', $siteLangId); ?></th>

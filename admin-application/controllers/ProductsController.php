@@ -876,7 +876,7 @@ class ProductsController extends AdminBaseController
         $productId = FatUtility::int($productId);
         $attachDownloadsWithInv = 0;
         $productType = Product::PRODUCT_TYPE_PHYSICAL;
-        if (0 > $productId) {
+        if (0 < $productId) {
             $prodData = Product::getAttributesById($productId, ['product_type', 'product_attachements_with_inventory']);
             $productType = $prodData['product_type'] ?? 0;
             $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'] ?? 0;
@@ -1536,7 +1536,8 @@ class ProductsController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        DigitalDownload::canDo($productId);
+        $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
+
 
         $frm = DigitalDownload::getDownloadForm($this->adminLangId);
 
@@ -1576,6 +1577,7 @@ class ProductsController extends AdminBaseController
         $frm->fill($frmData);
 
         $this->set('downloadFrm', $frm);
+        $this->set('canDo', $canDo);
         $this->set('adminLangId', $this->adminLangId);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'products/download-setup-frm.php');
@@ -1595,8 +1597,10 @@ class ProductsController extends AdminBaseController
         => To check downloads allowed at product level
         */
 
-        DigitalDownload::canDo($prodId);
-
+        $canDo = DigitalDownload::canDo($prodId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
+        if (false == $canDo) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_Product', $this->adminLangId));
+        }
         $post = FatApp::getPostedData();
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
@@ -1742,7 +1746,7 @@ class ProductsController extends AdminBaseController
             => need to check downloads allowed at product level
         */
 
-        $srch = new DigitalDownloadSearch();
+        /* $srch = new DigitalDownloadSearch();
 
         $srch->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', DigitalDownload::DB_TBL_LINKS_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id');
 
@@ -1760,7 +1764,12 @@ class ProductsController extends AdminBaseController
         $srch->addOrder(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
 
         $rs = $srch->getResultSet();
-        $rows = FatApp::getDb()->fetchAll($rs);
+        $rows = FatApp::getDb()->fetchAll($rs); */
+
+        $canDo = DigitalDownload::canDo($prodId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
+        $this->set('canDo', $canDo);
+
+        $rows = DigitalDownloadSearch::getLinks($prodId, Product::CATALOG_TYPE_PRIMARY, $optionCombi, $langId);
 
         $this->set('links', $rows);
         $languages = Language::getAllNames();
@@ -1779,14 +1788,14 @@ class ProductsController extends AdminBaseController
         $this->objPrivilege->canViewProducts();
 
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $optionComb = FatApp::getPostedData('option_comb', null, 0);
+        $optionComb = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', null, 0);
 
         if (1 > $productId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $srch = new DigitalDownloadSearch();
+        /* $srch = new DigitalDownloadSearch();
 
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
 
@@ -1824,7 +1833,12 @@ class ProductsController extends AdminBaseController
         $srch->doNotCalculateRecords();
         $srch->addOrder('afile.afile_updated_at', 'DESC');
         $rs = $srch->getResultSet();
-        $attachments = FatApp::getDb()->fetchAll($rs, 'afile_id');
+        $attachments = FatApp::getDb()->fetchAll($rs, 'afile_id'); */
+
+        $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
+        $this->set('canDo', $canDo);
+
+        $attachments = DigitalDownloadSearch::getAttachments($productId, Product::CATALOG_TYPE_PRIMARY, $optionComb, $langId);
 
         $this->set('attachments', $attachments);
         $languages = Language::getAllNames();

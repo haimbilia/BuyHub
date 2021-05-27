@@ -1874,7 +1874,7 @@ class Importexport extends ImportexportCommon
                             $columnKey = 'ps_from_country_id';
                             $colValue = mb_strtolower($colValue);
                             if (!array_key_exists($colValue, $countryArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getCountriesArr(false, $colValue), CASE_LOWER);
+                                $res = $this->array_change_key_case_unicode($this->getCountriesAssocArr(false, $colValue), CASE_LOWER);
                                 if (!$res) {
                                     $invalid = true;
                                 } else {
@@ -2826,7 +2826,7 @@ class Importexport extends ImportexportCommon
                         case 'country_id':
                             $colValue = mb_strtolower($colValue);
                             if ('country_code' == $columnKey && !array_key_exists($colValue, $countryCodeArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getCountriesArr(false, $colValue), CASE_LOWER);
+                                $res = $this->array_change_key_case_unicode($this->getCountriesAssocArr(false, $colValue), CASE_LOWER);
                                 if (!$res) {
                                     $invalid = true;
                                 } else {
@@ -5424,9 +5424,9 @@ class Importexport extends ImportexportCommon
         $rowIndex = 1;
 
         if ($this->settings['CONF_USE_COUNTRY_ID']) {
-            $countryCodes = $this->getCountriesArr(true);
+            $countryCodes = $this->getCountriesAssocArr(true);
         } else {
-            $countryIds = $this->getCountriesArr(false);
+            $countryIds = $this->getCountriesAssocArr(false);
         }
 
         $coloumArr = $this->getStatesColoumArr($langId);

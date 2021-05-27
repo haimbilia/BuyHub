@@ -632,7 +632,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Timezone', $this->adminLangId), 'CONF_TIMEZONE', Configurations::dateTimeZoneArr(), false, array(), '');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_Current", $this->adminLangId) . ' <span id="currentDate">' . CommonHelper::currentDateTime(null, true) . '</span></small>';
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+                $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'CONF_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
@@ -816,7 +816,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $this->adminLangId) . "</small>";
 
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true, 'country_code');
+                $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true, 'country_code');
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'CONF_GEO_DEFAULT_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
@@ -1163,6 +1163,7 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_COMMISSION:
                 /* $frm->addHtml('','Commission','<h3>'.Labels::getLabel("LBL_Commission",$this->adminLangId) . '</h3>'); */
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Maximum_Site_Commission", $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COMMISSION', '');
+                $fld->requirements()->setFloatPositive();
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_maximum_commission/Fees_that_will_be_charged_on_a_particular_product.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_shipping", $this->adminLangId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);
@@ -1456,6 +1457,13 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addHtml('', 'GoogleFontsAPI', '<h3>' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $this->adminLangId), 'CONF_GOOGLE_FONTS_API_KEY');
+
+                /* JW player Settings */
+                $frm->addHtml('', 'JWPlayerSettings', '<h3>' . Labels::getLabel("LBL_JW_Player_Settings", $this->adminLangId) . '</h3>');
+
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_JW_Player_Key", $this->adminLangId), 'CONF_JW_PLAYER_KEY');
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_key_provided_by_JW_PLAYER", $this->adminLangId) . "</small>";
+                /* JW player Settings */
                 break;
             case Configurations::FORM_REFERAL:
                 $fld = $frm->addRadioButtons(
