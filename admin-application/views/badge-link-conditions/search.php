@@ -3,7 +3,7 @@ $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_OBJECT', $adminLangId),
+    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $adminLangId),
     'record_condition' => Labels::getLabel('LBL_TRIGGER', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
@@ -64,8 +64,13 @@ foreach ($arr_listing as $sn => $row) {
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "MINI", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $row[Badge::DB_TBL_PREFIX . 'name'], 'alt' => $row[Badge::DB_TBL_PREFIX . 'name']], '', true);
                 } else {
-                    $color = empty($row[Badge::DB_TBL_PREFIX . 'color']) ? Labels::getLabel('LBL_N/A', $adminLangId) : '<div class="d-flex align-items-center"><span class="color-' . strtolower(Badge::getShapeTypeName($row[$key], $adminLangId)) . '" style="background-color:' . $row[Badge::DB_TBL_PREFIX . 'color'] . '" title="' . $row[Badge::DB_TBL_PREFIX . 'name'] . '"></span></div>';
-                    $td->appendElement('plaintext', [], $color, true);
+                    $text = $row[Badge::DB_TBL_PREFIX . 'name'];
+                    $type = $row[$key];
+                    $color = $row[Badge::DB_TBL_PREFIX . 'color'];
+                    $return = true;
+                    $html = include CONF_FRONT_END_THEME_PATH . '/_partial/ribbon.php';
+                    $html = '<div class="badge-wrap">' . $html . '</div>';
+                    $td->appendElement('plaintext', [], $html, true);
                 }
                 break;
             case 'action':

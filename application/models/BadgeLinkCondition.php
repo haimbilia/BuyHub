@@ -8,8 +8,8 @@ class BadgeLinkCondition extends MyAppModel
     public const DB_TBL_BADGE_LINKS = 'tbl_badge_links';
     public const DB_TBL_BADGE_LINKS_PREFIX = 'badgelink_';
 
-    public const RECORD_TYPE_PRODUCT = 1;
-    public const RECORD_TYPE_SELLER_PRODUCT = 2;
+    public const RECORD_TYPE_SELLER_PRODUCT = 1;
+    public const RECORD_TYPE_PRODUCT = 2;
     public const RECORD_TYPE_SHOP = 3;
 
     public const COND_TYPE_DATE = 1;
@@ -54,8 +54,8 @@ class BadgeLinkCondition extends MyAppModel
     public static function getRecordTypeArr(int $langId): array
     {
         return [
-            self::RECORD_TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
             self::RECORD_TYPE_SELLER_PRODUCT => Labels::getLabel('LBL_SELLER_PRODUCT', $langId),
+            self::RECORD_TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
             self::RECORD_TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId)
         ];
     }
@@ -133,7 +133,7 @@ class BadgeLinkCondition extends MyAppModel
      */
     public static function getBadgeLinksSearchObj(int $langId, bool $linkRecords = false): object
     {
-        $srch = new BadgeLinkConditionSearch($langId);
+        $srch = new BadgeLinkConditionSearch();
 
         $recordFields = [];
         if (true === $linkRecords) {

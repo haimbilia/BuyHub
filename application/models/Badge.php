@@ -12,11 +12,11 @@ class Badge extends MyAppModel
     public const TYPE_RIBBON = 2;
 
     /* Used in case of Ribbons */
-    public const SHAPE_CIRCLE = 1;
+    public const SHAPE_RECTANGLE = 1;
     public const SHAPE_STRIP = 2;
     public const SHAPE_STAR = 3;
     public const SHAPE_TRIANGLE = 4;
-    public const SHAPE_SQUARE = 5;
+    public const SHAPE_CIRCLE = 5;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
@@ -43,6 +43,10 @@ class Badge extends MyAppModel
      /* For Ribbon */
 
     public const REMOVED_OLD_IMAGE_TIME = 4;
+
+    private $selProdId = 0;  //Priority 1
+    private $prodId = 0;  //Priority 2
+    private $shopId = 0;  //Priority 3
 
     /**
      * __construct
@@ -95,11 +99,11 @@ class Badge extends MyAppModel
     public static function getShapeTypesArr(int $langId): array
     {
         return [
-            self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
+            self::SHAPE_RECTANGLE => Labels::getLabel('LBL_RECTANGLE', $langId),
             self::SHAPE_STRIP => Labels::getLabel('LBL_STRIP', $langId),
             self::SHAPE_STAR => Labels::getLabel('LBL_STAR', $langId),
             self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
-            self::SHAPE_SQUARE => Labels::getLabel('LBL_SQUARE', $langId),
+            self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
         ];
     }
 
@@ -303,6 +307,82 @@ class Badge extends MyAppModel
             return false;
         }
         return true;
+    }
+    
+    /**
+     * setSellerProdudtId
+     *
+     * @param  int $selProdId
+     * @return object
+     */
+    public function setSellerProdudtId(int $selProdId): object
+    {
+        $this->selProdId = $selProdId;
+        return $this;
+    }
+
+    /**
+     * setProductId
+     *
+     * @param  int $prodId
+     * @return object
+     */
+    public function setProductId(int $prodId): object
+    {
+        $this->prodId = $prodId;
+        return $this;
+    }
+
+    /**
+     * setShopId
+     *
+     * @param  int $shopId
+     * @return object
+     */
+    public function setShopId(int $shopId): object
+    {
+        $this->shopId = $shopId;
+        return $this;
+    }
+    
+    /**
+     * getRibbon
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public function getRibbon(int $langId): array
+    {
+        if (1 > $this->selProdId && 1 > $this->prodId && 1 > $this->shopId) {
+            return [];
+        }
+
+        $attr = [
+            'blinkcond_badge_id',
+            'blinkcond_record_type',
+            'badge_display_inside',
+            'badge_shape_type',
+            'badge_color',
+            'COALESCE(badge_name, badge_identifier) as badge_name'
+        ];
+
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinBadgeLinks();
+        $srch->joinBadge($langId);
+        $srch->addMultipleFields($attr);
+        $srch->addCondition('blinkcond_record_type', 'IN', array_keys(BadgeLinkCondition::getRecordTypeArr($langId)));
+        $srch->addCondition('badgelink_record_id', 'IN', [$this->selProdId, $this->prodId, $this->shopId]);
+        $srch->addDirectCondition(
+            'blinkcond_record_type = (CASE 
+            WHEN blinkcond_record_type = 1 THEN 1
+            WHEN blinkcond_record_type = 2 THEN 2
+            WHEN blinkcond_record_type = 3 THEN 3
+            ELSE 0 END)'
+        );
+        $srch->addCondition('badge_type', '=', Badge::TYPE_RIBBON);
+        $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
+        return (array) FatApp::getDb()->fetch($srch->getResultSet())
     }
 
 }

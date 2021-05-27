@@ -12,37 +12,42 @@ if (!isset($showAddToFavorite)) {
     }
 }
 if ($showAddToFavorite) { ?>
-    <!-- <div class="badges badges-1">New</div> -->
+    <!-- <div class="badges badges-1">New</div>
 
-    <!-- <div class="badges badges-2">
-        <svg class="svg">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-2"></use>
-        </svg>
-        <span class="text">Offer</span>
-    </div>   -->
+<div class="badges badges-2">
+    <svg class="svg">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-2"></use>
+    </svg>
+    <span class="text">Offer</span>
+</div>
 
-    <!-- <div class="badges badges-3">
-        <svg class="svg">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-3"></use>
-        </svg>
-        <span class="text">New</span>
-    </div>   -->
+<div class="badges badges-3">
+    <svg class="svg">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-3"></use>
+    </svg>
+    <span class="text">New</span>
+</div>
 
-    <!-- <div class="badges badges-4">
-        <svg class="svg">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-4"></use>
-        </svg>
-        <span class="text">New</span>
-    </div>  -->
+<div class="badges badges-4">
+    <svg class="svg">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-4"></use>
+    </svg>
+    <span class="text">New</span>
+</div> -->
 
-
-    <div class="badges badges-5">
-        <svg class="svg">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-5"></use>
-        </svg>
-        <span class="text">50% <br> OFF</span>
-    </div>
-    <div class="favourite-wrapper <?php /* echo $staticCollectionClass; */ ?>">
+<div class="badges badges-3">
+    <svg class="svg">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-3"></use>
+    </svg>
+    <span class="text">New</span>
+</div>
+<!-- <div class="badges badges-5">
+    <svg class="svg">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-5"></use>
+    </svg>
+    <span class="text">50% <br> OFF</span>
+</div> -->
+    <div class="favourite-wrapper">
         <?php if (true ==  $showActionBtns) { ?>
             <div class="actions_wishlist">
                 <ul class="actions">
@@ -71,7 +76,7 @@ if ($showAddToFavorite) { ?>
                 </ul>
             </div>
             <?php
-        } else {
+        } /* else {
             if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
                 $jsFunc = 0 < $product['ufp_id'] ? 'removeFromFavorite(' . $product['selprod_id'] . ')' : 'markAsFavorite(' . $product['selprod_id'] . ')';
             ?>
@@ -82,14 +87,14 @@ if ($showAddToFavorite) { ?>
                     </a>
                 </div>
             <?php } else { ?>
-                <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" <?php /* id="listDisplayDiv_<?php echo $product['selprod_id']; ?>" */ ?> data-id="<?php echo $product['selprod_id']; ?>">
+                <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" data-id="<?php echo $product['selprod_id']; ?>">
                     <a href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
                         <div class="ring"></div>
                         <div class="circles"></div>
                     </a>
                 </div>
             <?php }
-        }
+        } */
 
         if (isset($productView) && true == $productView) { ?>
             <div class="dropdown">

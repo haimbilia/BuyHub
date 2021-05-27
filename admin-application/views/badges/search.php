@@ -4,8 +4,7 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $adminLangId),
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_OBJECT', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'color' => Labels::getLabel('LBL_COLOR', $adminLangId),
+    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $adminLangId),
     Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL_STATUS', $adminLangId),
     Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_PUBLISH', $adminLangId),
     'action' => '',
@@ -52,13 +51,14 @@ foreach ($arr_listing as $sn => $row) {
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "MINI", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $icon['afile_name'], 'alt' => $icon['afile_name']], '', true);
                 } else {
-                    $color = empty($row[Badge::DB_TBL_PREFIX . 'color']) ? Labels::getLabel('LBL_N/A', $adminLangId) : '<div class="d-flex align-items-center"><span class="color-' . strtolower(Badge::getShapeTypeName($row[$key], $adminLangId)) . '" style="background-color:' . $row[Badge::DB_TBL_PREFIX . 'color'] . '"></span></div>';
-                    $td->appendElement('plaintext', [], $color, true);
+                    $text = $row[Badge::DB_TBL_PREFIX . 'name'];
+                    $type = $row[$key];
+                    $color = $row[Badge::DB_TBL_PREFIX . 'color'];
+                    $return = true;
+                    $html = include CONF_FRONT_END_THEME_PATH . '/_partial/ribbon.php';
+                    $html = '<div class="badge-wrap">' . $html . '</div>';
+                    $td->appendElement('plaintext', [], $html, true);
                 }
-                break;
-            case Badge::DB_TBL_PREFIX . 'color':
-                $str = (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) ? Labels::getLabel('LBL_N/A', $adminLangId) : $row[$key];
-                $td->appendElement('plaintext', [], $str, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
                 $class = applicationConstants::YES == $row[$key] ? 'badge--unified-danger' : 'badge--unified-brand'; 

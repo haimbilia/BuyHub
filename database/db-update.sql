@@ -863,7 +863,4 @@ CREATE TABLE `tbl_badge_links` (
   `badgelink_record_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE `tbl_badge_links`
-  MODIFY `badgelink_id` bigint NOT NULL AUTO_INCREMENT;
-
 -- --- Badges & Ribbons --- --
