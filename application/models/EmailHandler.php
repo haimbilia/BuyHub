@@ -2743,7 +2743,7 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{user_full_name}' => $userInfo['user_name'],
-            '{promotion_name}' => ($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
+            '{promotion_name}' => isset($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
             '{new_request_status}' => $statusArr[$d['promotion_approved']],
         );
 
@@ -2764,7 +2764,7 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{user_full_name}' => $userInfo['user_name'],
-            '{promotion_name}' => ($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
+            '{promotion_name}' => isset($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
 
         );
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {

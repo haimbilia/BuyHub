@@ -93,7 +93,7 @@ class Slides extends MyAppModel
 
         return $srch;
     }
-
+    /*
     public function joinUserWallet()
     {
         $this->joinedUserWallet = true;
@@ -122,6 +122,8 @@ class Slides extends MyAppModel
         $this->addFld(array('IF(pr.promotion_id > 0, userBalance,' . FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE') . ') AS userBalance'));
         $this->addHaving('userBalance', '>=', FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE'));
     }
+     * 
+     */
 
     public function joinBudget()
     {
