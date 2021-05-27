@@ -360,6 +360,14 @@
                                   <?php } ?>
                               </ul>
                           </li>
+                          <?php /* if ($objPrivilege->canViewOrdersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Orders_Report', $adminLangId); ?></a>
+                                  <ul>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('OrdersReport'); ?>"><?php echo Labels::getLabel('LBL_By_Order', $adminLangId); ?></a></li>
+                                      <li><a href="<?php echo UrlHelper::generateUrl('OrderSubscriptionReport'); ?>"><?php echo Labels::getLabel('LBL_By_Subscription', $adminLangId); ?></a></li>
+                                  </ul>
+                              </li>
+                          <?php }   */?>
                           <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Financial_Report', $adminLangId); ?></a>
                                   <ul>
