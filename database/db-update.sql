@@ -762,6 +762,7 @@ UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options
 -- --- task_84719_Preview_module_for_digital_files -- ---
 -- --- Display Total Savings on Checkout page  --- --
 ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
+ALTER TABLE `tbl_order_product_specifics` ADD `op_special_price` DECIMAL(10,2) NOT NULL AFTER `op_prodcat_id`;
 -- --- Display Total Savings on Checkout page  --- --
 
 

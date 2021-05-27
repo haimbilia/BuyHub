@@ -1249,7 +1249,7 @@ class ImportexportCommon extends FatModel
         return $row = $this->db->fetchAllAssoc($rs);
     }
 
-    public function getCountriesArr($byId = true, $countryIdOrCode = false)
+    public function getCountriesAssocArr($byId = true, $countryIdOrCode = false)
     {
         $srch = Countries::getSearchObject(false, false);
         $srch->doNotCalculateRecords();

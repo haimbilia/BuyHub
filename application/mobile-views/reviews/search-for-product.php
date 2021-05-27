@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $data = array(
-    'reviewsList' => $reviewsList,
+    'reviewsList' => array_values($reviewsList),
     'page' => $page,
     'pageCount' => $pageCount,
     'recordCount' => $totalRecords,

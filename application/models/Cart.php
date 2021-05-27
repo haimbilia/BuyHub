@@ -1285,7 +1285,7 @@ class Cart extends FatModel
             'taxOptions' => $taxOptions,
             'prodTaxOptions' => $prodTaxOptions,
             'roundingOff' => $roundingOff,
-            'totalSaving' => ($selProdTotalPrice - $cartTotal) + $cartVolumeDiscount + ($cartDiscounts['coupon_discount_total'] ?? 0),
+            'totalSaving' => ($selProdTotalPrice - $originalTotalPrice) /* special price */ + $cartVolumeDiscount + ($cartDiscounts['coupon_discount_total'] ?? 0),
         );
         return $cartSummary;
     }

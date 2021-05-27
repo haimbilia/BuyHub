@@ -1259,74 +1259,8 @@
     }
 }
 
-.reviews-list {
-    .all-review-media {
-        border-top: none;
-        padding-top: 0;
-        margin-top: 0;
-    }
-}
+ 
 
-.review-media-list {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -.35rem;
-    li {
-        margin: 0 .35rem 1rem .35rem;
-        flex: 0 0 60px;
-        max-width: 60px;
-        position: relative;
-        z-index: 0;
-        border: none;
-        .review-media {
-            display: block;
-            position: relative;
-            border: $border;
-            width: 60px;
-            height: 60px;
-            &:after {
-                content: "";
-                display: block;
-                padding-bottom: 100%;
-                background-color: #f0f0f0;
-            }
-            img,
-            video,
-            iframe {
-                position: absolute;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                right: 0;
-                margin: auto;
-            }
-            iframe {
-                width: 100%;
-                height: 100%;
-            }
-        }
-        &.more-media {
-            .review-media {
-                &:before {
-                    content: attr(data-count);
-                    position: absolute;
-                    z-index: 2;
-                    left: 0;
-                    top: 0;
-                    bottom: 0;
-                    right: 0;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    color: #fff;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-weight: 700;
-                    font-size: 1.125rem;
-                }
-            }
-        }
-    }
-}
 
 
 .ratedby-list {

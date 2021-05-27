@@ -42,7 +42,8 @@ class TopProductsReportController extends AdminBaseController
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pageSize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, 10);
-        $topPerformed = FatApp::getPostedData('top_perfomed', FatUtility::VAR_INT, 0);
+        $topPerformed = FatApp::getPostedData('top_perfomed', FatUtility::VAR_INT, 0);        
+        $keyword = FatApp::getPostedData('keyword', null, '');        
         
         
         /* Sub Query to get, how many users added current product in his/her wishlist[ */
@@ -61,6 +62,12 @@ class TopProductsReportController extends AdminBaseController
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
+        if (!empty($keyword)) {          
+            $cnd = $srch->addCondition('op_selprod_title', 'like', '%' . $keyword . '%');
+            $cnd->attachCondition('op_selprod_options', 'like', '%' . $keyword . '%', 'OR');
+            $cnd->attachCondition('op_brand_name', 'like', '%' . $keyword . '%', 'OR');
+            $cnd->attachCondition('op_shop_name', 'like', '%' . $keyword . '%', 'OR');
+        }        
         $srch->addMultipleFields(array('op_selprod_title', 'op_product_name', 'op_shop_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_refund_qty) as totRefundQty', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'count(distinct tquwl.uwlist_user_id) as followers', 'IFNULL(tquwl.wishlist_user_counts, 0) as wishlistUserCounts'));
         $srch->addGroupBy('op.op_selprod_id');
         $srch->addGroupBy('op.op_is_batch');
@@ -145,6 +152,7 @@ class TopProductsReportController extends AdminBaseController
     private function getSearchForm()
     {
         $frm = new Form('frmTopProductsReportSearch');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'report_type', $this->getReportTypeArr(), '', array(), Labels::getLabel('LBL_OverAll', $this->adminLangId));
         $frm->addHiddenField('', 'page', 1);
         $frm->addSelectBox(Labels::getLabel('LBL_Record_Per_Page', $this->adminLangId), 'pagesize', array( 10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');

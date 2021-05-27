@@ -1,17 +1,15 @@
-
 .file__upload {
     position: relative;
     display: inline-flex;
     align-items: center;
     color: $txt-gray;
-    
-    border:$border;
+    border: $border;
     padding: .45rem 1rem;
     border-radius: .25rem;
     //margin: .875rem 0;
     font-size: .8rem;
-    
-    &:hover {cursor: pointer;
+    &:hover {
+        cursor: pointer;
         color: $primary-color;
     }
     input[type="file"] {
@@ -34,6 +32,100 @@
             justify-content: center;
             align-items: center;
             margin-#{$end-direction}: .25rem;
+        }
+    }
+}
+
+.uploaded-media {
+    margin-top: 1rem;
+    ul {
+        display: flex; flex-wrap: wrap;
+        li {
+            margin-#{$end-direction}: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+    }
+    .uploaded-file {
+        display: flex;
+        align-items: center;
+        width: 80px;
+        height: 80px;
+        border: $border;
+        border-radius: $radius4;
+        padding: 10px;
+        background: #fff;
+    }
+    .close-layer {  
+        box-shadow: $shadow1;
+        background: #fff;
+        border-radius: 50%;
+        right: -10px;
+        top: -10px;
+    }
+}
+
+.all-review-media {
+    padding-top: 0;
+    margin-top: 2rem;
+    .review-media-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -.35rem;
+        li {
+            margin: 0 .35rem 1rem .35rem;
+            flex: 0 0 60px;
+            max-width: 60px;
+            position: relative;
+            z-index: 0;
+            border: none;
+            .review-media {
+                display: block;
+                position: relative;
+                border: $border;
+                width: 60px;
+                height: 60px;
+                &:after {
+                    content: "";
+                    display: block;
+                    padding-bottom: 100%;
+                    background-color: #f0f0f0;
+                }
+                img,
+                video,
+                iframe {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    right: 0;
+                    margin: auto;
+                }
+                iframe {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            &.more-media {
+                .review-media {
+                    &:before {
+                        content: attr(data-count);
+                        position: absolute;
+                        z-index: 2;
+                        left: 0;
+                        top: 0;
+                        bottom: 0;
+                        right: 0;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        color: #fff;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-weight: 700;
+                        font-size: 1.125rem;
+                    }
+                }
+            }
         }
     }
 }

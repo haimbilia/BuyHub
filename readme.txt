@@ -144,13 +144,30 @@ Fixes:
     => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
     => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
     => 053861 - In Side bar only number of items displayed.
+    => 053822 - seller reports> balance is not populating
     => 053883 - pickup slots are not getting listed on front end while placing order on selection of address
     => 053882 - getting error on product detail page under recommended products
     => 053817 - on registration screen> logo is not displaying
     => 053832 - rating star color is different in admin and front end
+    => 053932 - while placing order> when no coupon or discount is there then getting entry on name of saving
+    => 053954 - Not storing Product unit price so in report data not coming
+    => 053985 - Stripe connect unable to debit site commission
+    => 053850 - admin> advertiser report> data is not populating.
+    => 053849 - admin> advertiser report> keyword search needs to be there in filter
+    => 053751 - after applying filters and exporting file in reports> all data is exporting instead of filtered data
+    => 053935 - when buyer purchases multiple qty (incl. tax) then on seller end in transactions it's listing $1000.02 and under reports it's listing $1000 and on buyer end it's listing $0.01 as rounding off amount
+    => 053948 - getting invalid slot when buyer changes date for pickup (admin's place)
+    => 053855 - admin> reports> top products> filter> search by keyword is missing 
 
 New Features:
     => Admin shipped products listing page
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053978 - Forget password label language issue in admin
+
 
 Enhancements :
    => Make provision to made seller

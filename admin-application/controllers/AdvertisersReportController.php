@@ -28,6 +28,7 @@ class AdvertisersReportController extends AdminBaseController
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
 
         $srch = new UserSearch();
         $srch->includeTransactionBalance();
@@ -35,7 +36,7 @@ class AdvertisersReportController extends AdminBaseController
         $srch->includePromotionsCount();
         $srch->addMultipleFields(
             array(
-                'u.user_name as name', 'uc.credential_email as email', 'u.user_regdate', 'u.user_is_supplier', 'activePromotions', 'promotionsCount','promotionCharged'
+                'u.user_name as name', 'uc.credential_email as email', 'u.user_regdate', 'u.user_is_supplier', 'activePromotions', 'promotionsCount', 'promotionCharged'
             )
         );
         $srch->addCondition('u.user_is_advertiser', '=', applicationConstants::YES);
@@ -48,6 +49,10 @@ class AdvertisersReportController extends AdminBaseController
         $date_to = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
         if (!empty($date_to)) {
             $srch->addCondition('u.user_regdate', '<=', $date_to . ' 23:59:59');
+        }
+
+        if (!empty($keyword)) {
+            $srch->addCondition('u.user_name', 'like', '%' . $keyword . '%');
         }
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
@@ -106,7 +111,7 @@ class AdvertisersReportController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        
+
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
@@ -130,6 +135,7 @@ class AdvertisersReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->adminLangId), 'keyword');
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         if (!empty($fields)) {

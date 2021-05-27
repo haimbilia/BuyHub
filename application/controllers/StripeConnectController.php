@@ -357,7 +357,7 @@ class StripeConnectController extends PaymentMethodBaseController
             } elseif (false !== strpos($field, 'country')) {
                 $stateFldClass = md5($name);
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->siteLangId, true, 'country_code');
+                $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true, 'country_code');
                 $fld = $frm->addSelectBox($labelStr, $name, $countriesArr, '', ['class' => 'country', 'data-statefield' => $stateFldClass], Labels::getLabel('LBL_Select', $this->siteLangId));
             } elseif ('tos_acceptance' == $field) {
                 $fld = $frm->addCheckBox('', 'tos_acceptance', 1);

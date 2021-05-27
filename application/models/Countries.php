@@ -55,14 +55,35 @@ class Countries extends MyAppModel
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public function getCountriesArr($langId, $isActive = true, $idCol = 'country_id')
+    private function searchCountriesObj(int $langId, bool $isActive = true)
     {
-        $langId = FatUtility::int($langId);
-
         $srch = static::getSearchObject($isActive, $langId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('country_name', 'ASC');
+        return $srch;
+    }
+
+    public function getCountriesArr(int $langId, bool $isActive = true): array
+    {
+        $srch = $this->searchCountriesObj($langId, $isActive);
+        $srch->addMultipleFields(
+            array(
+                'country_id',
+                'COALESCE(country_name, country_code) as country_name',
+                'country_code',
+            )
+        );
+
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
+    }
+
+    public function getCountriesAssocArr($langId, $isActive = true, $idCol = 'country_id')
+    {
+        $langId = FatUtility::int($langId);
+
+        $srch = $this->searchCountriesObj($langId, $isActive);
         $srch->addMultipleFields(
             array(
                 $idCol,

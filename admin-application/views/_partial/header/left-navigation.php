@@ -369,7 +369,8 @@
                                       <li><a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>"><?php echo Labels::getLabel('LBL_Earnings', $adminLangId); ?></a></li>
                                       <li><a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>"><?php echo Labels::getLabel('LBL_Profit_by_Products', $adminLangId); ?></a></li>
                                       <li><a href="<?php echo UrlHelper::generateUrl('PreferredPaymentMethod'); ?>"><?php echo Labels::getLabel('LBL_Preferred_Payment_Method', $adminLangId); ?></a></li>
-
+                                      <?php /*  ?> <li><a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>"><?php echo Labels::getLabel('LBL_Payout', $adminLangId); ?></a></li>
+<?php  */?>
                                   </ul>
                               </li>
                           <?php }  ?>

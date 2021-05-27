@@ -5,7 +5,6 @@ $staticCollectionClass = '';
 if ($controllerName = 'Products' && isset($action) && $action == 'view') {
     $staticCollectionClass = 'static--collection';
 }
-
 if (!isset($showAddToFavorite)) {
     $showAddToFavorite = true;
     if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
@@ -13,10 +12,36 @@ if (!isset($showAddToFavorite)) {
     }
 }
 if ($showAddToFavorite) { ?>
+    <!-- <div class="badges badges-1">New</div> -->
+
+    <!-- <div class="badges badges-2">
+        <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-2"></use>
+        </svg>
+        <span class="text">Offer</span>
+    </div>   -->
+
+    <!-- <div class="badges badges-3">
+        <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-3"></use>
+        </svg>
+        <span class="text">New</span>
+    </div>   -->
+
+    <!-- <div class="badges badges-4">
+        <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-4"></use>
+        </svg>
+        <span class="text">New</span>
+    </div>  -->
+
+
     <div class="badges badges-5">
+        <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-5"></use>
+        </svg>
         <span class="text">50% <br> OFF</span>
     </div>
-
     <div class="favourite-wrapper <?php /* echo $staticCollectionClass; */ ?>">
         <?php if (true ==  $showActionBtns) { ?>
             <div class="actions_wishlist">

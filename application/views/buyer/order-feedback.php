@@ -131,7 +131,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                             </span>
                                                             <span><?php echo Labels::getLabel('LBL_UPLOAD_IMAGES', $siteLangId); ?></span>
                                                         </div>
-                                                        <div class='all-review-media mt-2 multipleImgsGallery--js'>
+                                                        <div class='uploaded-media multipleImgsGallery--js'>
                                                         </div>
                                                     </div>
                                                 </div>

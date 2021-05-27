@@ -25,7 +25,7 @@
 }
 
 @mixin ct-align-justify($ct-text-align: $ct-text-align, $ct-text-justify: $ct-text-justify) {
-    -webkit-box-align: $ct-text-align;
+    
     -webkit-align-items: $ct-text-align;
     -ms-flex-align: $ct-text-align;
     align-items: $ct-text-align;
