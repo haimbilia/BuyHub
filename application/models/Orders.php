@@ -1699,7 +1699,6 @@ class Orders extends MyAppModel
                 }
                 /* ]*/
             }
-
             $opRefundArr = array(
                 'op_refund_qty' => $childOrderInfo["op_qty"],
                 'op_refund_amount' => $txnAmount,

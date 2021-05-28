@@ -351,3 +351,39 @@ if ($(window).width() > 1050) {
 $('.gallery').modaal({
 	type: 'image'
 });
+
+function playVideo(videoPath, type)
+{
+	fcom.updateFaceboxContent(function(){
+		$.facebox.reveal('<div class="jwplayer--content"><div id="jwplayer-blk"></div></div>');
+		
+		/* 
+		------following code can be used if need to set height/width of jw player and need to set the . Other wise we have the option to set the aspect ratio.
+
+		var width = $('.jwplayer--content').width() || 0;
+		var height = $('.jwplayer--content').height() || 0;
+
+		if (1 > width) {
+			width = $('#facebox').width();
+		}
+		if (1 > height) {
+			height = $('#facebox').height();
+		} */
+
+		var type = type || "mp4";
+		var jwplayerInst = jwplayer("jwplayer-blk").setup({
+			file: videoPath,
+			type: type,
+			/* width: width,
+			height: height, */
+			aspectratio: "16:9",
+			events: {
+				onTime: function (object) {
+					if (object.position > object.duration - 1) {
+						this.pause();
+					}
+				}
+			}
+		}).play();
+	});
+}

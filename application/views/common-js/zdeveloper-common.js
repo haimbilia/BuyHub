@@ -788,6 +788,30 @@ function defaultSetUpLogin(frm, v) {
             $.systemMessage.close();
             fcom.resetFaceboxHeight();
         },
+
+        displayProcessing: function(msg, cls, autoclose) {
+            if (typeof msg == 'undefined' || msg == 'undefined') {
+                msg = langLbl.processing;
+            }
+            $.systemMessage(msg, 'alert--process', autoclose);
+        },
+
+        displaySuccessMessage: function (msg, cls, autoclose) {
+            if (typeof cls == 'undefined' || cls == 'undefined') {
+                cls = 'alert--success';
+            }
+            $.systemMessage(msg, cls, autoclose);
+        },
+        displayErrorMessage: function (msg, cls, autoclose) {
+            if (typeof cls == 'undefined' || cls == 'undefined') {
+                cls = 'alert--danger';
+            }
+            $.systemMessage(msg, cls, autoclose);
+        },
+
+        closeAlertMessage: function(msg, cls, autoclose) {
+            $.systemMessage.close();
+        },
     });
 
     $(document).bind('reveal.facebox', function() {

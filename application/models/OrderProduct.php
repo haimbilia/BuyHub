@@ -259,4 +259,12 @@ class OrderProduct extends MyAppModel
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetch($rs);
     }
+
+    public static function moreAttachmentsForm($langId)
+    {
+        $frm = new Form('additional_attachments');
+        $frm->addHiddenField('', 'op_id');
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
+        return $frm;
+    }
 }

@@ -103,6 +103,10 @@ Fixes:
     => 053757 - when order status is changed then sms are not triggering to buyer for the same
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053985 - Stripe connect unable to debit site commission
+    => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming
 
 Develop
 
@@ -167,7 +171,6 @@ New Features:
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
     => 053978 - Forget password label language issue in admin
-
 
 Enhancements :
    => Make provision to made seller
@@ -268,3 +271,12 @@ Released Version:
 
 Tasks:
     task-84719 Preview module for digital files
+    task-85619 Adding files when digital order is delivered
+
+=======================================
+
+Released Version:
+
+bugs:
+    #054201	while adding catalog for digital item> only option to add attachment at inventory level is either Yes or No
+    #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted

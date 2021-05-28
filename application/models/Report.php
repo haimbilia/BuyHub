@@ -510,7 +510,7 @@ class Report extends SearchBase
             return array_values($arr);
         }
 
-        $fields = array_diff($fields, ['taxTotal', 'shippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'opDiscountCharges', 'opNonDiscountCharges', 'sellerShippingTotal', 'adminShippingTotal', 'sellerTaxTotal', 'adminTaxTotal']);
+        $fields = array_diff($fields, ['taxTotal', 'shippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'opDiscountCharges', 'opNonDiscountCharges', 'sellerShippingTotal', 'adminShippingTotal', 'sellerTaxTotal', 'adminTaxTotal', 'totalAmount']);
 
         $flds = [];
         foreach ($fields as $key) {

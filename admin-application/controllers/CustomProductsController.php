@@ -135,8 +135,11 @@ class CustomProductsController extends AdminBaseController
             $productOptions = !empty($row_data['product_option']) ? $row_data['product_option'] : array();
             $productTags = !(empty($row_data['product_tags'])) ? $row_data['product_tags'] : array();
 
+            /* $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && 
+            applicationConstants::NO == $productData['product_attachements_with_inventory']); */
+
             $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && 
-            applicationConstants::NO == $productData['product_attachements_with_inventory']);
+            applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
             
             /*   */
             $customProductFrm = $this->getForm(0, $productData['product_type']);
@@ -148,6 +151,7 @@ class CustomProductsController extends AdminBaseController
         $this->set('preq_prodcat_id', $preq_prodcat_id);
         $this->set('productOptions', $productOptions);
         $this->set('productTags', $productTags);
+        
         $this->set('displayDownloadTab', $displayDownloadTab);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
@@ -301,19 +305,25 @@ class CustomProductsController extends AdminBaseController
 
         $productOptions = array();
         $productRow = array();
-
+        $displayDownloadTab = false;
+            
+           
         if ($preqId) {
             $productRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_prodcat_id', 'preq_content', 'preq_specifications'));
             $preqCatId = $productRow['preq_prodcat_id'];
             $productReqData = json_decode($productRow['preq_content'], true);
             // CommonHelper::printArray($productRow);
             $productOptions = !empty($productReqData['product_option']) ? $productReqData['product_option'] : [];
+
+            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
+            applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productReqData) ? $productReqData['product_attachements_with_inventory'] : applicationConstants::NO));
         }
         $productSpecData = !empty($productRow['preq_specifications']) ? json_decode($productRow['preq_specifications'], true) : [];
         $this->set('productSpecifications', $productSpecData);
         $this->set('preqId', $preqId);
         $this->set('preqCatId', $preqCatId);
         $this->set('productOptions', $productOptions);
+        $this->set('displayDownloadTab', $displayDownloadTab);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
@@ -396,6 +406,15 @@ class CustomProductsController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
+        $row_data = ProductRequest::getAttributesById($preq_id, array('preq_content'));
+        
+        if (false == $row_data) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $displayDownloadTab = false;
+        
         $customProductLangFrm = $this->getLangForm($preq_id, $lang_id);
 
         $prodObj = new ProductRequest($preq_id);
@@ -430,10 +449,11 @@ class CustomProductsController extends AdminBaseController
 
         $customProductLangFrm->fill($customProductLangData);
 
-        $row_data = ProductRequest::getAttributesById($preq_id, array('preq_content'));
         $productData = json_decode($row_data['preq_content'], true);
         $row_data = array_merge($row_data, $productData);
         $productOptions = !empty($row_data['product_option']) ? $row_data['product_option'] : array();
+
+        $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
 
         $customProductLangData['preq_id'] = $preq_id;
 
@@ -443,6 +463,7 @@ class CustomProductsController extends AdminBaseController
         $this->set('product_lang_id', $lang_id);
         $this->set('customProductLangFrm', $customProductLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->set('displayDownloadTab', $displayDownloadTab);
         $this->_template->render(false, false);
     }
 
@@ -524,6 +545,10 @@ class CustomProductsController extends AdminBaseController
 
         $frm = $this->getStatusForm();
         $frm->fill($data);
+
+        $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
+
+        $this->set('displayDownloadTab', $displayDownloadTab);
 
         $this->set('frm', $frm);
         $this->set('preqId', $preqId);
@@ -1029,8 +1054,10 @@ class CustomProductsController extends AdminBaseController
 
             $productReqData = json_decode($productReqRow['preq_content'],true);
 
+            /* $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
+            applicationConstants::NO == $productReqData['product_attachements_with_inventory']); */
             $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
-            applicationConstants::NO == $productReqData['product_attachements_with_inventory']);
+            applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productReqData) ? $productReqData['product_attachements_with_inventory'] : applicationConstants::NO));
 
         }
         /* ] */
@@ -1444,7 +1471,7 @@ class CustomProductsController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
         
-        DigitalDownload::canDo($preqId, 1);
+        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
 
         $frm = DigitalDownload::getDownloadForm($this->adminLangId);
 
@@ -1483,9 +1510,12 @@ class CustomProductsController extends AdminBaseController
         
         $frm->fill($frmData);
 
+        $this->set('canDo', $canDo);
         $this->set('downloadFrm', $frm);
+        $this->set('productOptions', $productOptions);
         $this->set('adminLangId', $this->adminLangId);
         $this->set('msg', $msg);
+        $this->set('preqId', $preqId);
         $this->_template->render(false, false, 'custom-products/download-setup-frm.php');
     }
 
@@ -1503,7 +1533,9 @@ class CustomProductsController extends AdminBaseController
         => To check downloads allowed at product level
         */
 
-        DigitalDownload::canDo($preqId, 1);
+        if (false == DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true)) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_Product', $this->adminLangId));
+        }
         
         $post = FatApp::getPostedData();
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
@@ -1649,7 +1681,7 @@ class CustomProductsController extends AdminBaseController
             => need to check downloads allowed at product level
         */
 
-        $srch = new DigitalDownloadSearch();
+        /* $srch = new DigitalDownloadSearch();
 
         $srch->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', DigitalDownload::DB_TBL_LINKS_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id');
 
@@ -1669,9 +1701,15 @@ class CustomProductsController extends AdminBaseController
         $srch->addOrder(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
 
         $rs = $srch->getResultSet();
-        $rows = FatApp::getDb()->fetchAll($rs);
+        $rows = FatApp::getDb()->fetchAll($rs); */
         
+        $rows = DigitalDownloadSearch::getLinks($preqId, Product::CATALOG_TYPE_REQUEST, $optionCombi, $langId);
+
         $this->set('links', $rows);
+
+        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $this->set('canDo', $canDo);
+
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $languages;
         $this->set('languages', $languages);
@@ -1700,9 +1738,9 @@ class CustomProductsController extends AdminBaseController
 
         $optionComb = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-        $prodRefType = 1;
+        $prodRefType = Product::CATALOG_TYPE_REQUEST;
 
-        $srch = new DigitalDownloadSearch();
+        /* $srch = new DigitalDownloadSearch();
 
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
         
@@ -1743,9 +1781,14 @@ class CustomProductsController extends AdminBaseController
         $srch->addOrder('afile.afile_updated_at', 'DESC');
 
         $rs = $srch->getResultSet();
-        $attachments = FatApp::getDb()->fetchAll($rs, 'afile_id');
-        
+        $attachments = FatApp::getDb()->fetchAll($rs, 'afile_id'); */
+
+        $attachments = DigitalDownloadSearch::getAttachments($preqId, Product::CATALOG_TYPE_REQUEST, $optionComb, $langId);
         $this->set('attachments', $attachments);
+        
+        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $this->set('canDo', $canDo);
+        
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $languages;
         $this->set('languages', $languages);
