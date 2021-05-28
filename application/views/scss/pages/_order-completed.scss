@@ -138,8 +138,8 @@
 .completed-cart {
     margin-top: 2rem;
     .list-cart {
-        .list-group-item {
-            padding: 1rem 0;
+        li {
+            padding: 1rem 1rem;
         }
     }
     .product-price {
