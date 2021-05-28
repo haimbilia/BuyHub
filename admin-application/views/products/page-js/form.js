@@ -158,8 +158,16 @@
     }
 
     upcListing = function (product_id){
-        fcom.ajax(fcom.makeUrl('products', 'upcListing', [product_id]), '', function(t) {
+        /* fcom.ajax(fcom.makeUrl('products', 'upcListing', [product_id]), '', function(t) {
             $("#upc-listing").html(t);
+        }); */
+        fcom.ajax(fcom.makeUrl('Products', 'viewProdOptions', [product_id]), '', function (t) {
+            var res = $.parseJSON(t);
+            if (0 == res.status) {
+                $("#upc-listing").html('');
+                return;
+            }
+            $("#upc-listing").html(res.html);
         });
     };
 

@@ -1938,4 +1938,20 @@ class ProductsController extends AdminBaseController
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
     }
+    
+    public function viewProdOptions(int $product_id)
+    {
+        if (1 > $product_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        }
+
+        $productOptions = Product::getProductOptions($product_id, $this->adminLangId, true);
+        if (empty($productOptions)) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_NO_RECORD_FOUND', $this->adminLangId));
+        }
+
+        $this->set('productOptions', $productOptions);
+        $json['html'] = $this->_template->render(false, false, 'products/prod-options.php', true);
+        FatUtility::dieJsonSuccess($json);
+    }
 }
