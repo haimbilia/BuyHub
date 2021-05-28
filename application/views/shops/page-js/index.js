@@ -31,8 +31,18 @@ $(document).ready(function(){
 			} else {
 				$(dv).html(ans.html);
 			}
-			$("#loadMoreBtnDiv").html( ans.loadMoreBtnHtml );
-			$("#favShopCount").html( ans.totalRecords );
+                        if(CONF_ENABLE_GEO_LOCATION){
+                            if (typeof map == 'undefined') {
+                                initMutipleMapMarker(markers, 'shopMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'), dragCallback);
+                            } else {
+                                clearMarkers();
+                                createMarkers(markers);
+                            }
+                        }else{
+                           $("#loadMoreBtnDiv").html( ans.loadMoreBtnHtml ); 
+                           $("#favShopCount").html( ans.totalRecords );
+                        }
+                        
 		}); 
 	};
 	
@@ -60,4 +70,27 @@ $(document).ready(function(){
 				$(e).html(langLbl.unfavoriteToShop);
 		//reloadListing();
 	};
+        dragCallback = function(dragendMap){
+                canSetCookie = true;
+                codeLatLng(dragendMap.getCenter().lat(),dragendMap.getCenter().lng(),function(data){ 
+                    displayGeoAddress(setGeoAddress(data));  
+                    if(typeof dragTimeOutEvent != "undefined"){
+                        clearTimeout(dragTimeOutEvent); 
+                    }                                        
+                    dragTimeOutEvent = setTimeout(function(){  reloadListing(); }, 1000);
+                });
+	};
 })();
+
+$(document).on('mouseover mouseout', '#mapShops--js > li', function (e) {
+    let shopId = $(this).data('shopid');   
+    $.each(mapMarker, function (index, marker) {
+        if(typeof marker != 'undefined'){                
+            let iconImage = fcom.makeUrl()+'images/pin.png';
+            if(marker['refId'] == shopId  && e.type == 'mouseover'){
+                iconImage = fcom.makeUrl()+'images/pin2.png';
+            }
+            marker.setIcon(iconImage);           
+        }
+    });
+})

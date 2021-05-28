@@ -940,3 +940,140 @@ function loadScript(src, callback = '', params = []) {
 
     document.head.append(script);
 }
+
+var mapMarker = [];
+var map;
+var searchAsMapMove = false;
+var dragenMapListener;
+
+function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, dragendCallback) {
+    /*  
+     * centeredLat and centeredLng - map center point
+     * markers object sample
+     markers = [{ lat: 11,lng: 11,content:'<div>Bondi Beach</div>' }];
+     */
+    if (!$.isNumeric(centeredLat) || !$.isNumeric(centeredLat)) {
+        console.warn('user location not set');
+        return;
+    }
+
+    if (typeof markers != 'object') {
+        console.log(markers);
+        console.warn('Invalid markers passed');
+        return;
+    }
+    map = new google.maps.Map(document.getElementById(elementId), {
+        zoom: 10,
+        center: new google.maps.LatLng(centeredLat, centeredLng),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    createMarkers(markers);
+    /* hide loader */
+    map.addListener('idle', function () {
+        $('.map-loader.is-loading').hide();
+    });
+
+
+    if (typeof dragendCallback == 'function') {
+        if (searchAsMapMove) {
+            addDragendListiner(map, dragendCallback);
+        }
+
+        const centerControlDiv = document.createElement("div");
+        centerControlDiv.setAttribute('class', 'map-drag-input-wrapper');
+        centerControlDiv.style.clear = "both";
+
+        const labelTag = document.createElement("label");
+        labelTag.setAttribute('class', 'checkbox radioinputs');
+
+        const iTag = document.createElement("i");
+        iTag.setAttribute('class', 'input-helper');
+        labelTag.appendChild(iTag);
+
+        const inputHtml = document.createElement("INPUT");
+        inputHtml.setAttribute("type", "checkbox");
+        if (searchAsMapMove == true) {
+            inputHtml.setAttribute("checked", "checked");
+        }
+        inputHtml.id = "mapSearchAsMove";
+        labelTag.appendChild(inputHtml);
+
+        const spanTag = document.createElement("span");
+        iTag.setAttribute('class', 'lb-txt');
+        spanTag.appendChild(document.createTextNode(langLbl.searchAsIMoveTheMap));
+        labelTag.appendChild(spanTag);
+
+        centerControlDiv.appendChild(labelTag);
+
+        inputHtml.addEventListener("click", (e) => {
+            var targetElement = event.target || event.srcElement;
+            if (targetElement.checked == true) {
+                addDragendListiner(map, dragendCallback);
+            } else {
+                removeDragendListiner(map, dragendCallback);
+            }
+        });
+
+        centerControlDiv.style.paddingTop = "10px";
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+    }
+    
+};
+
+function addDragendListiner(map,dragendCallback){
+    if (typeof dragendCallback == 'function') {
+        dragenMapListener = map.addListener("dragend", () => {
+            dragendCallback(map);
+        });
+    }
+    
+}
+
+function removeDragendListiner(map,dragendCallback){
+    if (typeof dragendCallback == 'function') {
+        google.maps.event.removeListener(dragenMapListener);
+    }
+}
+
+
+
+function createMarkers(markers) {
+    var infowindow = new google.maps.InfoWindow();
+    $.each(markers, function (index, marker) {
+        if (!("lat" in marker) || !("lng" in marker) || !("content" in marker)) {
+            console.log(marker);
+            console.warn('Invalid marker passed');
+            return;
+        }
+        if (marker['lat'] != '' || marker['lng'] != '') {
+
+            var newMarker = new google.maps.Marker({
+                position: new google.maps.LatLng(marker['lat'], marker['lng']),
+                map: map,
+                //title: marker['title'],
+                icon: fcom.makeUrl() + 'images/pin.png',
+                refId: index
+            });
+
+            google.maps.event.addListener(newMarker, 'click', (function (newMarker, index) {
+                return function () {
+                    infowindow.setContent(marker['content']);
+                    infowindow.open(map, newMarker);
+                }
+            })(newMarker, index));
+
+            mapMarker[index] = newMarker;
+        }
+
+    });
+}
+
+function clearMarkers() {
+
+    $.each(mapMarker, function (index, marker) {
+        if (typeof marker != 'undefined') {
+            marker.setMap(null);
+        }
+    });
+    mapMarker = [];
+}
