@@ -46,7 +46,7 @@ $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-inventory');
 
 $inventoryForm->setCustomRendererClass('FormRendererBS');
-$inventoryForm->developerTags['colClassAfterWidthDefault'] = 'col';
+$inventoryForm->developerTags['colClassAfterWidthDefault'] = 'col-3';
 $inventoryForm->developerTags['colWidthClassesDefault'] = [null, null, null, null];
 $inventoryForm->developerTags['colWidthValuesDefault'] = [null, null, null, null];
 $inventoryForm->developerTags['fldWidthClassesDefault'] = [null, null, null, null];
@@ -320,9 +320,12 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
             <?php echo $frmSellerProduct->getFieldHtml('selprod_product_id');
             echo $frmSellerProduct->getFieldHtml('selprod_urlrewrite_id');
             echo $frmSellerProduct->getFieldHtml('selprod_id');
-            ?>
-            </form>
-            <?php echo $frmSellerProduct->getExternalJS(); ?>
+            
+            /* Close form if adding new Inventory. */
+            if ($selprod_id == 0) { ?> 
+                </form>
+            <?php }
+            echo $frmSellerProduct->getExternalJS(); ?>
 
 
             <?php if ($selprod_id == 0) { ?>
@@ -391,6 +394,31 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
                     </div>
                 </div>
             </div>
+
+            <?php if ($selprod_id > 0) { ?>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                    <?php echo $frmSellerProduct->getFieldHtml('btn_cancel'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover">
+                                    <?php echo $frmSellerProduct->getFieldHtml('btn_submit'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
@@ -565,6 +593,9 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
                 return;
             }
 
+            var invForm = $('.inventoryForm-js');
+            if (!$(invForm[0]).validate()) return;
+
             var postData = {
                 inv_option_index: $("table#optionsTable-js tbody tr").length,
                 product_id: productId,
@@ -578,7 +609,7 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
             postData['selprod_stock' + invOptionId] = invOptionStock;
             postData['selprod_sku' + invOptionId] = invOptionSku;
 
-            var invFormData = $('.inventoryForm-js').serializeArray().reduce(function(obj, item) {
+            var invFormData = invForm.serializeArray().reduce(function(obj, item) {
                 obj[item.name] = item.value;
                 return obj;
             }, {});
