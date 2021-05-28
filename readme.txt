@@ -123,6 +123,7 @@ Fixes:
     => 054137 - Issue in product refund stats
     => 054183 - on admin order cancellation page roundoff error coming
     => 054242 - paystack gateway not supporting ZAR currency
+    => 054262 - some issue with collection 
 
 
 Enhancements :

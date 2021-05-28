@@ -410,3 +410,5 @@ SET
 op.op_refund_tax = view_refund_order.refund_tax;
 
 DROP VIEW view_refund_order;
+
+update `tbl_collections`  set collection_identifier = concat(collection_identifier," {del}") where collection_deleted = 1;
