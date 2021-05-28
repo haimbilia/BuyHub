@@ -30237,7 +30237,7 @@ a.ui-button:active,
     align-items: center;
     justify-content: space-between; }
     .cart-summary ul li .label, .cart-summary ul li .product-line-info .value, .product-line-info .cart-summary ul li .value {
-      color: #000;
+      color: currentColor;
       padding: 0; }
     .cart-summary ul li .value {
       font-weight: 500;

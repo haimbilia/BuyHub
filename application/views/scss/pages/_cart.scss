@@ -7,12 +7,12 @@
             align-items: center;
             justify-content: space-between;
             .label {
-                color: $body-color;
-                padding: 0;
+                color: currentColor; 
+                padding: 0; 
             }
-            .value {
+            .value { 
                 font-weight: 500;
-                text-align:#{$end-direction};
+                text-align:#{$end-direction}; 
                 margin-#{$start-direction}: auto;
             }
             &.hightlighted {
