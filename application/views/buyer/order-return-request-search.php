@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 <?php $arr_flds = array(
     'orrequest_id'    =>    Labels::getLabel('LBL_ID', $siteLangId),
     'orrequest_date'    =>    Labels::getLabel('LBL_Date', $siteLangId),

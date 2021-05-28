@@ -299,7 +299,7 @@ if (!$print) { ?>
                                 </div>
                     <?php
                     } ?>
-                    <div class="js-scrollable table-wrap">
+                    <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table table-justified">
                             <thead>
                                 <?php
@@ -797,7 +797,7 @@ if (!$print) { ?>
                             <h6>
                                 <?php echo Labels::getLabel('LBL_Posted_Comments', $siteLangId); ?>
                             </h6>
-                            <div class="js-scrollable table-wrap">
+                            <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table">
                                     <thead>
                                         <tr class="">
@@ -872,7 +872,7 @@ if (!$print) { ?>
                             <h6>
                                 <?php echo Labels::getLabel('LBL_Payment_History', $siteLangId); ?>
                             </h6>
-                            <div class="js-scrollable table-wrap">
+                            <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table">
                                     <thead>
                                         <tr class="">
@@ -948,7 +948,7 @@ if (!$print) { ?>
                             <h6>
                                 <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
                             </h6>
-                            <div class="js-scrollable table-wrap">
+                            <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table">
                                     <thead>
                                         <tr class="">
@@ -1044,7 +1044,7 @@ if (!$print) { ?>
                             <h6>
                                 <?php echo Labels::getLabel('LBL_Download_Links', $siteLangId); ?>
                             </h6>
-                            <div class="js-scrollable table-wrap">
+                            <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table">
                                     <thead>
                                         <tr class="">

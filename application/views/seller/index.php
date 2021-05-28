@@ -281,7 +281,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <?php } ?>
                             </div>
                             <div class="card-body ">
-                                <div class="js-scrollable table-wrap">
+                                <div class="js-scrollable table-wrap scroll scroll-x">
                                     <table class="table table-justified">
                                         <thead>
                                             <tr class="">
@@ -387,7 +387,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <?php } ?>
                             </div>
                             <div class="card-body ">
-                                <div class="js-scrollable table-wrap">
+                                <div class="js-scrollable table-wrap scroll scroll-x">
                                     <table class="table table-justified">
                                         <thead>
                                             <tr class="">
@@ -453,7 +453,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <?php } ?>
                             </div>
                             <div class="card-body ">
-                                <div class="js-scrollable table-wrap">
+                                <div class="js-scrollable table-wrap scroll scroll-x">
                                     <table class="table table-justified">
                                         <thead>
                                             <tr class="">
@@ -536,7 +536,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <?php } ?>
                             </div>
                             <div class="card-body ">
-                                <div class="js-scrollable table-wrap">
+                                <div class="js-scrollable table-wrap scroll scroll-x">
                                     <table class="table table-justified">
                                         <thead>
                                             <tr class="">

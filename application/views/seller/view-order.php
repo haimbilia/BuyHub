@@ -177,7 +177,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             </div>
                         </div>
                     </div>
-                    <div class="js-scrollable table-wrap">
+                    <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table">
                             <thead>
                                 <tr class="">
