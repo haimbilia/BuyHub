@@ -517,7 +517,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                             ?>
                                     <div class="prod-ext-links"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
                             <?php   foreach ($product['preview_links'] as $keys => $link) {
-                                        echo $link['pdl_preview_link'] . '<br />';
+                                        echo '<div class="clipboard"><input class="copy-input" value="'.$link['pdl_preview_link'].'" id="copypreview_'. $link['pdl_id'] .'" readonly> <button class="copy-btn" id="copyButton_'. $link['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copypreview_'. $link['pdl_id'] .'\')"><i class="far fa-copy"></i></button><br />';
+                                        // echo $link['pdl_preview_link'] . '<br />';
                                     }
                                 }
                                 if (0 < count($product['preview_attachments'])) {

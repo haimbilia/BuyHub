@@ -40,6 +40,12 @@ foreach ($records as $sn => $row) {
                 }
                 $td->appendElement('plaintext', array(), $val, true);
                 break;
+            case 'pdl_download_link':
+                $td->appendElement('div', array("class"=>"clipboard"), '<input class="copy-input" value="'.$row[$key].'" id="copymain_'. $row['pdl_id'] .'" readonly> <button class="copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copymain_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
+                break;
+            case 'pdl_preview_link':
+                $td->appendElement('div', array("class"=>"clipboard"), '<input class="copy-input" value="'.$row[$key].'" id="copypreview_'. $row['pdl_id'] .'" readonly> <button class="copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copypreview_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
+                break;
             case 'action':
                 /* $td->appendElement(
                     "a",
@@ -78,4 +84,52 @@ if (empty($records)) {
 ?>
 <div class="col-md-12">
     <?php echo $tbl->getHtml(); ?>
+    <div class="tooltip">
+    <button onclick="myFunction()" onmouseout="outFunc()">
+        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+    Copy text
+    </button>
+    </div>
 </div>
+
+<style>
+.clipboard {
+    position: relative;
+}
+
+.copy-input {
+    max-width: 248px;
+    width: 100%;
+    cursor: pointer;
+    background-color: #eaeaeb;
+    border:none;
+    color:#6c6c6c;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px 50px 10px 10px;
+}
+.copy-input:focus {
+o   utline:none;
+}
+
+.copy-btn {
+    width:40px;
+    background-color: #eaeaeb;
+    font-size: 18px;
+    padding: 6px 9px;
+    border-radius: 5px;
+    border:none;
+    color:#6c6c6c;
+    margin-left:-50px;
+    transition: all .4s;
+}
+.copy-btn:hover {
+    transform: scale(1.3);
+    color:#1a1a1a;
+    cursor:pointer;
+}
+
+.copy-btn:focus {
+    outline:none;
+}
+</style>
