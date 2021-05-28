@@ -99,7 +99,7 @@ class ProductsController extends MyAppController
                 $get['featured'] = 1;
                 break;
         }
-
+        $get['vtype']  = $get['vtype'] ?? 'grid';
         $frm->fill($get);
         $data = $this->getListingData($get);
 

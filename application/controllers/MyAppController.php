@@ -564,6 +564,7 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'top_products', 0);
         $frm->addHiddenField('', 'currency_id', $this->siteCurrencyId);
         $frm->addSubmitButton('', 'btnProductSrchSubmit', '');
+        $frm->addHiddenField('', 'vtype');
         return $frm;
     }
 

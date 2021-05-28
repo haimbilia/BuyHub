@@ -8,6 +8,8 @@ if (empty($products)) {
     return;
 }
 
+$vtype = $postedData['vtype'] ?? false;
+
 $frmProductSearch->setFormTagAttribute('onSubmit', 'searchProducts(this); return(false);');
 $keywordFld = $frmProductSearch->getField('keyword');
 // $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search', $siteLangId));
@@ -177,6 +179,19 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                         </div>
                                     </div>
                                 </li>
+                                <?php if ($vtype) { ?>
+                                        <li>
+                                            <span class="<?php echo $vtype == 'map' ? 'active' : ''; ?>">
+                                                <a href="javascript:void(0);" class="listing-map-view-toggle--js">
+                                                    <i class="icn icn-show_list">
+                                                        <svg class="svg">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#show_list" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#show_list"></use>
+                                                        </svg>
+                                                    </i>
+                                                </a>
+                                            </span>
+                                        <li>    
+                                <?php } ?>
                             </ul>
                         </div>
                     </div>
