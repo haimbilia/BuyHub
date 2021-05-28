@@ -354,7 +354,7 @@ class Aramex extends ShippingServicesBase
             'ShipmentDetails' => [
                 'PaymentType' => 'P',
                 'ProductGroup' => 'EXP',
-                'ProductType' => 'PPX',
+                'ProductType' => 'EPX',
                 'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                 'ChargeableWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                 'NumberOfPieces' => $this->orderQty
@@ -457,7 +457,7 @@ class Aramex extends ShippingServicesBase
                         'Dimensions' => $this->dimensions,
                         'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                         'ProductGroup' => 'EXP',
-                        'ProductType' => 'PDX',
+                        'ProductType' => 'EPX',
                         'PaymentType' => 'P',
                         'NumberOfPieces' => $systemOrderDetail['op_qty'],
                         'Items' => [
