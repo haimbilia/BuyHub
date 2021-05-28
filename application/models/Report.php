@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Report
+ */
 class Report extends SearchBase
 {
     private $langId;
@@ -7,7 +10,15 @@ class Report extends SearchBase
     private $attr = [];
     private $shopSpecific = false;
 
-    public function __construct($langId = 0, $attr = [], $shopSpecific = false)
+    /**
+     * __construct
+     *
+     * @param  int $langId
+     * @param  array $attr
+     * @param  bool $shopSpecific
+     * @return void
+     */
+    public function __construct(int $langId = 0, array $attr = [], bool $shopSpecific = false)
     {
         parent::__construct(Orders::DB_TBL_ORDER_PRODUCTS, 'op');
         $this->langId = FatUtility::int($langId);
@@ -16,21 +27,39 @@ class Report extends SearchBase
         $this->setFields($attr, $shopSpecific);
     }
 
-    public function joinSettings()
+    /**
+     * joinSettings
+     *
+     * @return object
+     */
+    public function joinSettings(): object
     {
         $this->joinTable(OrderProduct::DB_TBL_SETTINGS, 'LEFT OUTER JOIN', 'op.op_id = opst.opsetting_op_id', 'opst');
+        return $this;
     }
 
-    public function joinOrders()
+    /**
+     * joinOrders
+     *
+     * @return object
+     */
+    public function joinOrders(): object
     {
         if ($this->ordersTableJoined) {
             trigger_error('Orders Table is already joined', E_USER_ERROR);
         }
         $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = op.op_order_id', 'o');
         $this->ordersTableJoined = true;
+        return $this;
     }
 
-    public function joinPaymentMethod(int $langId = 0)
+    /**
+     * joinPaymentMethod
+     *
+     * @param  int $langId
+     * @return object
+     */
+    public function joinPaymentMethod(int $langId = 0): object
     {
         if (1 > $langId) {
             $langId = $this->langId;
@@ -44,21 +73,41 @@ class Report extends SearchBase
         if ($langId) {
             $this->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pm.plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
         }
+        return $this;
     }
 
-    public function joinSellerUser()
+    /**
+     * joinSellerUser
+     *
+     * @return object
+     */
+    public function joinSellerUser(): object
     {
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'seller.user_id = op.op_selprod_user_id', 'seller');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'seller.user_id = credential_user_id', 'seller_cred');
+        return $this;
     }
 
-    public function joinBuyerUser()
+    /**
+     * joinBuyerUser
+     *
+     * @return object
+     */
+    public function joinBuyerUser(): object
     {
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'buyer.user_id = o.order_user_id', 'buyer');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'buyer.user_id = credential_user_id', 'buyer_cred');
+        return $this;
     }
 
-    public function joinOtherCharges($bifurcationCharges = false, $excludeType = [])
+    /**
+     * joinOtherCharges
+     *
+     * @param  bool $bifurcationCharges
+     * @param  array $excludeType
+     * @return object
+     */
+    public function joinOtherCharges(bool $bifurcationCharges = false, array $excludeType = []): object
     {
         $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
         $ocSrch->doNotCalculateRecords();
@@ -85,50 +134,120 @@ class Report extends SearchBase
         }
 
         $this->joinTable('(' . $ocSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
+        return $this;
     }
 
-    public function joinOrderProductCharges($type, $alias = 'opc_temp')
+    /**
+     * joinOrderProductCharges
+     *
+     * @param  int $type
+     * @param  string $alias
+     * @return object
+     */
+    public function joinOrderProductCharges(int $type, string $alias = 'opc_temp'): object
     {
         $this->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', $alias . '.opcharge_op_id = op.op_id and ' . $alias . '.opcharge_type = ' . $type, $alias);
+        return $this;
     }
 
-    public function joinOrderProductTaxCharges()
+    /**
+     * joinOrderProductTaxCharges
+     *
+     * @return object
+     */
+    public function joinOrderProductTaxCharges(): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_TAX, 'optax');
         $this->joinSettings();
         $this->addFld('(SUM(IFNULL(optax.opcharge_amount,0))) as taxTotal');
         $this->addFld('SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0)) as sellerTaxTotal');
         $this->addFld('SUM(if(opst.op_tax_collected_by_seller = 0,IFNULL(optax.opcharge_amount,0),0)) as adminTaxTotal');
+        return $this;
     }
 
-    public function joinOrderProductShipCharges()
+    /**
+     * joinOrderProductShipCharges
+     *
+     * @return object
+     */
+    public function joinOrderProductShipCharges(): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
         $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFt JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
         $this->addFld('(SUM(IFNULL(opship.opcharge_amount,0))) as shippingTotal');
         $this->addFld('SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0)) as sellerShippingTotal');
         $this->addFld('SUM(if(ops.opshipping_by_seller_user_id = 0,IFNULL(opship.opcharge_amount,0),0)) as adminShippingTotal');
+        return $this;
     }
 
-    public function joinOrderProductDicountCharges()
+    /**
+     * joinOrderProductDicountCharges
+     *
+     * @return object
+     */
+    public function joinOrderProductDicountCharges(): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_DISCOUNT, 'opDis');
         $this->addFld('(SUM(IFNULL(opDis.opcharge_amount,0))) as couponDiscount');
+        return $this;
     }
 
-    public function joinOrderProductVolumeCharges()
+    /**
+     * joinOrderProductVolumeCharges
+     *
+     * @return object
+     */
+    public function joinOrderProductVolumeCharges(): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, 'opVolDis');
         $this->addFld('(SUM(IFNULL(opVolDis.opcharge_amount, 0))) as volumeDiscount');
+        return $this;
     }
 
-    public function joinOrderProductRewardCharges()
+    /**
+     * joinOrderProductRewardCharges
+     *
+     * @return object
+     */
+    public function joinOrderProductRewardCharges(): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT, 'opRewardDis');
         $this->addFld('(SUM(IFNULL(opRewardDis.opcharge_amount, 0))) as rewardDiscount');
+        return $this;
     }
 
-    public function addTotalOrdersCount($key = 'order_id', $opSelprodUserId = 0)
+    /**
+     * joinOrderUserAddress
+     *
+     * @param  int $addrType
+     * @return object
+     */
+    public function joinOrderUserAddress(int $addrType = Orders::BILLING_ADDRESS_TYPE): object
+    {
+        $this->joinTable(Orders::DB_TBL_ORDER_USER_ADDRESS, 'LEFT JOIN', 'o.order_id = oaddr.oua_order_id and oua_type = ' . $addrType, 'oaddr');
+        return $this;
+    }
+
+    /**
+     * joinOrderPayments
+     *
+     * @param  int $txnStatus
+     * @return object
+     */
+    public function joinOrderPayments(int $txnStatus = Orders::ORDER_PAYMENT_PAID): object
+    {
+        $this->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'o.order_id = opaym.opayment_order_id and opaym.opayment_txn_status = ' . $txnStatus, 'opaym');
+        return $this;
+    }
+
+    /**
+     * addTotalOrdersCount
+     *
+     * @param  string $key
+     * @param  int $opSelprodUserId
+     * @return object
+     */
+    public function addTotalOrdersCount(string $key = 'order_id', int $opSelprodUserId = 0): object
     {
         $srch = new self(0, [], $this->shopSpecific);
         $srch->joinOrders();
@@ -166,7 +285,7 @@ class Report extends SearchBase
                 break;
             case 'op_selprod_user_id':
                 $srch->joinSellerUser();
-                $srch->addMultipleFields(['op_selprod_user_id', 'count(DISTINCT(op.op_id)) as totOrders']);
+                $srch->addMultipleFields(['op_selprod_user_id', 'count(DISTINCT(o.order_id)) as totOrders']);
                 $srch->addGroupBy('op_selprod_user_id');
                 $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.op_selprod_user_id = op.op_selprod_user_id', 'ocount');
                 break;
@@ -177,28 +296,49 @@ class Report extends SearchBase
                 $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'ocount.order_user_id = o.order_user_id', 'ocount');
                 break;
         }
+        return $this;
     }
 
-    public function addStatusCondition($op_status, $orderPaymentCancel = false)
+    /**
+     * addStatusCondition
+     *
+     * @param  array $op_status
+     * @param  bool $orderPaymentCancel
+     * @return object
+     */
+    public function addStatusCondition(array $opStatus, bool $orderPaymentCancel = false): object
     {
-        if (is_array($op_status)) {
-            if (!empty($op_status)) {
-                $cnd = $this->addCondition('op.op_status_id', 'IN', $op_status);
+        /* if (is_array($opStatus)) {
+            if (!empty($opStatus)) {
+                $cnd = $this->addCondition('op.op_status_id', 'IN', $opStatus);
             } else {
                 $cnd = $this->addCondition('op.op_status_id', '=', 0);
             }
         } else {
-            $op_status_id = FatUtility::int($op_status);
+            $op_status_id = FatUtility::int($opStatus);
             $cnd = $this->addCondition('op.op_status_id', '=', $op_status_id);
+        } */
+        if (!empty($opStatus)) {
+            $cnd = $this->addCondition('op.op_status_id', 'IN', $opStatus);
+        } else {
+            $cnd = $this->addCondition('op.op_status_id', '=', 0);
         }
 
         if (true === $orderPaymentCancel) {
             $cnd->attachCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_CANCELLED, 'OR');
         }
+        return $this;
     }
 
 
-    public function setDateCondition($from = '', $to = '')
+    /**
+     * setDateCondition
+     *
+     * @param  string $from
+     * @param  string $to
+     * @return object
+     */
+    public function setDateCondition(string $from = '', string $to = ''): object
     {
         if (!empty($from)) {
             $this->addCondition('o.order_date_added', '>=', $from . ' 00:00:00');
@@ -207,47 +347,88 @@ class Report extends SearchBase
         if (!empty($to)) {
             $this->addCondition('o.order_date_added', '<=', $to . ' 23:59:59');
         }
+        return $this;
     }
 
-    public function setPaymentStatusCondition($paymentStatus = Orders::ORDER_PAYMENT_PAID)
+    /**
+     * setPaymentStatusCondition
+     *
+     * @param  int $paymentStatus
+     * @return object
+     */
+    public function setPaymentStatusCondition(int $paymentStatus = Orders::ORDER_PAYMENT_PAID): object
     {
         $cnd = $this->addCondition('o.order_payment_status', '=', $paymentStatus);
         $cnd->attachCondition('pm.plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('pm.plugin_code', '=', 'payatstore');
+        return $this;
     }
 
-    public function setCompletedOrdersCondition()
+    /**
+     * setCompletedOrdersCondition
+     *
+     * @return object
+     */
+    public function setCompletedOrdersCondition(): object
     {
         $this->addStatusCondition(unserialize(FatApp::getConfig('CONF_COMPLETED_ORDER_STATUS')));
         /* $completedStatus = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS", FatUtility::VAR_STRING, ''));
         $cancelledStatus = [FatApp::getConfig('CONF_DEFAULT_CANCEL_ORDER_STATUS')];
         $refundCompletedStatus = array_diff($completedStatus, $cancelledStatus);
         $this->addStatusCondition($refundCompletedStatus); */
+        return $this;
     }
 
-    public function excludeDeletedOrdersCondition()
+    /**
+     * excludeDeletedOrdersCondition
+     *
+     * @return object
+     */
+    public function excludeDeletedOrdersCondition(): object
     {
         $this->addCondition('order_deleted', '=', applicationConstants::NO);
+        return $this;
     }
 
-    public function setOrderBy($key, $sortBy = 'ASC')
+    /**
+     * setOrderBy
+     *
+     * @param  string $key
+     * @param  string $sortBy
+     * @return object
+     */
+    public function setOrderBy(string $key, string $sortBy = 'ASC'): object
     {
         if (!array_key_exists($sortBy, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortBy = applicationConstants::SORT_ASC;
         }
 
         switch ($key) {
+            case 'op_invoice_number':
+                $this->addOrder('o.order_id', $sortBy);
+                $this->addOrder($key, $sortBy);
+                break;
             default:
                 $this->addOrder($key, $sortBy);
                 break;
         }
+        return $this;
     }
 
-    public function setGroupBy($key)
+    /**
+     * setGroupBy
+     *
+     * @param  string $key
+     * @return object
+     */
+    public function setGroupBy(string $key): object
     {
         switch ($key) {
             case 'orderDate':
                 $this->addGroupBy('DATE(o.order_date_added)');
+                break;
+            case 'order_id':
+                $this->addGroupBy('o.order_id');
                 break;
             case 'product_id':
                 $this->addFld('SUBSTRING( op_selprod_code, 1, (LOCATE( "_", op_selprod_code ) - 1 ) ) as product_id');
@@ -273,9 +454,17 @@ class Report extends SearchBase
                 $this->addGroupBy($key);
                 break;
         }
+        return $this;
     }
 
-    public static function getFields($fields = [], $shopSpecific = false)
+    /**
+     * getFields
+     *
+     * @param  array $fields
+     * @param  bool $shopSpecific
+     * @return array
+     */
+    public static function getFields(array $fields = [], bool $shopSpecific = false): array
     {
         // pending NetSales
         $arr = [
@@ -321,7 +510,7 @@ class Report extends SearchBase
             return array_values($arr);
         }
 
-        $fields = array_diff($fields, ['taxTotal', 'shippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'opDiscountCharges', 'opNonDiscountCharges', 'sellerShippingTotal', 'adminShippingTotal', 'sellerTaxTotal', 'adminTaxTotal']);
+        $fields = array_diff($fields, ['taxTotal', 'shippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'opDiscountCharges', 'opNonDiscountCharges', 'sellerShippingTotal', 'adminShippingTotal', 'sellerTaxTotal', 'adminTaxTotal', 'totalAmount']);
 
         $flds = [];
         foreach ($fields as $key) {
@@ -335,17 +524,33 @@ class Report extends SearchBase
         return $flds;
     }
 
-    private function setFields($fields = [], $shopSpecific = false)
+    /**
+     * setFields
+     *
+     * @param  array $fields
+     * @param  bool $shopSpecific
+     * @return object
+     */
+    private function setFields(array $fields = [], bool $shopSpecific = false): object
     {
         if (empty($fields)) {
-            return;
+            return $this;
         }
         $this->attr[] = array_merge($this->attr, self::getFields($fields, $shopSpecific));
         $this->addMultipleFields($this->attr);
+        return $this;
     }
 
 
-    public static function salesReportObject($langId = 0, $joinSeller = false, $attr = array())
+    /**
+     * salesReportObject
+     *
+     * @param  int $langId
+     * @param  bool $joinSeller
+     * @param  array $attr
+     * @return object
+     */
+    public static function salesReportObject(int $langId = 0, bool $joinSeller = false, array $attr = array()): object
     {
         $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
         $ocSrch->doNotCalculateRecords();

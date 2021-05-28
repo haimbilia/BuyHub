@@ -89,7 +89,8 @@ class QnbPayController extends PaymentController
         $post = FatApp::getPostedData();
         $orderId = FatApp::getPostedData('OrderId');
         if (empty($orderId)) {
-            $this->logFailure($orderId, Labels::getLabel('MSG_Invalid_Callback_Response', $this->siteLangId));
+            FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+            return;
         }
 
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
@@ -116,6 +117,7 @@ class QnbPayController extends PaymentController
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }
+        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }
 
     public function paymentFailed()
@@ -189,7 +191,7 @@ class QnbPayController extends PaymentController
 
         $orderPaymentObj = new OrderPayment($orderId);
         $orderPaymentObj->addOrderPaymentComments($msg);
-        exit;
+        FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
     }
 
 }

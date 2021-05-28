@@ -122,6 +122,7 @@ class AdminPrivilege
     public const SECTION_SELLERS_REPORT = 116;
     public const SECTION_SUBSCRIPTION_REPORT = 117;
     public const SECTION_FINANCIAL_REPORT = 117;
+    public const SECTION_ORDERS_REPORT = 118;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -273,6 +274,9 @@ class AdminPrivilege
             static::SECTION_RATING_TYPES => Labels::getLabel('MSG_RATING_TYPES', CommonHelper::getLangId()),
             static::SECTION_BUYERS_REPORT => Labels::getLabel('MSG_CUSTOMER_REPORT', CommonHelper::getLangId()),
             static::SECTION_SELLERS_REPORT => Labels::getLabel('MSG_SELLER_REPORT', CommonHelper::getLangId()),
+            static::SECTION_SUBSCRIPTION_REPORT => Labels::getLabel('MSG_SUBSCRIPTION_REPORT', CommonHelper::getLangId()),
+            static::SECTION_FINANCIAL_REPORT => Labels::getLabel('MSG_FINANCIAL_REPORT', CommonHelper::getLangId()),
+            static::SECTION_ORDERS_REPORT => Labels::getLabel('MSG_ORDERS_REPORT', CommonHelper::getLangId()),
 
 
             /* static::SECTION_Languages => Labels::getLabel('MSG_Languages',CommonHelper::getLangId()),
@@ -1144,6 +1148,10 @@ class AdminPrivilege
     public function canViewFinancialReport($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_FINANCIAL_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+    public function canViewOrdersReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_ORDERS_REPORT, static::PRIVILEGE_READ, $returnResult);
     }
 
     public function canViewBuyersReport($adminId = 0, $returnResult = false)

@@ -30,7 +30,7 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement(
                     "a",
                     array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'class' => 'btn',
                         'title' => Labels::getLabel('LBL_download', $adminLangId),
                         'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
                         'target' => '_blank'
@@ -40,18 +40,22 @@ foreach ($attachments as $sn => $row) {
                 );
                 break;
             case 'preview':
-                $td->appendElement('plaintext', array(), $row[$key], true);
-                $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_download', $adminLangId),
-                        'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
-                        'target' => '_blank'
-                    ),
-                    '<i class="fa fa-download  icon"></i>',
-                    true
-                );
+                if (0 < $row['prev_afile_id']) {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                    $td->appendElement(
+                        "a",
+                        array(
+                            'class' => 'btn',
+                            'title' => Labels::getLabel('LBL_download', $adminLangId),
+                            'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
+                            'target' => '_blank'
+                        ),
+                        '<i class="fa fa-download  icon"></i>',
+                        true
+                    );
+                } else {
+                    $td->appendElement('plaintext', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
+                }
                 break;
             case 'pddr_options_code':
                 if (array_key_exists($row['pddr_options_code'], $options)) {
@@ -79,19 +83,20 @@ foreach ($attachments as $sn => $row) {
                     '<i class="fa fa-trash  icon"></i>',
                     true
                 );
-                if (empty($row['preview'])) {
-                    $td->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn btn-clean btn-sm btn-icon',
-                            'title' => Labels::getLabel('LBL_Preview', $adminLangId),
-                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
-                        ),
-                        '<i class="fa fa-caret-square-right icon"></i>',
-                        true
-                    );
+                if(true == $canDo) {
+                    if (empty($row['preview'])) {
+                        $td->appendElement(
+                            "a",
+                            array(
+                                'class' => 'btn btn-clean btn-sm btn-icon',
+                                'title' => Labels::getLabel('LBL_Preview', $adminLangId),
+                                'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
+                            ),
+                            '<i class="fa fa-caret-square-right icon"></i>',
+                            true
+                        );
+                    }
                 }
-                
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

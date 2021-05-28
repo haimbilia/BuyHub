@@ -55,14 +55,17 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     <div class="">
                                         <div class="products__title">
                                             <div>
-                                                <h1><?php echo $product['selprod_title']; ?></h1>
+                                                <h1>
+                                                    <img class="badges" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges.svg" width="26px" height="26px" alt="">
+                                                    <?php echo $product['selprod_title']; ?>
+                                                </h1>
                                                 <div class="favourite-wrapper favourite-wrapper-detail ">
                                                     <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
                                                     <div class="dropdown">
                                                         <a class="no-after share-icon" data-display="static" href="javascript:void(0)" data-toggle="dropdown">
                                                             <i class="icn">
                                                                 <svg class="svg">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
                                                                     </use>
                                                                 </svg>
                                                             </i>
@@ -180,8 +183,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                             </span>
                                                         </button>
                                                         <?php if ($option['values']) { ?>
-                                                            <div class="dropdown-menu dropdown-menu-anim">
-                                                                <ul class="nav nav-block" data-simplebar="init" style="max-height:150px;">
+                                                            <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
+                                                                <ul class="nav nav-block">
                                                                     <?php foreach ($option['values'] as $opVal) {
                                                                         $isAvailable = true;
                                                                         if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
@@ -468,7 +471,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             <div class="nav-detail nav-detail-js">
                 <ul>
                     <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
-                        <li><a class="nav-scroll-js is-active" href="#specifications"><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></a>
+                        <li>
+                            <a class="nav-scroll-js is-active" href="#specifications">
+                                <?php echo Labels::getLabel('LBL_FILES', $siteLangId); ?>
+                            </a>
                         </li>
                     <?php } ?>
                     <?php if (count($productSpecifications) > 0) { ?>
@@ -501,27 +507,42 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                     <div class="col-xl-7">
                         <div class="section-head">
                             <div class="section__heading" id="specifications">
-                                <h2><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></h2>
+                                <h2><?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?></h2>
                             </div>
                         </div>
                         <div class="cms bg-gray p-4 mb-4">
                             <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']
                                 && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))) {
-                                if (count($product['preview_links'])) {
+                                if (0 < count($product['preview_links'])) {
                             ?>
-                                    <div>Links:</div>
+                                    <div class="prod-ext-links"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
                             <?php   foreach ($product['preview_links'] as $keys => $link) {
                                         echo $link['pdl_preview_link'] . '<br />';
                                     }
                                 }
-                                if (count($product['preview_attachments'])) {
+                                if (0 < count($product['preview_attachments'])) {
                             ?>
-                                    <div>Attachments:</div>
+                                    <div class="prod-attached-files"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></div>
                             <?php
                                     foreach ($product['preview_attachments'] as $keys => $attachment) {
-                                        $fileExtension = substr($attachment['preview'], strlen($attachment['preview']) - 3, strlen($attachment['preview']));
-                                        echo '<a target="_blank" href ="' . UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview'] . '" title="' . $attachment['preview'] . '">' . $attachment['preview'] . '</a>';
-                                        echo '<br />';
+                                        if (0 < strlen($attachment['preview'])) {
+
+                                            $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
+                                            $fileExt = strtolower($fileExt);
+
+                                            $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
+                            ?>
+                                            <?php echo $attachment['preview']; ?>
+                                            <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
+                                                <a class="play-preview" href ="javascript:void(0);" title="<?php echo $attachment['preview'];?>" onclick="playVideo('<?php echo $videoPath;?>', '<?php echo $fileExt;?>'); return false;">
+                                                    <i class="fa fa-caret-square-right icon"></i>
+                                                </a>
+                                            <?php } ?>
+                                            <a class="download--preview" target="_blank" href ="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
+                                                <i class="fa fa-download icon"></i>
+                                            </a><br />
+                            <?php
+                                        }
                                     }
                                 }
                             } else {
@@ -800,3 +821,9 @@ $(function() {
 
 <!--Here is the facebook OG for this product  -->
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
+
+<!-- JWPlayer -->
+<script type="text/JavaScript">
+    jwplayer.key='<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, '');?>';
+</script>
+<!-- JWPlayer -->

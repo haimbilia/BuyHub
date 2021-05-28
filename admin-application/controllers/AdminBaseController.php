@@ -343,7 +343,7 @@ class AdminBaseController extends FatController
         $frm->addEmailField(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 
@@ -405,7 +405,7 @@ class AdminBaseController extends FatController
 
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', (array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->adminLangId)) + applicationConstants::getYesNoArr($this->adminLangId)), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->adminLangId), '', array(), '');
 
         /* $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
         $downloadAttachementsWithInventoryTrue->setRequired();

@@ -498,7 +498,7 @@ class MyAppController extends FatController
         $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $siteLangId), 'addr_address2');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($siteLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('LBL_Select', $siteLangId));
         $fld->requirement->setRequired(true);
 

@@ -23,7 +23,7 @@ class UsersReportController extends AdminBaseController
     {
         $usertype = FatApp::getPostedData('user_type', FatUtility::VAR_INT, User::USER_TYPE_BUYER);
         $this->validateViewPermission($usertype);
-        
+
         $fields = $this->getFormColumns($usertype);
         $srchFrm = $this->getSearchForm($fields, $usertype);
 
@@ -59,13 +59,13 @@ class UsersReportController extends AdminBaseController
                 $rSrch->setGroupBy('op_selprod_user_id');
                 $srch->joinTable('(' . $rSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = opq.op_selprod_user_id', 'opq');
                 $srch->addFld(['pchagres.promotionCharged']);
+                $srch->addCondition('u.user_is_supplier', '=', applicationConstants::YES);
                 break;
             default:
                 $srch->joinReferrerUser();
                 $srch->includeRewardsCount();
-                $srch->addFld('uref.user_name as referrerName');
-                $srch->addFld('uref_c.credential_email as referrerEmail');
-                $srch->addFld('urpbal.*');
+                $srch->addFld(['uref.user_name as referrerName', 'uref_c.credential_email as referrerEmail', 'urpbal.*']);
+                $srch->addCondition('u.user_is_buyer', '=', applicationConstants::YES);
 
                 $rSrch->addTotalOrdersCount('order_user_id');
                 $rSrch->setGroupBy('order_user_id');
@@ -91,7 +91,17 @@ class UsersReportController extends AdminBaseController
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
         }
-        
+
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
+        }
+
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -115,7 +125,7 @@ class UsersReportController extends AdminBaseController
                         case 'orderNetAmount':
                         case 'promotionCharged':
                         case 'availableBalance':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];

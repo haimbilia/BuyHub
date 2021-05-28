@@ -455,6 +455,23 @@ if (!empty($order['opship_tracking_url'])) {
                         </table>
                     </div>
                 </section>
+                <?php if (true === $canAttachMoreFiles && !$print) { ?>
+                    <section class="section no-print">
+                        <div class="sectionhead">
+                            <h4><?php echo Labels::getLabel('LBL_Add_more_attachments', $adminLangId); ?></h4>
+                        </div>
+                        <div class="sectionbody space">
+                            <?php 
+                            $moreAttachmentsFrm->setFormTagAttribute('class', 'web_form');
+                            $moreAttachmentsFrm->setFormTagAttribute('id', 'additional_attachments');
+                            $fld = $moreAttachmentsFrm->getField('downloadable_file');
+                            $fld->setFieldTagAttribute('onchange', 'uploadAdditionalAttachment(this); return false;');
+                            echo $moreAttachmentsFrm->getFormHtml();
+                            ?>
+                        </div>
+                    </section>
+                <?php } ?>
+                
                 <?php if (!empty($digitalDownloads) && !$print) { ?>
                     <section class="section no-print">
                         <div class="sectionhead">

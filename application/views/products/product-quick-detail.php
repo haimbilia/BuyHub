@@ -62,8 +62,8 @@
                                         </span>
                                     </button>
                                     <?php if ($option['values']) { ?>
-                                        <div class="dropdown-menu dropdown-menu-anim">
-                                            <ul class="nav nav-block" data-simplebar="init" style="max-height:130px;">
+                                        <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
+                                            <ul class="nav nav-block">
                                                 <?php foreach ($option['values'] as $opVal) {
                                                     $isAvailable = true;
                                                     if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
@@ -117,8 +117,7 @@
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                                     </use>
                                                 </svg><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
-                </div>
-                     
+                </div>          
                      
                 <?php } else {
                     echo $frmBuyProduct->getFormTag();

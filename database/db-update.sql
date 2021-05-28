@@ -519,6 +519,7 @@ UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl
 UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
 /* Shop And Product Ratings */
 
+
 DELETE FROM tbl_language_labels WHERE label_key = "ERR_USER_INACTIVE_OR_DELTED";
 
 INSERT IGNORE INTO `tbl_orders_status` (`orderstatus_id`, `orderstatus_identifier`, `orderstatus_color_class`, `orderstatus_type`, `orderstatus_priority`, `orderstatus_is_active`, `orderstatus_is_digital`) VALUES (NULL, 'Ready For Pickup', NULL, '1', '6', '1', '');
@@ -706,34 +707,8 @@ ALTER TABLE `tbl_product_digital_links`
 --
 ALTER TABLE `tbl_product_digital_links`
   MODIFY `pdl_id` int(11) NOT NULL AUTO_INCREMENT;
--- --- task_84719_Preview_module_for_digital_files -- ---
 
-UPDATE `tbl_email_templates` SET `etpl_replacements` = '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{product_name} Product Name <br>\r\n{new_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
-UPDATE `tbl_email_templates` SET `etpl_body` = '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                           \r\n								                           \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog {new_status}</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n												                                              Your catalog {product_name} has been {new_status} on {website_name}.</td>                                    \r\n										</tr> \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table> ' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
-UPDATE `tbl_email_templates` SET `etpl_name` = 'Seller - Catalog  Status Change' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
-UPDATE `tbl_email_templates` SET `etpl_subject` = 'Your Catalog {product_name} {new_status} at {website_name}' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1;
-
-UPDATE `tbl_sms_templates` SET `stpl_body` = 'Hello {shop_name},\r\nYour catalog {product_name} has been {new_status} on {website_name}\r\n\r\n{SITE_NAME} Team' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
-UPDATE `tbl_sms_templates` SET `stpl_replacements` = '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"New Status\", \"variable\":\"{new_status}\"},{\"title\":\"Product Name\", \"variable\":\"{product_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]' WHERE `tbl_sms_templates`.`stpl_code` = 'seller_catalog_request_status_change' AND `tbl_sms_templates`.`stpl_lang_id` = 1;
-
-ALTER TABLE `tbl_shipping_profile` CHANGE `shipprofile_name` `shipprofile_identifier` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
-
-CREATE TABLE `tbl_shipping_profile_lang` (
-  `shipprofilelang_shipprofile_id` int NOT NULL,
-  `shipprofilelang_lang_id` int NOT NULL,
-  `shipprofile_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile_id`, `shipprofilelang_lang_id`);
-INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
-('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
-ON DUPLICATE KEY UPDATE conf_val = 3;
-
-
---------------------------------------------------
-
--- --- task_84719_Preview_module_for_digital_files -- ---
---- Update tbl_attached_files table ---
+-- Update tbl_attached_files table ---
 DROP VIEW IF EXISTS pddr_files_view;
 
 CREATE VIEW pddr_files_view AS select tbl_seller_products.selprod_id, selprod_product_id, selprod_code, SUBSTRING(selprod_code, INSTR(selprod_code, '_') + 1) as new_selprodcode
@@ -750,9 +725,7 @@ INNER JOIN tbl_product_digital_data_relation as pddr ON pddr_record_id = afile_r
 SET afile.afile_record_id = pddr_id;
 
 DROP VIEW IF EXISTS pddr_files_view;
-
------------------------------------------------------------------------------------------
---- Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
+--  Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
 
 UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',');
 
@@ -781,15 +754,20 @@ SELECT 0, 0, link, new_selprodcode, selprod_id FROM pddr_links_view;
 UPDATE tbl_product_digital_links INNER JOIN  tbl_product_digital_data_relation ON pdl_selprod_id = pddr_record_id AND pdl_selprod_code =  pddr_options_code AND pddr_type = 2 SET pdl_record_id = pddr_id;
 
 DROP VIEW IF EXISTS pddr_links_view;
------------------------------------------------------------------------------------------
+
 ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_id`;
 ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_code`;
 
 ALTER TABLE `tbl_seller_products` DROP `selprod_downloadable_link`;
 
 UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options_code = '', 0, ifnull(pddr_options_code,0));
------------------------------------------------------------------------------------------
--- --- task_84719_Preview_module_for_digital_files -- ---
 
+-- --- task_84719_Preview_module_for_digital_files -- ---
+-- --- Display Total Savings on Checkout page  --- --
+ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
+ALTER TABLE `tbl_order_product_specifics` ADD `op_special_price` DECIMAL(10,2) NOT NULL AFTER `op_prodcat_id`;
+-- --- Display Total Savings on Checkout page  --- --
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_%';
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_%';
 
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Qnb', '13', 'Qnb', '0', '1');

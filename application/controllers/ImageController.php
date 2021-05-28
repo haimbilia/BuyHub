@@ -1360,4 +1360,23 @@ class ImageController extends FatController
                 break;
         }
     }
+
+    public function productVideo($afileId)
+    {
+        $afileId = FatUtility::int($afileId);
+        if ($afileId < 0) {
+            return false;
+        }
+        
+        $res = AttachedFile::getAttributesById($afileId);
+        if (false === $res) {
+            return false;
+        }
+        if ($res['afile_type'] != AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW) {
+            return false;
+        }
+        
+        echo AttachedFile::getVideo($res['afile_physical_path']);
+        exit;
+    }
 }

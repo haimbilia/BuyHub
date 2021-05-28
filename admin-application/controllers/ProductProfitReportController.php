@@ -86,7 +86,7 @@ class ProductProfitReportController extends AdminBaseController
                             break;
                         case 'transactionAmount':
                         case 'adminSalesEarnings':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];

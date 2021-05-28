@@ -1087,11 +1087,13 @@ class AccountController extends LoggedUserController
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
         }
 
-        /* CommonHelper::printArray($post);  */
-        if (CommonHelper::isFieldEncrypted($post['user_dob']) == true) {
+        $dob = FatApp::getPostedData('user_dob', FatUtility::VAR_STRING, '');
+        if (CommonHelper::isFieldEncrypted($dob) == true) {
             unset($post['user_dob']);
         }
-        if (CommonHelper::isFieldEncrypted($post['user_phone']) == true) {
+        
+        $userphone = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, 0);
+        if (CommonHelper::isFieldEncrypted($userphone) == true) {
             unset($post['user_phone']);
         }
 
@@ -2830,7 +2832,7 @@ class AccountController extends LoggedUserController
         }
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->siteLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
@@ -3987,6 +3989,7 @@ class AccountController extends LoggedUserController
         $srch->joinShopCountry();
         $srch->joinShopState();
         $srch->addOrderProductCharges();
+        $srch->joinOrderProductSpecifics();
         $srch->addCondition('order_id', '=', $orderId);
         if (0 < $opId) {
             $srch->addCondition('op_id', '=', $opId);

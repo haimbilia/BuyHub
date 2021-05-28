@@ -65,8 +65,7 @@
                         <div id="tabs_003" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_004" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_005" class="tabs_panel" style="display: none;"></div>
-                        <div id="tabs_006" class="tabs_panel" style="display: none;">
-                        </div>
+                        <div id="tabs_006" class="tabs_panel" style="display: none;"></div>
                      </div>
                 </div>
             </div>
