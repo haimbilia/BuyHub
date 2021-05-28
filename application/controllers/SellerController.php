@@ -581,20 +581,26 @@ class SellerController extends SellerBaseController
         }
 
         $digitalDownloads = array();
+        $digitalDownloadLinks = array();
+        $canAttachMoreFiles = false;
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
+            $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
+
+            if (DigitalOrderProduct::canAttachMoreFiles($orderDetail['op_status_id'])) {
+                $canAttachMoreFiles = true;
+                $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->siteLangId);
+                $moreAttachmentsFrm->fill(['op_id' => $orderDetail['op_id']]);
+                $this->set('moreAttachmentsFrm', $moreAttachmentsFrm);
+            }
         }
 
-        $digitalDownloadLinks = array();
-        if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
-        }
-        // CommonHelper::printArray($orderDetail);
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
         $this->set('shippedBySeller', $shippedBySeller);
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
+        $this->set('canAttachMoreFiles', $canAttachMoreFiles);
         $this->set('languages', Language::getAllNames());
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('frm', $frm);
@@ -5331,7 +5337,7 @@ class SellerController extends SellerBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $this->siteLangId), 'product_identifier');
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', Product::getProductTypes($this->siteLangId), Product::PRODUCT_TYPE_PHYSICAL, array(), '');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_attachements_at_inventory_level', $this->siteLangId), 'product_attachements_with_inventory', (array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId)), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_attachements_at_inventory_level', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->siteLangId), '', array(), '');
 
         $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand', $this->siteLangId), 'brand_name');
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {

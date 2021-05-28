@@ -3,7 +3,7 @@
 class ConfigurationsController extends AdminBaseController
 {
     /* these variables must be only those which will store array type data and will saved as serialized array [*/
-    private $serializeArrayValues = array('CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_DIGITAL_RETURN_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_PURCHASE_ORDER_STATUS', 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', 'CONF_SUBSCRIPTION_ORDER_STATUS', 'CONF_SELLER_SUBSCRIPTION_STATUS', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES');
+    private $serializeArrayValues = array('CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_DIGITAL_RETURN_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_PURCHASE_ORDER_STATUS', 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', 'CONF_SUBSCRIPTION_ORDER_STATUS', 'CONF_SELLER_SUBSCRIPTION_STATUS', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES');
     /* ] */
 
     public function __construct($action)
@@ -1106,6 +1106,10 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $this->adminLangId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, $enableDigitalDownloads, array('class' => 'list-inline'));
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_access_their_downloadable_Products.", $this->adminLangId) . "</small>";
 
+                $statusesToAttachMoreFiles = (!empty($arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'])) ? $arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'] : 0;
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $this->adminLangId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, $statusesToAttachMoreFiles, array('class' => 'list-inline'));
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_order_statuses_to_allow_seller_or_admin_to_attach_more_files_with_order_products", $this->adminLangId) . "</small>";
+
                 /* $purchaseOrderSelected = (!empty($arrValues['CONF_PURCHASE_ORDER_STATUS'])) ? $arrValues['CONF_PURCHASE_ORDER_STATUS'] : 0;
                 $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Purchases_Calculation_(For_Buyers)",$this->adminLangId),'CONF_PURCHASE_ORDER_STATUS',$orderStatusArr,$purchaseOrderSelected,array('class' => 'list-inline'));
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_are_considered_in_buyer's_purchase.",$this->adminLangId) . "</small>"; */
@@ -1970,10 +1974,6 @@ class ConfigurationsController extends AdminBaseController
 
                 break;
 
-            case Configurations::FORM_PPC:
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_products_home_page_caption', $this->adminLangId), 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_' . $langId);
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_shops_home_page_caption', $this->adminLangId), 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_' . $langId);
-                break;
             case Configurations::FORM_SERVER:
                 $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Maintenance_Text', $this->adminLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
                 $fld->requirements()->setRequired(true);

@@ -766,3 +766,7 @@ UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options
 ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
 ALTER TABLE `tbl_order_product_specifics` ADD `op_special_price` DECIMAL(10,2) NOT NULL AFTER `op_prodcat_id`;
 -- --- Display Total Savings on Checkout page  --- --
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_%';
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_%';
+
+
