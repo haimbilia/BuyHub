@@ -325,3 +325,10 @@ ALTER TABLE `tbl_shipping_profile_lang` ADD UNIQUE( `shipprofilelang_shipprofile
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_DEFAULT_INPROCESS_ORDER_STATUS', 3)
 ON DUPLICATE KEY UPDATE conf_val = 3;
+
+
+INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('vendor_cod_order_email', 1, 'Order Received', 'Hello {vendor_name}
+You have received a new cash on delivery order {order_id} at {SITE_NAME}
+
+{SITE_NAME} Team', '[{"title":"Seller", "variable":"{vendor_name}"},{"title":"Order Id", "variable":"{order_id}"}, {"title":"Website Name", "variable":"{SITE_NAME}"}]', 1);

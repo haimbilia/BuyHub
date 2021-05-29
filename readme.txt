@@ -118,6 +118,7 @@ Fixes:
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
     => 054255 - Unable to reach location if redirect from notification listing in admin.
+    => 054265 - missing sms template on seller end
 
 
 Enhancements :
