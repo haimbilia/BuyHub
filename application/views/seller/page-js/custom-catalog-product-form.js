@@ -1248,7 +1248,7 @@ downloadsForm = function(preqId, linkId, getList) {
 
     var data = '&preq_id=' + preqId + '&link_id=' + linkId;
 
-    fcom.displayProcessing(langLbl.requestProcessing);
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
     
     fcom.ajax(fcom.makeUrl('Seller', 'downloadsForm'), data, function(res){
         $("#digital_download_form").html(res);
@@ -1276,7 +1276,7 @@ saveDownloadLinks = function ()
 
     data = data + '&prod_ref_type=1';
 
-    fcom.displayProcessing(langLbl.requestProcessing);
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
     fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function(t) {
         var ans = $.parseJSON(t);
@@ -1316,7 +1316,7 @@ saveDownloadFiles = function()
     }
     
     data.append('prod_ref_type', 1);
-    fcom.displayProcessing(langLbl.requestProcessing);
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
     $.ajax({
         url : fcom.makeUrl('Seller', 'setupDigitalDownloads'),
         type: "POST",
@@ -1360,7 +1360,7 @@ saveDigitalPreviewFile = function()
         data.append('preview_file', file);
     });
 
-    fcom.displayProcessing(langLbl.requestProcessing);
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
     $.ajax({
         url : fcom.makeUrl('Seller', 'setupDigitalPreviewFile'),
@@ -1420,8 +1420,6 @@ deleteDigitallink = function(linkId, refId)
     
     var data = '&link_id=' + linkId + '&ref_id=' + refId;
 
-    // fcom.displayProcessing(langLbl.requestProcessing);
-
     fcom.updateWithAjax( fcom.makeUrl( 'Seller', 'deleteDigitalLink'), data , function(res) {
         if( res.status == 1 ){
             getDigitalDownloads();
@@ -1434,7 +1432,6 @@ deleteDigitalFile = function(afile_id, prod_id)
     var agree = confirm(langLbl.confirmDelete);
     if( !agree ){ return false; }
 
-    // fcom.displayProcessing(langLbl.requestProcessing);
     var data = '&afile_id=' + afile_id + '&ref_id=' + prod_id;
     fcom.updateWithAjax( fcom.makeUrl( 'Seller', 'deleteDigitalFile'), data , function(res) {
         if( res.status == 1 ){

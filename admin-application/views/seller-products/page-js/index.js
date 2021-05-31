@@ -505,7 +505,7 @@ $(document).ready(function(){
 (function() {
 
 	sellerProductDownloadFrm = function( selprod_id, type ) {
-		fcom.displayProcessing(langLbl.requestProcessing);
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 		fcom.updateFaceboxContent('<div class="col-md-12" id="digital_download_form"></div> <div class="col-md-12" class="dd-list"><div class="row" id="digital_download_list"></div></div>');
 		
 		fcom.ajax(fcom.makeUrl('SellerProducts', 'sellerProductDownloadFrm', [selprod_id]), '', function(t) {
@@ -551,8 +551,8 @@ $(document).ready(function(){
 		if (optionCombi == '') {
 			data = data + '&option_comb_id=0';
 		}
-		fcom.displayProcessing(langLbl.requestProcessing);
-
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+		
 		fcom.ajax(fcom.makeUrl('SellerProducts', 'setupDigitalDownloads'), data, function(t) {
 			var ans = $.parseJSON(t);
 			if( ans.status == 0 ){
@@ -592,8 +592,8 @@ $(document).ready(function(){
 		
 		data.append('prod_ref_type', 1);
 
-		fcom.displayProcessing(langLbl.requestProcessing);
-
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+		
 		$.ajax({
 			url : fcom.makeUrl('SellerProducts', 'setupDigitalDownloads'),
 			type: "POST",
@@ -618,7 +618,7 @@ $(document).ready(function(){
 
 	attachDigitalPreviewFile = function (option, langId, refId, subRefId)
 	{
-		$(".option-comb-id-js").val(option);
+		/* $(".option-comb-id-js").val(option); */
 		$(".file-language-js").val(langId);
 		$('#frmDownload input[name=dd_link_id]').val(refId);
 		$('#frmDownload input[name=dd_link_ref_id]').val(subRefId);
@@ -637,8 +637,8 @@ $(document).ready(function(){
 			data.append('preview_file', file);
 		});
 
-		fcom.displayProcessing(langLbl.requestProcessing);
-
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+		
 		$.ajax({
 			url : fcom.makeUrl('SellerProducts', 'setupDigitalPreviewFile'),
 			type: "POST",
@@ -669,7 +669,7 @@ $(document).ready(function(){
 		
 		var data = '&link_id=' + linkId + '&ref_id=' + refId;
 
-		fcom.displayProcessing(langLbl.requestProcessing);
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
     	fcom.ajax( fcom.makeUrl( 'SellerProducts', 'deleteDigitalLink'), data, function(t) {
 			var ans = $.parseJSON(t);
@@ -687,7 +687,7 @@ $(document).ready(function(){
 		var agree = confirm(langLbl.confirmDelete);
 		if( !agree ){ return false; }
 
-		fcom.displayProcessing(langLbl.requestProcessing);
+		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 		var data = '&afile_id=' + afile_id + '&ref_id=' + prod_id;
 		fcom.ajax( fcom.makeUrl( 'SellerProducts', 'deleteDigitalFile'), data , function(res) {
 			var ans = $.parseJSON(res);

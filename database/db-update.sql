@@ -519,7 +519,7 @@ UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '4' WHERE `tbl
 UPDATE `tbl_seller_product_rating` SET `sprating_ratingtype_id` = '3' WHERE `tbl_seller_product_rating`.`sprating_ratingtype_id` = 2;
 /* Shop And Product Ratings */
 
-<<<<<<< HEAD
+
 DELETE FROM tbl_language_labels WHERE label_key = "ERR_USER_INACTIVE_OR_DELTED";
 
 INSERT IGNORE INTO `tbl_orders_status` (`orderstatus_id`, `orderstatus_identifier`, `orderstatus_color_class`, `orderstatus_type`, `orderstatus_priority`, `orderstatus_is_active`, `orderstatus_is_digital`) VALUES (NULL, 'Ready For Pickup', NULL, '1', '6', '1', '');
@@ -761,6 +761,7 @@ ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_code`;
 ALTER TABLE `tbl_seller_products` DROP `selprod_downloadable_link`;
 
 UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options_code = '', 0, ifnull(pddr_options_code,0));
+
 -- --- task_84719_Preview_module_for_digital_files -- ---
 -- --- Display Total Savings on Checkout page  --- --
 ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
@@ -769,4 +770,4 @@ ALTER TABLE `tbl_order_product_specifics` ADD `op_special_price` DECIMAL(10,2) N
 delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_%';
 delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_%';
 
-
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Qnb', '13', 'Qnb', '0', '1');

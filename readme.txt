@@ -6,6 +6,7 @@ New Feature :
     => 82248 : DPO Payment Gateway Integration
     => 82892 : Easypost Shipping API Integration
     =>  Shopify sync module for SV seller
+    => 85399 : QNB payment gateway 
 
 Updates:
     => Tax Module update
@@ -272,3 +273,11 @@ Released Version:
 Tasks:
     task-84719 Preview module for digital files
     task-85619 Adding files when digital order is delivered
+
+=======================================
+
+Released Version:
+
+bugs:
+    #054201	while adding catalog for digital item> only option to add attachment at inventory level is either Yes or No
+    #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted

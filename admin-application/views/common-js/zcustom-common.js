@@ -817,3 +817,12 @@ function resetReportFirstColumnWidth(ratio) {
     $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
     $('.datatable_cell_left').children('span').css('display', 'block');
 }
+
+
+$(document).on('click', '.v-tabs--js ul li', function(e){
+    e.preventDefault();
+    $('.v-tabs--js .is-active').removeClass('is-active');
+    var target = $('a.v-tab--js', this).attr('href');
+    $(this).addClass('is-active');
+    $(target).addClass('is-active');
+});

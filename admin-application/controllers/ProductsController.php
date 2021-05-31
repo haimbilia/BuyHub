@@ -987,7 +987,7 @@ class ProductsController extends AdminBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $this->adminLangId), 'product_identifier');
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($this->adminLangId), Product::PRODUCT_TYPE_PHYSICAL, array(), '');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', (array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->adminLangId)) + applicationConstants::getYesNoArr($this->adminLangId)), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->adminLangId), '', array(), '');
 
         $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
         $downloadAttachementsWithInventoryTrue->setRequired();
@@ -1937,5 +1937,21 @@ class ProductsController extends AdminBaseController
 
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
+    }
+    
+    public function viewProdOptions(int $product_id)
+    {
+        if (1 > $product_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        }
+
+        $productOptions = Product::getProductOptions($product_id, $this->adminLangId, true);
+        if (empty($productOptions)) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_NO_RECORD_FOUND', $this->adminLangId));
+        }
+
+        $this->set('productOptions', $productOptions);
+        $json['html'] = $this->_template->render(false, false, 'products/prod-options.php', true);
+        FatUtility::dieJsonSuccess($json);
     }
 }
