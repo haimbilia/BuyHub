@@ -31,17 +31,18 @@ class SubscriptionSellerReportController extends AdminBaseController
         $keyword = FatApp::getPostedData('keyword', null, '');
 
         $srch = new OrderSubscriptionSearch($this->adminLangId, true, true);
+        $srch->joinWithCurrentSubscription();
         $srch->joinSubscription();
         $srch->joinOrderUser();
         $srch->joinOtherCharges();
-        $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
-        $srch->addGroupBy('order_user_id');
-        $srch->addMultipleFields(['user_autorenew_subscription', 'ossubs_subscription_name', 'ossubs_interval', 'ossubs_frequency', 'ossubs_type', 'ou.user_name as user_name', 'sum(ossubs_price + ifnull(op_other_charges,0)) as amountPaid', 'count(DISTINCT(if(order_renew = 1 and order_payment_status = ' . Orders::ORDER_PAYMENT_PAID . ', order_id, null))) as spRenewals', 'count(DISTINCT(if(ossubs_status_id = ' . OrderSubscription::CANCELLED_SUBSCRIPTION . ', order_id, null))) as spackageCancelled', 'ossubs_from_date', 'ossubs_till_date']);
-        /*toDo ossubs_from_date and  ossubs_till_date from last order*/
+        $srch->addGroupBy('o.order_user_id');
+        $srch->addCondition('o.order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->includeCount();
+        $srch->addMultipleFields(['user_autorenew_subscription', 'oss_l.ossubs_subscription_name', 'oss.ossubs_interval', 'oss.ossubs_frequency', 'oss.ossubs_type', 'ou.user_name as user_name', 'oss.ossubs_from_date', 'oss.ossubs_till_date', 'subscount.*']);
 
         if (!empty($keyword)) {
-            $cnd = $srch->addCondition('user_name', 'like', '%' . $keyword . '%');
-            $cnd->attachCondition('ossubs_subscription_name', 'like', '%' . $keyword . '%');
+            $srch->addHaving('user_name', 'like', '%' . $keyword . '%', 'AND');
+            $srch->addHaving('oss_l.ossubs_subscription_name', 'like', '%' . $keyword . '%', 'OR');
         }
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
@@ -102,7 +103,7 @@ class SubscriptionSellerReportController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-
+        echo $srch->getError();
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
