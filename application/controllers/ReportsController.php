@@ -219,43 +219,98 @@ class ReportsController extends SellerBaseController
     public function productsInventory()
     {
         $this->userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId());
-        if (!User::canAccessSupplierDashboard()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
-        }
-        $frmSrch = $this->getProductInventorySearchForm($this->siteLangId);
+        $fields = $this->productsInventoryColumns($this->siteLangId);
+        $frmSrch = $this->getProductInventorySearchForm($fields);
         $this->set('frmSrch', $frmSrch);
         $this->_template->render(true, true);
     }
 
     public function searchProductsInventory($export = "")
     {
-        if (!User::canAccessSupplierDashboard()) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $post = FatApp::getPostedData();
-        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
+        $fields = $this->productsInventoryColumns($this->siteLangId);
+        $frmSrch = $this->getProductInventorySearchForm($fields);
+        $post = $frmSrch->getFormDataFromArray(FatApp::getPostedData());
+
+        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         if ($page < 2) {
             $page = 1;
         }
-        $userId = $this->userParentId;
-        $srch = SellerProduct::getSearchObject($this->siteLangId);
-        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
-        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'p.product_brand_id = b.brand_id', 'b');
-        $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id  AND brandlang_lang_id = ' . $this->siteLangId, 'b_l');
-        $srch->addCondition('selprod_user_id', '=', $userId);
-        $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addOrder('selprod_active', 'DESC');
-        $srch->addOrder('product_name');
-        $srch->addMultipleFields(
-            array(
-                'selprod_id', 'selprod_user_id', 'selprod_cost', 'selprod_price', 'selprod_stock', 'selprod_product_id', 'selprod_sku',
-                'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'b_l.brand_name'
-            )
-        );
+
+        $opSrch = new Report(0, array_keys($fields), true);
+        $opSrch->joinOrders();
+        $opSrch->joinPaymentMethod();
+        $opSrch->joinOtherCharges(true);
+        $opSrch->joinOrderProductTaxCharges();
+        $opSrch->joinOrderProductShipCharges();
+        $opSrch->joinOrderProductDicountCharges();
+        $opSrch->joinOrderProductVolumeCharges();
+        $opSrch->joinOrderProductRewardCharges();
+        $opSrch->setPaymentStatusCondition();
+        $opSrch->setCompletedOrdersCondition();
+        $opSrch->excludeDeletedOrdersCondition();
+        $opSrch->addTotalOrdersCount('selprod_id');
+        $opSrch->setGroupBy('selprod_id');
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opSrch->removeFld(['product_name', 'followers', 'selprod_price', 'selprod_sku']);
+        $opSrch->addCondition('op.op_selprod_user_id', '=', $this->userParentId);
+
+        /* get Seller product Options[ */
+        $spOptionSrch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
+        $spOptionSrch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
+        $spOptionSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $this->siteLangId, 'ov_lang');
+        $spOptionSrch->joinTable(Option::DB_TBL, 'INNER JOIN', '`option`.option_id = ov.optionvalue_option_id', '`option`');
+        $spOptionSrch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', '`option`.option_id = option_lang.optionlang_option_id AND option_lang.optionlang_lang_id = ' . $this->siteLangId, 'option_lang');
+        $spOptionSrch->doNotCalculateRecords();
+        $spOptionSrch->doNotLimitRecords();
+        $spOptionSrch->addGroupBy('spo.selprodoption_selprod_id');
+        $spOptionSrch->addMultipleFields(array('spo.selprodoption_selprod_id', 'IFNULL(option_name, option_identifier) as option_name', 'IFNULL(optionvalue_name, optionvalue_identifier) as optionvalue_name', 'GROUP_CONCAT(option_name) as grouped_option_name', 'GROUP_CONCAT(optionvalue_name) as grouped_optionvalue_name'));
+        /* ] */
+
+        /* Sub Query to get, how many users added current product in his/her wishlist[ */
+        $uWsrch = new UserWishListProductSearch($this->siteLangId);
+        $uWsrch->doNotCalculateRecords();
+        $uWsrch->doNotLimitRecords();
+        $uWsrch->joinWishLists();
+        $uWsrch->addMultipleFields(array('uwlp_selprod_id', 'uwlist_user_id'));
+        /* ] */
+
+        $srch = new ProductSearch($this->siteLangId, '', '', false, false, false);
+        $srch->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'p.product_id = selprod.selprod_product_id', 'selprod');
+        $srch->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'selprod.selprod_id = sprod_l.selprodlang_selprod_id AND sprod_l.selprodlang_lang_id = ' . $this->siteLangId, 'sprod_l');
+        $srch->joinSellers();
+        $srch->joinBrands($this->siteLangId, false, true);
+        //$srch->addCondition('brand_id', '!=', 'NULL');
+        $srch->joinShops($this->siteLangId, false, false);
+        $srch->joinTable('(' . $spOptionSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'selprod_id = spoq.selprodoption_selprod_id', 'spoq');
+        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'selprod.selprod_id = opq.op_selprod_id', 'opq');
+        $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = selprod.selprod_id', 'tquwl');
+        $srch->joinProductToCategory();
+        $srch->addCondition('selprod.selprod_id', '!=', 'NULL');
+        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'selprod_sku', 'opq.*'));
+
+        /* groupby added, because if same product is linked with multiple categories, then showing in repeat for each category[ */
+        $srch->addGroupBy('selprod_id');
+        /* ] */
+
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
+        }
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
+        if (!empty($keyword)) {
+            $srch->addKeywordSearch($keyword);
+        }
 
         if ($keyword = FatApp::getPostedData('keyword')) {
             $cnd = $srch->addCondition('product_name', 'like', "%$keyword%");
@@ -280,6 +335,7 @@ class ReportsController extends SellerBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
+            echo $srch->getError();
             $arrListing = FatApp::getDb()->fetchAll($rs);
 
             if (count($arrListing)) {
@@ -294,6 +350,9 @@ class ReportsController extends SellerBaseController
             $this->set('postedData', $post);
             $this->set('recordCount', $srch->recordCount());
             $this->set('arrListing', $arrListing);
+            $this->set('fields', $fields);
+            $this->set('sortBy', $sortBy);
+            $this->set('sortOrder', $sortOrder);
             $this->_template->render(false, false);
         }
     }
@@ -401,16 +460,6 @@ class ReportsController extends SellerBaseController
     public function exportProductsInventoryStockStatusReport()
     {
         $this->searchProductsInventoryStockStatus("export");
-    }
-
-    private function getProductInventorySearchForm($langId)
-    {
-        $frm = new Form('frmProductInventorySrch');
-        $frm->addTextBox('', 'keyword', '');
-        $frm->addHiddenField('', 'page');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
-        return $frm;
     }
 
     private function getProductInventoryStockStatusSearchForm($langId)
@@ -531,6 +580,8 @@ class ReportsController extends SellerBaseController
                         case 'commissionCharged':
                         case 'refundedCommission':
                         case 'adminSalesEarnings':
+                        case 'refundedShippingFromSeller':
+                        case 'refundedTaxFromSeller':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
@@ -568,6 +619,56 @@ class ReportsController extends SellerBaseController
         $this->searchSalesReport("export");
     }
 
+    private function getProductInventorySearchForm($fields = [])
+    {
+        $frm = new Form('frmProductInventorySrch');
+        $frm->addHiddenField('', 'page');
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        if (!empty($fields)) {
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
+        }
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        return $frm;
+    }
+
+    private function productsInventoryColumns($langId)
+    {
+        $selProdInventoryReportCacheVar = FatCache::get('selProdInventoryReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$selProdInventoryReportCacheVar) {
+            $arr = [
+                'product_name'    =>    Labels::getLabel('LBL_Product_name', $langId),
+                'selprod_sku'    =>    Labels::getLabel('LBL_SKU', $langId),
+                'followers'    =>    Labels::getLabel('LBL_Favorites', $langId),
+                'selprod_price'    =>    Labels::getLabel('LBL_Unit_Price', $langId),
+                'totOrders' => Labels::getLabel('LBL_Order_Placed', $langId),
+                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $langId),
+                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $langId),
+                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $langId),
+                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $langId),
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $langId),
+                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $langId),
+                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $langId),
+                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $langId),
+                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $langId),
+                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $langId),
+                'refundedShippingFromSeller' => Labels::getLabel('LBL_Refunded_Shipping', $langId),
+                'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $langId),
+                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $langId),
+                'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $langId),
+                'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $langId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $langId)
+            ];
+            FatCache::set('selProdInventoryReportCacheVar' . $langId, serialize($arr), '.txt');
+        } else {
+            $arr =  unserialize($selProdInventoryReportCacheVar);
+        }
+
+        return $arr;
+    }
+
     private function getSalesReportSearchForm($fields = [], $orderDate = '')
     {
         $frm = new Form('frmSalesReportSrch');
@@ -582,7 +683,6 @@ class ReportsController extends SellerBaseController
 
         if (!empty($fields)) {
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
-
             $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
         }
 
@@ -593,7 +693,7 @@ class ReportsController extends SellerBaseController
 
     private function getFormColumns($orderDate = '')
     {
-        $shopsReportCacheVar = FatCache::get('shopsReportCacheVar' . $this->userParentId . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $shopsReportCacheVar = FatCache::get('shopsReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$shopsReportCacheVar) {
             $arr = [
                 'orderDate' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -604,27 +704,13 @@ class ReportsController extends SellerBaseController
                 'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->siteLangId),
                 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
                 'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->siteLangId),
-
-                // 'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->siteLangId),
                 'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->siteLangId),
-                // 'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->siteLangId),
-
-                // 'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->siteLangId),
                 'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->siteLangId),
-                // 'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->siteLangId),
-
-                // 'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->siteLangId),
                 'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->siteLangId),
-                // 'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->siteLangId),
-
                 'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId),
-                // 'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->siteLangId),
                 'refundedShippingFromSeller' => Labels::getLabel('LBL_Refunded_Shipping', $this->siteLangId),
-                // 'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
                 'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
-
                 'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
-
                 'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->siteLangId),
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->siteLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId),

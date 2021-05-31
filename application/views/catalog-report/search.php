@@ -45,29 +45,17 @@ foreach ($arrListing as $sn => $row) {
             case 'listserial':
                 $span->appendElement('plaintext', array(), $sr_no);
                 break;
-            case 'product_name':
-                $name = ($row['selprod_title'] != '') ? $row['selprod_title'] : $row['product_name'];
-                if ($row['grouped_option_name'] != '') {
-                    $groupedOptionNameArr = explode(',', $row['grouped_option_name']);
-                    $groupedOptionValueArr = explode(',', $row['grouped_optionvalue_name']);
-                    if (!empty($groupedOptionNameArr)) {
-                        foreach ($groupedOptionNameArr as $key => $optionName) {
-                            $name .= '<br/><strong>' . $optionName . ':</strong> ' . $groupedOptionValueArr[$key];
-                        }
-                    }
-                }
 
-                if ($row['brand_name'] != '') {
-                    $name .= "<br/><strong>" . Labels::getLabel('LBL_Brand', $siteLangId) . ":  </strong>" . $row['brand_name'];
-                }
-                $span->appendElement('plaintext', array(), $name, true);
+            case 'orderDate':
+                $span->appendElement('plaintext', array(), '<a href="' . UrlHelper::generateUrl(
+                    'Reports',
+                    'salesReport',
+                    array($row[$key])
+                ) . '">' . FatDate::format($row[$key]) . '</a>', true);
                 break;
-            case 'price':
-                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row['selprod_price'], true, true));
-                break;
-
-            case 'followers':
-                $span->appendElement('plaintext', array(), $row[$key], true);
+            case 'order_net_amount':
+                $amt = CommonHelper::orderProductAmount($row);
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($amt, true, true));
                 break;
 
             case 'grossSales':
@@ -103,12 +91,12 @@ if (count($arrListing) == 0) {
 } ?>
 </div>
 <?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductInventorySrchPaging'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToProductsInventorySearchPage');
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSrchPaging', 'method' => 'post'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSalesReportSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 <script>
     var x = $(".card-body").width();
-    var actualWidth = x / 6;
+    var actualWidth = x / 7;
     $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
     $('.datatable_cell_left').children('span').css('display', 'block');
     $('.datatable_cell_left').children('span').css('white-space', 'normal');

@@ -324,7 +324,7 @@
                 ) { ?>
                   <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Reports', $adminLangId); ?></a>
                       <ul>
-                          <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Sales', $adminLangId); ?></a>
+                          <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Sales_Report', $adminLangId); ?></a>
                               <ul>
                                   <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                       <li><a href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>"><?php echo Labels::getLabel('LBL_Sales_Over_Time', $adminLangId); ?></a></li>

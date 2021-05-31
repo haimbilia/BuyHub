@@ -79,7 +79,7 @@ class CustomRouter
         }
         define('MOBILE_APP_USER_TYPE', $userType);
 
-        self::checkRequiredParam($controller, $action);
+        // self::checkRequiredParam($controller, $action);
         /* Handled CDN url for static contents and 404 for other requests. Specially when mapped on same root directory[*/
         if (CDN_DOMAIN_URL != '' && (strpos(CDN_DOMAIN_URL, $_SERVER['SERVER_NAME']) !== false)) {
             if (!UrlHelper::staticContentProvider($controller, $action)) {
@@ -188,7 +188,7 @@ class CustomRouter
         }
     }
 
-    private static function checkRequiredParam($controller, $action)
+    /* private static function checkRequiredParam($controller, $action)
     {
         if (empty($action)) {
             return false;
@@ -207,5 +207,5 @@ class CustomRouter
         } catch (Exception $exc) {
             FatUtility::exitWithErrorCode(404);
         }
-    }
+    } */
 }
