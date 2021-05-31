@@ -395,7 +395,7 @@ class Badge extends MyAppModel
                             THEN "' . $returnAcceptanceRate . '" = blinkcond_condition_from
                         WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . '" 
                             THEN "' . $orderCancellationRate . '" = blinkcond_condition_from
-                        ELSE 
+                        ELSE TRUE
                     END)
                 ELSE 
                     badgelink_record_id = (CASE 
