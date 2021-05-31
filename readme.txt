@@ -6,6 +6,7 @@ New Feature :
     => 82248 : DPO Payment Gateway Integration
     => 82892 : Easypost Shipping API Integration
     =>  Shopify sync module for SV seller
+    => 85399 : QNB payment gateway 
 
 Updates:
     => Tax Module update
