@@ -163,6 +163,7 @@ Fixes:
     => 053935 - when buyer purchases multiple qty (incl. tax) then on seller end in transactions it's listing $1000.02 and under reports it's listing $1000 and on buyer end it's listing $0.01 as rounding off amount
     => 053948 - getting invalid slot when buyer changes date for pickup (admin's place)
     => 053855 - admin> reports> top products> filter> search by keyword is missing 
+    => 054278 - if for any digital item there is no preview available then preview tab shouldn't be displayed
 
 New Features:
     => Admin shipped products listing page
