@@ -124,6 +124,7 @@ Fixes:
     => 054183 - on admin order cancellation page roundoff error coming
     => 054242 - paystack gateway not supporting ZAR currency
     => 054262 - some issue with collection 
+    => 054279 - warranty needs to be optional when product is digital
 
 
 Enhancements :
