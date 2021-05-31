@@ -1325,18 +1325,4 @@ class SellerProduct extends MyAppModel
 
         return $optionRows;
     }
-
-    /* public static function getSelProdAvgRating(int $selProdId)
-    {
-        $selProdReviewObj = new SelProdReviewSearch();
-        $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
-        $selProdReviewObj->doNotCalculateRecords();
-        $selProdReviewObj->doNotLimitRecords();
-        $selProdReviewObj->addGroupBy('spr.spreview_product_id');
-        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-        $selProdReviewObj->addMultipleFields(array("ROUND(AVG(sprating_rating),2) as prod_rating"));
-        $selProdReviewObj->addCondition('spreview_selprod_id', '=', $selProdId);
-        CommonHelper::printArray(FatApp::getDb()->fetch($selProdReviewObj->getResultSet()));
-    } */
 }
