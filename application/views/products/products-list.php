@@ -4,8 +4,22 @@ $displayProductNotAvailableLable = false;
 if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
     $displayProductNotAvailableLable = true;
 }
+
+$vtype = $postedData['vtype'] ?? false;
+$productListClass = '';
+if ($vtype == 'grid') {
+    $productListClass = 'listing-products--list';
+} elseif ($vtype == 'list') {
+    $productListClass = 'listing-products--grid';
+}
+
 ?>
-<div id="productsList">
+<div id="productsList" class="<?php echo $productListClass ?>">
+    <?php 
+    if ($vtype == 'map') {
+        include(CONF_THEME_PATH . 'products/products-list-map.php');
+    } else {    
+    ?>
     <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
         <?php if ($products) {
             $showActionBtns = !empty($showActionBtns) ? $showActionBtns : false;
@@ -73,5 +87,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
             $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message)); ?>
-<?php } ?>
+    <?php } 
+    
+}?>
 </div>

@@ -169,11 +169,13 @@ $(document).ready(function() {
     /* for toggling of grid/list view[ */
 
     $(document).on('click', '.list-grid-toggle', function() {
-        //   var txt = $(".icon").hasClass('icon-grid') ? 'List' : 'Grid';
+               //   var txt = $(".icon").hasClass('icon-grid') ? 'List' : 'Grid';
         $('.icon').toggleClass('icon-grid');
         if ($(".icon").hasClass('icon-grid')) {
+            $("form[name=frmProductSearch] input[name=vtype]").val('grid');
             $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
         } else {
+            $("form[name=frmProductSearch] input[name=vtype]").val('list');
             $('#productsList').removeClass('listing-products--list').addClass('listing-products--grid');
         }
         /* $(".label").text(txt); */
@@ -251,7 +253,8 @@ $(document).on('mouseover mouseout', '#mapProducts--js li', function (e) {
         });
     });
 
-$(document).on('click', '.listing-map-view-toggle--js', function () {
+$(document).on('click', '.listing-map-view-toggle--js', function () {   
+    $("form[name=frmProductSearch] input[name=vtype]").val('map');
     window.location.href = getSearchQueryUrl(true);
 });
 
@@ -468,12 +471,11 @@ function getSearchQueryUrl(includeBaseUrl) {
     if (category > 0) {
         delete searchArr['category'];
         url = url + setQueryParamSeperator(url) + 'category' + valueSeperator + category;
-    }
-
+    }   
     for (var key in searchArr) {
         url = url + setQueryParamSeperator(url) + key.replace(/_/g, '-') + valueSeperator + searchArr[key];
     }
-
+    
     /* var currency = parseInt($("input[name=currency_id]").val());
     if(currency > 0){
     	delete searchArr['currency'];
@@ -743,7 +745,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         var minPrice = parseInt($("input[name=priceFilterMinValue]").val());
         var defaultMaxPrice = parseInt($("input[name=priceFilterMaxValue]").data('defaultvalue'));
         var maxPrice = parseInt($("input[name=priceFilterMaxValue]").val());
-        if ((minPrice != defaultMinPrice) || (maxPrice != defaultMaxPrice)) {
+        if ( !isNaN(defaultMinPrice) && !isNaN(defaultMaxPrice) && ( (minPrice != defaultMinPrice) || (maxPrice != defaultMaxPrice))) {       
             addPricefilter(false);
         }
 
@@ -829,11 +831,13 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     dragCallback = function(dragendMap){
         canSetCookie = true;
         codeLatLng(dragendMap.getCenter().lat(),dragendMap.getCenter().lng(),function(data){ 
-            displayGeoAddress(setGeoAddress(data));  
-            clearTimeout(dragTimeOutEvent);                    
-            dragTimeOutEvent = setTimeout(function(){  
+            displayGeoAddress(setGeoAddress(data));
+            if(typeof dragTimeOutEvent != 'undefined'){
+                clearTimeout(dragTimeOutEvent);  
+            }                              
+            dragTimeOutEvent = setTimeout(function(){
+                reloadProductListing(document.frmProductSearch);
                 loadProductListingfilters(document.frmProductSearch);
-                reloadProductListing(document.frmProductSearch)
             }, 1200);
         });
     };

@@ -357,7 +357,7 @@ if (isset($prodcat_code)) {
 
             $("document").ready(function() {
                 
-                <?php if (FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP) { ?>
+                <?php if (FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP ||  $headerFormParamsAssocArr['vtype'] == 'map') { ?>
                         $(window).resize(function(){                            
                             var windowSize = $(window).width();
                             if(windowSize > 992){                         
@@ -457,7 +457,11 @@ if (isset($prodcat_code)) {
                     var updateValues = function() {
                         $from.prop("value", from);
                         $to.prop("value", to);
-                    }; <?php
+                    };
+                    updatePriceFilter( <?php echo floor($priceArr['minPrice']); ?> , <?php echo ceil($priceArr[
+                    'maxPrice']); ?> );    
+                        
+                        <?php
                 } ?>
 
                 /* left side filters scroll bar[ */
@@ -483,9 +487,7 @@ if (isset($prodcat_code)) {
                 });
                 $('.span--expand').click();
                 /* ] */
-
-                updatePriceFilter( <?php echo floor($priceArr['minPrice']); ?> , <?php echo ceil($priceArr[
-                    'maxPrice']); ?> );
+               
 
                 if ('rtl' == langLbl.layoutDirection && 0 < $("[data-simplebar]").length) {
                     $("[data-simplebar]").attr('data-simplebar-direction', 'rtl');

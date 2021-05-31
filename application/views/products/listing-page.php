@@ -123,7 +123,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 <?php $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
 <div class="section">
     <div class="container">
-        <div class="collection-listing <?php echo FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP ? 'filter-top' : 'filter-left'; ?>">
+        <div class="collection-listing <?php echo FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP || $vtype == 'map' ? 'filter-top' : 'filter-left'; ?>">
 
             <?php
             /*
@@ -171,15 +171,15 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                     <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?></li>
 
                                 <li class="d-none d-md-block">
-                                    <div class="list-grid-toggle switch--link-js">
-                                        <div class="icon">
+                                    <div class="list-grid-toggle switch--link-js">                                 
+                                        <div class="icon <?php echo $vtype == 'grid' ? 'icon-grid' : ''; ?>">                                  
                                             <div class="icon-bar"></div>
                                             <div class="icon-bar"></div>
                                             <div class="icon-bar"></div>
                                         </div>
                                     </div>
                                 </li>
-                                <?php if ($vtype) { ?>
+                                <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
                                         <li>
                                             <span class="<?php echo $vtype == 'map' ? 'active' : ''; ?>">
                                                 <a href="javascript:void(0);" class="listing-map-view-toggle--js">
@@ -196,19 +196,36 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                         </div>
                     </div>
                 </div>
-                <div class="listing-products -listing-products ">
-                    <?php
-                    $productsData = array(
-                        'products' => $products,
-                        'page' => $page,
-                        'pageCount' => $pageCount,
-                        'postedData' => $postedData,
-                        'recordCount' => $recordCount,
-                        'siteLangId' => $siteLangId,
-                        'colMdVal' => 4
-                    );
-                    $this->includeTemplate('products/products-list.php', $productsData, false); ?>
-                </div>
+                <?php if (isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
+                    <div class="interactive-stores">
+                        <div class="interactive-stores__map">
+                            
+                                <div class="map-loader is-loading">
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                                        <path fill="#fff" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform>
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div class="canvas-map" id="productMap--js" style="width:600px;height:600px;"> </div>
+                             
+                        </div>
+                    </div>    
+                    <?php } else { ?>
+                    <div class="listing-products -listing-products ">
+                    <?php } ?>    
+                        <?php
+                        $productsData = array(
+                            'products' => $products,
+                            'page' => $page,
+                            'pageCount' => $pageCount,
+                            'postedData' => $postedData,
+                            'recordCount' => $recordCount,
+                            'siteLangId' => $siteLangId,
+                            'colMdVal' => 4
+                        );
+                        $this->includeTemplate('products/products-list.php', $productsData, false); ?>
+                    </div>
             </main>
 
         </div>
