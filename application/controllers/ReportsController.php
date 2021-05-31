@@ -323,10 +323,61 @@ class ReportsController extends SellerBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Product', $this->siteLangId), Labels::getLabel('LBL_Custom_Title(If_Any)', $this->siteLangId), Labels::getLabel('LBL_Product_SKU', $this->siteLangId), Labels::getLabel('LBL_Brand', $this->siteLangId), Labels::getLabel('LBL_Stock_Quantity', $this->siteLangId));
-            array_push($sheetData, $arr);
+
+            array_push($sheetData, array_values($fields));
             while ($row = FatApp::getDb()->fetch($rs)) {
-                $arr = array($row['product_name'], $row['selprod_title'], $row['selprod_sku'], $row['brand_name'], $row['selprod_stock']);
+                $arr = [];
+                foreach ($fields as $key => $val) {
+                    switch ($key) {
+                        case 'product_name':
+                            $name = ($row['selprod_title'] != '') ? $row['selprod_title'] : $row['product_name'];
+
+                            if ($row['grouped_option_name'] != '') {
+                                $groupedOptionNameArr = explode(',', $row['grouped_option_name']);
+                                $groupedOptionValueArr = explode(',', $row['grouped_optionvalue_name']);
+                                if (!empty($groupedOptionNameArr)) {
+                                    foreach ($groupedOptionNameArr as $key => $optionName) {
+                                        $name .= "\n" . $optionName . ':</strong> ' . $groupedOptionValueArr[$key];
+                                    }
+                                }
+                            }
+
+                            if ($row['brand_name'] != '') {
+                                $name .= "\n" . Labels::getLabel('LBL_Brand', $this->siteLangId) . ": " . $row['brand_name'];
+                            }
+
+                            if ($row['shop_name'] != '') {
+                                $name .= "\n" . Labels::getLabel('LBL_Sold_By', $this->siteLangId) . ': ' . $row['shop_name'];
+                            }
+                            $arr[] = html_entity_decode($name, ENT_QUOTES, 'utf-8');
+                            break;
+                        case 'grossSales':
+                        case 'transactionAmount':
+                        case 'inventoryValue':
+                        case 'taxTotal':
+                        case 'adminTaxTotal':
+                        case 'sellerTaxTotal':
+                        case 'shippingTotal':
+                        case 'sellerShippingTotal':
+                        case 'discountTotal':
+                        case 'couponDiscount':
+                        case 'volumeDiscount':
+                        case 'rewardDiscount':
+                        case 'refundedAmount':
+                        case 'refundedShippingFromSeller':
+                        case 'refundedTaxFromSeller':
+                        case 'orderNetAmount':
+                        case 'commissionCharged':
+                        case 'refundedCommission':
+                        case 'adminSalesEarnings':
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
+                            break;
+                        default:
+                            $arr[] = $row[$key];
+                            break;
+                    }
+                }
+
                 array_push($sheetData, $arr);
             }
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Inventory_Report', $this->siteLangId) . date("Y-m-d") . '.csv', ',');
