@@ -1125,6 +1125,7 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_COMMISSION:
                 /* $frm->addHtml('','Commission','<h3>'.Labels::getLabel("LBL_Commission",$this->adminLangId) . '</h3>'); */
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Maximum_Site_Commission", $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COMMISSION', '');
+                $fld->requirements()->setFloatPositive();
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_maximum_commission/Fees_that_will_be_charged_on_a_particular_product.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_shipping", $this->adminLangId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);
@@ -1923,10 +1924,6 @@ class ConfigurationsController extends AdminBaseController
 
                 break;
 
-            case Configurations::FORM_PPC:
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_products_home_page_caption', $this->adminLangId), 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_' . $langId);
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_shops_home_page_caption', $this->adminLangId), 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_' . $langId);
-                break;
             case Configurations::FORM_SERVER:
                 $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Maintenance_Text', $this->adminLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
                 $fld->requirements()->setRequired(true);
