@@ -188,4 +188,23 @@ class BadgeLinkCondition extends MyAppModel
         }
         return $srch;
     }
+    
+    /**
+     * isUnique
+     *
+     * @param  int $recordType
+     * @param  int $record_id
+     * @return void
+     */
+    public static function isUnique(int $recordType, int $record_id): bool
+    {
+        $srch = self::getBadgeLinksSearchObj(CommonHelper::getLangId());
+        $srch->addFld('blinkcond_badge_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addRecordTypesCondition([$recordType]);
+        $srch->addCondition('badgelink_record_id', '=', $record_id);
+        $result = (array) FatApp::getDb()->fetch($srch->getResultSet());
+        return (empty($result));
+    }
 }

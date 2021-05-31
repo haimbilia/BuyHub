@@ -287,6 +287,10 @@ class BadgeLinkConditionsController extends AdminBaseController
         }
 
         $badgeLinkCondId = $record->getMainTableRecordId();
+        
+        $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
+
+        $msg = '';
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition && !empty($records)) {
             $db = FatApp::getDb();
             $db->deleteRecords(BadgeLinkCondition::DB_TBL_BADGE_LINKS, array(
@@ -294,6 +298,13 @@ class BadgeLinkConditionsController extends AdminBaseController
                 'vals' => [$badgeLinkCondId]
             ));
             foreach ($records as $recordId) {
+                if (false === BadgeLinkCondition::isUnique($recordType, $recordId)) {
+                    if (empty($msg)) {
+                        $msg = Labels::getLabel('MGS_UNABLE_TO_BIND_SOME_RECORDS._ALREADY_LINKED_WITH_OTHER_BADGE_LINK_RECORD', $this->adminLangId);
+                    }
+                    continue;
+                }
+
                 $linkData = array(
                     'badgelink_blinkcond_id' => $badgeLinkCondId,
                     'badgelink_record_id' => $recordId
@@ -302,11 +313,11 @@ class BadgeLinkConditionsController extends AdminBaseController
             }
         }
 
-        $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
+        $msg = !empty($msg) ? $msg : Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->adminLangId);
 
         $this->set('recordType', $recordType);
         $this->set('blinkcond_id', $badgeLinkCondId);
-        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -474,11 +485,28 @@ class BadgeLinkConditionsController extends AdminBaseController
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->adminLangId));
     }
 
+    public function isUnique(int $recordType, int $record_id)
+    {
+        if (false === BadgeLinkCondition::isUnique($recordType, $record_id)) {
+            $msg = Labels::getLabel('MSG_THIS_RECORD_IS_LINKED_WITH_OTHER_BADGE_LINK_RECORD', $this->adminLangId);
+            FatUtility::dieJsonError($msg);
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_UNIQUE', $this->adminLangId));
+    }
+
     public function linkRecord(int $blinkcond_id, int $record_id)
     {
         if (1 > $blinkcond_id || 1 > $record_id) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD', $this->adminLangId));
         }
+
+        $recordType = BadgeLinkCondition::getAttributesById($blinkcond_id, 'blinkcond_record_type');
+
+        if (false === BadgeLinkCondition::isUnique($recordType, $record_id)) {
+            $msg = Labels::getLabel('MSG_THIS_RECORD_IS_LINKED_WITH_OTHER_BADGE_LINK_RECORD', $this->adminLangId);
+            FatUtility::dieJsonError($msg);
+        }
+
         $linkData = array(
             'badgelink_blinkcond_id' => $blinkcond_id,
             'badgelink_record_id' => $record_id

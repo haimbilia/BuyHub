@@ -357,6 +357,14 @@ class Badge extends MyAppModel
             return [];
         }
 
+        // $response = SellerProduct::getSelProdAvgRating($this->selProdId);
+        // CommonHelper::printArray($response, true);
+        $avgRating = "";
+        $completionRate = "";
+        $completedOrders = "";
+        $returnAcceptanceRate = "";
+        $orderCancellationRate = "";
+
         $attr = [
             'blinkcond_badge_id',
             'blinkcond_record_type',
@@ -367,22 +375,47 @@ class Badge extends MyAppModel
         ];
 
         $srch = new BadgeLinkConditionSearch();
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $srch->joinBadgeLinks();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
-        $srch->addCondition('blinkcond_record_type', 'IN', array_keys(BadgeLinkCondition::getRecordTypeArr($langId)));
-        $srch->addCondition('badgelink_record_id', 'IN', [$this->selProdId, $this->prodId, $this->shopId]);
         $srch->addDirectCondition(
-            'blinkcond_record_type = (CASE 
-            WHEN blinkcond_record_type = 1 THEN 1
-            WHEN blinkcond_record_type = 2 THEN 2
-            WHEN blinkcond_record_type = 3 THEN 3
-            ELSE 0 END)'
+            'CASE 
+                WHEN badgelink_record_id IS NULL
+                THEN 
+                    (CASE 
+                        WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_AVG_RATING . '" 
+                            THEN "' . $avgRating . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                        WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . '" 
+                            THEN "' . $completionRate . '" = blinkcond_condition_from
+                        WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . '" 
+                            THEN "' . $completedOrders . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                        WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . '" 
+                            THEN "' . $returnAcceptanceRate . '" = blinkcond_condition_from
+                        WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . '" 
+                            THEN "' . $orderCancellationRate . '" = blinkcond_condition_from
+                        ELSE 
+                    END)
+                ELSE 
+                    badgelink_record_id = (CASE 
+                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' THEN ' . $this->selProdId . '
+                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' THEN ' . $this->prodId . '
+                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' THEN ' . $this->shopId . '
+                    ELSE 0 END)
+            END'
+        );
+        $srch->addDirectCondition(
+            '(CASE 
+                WHEN blinkcond_to_date != 0 
+                THEN "' . date('Y-m-d H:i:s') . '" BETWEEN blinkcond_from_date AND blinkcond_to_date 
+                ELSE TRUE 
+            END)'
         );
         $srch->addCondition('badge_type', '=', Badge::TYPE_RIBBON);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
-        return (array) FatApp::getDb()->fetch($srch->getResultSet())
+        $srch->addOrder('blinkcond_record_type', 'ASC');
+        return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
-
 }

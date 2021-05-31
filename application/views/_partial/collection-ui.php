@@ -11,42 +11,23 @@ if (!isset($showAddToFavorite)) {
         $showAddToFavorite = false;
     }
 }
-if ($showAddToFavorite) { ?>
-    <!-- <div class="badges badges-1">New</div>
 
-<div class="badges badges-2">
-    <svg class="svg">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-2"></use>
-    </svg>
-    <span class="text">Offer</span>
-</div>
+if ($showAddToFavorite) { 
 
-<div class="badges badges-3">
-    <svg class="svg">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-3"></use>
-    </svg>
-    <span class="text">New</span>
-</div>
+    /* Display Ribbons */
+    $badgeObj = new Badge();
+    $ribbonDetail = $badgeObj->setSellerProdudtId($product['selprod_id'])
+                            ->setProductId($product['product_id'])
+                            ->setShopId($product['shop_id'])
+                            ->getRibbon($siteLangId);
 
-<div class="badges badges-4">
-    <svg class="svg">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-4"></use>
-    </svg>
-    <span class="text">New</span>
-</div> -->
-
-<div class="badges badges-3">
-    <svg class="svg">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-3"></use>
-    </svg>
-    <span class="text">New</span>
-</div>
-<!-- <div class="badges badges-5">
-    <svg class="svg">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-5"></use>
-    </svg>
-    <span class="text">50% <br> OFF</span>
-</div> -->
+    if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
+        $type = $ribbonDetail['badge_shape_type'];
+        $color = $ribbonDetail['badge_color'];
+        $text = $ribbonDetail['badge_name'];
+        $displayInside = $ribbonDetail['badge_display_inside'];
+        include ('ribbon.php');
+    } ?>
     <div class="favourite-wrapper">
         <?php if (true ==  $showActionBtns) { ?>
             <div class="actions_wishlist">
