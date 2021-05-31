@@ -29,8 +29,9 @@ foreach ($records as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'mainfile':
-                $td->appendElement('plaintext', array(), $row[$key], true);
-                $td->appendElement(
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem->appendElement(
                     "a",
                     array(
                         'class' => 'btn',
@@ -44,8 +45,9 @@ foreach ($records as $sn => $row) {
                 break;
             case 'preview':
                 if (0 < $row['prev_afile_id']) {
-                    $td->appendElement('plaintext', array(), $row['preview'], true);
-                    $td->appendElement(
+                    $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement(
                         "a",
                         array(
                             'class' => 'btn',

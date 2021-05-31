@@ -823,7 +823,7 @@ $.extend(fcom, {
     copyToClipboard: function (targetId)
     {
         var targetId = targetId || "_copytext_";
-        /* alert(targetId); */
+        
         var target = document.getElementById(targetId);
         
         target.select();
