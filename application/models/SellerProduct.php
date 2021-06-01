@@ -650,13 +650,7 @@ class SellerProduct extends MyAppModel
 			END
        		as matches FROM " . Commission::DB_TBL . " WHERE commsetting_deleted = 0 order by matches desc, commsetting_fees desc  limit 0,1";
         $rs = $db->query($sql);
-        if ($row = $db->fetch($rs)) {
-            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-                $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails(0, $selprod_user_id, array(OrderSubscription::DB_TBL_PREFIX . 'commission'));
-                if ($row['commsetting_product_id'] == 0 && $row['commsetting_user_id'] == 0 && $row['commsetting_prodcat_id'] == 0) {
-                    return $currentPlanData['ossubs_commission'];
-                }
-            }
+        if ($row = $db->fetch($rs)) {           
             return $row['commsetting_fees'];
         }
     }
