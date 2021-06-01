@@ -164,6 +164,7 @@ Fixes:
     => 053948 - getting invalid slot when buyer changes date for pickup (admin's place)
     => 053855 - admin> reports> top products> filter> search by keyword is missing 
     => 054278 - if for any digital item there is no preview available then preview tab shouldn't be displayed
+    => 054144 - Set Default Location not populating on front end after set by admin
 
 New Features:
     => Admin shipped products listing page

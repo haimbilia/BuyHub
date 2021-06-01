@@ -586,9 +586,24 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     if (zip != null) {
         address = address + ' ' + zip.value;
     }
-
-    geocodeAddress(geocoder, map, infowindow, { 'address': address });
-
+    
+    marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        title: address,
+        draggable:true,
+    });
+    
+    google.maps.event.addListener(marker, 'dragend', function () {
+          geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                geocodeSetData(results);
+            }
+        });
+    });
+    
+    //geocodeAddress(geocoder, map, infowindow, { 'address': address });
+    
     document.getElementById('geo_postal_code').addEventListener('blur', function () {
         var sel = document.getElementById('geo_country_code');
         var country = sel.options[sel.selectedIndex].text;
@@ -652,7 +667,7 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
     });
 }
 
-function geocodeSetData(results) {
+function geocodeSetData(results) {    
     document.getElementById('lat').value = marker.getPosition().lat();
     document.getElementById('lng').value = marker.getPosition().lng();
     if (results[0]) {
@@ -677,9 +692,12 @@ function geocodeSetData(results) {
                     data['state'] = value;
                 } else if ('administrative_area_level_2' == key) {
                     data['city'] = value;
+                }   else if ('locality' == key) {
+                    data['city'] = value;
                 }
             }
         }
+     
         $('#geo_postal_code').val(data.postal_code);
         $('#geo_city').val(data.city);
         $('#geo_country_code option').each(function () {
