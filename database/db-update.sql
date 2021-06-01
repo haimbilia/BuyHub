@@ -412,3 +412,10 @@ op.op_refund_tax = view_refund_order.refund_tax;
 DROP VIEW view_refund_order;
 
 update `tbl_collections`  set collection_identifier = concat(collection_identifier," {del}") where collection_deleted = 1;
+
+
+INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('vendor_cod_order_email', 1, 'Order Received', 'Hello {vendor_name}
+You have received a new cash on delivery order {order_id} at {SITE_NAME}
+
+{SITE_NAME} Team', '[{"title":"Seller", "variable":"{vendor_name}"},{"title":"Order Id", "variable":"{order_id}"}, {"title":"Website Name", "variable":"{SITE_NAME}"}]', 1);
