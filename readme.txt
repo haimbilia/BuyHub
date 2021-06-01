@@ -165,6 +165,7 @@ Fixes:
     => 053855 - admin> reports> top products> filter> search by keyword is missing 
     => 054278 - if for any digital item there is no preview available then preview tab shouldn't be displayed
     => 054144 - Set Default Location not populating on front end after set by admin
+    => 054071 - Product Download Attachments At Inventory Level for catalog is missing in import/export
 
 New Features:
     => Admin shipped products listing page
