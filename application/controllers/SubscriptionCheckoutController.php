@@ -307,9 +307,9 @@ class SubscriptionCheckoutController extends LoggedUserController
                 }
 
                 $discount = 0;
-                if (!empty($cartSummary["cartDiscounts"]["discountedSPPlanId"])) {
-                    if (array_key_exists($subscriptionInfo['spplan_id'], $cartSummary["cartDiscounts"]["discountedSPPlanId"])) {
-                        $discount = $cartSummary["cartDiscounts"]["discountedSPPlanId"][$subscriptionInfo['spplan_id']];
+                if (!empty($cartSummary["cartDiscounts"]["discountedSelProdIds"])) {
+                    if (array_key_exists($subscriptionInfo['spplan_id'], $cartSummary["cartDiscounts"]["discountedSelProdIds"])) {
+                        $discount = $cartSummary["cartDiscounts"]["discountedSelProdIds"][$subscriptionInfo['spplan_id']];
                     }
                 }
 
