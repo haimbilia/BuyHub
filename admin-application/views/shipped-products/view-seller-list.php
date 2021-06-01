@@ -33,9 +33,9 @@
         echo $tbl->getHtml(); 
         $postedData['page'] = $page;
         echo FatUtility::createHiddenFormFromData($postedData, array(
-            'name' => 'frmShippedProductsPaging'
+            'name' => 'frmSellerPaging'
         ));
-        $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+        $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId ,'callBackJsFunc'=> 'goToSellerSearchPage');
         $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
         
         ?>

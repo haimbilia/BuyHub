@@ -98,19 +98,20 @@ class ShippedProductsController extends AdminBaseController
         $this->_template->render(false, false);
     }
     
-    public function viewSellerList($productId, $adminShip = false)
+    public function viewSellerList()
     {
         $this->objPrivilege->canViewShippedProducts();
-        $productId = FatUtility::int($productId);
+        
+        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT); 
+        $adminShip = FatApp::getPostedData('adminShip', FatUtility::VAR_INT, 0);
 
         if (1 > $productId) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
-        $data = FatApp::getPostedData();
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1); 
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
+        $post = FatApp::getPostedData();
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);       
         /* Get all Products */
         $srch = new ShippedProducts($this->adminLangId);
         $srch->joinShipProfileProd();
@@ -127,7 +128,7 @@ class ShippedProductsController extends AdminBaseController
         $srch->setPageSize($pageSize);
         $srch->addGroupBy('u.user_id');
         
-        if( true == $adminShip){
+        if( applicationConstants::YES == $adminShip){
             $srch->addCondition('psbs.psbs_product_id', 'is', 'mysql_func_NULL', 'AND', true);
         }else{
             $srch->addCondition('psbs.psbs_product_id', 'is not', 'mysql_func_NULL', 'AND', true);
@@ -142,6 +143,7 @@ class ShippedProductsController extends AdminBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('adminShip', $adminShip);
         $this->set('adminLangId', $this->adminLangId);
+        $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
 
