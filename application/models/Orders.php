@@ -1697,32 +1697,24 @@ class Orders extends MyAppModel
                         }
                     }
                 }
+                
+                $opRefundArr = array(
+                    'op_refund_qty' => $childOrderInfo["op_qty"],
+                    'op_refund_amount' => $txnAmount,
+                    'op_refund_commission' => $childOrderInfo["op_commission_charged"],
+                    'op_refund_shipping' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+                    'op_refund_affiliate_commission' => $childOrderInfo["op_affiliate_commission_charged"],
+                    'op_refund_tax' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+                );
+                if (!$db->updateFromArray(
+                                Orders::DB_TBL_ORDER_PRODUCTS,
+                                $opRefundArr,
+                                array('smt' => 'op_id = ? ', 'vals' => array($op_id))
+                        )) {
+                    $this->error = $db->getError();
+                    return false;
+                }
                 /* ]*/
-            }
-            $opRefundArr = array(
-                'op_refund_qty' => $childOrderInfo["op_qty"],
-                'op_refund_amount' => $txnAmount,
-                'op_refund_commission' => $childOrderInfo["op_commission_charged"],
-                'op_refund_shipping' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
-                'op_refund_affiliate_commission' => $childOrderInfo["op_affiliate_commission_charged"],
-                'op_refund_tax' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
-            );
-            if (!$db->updateFromArray(
-                Orders::DB_TBL_ORDER_PRODUCTS,
-                $opRefundArr,
-                array('smt' => 'op_id = ? ', 'vals' => array($op_id))
-            )) {
-                $this->error = $db->getError();
-                return false;
-            }
-            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
-                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
-                $et->addProduct($childOrderInfo['op_selprod_id']);
-                $et->addTransaction($childOrderInfo['op_order_id']);
-                $et->addEvent('Ecommerce', 'Refund');
-                $et->sendRequest();
             }
         }
         /* ] */

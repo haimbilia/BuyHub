@@ -1179,6 +1179,11 @@ class ProductsController extends AdminBaseController
         $warrantyFld->requirements()->setInt();
         $warrantyFld->requirements()->setPositive();
         $frm->addCheckBox(Labels::getLabel('LBL_Mark_This_Product_As_Featured?', $this->adminLangId), 'product_featured', 1, array(), false, 0);
+         
+        $productType = Product::getAttributesById($productId, 'product_type');
+        if($productType == Product::PRODUCT_TYPE_DIGITAL){            
+            $warrantyFld->requirements()->setRequired(false);
+        }
 
         $frm->addHiddenField('', 'product_seller_id');
         $frm->addHiddenField('', 'product_id', $productId);
