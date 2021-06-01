@@ -300,3 +300,5 @@ Released Version:
 bugs:
     #054201	while adding catalog for digital item> only option to add attachment at inventory level is either Yes or No
     #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
+    #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
+    #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
