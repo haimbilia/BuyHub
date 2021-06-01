@@ -358,13 +358,18 @@ class Badge extends MyAppModel
             return [];
         }
 
-        // $response = SellerProduct::getSelProdAvgRating($this->selProdId);
-        // CommonHelper::printArray($response, true);
-        $avgRating = "";
-        $completionRate = "";
-        $completedOrders = "";
-        $returnAcceptanceRate = "";
-        $orderCancellationRate = "";
+        $avgRating = SellerProduct::getRating($this->selProdId);
+        if (1 > $avgRating) {
+            $avgRating = SellerProduct::getProdRating($this->prodId);
+        }
+        
+        $sellerId = Shop::getAttributesById($this->shopId, 'shop_user_id');
+
+        $shopAvgRating = SellerProduct::getShopRating($sellerId);
+        $completionRate = OrderProduct::getCompletionRate($sellerId);
+        $completedOrders = OrderProduct::getCompltedOrderCount($sellerId);
+        $returnAcceptanceRate = OrderProduct::getReturnAcceptanceRate($sellerId);
+        $orderCancellationRate = OrderProduct::getCancellationRate($sellerId);
 
         $attr = [
             'blinkcond_badge_id',
@@ -378,17 +383,21 @@ class Badge extends MyAppModel
 
         $srch = new BadgeLinkConditionSearch();
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
+        $srch->setPageSize(1);/* Need to discuss about display functionality relatd to badges and ribbons. single or multiple */
         $srch->joinBadgeLinks();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
         $srch->addDirectCondition(
-            'CASE 
-                WHEN badgelink_record_id IS NULL
+            '(CASE 
+                WHEN blinkcond_condition_type > 0
                 THEN 
                     (CASE 
                         WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_AVG_RATING . '" 
-                            THEN "' . $avgRating . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                            THEN (CASE 
+                                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' 
+                                    THEN "' . $shopAvgRating . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                                    ELSE "' . $avgRating . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                                END)
                         WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . '" 
                             THEN "' . $completionRate . '" = blinkcond_condition_from
                         WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . '" 
@@ -405,7 +414,7 @@ class Badge extends MyAppModel
                     WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' THEN ' . $this->prodId . '
                     WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' THEN ' . $this->shopId . '
                     ELSE 0 END)
-            END'
+            END)'
         );
         $srch->addDirectCondition(
             '(CASE 
@@ -418,31 +427,39 @@ class Badge extends MyAppModel
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
         $srch->addOrder('blinkcond_record_type', 'ASC');
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        // echo $srch->getQuery();
+        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
         
     /**
      * getBadgeUrl
      *
-     * @param  mixed $langId
-     * @return string
+     * @param  int $langId
+     * @param  string|int $size
+     * @return array
      */
-    public function getBadgeUrl(int $langId): string
+    public function getBadgeUrl(int $langId, $size = 'MINI'): array
     {
         if (1 > $this->selProdId && 1 > $this->prodId && 1 > $this->shopId) {
-            return "";
+            return [];
         }
 
         $badgeDetail = $this->getRibbonOrBadge($langId, Badge::TYPE_BADGE);
         if (!is_array($badgeDetail) || empty($badgeDetail)) {
-            return "";
+            return [];
         }
-        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeDetail[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $langId, 0, false);
-        if (!is_array($icon) || empty($icon['afile_physical_path'])) {
-            /* Fetching Universal Image Else */
-            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeDetail[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
+
+        $urls = [];
+
+        foreach ($badgeDetail as $row) {
+            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $langId, 0, false);
+            if (!is_array($icon) || empty($icon['afile_physical_path'])) {
+                /* Fetching Universal Image Else */
+                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
+            }
+            $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+            $urls[] = UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         }
-        $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-        return UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "MINI", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        return $urls;
     }
 }

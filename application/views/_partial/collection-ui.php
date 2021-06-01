@@ -22,11 +22,13 @@ if ($showAddToFavorite) {
                             ->getRibbonOrBadge($siteLangId);
 
     if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
-        $type = $ribbonDetail['badge_shape_type'];
-        $color = $ribbonDetail['badge_color'];
-        $text = $ribbonDetail['badge_name'];
-        $displayInside = $ribbonDetail['badge_display_inside'];
-        include ('ribbon.php');
+        foreach ($ribbonDetail as $row) {
+            $type = $row['badge_shape_type'];
+            $color = $row['badge_color'];
+            $text = $row['badge_name'];
+            $displayInside = $row['badge_display_inside'];
+            include ('ribbon.php');
+        }
     } ?>
     <div class="favourite-wrapper">
         <?php if (true ==  $showActionBtns) { ?>

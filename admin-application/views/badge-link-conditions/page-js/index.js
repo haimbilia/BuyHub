@@ -10,6 +10,8 @@ $(document).on('change', formClass + 'select[name="blinkcond_condition_type"]', 
     var ratePercElements = [COND_TYPE_ORDER_COMPLETION_RATE, COND_TYPE_RETURN_ACCEPTANCE, COND_TYPE_ORDER_CANCELLED];
     var toSelector = $(formClass + 'input[name="blinkcond_condition_to"]');
     var fromSelector = $(formClass + 'input[name="blinkcond_condition_from"]');
+    $(fromSelector).closest('.field-set').show();
+    $(toSelector).closest('.field-set').show();
 
     toSelector.attr('data-fatreq', JSON.stringify({ required: true }));
     if (1 > toSelector.closest('.field-set').find('label').children('.spn_must_field').length) {
@@ -21,7 +23,18 @@ $(document).on('change', formClass + 'select[name="blinkcond_condition_type"]', 
     selector.closest('.field-set').parent().fadeIn().removeClass("col-md-6");
 
     if ('' == $(this).val()) {
-        return;
+        $(fromSelector).closest('.field-set').hide();
+        $(toSelector).closest('.field-set').hide();
+        return false;
+    }
+
+    var recordType = $(formClass + "select[name='blinkcond_record_type']").val();
+    if ((RECORD_TYPE_PRODUCT == recordType || RECORD_TYPE_SELLER_PRODUCT == recordType) && COND_TYPE_AVG_RATING != $(this).val()) {
+        $.systemMessage(langLbl.invalidConditionTypeSelection, 'alert--danger');
+        $(this).val("");
+        $(fromSelector).closest('.field-set').hide();
+        $(toSelector).closest('.field-set').hide();
+        return false;
     }
 
     if (-1 < jQuery.inArray(parseInt($(this).val()), ratePercElements)) {
@@ -106,6 +119,8 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
         fcom.ajax(fcom.makeUrl(controller, 'form', [blinkcond_id, recordType]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
+            $(formClass + 'select[name="blinkcond_condition_type"]').change();
+
             bindBadgeNameSelect2();
             bindRecordsSelect2();
 

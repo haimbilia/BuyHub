@@ -57,13 +57,15 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                 <h1>
                                                     <?php
                                                     $badgeObj = new Badge();
-                                                    $badgeUrl = $badgeObj->setSellerProdudtId($product['selprod_id'])
+                                                    $badgeUrlArr = $badgeObj->setSellerProdudtId($product['selprod_id'])
                                                                             ->setProductId($product['product_id'])
                                                                             ->setShopId($product['shop_id'])
-                                                                            ->getBadgeUrl($siteLangId);
-                                                    if (!empty($badgeUrl)) { ?>
-                                                        <img src="<?php echo $badgeUrl; ?>" width="26px" height="26px">
-                                                    <?php }
+                                                                            ->getBadgeUrl($siteLangId, 26);
+                                                    if (is_array($badgeUrlArr) && !empty($badgeUrlArr)) { 
+                                                        foreach ($badgeUrlArr as $url) { ?>
+                                                            <img src="<?php echo $url; ?>">
+                                                        <?php }
+                                                    }
                                                     echo $product['selprod_title']; ?>
                                                 </h1>
                                                 <div class="favourite-wrapper favourite-wrapper-detail ">

@@ -1374,15 +1374,19 @@ class ImageController extends FatController
                 $w = 60;
                 $h = 60;
                 AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
-                break;
+            break;
             case 'MINI':
                 $w = 35;
                 $h = 35;
                 AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
-                break;
+            break;
             default:
-                AttachedFile::displayOriginalImage($image_name, '', $filePath);
-                break;
+                if (is_numeric($sizeType)) {
+                    AttachedFile::displayImage($image_name, $sizeType, $sizeType, '', $filePath);
+                } else {
+                    AttachedFile::displayOriginalImage($image_name, '', $filePath);
+                }
+            break;
         }
     }
 }
