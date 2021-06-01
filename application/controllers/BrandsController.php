@@ -101,6 +101,10 @@ class BrandsController extends MyAppController
         $get['join_price'] = 1;
         $get['brand_id'] = $brandId;
         $get['brand'] = array($brandId); /*For filters*/
+        $get['vtype']  = $get['vtype'] ?? 'list';
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $get['vtype'] == 'map') {
+            $get['vtype'] = 'list';
+        }
         $frm->fill($get);
 
 

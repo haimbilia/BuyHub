@@ -952,6 +952,12 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
      * markers object sample
      markers = [{ lat: 11,lng: 11,content:'<div>Bondi Beach</div>' }];
      */
+    
+    if(centeredLat == '' || centeredLng == ''){
+        centeredLat = 0;
+        centeredLng = 0;
+    }
+    
     if (!$.isNumeric(centeredLat) || !$.isNumeric(centeredLat)) {
         console.warn('user location not set');
         return;
