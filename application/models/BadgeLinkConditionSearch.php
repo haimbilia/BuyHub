@@ -14,6 +14,18 @@ class BadgeLinkConditionSearch extends SearchBase
     {
         parent::__construct(BadgeLinkCondition::DB_TBL, 'blnk');
     }
+
+    
+    /**
+     * descOrder
+     *
+     * @param  array $descOrder
+     * @return void
+     */
+    public function descOrder()
+    {
+        $this->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
+    }
     
     /**
      * addBadgeTypeCondition

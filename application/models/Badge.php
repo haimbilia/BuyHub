@@ -349,9 +349,10 @@ class Badge extends MyAppModel
      * getRibbon
      *
      * @param  int $langId
+     * @param  int $type
      * @return array
      */
-    public function getRibbon(int $langId): array
+    public function getRibbonOrBadge(int $langId, int $type = Badge::TYPE_RIBBON): array
     {
         if (1 > $this->selProdId && 1 > $this->prodId && 1 > $this->shopId) {
             return [];
@@ -369,6 +370,7 @@ class Badge extends MyAppModel
             'blinkcond_badge_id',
             'blinkcond_record_type',
             'badge_display_inside',
+            'badge_type',
             'badge_shape_type',
             'badge_color',
             'COALESCE(badge_name, badge_identifier) as badge_name'
@@ -412,10 +414,35 @@ class Badge extends MyAppModel
                 ELSE TRUE 
             END)'
         );
-        $srch->addCondition('badge_type', '=', Badge::TYPE_RIBBON);
+        $srch->addCondition('badge_type', '=', $type);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
         $srch->addOrder('blinkcond_record_type', 'ASC');
         return (array) FatApp::getDb()->fetch($srch->getResultSet());
+    }
+        
+    /**
+     * getBadgeUrl
+     *
+     * @param  mixed $langId
+     * @return string
+     */
+    public function getBadgeUrl(int $langId): string
+    {
+        if (1 > $this->selProdId && 1 > $this->prodId && 1 > $this->shopId) {
+            return "";
+        }
+
+        $badgeDetail = $this->getRibbonOrBadge($langId, Badge::TYPE_BADGE);
+        if (!is_array($badgeDetail) || empty($badgeDetail)) {
+            return "";
+        }
+        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeDetail[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $langId, 0, false);
+        if (!is_array($icon) || empty($icon['afile_physical_path'])) {
+            /* Fetching Universal Image Else */
+            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeDetail[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
+        }
+        $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+        return UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "MINI", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     }
 }

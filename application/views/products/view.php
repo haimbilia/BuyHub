@@ -55,8 +55,16 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                         <div class="products__title">
                                             <div>
                                                 <h1>
-                                                    <img class="badges" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges.svg" width="26px" height="26px" alt="">
-                                                    <?php echo $product['selprod_title']; ?>
+                                                    <?php
+                                                    $badgeObj = new Badge();
+                                                    $badgeUrl = $badgeObj->setSellerProdudtId($product['selprod_id'])
+                                                                            ->setProductId($product['product_id'])
+                                                                            ->setShopId($product['shop_id'])
+                                                                            ->getBadgeUrl($siteLangId);
+                                                    if (!empty($badgeUrl)) { ?>
+                                                        <img src="<?php echo $badgeUrl; ?>" width="26px" height="26px">
+                                                    <?php }
+                                                    echo $product['selprod_title']; ?>
                                                 </h1>
                                                 <div class="favourite-wrapper favourite-wrapper-detail ">
                                                     <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>

@@ -19,7 +19,7 @@ if ($showAddToFavorite) {
     $ribbonDetail = $badgeObj->setSellerProdudtId($product['selprod_id'])
                             ->setProductId($product['product_id'])
                             ->setShopId($product['shop_id'])
-                            ->getRibbon($siteLangId);
+                            ->getRibbonOrBadge($siteLangId);
 
     if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
         $type = $ribbonDetail['badge_shape_type'];

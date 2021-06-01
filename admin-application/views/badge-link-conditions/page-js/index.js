@@ -279,8 +279,9 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
                 return result.name || result.text;
             }
         }).on('select2:selecting', function (e) {
+            var badgeType = $(formClass + 'select[name="badge_type"]').val();
             var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
-            fcom.ajax(fcom.makeUrl(controller, 'isUnique', [recordType, e.params.args.data.id]), '', function (t) {
+            fcom.ajax(fcom.makeUrl(controller, 'isUnique', [badgeType, recordType, e.params.args.data.id]), '', function (t) {
                 var resp = JSON.parse(t);
                 if (1 > resp.status) {
                     selector.val('').trigger('change');
@@ -300,7 +301,7 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
                 }, 200);
                 var badgeLinkCondId = $(formClass + "input[name='blinkcond_id']").val();
                 if ('' != badgeLinkCondId) {
-                    bindLink(badgeLinkCondId, e.params.args.data.id);
+                    bindLink(badgeType, badgeLinkCondId, e.params.args.data.id);
                 } else {
                     var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="icon ion-close"></i></a></id><td>' + e.params.args.data.name + '</td></tr>';
                     var tbl = "";
@@ -341,8 +342,8 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
         });
     }
 
-    bindLink = function (blinkcond_id, recordId) {
-        fcom.updateWithAjax(fcom.makeUrl(controller, 'linkRecord', [blinkcond_id, recordId]), '', function (t) {
+    bindLink = function (badgeType, blinkcond_id, recordId) {
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'linkRecord', [badgeType, blinkcond_id, recordId]), '', function (t) {
             reloadRecordsList(blinkcond_id);
         });
     }

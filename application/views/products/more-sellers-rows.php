@@ -53,7 +53,15 @@ foreach ($sellers as $sellerDetail) {
                 <div class="item__description">
                     <div class="item__title">
                         <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>">
-                        <img class="item__title_badge" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/badges.svg" width="20px" height="20px" alt="">
+                        <?php
+                        $badgeObj = new Badge();
+                        $badgeUrl = $badgeObj->setSellerProdudtId($sellerDetail['selprod_id'])
+                                                ->setProductId($sellerDetail['product_id'])
+                                                ->setShopId($sellerDetail['shop_id'])
+                                                ->getBadgeUrl($siteLangId);
+                        if (!empty($badgeUrl)) { ?>
+                            <img class="item__title_badge" src="<?php echo $badgeUrl; ?>" width="20px" height="20px">
+                        <?php } ?>
                         
                         <?php echo $sellerDetail['shop_name']; ?></a>
                     </div>

@@ -791,7 +791,7 @@ CREATE TABLE `tbl_badges` (
 --
 ALTER TABLE `tbl_badges`
   ADD PRIMARY KEY (`badge_id`),
-  ADD UNIQUE KEY `badge_identifier` (`badge_identifier`);
+  ADD UNIQUE KEY `badge_identifier` (`badge_identifier`,`badge_type`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -817,8 +817,7 @@ CREATE TABLE `tbl_badges_lang` (
 -- Indexes for table `tbl_badges_lang`
 --
 ALTER TABLE `tbl_badges_lang`
-  ADD PRIMARY KEY (`badgelang_badge_id`,`badgelang_lang_id`),
-  ADD UNIQUE KEY `badge_name` (`badgelang_lang_id`,`badge_name`);
+  ADD PRIMARY KEY (`badgelang_badge_id`,`badgelang_lang_id`);
 
 --
 -- Table structure for table `tbl_badge_link_conditions`
