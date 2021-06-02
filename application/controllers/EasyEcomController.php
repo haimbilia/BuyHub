@@ -236,4 +236,17 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         }
         $this->dieWithJsonResponse($response);
     }
+    
+    /**
+     * getOrdersStatusList
+     *
+     * @return void
+     */
+    public function getOrdersStatusList()
+    {
+        $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId);
+        $msg = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
+        $resp = $this->formatOutput(Plugin::RETURN_TRUE, $msg, $orderStatusArr);
+        $this->dieWithJsonResponse($resp);
+    }
 }
