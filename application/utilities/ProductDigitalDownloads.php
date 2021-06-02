@@ -53,6 +53,19 @@ trait ProductDigitalDownloads
             $fld->options = $savedOptions;
         }
 
+        $showFldAttachWithExistingOrders = true;
+
+        $fld = $frm->getField('attach_with_existing_orders');
+
+        $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
+
+        if (1 !== $product['product_attachements_with_inventory']) {
+            $frm->removeField($fld);
+            $showFldAttachWithExistingOrders = false;
+        }
+        
+        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
+        
         $data = [
             'product_id' => $productId,
             'selprod_id' =>  $selProdId,

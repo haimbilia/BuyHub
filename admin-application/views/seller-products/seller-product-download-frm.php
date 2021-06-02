@@ -95,10 +95,27 @@ if (false == $canDo) {
                     </div>
                 </div>
             </div>
-            <div class="attach-links-js">
-            <?php if (true == $canDo) { ?>
-                <div class="row">
-                    <div class="col-md-4">
+            <div class="row">
+                <?php if (true == $canDo) { ?>
+                    <?php if (true === $showFldAttachWithExistingOrders) { ?>
+                        <div class="col-md-4">
+                            <div class="field-set">
+                                <div class="caption-wraper">
+                                    <label class="field_label">
+                                        <?php $fld = $downloadFrm->getField('attach_with_existing_orders');
+                                        echo $fld->getCaption();
+                                        ?>
+                                    </label>
+                                </div>
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                    <?php echo $downloadFrm->getFieldHtml('attach_with_existing_orders'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <div class="col-md-4 attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -115,7 +132,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -132,7 +149,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-left">
+                    <div class="col-md-4 text-left attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
@@ -142,17 +159,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                </div>
-                <?php } else { ?>
-                    <div class="row dd-not-allowed">
-                        <?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $adminLangId); ?>
-                    </div>
-             <?php } ?>
-            </div>
-            <div class="attach-files-js">
-            <?php if (true == $canDo) { ?>
-                <div class="row">
-                    <div class="col-md-4 downloadable_file_input">
+                    <div class="col-md-4 downloadable_file_input attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -169,7 +176,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -186,7 +193,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-left">
+                    <div class="col-md-4 text-left attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
@@ -198,12 +205,14 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php } else { ?>
-                <div class="row dd-not-allowed">
-                    <?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?>
-                </div>
-            <?php } ?>
+                <?php } else { ?>
+                    <div class="col-md-12 dd-not-allowed attach-files-js alert-danger">
+                        <?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?>
+                    </div>
+                    <div class="col-md-12 dd-not-allowed attach-links-js alert-danger">
+                        <?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $adminLangId); ?>
+                    </div>
+                <?php } ?>
             </div>
             <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
             <?php echo $downloadFrm->getFieldHtml('selprod_id'); ?>

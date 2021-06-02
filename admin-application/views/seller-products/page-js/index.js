@@ -563,7 +563,7 @@ $(document).ready(function(){
 			$('.product_downloadable_link').val('');
 			$('.product_preview_link').val('');
 			$('input[name="dd_link_id"]').val('');
-			$('#attachment_link_btn').val(ans.btn_label);
+			/* $('#attachment_link_btn').val(ans.btn_label); */
 			getDigitalDownloads();
 		});
 	}
@@ -624,6 +624,7 @@ $(document).ready(function(){
 		$('#frmDownload input[name=dd_link_ref_id]').val(subRefId);
 
 		$(".downloadable_file_input").hide();
+		$("#attach_with_existing_orders").hide();
 		$("#attachement_upload_btn").attr('onclick', 'saveDigitalPreviewFile(); return false;');
 	}
 
