@@ -1,11 +1,12 @@
 <?php
-$arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'mainfile' => Labels::getLabel('LBL_File', $siteLangId),
-    'preview' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
-    // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_Language', $siteLangId),
-);
+$arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
+if (true === $canDoDigDownload) {
+    $arr_flds['mainfile'] = Labels::getLabel('LBL_File', $siteLangId);
+}
+
+$arr_flds['preview'] = Labels::getLabel('LBL_Preview_Link', $siteLangId);
+/* $arr_flds['pddr_options_code'] = Labels::getLabel('LBL_Link_Option', $siteLangId); */
+$arr_flds['afile_lang_id'] = Labels::getLabel('LBL_Language', $siteLangId);
 
 if (true === $canDoDigDownload) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);
@@ -30,17 +31,19 @@ foreach ($records as $sn => $row) {
                 break;
             case 'mainfile':
                 $td->appendElement('plaintext', array(), $row[$key], true);
-                $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn',
-                        'title' => Labels::getLabel('LBL_download', $siteLangId),
-                        'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
-                        'target' => '_blank'
-                    ),
-                    '<i class="fa fa-download  icon"></i>',
-                    true
-                );
+                if (true === $canDoDigDownload) {
+                    $td->appendElement(
+                        "a",
+                        array(
+                            'class' => 'btn',
+                            'title' => Labels::getLabel('LBL_download', $siteLangId),
+                            'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
+                            'target' => '_blank'
+                        ),
+                        '<i class="fa fa-download  icon"></i>',
+                        true
+                    );
+                }
                 break;
             case 'preview':
                 if (0 < $row['prev_afile_id']) {

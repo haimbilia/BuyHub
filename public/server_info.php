@@ -28,7 +28,7 @@ function apacheGetModules()
 $title = 'System Requirement check';
 $text_install_php = '1. Please configure your PHP settings to match requirements listed below.';
 $text_install_extension = '2. Please make sure the PHP extensions listed below are installed.';
-$text_msql_version = '3. Please make sure you have Mysql version 7.2.3 or greater than 7.2.3';
+$text_msql_version = '3. Please make sure you have Mysql version 8.0';
 $text_note = 'Note: In some server environment, script unable to detect server settings. So if you have configured your server as per required settings, You can install <a href="http://www.fatbit.com/" target="_blank">FatBit</a> Powered Scripts. ';
 $text_strict_trans_tables = '4. sql_mode = NO_ENGINE_SUBSTITUTION and SET GLOBAL log_bin_trust_function_creators = 1';
 $text_composer = '5. PHP Composer should be installed.';

@@ -720,6 +720,14 @@ class GuestUserController extends MyAppController
         $userAuthObj = new UserAuthentication();
         if (0 < $withPhone) {
             $row = $userAuthObj->getUserByPhone($user, '', false);
+            if (!array_key_exists('credential_email', $row) || empty($row['credential_email'])) {
+                $message = Labels::getLabel('MSG_AS_THIS_ACCOUNT_IS_REGISTERED_WITH_PHONE._SO_PASSWORD_IS_NOT_REQUIRED', $this->siteLangId);
+                if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
+                    FatUtility::dieJsonError($message);
+                }
+                Message::addErrorMessage($message);
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+            }
         } else {
             $row = $userAuthObj->getUserByEmailOrUserName($user, '', false);
         }
