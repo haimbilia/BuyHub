@@ -126,6 +126,7 @@ Fixes:
     => 054262 - some issue with collection 
     => 054255 - Unable to reach location if redirect from notification listing in admin.
     => 054265 - missing sms template on seller end
+    => 054557 - admin> catalog> categories> count is mismatching
 
 
 Enhancements :
