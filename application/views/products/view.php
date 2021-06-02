@@ -57,362 +57,226 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                         <div class="col-lg-5 col-details-right">
                             <div class="product-description">
                                 <div class="product-description-inner">
-                                    <div class="">
-                                        <div class="products__title">
-                                            <div>
-                                                <h1>
-                                                    <img class="badges"
-                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges.svg"
-                                                        width="26px" height="26px" alt="">
-                                                    <?php echo $product['selprod_title']; ?>
-                                                </h1>
-                                                <div class="favourite-wrapper favourite-wrapper-detail ">
-                                                    <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
-                                                    <div class="dropdown">
-                                                        <a class="no-after share-icon" data-display="static"
-                                                            href="javascript:void(0)" data-toggle="dropdown">
-                                                            <i class="icn">
-                                                                <svg class="svg">
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
-                                                                    </use>
-                                                                </svg>
-                                                            </i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-anim">
-                                                            <ul class="social-sharing">
-                                                                <li class="social-facebook">
-                                                                    <a class="st-custom-button" data-network="facebook"
-                                                                        data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
-                                                                        <i class="icn"><svg class="svg">
-                                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
-                                                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
-                                                                                </use>
-                                                                            </svg></i>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="social-twitter">
-                                                                    <a class="st-custom-button" data-network="twitter">
-                                                                        <i class="icn"><svg class="svg">
-                                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
-                                                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
-                                                                                </use>
-                                                                            </svg></i>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="social-pintrest">
-                                                                    <a class="st-custom-button"
-                                                                        data-network="pinterest">
-                                                                        <i class="icn"><svg class="svg">
-                                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
-                                                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
-                                                                                </use>
-                                                                            </svg></i>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="social-email">
-                                                                    <a class="st-custom-button" data-network="email">
-                                                                        <i class="icn"><svg class="svg">
-                                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
-                                                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
-                                                                                </use>
-                                                                            </svg></i>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
+                                    <div class="products__title">
+                                        <div>
+                                            <h1>
+                                                <img class="badges"
+                                                    src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges.svg"
+                                                    width="26px" height="26px" alt="">
+                                                <?php echo $product['selprod_title']; ?>
+                                            </h1>
+                                            <div class="favourite-wrapper favourite-wrapper-detail ">
+                                                <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
+                                                <div class="dropdown">
+                                                    <a class="no-after share-icon" data-display="static"
+                                                        href="javascript:void(0)" data-toggle="dropdown">
+                                                        <i class="icn">
+                                                            <svg class="svg">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-anim">
+                                                        <ul class="social-sharing">
+                                                            <li class="social-facebook">
+                                                                <a class="st-custom-button" data-network="facebook"
+                                                                    data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
+                                                                    <i class="icn"><svg class="svg">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
+                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                                                            </use>
+                                                                        </svg></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="social-twitter">
+                                                                <a class="st-custom-button" data-network="twitter">
+                                                                    <i class="icn"><svg class="svg">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
+                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                                                            </use>
+                                                                        </svg></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="social-pintrest">
+                                                                <a class="st-custom-button" data-network="pinterest">
+                                                                    <i class="icn"><svg class="svg">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
+                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                                                            </use>
+                                                                        </svg></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="social-email">
+                                                                <a class="st-custom-button" data-network="email">
+                                                                    <i class="icn"><svg class="svg">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
+                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                                                            </use>
+                                                                        </svg></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-                                           
-                                            <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
-                                            <div class="products-reviews">
-                                                <div class="products__rating">
-                                                    <i class="icn"><svg class="svg">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
-                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                            </use>
-                                                        </svg>
-                                                    </i>
-                                                    <span
-                                                        class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
-                                                </div>
-                                                <a href="#itemRatings"
-                                                    class="totals-review link nav-scroll-js"><?php echo $label; ?></a>
+                                        </div>
+                                        <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+
+                                        <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
+                                        <div class="products-reviews">
+                                            <div class="products__rating">
+                                                <i class="icn"><svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
+                                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                                <span
+                                                    class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
                                             </div>
-                                                                                      
+                                            <a href="#itemRatings"
+                                                class="totals-review link nav-scroll-js"><?php echo $label; ?></a>
+                                        </div>
+
+                                        <?php } ?>
+                                    </div>
+
+                                    <div class="block-detail">
+                                        <?php if (!empty($product['brand_name'])) { ?>
+                                        <div class="brand-data"><span
+                                                class="txt-gray-light"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span>
+                                            <?php echo $product['brand_name']; ?></div>
+                                        <?php } ?>
+
+                                        <div class="products__price">
+                                            <span
+                                                class="original_price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
+                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                            <del
+                                                class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
+                                            <span
+                                                class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                                             <?php } ?>
                                         </div>
-                                    </div>
-                                    <?php if (!empty($product['brand_name'])) { ?>
-                                    <div class="brand-data"><span
-                                            class="txt-gray-light"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span>
-                                        <?php echo $product['brand_name']; ?></div>
-                                    <?php } ?>
-                                    <div class="products__price">
-                                        <span
-                                            class="original_price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
-                                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                        <del
-                                            class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
-                                        <span
-                                            class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                        <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
+
+                                        <p class="tax-inclusive">
+                                            <?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId); ?></p>
+
                                         <?php } ?>
                                     </div>
-                                    <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
 
-                                    <p class="tax-inclusive">
-                                        <?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId); ?></p>
-
-                                    <?php } ?>
-                                   
                                     <div class="divider"></div>
-                                    <?php if (!empty($optionRows)) { ?>
-                                    <div class="gap"> </div>
-                                    <div class="row">
-                                        <?php $selectedOptionsArr = $product['selectedOptionValues'];
-                                            $count = 0;
-                                            foreach ($optionRows as $key => $option) {
-                                                $selectedOptionValue = $option['values'][$selectedOptionsArr[$key]]['optionvalue_name'];
-                                                $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code'];
-                                                if ($option['option_is_color']) {
-                                                    $selectedOptionColor = ("#" == $selectedOptionColor[0] ? $selectedOptionColor : "#" . $selectedOptionColor);
-                                                }
-                                            ?>
-                                        <div class="col-md-6 mb-3">
-                                            <div class="h6"><?php echo $option['option_name']; ?></div>
+                                    <div class="block-detail">
+                                        <?php if (!empty($optionRows)) { ?>
 
-                                            <div class="dropdown dropdown-options">
-                                                <button class="btn btn-outline-gray dropdown-toggle" type="button"
-                                                    data-toggle="dropdown" data-display="static" aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                    <span>
-                                                        <?php if ($option['option_is_color']) { ?>
-                                                        <span class="colors"
-                                                            style="background-color:<?php echo $selectedOptionColor; ?>;"></span>
-                                                        <?php } ?>
-                                                        <?php echo $selectedOptionValue; ?>
-                                                    </span>
-                                                </button>
-                                                <?php if ($option['values']) { ?>
-                                                <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
-                                                    <ul class="nav nav-block">
-                                                        <?php foreach ($option['values'] as $opVal) {
-                                                                        $isAvailable = true;
-                                                                        if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
-                                                                            $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
-                                                                        } else {
-                                                                            $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
-                                                                            $optionUrlArr = explode("::", $optionUrl);
-                                                                            if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
-                                                                                $optionUrl = $optionUrlArr[0];
-                                                                                $isAvailable = false;
-                                                                            }
-                                                                        } ?>
-                                                        <li
-                                                            class="nav__item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' is-active' : ' ';
-                                                                                                echo (!$optionUrl) ? ' is-disabled' : '';
-                                                                                                echo (!$isAvailable) ? 'not--available' : ''; ?>">
-                                                            <?php if ($option['option_is_color'] && $opVal['optionvalue_color_code'] != '') {
-                                                                                $color = ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] : "#" . $opVal['optionvalue_color_code']);
-                                                                            ?>
-                                                            <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>"
-                                                                data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>"
-                                                                title="<?php echo $opVal['optionvalue_name'];
-                                                                                                                                                                                                                                    echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>"
-                                                                class="dropdown-item nav__link <?php echo (!$option['option_is_color']) ? 'selector__link' : '';
+                                        <div class="row">
+                                            <?php $selectedOptionsArr = $product['selectedOptionValues'];
+                                                $count = 0;
+                                                foreach ($optionRows as $key => $option) {
+                                                    $selectedOptionValue = $option['values'][$selectedOptionsArr[$key]]['optionvalue_name'];
+                                                    $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code'];
+                                                    if ($option['option_is_color']) {
+                                                        $selectedOptionColor = ("#" == $selectedOptionColor[0] ? $selectedOptionColor : "#" . $selectedOptionColor);
+                                                    }
+                                                ?>
+                                            <div class="col-md-6">
+                                                <div class="h6"><?php echo $option['option_name']; ?></div>
+                                                <div class="dropdown dropdown-options">
+                                                    <button class="btn btn-outline-gray dropdown-toggle" type="button"
+                                                        data-toggle="dropdown" data-display="static"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                        <span>
+                                                            <?php if ($option['option_is_color']) { ?>
+                                                            <span class="colors"
+                                                                style="background-color:<?php echo $selectedOptionColor; ?>;"></span>
+                                                            <?php } ?>
+                                                            <?php echo $selectedOptionValue; ?>
+                                                        </span>
+                                                    </button>
+                                                    <?php if ($option['values']) { ?>
+                                                    <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
+                                                        <ul class="nav nav-block">
+                                                            <?php foreach ($option['values'] as $opVal) {
+                                                                            $isAvailable = true;
+                                                                            if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
+                                                                                $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
+                                                                            } else {
+                                                                                $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
+                                                                                $optionUrlArr = explode("::", $optionUrl);
+                                                                                if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
+                                                                                    $optionUrl = $optionUrlArr[0];
+                                                                                    $isAvailable = false;
+                                                                                }
+                                                                            } ?>
+                                                            <li
+                                                                class="nav__item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' is-active' : ' ';
+                                                                                                    echo (!$optionUrl) ? ' is-disabled' : '';
+                                                                                                    echo (!$isAvailable) ? 'not--available' : ''; ?>">
+                                                                <?php if ($option['option_is_color'] && $opVal['optionvalue_color_code'] != '') {
+                                                                                    $color = ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] : "#" . $opVal['optionvalue_color_code']);
+                                                                                ?>
+                                                                <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>"
+                                                                    data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>"
+                                                                    title="<?php echo $opVal['optionvalue_name'];
+                                                                                                                                                                                                                                        echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>"
+                                                                    class="dropdown-item nav__link <?php echo (!$option['option_is_color']) ? 'selector__link' : '';
                                                                                                                                                                                                                                                                                                                                                                 echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' ' : ' ';
                                                                                                                                                                                                                                                                                                                                                                 echo (!$optionUrl) ? ' is-disabled' : ''; ?>"
-                                                                href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
-                                                                <span class="colors"
-                                                                    style="background-color:<?php echo $color; ?>;"></span><?php echo $opVal['optionvalue_name']; ?></a>
-                                                            <?php } else { ?>
-                                                            <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>"
-                                                                data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>"
-                                                                title="<?php echo $opVal['optionvalue_name'];
-                                                                                                                                                                                                                                    echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>"
-                                                                class="dropdown-item nav__link <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? '' : ' ';
+                                                                    href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
+                                                                    <span class="colors"
+                                                                        style="background-color:<?php echo $color; ?>;"></span><?php echo $opVal['optionvalue_name']; ?></a>
+                                                                <?php } else { ?>
+                                                                <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>"
+                                                                    data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>"
+                                                                    title="<?php echo $opVal['optionvalue_name'];
+                                                                                                                                                                                                                                        echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>"
+                                                                    class="dropdown-item nav__link <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? '' : ' ';
                                                                                                                                                                                                                                                                                                                                                                 echo (!$optionUrl) ? ' is-disabled' : ''; ?>"
-                                                                href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
-                                                                <?php echo $opVal['optionvalue_name'];  ?> </a>
+                                                                    href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
+                                                                    <?php echo $opVal['optionvalue_name'];  ?> </a>
+                                                                <?php } ?>
+                                                            </li>
                                                             <?php } ?>
-                                                        </li>
-                                                        <?php } ?>
-                                                    </ul>
-                                                </div>
-                                                <?php } ?>
-                                            </div>
-                                        </div>
-                                        <?php $count++;
-                                            } ?>
-                                    </div>
-                                    <?php } ?>
-
-                                    <!-- Add To Cart [ -->
-                                    <?php if (0 < $currentStock) {
-                                        if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
-                                    <div class="not-available">
-                                        <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"
-                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
-                                            </use>
-                                        </svg>
-                                        <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
-                                    </div>
-
-                                    <?php } else {
-                                            echo $frmBuyProduct->getFormTag();
-                                            $qtyField =  $frmBuyProduct->getField('quantity');
-                                            $qtyField->value = $product['selprod_min_order_qty'];
-                                            $qtyField->addFieldTagAttribute('data-min-qty', $product['selprod_min_order_qty']);
-                                            $qtyFieldName =  $qtyField->getCaption();
-                                            if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
-                                    <div class="row align-items-end">
-                                        <div class="col-auto mb-2">
-                                            <label class="h6"><?php echo $qtyFieldName; ?></label>
-                                            <div class="qty-wrapper">
-                                                <div class="quantity"
-                                                    data-stock="<?php echo $product['selprod_stock']; ?>">
-                                                    <span class="decrease decrease-js not-allowed"><i class="icn">
-                                                            <svg class="svg" width="16px" height="16px">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                                </use>
-                                                            </svg>
-                                                        </i></span>
-                                                    <div class="qty-input-wrapper"
-                                                        data-stock="<?php echo $product['selprod_stock']; ?>">
-                                                        <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                                                        </ul>
                                                     </div>
-                                                    <span class="increase increase-js"><i class="icn">
-                                                            <svg class="svg" width="16px" height="16px">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                                </use>
-                                                            </svg>
-                                                        </i></span>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                        <div class="col mb-2">
-                                            <label class="h6">&nbsp;</label>
-                                            <div class="buy-group">
-                                                <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
-                                                                //echo $frmBuyProduct->getFieldHtml('btnProductBuy');
-                                                                echo $frmBuyProduct->getFieldHtml('btnAddToCart');
-                                                            }
-                                                            echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php } ?>
-                                    <div class="gap"></div>
-                                    </form>
-                                    <?php echo $frmBuyProduct->getExternalJs();
-                                        }
-                                    } else { ?>
-                                    <div class="tag--soldout tag--soldout-full">
-                                        <h3>
-                                            <?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></h3>
-                                        <p>
-                                            <?php echo Labels::getLabel('LBL_This_item_is_currently_out_of_stock', $siteLangId); ?>
-                                        </p>
-                                    </div>
-                                    <?php } ?>
-                                    <?php if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
-                                    <div class="tag--soldout tag--soldout-full">
-                                        <h3>
-                                            <?php echo Labels::getLabel('LBL_Not_Available', $siteLangId); ?></h3>
-                                        <p>
-                                            <?php echo str_replace('{available-date}', FatDate::Format($product['selprod_available_from']), Labels::getLabel('LBL_This_item_will_be_available_from_{available-date}', $siteLangId)); ?>
-                                        </p>
-                                    </div>
-                                    <?php } ?>
-                                    <!-- ] -->
-
-
-                                    <?php /* Volume Discounts[ */
-                                    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
-                                    <div class="gap"></div>
-                                    <div class="h6">
-                                        <?php echo Labels::getLabel('LBL_Wholesale_Price_(Piece)', $siteLangId); ?>:
-                                    </div>
-                                    <div class="<?php echo (count($volumeDiscountRows) > 1) ? 'js--discount-slider' : ''; ?> discount-slider"
-                                        dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                                        <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
-                                                $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
-                                                $price = ($product['theprice'] - $volumeDiscount); ?>
-                                        <div class="item">
-                                            <div class="qty__value">
-                                                <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
-                                                <?php echo Labels::getLabel('LBL_Or_more', $siteLangId); ?>
-                                                (<?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?>)
-                                                <span
-                                                    class="item__price"><?php echo CommonHelper::displayMoneyFormat($price); ?>
-                                                    /
-                                                    <?php echo Labels::getLabel('LBL_Product', $siteLangId); ?></span>
-                                            </div>
+                                            <?php $count++;
+                                                } ?>
                                         </div>
                                         <?php } ?>
                                     </div>
-                                    <script>
-                                    $("document").ready(function() {
-                                        $('.js--discount-slider').slick(getSlickSliderSettings(2, 1, langLbl
-                                            .layoutDirection, false, {
-                                                1199: 2,
-                                                1023: 2,
-                                                767: 2,
-                                                480: 2
-                                            }, false));
-                                    });
-                                    </script>
-                                    <?php } /* ] */ ?>
+                                    <div class="block-detail">
+                                        <!-- Add To Cart [ -->
+                                        <?php if (0 < $currentStock) {
+                                            if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
+                                        <div class="not-available">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                                </use>
+                                            </svg>
+                                            <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
+                                        </div>
 
-                                    <!-- Upsell Products [ -->
-                                    <?php if (count($upsellProducts) > 0) { ?>
-                                    <div class="gap"></div>
-                                    <div class="h6"><?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?>
-                                    </div>
-                                    <div class="addons-scrollbar" data-simplebar="init"
-                                        data-simplebar-auto-hide="false">
-                                        <ul class="list-addons list-addons--js">
-                                            <?php foreach ($upsellProducts as $usproduct) {
-                                                    $cancelClass = '';
-                                                    $uncheckBoxClass = '';
-                                                    if ($usproduct['selprod_stock'] <= 0) {
-                                                        $cancelClass = 'cancel cancelled--js';
-                                                        $uncheckBoxClass = 'remove-add-on';
-                                                    } ?>
-                                            <li class="addon--js <?php echo $cancelClass; ?>">
-                                                <div class="item">
-                                                    <figure class="item__pic"><a
-                                                            title="<?php echo $usproduct['selprod_title']; ?>"
-                                                            href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img
-                                                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], 'MINI', $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
-                                                                alt="<?php echo $usproduct['product_identifier']; ?>">
-                                                        </a>
-                                                    </figure>
-                                                    <div class="item__description">
-                                                        <div class="item__title"><a
-                                                                href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
-                                                        </div>
-                                                        <div class="item__price">
-                                                            <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
-                                                        </div>
-                                                    </div>
-                                                    <?php if ($usproduct['selprod_stock'] <= 0) { ?>
-                                                    <div class="tag--soldout">
-                                                        <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
-                                                    </div>
-                                                    <?php  } ?>
-                                                </div>
-
+                                        <?php } else {
+                                                echo $frmBuyProduct->getFormTag();
+                                                $qtyField =  $frmBuyProduct->getField('quantity');
+                                                $qtyField->value = $product['selprod_min_order_qty'];
+                                                $qtyField->addFieldTagAttribute('data-min-qty', $product['selprod_min_order_qty']);
+                                                $qtyFieldName =  $qtyField->getCaption();
+                                                if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
+                                        <div class="row align-items-end">
+                                            <div class="col-auto">
+                                                <label class="h6"><?php echo $qtyFieldName; ?></label>
                                                 <div class="qty-wrapper">
-                                                    <div class="quantity quantity-2"
-                                                        data-stock="<?php echo $usproduct['selprod_stock']; ?>"><span
-                                                            class="decrease decrease-js"><i class="icn">
+                                                    <div class="quantity"
+                                                        data-stock="<?php echo $product['selprod_stock']; ?>">
+                                                        <span class="decrease decrease-js not-allowed"><i class="icn">
                                                                 <svg class="svg" width="16px" height="16px">
                                                                     <use
                                                                         xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
@@ -420,12 +284,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                                 </svg>
                                                             </i></span>
                                                         <div class="qty-input-wrapper"
-                                                            data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                                            <input type="text" value="1" data-page="product-view"
-                                                                placeholder="Qty"
-                                                                class="qty-input cartQtyTextBox productQty-js"
-                                                                data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]"
-                                                                name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                                            data-stock="<?php echo $product['selprod_stock']; ?>">
+                                                            <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                                                         </div>
                                                         <span class="increase increase-js"><i class="icn">
                                                                 <svg class="svg" width="16px" height="16px">
@@ -436,255 +296,411 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                             </i></span>
                                                     </div>
                                                 </div>
-                                                <label class="checkbox">
-                                                    <input
-                                                        <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?>
-                                                        type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>"
-                                                        name="check_addons"
-                                                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                    <i class="input-helper"></i> </label>
 
+                                            </div>
+                                            <div class="col">
+                                                <label class="h6">&nbsp;</label>
+                                                <div class="buy-group">
+                                                    <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
+                                                                    //echo $frmBuyProduct->getFieldHtml('btnProductBuy');
+                                                                    echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                                                                }
+                                                                echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php } ?>
 
-                                            </li>
-                                            <?php } ?>
-                                        </ul>
+                                        </form>
+                                        <?php echo $frmBuyProduct->getExternalJs();
+                                            }
+                                        } else { ?>
+                                        <div class="tag--soldout tag--soldout-full">
+                                            <h3>
+                                                <?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></h3>
+                                            <p>
+                                                <?php echo Labels::getLabel('LBL_This_item_is_currently_out_of_stock', $siteLangId); ?>
+                                            </p>
+                                        </div>
+                                        <?php } ?>
+                                        <?php if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
+                                        <div class="tag--soldout tag--soldout-full">
+                                            <h3>
+                                                <?php echo Labels::getLabel('LBL_Not_Available', $siteLangId); ?></h3>
+                                            <p>
+                                                <?php echo str_replace('{available-date}', FatDate::Format($product['selprod_available_from']), Labels::getLabel('LBL_This_item_will_be_available_from_{available-date}', $siteLangId)); ?>
+                                            </p>
+                                        </div>
+                                        <?php } ?>
 
                                     </div>
-                                    <?php } ?>
-                                    
+
+                                    <div class="block-detail">
+                                        <?php /* Volume Discounts[ */
+                                        if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
+
+                                        <div class="h6">
+                                            <?php echo Labels::getLabel('LBL_Wholesale_Price_(Piece)', $siteLangId); ?>:
+                                        </div>
+                                        <div class="<?php echo (count($volumeDiscountRows) > 1) ? 'js--discount-slider' : ''; ?> discount-slider"
+                                            dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+                                            <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
+                                                    $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                                                    $price = ($product['theprice'] - $volumeDiscount); ?>
+                                            <div class="item">
+                                                <div class="qty__value">
+                                                    <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
+                                                    <?php echo Labels::getLabel('LBL_Or_more', $siteLangId); ?>
+                                                    (<?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?>)
+                                                    <span
+                                                        class="item__price"><?php echo CommonHelper::displayMoneyFormat($price); ?>
+                                                        /
+                                                        <?php echo Labels::getLabel('LBL_Product', $siteLangId); ?></span>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                        </div>
+                                        <script>
+                                        $("document").ready(function() {
+                                            $('.js--discount-slider').slick(getSlickSliderSettings(2, 1, langLbl
+                                                .layoutDirection, false, {
+                                                    1199: 2,
+                                                    1023: 2,
+                                                    767: 2,
+                                                    480: 2
+                                                }, false));
+                                        });
+                                        </script>
+                                        <?php }  ?>
+                                    </div>
+                                    <div class="block-detail">
+                                        <!-- Upsell Products [ -->
+                                        <?php if (count($upsellProducts) > 0) { ?>
+
+                                        <div class="h6">
+                                            <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?>
+                                        </div>
+                                        <div class="addons-scrollbar scroll scroll-x">
+                                            <ul class="list-addons list-addons--js">
+                                                <?php foreach ($upsellProducts as $usproduct) {
+                                                        $cancelClass = '';
+                                                        $uncheckBoxClass = '';
+                                                        if ($usproduct['selprod_stock'] <= 0) {
+                                                            $cancelClass = 'cancel cancelled--js';
+                                                            $uncheckBoxClass = 'remove-add-on';
+                                                        } ?>
+                                                <li class="addon--js <?php echo $cancelClass; ?>">
+                                                    <div class="item">
+                                                        <figure class="item__pic"><a
+                                                                title="<?php echo $usproduct['selprod_title']; ?>"
+                                                                href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img
+                                                                    src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], 'MINI', $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                                                    alt="<?php echo $usproduct['product_identifier']; ?>">
+                                                            </a>
+                                                        </figure>
+                                                        <div class="item__description">
+                                                            <div class="item__title"><a
+                                                                    href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
+                                                            </div>
+                                                            <div class="item__price">
+                                                                <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
+                                                            </div>
+                                                        </div>
+                                                        <?php if ($usproduct['selprod_stock'] <= 0) { ?>
+                                                        <div class="tag--soldout">
+                                                            <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                                                        </div>
+                                                        <?php  } ?>
+                                                    </div>
+
+                                                    <div class="qty-wrapper">
+                                                        <div class="quantity quantity-2"
+                                                            data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                                            <span class="decrease decrease-js"><i class="icn">
+                                                                    <svg class="svg" width="16px" height="16px">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i></span>
+                                                            <div class="qty-input-wrapper"
+                                                                data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                                                <input type="text" value="1" data-page="product-view"
+                                                                    placeholder="Qty"
+                                                                    class="qty-input cartQtyTextBox productQty-js"
+                                                                    data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]"
+                                                                    name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                                            </div>
+                                                            <span class="increase increase-js"><i class="icn">
+                                                                    <svg class="svg" width="16px" height="16px">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i></span>
+                                                        </div>
+                                                    </div>
+                                                    <label class="checkbox">
+                                                        <input
+                                                            <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?>
+                                                            type="checkbox"
+                                                            class="cancel <?php echo $uncheckBoxClass; ?>"
+                                                            name="check_addons"
+                                                            title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                                        <i class="input-helper"></i> </label>
+
+
+                                                </li>
+                                                <?php } ?>
+                                            </ul>
+
+                                        </div>
+                                        <?php } ?>
+                                    </div>
+
                                 </div>
-                                
-            </div>
-        </div>
-</div>
-</div>
-<div class="more-sellers">
-    <?php if (count($product['moreSellersArr']) > 0) { ?>
-    <h6><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId); ?></h6>
-    <?php } ?>
-    <ul class="responsive-table <?php echo (count($product['moreSellersArr']) ? 'moreSellerRows--js' : ''); ?>">
-        <?php
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="more-sellers">
+                    <?php if (count($product['moreSellersArr']) > 0) { ?>
+                    <h6><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId); ?></h6>
+                    <?php } ?>
+                    <ul
+                        class="responsive-table <?php echo (count($product['moreSellersArr']) ? 'moreSellerRows--js' : ''); ?>">
+                        <?php
                         $sellers[0]['isActive'] = true;
                         include('more-sellers-rows.php');
                         ?>
-    </ul>
+                    </ul>
 
-    <?php if (count($product['moreSellersArr']) > 0) { ?>
-    <script>
-    $(document).ready(function() {
-        moreSellerRows('<?php echo $product['selprod_code']; ?>', <?php echo $product['selprod_user_id']; ?>);
-    });
-    </script>
-    <?php } ?>
-</div>
-<?php $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); ?>
-</div>
-<!-- Don't remove scrollUpTo-js span -->
-<span id="scrollUpTo-js"></span>
-<!-- ------------------------------- -->
-
-<div class="nav-detail nav-detail-js">
-    <ul>
-        <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
-        <li>
-            <a class="nav-scroll-js is-active" href="#specifications">
-                <?php echo Labels::getLabel('LBL_FILES', $siteLangId); ?>
-            </a>
-        </li>
-        <?php } ?>
-        <?php if (count($productSpecifications) > 0) { ?>
-        <li><a class="nav-scroll-js is-active"
-                href="#specifications"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?></a>
-        </li>
-        <?php } ?>
-        <?php if (trim($product['product_description']) != '') { ?>
-        <li class=""><a class="nav-scroll-js"
-                href="#description"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?> </a></li>
-        <?php } ?>
-        <?php if ($youtube_embed_code) { ?>
-        <li class=""><a class="nav-scroll-js" href="#video"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
-            </a></li>
-        <?php } ?>
-        <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
-        <li class=""><a class="nav-scroll-js"
-                href="#shop-policies"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?> </a>
-        </li>
-        <?php } ?>
-        <?php if (!empty($product['selprodComments'])) { ?>
-        <li class=""><a class="nav-scroll-js"
-                href="#extra-comments"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?> </a>
-        </li>
-        <?php } ?>
-        <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-        <li class=""><a class="nav-scroll-js"
-                href="#itemRatings"><?php echo Labels::getLabel('LBL_Ratings_and_Reviews', $siteLangId); ?> </a>
-        </li>
-        <?php } ?>
-    </ul>
-</div>
-
-<section class="section">
-    <div class="row justify-content-center">
-        <div class="col-xl-7">
-
-            
-            <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']
-            && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))) {
-            ?>
-            <div class="detail-content">
-                <div class="section-head">
-                    <div class="section__heading" id="specifications">
-                        <h2><?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?></h2>
-                    </div>
-                </div>
-                <div class="cms bg-gray p-4 mb-4">
-                            <?php 
-                            if (0 < count($product['preview_links'])) {
-                            ?>
-                    <div class="prod-ext-links"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
-                    <?php   foreach ($product['preview_links'] as $keys => $link) {
-                                        echo $link['pdl_preview_link'] . '<br />';
-                                    }
-                                }
-                                if (0 < count($product['preview_attachments'])) {
-                            ?>
-                    <div class="prod-attached-files"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?>
-                    </div>
-                    <?php
-                                    foreach ($product['preview_attachments'] as $keys => $attachment) {
-                                        if (0 < strlen($attachment['preview'])) {
-
-                                            $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
-                                            $fileExt = strtolower($fileExt);
-
-                                            $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
-                            ?>
-                    <?php echo $attachment['preview']; ?>
-                    <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
-                    <a class="play-preview" href="javascript:void(0);" title="<?php echo $attachment['preview'];?>"
-                        onclick="playVideo('<?php echo $videoPath;?>', '<?php echo $fileExt;?>'); return false;">
-                        <i class="fa fa-caret-square-right icon"></i>
-                    </a>
+                    <?php if (count($product['moreSellersArr']) > 0) { ?>
+                    <script>
+                    $(document).ready(function() {
+                        moreSellerRows('<?php echo $product['selprod_code']; ?>',
+                            <?php echo $product['selprod_user_id']; ?>);
+                    });
+                    </script>
                     <?php } ?>
-                    <a class="download--preview" target="_blank"
-                        href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>"
-                        title="<?php echo $attachment['preview']; ?>">
-                        <i class="fa fa-download icon"></i>
-                    </a><br />
-                    <?php
+                </div>
+                <?php $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); ?>
+            </div>
+            <!-- Don't remove scrollUpTo-js span -->
+            <span id="scrollUpTo-js"></span>
+            <div class="nav-detail nav-detail-js">
+                <ul>
+                    <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
+                    <li>
+                        <a class="nav-scroll-js is-active" href="#specifications">
+                            <?php echo Labels::getLabel('LBL_FILES', $siteLangId); ?>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php if (count($productSpecifications) > 0) { ?>
+                    <li><a class="nav-scroll-js is-active"
+                            href="#specifications"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?></a>
+                    </li>
+                    <?php } ?>
+                    <?php if (trim($product['product_description']) != '') { ?>
+                    <li class=""><a class="nav-scroll-js"
+                            href="#description"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?> </a>
+                    </li>
+                    <?php } ?>
+                    <?php if ($youtube_embed_code) { ?>
+                    <li class=""><a class="nav-scroll-js"
+                            href="#video"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
+                        </a></li>
+                    <?php } ?>
+                    <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
+                    <li class=""><a class="nav-scroll-js"
+                            href="#shop-policies"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?> </a>
+                    </li>
+                    <?php } ?>
+                    <?php if (!empty($product['selprodComments'])) { ?>
+                    <li class=""><a class="nav-scroll-js"
+                            href="#extra-comments"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+                    <li class=""><a class="nav-scroll-js"
+                            href="#itemRatings"><?php echo Labels::getLabel('LBL_Ratings_and_Reviews', $siteLangId); ?>
+                        </a>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+
+            <section class="section">
+                <div class="row justify-content-center">
+                    <div class="col-xl-7">
+
+
+                        <?php if (
+                            Product::PRODUCT_TYPE_DIGITAL == $product['product_type']
+                            && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))
+                        ) {
+                        ?>
+                        <div class="detail-content">
+                            <div class="section-head">
+                                <div class="section__heading" id="specifications">
+                                    <h2><?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?></h2>
+                                </div>
+                            </div>
+                            <div class="cms bg-gray p-4 mb-4">
+                                <?php
+                                    if (0 < count($product['preview_links'])) {
+                                    ?>
+                                <div class="prod-ext-links"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?>
+                                </div>
+                                <?php foreach ($product['preview_links'] as $keys => $link) {
+                                            echo $link['pdl_preview_link'] . '<br />';
                                         }
                                     }
-                                } else {
-                                    echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
-                                }
-                                ?>
-                </div>
-            </div>
-            <?php } ?>
-            <?php if (count($productSpecifications) > 0) { ?>
-            <div class="detail-content">
-                <div class="section-head">
-                    <div class="section__heading" id="specifications">
-                        <h2><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?></h2>
-                    </div>
-                </div>
-                <div class="cms bg-gray p-4 mb-4">
-                    <table>
-                        <tbody>
-                            <?php foreach ($productSpecifications as $key => $specification) { ?>
-                            <tr>
-                                <th><?php echo $specification['prodspec_name'] . ":"; ?></th>
-                                <td><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
-                                </td>
-                            </tr>
+                                    if (0 < count($product['preview_attachments'])) {
+                                        ?>
+                                <div class="prod-attached-files">
+                                    <?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?>
+                                </div>
+                                <?php
+                                        foreach ($product['preview_attachments'] as $keys => $attachment) {
+                                            if (0 < strlen($attachment['preview'])) {
+
+                                                $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
+                                                $fileExt = strtolower($fileExt);
+
+                                                $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
+                                        ?>
+                                <?php echo $attachment['preview']; ?>
+                                <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
+                                <a class="play-preview" href="javascript:void(0);"
+                                    title="<?php echo $attachment['preview']; ?>"
+                                    onclick="playVideo('<?php echo $videoPath; ?>', '<?php echo $fileExt; ?>'); return false;">
+                                    <i class="fa fa-caret-square-right icon"></i>
+                                </a>
+                                <?php } ?>
+                                <a class="download--preview" target="_blank"
+                                    href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>"
+                                    title="<?php echo $attachment['preview']; ?>">
+                                    <i class="fa fa-download icon"></i>
+                                </a><br />
+                                <?php
+                                            }
+                                        }
+                                    } else {
+                                        echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
+                                    }
+                                    ?>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <?php if (count($productSpecifications) > 0) { ?>
+                        <div class="detail-content">
+                            <div class="section-head">
+                                <div class="section__heading" id="specifications">
+                                    <h2><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?></h2>
+                                </div>
+                            </div>
+                            <div class="cms bg-gray p-4 mb-4">
+                                <table>
+                                    <tbody>
+                                        <?php foreach ($productSpecifications as $key => $specification) { ?>
+                                        <tr>
+                                            <th><?php echo $specification['prodspec_name'] . ":"; ?></th>
+                                            <td><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <?php if (trim($product['product_description']) != '') { ?>
+                        <div class="detail-content">
+                            <div class="section-head">
+                                <div class="section__heading" id="description">
+                                    <h2><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></h2>
+                                </div>
+                            </div>
+                            <div class="cms bg-gray p-4 mb-4">
+                                <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <?php if ($youtube_embed_code) { ?>
+                        <div class="detail-content">
+                            <div class="section-head">
+                                <div class="section__heading" id="video">
+                                    <h2><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?></h2>
+                                </div>
+                            </div>
+                            <?php if ($youtube_embed_code != "") : ?>
+                            <div class="mb-4 video-wrapper">
+                                <iframe width="100%" height="315"
+                                    src="//www.youtube.com/embed/<?php echo $youtube_embed_code ?>"
+                                    allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php } ?>
+                        <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
+                        <div class="detail-content">
+                            <div class="section-head">
+                                <div class="section__heading" id="shop-policies">
+                                    <h2><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?></h2>
+                                </div>
+                            </div>
+                            <div class="cms bg-gray p-4 mb-4">
+                                <?php if ($shop['shop_payment_policy'] != '') { ?>
+                                <h6><?php echo Labels::getLabel('LBL_Payment_Policy', $siteLangId) ?></h6>
+                                <p><?php echo nl2br($shop['shop_payment_policy']); ?></p>
+                                <br>
+                                <?php } ?>
+                                <?php if ($shop['shop_delivery_policy'] != '') { ?>
+                                <h6><?php echo Labels::getLabel('LBL_Delivery_Policy', $siteLangId) ?></h6>
+                                <p><?php echo nl2br($shop['shop_delivery_policy']); ?></p>
+                                <br>
+                                <?php } ?>
+                                <?php if ($shop['shop_refund_policy'] != '') { ?>
+                                <h6><?php echo Labels::getLabel('LBL_Refund_Policy', $siteLangId) ?></h6>
+                                <p><?php echo nl2br($shop['shop_refund_policy']); ?></p>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <?php if (!empty($product['selprodComments'])) { ?>
+                        <div class="detail-content">
+                            <div class="section-head">
+                                <div class="section__heading" id="extra-comments">
+                                    <h2><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?></h2>
+                                </div>
+                            </div>
+                            <div class="cms bg-gray p-4 mb-4">
+                                <p><?php echo CommonHelper::displayNotApplicable($siteLangId, nl2br($product['selprodComments'])); ?>
+                                </p>
+                            </div>
+                        </div>
+                        <?php } ?>
+
+                        <div id="itemRatings">
+                            <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+                            <?php echo $frmReviewSearch->getFormHtml(); ?>
+                            <?php $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false); ?>
                             <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php } ?>
-            <?php if (trim($product['product_description']) != '') { ?>
-            <div class="detail-content">
-                <div class="section-head">
-                    <div class="section__heading" id="description">
-                        <h2><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></h2>
-                    </div>
-                </div>
-                <div class="cms bg-gray p-4 mb-4">
-                    <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
-                </div>
-            </div>
-            <?php } ?>
-            <?php if ($youtube_embed_code) { ?>
-            <div class="detail-content">
-                <div class="section-head">
-                    <div class="section__heading" id="video">
-                        <h2><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?></h2>
-                    </div>
-                </div>
-                <?php if ($youtube_embed_code != "") : ?>
-                <div class="mb-4 video-wrapper">
-                    <iframe width="100%" height="315" src="//www.youtube.com/embed/<?php echo $youtube_embed_code ?>"
-                        allowfullscreen></iframe>
-                </div>
-            </div>
-            <?php endif; ?>
-            <?php } ?>
-            <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
-            <div class="detail-content">
-                <div class="section-head">
-                    <div class="section__heading" id="shop-policies">
-                        <h2><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?></h2>
-                    </div>
-                </div>
-                <div class="cms bg-gray p-4 mb-4">
-                    <?php if ($shop['shop_payment_policy'] != '') { ?>
-                    <h6><?php echo Labels::getLabel('LBL_Payment_Policy', $siteLangId) ?></h6>
-                    <p><?php echo nl2br($shop['shop_payment_policy']); ?></p>
-                    <br>
-                    <?php } ?>
-                    <?php if ($shop['shop_delivery_policy'] != '') { ?>
-                    <h6><?php echo Labels::getLabel('LBL_Delivery_Policy', $siteLangId) ?></h6>
-                    <p><?php echo nl2br($shop['shop_delivery_policy']); ?></p>
-                    <br>
-                    <?php } ?>
-                    <?php if ($shop['shop_refund_policy'] != '') { ?>
-                    <h6><?php echo Labels::getLabel('LBL_Refund_Policy', $siteLangId) ?></h6>
-                    <p><?php echo nl2br($shop['shop_refund_policy']); ?></p>
-                    <?php } ?>
-                </div>
-            </div>
-            <?php } ?>
-            <?php if (!empty($product['selprodComments'])) { ?>
-            <div class="detail-content">
-                <div class="section-head">
-                    <div class="section__heading" id="extra-comments">
-                        <h2><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?></h2>
-                    </div>
-                </div>
-                <div class="cms bg-gray p-4 mb-4">
-                    <p><?php echo CommonHelper::displayNotApplicable($siteLangId, nl2br($product['selprodComments'])); ?>
-                    </p>
-                </div>
-            </div>
-            <?php } ?>
+                        </div>
 
-            <div id="itemRatings">
-                <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-                <?php echo $frmReviewSearch->getFormHtml(); ?>
-                <?php $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false); ?>
-                <?php } ?>
-            </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <?php if (isset($banners) && isset($banners['blocation_active']) && $banners['blocation_active'] && count($banners['banners'])) { ?>
 
-        </div>
-    </div>
-</section>
-<section class="section">
-    <?php if (isset($banners) && isset($banners['blocation_active']) && $banners['blocation_active'] && count($banners['banners'])) { ?>
-    <div class="gap"></div>
-    <div class="container">
-        <div class="row">
-            <?php
+                <div class="container">
+                    <div class="row">
+                        <?php
                             foreach ($banners['banners'] as $val) {
                                 $desktop_url = '';
                                 $tablet_url = '';
@@ -707,43 +723,43 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                         }
                                     }
                                 } ?>
-            <div class="col-md-6 mb-3 mb-md-0">
-                <div class="banner-ppc"><a
-                        href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>"
-                        target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>"
-                        class="advertise__block">
-                        <picture>
-                            <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>"
-                                media="(max-width: 767px)">
-                            <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>"
-                                media="(max-width: 1024px)">
-                            <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-                            <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
-                        </picture>
-                    </a>
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="banner-ppc"><a
+                                    href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>"
+                                    target="<?php echo $val['banner_target']; ?>"
+                                    title="<?php echo $val['banner_title']; ?>" class="advertise__block">
+                                    <picture>
+                                        <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>"
+                                            media="(max-width: 767px)">
+                                        <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>"
+                                            media="(max-width: 1024px)">
+                                        <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
+                                        <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
+                                    </picture>
+                                </a>
+                            </div>
+                        </div>
+                        <?php } ?>
+                    </div>
                 </div>
-            </div>
-            <?php } ?>
-        </div>
-    </div>
-    <?php }
+                <?php }
                 if (isset($val['banner_record_id']) && $val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
                     Promotion::updateImpressionData($val['banner_record_id']);
                 } ?>
-</section>
-</div>
-</section>
-<?php if ($recommendedProducts) { ?>
-<section class="section bg-second">
-    <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
-</section>
-<?php } ?>
-<?php if ($relatedProductsRs) { ?>
-<section class="section">
-    <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
-</section>
-<?php } ?>
-<div id="recentlyViewedProductsDiv"></div>
+            </section>
+        </div>
+    </section>
+    <?php if ($recommendedProducts) { ?>
+    <section class="section bg-second">
+        <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
+    </section>
+    <?php } ?>
+    <?php if ($relatedProductsRs) { ?>
+    <section class="section">
+        <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
+    </section>
+    <?php } ?>
+    <div id="recentlyViewedProductsDiv"></div>
 </div>
 <script>
 var mainSelprodId = <?php echo $product['selprod_id']; ?>;
@@ -780,15 +796,6 @@ $("document").ready(function() {
     }, 5000);
 
 });
-
-<?php /* if( isset($banners['Product_Detail_Page_Banner']) && $banners['Product_Detail_Page_Banner']['blocation_active'] && count($banners['Product_Detail_Page_Banner']['banners']) ) { ?>
-$(function() {
-    if ($(window).width() > 1050) {
-        $(window).scroll(sticky_relocate);
-        sticky_relocate();
-    }
-});
-<?php } */ ?>
 </script>
 <script>
 $(document).ready(function() {
@@ -869,6 +876,6 @@ $(document).ready(function() {
 
 <!-- JWPlayer -->
 <script type="text/JavaScript">
-    jwplayer.key='<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, '');?>';
+    jwplayer.key='<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, ''); ?>';
 </script>
 <!-- JWPlayer -->

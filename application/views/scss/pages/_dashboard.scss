@@ -563,8 +563,8 @@
                     outline-width: 0;
                 }
             }
-            .dashboard-menu {
-                color: $body-color;
+            .dashboard-menu { 
+                color: $txt-body; 
                 fill: currentColor;
                 .menu__item {
                     overflow: hidden;
