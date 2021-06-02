@@ -114,6 +114,12 @@ class OrderSubscriptionSearch extends SearchBase
         }
     }
 
+    public function addCompletedOrderCondition()
+    {
+        $status = array_diff(unserialize(FatApp::getConfig("CONF_SELLER_SUBSCRIPTION_STATUS")), (array)FatApp::getConfig("CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS"));
+        $this->addStatusCondition($status);
+    }
+
     public function addStatusCondition($op_status)
     {
         if (is_array($op_status)) {
@@ -216,6 +222,7 @@ class OrderSubscriptionSearch extends SearchBase
         $srch->addGroupBy('o.order_user_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addCompletedOrderCondition();
         $srch->addMultipleFields(['o.order_user_id', 'sum(oss.ossubs_price + ifnull(op_other_charges,0)) as amountPaid', 'count(DISTINCT(if(o.order_renew = 1 and order_payment_status = ' . Orders::ORDER_PAYMENT_PAID . ', o.order_id, null))) as spRenewals', 'count(DISTINCT(if(oss.ossubs_status_id = ' . OrderSubscription::CANCELLED_SUBSCRIPTION . ', o.order_id, null))) as spackageCancelled']);
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'subscount.order_user_id = o.order_user_id', 'subscount');
     }
