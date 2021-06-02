@@ -6,6 +6,7 @@ New Feature :
     => 82248 : DPO Payment Gateway Integration
     => 82892 : Easypost Shipping API Integration
     =>  Shopify sync module for SV seller
+    => 85399 : QNB payment gateway 
 
 Updates:
     => Tax Module update
@@ -103,6 +104,24 @@ Fixes:
     => 053757 - when order status is changed then sms are not triggering to buyer for the same
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053985 - Stripe connect unable to debit site commission
+    => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming      
+    => 054242 - paystack gateway not supporting ZAR currency
+    => 054262 - some issue with collection 
+    => 054255 - Unable to reach location if redirect from notification listing in admin.
+    => 054265 - missing sms template on seller end
+    => 053985 - Stripe connect unable to debit site commission
+    => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming
+    => 054242 - paystack gateway not supporting ZAR currency
+    => 054262 - some issue with collection 
+    => 054279 - warranty needs to be optional when product is digital
+    => 054255 - Unable to reach location if redirect from notification listing in admin.
+    => 054265 - missing sms template on seller end
+    => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
 
 Develop
 
@@ -155,6 +174,14 @@ Fixes:
     => 053850 - admin> advertiser report> data is not populating.
     => 053849 - admin> advertiser report> keyword search needs to be there in filter
     => 053751 - after applying filters and exporting file in reports> all data is exporting instead of filtered data
+    => 053935 - when buyer purchases multiple qty (incl. tax) then on seller end in transactions it's listing $1000.02 and under reports it's listing $1000 and on buyer end it's listing $0.01 as rounding off amount
+    => 053948 - getting invalid slot when buyer changes date for pickup (admin's place)
+    => 053855 - admin> reports> top products> filter> search by keyword is missing 
+    => 054351 - when seller B purchases subscription then in Subscription Seller Report> subscription name for seller A changes similar to seller B
+    => 054278 - if for any digital item there is no preview available then preview tab shouldn't be displayed
+    => 054144 - Set Default Location not populating on front end after set by admin
+    => 054071 - Product Download Attachments At Inventory Level for catalog is missing in import/export
+    => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox
 
 New Features:
     => Admin shipped products listing page
@@ -164,7 +191,6 @@ New Features:
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
     => 053978 - Forget password label language issue in admin
-
 
 Enhancements :
    => Make provision to made seller
@@ -265,3 +291,14 @@ Released Version:
 
 Tasks:
     task-84719 Preview module for digital files
+    task-85619 Adding files when digital order is delivered
+
+=======================================
+
+Released Version:
+
+bugs:
+    #054201	while adding catalog for digital item> only option to add attachment at inventory level is either Yes or No
+    #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
+    #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
+    #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory

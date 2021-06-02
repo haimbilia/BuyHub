@@ -63,7 +63,7 @@ class CatalogReportController extends AdminBaseController
         $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
         $srch->joinBrands($this->adminLangId, false, true);
         $srch->joinProductToCategory();
-        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = opq.product_id', 'opq');
+        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields($selectedFlds);
         $srch->addGroupBy('p.product_id');
 

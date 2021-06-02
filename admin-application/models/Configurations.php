@@ -42,8 +42,7 @@ class Configurations extends FatModel
             Configurations::FORM_LOCAL,
             Configurations::FORM_EMAIL,
             Configurations::FORM_SHARING,
-            Configurations::FORM_MEDIA,
-            Configurations::FORM_PPC,
+            Configurations::FORM_MEDIA,     
             Configurations::FORM_SERVER,
         );
     }

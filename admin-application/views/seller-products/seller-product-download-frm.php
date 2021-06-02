@@ -96,7 +96,7 @@ if (false == $canDo) {
                 </div>
             </div>
             <div class="attach-links-js">
-            <?php if(true == $canDo) { ?>
+            <?php if (true == $canDo) { ?>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="field-set">
@@ -143,10 +143,14 @@ if (false == $canDo) {
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+                <?php } else { ?>
+                    <div class="row dd-not-allowed">
+                        <?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $adminLangId); ?>
+                    </div>
+             <?php } ?>
             </div>
             <div class="attach-files-js">
-            <?php if(true == $canDo) { ?>
+            <?php if (true == $canDo) { ?>
                 <div class="row">
                     <div class="col-md-4 downloadable_file_input">
                         <div class="field-set">
@@ -194,6 +198,10 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
+                </div>
+            <?php } else { ?>
+                <div class="row dd-not-allowed">
+                    <?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?>
                 </div>
             <?php } ?>
             </div>

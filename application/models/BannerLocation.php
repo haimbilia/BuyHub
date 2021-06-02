@@ -99,8 +99,7 @@ class BannerLocation extends MyAppModel
         $bsrch->joinLocations(true);
         $bsrch->addPromotionTypeCondition();
         $bsrch->joinActiveUser();
-        $bsrch->joinUserWallet();
-        $bsrch->addMinimiumWalletbalanceCondition();
+        $bsrch->joinUserWallet();     
         $bsrch->addSkipExpiredPromotionAndBannerCondition();
         $bsrch->joinBudget();
         $bsrch->addMultipleFields(array('banner_id', 'banner_blocation_id', 'banner_type', 'banner_record_id', 'banner_url', 'banner_target', 'banner_title', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'banner_updated_on'));

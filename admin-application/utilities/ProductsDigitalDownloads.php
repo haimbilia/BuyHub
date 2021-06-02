@@ -8,7 +8,7 @@ trait ProductsDigitalDownloads
 
         $selProdId = FatUtility::int($selProdId);
 
-        $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, false, true);
+        $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, true, true);
         
         $sellerProductRow = SellerProduct::getAttributesById($selProdId);
 
@@ -35,6 +35,7 @@ trait ProductsDigitalDownloads
         $currentOption[$selProdId] = (array_key_exists($selProdId, $savedOptions)) ? $savedOptions[$selProdId] : '';
         $savedOptions = $currentOption;
 
+        $savedOptions = array_filter($savedOptions);
         $fld = $frm->getField('option_comb_id');
         if (1 > count($savedOptions)) {
             $frm->removeField($fld);
@@ -50,6 +51,7 @@ trait ProductsDigitalDownloads
         $this->set('canDo', $canDo);
         $this->set('savedOptions', $savedOptions);
         $this->set('downloadFrm', $frm);
+        $this->set('adminLangId', $this->adminLangId);
         $this->set('product_id', $productId);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
@@ -75,8 +77,10 @@ trait ProductsDigitalDownloads
         }
         
         $canDelete = DigitalDownload::canDelete($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, true, true);
+        $canDoDigDownload = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, true, true);
         
         $this->set('canDelete', $canDelete);
+        $this->set('canDoDigDownload', $canDoDigDownload);
         $this->set('records', $records);
         $this->set('recordId', $selProdId);
         $this->set('downloadrefType', Product::CATALOG_TYPE_INVENTORY);
@@ -103,8 +107,10 @@ trait ProductsDigitalDownloads
         }
         
         $requstedProd = Product::CATALOG_TYPE_INVENTORY;
-        
-        DigitalDownload::canDo($inventoryId, $requstedProd, 0, $this->adminLangId, false);
+
+        if (false == DigitalDownload::canDo($inventoryId, $requstedProd, 0, $this->adminLangId, true, true)) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $this->adminLangId));
+        }
         
         $selProdData = SellerProduct::getAttributesById($inventoryId, array('selprod_user_id', 'selprod_code'));
         if (false == $selProdData) {

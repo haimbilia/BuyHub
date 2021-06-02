@@ -1136,17 +1136,7 @@ class EmailHandler extends FatModel
                 $bccEmails = $receipentsInfo['email'];
                 self::sendMailTpl($val["op_shop_owner_email"], $tpl, $langId, $arrReplacements, '', 0, array(), $bccEmails);
 
-                if (!in_array(strtolower($paymentType), ['cashondelivery', 'payatstore', 'transferbank'])) {
-                    /*
-                    $phoneNumbers = $receipentsInfo['phone'];
-                    $userPhone = !empty($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
-                    $phoneNumbers[] = $userPhone;
-                    foreach ($phoneNumbers as $phone) {
-                        $this->sendSms($tpl, $phone, $arrReplacements, $langId);
-                    }
-                     * 
-                     */
-
+                if (!in_array(strtolower($paymentType), ['vendor_bank_transfer_order_email'])) {
                     $sellerInfo = User::getAttributesById($val['op_selprod_user_id'], array('user_phone_dcode', 'user_phone'));
                     $sellerPhone = !empty($sellerInfo['user_phone']) ? ValidateElement::formatDialCode($sellerInfo['user_phone_dcode']) . $sellerInfo['user_phone'] : '';
                     $this->sendSms($tpl, $sellerPhone, $arrReplacements, $langId);
@@ -2761,7 +2751,7 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{user_full_name}' => $userInfo['user_name'],
-            '{promotion_name}' => ($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
+            '{promotion_name}' => isset($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
             '{new_request_status}' => $statusArr[$d['promotion_approved']],
         );
 
@@ -2782,7 +2772,7 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{user_full_name}' => $userInfo['user_name'],
-            '{promotion_name}' => ($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
+            '{promotion_name}' => isset($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
 
         );
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {

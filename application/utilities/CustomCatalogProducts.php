@@ -1027,8 +1027,8 @@ trait CustomCatalogProducts
         $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId());
         $this->canAddCustomCatalogProduct(true);
         $preqId = FatUtility::int($preqId);
-        $productType = 0;
-        $attachDownloadsWithInv = 0;
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::NO;
         if (0 < $preqId) {
             $productReqContent = ProductRequest::getAttributesById($preqId, 'preq_content');
             if (!empty($productReqContent)) {
@@ -1052,6 +1052,10 @@ trait CustomCatalogProducts
         $preqId = FatUtility::int($preqId);
         $customProductFrm = $this->getCustomProductIntialSetUpFrm(0, $preqId);
         $languages = Language::getAllNames();
+
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::NO;
+
         if ($preqId > 0) {
             $productReqRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_prodcat_id', 'preq_content'));
             $userArr = User::getAuthenticUserIds(UserAuthentication::getLoggedUserId(), $this->userParentId);
@@ -1084,6 +1088,10 @@ trait CustomCatalogProducts
             }
             $productReqRow = array_merge($productReqRow, $langData);
             $customProductFrm->fill($productReqRow);
+
+            $productType = $productData['product_type'];
+            $attachDownloadsWithInv = (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO);
+
         }
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -1092,6 +1100,9 @@ trait CustomCatalogProducts
         $this->set('otherLanguages', $languages);
         $this->set('productFrm', $customProductFrm);
         $this->set('preqId', $preqId);
+        $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
+        
         $this->_template->render(false, false);
     }
 

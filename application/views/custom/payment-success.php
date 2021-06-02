@@ -202,7 +202,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                     <div class="completed-cart">
                                         <div class="row justify-content-between">
                                             <div class="col-md-7">
-                                                <div class="bg-gray rounded p-4">
+                                                <div class="bg-gray h-100 rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h5>
                                                     <ul class="list-cart list-cart-checkout">
                                                         <?php
@@ -257,9 +257,9 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
-                                                <div class="bg-gray rounded p-4">
+                                                <div class="bg-gray rounded h-100 p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h5>
-                                                    <div class="cart-total">
+                                                    <div class="cart-total cart-summary">
                                                         <ul class="mt-4">
                                                             <?php if (0 < $subTotal) { ?>
                                                                 <li>

@@ -761,11 +761,24 @@ ALTER TABLE `tbl_product_digital_links` DROP `pdl_selprod_code`;
 ALTER TABLE `tbl_seller_products` DROP `selprod_downloadable_link`;
 
 UPDATE tbl_product_digital_data_relation SET pddr_options_code = IF(pddr_options_code = '', 0, ifnull(pddr_options_code,0));
+
 -- --- task_84719_Preview_module_for_digital_files -- ---
 -- --- Display Total Savings on Checkout page  --- --
 ALTER TABLE `tbl_order_products` ADD `op_selprod_price` DECIMAL(10,2) NOT NULL AFTER `op_qty`;
 ALTER TABLE `tbl_order_product_specifics` ADD `op_special_price` DECIMAL(10,2) NOT NULL AFTER `op_prodcat_id`;
 -- --- Display Total Savings on Checkout page  --- --
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_%';
+delete  FROM `tbl_configurations` WHERE `conf_name` LIKE 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_%';
+
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Qnb', '13', 'Qnb', '0', '1');
+update `tbl_collections`  set collection_identifier = concat(collection_identifier," {del}") where collection_deleted = 1;
+
+
+INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('vendor_cod_order_email', 1, 'Order Received', 'Hello {vendor_name}
+You have received a new cash on delivery order {order_id} at {SITE_NAME}
+
+{SITE_NAME} Team', '[{"title":"Seller", "variable":"{vendor_name}"},{"title":"Order Id", "variable":"{order_id}"}, {"title":"Website Name", "variable":"{SITE_NAME}"}]', 1);
 
 
 -- --------EasyECom---------- --

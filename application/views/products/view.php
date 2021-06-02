@@ -470,8 +470,11 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
 
             <div class="nav-detail nav-detail-js">
                 <ul>
-                    <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
-                        <li><a class="nav-scroll-js is-active" href="#specifications"><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></a>
+                    <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))) { ?>
+                        <li>
+                            <a class="nav-scroll-js is-active" href="#specifications">
+                                <?php echo Labels::getLabel('LBL_FILES', $siteLangId); ?>
+                            </a>
                         </li>
                     <?php } ?>
                     <?php if (count($productSpecifications) > 0) { ?>
@@ -502,36 +505,56 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             <section class="section">
                 <div class="row justify-content-center">
                     <div class="col-xl-7">
-                        <div class="section-head">
-                            <div class="section__heading" id="specifications">
-                                <h2><?php echo Labels::getLabel('LBL_Previews', $siteLangId); ?></h2>
-                            </div>
-                        </div>
-                        <div class="cms bg-gray p-4 mb-4">
-                            <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']
-                                && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))) {
-                                if (count($product['preview_links'])) {
-                            ?>
-                                    <div>Links:</div>
-                            <?php   foreach ($product['preview_links'] as $keys => $link) {
-                                        echo $link['pdl_preview_link'] . '<br />';
+                        <?php
+                        if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
+                            $links = array_filter(array_column($product['preview_links'], 'pdl_preview_link'));
+                            $preview = array_filter(array_column($product['preview_attachments'], 'preview'));
+                            if (0 < count($links) || 0 < count($preview)) {
+                                ?>
+                                <div class="section-head">
+                                    <div class="section__heading" id="specifications">
+                                        <h2><?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?></h2>
+                                    </div>
+                                </div>
+                                <div class="cms bg-gray p-4 mb-4">
+                                    <?php
+                                    if (0 < count($links)) {
+                                        ?>
+                                        <div class="prod-ext-links"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
+                                        <?php
+                                        foreach ($links as $link) {
+                                            echo $link . '<br />';
+                                        }
                                     }
-                                }
-                                if (count($product['preview_attachments'])) {
-                            ?>
-                                    <div>Attachments:</div>
-                            <?php
-                                    foreach ($product['preview_attachments'] as $keys => $attachment) {
-                                        $fileExtension = substr($attachment['preview'], strlen($attachment['preview']) - 3, strlen($attachment['preview']));
-                                        echo '<a target="_blank" href ="' . UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview'] . '" title="' . $attachment['preview'] . '">' . $attachment['preview'] . '</a>';
-                                        echo '<br />';
+                                    if (0 < count($preview)) {
+                                        ?>
+                                        <div class="prod-attached-files"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></div>
+                                        <?php
+                                        foreach ($product['preview_attachments'] as $keys => $attachment) {
+                                            if (0 < strlen($attachment['preview'])) {
+
+                                                $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
+                                                $fileExt = strtolower($fileExt);
+
+                                                $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
+                                                ?>
+                                                <?php echo $attachment['preview']; ?>
+                                                <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
+                                                    <a class="play-preview" href ="javascript:void(0);" title="<?php echo $attachment['preview']; ?>" onclick="playVideo('<?php echo $videoPath; ?>', '<?php echo $fileExt; ?>'); return false;">
+                                                        <i class="fa fa-caret-square-right icon"></i>
+                                                    </a>
+                                                <?php } ?>
+                                                <a class="download--preview" target="_blank" href ="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
+                                                    <i class="fa fa-download icon"></i>
+                                                </a><br />
+                                                <?php
+                                            }
+                                        }
                                     }
-                                }
-                            } else {
-                                echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
-                            }
-                            ?>
-                        </div>
+                                    ?>
+                                </div>
+                            <?php }
+                        } ?>
                         <?php if (count($productSpecifications) > 0) { ?>
                             <div class="section-head">
                                 <div class="section__heading" id="specifications">
@@ -803,3 +826,9 @@ $(function() {
 
 <!--Here is the facebook OG for this product  -->
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
+
+<!-- JWPlayer -->
+<script type="text/JavaScript">
+    jwplayer.key='<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, '');?>';
+</script>
+<!-- JWPlayer -->

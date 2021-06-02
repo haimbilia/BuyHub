@@ -28,7 +28,7 @@ class PaystackPayController extends PaymentController
      */
     protected function allowedCurrenciesArr(): array
     {
-        return ['NGN'];
+        return ['NGN', 'USD', 'GHS', 'ZAR'];
     }
 
     /**

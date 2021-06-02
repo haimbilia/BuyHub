@@ -228,8 +228,12 @@ class OrderReturnRequest extends MyAppModel
             $db->rollbackTransaction();
             return false;
         }
-
-        if ($requestRow['orrequest_type'] == static::RETURN_REQUEST_TYPE_REFUND) {
+        
+        if ($requestRow['orrequest_type'] == static::RETURN_REQUEST_TYPE_REPLACE) {
+            $moveRefundInWallet = false;
+        }
+        
+        if ($moveRefundInWallet && $requestRow['orrequest_type'] == static::RETURN_REQUEST_TYPE_REFUND) {
             $opDataToUpdate = CommonHelper::getOrderProductRefundAmtArr($requestRow);
             unset($opDataToUpdate['op_cart_amount']);
             unset($opDataToUpdate['op_prod_price']);
@@ -239,10 +243,6 @@ class OrderReturnRequest extends MyAppModel
                 $db->rollbackTransaction();
                 return false;
             }
-        }
-
-        if ($requestRow['orrequest_type'] == static::RETURN_REQUEST_TYPE_REPLACE) {
-            $moveRefundInWallet = false;
         }
 
         $approvedByLabel = sprintf(Labels::getLabel('MSG_Approved_Return_Request', $orderLangId), $requestRow['op_shop_owner_name']);

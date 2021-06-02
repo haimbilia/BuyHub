@@ -122,34 +122,68 @@ class SlideSearch extends SearchBase
         $cnd = $this->addCondition('pr.promotion_type', '=', PROMOTION::TYPE_SLIDES);
         $cnd->attachCondition('slide_type', '=', SLIDES::TYPE_SLIDE, 'OR');
     }
-
-    public function joinUserWallet()
+        
+    public function joinUserWallet($excludePendingWidrawReq = true, $excludePromotion = true, $excludeProcessedWidrawReq = true)
     {
-        $this->joinedUserWallet = true;
-        $txnObj = new Transactions();
-        $srch = $txnObj -> getSearchObject();
-        $srch->addMultipleFields(array('IFNULL(SUM(utxn.utxn_credit)-SUM(utxn.utxn_debit),0) AS userBalance', 'utxn_user_id'));
+        $this->joinedUserWallet = true;  
+        $srch = Transactions::getSearchObject();
         $srch->doNotCalculateRecords();
-        $srch->doNotlimitRecords();
-        $srch->addCondition('utxn_status', '=', applicationConstants::ACTIVE);
-        $srch->addGroupBy('utxn_user_id');
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('utxn.utxn_user_id');
+        $srch->addMultipleFields(array('utxn.utxn_user_id', 'SUM(utxn_credit - utxn_debit) as walletAmount'));        
+        $srch->addCondition('utxn_status', '=', Transactions::STATUS_COMPLETED);
 
-        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = uw.utxn_user_id ', 'uw');
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = tqub.utxn_user_id', 'tqub');
+
+        $userBalance = 'tqub.walletAmount';
+        if ($excludePendingWidrawReq) {
+            $this->includePendingWithdrawReq($excludeProcessedWidrawReq);
+            $userBalance .= ' - IFNULL(pendingWithdrawalAmount,0)';
+        }
+
+        if ($excludePromotion) {
+            $this->includePromotionWalletToBeCharged();
+            $userBalance .= ' - IFNULL(pmCharge.pendingPromotionCost,0)';
+        }
+        
+        $this->addFld(array('IF(pr.promotion_id > 0, '.$userBalance.' ,' . FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE') . ') AS userBalance'));
+        $this->addHaving('userBalance', '>=', FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE'));
+    }
+    
+    public function includePromotionWalletToBeCharged()
+    {
+        $srch = new PromotionSearch();
+        $srch->joinPromotionCharge();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();        
+        $srch->addGroupBy('pr.promotion_id');
+        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(MAX(pcharge_end_piclick_id),0) as endClickId', 'IFNULL(MAX(pcharge_end_date),"0000-00-00") as chargeTillDate']);
+
+        $prChargeSummary = new SearchBase(Promotion::DB_TBL_ITEM_CHARGES, 'pci');
+        $prChargeSummary->joinTable(Promotion::DB_TBL_CLICKS, 'LEFT JOIN', 'pcl.pclick_id=pci.picharge_pclick_id', 'pcl');
+        $prChargeSummary->joinTable(Promotion::DB_TBL, 'LEFT JOIN', 'p.promotion_id=pcl.pclick_promotion_id', 'p');
+
+        $prChargeSummary->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'p.promotion_id = pcs.promotion_id and pci.picharge_id > pcs.endClickId', 'pcs');
+        $prChargeSummary->addGroupBy('p.promotion_user_id');
+        $prChargeSummary->addMultipleFields(['p.promotion_user_id', 'sum(picharge_cost) as pendingPromotionCost']);
+        $prChargeSummary->doNotLimitRecords();
+        $prChargeSummary->doNotCalculateRecords();
+       
+        $this->joinTable('(' . $prChargeSummary->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = pmCharge.promotion_user_id', 'pmCharge');
     }
 
-    public function addMinimiumWalletbalanceCondition($langId = 0)
+    public function includePendingWithdrawReq($excludeProcessedWidrawReq = true)
     {
-        $langId = FatUtility::int($langId);
-        if ($this->langId) {
-            $langId = $this->langId;
+        $wrSrch = new WithdrawalRequestsSearch();
+        $wrSrch->doNotCalculateRecords();
+        $wrSrch->doNotLimitRecords();
+        $wrSrch->addGroupBy('tuwr.withdrawal_user_id');
+        $wrSrch->addMultipleFields(array('tuwr.withdrawal_user_id', 'SUM(withdrawal_amount) as pendingWithdrawalAmount'));        
+        $cnd = $wrSrch->addCondition('withdrawal_status', '=', Transactions::WITHDRAWL_STATUS_PENDING);
+        if (true == $excludeProcessedWidrawReq) {
+            $cnd->attachCondition('withdrawal_status', '=', Transactions::WITHDRAWL_STATUS_PROCESSED);
         }
-
-        if (!$this->joinedUserWallet) {
-            trigger_error(Labels::getLabel('ERR_please_join_user_wallet', $langId), E_USER_ERROR);
-        }
-
-        $this->addFld(array('IF(pr.promotion_id > 0, userBalance,' . FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE', FatUtility::VAR_INT, 0) . ') AS userBalance'));
-        $this->addHaving('userBalance', '>=', FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE'));
+        $this->joinTable('(' . $wrSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = wrqb.withdrawal_user_id', 'wrqb');
     }
 
     public function joinBudget()

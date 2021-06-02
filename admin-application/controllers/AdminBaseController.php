@@ -405,7 +405,7 @@ class AdminBaseController extends FatController
 
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', (array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->adminLangId)) + applicationConstants::getYesNoArr($this->adminLangId)), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->adminLangId), '', array(), '');
 
         /* $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
         $downloadAttachementsWithInventoryTrue->setRequired();
@@ -443,7 +443,9 @@ class AdminBaseController extends FatController
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
-
+        if (Product::PRODUCT_TYPE_DIGITAL == $productType) {
+            $fld->requirements()->setRequired(false);
+        }    
         $taxCategories = Tax::getSaleTaxCatArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
 

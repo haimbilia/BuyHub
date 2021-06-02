@@ -99,7 +99,7 @@ class Notification extends MyAppModel
         Notification::PROMOTION_APPROVAL_NOTIFICATION => array(Labels::getLabel('LBL_user_promotion_approval_notification', $langId), 'promotions'),
         Notification::WITHDRAWL_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_user_withdrawl_request_notification', $langId), 'withdrawal-requests'),
         Notification::NEW_SUPPLIER_APPROVAL_NOTIFICATION => array(Labels::getLabel('LBL_user_supplier_approval_notification', $langId), 'users/seller-approval-requests'),
-        Notification::NEW_SELLER_APPROVED_NOTIFICATION => array(Labels::getLabel('LBL_user_seller_approved_notification', $langId), 'seller-approval-requests'),
+        Notification::NEW_SELLER_APPROVED_NOTIFICATION => array(Labels::getLabel('LBL_user_seller_approved_notification', $langId), 'users/seller-approval-requests'),
         Notification::ABUSIVE_REVIEW_POSTED_NOTIFICATION => array(Labels::getLabel('LBL_admin_abusive_review_posted_notification', $langId), ''),
         Notification::PRODUCT_REVIEW_NOTIFICATION => array(Labels::getLabel('LBL_admin_Product_review_notification', $langId), 'product-reviews'),
         Notification::ORDER_PAYMENT_STATUS_CHANGE_NOTIFICATION => array(Labels::getLabel('LBL_admin_order_payment_status_change_notification', $langId), 'orders'),
