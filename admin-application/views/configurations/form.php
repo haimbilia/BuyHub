@@ -201,7 +201,7 @@ switch ($frmType) {
         $(document).ready(function() {
             var lat = $('#lat').val();
             var lng = $('#lng').val();
-            initMap(lat, lng);
+            initMap(lat, lng);           
         });
     <?php } else { ?>
         getCountryStates($("#user_country_id").val(), '<?php echo $stateData; ?>', '#user_state_id');

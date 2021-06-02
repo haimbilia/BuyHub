@@ -5399,6 +5399,11 @@ class SellerController extends SellerBaseController
         } else {
             $productType = Product::getAttributesById($productId, 'product_type');
         }
+      
+        if($productType == Product::PRODUCT_TYPE_DIGITAL){            
+            $warrantyFld->requirements()->setRequired(false);
+        }
+        
         $frm->addHiddenField('', 'product_id', $productId);
         $frm->addHiddenField('', 'preq_id', $preqId);
         $frm->addButton('', 'btn_back', Labels::getLabel('LBL_Back', $this->siteLangId));

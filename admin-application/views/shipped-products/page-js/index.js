@@ -32,7 +32,7 @@ $(document).ready(function(){
 		var frm = document.frmShippedProductsPaging;
 		$(frm.page).val(page);
 		searchShippedProducts(frm);
-	}
+	} 
 
 	reloadList = function() {
         var frm = document.frmShippedProductsPaging;
@@ -83,7 +83,7 @@ $(document).ready(function(){
 	}
 
 	viewSellerShipForm = function(productId) {
-		fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList', [productId]), '', function(t) {
+		fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), {productId:productId}, function(t) {
 			fcom.updateFaceboxContent(t);
 		});
 	};
@@ -94,11 +94,23 @@ $(document).ready(function(){
 		});
 	}
 
-	viewAdminSellerShipForm = function(productId) {
-		fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList', [productId, 1]), '', function(t) {
+	viewAdminSellerShipForm = function(productId) {  
+		fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), {productId:productId,adminShip:1}, function(t) {
 			fcom.updateFaceboxContent(t);
 		});
 	};
+        
+        goToSellerSearchPage = function(page) {
+            if(typeof page==undefined || page == null){
+                    page = 1;
+            }
+            var frm = document.frmSellerPaging;
+            $(frm.page).val(page);
+            data = fcom.frmData(frm);
+            fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), data, function(t) {
+                fcom.updateFaceboxContent(t);
+            });
+	}
 
 	clearShippedProductsSearch = function(){
 		document.frmShippedProductsSearch.reset();

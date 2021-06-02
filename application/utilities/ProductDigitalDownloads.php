@@ -58,6 +58,7 @@ trait ProductDigitalDownloads
             'selprod_id' =>  $selProdId,
         ];
         $frm->fill($data);
+        $this->set('siteLangId', $this->siteLangId);
         $this->set('canDo', $canDo);
         $this->set('savedOptions', $savedOptions);
         $this->set('downloadFrm', $frm);
@@ -169,7 +170,20 @@ trait ProductDigitalDownloads
                     FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
                 }
 
-                if (false == DigitalDownload::allowedWithInventory($selProdData['selprod_product_id'])) {
+                $product = Product::getAttributesById($selProdData['selprod_product_id']);
+                
+                if (false == $product) {
+                    static::returnResponseOrDie();
+                }
+                
+                if (applicationConstants::NO == $product['product_attachements_with_inventory']
+                    && $product['product_seller_id'] !== $this->userParentId
+                    && applicationConstants::NO == $isPreview
+                ) {
+                    FatUtility::dieWithError(Labels::getLabel("LBL_Unauthorized_Access", $this->siteLangId));
+                }
+                
+                if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
                     $recordId = $selProdData['selprod_product_id'];
                     $requestType = Product::CATALOG_TYPE_PRIMARY;
                 }

@@ -107,9 +107,9 @@ class ProductCategoriesController extends AdminBaseController
 
             $prodCat = new ProductCategory($prodCatId);
             $ratingTypes = array();
-            foreach ($prodCat->getRatingTypes() as $key => $data) {
-                $ratingTypes[$key]['id'] = $data['ratingtype_id'];
-                $ratingTypes[$key]['value'] = $data['ratingtype_name'];
+            foreach ($prodCat->getRatingTypes() as $key => $types) {
+                $ratingTypes[$key]['id'] = $types['ratingtype_id'];
+                $ratingTypes[$key]['value'] = $types['ratingtype_name'];
             }
             $ratingTypes = ['rating_type' => json_encode($ratingTypes)];
             $data = array_merge($data, $catNameArr, $ratingTypes);
