@@ -82,8 +82,8 @@ $frm->developerTags['fld_default_col'] = 12;
 								<dd><?php echo preg_replace('/' . $findKeywordStr . '/i', '<span class="highlight">$0</span>', nl2br($data['spreview_description'])); ?></dd>
 							<?php } ?>
 						</dl>
-						<div class="all-review-media">
-							<ul class="review-media-list">
+						<div class="uploaded-media">
+							<ul>
 								<?php
 								$images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $spreview_id);
 

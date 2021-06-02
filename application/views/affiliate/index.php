@@ -163,7 +163,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
     } ?>
                         </div>
                         <div class="card-body">
-                        <div class="js-scrollable table-wrap">
+                        <div class="js-scrollable table-wrap scroll scroll-x">
                             <table class="table">
                                 <tbody>
                                     <tr class="">
@@ -219,7 +219,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
     } ?>
                         </div>
                         <div class="card-body">
-                        <div class="js-scrollable table-wrap">
+                        <div class="js-scrollable table-wrap scroll scroll-x">
                             <table class="table">
                                 <tbody>
                                     <tr class="">

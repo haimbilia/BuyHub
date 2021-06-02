@@ -10,7 +10,7 @@
             align-items: center;
             justify-content: space-between;
             .label {
-                color: $body-color;
+                color: currentColor;
                 padding: 0;
             }
             .value {
@@ -21,6 +21,9 @@
             &.hightlighted {
                 font-weight: 500;
                 border-top: $border;
+            }
+            &.text-success {
+                color: $success-color;
             }
         }
     }
@@ -188,6 +191,7 @@
     }
     &-checkout {
         border: none;
+        background: none;
         li {
             background: none;
             border: none;

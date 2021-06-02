@@ -65,7 +65,7 @@
     align-items: center;
     flex-wrap: wrap;
     li {
-        -webkit-transition-delay: 250ms;
+        border: none;
         transition-delay: 250ms;
         margin-#{$end-direction}: 15px;
         a {
@@ -88,7 +88,6 @@
             margin-#{$end-direction}: 0;
         }
         &:nth-child(2) {
-            
             transition-delay: 500ms;
         }
     }

@@ -7,7 +7,7 @@
 	</div>
 </div>
 <div class="box__body">
-	<div class="js-scrollable table-wrap">
+	<div class="js-scrollable table-wrap scroll scroll-x">
 		<?php $arr_flds = array(
 			'listserial'=>'Sr.',
 			'scatrequest_reference' => Labels::getLabel('LBL_Reference_number', $siteLangId),

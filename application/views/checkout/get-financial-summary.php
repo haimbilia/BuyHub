@@ -11,7 +11,7 @@
 <?php } */ ?>
 <div class="order-summary__sections">
     <div class="order-summary__section order-summary__section--product-list">
-        <div class="order-summary__section__content scroll-y">
+        <div class="order-summary__section__content scroll scroll-y">
             <!-- List group -->
 
             <ul class="list-cart list-cart-checkout">
@@ -56,7 +56,7 @@
             <div class="cart-summary">
                 <ul>
                     <li>
-                        <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="mleft-auto"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
+                        <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
                     </li>
                     <?php if ($cartSummary['cartVolumeDiscount']) { ?>
                         <li>
@@ -106,9 +106,9 @@
                         </li>
                     <?php } ?>
                     <?php if(0 < $cartSummary['totalSaving']){ ?>
-                    <li class="list-group-item hightlighted">
+                    <li class="text-success">
                         <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
-                        <span class="mleft-auto"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
+                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
                     </li>
                     <?php } ?>
                     <?php $orderNetAmt = $cartSummary['orderNetAmount'];

@@ -204,7 +204,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-7">
                                                 <div class="bg-gray h-100 rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h5>
-                                                    <ul class="list-cart list-cart-checkout">
+                                                    <ul class="list-cart list-cart-page">
                                                         <?php
                                                         $shippingCharges = $subTotal = 0;
                                                         $selProdTotalSpecialPrice = 0;
@@ -259,8 +259,8 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-5">
                                                 <div class="bg-gray rounded h-100 p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h5>
-                                                    <div class="cart-total cart-summary">
-                                                        <ul class="mt-4">
+                                                    <div class="cart-summary">
+                                                        <ul>
                                                             <?php if (0 < $subTotal) { ?>
                                                                 <li>
                                                                     <span class="label">
@@ -314,15 +314,15 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                             <li class="hightlighted">
                                                                 <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId); ?></span>
                                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount']); ?></span>
-                                                            </li> 
+                                                            </li>
                                                             <?php
                                                                 $totalSaving =  $selProdTotalSpecialPrice + $orderInfo['order_discount_total'] + $orderInfo['order_volume_discount_total'];
                                                                 if (0 < $totalSaving) { ?>                                                            
-                                                                <li class="list-group-item hightlighted">
+                                                                <li class="text-success">
                                                                     <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
                                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($totalSaving); ?></span>
                                                                 </li>
-                                                            <?php } ?> 
+                                                            <?php } ?>
 
                                                         </ul>
                                                     </div>

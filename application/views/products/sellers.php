@@ -49,7 +49,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0))
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_All_Sellers', $siteLangId); ?></h5>
                 </div>
                 <div class="card-body">
-                    <div class="js-scrollable table-wrap"> 
+                    <div class="js-scrollable table-wrap scroll scroll-x"> 
                         <?php
                         $arr_flds = array(
                             'shop_name' => Labels::getLabel('LBL_Seller', $siteLangId) ,
