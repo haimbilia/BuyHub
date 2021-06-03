@@ -113,7 +113,7 @@ Fixes:
     => 054255 - Unable to reach location if redirect from notification listing in admin.
     => 054265 - missing sms template on seller end
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
-    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    
 
 Develop
 
@@ -180,6 +180,8 @@ Fixes:
     => 054557 - admin> catalog> categories> count is mismatching
     => 054527 - Blog >> some error is there
     => 054599 - when order is on pickup and status is changed to ready for pickup it gets stuck and on refreshing the page> getting error on screen
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054529 - On FAQ >> if any letter is in caps then it is not highlighting on search
 
 New Features:
     => Admin shipped products listing page
