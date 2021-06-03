@@ -344,6 +344,9 @@ class Aramex extends ShippingServicesBase
     public function getRates(): array
     {
         $this->setServiceRequest(self::REQUEST_RATE);
+
+        $productGroup = (strtolower($this->toAddress['CountryCode']) == strtolower($this->fromAddress['CountryCode'])) ? 'DOM' : 'EXP';
+
         $requestParam = [
             'ClientInfo' => $this->getClientInfo(),
             'Transaction' => [
@@ -353,7 +356,7 @@ class Aramex extends ShippingServicesBase
             'DestinationAddress' => $this->toAddress,
             'ShipmentDetails' => [
                 'PaymentType' => 'P',
-                'ProductGroup' => 'EXP',
+                'ProductGroup' => $productGroup,
                 'ProductType' => 'EPX',
                 'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                 'ChargeableWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
