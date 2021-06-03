@@ -624,17 +624,17 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                         </div>
                         <div class="btn-group">
                             <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
-                            <button class="btn btn-light btn-sm play-preview" href="javascript:void(0);"
+                            <a class="btn btn-light btn-sm play-preview" href="javascript:void(0);"
                                 title="<?php echo $attachment['preview'];?>"
                                 onclick="playVideo('<?php echo $videoPath;?>', '<?php echo $fileExt;?>'); return false;">
                                 <i class="fa fa-caret-square-right icon"></i>
-                            </button>
+                            </a>
                             <?php } ?>
-                            <button class="btn btn-light btn-sm download--preview" target="_blank"
+                            <a class="btn btn-light btn-sm download--preview" target="_blank"
                                 href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>"
                                 title="<?php echo $attachment['preview']; ?>">
                                 <i class="fa fa-download icon"></i>
-                            </button>
+                            </a>
                         </div>
 
                     </li>

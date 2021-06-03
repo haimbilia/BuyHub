@@ -2010,7 +2010,7 @@ $.extend(fcom, {
         var succeed = true;
         try {
             succeed = document.execCommand("copy");
-            fcom.displaySuccessMessage(langLbl.copied + ' ' + target.value);
+            fcom.displaySuccessMessage(langLbl.copied);
         } catch(e) {
             succeed = false;
         }
