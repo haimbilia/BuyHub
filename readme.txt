@@ -176,6 +176,7 @@ Fixes:
     => 054526 - when seller purchases subscription then on order success screen> neither adjusted amount is listing (if there), nor the original amount of package
     => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox
     => 054499 - reviews added with category are not listing in admin
+    => 054557 - admin> catalog> categories> count is mismatching
 
 New Features:
     => Admin shipped products listing page
