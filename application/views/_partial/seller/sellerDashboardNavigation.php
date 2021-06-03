@@ -348,6 +348,22 @@ $action = strtolower($action);
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products', $siteLangId); ?></span></a></div>
                         </li>
                     <?php } ?>
+                    <?php if ($userPrivilege->canViewFinancialReport(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item">
+                            <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Financial_Report", $siteLangId); ?></span></div>
+                        </li>
+                        <li class="menu__item <?php echo ($controller == 'ProductProfitReport' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Profit_by_products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Profit_by_products', $siteLangId); ?></span></a></div>
+                        </li>
+                    <?php } ?>
+
+                    <li class="menu__item">
+                            <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Reports", $siteLangId); ?></span></div>
+                        </li>
                     <?php if ($userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsinventory') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Inventory', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'productsInventory'); ?>">

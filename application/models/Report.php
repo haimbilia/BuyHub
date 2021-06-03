@@ -477,7 +477,7 @@ class Report extends SearchBase
             'discountTotal' => 'SUM(IFNULL(opDiscountCharges, 0)) as discountTotal',
             'transactionAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0)) as transactionAmount',
             'inventoryValue' => 'SUM(op_unit_price*op_qty) as inventoryValue',
-
+            'inventoryCost' => 'SUM(op_unit_cost*op_qty) as inventoryCost',
             'refundedAmount' => 'sum(IFNULL(op_refund_amount,0)) as refundedAmount',
             'refundedShipping' => '(SUM(IFNULL(op_refund_shipping,0))) as refundedShipping',
             'refundedTax' => 'SUM(IFNULL(op_refund_tax,0)) as refundedTax',
@@ -502,7 +502,9 @@ class Report extends SearchBase
                 'transactionAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0) + if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0) + IFNULL(op_rounding_off,0)) as transactionAmount',
                 'refundedTaxFromSeller' => 'SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(op.op_refund_tax,0),0)) as refundedTaxFromSeller',
                 'orderNetAmount' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0) + if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0) + IFNULL(op_rounding_off,0) - (IFNULL(op_refund_amount,0) - if(opst.op_tax_collected_by_seller > 0,0,IFNULL(op.op_refund_tax,0)))) as orderNetAmount',
-                'refundedShippingFromSeller' => 'SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(op.op_refund_shipping,0),0)) as refundedShippingFromSeller'
+                'refundedShippingFromSeller' => 'SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(op.op_refund_shipping,0),0)) as refundedShippingFromSeller',
+                'sellerEarnings' => 'sum(( op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - (IFNULL(op_refund_amount,0) - if(opst.op_tax_collected_by_seller > 0,0,IFNULL(op.op_refund_tax,0)))) - SUM(op_unit_cost*op_qty) as sellerEarnings',
+                'sellerCost' => 'sum(if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0) + if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0) + IFNULL(op_rounding_off,0) - ( if(opst.op_tax_collected_by_seller > 0,0,IFNULL(op.op_refund_tax,0)))) + SUM(op_unit_cost*op_qty) as sellerCost'
             ]);
         }
 

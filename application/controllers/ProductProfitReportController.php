@@ -1,12 +1,12 @@
 <?php
 
-class ProductProfitReportController extends AdminBaseController
+class ProductProfitReportController extends SellerBaseController
 {
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewFinancialReport();
+        $this->userPrivilege->canViewFinancialReport();
     }
 
     public function index()
@@ -26,13 +26,13 @@ class ProductProfitReportController extends AdminBaseController
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'netSoldQty');
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
         $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
 
-        $opSrch = new Report(1,  array_keys($fields));
+        $opSrch = new Report(1,  array_keys($fields), true);
         $opSrch->joinOrders();
         $opSrch->joinPaymentMethod();
         $opSrch->joinOtherCharges(true);
@@ -50,12 +50,12 @@ class ProductProfitReportController extends AdminBaseController
         $opSrch->addTotalOrdersCount('product_id');
         // $opSrch->setOrderBy($sortBy, $sortOrder);
         $opSrch->setDateCondition($fromDate, $toDate);
-        $opSrch->removeFld(['product_name', 'category_name', 'sellingPrice']);
+        $opSrch->removeFld(['product_name', 'category_name']);
 
-        $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
-        $srch->joinBrands($this->adminLangId, false, true);
+        $srch = new ProductSearch($this->siteLangId, '', '', false, false, false);
+        $srch->joinBrands($this->siteLangId, false, true);
         $srch->joinProductToCategory();
-        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = opq.product_id', 'opq');
+        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields(['COALESCE(tp_l.product_name, p.product_identifier) as product_name', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier) as category_name', 'opq.*']);
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
@@ -97,14 +97,14 @@ class ProductProfitReportController extends AdminBaseController
                 array_push($sheetData, $arr);
                 $count++;
             }
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Product_Profit_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Product_Profit_Report', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-
+        echo $srch->getError();
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
@@ -128,34 +128,33 @@ class ProductProfitReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
 
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->siteLangId), array('onclick' => 'clearSearch();'));
 
         return $frm;
     }
 
     private function getFormColumns()
     {
-        $productProfitReportsCacheVar = FatCache::get('productProfitReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $productProfitReportsCacheVar = FatCache::get('productProfitReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productProfitReportsCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->adminLangId),
-                'category_name' => Labels::getLabel('LBL_Category', $this->adminLangId),
-                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->adminLangId),
-               /*  'inventoryCost' => Labels::getLabel('LBL_Inventory_Cost', $this->adminLangId),     */            
-                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->adminLangId)
+                'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->siteLangId),
+                'category_name' => Labels::getLabel('LBL_Category', $this->siteLangId),
+                'sellerCost' => Labels::getLabel('LBL_Cost', $this->siteLangId),
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
+                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
+                'sellerEarnings' => Labels::getLabel('LBL_Earnings', $this->siteLangId)
             ];
-            FatCache::set('productProfitReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('productProfitReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($productProfitReportsCacheVar);
         }
