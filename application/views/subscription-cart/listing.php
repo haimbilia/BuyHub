@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="tbl-heading"><?php echo Labels::getLabel('LBL_Shopping_Cart', $siteLangId); ?> </div>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 	<table class="table cart--full item-yk">
 	  <thead>
 		<tr>

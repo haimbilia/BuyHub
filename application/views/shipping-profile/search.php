@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
     <?php if (count($arr_listing) == 0) {
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
     } else {

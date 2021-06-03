@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="js-scrollable table-wrap">
+        <div class="js-scrollable table-wrap scroll scroll-x">
             <?php $arr_flds = array(
                 'listserial'=>'#',
                 'splatform_identifier'=>Labels::getLabel('LBL_Title', $siteLangId),

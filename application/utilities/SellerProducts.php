@@ -1,7 +1,5 @@
 <?php
 
-use PhpParser\Node\Stmt\Label;
-
 trait SellerProducts
 {
     private $selProdRecordId = 0;

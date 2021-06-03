@@ -52,7 +52,10 @@ foreach ($sellers as $sellerDetail) {
                 </div>
                 <div class="item__description">
                     <div class="item__title">
-                        <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>"><?php echo $sellerDetail['shop_name']; ?></a>
+                        <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>">
+                        <img class="item__title_badge" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/badges.svg" width="20px" height="20px" alt="">
+                        
+                        <?php echo $sellerDetail['shop_name']; ?></a>
                     </div>
 
                     <div class="item__location">
@@ -65,7 +68,7 @@ foreach ($sellers as $sellerDetail) {
                         <?php echo $sellerDetail['shop_state_name'] . "," . $sellerDetail['shop_country_name']; ?>
                     </div>
 
-                    <div class="products__rating -display-inline m-0">
+                    <div class="products__rating">
                         <i class="icn">
                             <svg class="svg">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">

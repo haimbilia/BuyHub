@@ -7,7 +7,7 @@
                 <th width="30%"><?php echo Labels::getLabel('LBL_EAN/UPC_code', $adminLangId); ?></th>
             </tr>
         </thead>
-        <tbody class="scroll-y">
+        <tbody class="scroll scroll-y">
             <?php
             foreach ($optionCombinations as $optionValueId => $optionValue) {
                 $arr = explode('|', $optionValue);

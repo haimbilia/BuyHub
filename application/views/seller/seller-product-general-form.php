@@ -226,7 +226,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="js-scrollable table-wrap">
+                    <div class="js-scrollable table-wrap scroll scroll-x">
                         <table id="optionsTable-js" class="table table-justified">
                             <thead>
                                 <tr>
