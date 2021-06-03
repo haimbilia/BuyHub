@@ -183,6 +183,7 @@ Fixes:
     => 054447 - when product having multiple options then on detail page> options are not listing properly
     => 054529 - On FAQ >> if any letter is in caps then it is not highlighting on search
     => 054545 - when subscription is downgraded and after adjustment amount becomes 0 then on applying coupon it's getting the total in negative
+    => 054597 - generate label is coming on seller end on pickup order 
 
 New Features:
     => Admin shipped products listing page

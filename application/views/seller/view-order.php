@@ -62,7 +62,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
 				<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>">
                                 <i class="fas fa-print"></i>
                             </a>
-                            <?php if ($shippedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
+                            <?php if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP  &&  $shippedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
                                 $opId = $orderDetail['op_id'];
                                 $plugin = new Plugin();
                                 $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
