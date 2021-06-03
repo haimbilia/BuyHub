@@ -12511,3 +12511,12 @@ form[name="frmShippingProfile"] {
 .rating {
     display: flex;
 }
+
+.clipboard {
+    display: flex;
+    align-items: center;
+}
+
+.clipboard .copy-btn {
+    margin-left: 10px;
+}
