@@ -34,6 +34,21 @@ class BadgeLinkCondition extends MyAppModel
         self::DB_TBL_PREFIX . 'condition_to'
     ];
 
+    public const RANGE_COND_TYPE_ELEMENT = [
+        self::COND_TYPE_COMPLETED_ORDERS,
+        self::COND_TYPE_AVG_RATING_SELPROD,
+        self::COND_TYPE_AVG_RATING_SHOP,
+        self::COND_TYPE_ORDER_COMPLETION_RATE
+    ];
+
+    public const SHOP_BADGES_COND_TYPES = [
+        self::COND_TYPE_AVG_RATING_SHOP,
+        self::COND_TYPE_ORDER_COMPLETION_RATE,
+        self::COND_TYPE_COMPLETED_ORDERS,
+        self::COND_TYPE_RETURN_ACCEPTANCE,
+        self::COND_TYPE_ORDER_CANCELLED
+    ];
+
     /**
      * __construct
      *

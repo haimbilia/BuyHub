@@ -40,8 +40,7 @@ foreach ($sellers as $sellerDetail) {
         } else {
             $codEnabled = ($product['product_cod_enabled']);
         }
-    }
-    ?>
+    } ?>
     <li class="table-row <?php echo (array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'] ? 'is-active' : ''); ?>">
         <div class="cell cell-1" data-label="<?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>">
             <div class="item">
@@ -53,18 +52,15 @@ foreach ($sellers as $sellerDetail) {
                 <div class="item__description">
                     <div class="item__title">
                         <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>">
-                        <?php
-                        $badgeObj = new Badge();
-                        $badgeUrlArr = $badgeObj->setSellerProdudtId($sellerDetail['selprod_id'])
-                                                ->setProductId($sellerDetail['product_id'])
-                                                ->setShopId($sellerDetail['shop_id'])
-                                                ->getBadgeUrl($siteLangId, 20);
-                        if (is_array($badgeUrlArr) && !empty($badgeUrlArr)) { 
-                            foreach ($badgeUrlArr as $url) { ?>
-                                <img class="item__title_badge" src="<?php echo $url; ?>">
-                            <?php }
-                        } 
-                        echo $sellerDetail['shop_name']; ?></a>
+                            <?php echo $sellerDetail['shop_name']; ?>
+                        </a>
+                        <?php 
+                        $bdgSelProdId = $sellerDetail['selprod_id'];
+                        $bdgProdId = $sellerDetail['product_id'];
+                        $bdgShopId = $sellerDetail['shop_id'];
+                        $bdgSize = 20;
+                        $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
+                        include (CONF_THEME_PATH . '_partial/get-badge.php'); ?>
                     </div>
 
                     <div class="item__location">

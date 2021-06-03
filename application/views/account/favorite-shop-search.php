@@ -21,6 +21,11 @@
                     </div>
                 </div>
 
+                <?php 
+                $bdgShopId = $shop['shop_id'];
+                $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
+                include (CONF_THEME_PATH . '_partial/get-badge.php'); ?>
+
             </div>
             <div class="featured-item__foot">
                 <div class="featured_footer mt-3">

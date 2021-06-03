@@ -372,8 +372,6 @@ class Badge extends MyAppModel
             'blinkcond_record_type',
             'badge_display_inside',
             'badge_type',
-            'badge_shape_type',
-            'badge_color',
             'COALESCE(badge_name, badge_identifier) as badge_name'
         ];
 
@@ -393,30 +391,35 @@ class Badge extends MyAppModel
         $srch->addMultipleFields($attr);
 
         if ($type == Badge::TYPE_BADGE) {
+            $srch->addFld('blinkcond_condition_type');
             $srch->addDirectCondition(
                 '(CASE 
                     WHEN blinkcond_condition_type > 0
                     THEN 
                         (CASE 
-                            WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD . '" 
-                                THEN "' . $avgRating . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP . '" 
-                                THEN "' . $shopAvgRating . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . '" 
-                                THEN "' . $completionRate . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . '" 
-                                THEN "' . $completedOrders . '" BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . '" 
-                                THEN "' . $returnAcceptanceRate . '" = blinkcond_condition_from
-                            WHEN blinkcond_condition_type = "' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . '" 
-                                THEN "' . $orderCancellationRate . '" = blinkcond_condition_from
-                            ELSE TRUE
+                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD . ' 
+                                THEN ' . $avgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP . ' 
+                                THEN ' . $shopAvgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . ' 
+                                THEN ' . $completionRate . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . ' 
+                                THEN ' . $completedOrders . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . ' 
+                                THEN ' . $returnAcceptanceRate . ' = blinkcond_condition_from
+                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . ' 
+                                THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
+                            ELSE FALSE
                         END)
                     ELSE FALSE END)'
             );
         } 
         
         if ($type == Badge::TYPE_RIBBON) {
+            $srch->addFld([
+                'badge_shape_type',
+                'badge_color',
+            ]);
             $srch->addDirectCondition(
                 '(CASE 
                     WHEN blinkcond_condition_type = 0
@@ -433,8 +436,12 @@ class Badge extends MyAppModel
 
         $srch->addDirectCondition(
             '(CASE 
-                WHEN blinkcond_to_date != 0 
+                WHEN blinkcond_from_date != 0 AND blinkcond_to_date != 0
                 THEN "' . date('Y-m-d H:i:s') . '" BETWEEN blinkcond_from_date AND blinkcond_to_date 
+                WHEN blinkcond_from_date != 0 AND blinkcond_to_date = 0
+                THEN "' . date('Y-m-d H:i:s') . '" >= blinkcond_from_date
+                WHEN blinkcond_from_date = 0 AND blinkcond_to_date != 0
+                THEN "' . date('Y-m-d H:i:s') . '" <= blinkcond_to_date 
                 ELSE TRUE 
             END)'
         );
@@ -442,7 +449,7 @@ class Badge extends MyAppModel
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
         $srch->addOrder('blinkcond_record_type', 'ASC');
-
+        // echo $srch->getQuery();
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
         
@@ -473,7 +480,11 @@ class Badge extends MyAppModel
                 $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
             }
             $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-            $urls[] = UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $urls[] = [
+                    'url' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    'name' => $row['badge_name'],
+                    'conditionType' => $row['blinkcond_condition_type'],
+                ];
         }
         return $urls;
     }

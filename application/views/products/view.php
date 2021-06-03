@@ -3,6 +3,12 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 $buyQuantity = $frmBuyProduct->getField('quantity');
 $buyQuantity->addFieldTagAttribute('class', 'qty-input cartQtyTextBox productQty-js');
 $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
+
+$obj = new Badge();
+$badgeUrlArr = $obj->setSellerProdudtId($product['selprod_id'])
+                        ->setProductId($product['product_id'])
+                        ->setShopId($product['shop_id'])
+                        ->getBadgeUrl($siteLangId, 26);
 ?>
 <div id="body" class="body detail-page">
     <section class="">
@@ -55,18 +61,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                         <div class="products__title">
                                             <div>
                                                 <h1>
-                                                    <?php
-                                                    $badgeObj = new Badge();
-                                                    $badgeUrlArr = $badgeObj->setSellerProdudtId($product['selprod_id'])
-                                                                            ->setProductId($product['product_id'])
-                                                                            ->setShopId($product['shop_id'])
-                                                                            ->getBadgeUrl($siteLangId, 26);
-                                                    if (is_array($badgeUrlArr) && !empty($badgeUrlArr)) { 
-                                                        foreach ($badgeUrlArr as $url) { ?>
-                                                            <img src="<?php echo $url; ?>">
-                                                        <?php }
-                                                    }
-                                                    echo $product['selprod_title']; ?>
+                                                    <?php echo $product['selprod_title']; ?>
                                                 </h1>
                                                 <div class="favourite-wrapper favourite-wrapper-detail ">
                                                     <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
@@ -145,6 +140,12 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             <del class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
                                             <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                                         <?php } ?>
+                                        <?php 
+                                        $bdgSelProdId = $product['selprod_id'];
+                                        $bdgProdId = $product['product_id'];
+                                        $bdgShopId = $product['shop_id'];
+                                        $bdgExcludeCndType = BadgeLinkCondition::SHOP_BADGES_COND_TYPES;
+                                        include (CONF_THEME_PATH . '_partial/get-badge.php'); ?>
                                     </div>
                                     <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
 

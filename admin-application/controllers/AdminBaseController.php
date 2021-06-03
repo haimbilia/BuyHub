@@ -170,7 +170,7 @@ class AdminBaseController extends FatController
             'defaultCountryCode' => $defaultCountryCode,
             'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
             'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
-            'rate' => Labels::getLabel('LBL_RATE(INT)', $this->adminLangId),
+            'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
             'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
             'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
         );

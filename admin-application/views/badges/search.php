@@ -55,7 +55,7 @@ foreach ($arr_listing as $sn => $row) {
                     $type = $row[$key];
                     $color = $row[Badge::DB_TBL_PREFIX . 'color'];
                     $return = true;
-                    $html = include CONF_FRONT_END_THEME_PATH . '/_partial/ribbon.php';
+                    $html = include CONF_THEME_PATH . '/_partial/get-ribbon.php';
                     $html = '<div class="badge-wrap">' . $html . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                 }

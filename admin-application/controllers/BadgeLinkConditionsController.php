@@ -259,16 +259,17 @@ class BadgeLinkConditionsController extends AdminBaseController
                 case BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS:
                 case BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD:
                 case BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP:
-                    $fromCond = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_INT, 0);
-                    $toCond = FatApp::getPostedData('blinkcond_condition_to', FatUtility::VAR_INT, 0);
+                    case BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE:
+                    $type = (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS == $conditionType) ? FatUtility::VAR_INT : FatUtility::VAR_FLOAT;
+                    $fromCond = FatApp::getPostedData('blinkcond_condition_from', $type, 0);
+                    $toCond = FatApp::getPostedData('blinkcond_condition_to', $type, 0);
                     if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond) {
                         FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
                     }
                     break;
-                case BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE:
                 case BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE:
                 case BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED:
-                    $rate = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_INT, 0);
+                    $rate = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
                     if (0 > $rate || 100 < $rate) {
                         FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RATE_VALUE', $this->adminLangId));
                     }
@@ -290,7 +291,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         }
 
         $badgeLinkCondId = $record->getMainTableRecordId();
-        
+
         $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
         $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
 
@@ -389,8 +390,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $fld = $frm->addTextBox(Labels::getLabel('LBL_FROM', $this->adminLangId), 'blinkcond_condition_from');
         $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));
 
-        $rangeElements = [BadgeLinkCondition::COND_TYPE_DATE, BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS, BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD, 
-        BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP, BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE];
+        $rangeElements = BadgeLinkCondition::RANGE_COND_TYPE_ELEMENT;
         $fld = $frm->addTextBox(Labels::getLabel('LBL_TO', $this->adminLangId), 'blinkcond_condition_to');
         if (0 == $conditionType || in_array($conditionType, $rangeElements)) {
             $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));

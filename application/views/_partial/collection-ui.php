@@ -12,24 +12,12 @@ if (!isset($showAddToFavorite)) {
     }
 }
 
-if ($showAddToFavorite) { 
+if ($showAddToFavorite) {
+    $ribSelProdId = $product['selprod_id'];
+    $ribProdId = $product['product_id'];
+    $ribShopId = $product['shop_id'];
+    include (CONF_THEME_PATH . '_partial/get-ribbon.php'); ?>
 
-    /* Display Ribbons */
-    $badgeObj = new Badge();
-    $ribbonDetail = $badgeObj->setSellerProdudtId($product['selprod_id'])
-                            ->setProductId($product['product_id'])
-                            ->setShopId($product['shop_id'])
-                            ->getRibbonOrBadge($siteLangId);
-
-    if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
-        foreach ($ribbonDetail as $row) {
-            $type = $row['badge_shape_type'];
-            $color = $row['badge_color'];
-            $text = $row['badge_name'];
-            $displayInside = $row['badge_display_inside'];
-            include ('ribbon.php');
-        }
-    } ?>
     <div class="favourite-wrapper">
         <?php if (true ==  $showActionBtns) { ?>
             <div class="actions_wishlist">
