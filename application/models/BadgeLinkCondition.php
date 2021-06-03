@@ -13,11 +13,12 @@ class BadgeLinkCondition extends MyAppModel
     public const RECORD_TYPE_SHOP = 3;
 
     public const COND_TYPE_DATE = 1;
-    public const COND_TYPE_AVG_RATING = 2;
-    public const COND_TYPE_ORDER_COMPLETION_RATE = 3;
-    public const COND_TYPE_COMPLETED_ORDERS = 4;
-    public const COND_TYPE_RETURN_ACCEPTANCE = 5; // Refund/Return Acceptance
-    public const COND_TYPE_ORDER_CANCELLED = 6; // Cancelled By Seller
+    public const COND_TYPE_AVG_RATING_SELPROD = 2;
+    public const COND_TYPE_AVG_RATING_SHOP = 3;
+    public const COND_TYPE_ORDER_COMPLETION_RATE = 4;
+    public const COND_TYPE_COMPLETED_ORDERS = 5;
+    public const COND_TYPE_RETURN_ACCEPTANCE = 6; // Refund/Return Acceptance
+    public const COND_TYPE_ORDER_CANCELLED = 7; // Cancelled By Seller
     
     public const REC_COND_AUTO = 1;
     public const REC_COND_MANUAL = 2;
@@ -85,11 +86,12 @@ class BadgeLinkCondition extends MyAppModel
     public static function getConditionTypesArr(int $langId): array
     {
         return [
-            self::COND_TYPE_AVG_RATING => Labels::getLabel('LBL_AVERAGE_RATING', $langId),
+            self::COND_TYPE_AVG_RATING_SELPROD => Labels::getLabel('LBL_AVERAGE_RATING_SELLER_PRODUCT_(%)', $langId),
+            self::COND_TYPE_AVG_RATING_SHOP => Labels::getLabel('LBL_AVERAGE_RATING_SHOP_(%)', $langId),
             self::COND_TYPE_ORDER_COMPLETION_RATE => Labels::getLabel('LBL_ORDER_COMPLETION_RATE_(%)', $langId),
             self::COND_TYPE_COMPLETED_ORDERS => Labels::getLabel('LBL_COMPLETED_ORDERS', $langId),
             self::COND_TYPE_RETURN_ACCEPTANCE => Labels::getLabel('LBL_RETURN/_REFUND_ACCEPTANCE_RATE_(%)', $langId),
-            self::COND_TYPE_ORDER_CANCELLED => Labels::getLabel('LBL_ORDER_CANCELLED_BY_SELLER', $langId),
+            self::COND_TYPE_ORDER_CANCELLED => Labels::getLabel('LBL_ORDER_CANCELLED_BY_SELLER_(%)', $langId),
             
         ];
     }
@@ -119,8 +121,8 @@ class BadgeLinkCondition extends MyAppModel
     public static function getRecordConditionArr(int $langId): array
     {
         return [
+            self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUALLY', $langId),
             self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATICALLY', $langId),
-            self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUALLY', $langId)
         ];
     }
     

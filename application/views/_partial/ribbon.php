@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
+$html = "";
 switch ($type) {
     case Badge::SHAPE_RECTANGLE:
         $html = '<div class="badges badges-' . $type . '" style="background:' . $color . '">' . $text . '</div>';

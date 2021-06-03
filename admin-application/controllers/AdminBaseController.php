@@ -173,7 +173,6 @@ class AdminBaseController extends FatController
             'rate' => Labels::getLabel('LBL_RATE(INT)', $this->adminLangId),
             'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
             'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
-            'invalidConditionTypeSelection' => Labels::getLabel('LBL_INVALID_SELECTION._PLEASE_SELECT_LINK_TYPE_SHOP_FOR_THESE_OPTIONS', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);

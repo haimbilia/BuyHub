@@ -28,6 +28,15 @@ if (null != $fld) {
 	$fld->developerTags['col'] = 12;
 	$fld->htmlAfterField = '<div class="recordsContainer--js p-0 box--scroller"></div>';
 }
+
+$fld = $frm->getField('blinkcond_condition_type');
+if (null != $fld) {
+ 	$fld->setWrapperAttribute( 'class' , 'conditionType--js');	
+}
+$fld = $frm->getField('blinkcond_record_type');
+if (null != $fld) {
+ 	$fld->setWrapperAttribute( 'class' , 'linkType--js');	
+}
 ?>
 <section class="section">
 	<div class="sectionhead">

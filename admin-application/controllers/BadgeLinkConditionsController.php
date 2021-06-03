@@ -257,7 +257,8 @@ class BadgeLinkConditionsController extends AdminBaseController
             $conditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
             switch ($conditionType) {
                 case BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS:
-                case BadgeLinkCondition::COND_TYPE_AVG_RATING:
+                case BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD:
+                case BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP:
                     $fromCond = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_INT, 0);
                     $toCond = FatApp::getPostedData('blinkcond_condition_to', FatUtility::VAR_INT, 0);
                     if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond) {
@@ -370,16 +371,16 @@ class BadgeLinkConditionsController extends AdminBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_NAME', $this->adminLangId), 'badge_name', $selectedBadge, $badgeId, ['placeholder' => Labels::getLabel('LBL_SEARCH...', $this->adminLangId)], '');
         $fld->requirement->setRequired(true);
 
+        $frm->addTextBox(Labels::getLabel('LBL_FROM_DATE', $this->adminLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
+        $frm->addTextBox(Labels::getLabel('LBL_TO_DATE', $this->adminLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
+
         $recordConditionArr = BadgeLinkCondition::getRecordConditionArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_TRIGGER', $this->adminLangId), 'record_condition', $recordConditionArr, '', [], '');
         $fld->requirement->setRequired(true);
 
         $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->adminLangId), 'blinkcond_record_type', $recordTypesArr, '', [], '');
-        $fld->requirement->setRequired(true);
-
-        $frm->addTextBox(Labels::getLabel('LBL_FROM_DATE', $this->adminLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
-        $frm->addTextBox(Labels::getLabel('LBL_TO_DATE', $this->adminLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->adminLangId), 'blinkcond_record_type', $recordTypesArr);
+        $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_MANUAL == $recordCondition));
 
         $conditionTypesArr = BadgeLinkCondition::getConditionTypesArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'blinkcond_condition_type', $conditionTypesArr);
@@ -388,7 +389,8 @@ class BadgeLinkConditionsController extends AdminBaseController
         $fld = $frm->addTextBox(Labels::getLabel('LBL_FROM', $this->adminLangId), 'blinkcond_condition_from');
         $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));
 
-        $rangeElements = [BadgeLinkCondition::COND_TYPE_DATE, BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS, BadgeLinkCondition::COND_TYPE_AVG_RATING];
+        $rangeElements = [BadgeLinkCondition::COND_TYPE_DATE, BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS, BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD, 
+        BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP, BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE];
         $fld = $frm->addTextBox(Labels::getLabel('LBL_TO', $this->adminLangId), 'blinkcond_condition_to');
         if (0 == $conditionType || in_array($conditionType, $rangeElements)) {
             $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));

@@ -43,7 +43,8 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', array(), Badge::getTypeName($row[$key], $adminLangId), true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
-                $td->appendElement('plaintext', array(), BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId), true);
+                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $adminLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId);
+                $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'record_condition':
                 $condition = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
