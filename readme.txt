@@ -112,15 +112,6 @@ Fixes:
     => 054262 - some issue with collection 
     => 054255 - Unable to reach location if redirect from notification listing in admin.
     => 054265 - missing sms template on seller end
-    => 053985 - Stripe connect unable to debit site commission
-    => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
-    => 054137 - Issue in product refund stats
-    => 054183 - on admin order cancellation page roundoff error coming
-    => 054242 - paystack gateway not supporting ZAR currency
-    => 054262 - some issue with collection 
-    => 054279 - warranty needs to be optional when product is digital
-    => 054255 - Unable to reach location if redirect from notification listing in admin.
-    => 054265 - missing sms template on seller end
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
 
 Develop
