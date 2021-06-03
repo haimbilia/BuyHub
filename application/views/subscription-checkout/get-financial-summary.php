@@ -3,6 +3,9 @@ $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
 $cartAdjustableAmount = isset($cartSummary['cartAdjustableAmount']) ? $cartSummary['cartAdjustableAmount'] : 0;
 $discountTotal = isset($cartSummary['cartDiscounts']) && isset($cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0;
 $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - $discountTotal, true, false, true, false, true);
+if($amount == 0){
+    $amount = '0.00';
+}
 ?>
 <h5 class="mb-2"><?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?></h5>
 <div class="box box--white box--radius order-summary">

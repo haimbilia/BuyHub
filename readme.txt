@@ -182,6 +182,7 @@ Fixes:
     => 054599 - when order is on pickup and status is changed to ready for pickup it gets stuck and on refreshing the page> getting error on screen
     => 054447 - when product having multiple options then on detail page> options are not listing properly
     => 054529 - On FAQ >> if any letter is in caps then it is not highlighting on search
+    => 054545 - when subscription is downgraded and after adjustment amount becomes 0 then on applying coupon it's getting the total in negative
 
 New Features:
     => Admin shipped products listing page
