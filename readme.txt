@@ -178,6 +178,7 @@ Fixes:
     => 054499 - reviews added with category are not listing in admin
     => 054557 - admin> catalog> categories> count is mismatching
     => 054527 - Blog >> some error is there
+    => 054599 - when order is on pickup and status is changed to ready for pickup it gets stuck and on refreshing the page> getting error on screen
 
 New Features:
     => Admin shipped products listing page
