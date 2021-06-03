@@ -177,6 +177,7 @@ Fixes:
     => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox
     => 054499 - reviews added with category are not listing in admin
     => 054557 - admin> catalog> categories> count is mismatching
+    => 054527 - Blog >> some error is there
 
 New Features:
     => Admin shipped products listing page
