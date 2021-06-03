@@ -4,7 +4,7 @@
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
 <?php } ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 <?php $arr_flds = array(
         'promotion_image'=>'',
         'promotion_id' => Labels::getLabel('LBL_ID', $siteLangId),

@@ -1585,8 +1585,18 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Before_How_many_Days_email_needs_to_be_sent_to_user_before_ending_subscription.", $this->adminLangId) . "</small>";
                 //$fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Subscription_Order_Statuses",$this->adminLangId),'CONF_SUBSCRIPTION_ORDER_STATUS',$orderSubscriptionStatusArr,$subscriptionOrderSelected,array('class' => 'list-inline'));
 
+                $fld = $frm->addSelectBox(
+                    Labels::getLabel("LBL_In-Active_Order_Status", $this->adminLangId),
+                    'CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS',
+                    $orderSubscriptionStatusArr,
+                    false,
+                    array(),
+                    ''
+                );
+
                 $subscriptionSellerOrderSelected = (!empty($arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'])) ? $arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'] : 0;
                 $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Subscription_Statuses", $this->adminLangId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, $subscriptionSellerOrderSelected, array('class' => 'list-inline'));
+
                 break;
 
             case Configurations::FORM_SYSTEM:

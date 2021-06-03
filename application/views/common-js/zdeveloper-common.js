@@ -1931,7 +1931,7 @@ $(document).on('click', '.v-tabs--js ul li', function(e){
 var imagesPreview = function (input, placeToInsertImagePreview) {
     if (input.files) {
         if (1 > $(placeToInsertImagePreview + ' ul').length) {
-            $(placeToInsertImagePreview).html('<ul class="review-media-list"></ul>');
+            $(placeToInsertImagePreview).html('<ul class="js-review-media-list"></ul>');
         }
 
         var fileFldName = $(input).attr('name');
@@ -1941,7 +1941,7 @@ var imagesPreview = function (input, placeToInsertImagePreview) {
 
             var reader = new FileReader();
             reader.onload = function (event) {
-                var htm = '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><a href="javascript:void(0);" class="file-remove fileRemove--js" data-filefld="' + fileFldName + '"></a></div></li>';
+                var htm = '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><a href="javascript:void(0);" class="close-layer close-layer-sm fileRemove--js" data-filefld="' + fileFldName + '"></a></div></li>';
                 $(placeToInsertImagePreview + ' ul').append(htm);
                 $($.parseHTML('<img class="imgToUpload--js" title="' + selectedFile.name + '">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview + ' ul li:last-child .uploaded-file__thumb');
             }

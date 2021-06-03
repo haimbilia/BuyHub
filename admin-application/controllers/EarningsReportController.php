@@ -63,6 +63,7 @@ class EarningsReportController extends AdminBaseController
         $sSrch->addMultipleFields(['DATE(o.order_date_added) as date']);
         $sSrch->doNotCalculateRecords();
         $sSrch->doNotLimitRecords();
+        $sSrch->addCompletedOrderCondition();
 
         $query = $pSrch->getQuery() . ' UNION ALL ' . $opSrch->getQuery() . ' UNION ALL ' . $sSrch->getQuery();
         $srch = new SearchBase("(" . $query . ") as tmp");

@@ -34,7 +34,7 @@ $clearFld->developerTags['noCaptionTag'] = true;
     </div>
 </div>
 <span class="gap"></span>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 	<?php $arr_flds = array(
 		'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
 		'afile_name'    =>    Labels::getLabel('LBL_File', $siteLangId),

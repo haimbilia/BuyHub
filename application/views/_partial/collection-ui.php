@@ -12,14 +12,37 @@ if ($controllerName = 'Products' && isset($action) && $action == 'view') {
         }
         if ($showAddToFavorite) { ?>
     <!-- <div class="badges badges-1">New</div> -->
-    <div class="badges badges-2">
-        <span class="text"> Offer</span></div>
 
-    <!-- <div class="snip1326">
-  <div class="icon"><i class="ion-android-star-outline"></i></div>
-  <h1>Revolution</h1>
-  <h5>Neque porro quisquam</h5>
-</div> -->
+    <!-- <div class="badges badges-2">
+        <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-2"></use>
+        </svg>
+        <span class="text">Offer</span>
+    </div>   -->
+
+    <!-- <div class="badges badges-3">
+        <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-3"></use>
+        </svg>
+        <span class="text">New</span>
+    </div>   -->
+
+    <!-- <div class="badges badges-4">
+ <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-4"></use>
+        </svg>
+    <span class="text">New</span>
+</div>  -->
+
+    
+     <div class="badges badges-5">
+     <svg class="svg">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges/sprite.svg#badges-5"></use>
+        </svg>
+    <span class="text">50% <br> OFF</span>
+</div>  
+
+
 
 
 
@@ -63,7 +86,7 @@ if ($controllerName = 'Products' && isset($action) && $action == 'view') {
                     </a>
                 </div>
             <?php } else { ?>
-                <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" <?php /* id="listDisplayDiv_<?php echo $product['selprod_id']; ?>"  */ ?> data-id="<?php echo $product['selprod_id']; ?>">
+                <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" <?php /* id="listDisplayDiv_<?php echo $product['selprod_id']; ?>" */ ?> data-id="<?php echo $product['selprod_id']; ?>">
                     <a href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
                         <div class="ring"></div>
                         <div class="circles"></div>

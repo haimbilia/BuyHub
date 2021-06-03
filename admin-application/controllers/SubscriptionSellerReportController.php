@@ -39,7 +39,7 @@ class SubscriptionSellerReportController extends AdminBaseController
         $srch->addCondition('o.order_type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->includeCount();
         $srch->addMultipleFields(['user_autorenew_subscription', 'oss_l.ossubs_subscription_name', 'oss.ossubs_interval', 'oss.ossubs_frequency', 'oss.ossubs_type', 'ou.user_name as user_name', 'oss.ossubs_from_date', 'oss.ossubs_till_date', 'subscount.*']);
-
+        $srch->addCompletedOrderCondition();
         if (!empty($keyword)) {
             $srch->addHaving('user_name', 'like', '%' . $keyword . '%', 'AND');
             $srch->addHaving('oss_l.ossubs_subscription_name', 'like', '%' . $keyword . '%', 'OR');

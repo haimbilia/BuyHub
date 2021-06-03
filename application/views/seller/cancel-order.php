@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <div class="gap"></div>
-						<div class="js-scrollable table-wrap">
+						<div class="js-scrollable table-wrap scroll scroll-x">
 							<table class="table">
 								<tbody>
 									<tr class="">

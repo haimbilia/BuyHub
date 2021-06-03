@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 	<?php $yesNoArr = applicationConstants::getYesNoArr($siteLangId);
 
 	$arr_flds = array(

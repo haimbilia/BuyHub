@@ -172,6 +172,8 @@ Fixes:
     => 054278 - if for any digital item there is no preview available then preview tab shouldn't be displayed
     => 054144 - Set Default Location not populating on front end after set by admin
     => 054071 - Product Download Attachments At Inventory Level for catalog is missing in import/export
+    => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox.
+    => 054526 - when seller purchases subscription then on order success screen> neither adjusted amount is listing (if there), nor the original amount of package
     => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox
     => 054499 - reviews added with category are not listing in admin
 

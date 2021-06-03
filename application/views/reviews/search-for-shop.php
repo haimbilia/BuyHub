@@ -60,8 +60,8 @@
                                 <?php } ?>
                             </p>
                         </div>
-                        <div class="all-review-media">
-                            <ul class="review-media-list">
+                        <div class="uploaded-media">
+                            <ul>
                                 <?php
                                 $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
                                 

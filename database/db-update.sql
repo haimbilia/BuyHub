@@ -779,3 +779,6 @@ INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`
 You have received a new cash on delivery order {order_id} at {SITE_NAME}
 
 {SITE_NAME} Team', '[{"title":"Seller", "variable":"{vendor_name}"},{"title":"Order Id", "variable":"{order_id}"}, {"title":"Website Name", "variable":"{SITE_NAME}"}]', 1);
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
+('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10)
+ON DUPLICATE KEY UPDATE conf_val = 10;

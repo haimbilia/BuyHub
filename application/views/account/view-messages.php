@@ -11,7 +11,7 @@
                     <div class="btn-group"><a href="<?php echo UrlHelper::generateUrl('Account', 'messages'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_to_messages', $siteLangId); ?></a></div>
                 </div>
                 <div class="card-body">
-                    <div class="js-scrollable table-wrap">
+                    <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table">
                             <tbody>
                                 <tr class="">
