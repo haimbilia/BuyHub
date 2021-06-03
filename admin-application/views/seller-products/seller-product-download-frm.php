@@ -206,11 +206,17 @@ if (false == $canDo) {
                         </div>
                     </div>
                 <?php } else { ?>
-                    <div class="col-md-12 dd-not-allowed attach-files-js alert-danger">
-                        <?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?>
+                    <div class="col-md-12 attach-files-js">
+                        <div class="dd-not-allowed note">
+                            <i class="fa fa-info-circle"></i>
+                            <p class=""><?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?></p>
+                        </div>
                     </div>
-                    <div class="col-md-12 dd-not-allowed attach-links-js alert-danger">
-                        <?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $adminLangId); ?>
+                    <div class="col-md-12 attach-links-js alert-danger">
+                        <div class="dd-not-allowed note">
+                            <i class="fa fa-info-circle"></i>
+                            <p class="note-text"><?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $adminLangId); ?></p>
+                        </div>
                     </div>
                 <?php } ?>
             </div>

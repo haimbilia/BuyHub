@@ -101,7 +101,7 @@ if (false == $canDo) {
             </div>
             <?php if (true == $canDo) { ?>
                 <div class="row">
-                    <?php if (true == $canDo && true === $showFldAttachWithExistingOrders) { ?>
+                    <?php if (true === $showFldAttachWithExistingOrders) { ?>
                         <div class="col-md-4">
                             <div class="field-set">
                                 <div class="caption-wraper">

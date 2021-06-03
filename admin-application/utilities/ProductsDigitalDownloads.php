@@ -81,16 +81,11 @@ trait ProductsDigitalDownloads
     public function getInventoryDigitalDownloads()
     {
         $this->objPrivilege->canViewSellerProducts();
-        /* $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0); */
+
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        /* $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0); */
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        /* $prodRefType = Product::CATALOG_TYPE_INVENTORY; */
-        
-        /* $optionComb = FatApp::getPostedData('option_comb', FatUtility::VAR_INT, 0); */
-        
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
             $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
         } else {
@@ -120,17 +115,13 @@ trait ProductsDigitalDownloads
     {
         $this->objPrivilege->canEditSellerProducts();
 
-        /* $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0); */
         $inventoryId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         
-        /* if (1 > $prodId && 1 > $inventoryId) { */
         if (1 > $inventoryId) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
         }
-        
-        $requstedProd = Product::CATALOG_TYPE_INVENTORY;
 
-        if (false == DigitalDownload::canDo($inventoryId, $requstedProd, 0, $this->adminLangId, true, true)) {
+        if (false == DigitalDownload::canDo($inventoryId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, true, true)) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $this->adminLangId));
         }
 
@@ -153,21 +144,21 @@ trait ProductsDigitalDownloads
         
         $ddObj = new DigitalDownload();
         
-        $refId = $ddObj->getReferenceId($inventoryId, $optionComb, $requstedProd);
+        $refId = $ddObj->getReferenceId($inventoryId, $optionComb, Product::CATALOG_TYPE_INVENTORY);
         
         if (1 > $refId) {
-            if (!$ddObj->saveReference($inventoryId, $optionComb, $requstedProd)) {
+            if (!$ddObj->saveReference($inventoryId, $optionComb, Product::CATALOG_TYPE_INVENTORY)) {
                 FatUtility::dieWithError($ddObj->getError());
             }
             $refId = $ddObj->getMainTableRecordId();
         }
         
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            if (true == $this->setupDigitalLink($ddObj, $refId)) {
+            if (true == $this->setupDigitalLink($ddObj, $refId, $inventoryId)) {
                 FatUtility::dieJsonSuccess(Message::getHtml());
             }
         } else {
-            if (true == $this->setupDigitalFile($ddObj, $refId)) {
+            if (true == $this->setupDigitalFile($ddObj, $refId, $inventoryId)) {
                 FatUtility::dieJsonSuccess(Message::getHtml());
             }
         }
@@ -175,7 +166,7 @@ trait ProductsDigitalDownloads
         FatUtility::dieJsonError(Message::getHtml());
     }
 
-    private function setupDigitalFile($ddObj, $refId)
+    private function setupDigitalFile($ddObj, $refId, $recordId)
     {
         if (!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name'])) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
@@ -208,46 +199,14 @@ trait ProductsDigitalDownloads
         }
 
         $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-        $inventoryId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-
+        
+        Message::addErrorMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
         if (0 === $attachWithExistingOrders) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
             return true;
         }
 
-        $opSrchObj = new OrderProductSearch(0, true);
-        
-        $opSrchObj->addCondition('op.op_selprod_id', '=', $inventoryId);
-        $opSrchObj->addMultipleFields([
-            'op_id',
-            'op_order_id'
-        ]);
-        $opSrchObj->addDigitalDownloadCondition();
-        $opSrchObj->doNotCalculateRecords();
-        
-        $rows = FatApp::getDb()->fetchAll($opSrchObj->getResultSet());
+        $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, Product::CATALOG_TYPE_INVENTORY, $langId);
 
-        if (0 < $rows) {
-            $mainFileRow = AttachedFile::getAttributesById($mainFileId);
-
-            $afileObj = new AttachedFile();
-            foreach($rows as $key => $op) {
-                $afileObj->setMainTableRecordId(0);
-                $afileObj->assignValues(
-                    [
-                        'afile_type' => AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD,
-                        'afile_record_id' => $op['op_id'],
-                        'afile_record_subid' => 0,
-                        'afile_physical_path' => $mainFileRow['afile_physical_path'],
-                        'afile_name' => $mainFileRow['afile_name'],
-                        'afile_lang_id' => $langId
-                    ]
-                );
-                $afileObj->save();
-            }
-        }
-        
-        Message::addMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
         return true;
     }
 
@@ -284,7 +243,7 @@ trait ProductsDigitalDownloads
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
     }
 
-    private function setupDigitalLink($ddObj, $refId)
+    private function setupDigitalLink($ddObj, $refId, $recordId)
     {
         
         $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
@@ -293,9 +252,6 @@ trait ProductsDigitalDownloads
         $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
         $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
         
-        /* $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-        $inventoryId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0); */
-
         if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
             Message::addMessage($ddObj->getError());
             return false;
@@ -311,34 +267,14 @@ trait ProductsDigitalDownloads
         }
         
         $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-        $inventoryId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-
+        
+        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId));
         if (0 === $attachWithExistingOrders) {
-            Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId));
             return true;
         }
 
-        $opSrchObj = new OrderProductSearch(0, true);
+        $ddObj->attachLinkWithOrderedProducts($downloadLink, $recordId, Product::CATALOG_TYPE_INVENTORY, $langId);
         
-        $opSrchObj->addCondition('op.op_selprod_id', '=', $inventoryId);
-        $opSrchObj->addMultipleFields([
-            'op_id',
-            'op_order_id'
-        ]);
-        $opSrchObj->addDigitalDownloadCondition();
-        $opSrchObj->doNotCalculateRecords();
-        
-        $rows = FatApp::getDb()->fetchAll($opSrchObj->getResultSet());
-
-        if (0 < $rows) {
-            foreach($rows as $key => $op) {
-                $linkData['opddl_op_id'] = $op['op_id'];
-                $linkData['opddl_downloadable_link'] = $downloadLink;
-                FatApp::getDb()->insertFromArray(OrderProductDigitalLinks::DB_TBL, $linkData);
-            }
-        }
-        
-        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId));
         return true;
     }
 
