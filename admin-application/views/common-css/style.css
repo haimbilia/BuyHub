@@ -12748,3 +12748,12 @@ form[name="frmShippingProfile"] {
     display: block;
 }
 /* Vertical tab for options listing 28-05-2021 */
+
+.clipboard {
+    display: flex;
+    align-items: center;
+}
+
+.clipboard .copy-btn {
+    margin-left: 10px;
+}

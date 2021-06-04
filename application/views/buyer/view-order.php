@@ -1007,7 +1007,7 @@ if (!$print) { ?>
                                                     <?php echo $sr_no; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $fileName; ?>
+                                                    <?php echo '<div class="text-break">' . $fileName . '</div>'; ?>
                                                 </td>
                                                 <td>
                                                     <?php echo $lang_name; ?>
@@ -1088,9 +1088,11 @@ if (!$print) { ?>
                                                     <?php echo $sr_no; ?>
                                                 </td>
                                                 <td>
-                                                    <a target="_blank" onClick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
-                                                        <?php echo $link; ?>
-                                                    </a>
+                                                    <div class="text-break">
+                                                        <a target="_blank" onClick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
+                                                            <?php echo $link; ?>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <?php echo $downloadableCount; ?>

@@ -546,7 +546,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                         } ?>
                                         <tr>
                                             <td><?php echo $sr_no; ?></td>
-                                            <td><?php echo $fileName; ?></td>
+                                            <td><?php echo '<div class="text-break">' . $fileName . '</div>'; ?></td>
                                             <td><?php echo $lang_name; ?></td>
                                             <td><?php echo $downloadableCount; ?></td>
                                             <td><?php echo $row['afile_downloaded_times']; ?></td>
@@ -591,7 +591,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                         } ?>
                                         <tr>
                                             <td><?php echo $sr_no; ?></td>
-                                            <td><a target="_blank" href="<?php echo $row['opddl_downloadable_link']; ?>" title="<?php echo Labels::getLabel('LBL_Click_to_download', $siteLangId); ?>"><?php echo $row['opddl_downloadable_link']; ?></a></td>
+                                            <td><div class="text-break"><a target="_blank" href="<?php echo $row['opddl_downloadable_link']; ?>" title="<?php echo Labels::getLabel('LBL_Click_to_download', $siteLangId); ?>"><?php echo $row['opddl_downloadable_link']; ?></a></div></td>
                                             <td><?php echo $downloadableCount; ?></td>
                                             <td><?php echo $row['opddl_downloaded_times']; ?></td>
                                             <td><?php echo $expiry; ?></td>

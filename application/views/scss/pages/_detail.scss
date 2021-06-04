@@ -1342,6 +1342,45 @@
         font-size: 1.5rem !important;
     }
 }
+.list-files {
+    li {
+        list-style: none;
+        margin: 0.5rem 0;
+        padding: 0;
+        list-style: none;
+        margin: 0.5rem 0;
+        padding: 1rem;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: $txt-gray;
+        border-radius: $radius3;
+        background-color: $bg-white;
+    }
+}
+
+.clipboard {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    .copy-input {
+        //max-width: 248px;
+        width: 100%;
+        cursor: pointer;
+        background-color: $bg-white;
+        font-size: 0.8rem;
+        border: none;
+        border-radius: $radius4;
+        padding: 0;
+        color: $txt-gray;
+        margin-#{$end-direction}: 10px;
+        &:focus {
+            outline: none;
+        }
+    }
+}
 
 .jwplayer--content {
     /* (16:9 ratio) */
