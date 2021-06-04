@@ -302,3 +302,4 @@ bugs:
     #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
     #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
+    #054212	while adding inventory> when we add link and url is long then UI is not proper

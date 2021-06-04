@@ -5,11 +5,6 @@ class ReportsController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
-        if (!User::canAccessSupplierDashboard()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
-        }
-        $this->set('bodyClass', 'is--dashboard');
     }
 
     public function index()
@@ -386,7 +381,6 @@ class ReportsController extends SellerBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            echo $srch->getError();
             $arrListing = FatApp::getDb()->fetchAll($rs);
 
             if (count($arrListing)) {

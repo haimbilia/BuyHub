@@ -536,65 +536,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
             <section class="section">
                 <div class="row justify-content-center">
                     <div class="col-xl-7">
-
-
-                        <?php if (
-                            Product::PRODUCT_TYPE_DIGITAL == $product['product_type']
-                            && (0 < count($product['preview_links']) || 0 < count($product['preview_attachments']))
-                        ) {
-                        ?>
-                        <div class="detail-content">
-                            <div class="section-head">
-                                <div class="section__heading" id="specifications">
-                                    <h2><?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?></h2>
-                                </div>
-                            </div>
-                            <div class="cms bg-gray p-4 mb-4">
-                                <?php
-                                    if (0 < count($product['preview_links'])) {
-                                    ?>
-                                <div class="prod-ext-links"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?>
-                                </div>
-                                <?php foreach ($product['preview_links'] as $keys => $link) {
-                                            echo $link['pdl_preview_link'] . '<br />';
-                                        }
-                                    }
-                                    if (0 < count($product['preview_attachments'])) {
-                                        ?>
-                                <div class="prod-attached-files">
-                                    <?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?>
-                                </div>
-                                <?php
-                                        foreach ($product['preview_attachments'] as $keys => $attachment) {
-                                            if (0 < strlen($attachment['preview'])) {
-
-                                                $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
-                                                $fileExt = strtolower($fileExt);
-
-                                                $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
-                                        ?>
-                                <?php echo $attachment['preview']; ?>
-                                <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
-                                <a class="play-preview" href="javascript:void(0);"
-                                    title="<?php echo $attachment['preview']; ?>"
-                                    onclick="playVideo('<?php echo $videoPath; ?>', '<?php echo $fileExt; ?>'); return false;">
-                                    <i class="fa fa-caret-square-right icon"></i>
-                                </a>
-                                <?php } ?>
-                                <a class="download--preview" target="_blank"
-                                    href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>"
-                                    title="<?php echo $attachment['preview']; ?>">
-                                    <i class="fa fa-download icon"></i>
-                                </a><br />
-                                <?php
-                                            }
-                                        }
-                                    } else {
-                                        echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
-                                    }
-                                    ?>
-                            </div>
-                        </div>
+                        <?php if ( Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
+                            <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
                         <?php } ?>
                         <?php if (count($productSpecifications) > 0) { ?>
                         <div class="detail-content">
