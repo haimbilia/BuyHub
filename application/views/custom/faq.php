@@ -68,10 +68,10 @@
     $(function() {
         $(document).on("keyup", '.faq-input', function() {
             // Get user input from search box
-            var filter_text = $(this).val();
+            var filter_text = $(this).val().toLowerCase();
             var replaceWith = "<span class='js--highlightText'>"+filter_text+"</span>";
             var re = new RegExp(filter_text, 'g');
-
+            
             $('.faqlist h3').each(function() {
                 if ('' !== filter_text) {
                     if ($(this).text().toLowerCase().indexOf(filter_text) >= 0) {
