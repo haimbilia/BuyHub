@@ -129,6 +129,7 @@ Fixes:
     => 054265 - missing sms template on seller end
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
     => 054557 - admin> catalog> categories> count is mismatching
+    => 054689 - 404 error page - issue with few produc urls when subscription in enabled
 
 Enhancements :
    => Make provision to made seller
