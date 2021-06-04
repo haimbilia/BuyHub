@@ -469,7 +469,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                     <h6><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId); ?></h6>
                     <?php } ?>
                     <ul
-                        class="responsive-table <?php echo (count($product['moreSellersArr']) ? 'moreSellerRows--js' : ''); ?>">
+                        class="responsive-table scroll scroll-y <?php echo (count($product['moreSellersArr']) ? 'moreSellerRows--js' : ''); ?>">
                         <?php
                         $sellers[0]['isActive'] = true;
                         include('more-sellers-rows.php');
