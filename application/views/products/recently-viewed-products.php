@@ -18,16 +18,7 @@ if ($recentViewedProducts) {
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
                     <!--product tile-->
                     <div class="products">
-                        <div class="products__quickview">
-                            <a onClick='quickDetail(<?php echo $rProduct['selprod_id']; ?>)' class="modaal-inline-content">
-                                <span class="svg-icon">
-                                    <svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#quick-view" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#quick-view">
-                                        </use>
-                                    </svg>
-                                </span><?php echo Labels::getLabel('LBL_Quick_View', $siteLangId); ?>
-                            </a>
-                        </div>
+                        <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $rProduct,  'siteLangId' => $siteLangId], false); ?>
                         <div class="products__body">
                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $rProduct) && 0 == $rProduct['availableInLocation']) { ?>
                                 <div class="not-available"><svg class="svg">

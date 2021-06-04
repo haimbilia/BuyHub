@@ -17531,7 +17531,6 @@ html.quick-view--open {
 .badges {
   position: absolute;
   top: 10px;
-  right: 10px;
   z-index: 9;
   font-size: 0.8rem; }
   .badges .svg {
@@ -17606,6 +17605,12 @@ html.quick-view--open {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis; }
+  .badges-left {
+    right: 10px;
+    top: 10px; }
+  .badges-right {
+    left: 10px;
+    top: 10px; }
 
 .scroll {
   overflow: auto;
@@ -33932,25 +33937,16 @@ input.sp-input,
 .product-detail-gallery {
   position: sticky;
   position: -webkit-sticky;
-  /*z-index: 1;*/
   top: 180px;
-  display: flex;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: space-between;
-  /*align-items: center;*/ }
+  margin-left: 3rem; }
   @media (max-width: 1199.98px) {
     .product-detail-gallery {
-      display: block;
+      margin-left: 0;
       position: relative;
       top: auto; } }
   .product-detail-gallery .slider-for {
-    flex: 1;
-    order: 2;
     border-radius: 4px;
-    border: solid 1px #dee2e6;
-    margin: 0 auto;
-    max-width: 500px; }
+    border: solid 1px #dee2e6; }
     @media (max-width: 1199.98px) {
       .product-detail-gallery .slider-for {
         padding: 0;
@@ -33966,21 +33962,15 @@ input.sp-input,
   .product-detail-gallery .slider-nav {
     position: relative;
     padding: 0;
-    /* margin-left: 2rem;*/
-    width: 90px;
-    overflow: hidden; }
-    @media (max-width: 1199.98px) {
-      .product-detail-gallery .slider-nav {
-        width: 100%;
-        display: flex; } }
-    @media (max-width: 991.98px) {
-      .product-detail-gallery .slider-nav {
-        margin-top: 1.5rem; } }
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem; }
     .product-detail-gallery .slider-nav .slick-list {
       margin: 0 auto;
       text-align: center; }
     .product-detail-gallery .slider-nav .thumb {
-      margin: 0.5rem auto;
+      margin: 0.5rem;
       text-align: center;
       border-radius: 4px;
       border: solid 1px #dee2e6 !important;
@@ -33997,14 +33987,14 @@ input.sp-input,
       position: relative;
       top: auto;
       width: 40px;
-      height: 90px;
+      height: 40px;
       padding: 0;
       border: none;
-      transform: rotate(90deg);
-      /*background: $gray-light;*/
       border-radius: 4px;
       box-shadow: none;
-      margin: 0; }
+      margin: 0;
+      max-width: 40px;
+      flex: 0 0 40px; }
       @media (max-width: 1199.98px) {
         .product-detail-gallery .slider-nav .slick-arrow {
           transform: none;

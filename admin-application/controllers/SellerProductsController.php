@@ -2548,7 +2548,7 @@ class SellerProductsController extends AdminBaseController
             $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
 
             if (false === $post) {
-                FatUtility::dieJsonError(current($frm->getValidationErrors()));
+                FatUtility::dieJsonError(current($srchFrm->getValidationErrors()));
             } else {
                 unset($post['btn_submit'], $post['btn_clear']);
                 $srchFrm->fill($post);

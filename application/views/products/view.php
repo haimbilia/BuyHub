@@ -2,8 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $buyQuantity = $frmBuyProduct->getField('quantity');
 $buyQuantity->addFieldTagAttribute('class', 'qty-input cartQtyTextBox productQty-js');
-$buyQuantity->addFieldTagAttribute('data-page', 'product-view');
-?>
+$buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 <div id="body" class="body detail-page">
     <section class="">
         <div class="container">
@@ -20,9 +19,13 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                 <?php $data['product'] = $product;
                                 $data['productImagesArr'] = $productImagesArr;
                                 $data['imageGallery'] = true;
-                                /* $this->includeTemplate('products/product-gallery.php',$data,false); */ ?>
-                                <div class="slider-for" dir="<?php echo CommonHelper::getLayoutDirection(); ?>"
-                                    id="slider-for">
+                                
+                                $ribSelProdId = $product['selprod_id'];
+                                $ribProdId = $product['product_id'];
+                                $ribShopId = $product['shop_id'];
+                                include (CONF_THEME_PATH . '_partial/get-ribbon.php'); ?>
+
+                                <div class="slider-for" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" id="slider-for">
                                     <?php if ($productImagesArr) { ?>
                                     <?php foreach ($productImagesArr as $afile_id => $image) {
                                             $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
@@ -60,85 +63,31 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                     <div class="products__title">
                                         <div>
                                             <h1>
-                                                <img class="badges"
-                                                    src="<?php echo CONF_WEBROOT_URL; ?>images/retina/badges.svg"
-                                                    width="26px" height="26px" alt="">
                                                 <?php echo $product['selprod_title']; ?>
                                             </h1>
                                             <div class="favourite-wrapper favourite-wrapper-detail ">
-                                                <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
-                                                <div class="dropdown">
-                                                    <a class="no-after share-icon" data-display="static"
-                                                        href="javascript:void(0)" data-toggle="dropdown">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-anim">
-                                                        <ul class="social-sharing">
-                                                            <li class="social-facebook">
-                                                                <a class="st-custom-button" data-network="facebook"
-                                                                    data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
-                                                                    <i class="icn"><svg class="svg">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
-                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
-                                                                            </use>
-                                                                        </svg></i>
-                                                                </a>
-                                                            </li>
-                                                            <li class="social-twitter">
-                                                                <a class="st-custom-button" data-network="twitter">
-                                                                    <i class="icn"><svg class="svg">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
-                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
-                                                                            </use>
-                                                                        </svg></i>
-                                                                </a>
-                                                            </li>
-                                                            <li class="social-pintrest">
-                                                                <a class="st-custom-button" data-network="pinterest">
-                                                                    <i class="icn"><svg class="svg">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
-                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
-                                                                            </use>
-                                                                        </svg></i>
-                                                                </a>
-                                                            </li>
-                                                            <li class="social-email">
-                                                                <a class="st-custom-button" data-network="email">
-                                                                    <i class="icn"><svg class="svg">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
-                                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
-                                                                            </use>
-                                                                        </svg></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                <?php 
+                                                $includeRibbon = false;
+                                                include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
                                             </div>
                                         </div>
                                         <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
 
-                                        <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
-                                        <div class="products-reviews">
-                                            <div class="products__rating">
-                                                <i class="icn"><svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
-                                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                        </use>
-                                                    </svg>
-                                                </i>
-                                                <span
-                                                    class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
+                                            <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
+                                            <div class="products-reviews">
+                                                <div class="products__rating">
+                                                    <i class="icn"><svg class="svg">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
+                                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                            </use>
+                                                        </svg>
+                                                    </i>
+                                                    <span
+                                                        class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
+                                                </div>
+                                                <a href="#itemRatings"
+                                                    class="totals-review link nav-scroll-js"><?php echo $label; ?></a>
                                             </div>
-                                            <a href="#itemRatings"
-                                                class="totals-review link nav-scroll-js"><?php echo $label; ?></a>
-                                        </div>
 
                                         <?php } ?>
                                     </div>
@@ -159,6 +108,13 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                             <span
                                                 class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                                             <?php } ?>
+                                            
+                                            <?php 
+                                            $bdgSelProdId = $product['selprod_id'];
+                                            $bdgProdId = $product['product_id'];
+                                            $bdgShopId = $product['shop_id'];
+                                            $bdgExcludeCndType = BadgeLinkCondition::SHOP_BADGES_COND_TYPES;
+                                            include (CONF_THEME_PATH . '_partial/get-badge.php'); ?>
                                         </div>
                                         <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
 
@@ -270,47 +226,47 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view');
                                                 $qtyField->addFieldTagAttribute('data-min-qty', $product['selprod_min_order_qty']);
                                                 $qtyFieldName =  $qtyField->getCaption();
                                                 if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
-                                        <div class="row align-items-end">
-                                            <div class="col-auto">
-                                                <label class="h6"><?php echo $qtyFieldName; ?></label>
-                                                <div class="qty-wrapper">
-                                                    <div class="quantity"
-                                                        data-stock="<?php echo $product['selprod_stock']; ?>">
-                                                        <span class="decrease decrease-js not-allowed"><i class="icn">
-                                                                <svg class="svg" width="16px" height="16px">
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                                    </use>
-                                                                </svg>
-                                                            </i></span>
-                                                        <div class="qty-input-wrapper"
-                                                            data-stock="<?php echo $product['selprod_stock']; ?>">
-                                                            <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                                                    <div class="row align-items-end">
+                                                        <div class="col-auto">
+                                                            <label class="h6"><?php echo $qtyFieldName; ?></label>
+                                                            <div class="qty-wrapper">
+                                                                <div class="quantity"
+                                                                    data-stock="<?php echo $product['selprod_stock']; ?>">
+                                                                    <span class="decrease decrease-js not-allowed"><i class="icn">
+                                                                            <svg class="svg" width="16px" height="16px">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                                                </use>
+                                                                            </svg>
+                                                                        </i>
+                                                                    </span>
+                                                                    <div class="qty-input-wrapper"
+                                                                        data-stock="<?php echo $product['selprod_stock']; ?>">
+                                                                        <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                                                                    </div>
+                                                                    <span class="increase increase-js"><i class="icn">
+                                                                            <svg class="svg" width="16px" height="16px">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                                                </use>
+                                                                            </svg>
+                                                                        </i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <span class="increase increase-js"><i class="icn">
-                                                                <svg class="svg" width="16px" height="16px">
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                                    </use>
-                                                                </svg>
-                                                            </i></span>
+                                                        <div class="col">
+                                                            <label class="h6">&nbsp;</label>
+                                                            <div class="buy-group">
+                                                                <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
+                                                                                //echo $frmBuyProduct->getFieldHtml('btnProductBuy');
+                                                                                echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                                                                            }
+                                                                            echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col">
-                                                <label class="h6">&nbsp;</label>
-                                                <div class="buy-group">
-                                                    <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
-                                                                    //echo $frmBuyProduct->getFieldHtml('btnProductBuy');
-                                                                    echo $frmBuyProduct->getFieldHtml('btnAddToCart');
-                                                                }
-                                                                echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <?php } ?>
-
+                                                <?php } ?>
                                         </form>
                                         <?php echo $frmBuyProduct->getExternalJs();
                                             }
