@@ -386,7 +386,6 @@ $(document).on('click', '.tabs_002', function(){
 			$('.product_downloadable_link').val('');
 			$('.product_preview_link').val('');
 			$('input[name="dd_link_id"]').val('');
-			$('#attachment_link_btn').val(ans.btn_label);
 			getDigitalDownloads();
 		});
 	}

@@ -99,10 +99,27 @@ if (false == $canDo) {
                     </div>
                 </div>
             </div>
-            <div class="attach-links-js">
-            <?php if(true == $canDo) { ?>
+            <?php if (true == $canDo) { ?>
                 <div class="row">
-                    <div class="col-md-4">
+                    <?php if (true === $showFldAttachWithExistingOrders) { ?>
+                        <div class="col-md-4">
+                            <div class="field-set">
+                                <div class="caption-wraper">
+                                    <label class="field_label">
+                                        <?php $fld = $downloadFrm->getField('attach_with_existing_orders');
+                                        echo $fld->getCaption();
+                                        ?>
+                                    </label>
+                                </div>
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                    <?php echo $downloadFrm->getFieldHtml('attach_with_existing_orders'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <div class="col-md-4 attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -111,6 +128,7 @@ if (false == $canDo) {
                                     echo $fld->getCaption();
                                     ?>
                                 </label>
+                                <span class="spn_must_field">*</span>
                             </div>
                             <div class="field-wraper">
                                 <div class="field_cover">
@@ -119,7 +137,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -136,7 +154,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-left">
+                    <div class="col-md-4 text-left attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
@@ -146,13 +164,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php } ?>
-            </div>
-            <div class="attach-files-js">
-            <?php if(true == $canDo) { ?>
-                <div class="row">
-                    <div class="col-md-4 downloadable_file_input">
+                    <div class="col-md-4 downloadable_file_input attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -161,6 +173,7 @@ if (false == $canDo) {
                                     echo $fld->getCaption();
                                     ?>
                                 </label>
+                                <span class="spn_must_field">*</span>
                             </div>
                             <div class="field-wraper">
                                 <div class="field_cover">
@@ -169,7 +182,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -186,7 +199,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-left">
+                    <div class="col-md-4 text-left attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
@@ -200,7 +213,6 @@ if (false == $canDo) {
                     </div>
                 </div>
             <?php } ?>
-            </div>
             <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
             <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
             <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>

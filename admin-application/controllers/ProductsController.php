@@ -1557,6 +1557,21 @@ class ProductsController extends AdminBaseController
             $fld->options = $optionCombinations;
         }
 
+        $showFldAttachWithExistingOrders = true;
+
+        $fld = $frm->getField('attach_with_existing_orders');
+
+        $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
+
+        if (false != $product) {
+            if (1 === $product['product_attachements_with_inventory']) {
+                $frm->removeField($fld);
+                $showFldAttachWithExistingOrders = false;
+            }
+        }
+
+        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
+        
         $msg = '';
         $frmData = [
             'product_id' => $productId
@@ -1582,6 +1597,7 @@ class ProductsController extends AdminBaseController
         $frm->fill($frmData);
 
         $this->set('downloadFrm', $frm);
+        
         $this->set('canDo', $canDo);
         $this->set('adminLangId', $this->adminLangId);
         $this->set('msg', $msg);
@@ -1597,10 +1613,6 @@ class ProductsController extends AdminBaseController
         if (1 > $prodId) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
-
-        /* TODO
-        => To check downloads allowed at product level
-        */
 
         $canDo = DigitalDownload::canDo($prodId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
         if (false == $canDo) {
@@ -1621,15 +1633,19 @@ class ProductsController extends AdminBaseController
         }
 
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $this->setupDigitalLink($ddObj, $refId);
+            if (true == $this->setupDigitalLink($ddObj, $refId, $prodId, Product::CATALOG_TYPE_PRIMARY)) {
+                FatUtility::dieJsonSuccess(Message::getHtml());
+            }
         } else {
-            $this->setupDigitalFile($ddObj, $refId);
+            if (true == $this->setupDigitalFile($ddObj, $refId, $prodId, Product::CATALOG_TYPE_PRIMARY)) {
+                FatUtility::dieJsonSuccess(Message::getHtml());
+            }
         }
 
         FatUtility::dieWithError($this->str_invalid_request);
     }
 
-    private function setupDigitalFile($ddObj, $refId)
+    private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
     {
         $this->objPrivilege->canEditProducts();
 
@@ -1649,7 +1665,7 @@ class ProductsController extends AdminBaseController
         );
         if (1 > $mainFileId) {
             Message::addErrorMessage($ddObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            return false;
         }
 
         if (isset($_FILES['preview_file']['tmp_name']) && is_uploaded_file($_FILES['preview_file']['tmp_name'])) {
@@ -1663,7 +1679,18 @@ class ProductsController extends AdminBaseController
             );
         }
 
-        FatUtility::dieJsonSuccess('Uploaded Successfully!!!');
+        $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+
+        if (0 === $attachWithExistingOrders) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
+            return true;
+        }
+
+        $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId);
+        
+        Message::addMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
+        return true;
     }
 
     public function setupDigitalPreviewFile()
@@ -1699,7 +1726,7 @@ class ProductsController extends AdminBaseController
         FatUtility::dieJsonSuccess('Uploaded Successfully!!!');
     }
 
-    private function setupDigitalLink($ddObj, $refId)
+    private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
     {
         $this->objPrivilege->canEditProducts();
 
@@ -1722,14 +1749,18 @@ class ProductsController extends AdminBaseController
             }
         }
 
-        if (1 <= $ddLinkId) {
-            $ret['msg'] = Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId);
-        } else {
-            $ret['msg'] = Labels::getLabel('LBL_Links_updated_successfully', $this->adminLangId);
-        }
-        $ret['btn_label'] = Labels::getLabel('LBL_Add', $this->adminLangId);
+        $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
 
-        FatUtility::dieJsonSuccess($ret);
+        if (0 === $attachWithExistingOrders) {
+            Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId));
+            return true;
+        }
+
+        $ddObj->attachLinkWithOrderedProducts($downloadLink, $recordId, $requstedProd, $langId);
+
+        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId));
+        return true;
     }
 
     public function getDigitalDownloadLinks()
@@ -1742,34 +1773,8 @@ class ProductsController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        /* $post = FatApp::getPostedData(); */
-
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        /* TODO
-            => need to check downloads allowed at product level
-        */
-
-        /* $srch = new DigitalDownloadSearch();
-
-        $srch->joinTable(DigitalDownload::DB_TBL_LINKS, 'INNER JOIN', DigitalDownload::DB_TBL_LINKS_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id');
-
-        $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $prodId);
-        if ($optionCombi != '0') {
-            $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-        }
-
-        if (0 < $langId) {
-            $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);
-        }
-
-        $srch->doNotCalculateRecords();
-
-        $srch->addOrder(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
-
-        $rs = $srch->getResultSet();
-        $rows = FatApp::getDb()->fetchAll($rs); */
 
         $canDo = DigitalDownload::canDo($prodId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
         $this->set('canDo', $canDo);
@@ -1799,46 +1804,6 @@ class ProductsController extends AdminBaseController
         if (1 > $productId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
-
-        /* $srch = new DigitalDownloadSearch();
-
-        $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
-
-        $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $productId);
-        if ($optionComb != '0') {
-            $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionComb);
-        }
-
-        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
-
-        $srch->joinTable(
-            AttachedFile::DB_TBL,
-            'LEFT JOIN',
-            'pa.afile_record_subid = afile.afile_id AND pa.' . AttachedFile::DB_TBL_PREFIX . 'type =' . AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
-            'pa'
-        );
-
-        if (0 < $langId) {
-            $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
-        }
-        $srch->addMultipleFields(
-            [
-                'pddr_id',
-                'pddr_options_code',
-                'pa.afile_name as preview',
-                'afile.afile_record_id as afile_record_id',
-                'afile.afile_name as mainfile',
-                'afile.afile_lang_id as afile_lang_id',
-                'afile.afile_id as afile_id',
-                'pa.afile_id as prev_afile_id',
-            ]
-        );
-        $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
-
-        $srch->doNotCalculateRecords();
-        $srch->addOrder('afile.afile_updated_at', 'DESC');
-        $rs = $srch->getResultSet();
-        $attachments = FatApp::getDb()->fetchAll($rs, 'afile_id'); */
 
         $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
         $this->set('canDo', $canDo);

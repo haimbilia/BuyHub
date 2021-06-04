@@ -5807,7 +5807,7 @@ class SellerController extends SellerBaseController
         $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
         
         $frm = DigitalDownload::getDownloadForm($this->siteLangId);
-        
+
         if (0 < $preqId) {
             $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
         } else {
@@ -5823,6 +5823,25 @@ class SellerController extends SellerBaseController
             $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
             $fld->options = $optionCombinations;
         }
+
+        $showFldAttachWithExistingOrders = false;
+
+        if (Product::CATALOG_TYPE_PRIMARY == $requstedProd) {
+            $showFldAttachWithExistingOrders = true;
+
+            $fld = $frm->getField('attach_with_existing_orders');
+
+            $product = Product::getAttributesById($recordId, ['product_attachements_with_inventory']);
+
+            if (false != $product) {
+                if (1 === $product['product_attachements_with_inventory']) {
+                    $frm->removeField($fld);
+                    $showFldAttachWithExistingOrders = false;
+                }
+            }
+        }
+
+        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
 
         $msg = '';
         $frmData = [
@@ -5913,7 +5932,6 @@ class SellerController extends SellerBaseController
 
         }
         
-        /* $post = FatApp::getPostedData(); */
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         
         $ddObj = new DigitalDownload();
@@ -5928,15 +5946,19 @@ class SellerController extends SellerBaseController
         }
         
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $this->setupDigitalLink($ddObj, $refId);
+            if (true == $this->setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)) {
+                FatUtility::dieJsonSuccess(Message::getHtml());
+            }
         } else {
-            $this->setupDigitalFile($ddObj, $refId);
+            if (true == $this->setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)) {
+                FatUtility::dieJsonSuccess(Message::getHtml());
+            }
         }
 
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        FatUtility::dieWithError($this->str_invalid_request);
     }
 
-    private function setupDigitalFile($ddObj, $refId)
+    private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
     {
         if (!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name'])) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
@@ -5954,7 +5976,7 @@ class SellerController extends SellerBaseController
         );
         if (1 > $mainFileId) {
             Message::addErrorMessage($ddObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            return false;
         }
 
         if (isset($_FILES['preview_file']['tmp_name']) && is_uploaded_file($_FILES['preview_file']['tmp_name'])) {
@@ -5968,7 +5990,23 @@ class SellerController extends SellerBaseController
             );
         }
 
-        FatUtility::dieJsonSuccess('Uploaded Successfully!!!');
+        if (Product::CATALOG_TYPE_REQUEST == $requstedProd) {
+            Message::addMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->siteLangId));
+            return true;
+        }
+        
+        $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+
+        if (0 === $attachWithExistingOrders) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->siteLangId));
+            return true;
+        }
+        
+        $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId);
+
+        Message::addMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->siteLangId));
+        return true;
     }
 
     public function setupDigitalPreviewFile()
@@ -6005,7 +6043,7 @@ class SellerController extends SellerBaseController
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
     }
 
-    private function setupDigitalLink($ddObj, $refId)
+    private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
     {
         $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
         $previewLink = FatApp::getPostedData('product_preview_link', null, '');
@@ -6014,7 +6052,8 @@ class SellerController extends SellerBaseController
         $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
         
         if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
-            FatUtility::dieJsonError($digitalDownload->getError());
+            Message::addMessage($ddObj->getError());
+            return false;
         }
 
         if (1 <= $ddLinkId) {
@@ -6025,15 +6064,17 @@ class SellerController extends SellerBaseController
                 $ddObj->deleteReference($ddRefId);
             }
         }
-        
-        if (1 <= $ddLinkId) {
-            $ret['msg'] = Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId);
-        } else {
-            $ret['msg'] = Labels::getLabel('LBL_Links_updated_successfully', $this->siteLangId);
-        }
-        $ret['btn_label'] = Labels::getLabel('LBL_Add', $this->siteLangId);
 
-        FatUtility::dieJsonSuccess($ret);
+        $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+
+        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId));
+        if (0 === $attachWithExistingOrders) {
+            return true;
+        }
+        
+        $ddObj->attachLinkWithOrderedProducts($downloadLink, $recordId, $requstedProd, $langId);
+
+        return true;
     }
 
     public function getDigitalDownloadLinks()
@@ -6059,10 +6100,6 @@ class SellerController extends SellerBaseController
 
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        /* TODO
-            => need to check seller private custom product OR Catalog Product Requested but not approved
-        */
 
         DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
         
