@@ -20,9 +20,12 @@ if ($canonicalUrl == '') {
         $cName = ($controllerName == 'Home') ? '' : $controllerName;
         $canonicalUrl = UrlHelper::generateFullUrl($cName);
     } else {
-        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), FatApp::getParameters());
+        $action = empty(FatApp::getAction()) ? 'index' : FatApp::getAction();
+        $params = empty(FatApp::getParameters()) ? [] : FatApp::getParameters();
+        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, $action, $params);
     }
 } ?>
+
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
 <?php $googleFontFamily = "'Poppins', sans-serif !important";
 $fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');

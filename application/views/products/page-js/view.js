@@ -146,14 +146,14 @@ $("document").ready(function () {
 	});
 	/* for click scroll function */
 	$(".scroll").click(function (event) {
-		event.preventDefault();
+		/* event.preventDefault();
 		var full_url = this.href;
 		var parts = full_url.split("#");
 		var trgt = parts[1];
 		fcom.scrollToTop('#' + trgt);
 		var target_offset = $("#" + trgt).offset();
 		var target_top = target_offset.top - 60;
-		$('html, body').animate({ scrollTop: target_top }, 1000);
+		$('html, body').animate({ scrollTop: target_top }, 1000); */
 	});
 
 	$(".link--write").click(function () {

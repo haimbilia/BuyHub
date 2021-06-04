@@ -113,7 +113,9 @@ Fixes:
     => 054255 - Unable to reach location if redirect from notification listing in admin.
     => 054265 - missing sms template on seller end
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
-    
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054613 - Error display on invoice pdf page
+
 
 Develop
 
@@ -185,6 +187,8 @@ Fixes:
     => 054545 - when subscription is downgraded and after adjustment amount becomes 0 then on applying coupon it's getting the total in negative
     => 054597 - generate label is coming on seller end on pickup order 
     => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
+    => 054612 - login with otp is working with default otp 0000
+
 
 New Features:
     => Admin shipped products listing page
@@ -305,3 +309,4 @@ bugs:
     #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
     #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
+    #054212	while adding inventory> when we add link and url is long then UI is not proper

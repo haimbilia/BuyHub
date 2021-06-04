@@ -16,7 +16,7 @@ if( !empty($list) ){  ?>
               <h3 class="user-name"><?php echo $listItem['testimonial_user_name']; ?></h3>
               
               <div class="txt">
-                <p class=""  data-simplebar> <?php echo $listItem['testimonial_text']; ?></p>
+                <p class="scroll scroll-y"> <?php echo $listItem['testimonial_text']; ?></p>
               </div>
             </div>
           </div>

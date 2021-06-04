@@ -168,6 +168,7 @@ class AdminBaseController extends FatController
             'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
             'defaultCountryCode' => $defaultCountryCode,
             'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
+            'copied' => Labels::getLabel('LBL_Copied', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);

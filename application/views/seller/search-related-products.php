@@ -39,7 +39,7 @@
                     $td->appendElement('plaintext', array(), $productName, true);
                     break;
                 case 'related_products':
-                    $div = $td->appendElement('div', array("class" => "list-tag-wrapper", "data-scroll-height" => "150", "data-simplebar" => ""));
+                    $div = $td->appendElement('div', array("class" => "list-tag-wrapper scroll scroll-y"));
                     $ul = $div->appendElement("ul", array("class" => "list-tags"));
                     foreach ($relatedProds as $relatedProd) {
                         $options = SellerProduct::getSellerProductOptions($relatedProd['selprod_id'], true, $siteLangId);

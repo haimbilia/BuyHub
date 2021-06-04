@@ -86,6 +86,7 @@
                 max-width: inherit;
                 margin-#{$start-direction}: 0;
             }
+           
         }
         &_action {
             text-align: #{$end-direction};
@@ -101,6 +102,9 @@
             .svg {
                 fill: #a9a9a9;
             }
+        }
+        &:last-child { 
+            padding-#{$end-direction}: 0;
         }
     }
     .product-quantity {
