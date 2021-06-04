@@ -138,7 +138,7 @@ $(document).on('change', formClass + 'select[name="record_condition"]', function
                     $(formClass + 'select[name="blinkcond_condition_type"]').change();
                     var recordNameSelector = $(formClass + 'select.recordIds--js');
                     recordNameSelector.closest('.field-set').parent().hide();
-                    $(formClass + '.linkType--js').hide();
+                    $(formClass + '.linkType--js, ' + formClass + '.position--js').hide();
                 } else {
                     $(formClass + ".conditionType--js").hide();
                     $(formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]').closest('.field-set').hide();
