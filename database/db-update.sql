@@ -826,6 +826,7 @@ ALTER TABLE `tbl_badges_lang`
 CREATE TABLE `tbl_badge_link_conditions` (
   `blinkcond_id` bigint(20) NOT NULL,
   `blinkcond_badge_id` bigint(20) NOT NULL,
+  `blinkcond_position` TINYINT(2) NOT NULL,
   `blinkcond_record_type` int(11) NOT NULL,
   `blinkcond_from_date` datetime DEFAULT NULL,
   `blinkcond_to_date` datetime DEFAULT NULL,

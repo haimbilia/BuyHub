@@ -515,7 +515,7 @@ function getSlickGallerySettings(imagesForNav, layoutDirection, slidesToShow = 4
             focusOnSelect: true,
             autoplay: true,
             arrows: true,
-            vertical: true,
+            vertical: false,
             verticalSwiping: true,
             responsive: [{
                     breakpoint: 1499,

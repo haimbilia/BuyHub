@@ -26,6 +26,7 @@ class BadgeLinkCondition extends MyAppModel
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'badge_id',
+        self::DB_TBL_PREFIX . 'position',
         self::DB_TBL_PREFIX . 'record_type',
         self::DB_TBL_PREFIX . 'from_date',
         self::DB_TBL_PREFIX . 'to_date',
@@ -189,8 +190,9 @@ class BadgeLinkCondition extends MyAppModel
         $attr = array_merge(
             self::ATTR,
             [
-                Badge::DB_TBL_PREFIX . 'name',
+                'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
                 Badge::DB_TBL_PREFIX . 'type',
+                Badge::DB_TBL_PREFIX . 'display_inside',
                 Badge::DB_TBL_PREFIX . 'shape_type',
                 Badge::DB_TBL_PREFIX . 'color',
                 $recordIdsCol
@@ -212,9 +214,10 @@ class BadgeLinkCondition extends MyAppModel
      * @param  int $badgeType
      * @param  int $recordType
      * @param  int $record_id
+     * @param  int $position
      * @return void
      */
-    public static function isUnique(int $badgeType, int $recordType, int $record_id): bool
+    public static function isUnique(int $badgeType, int $recordType, int $record_id, int $position = 0): bool
     {
         $srch = self::getBadgeLinksSearchObj(CommonHelper::getLangId());
         $srch->addFld('blinkcond_badge_id');
@@ -222,6 +225,9 @@ class BadgeLinkCondition extends MyAppModel
         $srch->setPageSize(1);
         $srch->addBadgeTypeCondition([$badgeType]);
         $srch->addRecordTypesCondition([$recordType]);
+        if (Badge::TYPE_RIBBON == $badgeType && 0 < $position) {
+            $srch->addCondition('blinkcond_position', '=', $position);
+        }
         $srch->addCondition('badgelink_record_id', '=', $record_id);
         $result = (array) FatApp::getDb()->fetch($srch->getResultSet());
         return (empty($result));

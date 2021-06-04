@@ -19,9 +19,9 @@ $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ('select_all' == $key) {
-        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
+        $th->appendElement('th')->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
     } else {
-        $th->appendElement('th', array(), $val);
+        $th->appendElement('th', [], $val);
     }
 }
 
@@ -33,18 +33,18 @@ foreach ($arr_listing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="badgeLinkIds[]" value=' . $row['blinkcond_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', [], '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="badgeLinkIds[]" value=' . $row['blinkcond_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listserial':
-                $td->appendElement('plaintext', array(), $sr_no, true);
+                $td->appendElement('plaintext', [], $sr_no, true);
                 break;
             
             case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', array(), Badge::getTypeName($row[$key], $adminLangId), true);
+                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $adminLangId), true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $adminLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId);
-                $td->appendElement('plaintext', array(), $txt, true);
+                $td->appendElement('plaintext', [], $txt, true);
                 break;
             case 'record_condition':
                 $condition = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
@@ -53,24 +53,25 @@ foreach ($arr_listing as $sn => $row) {
                 if (BadgeLinkCondition::REC_COND_MANUAL == $condition) {
                     $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordCondition . '</span>';
                 }
-                $td->appendElement('plaintext', array(), $htm, true);
+                $td->appendElement('plaintext', [], $htm, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId) : Labels::getLabel('LBL_N/A', $adminLangId));
-                $td->appendElement('plaintext', array(), $conditionType, true);
+                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId) : Labels::getLabel('LBL_N/R', $adminLangId));
+                $td->appendElement('plaintext', [], $conditionType, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
+                    $name = $row[Badge::DB_TBL_PREFIX . 'name'];
                     $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-                    $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $row[Badge::DB_TBL_PREFIX . 'name'], 'alt' => $row[Badge::DB_TBL_PREFIX . 'name']], '', true);
+                    $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 } else {
                     $text = $row[Badge::DB_TBL_PREFIX . 'name'];
                     $type = $row[$key];
                     $color = $row[Badge::DB_TBL_PREFIX . 'color'];
-                    $return = true;
-                    $html = include CONF_THEME_PATH . '/_partial/get-ribbon.php';
-                    $html = '<div class="badge-wrap">' . $html . '</div>';
+                    
+                    include CONF_THEME_PATH . '/_partial/get-ribbon.php';
+                    $html = '<div class="badge-wrap">' . $ribbon . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                 }
                 break;
@@ -80,11 +81,11 @@ foreach ($arr_listing as $sn => $row) {
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {
-                    $td->appendElement('plaintext', array(), Labels::getLabel('LBL_N/A', $adminLangId), true);
+                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $adminLangId), true);
                 }
                 break;
             default : 
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', [], $row[$key], true);
                 break;
         }
     }

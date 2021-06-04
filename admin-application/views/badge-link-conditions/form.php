@@ -22,16 +22,23 @@ if (null != $fld) {
 	$fld->developerTags['col'] = 3;
 }
 
+$fld = $frm->getField('blinkcond_position');
+if (null != $fld) {
+	$fld->developerTags['colClassPrefix'] = 'col-md-';
+	$fld->developerTags['col'] = 3;
+	$fld->setWrapperAttribute( 'class' , 'position--js');
+}
+
 $fld = $frm->getField('badgelink_record_id');
 if (null != $fld) {
 	$fld->developerTags['colClassPrefix'] = 'col-md-';
-	$fld->developerTags['col'] = 12;
+	$fld->developerTags['col'] = 9;
 	$fld->htmlAfterField = '<div class="recordsContainer--js p-0 box--scroller"></div>';
 }
 
 $fld = $frm->getField('blinkcond_condition_type');
 if (null != $fld) {
- 	$fld->setWrapperAttribute( 'class' , 'conditionType--js');	
+ 	$fld->setWrapperAttribute( 'class' , 'conditionType--js');
 }
 $fld = $frm->getField('blinkcond_record_type');
 if (null != $fld) {

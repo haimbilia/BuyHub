@@ -40,6 +40,9 @@ class Badge extends MyAppModel
      /* For Ribbon */
     public const RIBB_TEXT_MIN_LEN = 2;
     public const RIBB_TEXT_MAX_LEN = 10;
+
+    public const RIBB_POS_TRIGHT = 1;
+    public const RIBB_POS_TLEFT = 2;
      /* For Ribbon */
 
     public const REMOVED_OLD_IMAGE_TIME = 4;
@@ -104,6 +107,20 @@ class Badge extends MyAppModel
             self::SHAPE_STAR => Labels::getLabel('LBL_STAR', $langId),
             self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
             self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
+        ];
+    }
+    
+    /**
+     * getRibbonPostionArr
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public static function getRibbonPostionArr(int $langId): array
+    {
+        return [
+            self::RIBB_POS_TRIGHT => Labels::getLabel("LBL_TOP_RIGHT", $langId),
+            self::RIBB_POS_TLEFT => Labels::getLabel("LBL_TOP_LEFT", $langId),
         ];
     }
 
@@ -371,6 +388,7 @@ class Badge extends MyAppModel
             'blinkcond_badge_id',
             'blinkcond_record_type',
             'badge_display_inside',
+            'blinkcond_position',
             'badge_type',
             'COALESCE(badge_name, badge_identifier) as badge_name'
         ];
@@ -383,7 +401,7 @@ class Badge extends MyAppModel
         }
 
         if ($type == Badge::TYPE_RIBBON) {
-            $srch->setPageSize(2);
+            $srch->setPageSize(count(self::getRibbonPostionArr($langId)));
         }
 
         $srch->joinBadgeLinks();
@@ -448,7 +466,8 @@ class Badge extends MyAppModel
         $srch->addCondition('badge_type', '=', $type);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
-        $srch->addOrder('blinkcond_record_type', 'ASC');
+        // $srch->addOrder('blinkcond_record_type', 'ASC');
+        $srch->addOrder('blinkcond_id', 'DESC');
         // echo $srch->getQuery();
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }

@@ -280,29 +280,18 @@
 .product-detail-gallery {
     position: sticky;
     position: -webkit-sticky;
-    /*z-index: 1;*/
     top: 180px;
-    display: flex;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    /*align-items: center;*/
+    margin-#{$end-direction}: 3rem;
     @include media-breakpoint-down(lg) {
         & {
-            display: block;
+            margin-#{$end-direction}: 0;
             position: relative;
             top: auto;
         }
     }
     .slider-for {
-        flex: 1;
-        -webkit-box-ordinal-group: 3;
-        -ms-flex-order: 2;
-        order: 2;
         border-radius: $radius4;
         border: $border;
-        margin: 0 auto;
-        max-width: 500px;
         @include media-breakpoint-down(lg) {
             & {
                 padding: 0;
@@ -324,26 +313,16 @@
     .slider-nav {
         position: relative;
         padding: 0;
-        /* margin-#{$end-direction}: 2rem;*/
-        width: 90px;
         overflow: hidden;
-        @include media-breakpoint-down(lg) {
-            & {
-                width: 100%;
-                display: flex;
-            }
-        }
-        @include media-breakpoint-down(md) {
-            & {
-                margin-top: 1.5rem;
-            }
-        }
+        display: flex;
+        align-items: center;
+        margin-top: 1.5rem;
         .slick-list {
             margin: 0 auto;
             text-align: center;
         }
         .thumb {
-            margin: 0.5rem auto;
+            margin: 0.5rem;
             text-align: center;
             border-radius: $radius4;
             border: $border !important;
@@ -365,15 +344,14 @@
             position: relative;
             top: auto;
             width: 40px;
-            height: 90px;
+            height: 40px;
             padding: 0;
             border: none;
-            transform: rotate(90deg);
-            /*background: $gray-light;*/
             border-radius: $radius4;
-            -webkit-box-shadow: none;
             box-shadow: none;
             margin: 0;
+            max-width: 40px;
+            flex: 0 0 40px;
             @include media-breakpoint-down(lg) {
                 & {
                     transform: none;

@@ -2,14 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $buyQuantity = $frmBuyProduct->getField('quantity');
 $buyQuantity->addFieldTagAttribute('class', 'qty-input cartQtyTextBox productQty-js');
-$buyQuantity->addFieldTagAttribute('data-page', 'product-view');
-
-$obj = new Badge();
-$badgeUrlArr = $obj->setSellerProdudtId($product['selprod_id'])
-                        ->setProductId($product['product_id'])
-                        ->setShopId($product['shop_id'])
-                        ->getBadgeUrl($siteLangId, 26);
-?>
+$buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 <div id="body" class="body detail-page">
     <section class="">
         <div class="container">
@@ -25,7 +18,13 @@ $badgeUrlArr = $obj->setSellerProdudtId($product['selprod_id'])
                             <div id="img-static" class="product-detail-gallery">
                                 <?php $data['product'] = $product;
                                 $data['productImagesArr'] = $productImagesArr;
-                                $data['imageGallery'] = true; ?>
+                                $data['imageGallery'] = true;
+                                
+                                $ribSelProdId = $product['selprod_id'];
+                                $ribProdId = $product['product_id'];
+                                $ribShopId = $product['shop_id'];
+                                include (CONF_THEME_PATH . '_partial/get-ribbon.php'); ?>
+
                                 <div class="slider-for" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" id="slider-for">
                                     <?php if ($productImagesArr) { ?>
                                         <?php foreach ($productImagesArr as $afile_id => $image) {
@@ -64,7 +63,10 @@ $badgeUrlArr = $obj->setSellerProdudtId($product['selprod_id'])
                                                     <?php echo $product['selprod_title']; ?>
                                                 </h1>
                                                 <div class="favourite-wrapper favourite-wrapper-detail ">
-                                                    <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
+                                                    <?php 
+                                                        $includeRibbon = false;
+                                                        include(CONF_THEME_PATH . '_partial/collection-ui.php'); 
+                                                    ?>
                                                     <div class="dropdown">
                                                         <a class="no-after share-icon" data-display="static" href="javascript:void(0)" data-toggle="dropdown">
                                                             <i class="icn">

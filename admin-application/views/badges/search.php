@@ -28,7 +28,10 @@ foreach ($arr_flds as $key => $val) {
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arr_listing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
-
+    $name = $row[Badge::DB_TBL_PREFIX . 'identifier'];
+    if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $row) && !empty($row[Badge::DB_TBL_PREFIX . 'name'])) {
+        $name = $row[Badge::DB_TBL_PREFIX . 'name'];
+    }
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
@@ -39,7 +42,6 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', [], $sr_no, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'name':
-                $name = array_key_exists(Badge::DB_TBL_PREFIX . 'name', $row) && !empty($row[$key]) ? $row[$key] : $row[Badge::DB_TBL_PREFIX . 'identifier'];
                 $td->appendElement('plaintext', [], $name, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'type':
@@ -49,14 +51,14 @@ foreach ($arr_listing as $sn => $row) {
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
                     $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[Badge::DB_TBL_PREFIX . 'id'], 0, 0, false);
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-                    $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $icon['afile_name'], 'alt' => $icon['afile_name']], '', true);
+                    $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 } else {
                     $text = $row[Badge::DB_TBL_PREFIX . 'name'];
                     $type = $row[$key];
                     $color = $row[Badge::DB_TBL_PREFIX . 'color'];
-                    $return = true;
-                    $html = include CONF_THEME_PATH . '/_partial/get-ribbon.php';
-                    $html = '<div class="badge-wrap">' . $html . '</div>';
+                    
+                    include CONF_THEME_PATH . '/_partial/get-ribbon.php';
+                    $html = '<div class="badge-wrap">' . $ribbon . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                 }
                 break;
