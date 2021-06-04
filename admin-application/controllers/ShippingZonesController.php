@@ -79,7 +79,7 @@ class ShippingZonesController extends AdminBaseController
             }
             $zoneLocations = $this->getLocations($zoneId);
         }
-        $zones = Zone::getZoneWithCountries($this->adminLangId);
+        $zones = Zone::getZoneWithCountriesStates($this->adminLangId);
 
         $excludeLocations = $this->getExcludeLocations($profileId, $zoneId);
 

@@ -81,7 +81,7 @@ class ShippingZonesController extends SellerBaseController
             }
             $zoneLocations = $this->getLocations($zoneId);
         }
-        $zones = Zone::getZoneWithCountries($this->siteLangId, true);
+        $zones = Zone::getZoneWithCountriesStates($this->siteLangId, true);
         $excludeLocations = $this->getExcludeLocations($profileId, $zoneId);
 
         $this->set('profile_id', $profileId);
