@@ -117,6 +117,8 @@ class DigitalDownloadSearch extends SearchBase
             'pa.afile_record_subid = afile.afile_id AND pa.' . AttachedFile::DB_TBL_PREFIX . 'type =' . AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
             'pa'
         );
+
+        /* . ') OR (pa.afile_record_subid = afile.afile_id AND pa.' . AttachedFile::DB_TBL_PREFIX . 'type =' . AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW . ')' */
         
         if (0 < $langId) {
             $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
@@ -143,6 +145,13 @@ class DigitalDownloadSearch extends SearchBase
             );
         }
         $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
+        /* $srch->addDirectCondition(
+            '(afile.' . AttachedFile::DB_TBL_PREFIX . 'type =' . AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD
+            . ' OR '
+            . '(afile.' . AttachedFile::DB_TBL_PREFIX . 'type =' . AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW 
+            . ' AND ' . 'afile.afile_record_subid = 0'
+            . '))'
+        ); */
         
         $srch->doNotCalculateRecords();
         $srch->addOrder('afile.afile_updated_at', 'DESC');

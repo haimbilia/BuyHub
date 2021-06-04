@@ -1649,11 +1649,43 @@ class ProductsController extends AdminBaseController
     {
         $this->objPrivilege->canEditProducts();
 
-        if (!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name'])) {
+        if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
+            && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
+        ) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+
+        $mainFileId = 0;
+        if (isset($_FILES['downloadable_file']['tmp_name'])
+            && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
+        ) {
+            $mainFileId = $this->setupDigitalMainFile($ddObj, $refId, $langId);
+
+            if (1 > $mainFileId) {
+                Message::addErrorMessage($ddObj->getError());
+                return false;
+            }
+            Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->adminLangId));
+        }
+        
+        if(isset($_FILES['preview_file']['tmp_name'])
+            && is_uploaded_file($_FILES['preview_file']['tmp_name'])
+        ) {
+            if (!$this->setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId)) {
+                Message::addErrorMessage($ddObj->getError());
+                return false;
+            }
+            Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->adminLangId));
+        }
+        
+        return true;
+    }
+
+    private function setupDigitalMainFile($ddObj, $refId, $langId)
+    {
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         $mainFileId = $ddObj->saveAttachment(
@@ -1664,66 +1696,33 @@ class ProductsController extends AdminBaseController
             $langId
         );
         if (1 > $mainFileId) {
-            Message::addErrorMessage($ddObj->getError());
-            return false;
-        }
-
-        if (isset($_FILES['preview_file']['tmp_name']) && is_uploaded_file($_FILES['preview_file']['tmp_name'])) {
-            $ddObj->saveAttachment(
-                $_FILES['preview_file']['tmp_name'],
-                $_FILES['preview_file']['name'],
-                $refId,
-                $mainFileId,
-                $langId,
-                true
-            );
+            return 0;
         }
 
         $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-
-        if (0 === $attachWithExistingOrders) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
-            return true;
-        }
-
-        $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId);
         
-        Message::addMessage(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
-        return true;
+        if (1 === $attachWithExistingOrders) {
+            $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId);
+        }
+        
+        return $mainFileId;
     }
 
-    public function setupDigitalPreviewFile()
+    private function setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId = 0)
     {
-        $this->objPrivilege->canEditProducts();
-
-        $recId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
-        $subRecId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $recId || 1 > $subRecId) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        if (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $ddObj = new DigitalDownload();
+        
         if (!$ddObj->saveAttachment(
             $_FILES['preview_file']['tmp_name'],
             $_FILES['preview_file']['name'],
-            $recId,
-            $subRecId,
+            $refId,
+            $mainFileId,
             $langId,
             true
         )) {
-            Message::addErrorMessage($ddObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            return false;
         }
-        FatUtility::dieJsonSuccess('Uploaded Successfully!!!');
+        return true;
     }
 
     private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
