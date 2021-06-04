@@ -4,7 +4,7 @@
             <h2><?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?></h2>
         </div>
     </div>
-    <div class="cms bg-gray p-4 mb-4">
+    <div class="bg-gray p-4 mb-4">
         <?php 
         if (0 < count($product['preview_links']) || 0 < count($product['preview_attachments'])) {
             if (0 < count($product['preview_links'])) { ?>
