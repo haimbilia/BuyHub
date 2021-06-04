@@ -431,7 +431,9 @@ class AdminBaseController extends FatController
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
-
+        if (Product::PRODUCT_TYPE_DIGITAL == $productType) {
+            $fld->requirements()->setRequired(false);
+        }    
         $taxCategories = Tax::getSaleTaxCatArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
 
