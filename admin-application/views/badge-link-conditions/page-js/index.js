@@ -122,6 +122,9 @@ $(document).on('change', formClass + '.recCond--js', function () {
             } else {
                 $(formClass + ".conditionType--js").hide();
                 $(formClass + 'select[name="blinkcond_record_type"]').trigger('change');
+
+                var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
+                conditionSelectors.attr('data-fatreq', JSON.stringify({ required: false }));
             }
             
             $(formClass + 'input[name="blinkcond_from_date"], ' + formClass + 'input[name="blinkcond_to_date"]').datetimepicker({
