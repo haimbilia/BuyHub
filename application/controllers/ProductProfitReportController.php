@@ -13,7 +13,7 @@ class ProductProfitReportController extends SellerBaseController
     {
         $flds = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($flds);
-        $frmSearch->fill(['sortBy' => 'netSoldQty', 'sortOrder' => 'DESC']);
+        $frmSearch->fill(['sortBy' => 'product_name', 'sortOrder' => 'ASC']);
         $this->set('frmSearch', $frmSearch);
         $this->_template->render();
     }
@@ -27,8 +27,8 @@ class ProductProfitReportController extends SellerBaseController
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'netSoldQty');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'product_name');
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'ASC');
         $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
 

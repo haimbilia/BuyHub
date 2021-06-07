@@ -27,8 +27,6 @@ foreach ($fields as $key => $val) {
     $count++;
 }
 
-$subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($adminLangId);
-
 $tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
@@ -47,50 +45,42 @@ foreach ($arrListing as $sn => $row) {
             case 'listserial':
                 $span->appendElement('plaintext', array(), $sr_no);
                 break;
-            case 'subscriptionCharges':
-                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
-                break;
-            case 'user_name':
-                $name = $row['user_name'];
-                $span->appendElement('plaintext', array(), $name);
-                break;
-            case 'ossubs_from_date':
-            case 'ossubs_till_date':
+            case 'date':
                 $span->appendElement('plaintext', array(), FatDate::format($row[$key]));
                 break;
-            case 'ossubs_subscription_name':
-                $name = $row['ossubs_subscription_name'] . ' ';
-                $name .= ($row['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $adminLangId) : Labels::getLabel("LBL_For", $adminLangId);
 
-                $name .= " " . (($row['ossubs_interval'] > 0) ? $row['ossubs_interval'] : '')
-                    . "  " . $subcriptionPeriodArr[$row['ossubs_frequency']];
-                $span->appendElement('plaintext', array(), $name);
+            case 'subscriptionCharges':
+            case 'promotionCharged':
+            case 'sellerTaxTotal':
+            case 'sellerShippingTotal':
+            case 'adminSalesEarnings':
+            case 'totalAmount':
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
+
             default:
                 $span->appendElement('plaintext', array(), $row[$key], true);
                 break;
         }
     }
+
     $sr_no++;
 }
-if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields)
-        ),
-        Labels::getLabel('LBL_No_Records_Found', $adminLangId)
-    );
-}
-
 echo $tbl->getHtml();
-echo '</div>';
-$postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array(
-    'name' => 'frmReportSearchPaging'
-));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+if (count($arrListing) == 0) {
+
+    $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+} ?>
+</div>
+<?php $postedData['page'] = $page;
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSrchPaging', 'method' => 'post'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToReportSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 <script>
-    resetReportFirstColumnWidth();
+    var x = $(".card-body").width();
+    var actualWidth = x / 7;
+    $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
+    $('.datatable_cell_left').children('span').css('display', 'block');
+    $('.datatable_cell_left').children('span').css('white-space', 'normal');
 </script>

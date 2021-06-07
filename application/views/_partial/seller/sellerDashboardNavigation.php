@@ -359,6 +359,13 @@ $action = strtolower($action);
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Profit_by_products', $siteLangId); ?></span></a></div>
                         </li>
+                        <li class="menu__item <?php echo ($controller == 'PayoutReport' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Payout', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('PayoutReport'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Payout', $siteLangId); ?></span></a></div>
+                        </li>
                     <?php } ?>
 
                     <li class="menu__item">
