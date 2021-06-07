@@ -10,10 +10,18 @@ $data = [
         [
             'attr' => [
                 'href' => 'javascript:void(0)',
-                'onclick' => 'form(0)',
-                'title' => Labels::getLabel('LBL_BIND_BADGE_OR_RIBBON', $adminLangId)
+                'onclick' => 'badgeForm(0)',
+                'title' => Labels::getLabel('LBL_BIND_BADGE', $adminLangId)
             ],
-            'label' => '<i class="fas fa-plus"></i>'
+            'label' => '<i class="fa fa-award"></i>'
+        ],
+        [
+            'attr' => [
+                'href' => 'javascript:void(0)',
+                'onclick' => 'ribbonForm(0)',
+                'title' => Labels::getLabel('LBL_BIND_RIBBON', $adminLangId)
+            ],
+            'label' => '<i class="fas fa-shapes"></i>'
         ],
         [
             'attr' => [
