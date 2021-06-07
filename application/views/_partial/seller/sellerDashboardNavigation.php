@@ -366,11 +366,18 @@ $action = strtolower($action);
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Payout', $siteLangId); ?></span></a></div>
                         </li>
+                        <li class="menu__item <?php echo ($controller == 'TransactionReport' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Transaction_Report', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Transaction_Report', $siteLangId); ?></span></a></div>
+                        </li>
                     <?php } ?>
 
                     <li class="menu__item">
-                            <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Reports", $siteLangId); ?></span></div>
-                        </li>
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Reports", $siteLangId); ?></span></div>
+                    </li>
                     <?php if ($userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsinventory') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Inventory', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'productsInventory'); ?>">

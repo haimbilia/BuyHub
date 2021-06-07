@@ -25,7 +25,7 @@ class PayoutReportController extends SellerBaseController
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'date');
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
         $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
