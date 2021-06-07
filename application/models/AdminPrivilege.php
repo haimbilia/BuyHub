@@ -123,6 +123,8 @@ class AdminPrivilege
     public const SECTION_SUBSCRIPTION_REPORT = 117;
     public const SECTION_FINANCIAL_REPORT = 117;
     public const SECTION_ORDERS_REPORT = 118;
+    public const SECTION_BADGES = 119;
+    public const SECTION_BADGE_LINKS = 120;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -278,6 +280,8 @@ class AdminPrivilege
             static::SECTION_FINANCIAL_REPORT => Labels::getLabel('MSG_FINANCIAL_REPORT', CommonHelper::getLangId()),
             static::SECTION_ORDERS_REPORT => Labels::getLabel('MSG_ORDERS_REPORT', CommonHelper::getLangId()),
 
+            static::SECTION_BADGES => Labels::getLabel('MSG_BADGES_&_RIBBONS', CommonHelper::getLangId()),
+            static::SECTION_BADGE_LINKS => Labels::getLabel('MSG_BADGE_LINKS', CommonHelper::getLangId()),
 
             /* static::SECTION_Languages => Labels::getLabel('MSG_Languages',CommonHelper::getLangId()),
         static::SECTION_Languages => Labels::getLabel('MSG_Order_Status',CommonHelper::getLangId()), */
@@ -1590,5 +1594,25 @@ class AdminPrivilege
     public function canEditRatingTypes($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_RATING_TYPES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewBadges($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditBadges($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewBadgeLinks($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditBadgeLinks($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

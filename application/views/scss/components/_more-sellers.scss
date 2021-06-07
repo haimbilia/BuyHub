@@ -1,11 +1,12 @@
 .more-sellers {
     padding: 2rem 3rem;
+  
     .item__pic-seller {
         width: 65px;
         height: 65px;
         border-radius: 50%;
-        flex: none;
-        max-width: inherit;
+        flex: none; 
+        max-width: inherit; 
         padding: 5px;
         display: none;
     }
@@ -36,30 +37,45 @@
         align-items: center;
         >li {
             text-align: center;
-            margin-right: 6px;
+            margin-#{$end-direction}: 6px;
             // width: 20px;
             // height: 20px;
             display: flex;
             align-items: center;
+            color: $txt-gray;
+            &.label {
+                color: currentColor;
+                font-weight: 500;
+                padding: 0;
+                margin: 0;
+                margin-#{$end-direction}:10px;
+            }
+            &.more {
+                width: auto;
+                height: auto;
+            }
             .colors-dot {
                 margin: 0 auto;
                 width: 12px;
                 height: 12px;
                 display: block;
                 border-radius: 50%;
+                box-shadow: $shadow1;
             }
             .sizes-dot {
                 font-weight: 600;
             }
-            &.more {
-                width: auto;
-                height: auto;
+            .ellipsis {
+                display: block;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
             }
         }
     }
 }
 
-.responsive-table {
+.responsive-table {  max-height: 400px;
     >li {
         font-size: 0.8rem;
         //border-radius: $radius4;

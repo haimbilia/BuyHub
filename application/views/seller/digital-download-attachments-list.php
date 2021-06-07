@@ -29,11 +29,12 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'mainfile':
-                $td->appendElement('plaintext', array(), $row[$key], true);
-                $td->appendElement(
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem->appendElement(
                     "a",
                     array(
-                        'class' => 'btn',
+                        'class' => 'btn btn-sm',
                         'title' => Labels::getLabel('LBL_Delete', $siteLangId),
                         'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $recordId, $requestType, 0, $row['mainfile'])),
                         'target' => '_blank'
@@ -44,11 +45,12 @@ foreach ($attachments as $sn => $row) {
                 break;
             case 'preview':
                 if (0 < $row['prev_afile_id']) {
-                    $td->appendElement('plaintext', array(), $row[$key], true);
-                    $td->appendElement(
+                    $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement(
                         "a",
                         array(
-                            'class' => 'btn',
+                            'class' => 'btn btn-sm',
                             'title' => Labels::getLabel('LBL_download', $siteLangId),
                             'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $requestType, 1, $row['preview'])),
                             'target' => '_blank'
@@ -105,6 +107,11 @@ foreach ($attachments as $sn => $row) {
                 break;
         }
     }
+}
+
+if (empty($attachments)) {
+    $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
+    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $siteLangId), true);
 }
 ?>
 <div class="col-md-12">

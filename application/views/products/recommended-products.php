@@ -12,18 +12,7 @@
             $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
                 <!--product tile-->
                 <div class="products">
-                    <div class="products__quickview">
-                        <a onClick='quickDetail(<?php echo $rProduct['selprod_id']; ?>)'
-                            class="modaal-inline-content">
-                            <span class="svg-icon">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#quick-view"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#quick-view">
-                                    </use>
-                                </svg>
-                            </span><?php echo Labels::getLabel('LBL_Quick_View', $siteLangId); ?>
-                        </a>
-                    </div>
+                    <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $rProduct,  'siteLangId' => $siteLangId], false); ?>
                     <div class="products__body">
                         <?php $this->includeTemplate('_partial/collection-ui.php', array('product'=>$rProduct,'siteLangId'=>$siteLangId), false); ?>
                         <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>

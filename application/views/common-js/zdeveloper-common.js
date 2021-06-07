@@ -515,7 +515,7 @@ function getSlickGallerySettings(imagesForNav, layoutDirection, slidesToShow = 4
             focusOnSelect: true,
             autoplay: true,
             arrows: true,
-            vertical: true,
+            vertical: false,
             verticalSwiping: true,
             responsive: [{
                     breakpoint: 1499,
@@ -1995,3 +1995,26 @@ function loadMoreImages(obj) {
     $(obj).removeClass('more-media').removeAttr('onclick');
     $(obj).nextAll().removeClass('d-none');
 }
+
+$.extend(fcom, {
+    copyToClipboard: function (targetId)
+    {
+        var targetId = targetId || "_copytext_";
+        
+        var target = document.getElementById(targetId);
+        
+        target.select();
+        target.focus();
+        target.setSelectionRange(0, target.value.length);
+
+        var succeed = true;
+        try {
+            succeed = document.execCommand("copy");
+            fcom.displaySuccessMessage(langLbl.copied);
+        } catch(e) {
+            succeed = false;
+        }
+
+        return succeed;
+    }
+});

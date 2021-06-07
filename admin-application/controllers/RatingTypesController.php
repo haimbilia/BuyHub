@@ -1,7 +1,4 @@
 <?php
-
-use PhpParser\Node\Stmt\Label;
-
 class RatingTypesController extends AdminBaseController
 {
     public function __construct($action)

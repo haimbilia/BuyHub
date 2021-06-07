@@ -30,34 +30,24 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
                                     <div class="item mb-3">
                                         <div class="item__pic">
-                                            <a href="/yokart/iphone-7-25"><img src="/yokart/image/product/5/25/0/1" alt="iPhone 7" title="iPhone 7"></a>
-                                        </div>
-                                        <div class="item__description">
-                                            <div class="item__category"><a href="/yokart/chromium-gallery">Chromium
-                                                    Gallery </a></div>
-                                            <div class="item__title"><a title="iPhone 7" href="/yokart/iphone-7-25">Apple iPhone 7 (Rose Gold, 128 GB)</a>
-                                            </div>
-                                            <div class="item__specification"> Color: Rose gold | Storage: 128 GB |
-                                                Quantity: 1 </div>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="">
-                                        <div class="product-card__img">
                                             <?php
+                                            $prodTitle =  (!empty($opDetail['op_selprod_title']) ? $opDetail['op_selprod_title'] : $opDetail['op_product_name']);
+                                            
                                             $selProdCodeArr = explode('_', $opDetail['op_selprod_code']);
-
                                             if ($opDetail['op_is_batch']) {
                                                 $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($opDetail['op_selprod_id'], $siteLangId, "MEDIUM"), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
                                             } else {
                                                 $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], "MEDIUM", $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
                                             } ?>
-                                            <img src="<?php echo $prodImg; ?>" />
+                                            <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id'])) ?>"><img src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>"></a>
                                         </div>
-                                        <div class="product-card__detail">
-                                            <h6><?php echo (!empty($opDetail['op_selprod_title']) ? $opDetail['op_selprod_title'] : $opDetail['op_product_name']), ' '; ?>
-                                            </h6>
+                                        <div class="item__description">
+                                            <div class="item__category"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($opDetail['op_shop_id'])); ?>"><?php echo $opDetail['op_shop_name']; ?></a></div>
+                                            <div class="item__title"><a title="<?php echo $prodTitle; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id'])) ?>"><?php echo $prodTitle; ?></a>
+                                            </div>
+                                            <div class="item__specification"> <?php echo $opDetail['op_selprod_options']; ?> </div>
                                         </div>
-                                    </div> -->
+                                    </div>                                
                                     <div class="rating-listing mb-4">
                                         <?php foreach ($ratingAspects as $ratingTypeId => $ratingTypeLabel) {
                                             if (in_array($ratingTypeId, [RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
@@ -65,7 +55,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             }
                                         ?>
                                             <div class="rating">
-                                                <!-- <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span> -->
+                                                <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                                 <div class="rating-action" data-rating="0">
                                                     <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                         <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -168,7 +158,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <div class="rating-listing">
                                                     <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                                         <div class="rating">
-                                                            <!-- <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span> -->
+                                                            <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                                             <div class="rating-action" data-rating="0">
                                                                 <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                                     <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -198,7 +188,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <div class="rating-listing">
                                                     <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                                         <div class="rating pb-0">
-                                                            <!-- <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span> -->
+                                                            <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span> 
                                                             <div class="rating-action" data-rating="0">
                                                                 <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                                     <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>

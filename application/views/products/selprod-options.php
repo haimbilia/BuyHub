@@ -16,7 +16,7 @@ if (!empty($optionRows)) {
                     $color = ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] : "#" . $opVal['optionvalue_color_code']);
                     $ul .= '<li data-toggle="tooltip" data-placement="top" title="' . $optionValueName . '"><span class="colors-dot" style="background:' . $color . ';"></span></li>';
                 } else {
-                    $ul .= '<li><span class="">' . $optionValueName . '</span></li>';
+                    $ul .= '<li><span class="ellipsis">' . $optionValueName . '</span></li>';
                 }
 
                 if ($displayCount == ($count + 1) && (0 < count($option['values']) - $displayCount)) {

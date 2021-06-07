@@ -116,6 +116,7 @@ Fixes:
     => 054447 - when product having multiple options then on detail page> options are not listing properly
     => 054613 - Error display on invoice pdf page
 
+
 Develop
 
 Fixes:
@@ -181,7 +182,13 @@ Fixes:
     => 054557 - admin> catalog> categories> count is mismatching
     => 054527 - Blog >> some error is there
     => 054599 - when order is on pickup and status is changed to ready for pickup it gets stuck and on refreshing the page> getting error on screen
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054529 - On FAQ >> if any letter is in caps then it is not highlighting on search
+    => 054545 - when subscription is downgraded and after adjustment amount becomes 0 then on applying coupon it's getting the total in negative
+    => 054597 - generate label is coming on seller end on pickup order 
+    => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
     => 054612 - login with otp is working with default otp 0000
+
 
 New Features:
     => Admin shipped products listing page
@@ -302,3 +309,4 @@ bugs:
     #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
     #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
+    #054212	while adding inventory> when we add link and url is long then UI is not proper
