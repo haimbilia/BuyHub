@@ -882,4 +882,6 @@ CREATE TABLE `tbl_badge_links` (
 
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ('LBL_N/R', '1', 'N/R', '1') ON DUPLICATE KEY UPDATE label_caption = 'N/R';
+
+ALTER TABLE `tbl_badges_lang` CHANGE `badge_name` `badge_name` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 -- --- Badges & Ribbons --- --
