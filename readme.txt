@@ -189,6 +189,7 @@ Fixes:
     => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
     => 054612 - login with otp is working with default otp 0000
     => 054616 - after submitting review> getting error on review page- front end
+    => 054717 - on recently view product error coming on product detail page
 
 
 New Features:
