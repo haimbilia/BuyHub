@@ -130,6 +130,7 @@ Fixes:
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
     => 054557 - admin> catalog> categories> count is mismatching
     => 054689 - 404 error page - issue with few produc urls when subscription in enabled
+    => 054718 - Categories added are not listing in admin.
 
 Enhancements :
    => Make provision to made seller
