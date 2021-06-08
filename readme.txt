@@ -131,6 +131,7 @@ Fixes:
     => 054557 - admin> catalog> categories> count is mismatching
     => 054689 - 404 error page - issue with few produc urls when subscription in enabled
     => 054718 - Categories added are not listing in admin.
+    => 054728 -	Aftership order status should be automatically marked delivered.
 
 Enhancements :
    => Make provision to made seller

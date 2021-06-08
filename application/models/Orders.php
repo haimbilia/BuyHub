@@ -1603,7 +1603,7 @@ class Orders extends MyAppModel
                         }
                     }
                 }
-                
+
                 $opRefundArr = array(
                     'op_refund_qty' => $childOrderInfo["op_qty"],
                     'op_refund_amount' => $txnAmount,
@@ -1613,16 +1613,15 @@ class Orders extends MyAppModel
                     'op_refund_tax' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
                 );
                 if (!$db->updateFromArray(
-                                Orders::DB_TBL_ORDER_PRODUCTS,
-                                $opRefundArr,
-                                array('smt' => 'op_id = ? ', 'vals' => array($op_id))
-                        )) {
+                    Orders::DB_TBL_ORDER_PRODUCTS,
+                    $opRefundArr,
+                    array('smt' => 'op_id = ? ', 'vals' => array($op_id))
+                )) {
                     $this->error = $db->getError();
                     return false;
                 }
                 /* ]*/
-            }            
-            
+            }
         }
         /* ] */
 
@@ -2653,5 +2652,41 @@ class Orders extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+
+    public static function afterShipOrderStatusDelivered()
+    {
+        $srch = new OrderProductSearch(0, true);
+        $srch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'op_id = oshistory_op_id', 'tosh');
+        $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED, OrderStatus::ORDER_DELIVERED));
+        $srch->addDirectCondition("oshistory_tracking_number != ''");
+        $srch->addDirectCondition("oshistory_courier != ''");
+        $srch->addMultipleFields(array('order_language_id', 'op_id', 'oshistory_tracking_number', 'oshistory_courier'));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addOrder('op_id', 'DESC');
+        $rs = $srch->getResultSet();
+        $ordersDetail = FatApp::getDb()->fetchAll($rs);
+        if (!empty($ordersDetail)) {
+            $shipmentTracking = new ShipmentTracking();
+            if (false === $shipmentTracking->init(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
+                $message = $shipmentTracking->getError();
+                Message::addErrorMessage($message);
+                FatUtility::dieWithError(Message::getHtml());
+            }
+            $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            foreach ($ordersDetail as $data) {
+                $response = $shipmentTracking->getTrackingInfo($data["oshistory_tracking_number"], $data["oshistory_courier"], FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+                if ($response['meta']['code'] == 200) {
+                    if (strtolower($response['data']['tracking']['tag']) == 'delivered') {
+                        $order = new Orders();
+                        $order->addChildProductOrderHistory($data['op_id'], $data["order_language_id"], OrderStatus::ORDER_COMPLETED, $comment, 1);
+                        $where = array('smt' => 'op_id = ? ', 'vals' => array($data['op_id']));
+                        FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS, array('op_confirm_date' => date('Y-m-d H:i:s')), $where);
+                    }
+                }
+            }
+        }
+        return true;
     }
 }
