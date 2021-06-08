@@ -35,6 +35,7 @@ class BadgeLinkCondition extends MyAppModel
         self::DB_TBL_PREFIX . 'condition_to'
     ];
 
+    /* Require Range Element(From, To) for the these condition types. */
     public const RANGE_COND_TYPE_ELEMENT = [
         self::COND_TYPE_COMPLETED_ORDERS,
         self::COND_TYPE_AVG_RATING_SELPROD,
@@ -42,6 +43,7 @@ class BadgeLinkCondition extends MyAppModel
         self::COND_TYPE_ORDER_COMPLETION_RATE
     ];
 
+    /* Display Badge relared to these condition types.  */
     public const SHOP_BADGES_COND_TYPES = [
         self::COND_TYPE_AVG_RATING_SHOP,
         self::COND_TYPE_ORDER_COMPLETION_RATE,

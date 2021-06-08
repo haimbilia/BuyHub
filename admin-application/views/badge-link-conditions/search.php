@@ -77,7 +77,8 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $function = "form(" . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ", " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'] . ")";
+                    $funcName = (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) ? 'badgeForm' : 'ribbonForm';
+                    $function = $funcName . "(" . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ", " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'] . ", " . $row[Badge::DB_TBL_PREFIX . 'type'] . ")";
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {

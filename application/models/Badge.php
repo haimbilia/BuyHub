@@ -408,6 +408,17 @@ class Badge extends MyAppModel
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
 
+        $recordCondition = '(CASE 
+                                WHEN blinkcond_condition_type = 0
+                                THEN badgelink_record_id = 
+                                    (CASE 
+                                        WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' THEN ' . $this->selProdId . '
+                                        WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' THEN ' . $this->prodId . '
+                                        WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' THEN ' . $this->shopId . '
+                                        ELSE 0 
+                                    END)
+                                ELSE FALSE END)';
+
         if ($type == Badge::TYPE_BADGE) {
             $srch->addFld('blinkcond_condition_type');
             $srch->addDirectCondition(
@@ -429,7 +440,7 @@ class Badge extends MyAppModel
                                 THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
                             ELSE FALSE
                         END)
-                    ELSE FALSE END)'
+                    ELSE ' . $recordCondition . ' END)'
             );
         } 
         
@@ -438,18 +449,7 @@ class Badge extends MyAppModel
                 'badge_shape_type',
                 'badge_color',
             ]);
-            $srch->addDirectCondition(
-                '(CASE 
-                    WHEN blinkcond_condition_type = 0
-                    THEN badgelink_record_id = 
-                        (CASE 
-                            WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' THEN ' . $this->selProdId . '
-                            WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' THEN ' . $this->prodId . '
-                            WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' THEN ' . $this->shopId . '
-                            ELSE 0 
-                        END)
-                    ELSE FALSE END)'
-            );
+            $srch->addDirectCondition($recordCondition);
         }
 
         $srch->addDirectCondition(
@@ -468,7 +468,6 @@ class Badge extends MyAppModel
         $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
         // $srch->addOrder('blinkcond_record_type', 'ASC');
         $srch->addOrder('blinkcond_id', 'DESC');
-        // echo $srch->getQuery();
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
         
@@ -500,7 +499,7 @@ class Badge extends MyAppModel
             }
             $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
             $urls[] = [
-                    'url' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    'url' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $langId, $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                     'name' => $row['badge_name'],
                     'conditionType' => $row['blinkcond_condition_type'],
                 ];

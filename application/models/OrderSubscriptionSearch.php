@@ -223,7 +223,7 @@ class OrderSubscriptionSearch extends SearchBase
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCompletedOrderCondition();
-        $srch->addMultipleFields(['o.order_user_id', 'sum(oss.ossubs_price + ifnull(op_other_charges,0)) as amountPaid', 'count(DISTINCT(if(o.order_renew = 1 and order_payment_status = ' . Orders::ORDER_PAYMENT_PAID . ', o.order_id, null))) as spRenewals', 'count(DISTINCT(if(oss.ossubs_status_id = ' . OrderSubscription::CANCELLED_SUBSCRIPTION . ', o.order_id, null))) as spackageCancelled']);
+        $srch->addMultipleFields(['o.order_user_id', 'sum(oss.ossubs_price + ifnull(op_other_charges,0)) as subscriptionCharges', 'count(DISTINCT(if(o.order_renew = 1 and order_payment_status = ' . Orders::ORDER_PAYMENT_PAID . ', o.order_id, null))) as spRenewals', 'count(DISTINCT(if(oss.ossubs_status_id = ' . OrderSubscription::CANCELLED_SUBSCRIPTION . ', o.order_id, null))) as spackageCancelled']);
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'subscount.order_user_id = o.order_user_id', 'subscount');
     }
 }

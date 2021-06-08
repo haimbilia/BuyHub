@@ -55,6 +55,7 @@ foreach ($sellers as $sellerDetail) {
                             <?php echo $sellerDetail['shop_name']; ?>
                         </a>
                         <?php 
+                        /* Get Badge */
                         $bdgSelProdId = $sellerDetail['selprod_id'];
                         $bdgProdId = $sellerDetail['product_id'];
                         $bdgShopId = $sellerDetail['shop_id'];
