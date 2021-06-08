@@ -3141,4 +3141,53 @@ trait SellerProducts
         }
         FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId));
     }
+
+    public function badgeAutocomplete(int $badgeType, int $recordType = 0)
+    {
+        $pagesize = 20;
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+
+        switch ($recordType) {
+            case BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT:
+                $srch = SellerProduct::getSearchObject(0);
+                $srch->addCondition('selprod_user_id', '=', $this->userParentId);
+                $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, 'INNER JOIN', 'badgelink_record_id = selprod_id', 'bl');
+                break;
+            case BadgeLinkCondition::RECORD_TYPE_PRODUCT:
+                $srch = new ProductSearch(0, null, null, true, true, true);
+                $srch->addCondition('product_seller_id', '=', $this->userParentId);
+                $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, 'INNER JOIN', 'badgelink_record_id = product_id', 'bl');
+                break;
+            case BadgeLinkCondition::RECORD_TYPE_SHOP:
+                $srch = Shop::getSearchObject(true);
+                $srch->addCondition('shop_user_id', '=', $this->userParentId);
+                $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, 'INNER JOIN', 'badgelink_record_id = shop_id', 'bl');
+                break;
+            
+            default:
+                return '';
+                break;
+        }
+
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = badgelink_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
+        $srch->addCondition('blinkcond_record_type', '=', $recordType);
+        $srch->addCondition('badge_type', '=', $badgeType);
+
+        if (!empty($keyword)) {
+            $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');    
+        }
+        
+        $srch->setPageSize($pagesize);
+
+        $srch->addMultipleFields([
+            Badge::DB_TBL_PREFIX . 'id as id',
+            'COALESCE(badge_name, badge_identifier) as name',
+        ]);
+        
+        $srch->addGroupBy('badge_id');
+        $badges = FatApp::getDb()->fetchAll($srch->getResultSet());
+        die(json_encode(['badges' => $badges]));
+    }
 }

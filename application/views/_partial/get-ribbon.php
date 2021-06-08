@@ -13,14 +13,13 @@ $ribbonDetail = $obj->setSellerProdudtId($ribSelProdId)
 
 $html = "";
 if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
-    foreach ($ribbonDetail as $row) {
-        $position = $row['blinkcond_position'];
+    foreach ($ribbonDetail as $ribbRow) {
+        $position = $ribbRow['blinkcond_position'];
         include CONF_BACK_END_THEME_PATH . '/_partial/get-ribbon.php';
         $html .= $ribbon;
     }
 }
 
-if ($frontReturn) {
-    return $html;
+if (false === $frontReturn) {
+    echo $html;
 }
-echo $html;
