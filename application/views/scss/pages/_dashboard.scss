@@ -2175,6 +2175,10 @@
             .rating {
                 --size: 1.5rem;
                 --space: 0.4rem;
+                &__text{
+                    margin-bottom: 0;
+                    margin-#{$end-direction}: 1rem;
+                }
             }
         }
     }
@@ -2185,8 +2189,9 @@
         &__img {
             border: $border;
             border-radius: $radius4;
-            padding: 2rem;
+            padding: .25rem;
             background: $bg-white;
+            max-width: 150px;
         }
         &__detail {
             margin: 1rem 0;
