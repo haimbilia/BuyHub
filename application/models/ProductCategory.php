@@ -1259,10 +1259,11 @@ class ProductCategory extends MyAppModel
         $srch = static::getSearchObject(false, $this->commonLangId, false);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', $this->mainTableRecordId);
-
+        
         if ($includeProductCount === true) {
             $srch->joinTable(self::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'cr.pcr_parent_id = m.prodcat_id', 'cr');
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id', 'ptc');
+            $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', 'p.product_id = ptc.ptc_product_id AND p.' . Product::DB_TBL_PREFIX . 'deleted = 0', 'p');
             $attr[] = 'SUM(IF(ptc.ptc_product_id IS NULL, 0, 1)) as category_products';
         }
 

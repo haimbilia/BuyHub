@@ -20,10 +20,12 @@ if ($canonicalUrl == '') {
         $cName = ($controllerName == 'Home') ? '' : $controllerName;
         $canonicalUrl = UrlHelper::generateFullUrl($cName);
     } else {
-        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, FatApp::getAction(), FatApp::getParameters());
-    }    
-}
-?>
+        $action = empty(FatApp::getAction()) ? 'index' : FatApp::getAction();
+        $params = empty(FatApp::getParameters()) ? [] : FatApp::getParameters();
+        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, $action, $params);
+    }
+} ?>
+
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
 <style>
     :root {
