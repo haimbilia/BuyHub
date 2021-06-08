@@ -26,11 +26,12 @@ foreach ($records as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'mainfile':
-                $td->appendElement('plaintext', array(), $row[$key], true);
-                $td->appendElement(
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement(
                     "a",
                     array(
-                        'class' => 'btn',
+                        'class' => 'btn btn-sm',
                         'title' => Labels::getLabel('LBL_download', $adminLangId),
                         'href' => UrlHelper::generateUrl('SellerProducts', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
                         'target' => '_blank'
@@ -41,11 +42,12 @@ foreach ($records as $sn => $row) {
                 break;
             case 'preview':
                 if (0 < $row['prev_afile_id']) {
-                    $td->appendElement('plaintext', array(), $row[$key], true);
-                    $td->appendElement(
+                    $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement(
                         "a",
                         array(
-                            'class' => 'btn',
+                            'class' => 'btn btn-sm',
                             'title' => Labels::getLabel('LBL_download', $adminLangId),
                             'href' => UrlHelper::generateUrl('SellerProducts', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
                             'target' => '_blank'

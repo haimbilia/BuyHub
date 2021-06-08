@@ -16,7 +16,7 @@ if (!empty($productsData)) { ?>
                 </div>
             </div>
             <?php if ($canEdit && isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1) { ?>
-            <a class="close-layer close-layer--sm" href="javascript:void(0)" onclick="removeProductFromProfile(<?php echo $row['product_id']; ?>)"
+            <a class="close-layer close-layer-sm" href="javascript:void(0)" onclick="removeProductFromProfile(<?php echo $row['product_id']; ?>)"
                 title="<?php echo Labels::getLabel('LBL_Remove_Product_from_profile', $siteLangId);?>"></a>
             <?php }?>
         </li>

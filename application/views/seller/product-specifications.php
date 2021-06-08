@@ -3,7 +3,7 @@ $layout = Language::getLayoutDirection($langId);
 if (count($productSpecifications) > 0){ ?>
 <div class="row" dir="<?php echo $layout; ?>">
     <div class="col-md-12">
-        <div class="js-scrollable table-wrap">
+        <div class="js-scrollable table-wrap scroll scroll-x">
         <?php 
             $arr_flds = array(
                 'prodspec_name' => Labels::getLabel('LBL_Specification_Name', $siteLangId),

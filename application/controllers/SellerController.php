@@ -1121,7 +1121,9 @@ class SellerController extends SellerBaseController
         $this->set('canAddCustomProduct', User::canAddCustomProduct());
         $this->set('canAddCustomProductAvailableToAllSellers', User::canAddCustomProductAvailableToAllSellers());
         $this->set('type', $type);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/slick.min.js'));
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/slick.min.js', 'js/select2.js'));
+        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        
         $this->_template->render(true, true);
     }
 
@@ -1515,15 +1517,51 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
         $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
+        
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         /* echo $page; die; */
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+
+        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $ribbonId = FatApp::getPostedData('ribbon_id', FatUtility::VAR_INT, 0);
 
         //$srch = Product::getSearchObject($this->siteLangId);
         $srch = new ProductSearch($this->siteLangId, null, null, false, false);
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
+
+        $badgeJoin = 'LEFT';
+        $condition = 'TRUE';
+        if (0 < $badgeId || 0 < $ribbonId) {
+            $badgeJoin = 'INNER';
+            $condition = '(';
+
+            if (0 < $badgeId && 0 < $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
+                $cnd = $srch->addCondition('badge_id', '=', $badgeId);
+                $cnd->attachCondition('badge_id', '=', $ribbonId, 'OR');
+            }else if (0 < $badgeId && 1 > $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
+                $srch->addCondition('badge_id', '=', $badgeId);
+            }else if (1 > $badgeId && 0 < $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_RIBBON;
+                $srch->addCondition('badge_id', '=', $ribbonId);
+            }
+
+            $condition .= ')';
+        }
+        $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $badgeJoin . ' JOIN', 'badgelink_record_id = product_id', 'bl');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_id = badgelink_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'LEFT JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
+
+        $srch->addDirectCondition('(CASE 
+                                        WHEN badge_id IS NOT NULL
+                                        THEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' 
+                                            AND ' . $condition . '
+                                        ELSE TRUE
+                                    END)');
 
         /* $cnd = $srch->addCondition( 'product_seller_id', '=',0);
           $cnd->attachCondition( 'product_added_by_admin_id', '=', applicationConstants::YES,'OR');
@@ -1572,23 +1610,27 @@ class SellerController extends SellerBaseController
             $srch->addCondition('product_type', '=', $product_type);
         }
 
-        $srch->addMultipleFields(
-            array(
-                'product_id',
-                'product_identifier',
-                'IFNULL(product_name, product_identifier) as product_name',
-                'product_added_on',
-                'product_model',
-                'product_attrgrp_id',
-                'attrgrp_name',
-                'psbs_user_id',
-                'product_seller_id ',
-                'product_added_by_admin_id',
-                'product_type',
-                'product_active',
-                'product_approved',
-            )
+        $attr = array(
+            'product_id',
+            'product_identifier',
+            'IFNULL(product_name, product_identifier) as product_name',
+            'product_added_on',
+            'product_model',
+            'product_attrgrp_id',
+            'attrgrp_name',
+            'psbs_user_id',
+            'product_seller_id ',
+            'product_added_by_admin_id',
+            'product_type',
+            'product_active',
+            'product_approved',
+            'COALESCE(badge_name, badge_identifier) as badge_name',
+            'blinkcond_badge_id',
+            'badge_shape_type',
+            'badge_color'
         );
+
+        $srch->addMultipleFields($attr);
         $srch->addOrder('product_active', 'DESC');
         $srch->addOrder('product_added_on', 'DESC');
         $srch->addGroupBy('product_id');
@@ -1597,7 +1639,7 @@ class SellerController extends SellerBaseController
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $arr_listing = $db->fetchAll($rs);
-
+        
         $this->set("arr_listing", $arr_listing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -3845,6 +3887,8 @@ class SellerController extends SellerBaseController
     private function getCatalogProductSearchForm($type = '')
     {
         $frm = new Form('frmSearchCatalogProduct');
+        $frm->addHiddenField('', 'badge_id');
+        $frm->addHiddenField('', 'ribbon_id');
         $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword');
 
         /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
@@ -3855,6 +3899,10 @@ class SellerController extends SellerBaseController
 
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_All', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
         /* }  */
+
+        $frm->addSelectBox(Labels::getLabel('LBL_BADGE', $this->siteLangId), 'badge_name', [], '', array('class' => 'badge--js','placeholder' => Labels::getLabel('LBL_SEARCH_BADGE', $this->siteLangId)));
+        
+        $frm->addSelectBox(Labels::getLabel('LBL_RIBBON', $this->siteLangId), 'ribbon_name', [], '', array('class' => 'ribbon--js','placeholder' => Labels::getLabel('LBL_SEARCH_RIBBON', $this->siteLangId)));
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
 
@@ -6017,7 +6065,7 @@ class SellerController extends SellerBaseController
         $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
         
         if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
-            FatUtility::dieJsonError($digitalDownload->getError());
+            FatUtility::dieJsonError($ddObj->getError());
         }
 
         if (1 <= $ddLinkId) {

@@ -40,8 +40,7 @@ foreach ($sellers as $sellerDetail) {
         } else {
             $codEnabled = ($product['product_cod_enabled']);
         }
-    }
-    ?>
+    } ?>
     <li class="table-row <?php echo (array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'] ? 'is-active' : ''); ?>">
         <div class="cell cell-1" data-label="<?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>">
             <div class="item">
@@ -52,7 +51,17 @@ foreach ($sellers as $sellerDetail) {
                 </div>
                 <div class="item__description">
                     <div class="item__title">
-                        <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>"><?php echo $sellerDetail['shop_name']; ?></a>
+                        <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>">
+                            <?php echo $sellerDetail['shop_name']; ?>
+                        </a>
+                        <?php 
+                        /* Get Badge */
+                        $bdgSelProdId = $sellerDetail['selprod_id'];
+                        $bdgProdId = $sellerDetail['product_id'];
+                        $bdgShopId = $sellerDetail['shop_id'];
+                        $bdgSize = 20;
+                        $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
+                        include (CONF_THEME_PATH . '_partial/get-badge.php'); ?>
                     </div>
 
                     <div class="item__location">
@@ -65,7 +74,7 @@ foreach ($sellers as $sellerDetail) {
                         <?php echo $sellerDetail['shop_state_name'] . "," . $sellerDetail['shop_country_name']; ?>
                     </div>
 
-                    <div class="products__rating -display-inline m-0">
+                    <div class="products__rating">
                         <i class="icn">
                             <svg class="svg">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">

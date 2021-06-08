@@ -140,6 +140,7 @@ $(document).ready(function () {
         });
     };
 
+    /*
     getStates = function (countryId, zoneId, profileId) {
         var shipZoneId = $('input[name="shipzone_id"]').val();
         var isdataLoaded = $('.link_' + countryId).data('loadedstates');
@@ -160,6 +161,7 @@ $(document).ready(function () {
             }
         });
     }
+    */
 
     setupZone = function (frm) {
         if ($('input[name="rest_of_the_world"]:checked').length < 1 && $('input[name="shiploc_zone_ids[]"]:checked').length < 1 && $('input[name="shiploc_country_ids[]"]:checked').length < 1 && $('input[name="shiploc_state_ids[]"]:checked').length < 1) {

@@ -83,8 +83,8 @@ $shopLocation = $shop_city . $shop_state . $shop_country;
                                             <?php $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $reviewData['spreview_id']); 
                                                 if (!empty($images)) {
                                             ?>
-                                                <div class="all-review-media">
-                                                    <ul class="review-media-list">
+                                                <div class="uploaded-media">
+                                                    <ul>
                                                         <?php
                                                         $i = 0;
                                                         foreach ($images as $image) {

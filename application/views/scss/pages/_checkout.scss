@@ -583,36 +583,57 @@
     }
 }
 
-.list-addresses {
-    .list-group-item {
-        padding: 1rem;
-        position: relative;
-        .delivery-address {
-            font-size: 0.85rem;
-            color: $txt-gray;
-            line-height: 1.5;
-            margin: 0;
-            h5 {
-                font-weight: 500;
-                font-size: 0.9rem;
-                margin-bottom: 10px;
+.list-addresses { max-height: 318px;
+    >ul {
+        border: $border;
+        border-radius: $radius4;
+        >li {
+            border-bottom: $border;
+            padding: 1rem;
+            position: relative;
+            &:last-child {
+                border-bottom: none;
+            }
+            .label-block {
                 display: flex;
                 align-items: flex-start;
             }
-            .tag {
-                margin: 0 5px;
-                border: solid 1px $success-color;
-                border-radius: 40px;
-                color: $success-color;
-                padding: 2px 0.6rem;
-                line-height: 1;
-                font-size: 0.75rem;
-                font-weight: 400;
-                text-transform: uppercase;
+            .checkbox_wrap {
+                margin-top: 3px;
+                margin-#{$end-direction}: 10px;
             }
-            .phone-txt {
-                margin-top: 5px;
-                font-weight: 600;
+            .delivery-address {
+                font-size: 0.85rem;
+                color: $txt-gray;
+                line-height: 1.5;
+                margin: 0;
+                flex: 1;
+                h5 {
+                    font-weight: 500;
+                    font-size: 0.9rem;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: flex-start;
+                }
+                .tag {
+                    margin: 0 5px;
+                    border: solid 1px $success-color;
+                    border-radius: 40px;
+                    color: $success-color;
+                    padding: 2px 0.6rem;
+                    line-height: inherit;
+                    font-size: 0.75rem;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                }
+                .phone-txt {
+                    margin-top: 10px;
+                    font-weight: 600;
+                }
+            }
+            .list-actions {
+                margin-#{$start-direction}: auto;
+                padding-#{$start-direction}: 10px;
             }
         }
     }
@@ -724,7 +745,6 @@
     font-size: 0.8rem;
     .shipping-select {
         font-size: 0.85rem;
-            
         background-color: $bg-gray;
         padding-#{$end-direction}: 5px;
         //align-items: center;

@@ -79,8 +79,15 @@ class ShippingZonesController extends AdminBaseController
             }
             $zoneLocations = $this->getLocations($zoneId);
         }
-        $zones = Zone::getZoneWithCountries($this->adminLangId);
-
+        
+        $zones = FatCache::get('zonesWithStateCountry' . $this->adminLangId, 108000, '.txt');       
+        if (!$zones) {
+            $zones = Zone::getZoneWithCountriesStates($this->adminLangId);
+            FatCache::set('zonesWithStateCountry' . $this->adminLangId, serialize($zones), '.txt');
+        }else{
+            $zones =  unserialize($zones); 
+        }
+        
         $excludeLocations = $this->getExcludeLocations($profileId, $zoneId);
 
         $this->set('profile_id', $profileId);

@@ -5,11 +5,6 @@ class ReportsController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
-        if (!User::canAccessSupplierDashboard()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
-        }
-        $this->set('bodyClass', 'is--dashboard');
     }
 
     public function index()
@@ -386,7 +381,6 @@ class ReportsController extends SellerBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            echo $srch->getError();
             $arrListing = FatApp::getDb()->fetchAll($rs);
 
             if (count($arrListing)) {
@@ -539,6 +533,7 @@ class ReportsController extends SellerBaseController
         }
         $flds = $this->getFormColumns($orderDate);
         $frmSrch = $this->getSalesReportSearchForm($flds, $orderDate);
+        $frmSrch->fill(['sortBy' => 'orderDate', 'sortOrder' => 'DESC']);
         $this->set('frmSrch', $frmSrch);
         $this->set('orderDate', $orderDate);
         $this->_template->render(true, true);
@@ -563,7 +558,7 @@ class ReportsController extends SellerBaseController
         }
         $userId = UserAuthentication::getLoggedUserId();
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderDate');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'ASC');
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
         $srch = new Report(0, array_keys($fields), true);
         $srch->joinOrders();

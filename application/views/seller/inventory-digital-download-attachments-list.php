@@ -30,25 +30,25 @@ foreach ($records as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'mainfile':
-                $td->appendElement('plaintext', array(), $row[$key], true);
-                if (true === $canDoDigDownload) {
-                    $td->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn',
-                            'title' => Labels::getLabel('LBL_download', $siteLangId),
-                            'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
-                            'target' => '_blank'
-                        ),
-                        '<i class="fa fa-download  icon"></i>',
-                        true
-                    );
-                }
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem->appendElement(
+                    "a",
+                    array(
+                        'class' => 'btn',
+                        'title' => Labels::getLabel('LBL_download', $siteLangId),
+                        'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
+                        'target' => '_blank'
+                    ),
+                    '<i class="fa fa-download  icon"></i>',
+                    true
+                );
                 break;
             case 'preview':
                 if (0 < $row['prev_afile_id']) {
-                    $td->appendElement('plaintext', array(), $row['preview'], true);
-                    $td->appendElement(
+                    $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement(
                         "a",
                         array(
                             'class' => 'btn',

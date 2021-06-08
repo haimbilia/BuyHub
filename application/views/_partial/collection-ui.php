@@ -4,26 +4,23 @@ $isWishList = isset($isWishList) ? $isWishList : 0;
 $staticCollectionClass = '';
 if ($controllerName = 'Products' && isset($action) && $action == 'view') {
     $staticCollectionClass = 'static--collection';
-} ?> <?php if (!isset($showAddToFavorite)) {
-            $showAddToFavorite = true;
-            if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
-                $showAddToFavorite = false;
-            }
-        }
-        if ($showAddToFavorite) { ?>
-    <!-- <div class="badges badges-1">New</div> -->
-    <div class="badges badges-2">
-        <span class="text"> Offer</span></div>
+}
+if (!isset($showAddToFavorite)) {
+    $showAddToFavorite = true;
+    if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
+        $showAddToFavorite = false;
+    }
+}
 
-    <!-- <div class="snip1326">
-  <div class="icon"><i class="ion-android-star-outline"></i></div>
-  <h1>Revolution</h1>
-  <h5>Neque porro quisquam</h5>
-</div> -->
+if ($showAddToFavorite) {
+    if (!isset($includeRibbon) || true === $includeRibbon) {
+        $ribSelProdId = $product['selprod_id'];
+        $ribProdId = $product['product_id'];
+        $ribShopId = $product['shop_id'];
+        include (CONF_THEME_PATH . '_partial/get-ribbon.php');
+    } ?>
 
-
-
-    <div class="favourite-wrapper <?php /* echo $staticCollectionClass; */ ?>">
+    <div class="favourite-wrapper">
         <?php if (true ==  $showActionBtns) { ?>
             <div class="actions_wishlist">
                 <ul class="actions">
@@ -52,9 +49,9 @@ if ($controllerName = 'Products' && isset($action) && $action == 'view') {
                 </ul>
             </div>
             <?php
-            } else {
-                if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-                    $jsFunc = 0 < $product['ufp_id'] ? 'removeFromFavorite(' . $product['selprod_id'] . ')' : 'markAsFavorite(' . $product['selprod_id'] . ')';
+        } /* else {
+            if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+                $jsFunc = 0 < $product['ufp_id'] ? 'removeFromFavorite(' . $product['selprod_id'] . ')' : 'markAsFavorite(' . $product['selprod_id'] . ')';
             ?>
                 <div class="favourite heart-wrapper <?php echo ($product['ufp_id']) ? 'is-active' : ''; ?>" onclick="<?php echo $jsFunc; ?>" data-id="<?php echo $product['selprod_id']; ?>">
                     <a href="javascript:void(0)" title="<?php echo ($product['ufp_id']) ? Labels::getLabel('LBL_Remove_product_from_favourite_list', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_favourite_list', $siteLangId); ?>">
@@ -63,61 +60,65 @@ if ($controllerName = 'Products' && isset($action) && $action == 'view') {
                     </a>
                 </div>
             <?php } else { ?>
-                <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" <?php /* id="listDisplayDiv_<?php echo $product['selprod_id']; ?>"  */ ?> data-id="<?php echo $product['selprod_id']; ?>">
+                <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" data-id="<?php echo $product['selprod_id']; ?>">
                     <a href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
                         <div class="ring"></div>
                         <div class="circles"></div>
                     </a>
                 </div>
             <?php }
-            }
+        } */
 
-            if (isset($productView) && true == $productView) { ?>
+        if (isset($productView) && true == $productView) { ?>
             <div class="dropdown">
-                <a class="dropdown-toggle no-after share-icon" href="javascript:void(0)" data-toggle="dropdown">
+                <a class="no-after share-icon" data-display="static"
+                    href="javascript:void(0)" data-toggle="dropdown">
                     <i class="icn">
                         <svg class="svg">
-                            <use xlink:href="/yokartv8/images/retina/sprite.svg#share" href="/yokartv8/images/retina/sprite.svg#share"></use>
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
+                            </use>
                         </svg>
                     </i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-anim">
                     <ul class="social-sharing">
-                        <li class="social-twitter">
-                            <a href="https://www.twitter.com"><i class="icn">
-                                    <svg class="svg">
-                                        <use xlink:href="/yokartv8/images/retina/sprite.svg#tw" href="/yokartv8/images/retina/sprite.svg#tw"></use>
-                                    </svg>
-                                </i></a>
-                        </li>
                         <li class="social-facebook">
-                            <a href="https://www.facebook.com"><i class="icn">
-                                    <svg class="svg">
-                                        <use xlink:href="/yokartv8/images/retina/sprite.svg#fb" href="/yokartv8/images/retina/sprite.svg#fb"></use>
-                                    </svg>
-                                </i></a>
+                            <a class="st-custom-button" data-network="facebook"
+                                data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
+                                <i class="icn"><svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
+                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                        </use>
+                                    </svg></i>
+                            </a>
                         </li>
-                        <li class="social-gplus">
-                            <a href="http://www.gplus.com"><i class="icn">
-                                    <svg class="svg">
-                                        <use xlink:href="/yokartv8/images/retina/sprite.svg#gp" href="/yokartv8/images/retina/sprite.svg#gp"></use>
-                                    </svg>
-                                </i></a>
+                        <li class="social-twitter">
+                            <a class="st-custom-button" data-network="twitter">
+                                <i class="icn"><svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
+                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                        </use>
+                                    </svg></i>
+                            </a>
                         </li>
                         <li class="social-pintrest">
-                            <a href="http://www.gplus.com"><i class="icn">
-                                    <svg class="svg">
-                                        <use xlink:href="/yokartv8/images/retina/sprite.svg#pt" href="/yokartv8/images/retina/sprite.svg#pt"></use>
-                                    </svg>
-                                </i></a>
+                            <a class="st-custom-button" data-network="pinterest">
+                                <i class="icn"><svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
+                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                        </use>
+                                    </svg></i>
+                            </a>
                         </li>
-
                         <li class="social-email">
-                            <a href="http://www.gplus.com"><i class="icn">
-                                    <svg class="svg">
-                                        <use xlink:href="/yokartv8/images/retina/sprite.svg#envelope" href="/yokartv8/images/retina/sprite.svg#envelope"></use>
-                                    </svg>
-                                </i></a>
+                            <a class="st-custom-button" data-network="email">
+                                <i class="icn"><svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
+                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                        </use>
+                                    </svg></i>
+                            </a>
                         </li>
                     </ul>
                 </div>

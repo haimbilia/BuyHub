@@ -47,7 +47,7 @@ foreach ($arrListing as $sn => $row) {
             case 'listserial':
                 $span->appendElement('plaintext', array(), $sr_no);
                 break;
-            case 'amountPaid':
+            case 'subscriptionCharges':
                 $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
             case 'user_name':

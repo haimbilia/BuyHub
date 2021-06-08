@@ -49,8 +49,6 @@
 
 .checkbox input,
 .radio input {
-    
-    
     -ms-appearance: none;
     -o-appearance: none;
     appearance: none;
@@ -63,7 +61,6 @@
     width: 1rem !important;
     flex: 0 0 1rem;
     max-width: 1rem;
-    -webkit-transition: all 0.15s ease-out 0s;
     transition: all 0.15s ease-out 0s;
     border: $border;
     background: #fff;
@@ -97,7 +94,6 @@
     line-height: 1rem;
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
-    -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
     left: 50%;
     top: 50%;
@@ -106,7 +102,6 @@
 
 .checkbox input:checked::after,
 .radio input:checked::after {
-    -webkit-animation: click-wave 0.65s;
     animation: click-wave 0.65s;
     background: $brand-color;
     color: $brand-color-inverse;
@@ -191,14 +186,12 @@
     position: absolute;
     #{$start-direction}: 4px;
     top: 3px;
-    -webkit-transition: all ease .3s;
     transition: all ease .3s;
 }
 
 .switch-button.is--active:after {
     #{$start-direction}: auto;
     #{$end-direction}: 4px;
-    -webkit-transition: all ease .3s;
     transition: all ease .3s;
 }
 

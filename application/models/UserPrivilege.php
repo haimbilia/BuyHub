@@ -34,6 +34,7 @@ class UserPrivilege
     public const SECTION_ADVERTISEMENT_FEED = 31;
     public const SECTION_SELLER_PLUGIN = 32;
     public const SECTION_CATALOG_REPORT = 33;
+    public const SECTION_FINANCIAL_REPORT = 34;
     public const SECTION_MARKETPLACE_CHANNEL = 34;
 
 
@@ -134,6 +135,7 @@ class UserPrivilege
             static::SECTION_ADVERTISEMENT_FEED => Labels::getLabel('LBL_Advertisement_Feed', $langId),
             static::SECTION_SELLER_PLUGIN => Labels::getLabel('LBL_SELLER_PLUGIN', $langId),
             static::SECTION_CATALOG_REPORT => Labels::getLabel('MSG_Catalog_Report', $langId),
+            static::SECTION_FINANCIAL_REPORT => Labels::getLabel('LBL_Financial_Report', $langId),
         );
         return $arr;
     }
@@ -814,6 +816,10 @@ class UserPrivilege
     public function canViewCatalogReport($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_CATALOG_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+    public function canViewFinancialReport($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_FINANCIAL_REPORT, static::PRIVILEGE_READ, $returnResult);
     }
 
     public function canEditSalesReport($sellerId = 0, $returnResult = false)

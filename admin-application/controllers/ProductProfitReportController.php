@@ -50,7 +50,7 @@ class ProductProfitReportController extends AdminBaseController
         $opSrch->addTotalOrdersCount('product_id');
         // $opSrch->setOrderBy($sortBy, $sortOrder);
         $opSrch->setDateCondition($fromDate, $toDate);
-        $opSrch->removeFld(['product_name', 'category_name']);
+        $opSrch->removeFld(['product_name', 'category_name', 'sellingPrice']);
 
         $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
         $srch->joinBrands($this->adminLangId, false, true);
@@ -151,6 +151,7 @@ class ProductProfitReportController extends AdminBaseController
                 'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->adminLangId),
                 'category_name' => Labels::getLabel('LBL_Category', $this->adminLangId),
                 'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->adminLangId),
+               /*  'inventoryCost' => Labels::getLabel('LBL_Inventory_Cost', $this->adminLangId),     */            
                 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->adminLangId)
             ];

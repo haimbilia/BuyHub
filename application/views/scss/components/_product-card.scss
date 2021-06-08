@@ -396,16 +396,12 @@
 }
 
 .products__rating {
-    vertical-align: middle;
-    padding: 3px 5px;
+    padding: 5px 0;
     margin: 5px 0;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    font-size: 0.85em;
-    display: flex;
-    align-items: center;
-    line-height: 0;
+    font-size: 0.85rem;
     a {
         color: inherit;
         font-size: inherit;
@@ -414,15 +410,20 @@
         justify-content: flex-start;
     }
     .icn {
-        margin-#{$end-direction}: 5px;
+        margin-#{$end-direction}: 0.5rem;
+        width: 1rem;
+        height: 1rem;
+        .svg {
+            width: 1rem;
+            height: 1rem;
+            vertical-align: baseline;
+        }
     }
     .rate {
-        line-height: 1;
-        font-size: 0.8rem;
-        display: inline-block;
+        line-height: inherit;
+        //height: 1rem;
         span {
-            font-size: 0.875em;
-            color: lighten($body-color, 50%);
+            color: $txt-gray;
         }
     }
     .be-first {
@@ -433,35 +434,11 @@
         vertical-align: top;
         color: $secondary-color;
     }
-    .svg {
-        width: 13px;
-        height: 13px;
-        margin-#{$end-direction}: 5px;
-        svg {
-            vertical-align: top;
-            margin-#{$end-direction}: 0px;
-            fill: $brand-color;
-            vertical-align: top;
-        }
-    }
 }
 
 .products-reviews {
     display: inline-block;
     vertical-align: middle;
-    .icn {
-        margin-#{$end-direction}: 5px;
-        svg {
-            width: 16px;
-            height: 16px;
-        }
-    }
-    .rate {
-        font-size: 0.875rem;
-        margin-#{$end-direction}: 10px;
-        display: flex;
-        align-items: center;
-    }
     .totals-review {
         color: $brand-color !important;
         display: block;
@@ -565,8 +542,8 @@
         .item__brand {
             font-style: italic;
         }
-        .item__location { margin-bottom: 5px;
-          
+        .item__location {
+            margin-bottom: 5px;
             .svg {
                 width: 14px;
                 height: 14px;

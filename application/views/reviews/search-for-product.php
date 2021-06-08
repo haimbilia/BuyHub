@@ -71,8 +71,8 @@
                                 <?php } ?>
                             </p>
                         </div>
-                        <div class="all-review-media">
-                            <ul class="review-media-list">
+                        <div class="uploaded-media">
+                            <ul>
                                 <?php
                                 $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
                                 
@@ -99,14 +99,14 @@
                                 } ?>
                             </ul>
                         </div>
-                        <a class="btn btn-secondary mt-3" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>"><?php echo Labels::getLabel('Lbl_Permalink', $siteLangId); ?> </a>
+                        <a class="btn btn-outline-gray btn-sm mt-3" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>"><?php echo Labels::getLabel('Lbl_Permalink', $siteLangId); ?> </a>
                     </div>
 
                 </div>
             </li>
         <?php } ?>
     </ul>
-    <div class="align--center  mt-4"><a href="<?php echo UrlHelper::generateUrl('Reviews', 'Product', array($selprod_id)); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('Lbl_Showing_All', $siteLangId) . ' ' . count($reviewsList) . ' ' . Labels::getLabel('Lbl_Reviews', $siteLangId); ?> </a></div> <?php echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchReviewsPaging')); ?>
+    <div class="align-center mt-4"><a href="<?php echo UrlHelper::generateUrl('Reviews', 'Product', array($selprod_id)); ?>" class="btn btn-outline-brand"><?php echo Labels::getLabel('Lbl_Showing_All', $siteLangId) . ' ' . count($reviewsList) . ' ' . Labels::getLabel('Lbl_Reviews', $siteLangId); ?> </a></div> <?php echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchReviewsPaging')); ?>
 <?php } else {
     // $this->includeTemplate('_partial/no-record-found.php', array('siteLangId'=>$siteLangId), false);
 } ?>

@@ -80,8 +80,14 @@ class ShippingZonesController extends SellerBaseController
                 FatUtility::dieWithError($this->str_invalid_request);
             }
             $zoneLocations = $this->getLocations($zoneId);
+        }        
+        $zones = FatCache::get('zonesWithStateCountry' . $this->siteLangId, 108000, '.txt');
+        if (!$zones) {
+            $zones = Zone::getZoneWithCountriesStates($this->siteLangId);
+            FatCache::set('zonesWithStateCountry' . $this->siteLangId, serialize($zones), '.txt');
+        }else{
+            $zones =  unserialize($zones); 
         }
-        $zones = Zone::getZoneWithCountries($this->siteLangId, true);
         $excludeLocations = $this->getExcludeLocations($profileId, $zoneId);
 
         $this->set('profile_id', $profileId);

@@ -51,7 +51,7 @@ if (isset($prodcat_code)) {
         </div>
         <?php if (!$shopCatFilters) { ?>
             <div class="sidebar-widget__body dropdown-menu dropdown-menu-anim" >
-                <div id="accordian" class="cat-accordion toggle-target scrollbar-filters scroll" data-simplebar="init" data-simplebar-auto-hide="false" >
+                <div id="accordian" class="cat-accordion toggle-target scrollbar-filters scroll scroll-y">
                 <ul >
                     <?php foreach ($categoriesArr as $cat) {
                     $catUrl = UrlHelper::generateUrl('category', 'view', array($cat['prodcat_id'])); ?>
@@ -117,7 +117,7 @@ if (isset($prodcat_code)) {
             </div>
         <?php } else {?>  
             <div class="sidebar-widget__body dropdown-menu dropdown-menu-anim" >  
-                <div class="scrollbar-filters" id="scrollbar-filters">
+                <div class="scrollbar-filters scroll scroll-y" id="scrollbar-filters">
                     <ul class="list-vertical">
                         <?php
                         $seprator = '&raquo;&raquo;&nbsp;&nbsp;';
@@ -204,7 +204,7 @@ if (isset($prodcat_code)) {
         <div class="sidebar-widget__head" data-toggle="dropdown">
             <?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?></div>
         <div class="sidebar-widget__body dropdown-menu dropdown-menu-anim">
-            <div class="scrollbar-filters" id="scrollbar-filters">
+            <div class="scrollbar-filters  scroll scroll-y" id="scrollbar-filters">
                 <ul class="list-vertical brandFilter-js">
                     <?php foreach ($brandsArr as $brand) {
             if ($brand['brand_id'] == null) {

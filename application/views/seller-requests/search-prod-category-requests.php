@@ -1,7 +1,7 @@
 <?php
 $variables = array('siteLangId' => $siteLangId, 'action' => $action);
 $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $variables, false); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
     <?php
     defined('SYSTEM_INIT') or die('Invalid Usage.');
     $arr_flds = array(

@@ -423,8 +423,9 @@ class ImportexportCommon extends FatModel
             $arr['product_approved'] = Labels::getLabel('LBL_Approved', $langId);
             $arr['product_active'] = Labels::getLabel('LBL_Active', $langId);
             $arr['product_deleted'] = Labels::getLabel('LBL_Deleted', $langId);
+            $arr['product_attachements_with_inventory'] = Labels::getLabel('LBL_DOWNLOAD_ATTACHMENTS_AT_INVENTORY', $langId);
         }        
-        $arr['product_attachements_with_inventory'] = Labels::getLabel('LBL_DOWNLOAD_ATTACHMENTS_AT_INVENTORY', $langId);
+        
 
         return $arr;
     }

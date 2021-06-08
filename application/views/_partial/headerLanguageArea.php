@@ -12,7 +12,7 @@ if ($languages && count($languages) > 1) {
                 <span><?php echo $languages[$siteLangId]['language_name']; ?></span>
             </a>
             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim">
-                <div class="scroll-y" data-simplebar>
+                <div class="scroll scroll-y">
                     <ul class="nav nav-block">
                         <li class="nav__item">
                             <h6 class="dropdown-header expand-heading"><?php echo Labels::getLabel('LBL_Select_Language', $siteLangId); ?></h6>
@@ -36,7 +36,7 @@ if ($currencies && count($currencies) > 1) {
                 <?php echo (CommonHelper::getCurrencySymbolRight()) ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft(); ?> <span> <?php echo $currencies[$siteCurrencyId]; ?></span>
             </a>
             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim">
-                <div class="scroll-y" data-simplebar>
+                <div class="scroll scroll-y">
                     <ul class="nav nav-block">
                         <li class="nav__item">
                             <h6 class="dropdown-header expand-heading"><?php echo Labels::getLabel('LBL_Select_Currency', $siteLangId); ?></h6>

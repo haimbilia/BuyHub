@@ -755,6 +755,7 @@ class ProductsController extends MyAppController
         $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
 
         $this->set('ratingAspects', $ratingAspects);
+        $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
 
         $currSellerArr = $this->getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);

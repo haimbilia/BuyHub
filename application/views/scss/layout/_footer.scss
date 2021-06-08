@@ -1,21 +1,19 @@
 .footer {
-    color: $body-color;
-    background: #fff;
-    border-top: 1px solid #ddd;
+    color: $txt-gray;
+    background: $bg-white;
+    border-top: $border;
     .container {
         position: relative;
     }
     p {
-        color: #717171;
-        font-size: 0.875em;
+        font-size: 0.875rem;
         margin: 0 0 20px;
     }
     h5 {
         color: $body-color;
-        font-size: 1em;
+        font-size: 1rem;
         font-weight: 500;
         padding: 5px 0;
-        
         margin-bottom: 20px;
         @include media-breakpoint-down(sm) {
             & {
@@ -40,17 +38,15 @@
                     border-#{$start-direction}: 2px solid rgba(0, 0, 0, 0.32);
                     border-bottom: 2px solid rgba(0, 0, 0, 0.32);
                     transform: rotate(-45deg);
-                    -webkit-transform: rotate(-45deg);
-                    -ms-transform: rotate(-45deg);
-                    -webkit-transition: 0.3s all ease-in-out;
+                     
+                    
                     transition: 0.3s all ease-in-out;
                 }
                 &.is-active {
                     &:before {
                         top: 19px;
                         transform: rotate(135deg);
-                        -webkit-transform: rotate(135deg);
-                        -ms-transform: rotate(135deg);
+                         
                     }
                 }
             }
@@ -74,7 +70,7 @@
                 color: #717171;
                 font-size: inherit;
                 position: relative;
-                -webkit-transition: all ease .3s;
+                 
                 transition: all ease .3s;
                 &:hover {
                     color: $brand-color;
@@ -184,7 +180,6 @@
         font-size: 1em;
         font-weight: 500;
         padding: 5px 0;
-        
         margin-bottom: 15px;
         p {
             margin: 0;
@@ -197,14 +192,10 @@
 }
 
 .contact-info {
-    
     display: flex;
-    
     align-items: center;
     li {
-
         display: flex;
-
         align-items: center;
         margin: 10px 0;
         margin-#{$end-direction}: 20px;
@@ -231,18 +222,13 @@
 
 .sub-form {
     margin-bottom: 20px;
-    
     display: flex;
-    
     align-items: center;
-
     justify-content: space-between;
     width: 100%;
 }
 
 .sub-form input[type="text"] {
-    
-   
     flex: 1;
     background: #fff;
     height: 2.5rem;
@@ -356,7 +342,6 @@
 
 .accordion_triger span:after {
     content: "+";
-    
     padding-#{$start-direction}: 5px;
 }
 
@@ -386,7 +371,6 @@
 
 .footerSubCategories li:after {
     content: "|";
-    
     padding-#{$start-direction}: 2px;
 }
 
@@ -400,9 +384,9 @@
 
 .copyright {
     text-align: center;
-    font-size: 0.875em;
+    font-size: 0.8rem;
     padding: 10px 10px;
-    color: #545454;
+    color: $txt-gray;
 }
 
 .store-button {

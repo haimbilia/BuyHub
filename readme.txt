@@ -112,16 +112,10 @@ Fixes:
     => 054262 - some issue with collection 
     => 054255 - Unable to reach location if redirect from notification listing in admin.
     => 054265 - missing sms template on seller end
-    => 053985 - Stripe connect unable to debit site commission
-    => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
-    => 054137 - Issue in product refund stats
-    => 054183 - on admin order cancellation page roundoff error coming
-    => 054242 - paystack gateway not supporting ZAR currency
-    => 054262 - some issue with collection 
-    => 054279 - warranty needs to be optional when product is digital
-    => 054255 - Unable to reach location if redirect from notification listing in admin.
-    => 054265 - missing sms template on seller end
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054613 - Error display on invoice pdf page
+
 
 Develop
 
@@ -181,7 +175,20 @@ Fixes:
     => 054278 - if for any digital item there is no preview available then preview tab shouldn't be displayed
     => 054144 - Set Default Location not populating on front end after set by admin
     => 054071 - Product Download Attachments At Inventory Level for catalog is missing in import/export
+    => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox.
+    => 054526 - when seller purchases subscription then on order success screen> neither adjusted amount is listing (if there), nor the original amount of package
     => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox
+    => 054499 - reviews added with category are not listing in admin
+    => 054557 - admin> catalog> categories> count is mismatching
+    => 054527 - Blog >> some error is there
+    => 054599 - when order is on pickup and status is changed to ready for pickup it gets stuck and on refreshing the page> getting error on screen
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054529 - On FAQ >> if any letter is in caps then it is not highlighting on search
+    => 054545 - when subscription is downgraded and after adjustment amount becomes 0 then on applying coupon it's getting the total in negative
+    => 054597 - generate label is coming on seller end on pickup order 
+    => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
+    => 054612 - login with otp is working with default otp 0000
+
 
 New Features:
     => Admin shipped products listing page
@@ -302,3 +309,4 @@ bugs:
     #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
     #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
+    #054212	while adding inventory> when we add link and url is long then UI is not proper

@@ -844,3 +844,26 @@ $(document).on('click', '.v-tabs--js ul li', function(e){
     $(this).addClass('is-active');
     $(target).addClass('is-active');
 });
+
+$.extend(fcom, {
+    copyToClipboard: function (targetId)
+    {
+        var targetId = targetId || "_copytext_";
+        
+        var target = document.getElementById(targetId);
+        
+        target.select();
+        target.focus();
+        target.setSelectionRange(0, target.value.length);
+
+        var succeed = true;
+        try {
+            succeed = document.execCommand("copy");
+            fcom.displaySuccessMessage(langLbl.copied);
+        } catch(e) {
+            succeed = false;
+        }
+
+        return succeed;
+    }
+});

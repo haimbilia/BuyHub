@@ -650,13 +650,7 @@ class SellerProduct extends MyAppModel
 			END
        		as matches FROM " . Commission::DB_TBL . " WHERE commsetting_deleted = 0 order by matches desc, commsetting_fees desc  limit 0,1";
         $rs = $db->query($sql);
-        if ($row = $db->fetch($rs)) {
-            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-                $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails(0, $selprod_user_id, array(OrderSubscription::DB_TBL_PREFIX . 'commission'));
-                if ($row['commsetting_product_id'] == 0 && $row['commsetting_user_id'] == 0 && $row['commsetting_prodcat_id'] == 0) {
-                    return $currentPlanData['ossubs_commission'];
-                }
-            }
+        if ($row = $db->fetch($rs)) {           
             return $row['commsetting_fees'];
         }
     }
@@ -1324,5 +1318,77 @@ class SellerProduct extends MyAppModel
         }
 
         return $optionRows;
+    }
+    
+    
+    /**
+     * rateObj
+     *
+     * @return object
+     */
+    private static function rateObj(): object
+    {
+        $avgRatingSrch = new SelProdReviewSearch();
+        $avgRatingSrch->joinSelProdRating();
+        $avgRatingSrch->doNotCalculateRecords();
+        $avgRatingSrch->doNotLimitRecords();
+        $avgRatingSrch->addGroupBy('spr.spreview_selprod_id');
+        $avgRatingSrch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $avgRatingSrch->addMultipleFields(["ROUND(AVG(sprating_rating),2) as rating"]);
+        return $avgRatingSrch;
+    }
+
+    /**
+     * getRating
+     *
+     * @param  int $recordId
+     * @return float
+     */
+    public static function getRating(int $recordId): float
+    {
+        $avgRatingSrch = self::rateObj();
+        $avgRatingSrch->addCondition('spreview_selprod_id', '=', $recordId);
+        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
+        if (empty($avgRatingData)) {
+            return 0;
+        }
+        return (float) $avgRatingData['rating'];
+    }
+    
+    /**
+     * getProdRating
+     *
+     * @param  mixed $recordId
+     * @return float
+     */
+    public static function getProdRating(int $recordId): float
+    {
+        $avgRatingSrch = self::rateObj();
+        $avgRatingSrch->addCondition('spreview_product_id', '=', $recordId);
+        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
+        if (empty($avgRatingData)) {
+            return 0;
+        }
+        return (float) $avgRatingData['rating'];
+    }
+
+    /**
+     * getRating
+     *
+     * @param  int $recordId
+     * @return float
+     */
+    public static function getShopRating(int $recordId): float
+    {
+        $avgRatingSrch = self::rateObj();
+        $avgRatingSrch->addCondition('spreview_seller_user_id', '=', $recordId);
+        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_SHOP);
+        $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
+        if (empty($avgRatingData)) {
+            return 0;
+        }
+        return (float) $avgRatingData['rating'];
     }
 }

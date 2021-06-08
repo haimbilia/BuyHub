@@ -34,7 +34,7 @@ $clearFld->developerTags['noCaptionTag'] = true;
     </div>
 </div>
 <span class="gap"></span>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 	<?php $arr_flds = array(
 		'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
 		'afile_name'    =>    Labels::getLabel('LBL_File', $siteLangId),
@@ -66,7 +66,7 @@ $clearFld->developerTags['noCaptionTag'] = true;
 					} else {
 						$fileName = $row['afile_name'];
 					}
-					$td->appendElement('plaintext', array(), $fileName, true);
+					$td->appendElement('div', ['class' => "text-break"], $fileName, true);
 					break;
 				case 'downloadable_count':
 					$downloadableCount = Labels::getLabel('LBL_N/A', $siteLangId) ;

@@ -2,7 +2,7 @@
 <?php if (!$print) { ?>
     <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php } ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <?php if (!$print) { ?>
             <div class="content-header row">
@@ -66,9 +66,9 @@
 
 
                     <?php if (!empty($request)) { ?>
-                        <div class="js-scrollable table-wrap">
-                            <table class="table">
-                                <tbody>
+                        <div class="js-scrollable table-wrap scroll scroll-x">
+                            <table class="table table-justified">
+                                <thead>
                                     <tr class="">
                                         <th width="15%"><?php echo Labels::getLabel('LBL_ID', $siteLangId); ?></th>
                                         <th width="20%"><?php echo Labels::getLabel('LBL_Order_Id/Invoice_Number', $siteLangId); ?></th>
@@ -76,6 +76,8 @@
                                         <th width="15%"><?php echo Labels::getLabel('LBL_Return_Qty', $siteLangId); ?></th>
                                         <th width="15%"><?php echo Labels::getLabel('LBL_Request_Type', $siteLangId); ?></th>
                                     </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td><?php echo $request['orrequest_reference'] /* CommonHelper::formatOrderReturnRequestNumber($request['orrequest_id']) */; ?></td>
                                         <td><?php echo $request['op_invoice_number']; ?>
@@ -111,7 +113,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="js-scrollable table-wrap">
+                        <div class="js-scrollable table-wrap scroll scroll-x">
                             <table class="table">
                                 <tbody>
                                     <tr class="">

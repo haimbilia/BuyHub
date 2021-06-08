@@ -386,7 +386,7 @@ foreach ($categories as $catId => $catName) {
         var prodCatId = $("input[name='prodcat_id']").val();
         if (rt_id == '') {
             if( !confirm(langLbl.addNewRatingType) ){ return; }
-            var data = 'ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
+            var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
                 var ans = $.parseJSON(t);
                 var newRtId = ans.rtId;

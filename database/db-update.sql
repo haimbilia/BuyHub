@@ -702,7 +702,6 @@ ALTER TABLE `tbl_product_digital_links`
 -- AUTO_INCREMENT for dumped tables
 --
 
---
 -- AUTO_INCREMENT for table `tbl_product_digital_links`
 --
 ALTER TABLE `tbl_product_digital_links`
@@ -779,7 +778,113 @@ INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`
 You have received a new cash on delivery order {order_id} at {SITE_NAME}
 
 {SITE_NAME} Team', '[{"title":"Seller", "variable":"{vendor_name}"},{"title":"Order Id", "variable":"{order_id}"}, {"title":"Website Name", "variable":"{SITE_NAME}"}]', 1);
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
+('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10)
+ON DUPLICATE KEY UPDATE conf_val = 10;
 
+
+-- --- Badges & Ribbons --- --
+--
+-- Table structure for table `tbl_badges`
+--
+
+CREATE TABLE `tbl_badges` (
+  `badge_id` bigint(20) NOT NULL,
+  `badge_type` int(11) NOT NULL,
+  `badge_display_inside` tinyint(4) NOT NULL,
+  `badge_shape_type` int(11) NOT NULL,
+  `badge_color` varchar(150) NOT NULL,
+  `badge_identifier` varchar(150) NOT NULL,
+  `badge_required_approval` tinyint(4) NOT NULL,
+  `badge_active` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_badges`
+--
+ALTER TABLE `tbl_badges`
+  ADD PRIMARY KEY (`badge_id`),
+  ADD UNIQUE KEY `badge_identifier` (`badge_identifier`,`badge_type`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_badges`
+--
+ALTER TABLE `tbl_badges`
+  MODIFY `badge_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- Table structure for table `tbl_badges_lang`
+--  
+
+CREATE TABLE `tbl_badges_lang` ( 
+  `badgelang_badge_id` BIGINT NOT NULL ,  
+  `badgelang_lang_id` INT NOT NULL ,  
+  `badge_name` VARCHAR(150) NOT NULL 
+) ENGINE = InnoDB;
+
+--
+-- Indexes for table `tbl_badges_lang`
+--
+ALTER TABLE `tbl_badges_lang`
+  ADD PRIMARY KEY (`badgelang_badge_id`,`badgelang_lang_id`);
+
+--
+-- Table structure for table `tbl_badge_link_conditions`
+--
+
+CREATE TABLE `tbl_badge_link_conditions` (
+  `blinkcond_id` bigint(20) NOT NULL,
+  `blinkcond_badge_id` bigint(20) NOT NULL,
+  `blinkcond_position` TINYINT(2) NOT NULL,
+  `blinkcond_record_type` int(11) NOT NULL,
+  `blinkcond_from_date` datetime DEFAULT NULL,
+  `blinkcond_to_date` datetime DEFAULT NULL,
+  `blinkcond_condition_type` int(11) NOT NULL,
+  `blinkcond_condition_from` varchar(150) NOT NULL,
+  `blinkcond_condition_to` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_badge_link_conditions`
+--
+ALTER TABLE `tbl_badge_link_conditions`
+  ADD PRIMARY KEY (`blinkcond_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_badge_link_conditions`
+--
+ALTER TABLE `tbl_badge_link_conditions`
+  MODIFY `blinkcond_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- Table structure for table `tbl_badge_links`
+--
+CREATE TABLE `tbl_badge_links` (
+  `badgelink_blinkcond_id` bigint(20) NOT NULL,
+  `badgelink_record_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('LBL_N/R', '1', 'N/R', '1') ON DUPLICATE KEY UPDATE label_caption = 'N/R';
+
+ALTER TABLE `tbl_badges_lang` CHANGE `badge_name` `badge_name` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+-- --- Badges & Ribbons --- --
 
 -- --------EasyECom---------- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'EasyEcom', '12', 'EasyEcom', '0', '1');

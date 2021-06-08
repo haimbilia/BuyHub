@@ -25,6 +25,11 @@
                                 <?php } ?> </span>
                         </div>
                     <?php } ?>
+                    <?php 
+                        $bdgShopId = $shop['shop_id'];
+                        $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
+                        include (CONF_THEME_PATH . '_partial/get-badge.php'); 
+                    ?>
                 </div>
 
                 <div class="shop-btn-group">

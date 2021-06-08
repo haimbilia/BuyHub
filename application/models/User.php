@@ -1668,7 +1668,7 @@ class User extends MyAppModel
             return false;
         }
 
-        if ('' == $otp) {
+        if ('' == $otp || 1 > $otp) {
             $this->error = Labels::getLabel('MSG_INVALID_OTP', $this->commonLangId);
             return false;
         }

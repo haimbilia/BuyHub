@@ -40,7 +40,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                             <div class="field-wraper">
                                                 <div class="field_cover custom-tagify">
                                                     <?php echo $relProdFrm->getFieldHTML('products_upsell'); ?>
-                                                    <div class="list-tag-wrapper" data-scroll-height="150" data-simplebar>
+                                                    <div class="list-tag-wrapper scroll scroll-y">
                                                         <ul class="list-tags" id="upsell-products"></ul>
                                                     </div>
                                                 </div>
