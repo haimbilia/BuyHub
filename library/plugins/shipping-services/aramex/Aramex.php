@@ -87,7 +87,7 @@ class Aramex extends ShippingServicesBase
         if (false == $this->validateSettings($this->langId)) {
             return [];
         }
-        
+
         $clientInfoArr = [];
         foreach ($this->clientInfoCols as $col) {
             $clientInfoArr[$col] = $this->settings[$col];
@@ -107,26 +107,35 @@ class Aramex extends ShippingServicesBase
         // libxml_disable_entity_loader(false);
 
         $service = $this->serviceRequest;
+        $options = [
+            'trace' => true,
+            'cache_wsdl' => WSDL_CACHE_MEMORY,
+            'stream_context' => stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false)))
+        ];
+        $wsdl = dirname(__FILE__) . '/wsdls/' . $dir;
+
         switch ($service) {
             case self::REQUEST_SHIPPING:
-                return new SoapClient(dirname(__FILE__) . '/wsdls/' . $dir . '/shipping.wsdl', ['trace' => true, 'cache_wsdl' => WSDL_CACHE_MEMORY]);
+                $wsdl .= '/shipping.wsdl';
                 break;
 
             case self::REQUEST_TRACKING:
-                return new SoapClient(dirname(__FILE__) . '/wsdls/' . $dir . '/tracking.wsdl', ['trace' => true, 'cache_wsdl' => WSDL_CACHE_MEMORY]);
+                $wsdl .= '/tracking.wsdl';
                 break;
 
             case self::REQUEST_RATE:
-                return new SoapClient(dirname(__FILE__) . '/wsdls/' . $dir . '/rate.wsdl', ['trace' => true, 'cache_wsdl' => WSDL_CACHE_MEMORY]);
+                $wsdl .= '/rate.wsdl';
                 break;
 
             case self::REQUEST_VALIDATE_ADDRESS:
-                return new SoapClient(dirname(__FILE__) . '/wsdls/' . $dir . '/location.wsdl', ['trace' => true, 'cache_wsdl' => WSDL_CACHE_MEMORY]);
+                $wsdl .= '/location.wsdl';
                 break;
             default:
                 CommonHelper::dieWithError(Labels::getLabel('LBL_INVALID_SERVICE_REQUEST', $this->langId));
                 break;
         }
+
+        return new SoapClient($wsdl, $options);
     }
 
     /**
@@ -515,7 +524,7 @@ class Aramex extends ShippingServicesBase
         }
         FatApp::redirectUser($labelData['Shipments']['ProcessedShipment']['ShipmentLabel']['LabelURL']);
     }
-    
+
     /**
      * canFetchTrackingDetail
      *
@@ -525,7 +534,7 @@ class Aramex extends ShippingServicesBase
     {
         return true;
     }
-    
+
     /**
      * fetchTrackingDetail
      *
@@ -540,9 +549,9 @@ class Aramex extends ShippingServicesBase
         $requestParam = [
             'ClientInfo' => $this->getClientInfo(),
             'Transaction' => [
-				'Reference1' => $orderInvoiceId
+                'Reference1' => $orderInvoiceId
             ],
-			'Shipments' => [$trackingId]
+            'Shipments' => [$trackingId]
         ];
 
         if (false === $this->doRequest($requestParam)) {
@@ -619,11 +628,11 @@ class Aramex extends ShippingServicesBase
                 if (isset($this->resp['Notifications'])) {
                     $notifications = $this->resp['Notifications'];
                 }
-                
+
                 if (empty($notifications) && isset($this->resp['Shipments']['ProcessedShipment'])) {
                     $notifications = $this->resp['Shipments']['ProcessedShipment']['Notifications'];
                 }
-                
+
                 if (array_key_exists(0, $notifications['Notification']) && is_array($notifications['Notification'][0])) {
                     foreach ($notifications['Notification'] as $errorDetail) {
                         $this->error .= $errorDetail['Message'] . '</br>';
