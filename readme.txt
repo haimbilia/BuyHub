@@ -128,6 +128,7 @@ Fixes:
     => 054255 - Unable to reach location if redirect from notification listing in admin.
     => 054265 - missing sms template on seller end
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
+    => 054644 - Admin > Shipping Company User > Wrong validation message is showing.
     => 054557 - admin> catalog> categories> count is mismatching
     => 054689 - 404 error page - issue with few produc urls when subscription in enabled
     => 054718 - Categories added are not listing in admin.
