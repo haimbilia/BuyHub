@@ -194,7 +194,7 @@ class ShippingCompanyUsersController extends AdminBaseController
 
         $user_id = $userObj->getMainTableRecordId();
         if ($post['user_id'] <= 0) {
-            $post['user_password'] = $post['credential_username'] . '@123';
+            $post['user_password'] = CommonHelper::getRandomPassword(10);
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], $post['user_password'], 1, 1)) {
                 Message::addErrorMessage(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->adminLangId) . $userObj->getError());
                 FatUtility::dieWithError(Message::getHtml());
