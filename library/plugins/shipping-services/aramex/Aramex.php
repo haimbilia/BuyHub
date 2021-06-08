@@ -198,7 +198,6 @@ class Aramex extends ShippingServicesBase
         if (false === $this->doRequest($requestParam)) {
             return false;
         }
-
         $this->resp = $address;
         return true;
     }
@@ -355,6 +354,7 @@ class Aramex extends ShippingServicesBase
         $this->setServiceRequest(self::REQUEST_RATE);
 
         $productGroup = (strtolower($this->toAddress['CountryCode']) == strtolower($this->fromAddress['CountryCode'])) ? 'DOM' : 'EXP';
+        $productType = ('DOM' == $productGroup ? 'OND' : 'PPX');
 
         $requestParam = [
             'ClientInfo' => $this->getClientInfo(),
@@ -366,7 +366,7 @@ class Aramex extends ShippingServicesBase
             'ShipmentDetails' => [
                 'PaymentType' => 'P',
                 'ProductGroup' => $productGroup,
-                'ProductType' => 'EPX',
+                'ProductType' => $productType,
                 'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                 'ChargeableWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                 'NumberOfPieces' => $this->orderQty
@@ -446,6 +446,9 @@ class Aramex extends ShippingServicesBase
 
         $this->setServiceRequest(self::REQUEST_SHIPPING);
         $clientInfo = $this->getClientInfo();
+
+        $productGroup = (strtolower($this->toAddress['CountryCode']) == strtolower($this->fromAddress['CountryCode'])) ? 'DOM' : 'EXP';
+
         $requestParam = array(
             'Shipments' => array(
                 'Shipment' => array(
@@ -468,8 +471,8 @@ class Aramex extends ShippingServicesBase
                     'Details' => array(
                         'Dimensions' => $this->dimensions,
                         'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
-                        'ProductGroup' => 'EXP',
-                        'ProductType' => 'EPX',
+                        'ProductGroup' => $productGroup,
+                        'ProductType' => 'OND',
                         'PaymentType' => 'P',
                         'NumberOfPieces' => $systemOrderDetail['op_qty'],
                         'Items' => [
@@ -495,12 +498,13 @@ class Aramex extends ShippingServicesBase
             ),
         );
 
+        // CommonHelper::printArray($requestParam);
         if (false === $this->doRequest($requestParam)) {
+            // CommonHelper::printArray($this->getError(), true);
             return false;
         }
 
         $shipment = $this->getResponse();
-
         if (0 < count($shipment)) {
             $processedShipment = $shipment['Shipments']['ProcessedShipment'];
             $shipment['orderNumber'] = $shipment['Transaction']['Reference1'];
