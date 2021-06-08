@@ -97,8 +97,7 @@ class DigitalDownloadSearch extends SearchBase
         $recordType,
         $optionCombi = null,
         $langId = 0,
-        $fileType = [42, 60],
-        // $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
+        $fileType = null,
         $attr = null
     ) {
         $srch = static::getSearchObject();
@@ -110,7 +109,7 @@ class DigitalDownloadSearch extends SearchBase
         if (null != $optionCombi) {
             if (is_array($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
-            } elseif(is_string($optionCombi) && '0' != $optionCombi) {
+            } elseif (is_string($optionCombi) && '0' != $optionCombi) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
             }
         }
@@ -134,7 +133,7 @@ class DigitalDownloadSearch extends SearchBase
         if (null != $fileType) {
             if (is_array($fileType)) {
                 $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', 'IN', $fileType);
-            } else if (is_numeric($fileType)) {
+            } elseif (is_numeric($fileType)) {
                 $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', $fileType);
             }
         } else {
@@ -147,14 +146,12 @@ class DigitalDownloadSearch extends SearchBase
         
         $srch->doNotCalculateRecords();
         $srch->addOrder('afile.afile_updated_at', 'DESC');
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $srch->getQuery()], 1);
-        $rs = $srch->getResultSet();
 
+        $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs, 'afile_id');
 
         $rows = static::processAttachmentsWithPreview($rows);
 
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], static::processAttachmentsWithPreview($rows)], 1);
         return $rows;
     }
     
@@ -283,7 +280,6 @@ class DigitalDownloadSearch extends SearchBase
             $productType = Product::CATALOG_TYPE_PRIMARY;
         }
 
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $selProdId, $recordId, $productType, $optionComb, $langId], 1);
         $records = static::getLinks($recordId, $productType, $optionComb, $langId);
         $commonRecords = [];
         if ('0' != $optionComb) {
@@ -331,17 +327,14 @@ class DigitalDownloadSearch extends SearchBase
         
         return $records;
     }
-
+    
     public static function processAttachmentsWithPreview($attachments)
     {
         if (0 > count($attachments)) {
             return [];
         }
-
         $rows = [];
         foreach ($attachments as $key => $attachment) {
-            /* $rows[$key]['pddr_id'] = $attachment['pddr_id'];
-            $rows[$key]['pddr_options_code'] = $attachment['pddr_options_code']; */
             if ($attachment['afile_type'] == AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD) {
                 if (!array_key_exists($key, $rows)) {
                     $rows[$key]['pddr_id'] = $attachment['pddr_id'];
@@ -360,7 +353,7 @@ class DigitalDownloadSearch extends SearchBase
                 $rows[$key]['pddr_options_code'] = $attachment['pddr_options_code'];
                 $rows[$key]['preview'] = $attachment['afile_name'];
                 $rows[$key]['prev_afile_id'] = $attachment['afile_id'];
-                $rows[$key]['afile_record_id'] = 0;
+                $rows[$key]['afile_record_id'] = $attachment['afile_record_id'];
                 $rows[$key]['mainfile'] = '';
                 $rows[$key]['afile_lang_id'] = '';
                 $rows[$key]['afile_id'] = 0;
@@ -371,14 +364,19 @@ class DigitalDownloadSearch extends SearchBase
                 $rows[$attachment['afile_record_subid']]['pddr_id'] = $attachment['pddr_id'];
                 $rows[$attachment['afile_record_subid']]['pddr_options_code'] = $attachment['pddr_options_code'];
                 $rows[$attachment['afile_record_subid']]['afile_record_id'] = $attachment['afile_record_id'];
-                $rows[$attachment['afile_record_subid']]['mainfile'] = $attachment['afile_name'];
                 $rows[$attachment['afile_record_subid']]['afile_lang_id'] = $attachment['afile_lang_id'];
-                $rows[$attachment['afile_record_subid']]['afile_id'] = $attachment['afile_record_subid'];
+
+                $rows[$attachment['afile_record_subid']]['mainfile'] = '';
+                $rows[$attachment['afile_record_subid']]['afile_id'] = 0;
+
+                if (array_key_exists($attachment['afile_record_subid'], $attachments)) {
+                    $rows[$attachment['afile_record_subid']]['mainfile'] = $attachments[$attachment['afile_record_subid']]['afile_name'];
+                    $rows[$attachment['afile_record_subid']]['afile_id'] = $attachment['afile_record_subid'];
+                }
             }
             $rows[$attachment['afile_record_subid']]['preview'] = $attachment['afile_name'];
             $rows[$attachment['afile_record_subid']]['prev_afile_id'] = $attachment['afile_id'];
         }
-        
         // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $rows], 1);
         return $rows;
     }
