@@ -538,10 +538,16 @@ class CustomController extends MyAppController
                 FatUtility::exitWithErrorCode(404);
             }
             $user = FatApp::getDb()->fetch($rs);
-
-            $cartObj = new Cart($orderInfo['order_user_id'], $this->siteLangId, $this->app_user['temp_user_id']);
-            $cartObj->clear();
-            $cartObj->updateUserCart();
+            if($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION){
+                $cartObj = new SubscriptionCart($orderInfo['order_user_id'], $this->siteLangId);
+                $cartObj->clear();
+                $cartObj->updateUserSubscriptionCart();                
+            }else{
+                $cartObj = new Cart($orderInfo['order_user_id'], $this->siteLangId, $this->app_user['temp_user_id']); 
+                $cartObj->clear();
+                $cartObj->updateUserCart();
+            }
+            
         }
 
         $orderFulFillmentTypeArr = [];
