@@ -119,11 +119,10 @@ if (!empty($excludeLocations)) {
 
                                                     <div class="col-auto mr-3">
                                                         <?php if ($statesCount > 0) { ?>
-                                                            <a class="link font-bolder link_<?php echo $countryId; ?> containChild-js" data-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1" >
+                                                            <a class="linkm font-bolder link--arrow link_<?php echo $countryId; ?> containChild-js" data-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1" >
                                                                 <span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
                                                                 <?php echo Labels::getLabel("LBL_of", $adminLangId); ?>
                                                                 <span class="totalStates "><?php echo $statesCount; ?></span>
-                                                                <span class="ion-ios-arrow-down icon"></span>
                                                             </a>
                                                         <?php } ?>
                                                     </div>
@@ -193,8 +192,10 @@ if (!empty($excludeLocations)) {
 <?php if (0 < $zone_id) { ?>
     <script>
         $(".containChild-js").each(function(){
+            /*
             var dropStateElement = $(this);
             dropStateElement.click();
+            */
             var countryId = $(this).data("countryid");
             $("#state_list_" + countryId).addClass('d-none');
             setTimeout(function(){
