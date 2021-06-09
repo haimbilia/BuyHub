@@ -266,9 +266,9 @@ $action = strtolower($action);
                     <?php } ?>
 
                     <?php /* if ($userPrivilege->canViewBadges(UserAuthentication::getLoggedUserId(), true)) { ?>
-                        <li class="menu__item <?php echo ($controller == 'seller' && $action == 'relatedproducts') ? 'is-active' : ''; ?>">
+                        <li class="menu__item <?php echo ($controller == 'Badges' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
-                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'RelatedProducts'); ?>">
+                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Badges', 'index'); ?>">
                                     <i class="icn fas fa-award"></i>
                                     <span class="menu-item__title">
                                         <?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>
@@ -278,9 +278,9 @@ $action = strtolower($action);
                         </li>
                     <?php } ?>
                     <?php if ($userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)) { ?>
-                        <li class="menu__item <?php echo ($controller == 'seller' && $action == 'relatedproducts') ? 'is-active' : ''; ?>">
+                        <li class="menu__item <?php echo ($controller == 'BadgeLinkConditions' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
-                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'RelatedProducts'); ?>">
+                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('BadgeLinkConditions', 'index'); ?>">
                                     <i class="icn fas fa-award"></i>
                                     <span class="menu-item__title">
                                         <?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $siteLangId); ?>
@@ -288,7 +288,7 @@ $action = strtolower($action);
                                 </a>
                             </div>
                         </li>
-                    <?php }  */?>
+                    <?php } */ ?>
 
                     <li class="divider"></li>
                 <?php } ?>
