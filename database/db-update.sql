@@ -886,3 +886,7 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ALTER TABLE `tbl_badges_lang` CHANGE `badge_name` `badge_name` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 -- --- Badges & Ribbons --- --
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOPIFY_MULTIVENDOR_PLUGIN_INFO', '1', 'Please enable the Multi Vendor Marketplace by Webkul Software Pvt Ltd plugin on your Shopify Store to sync data', '1');
+INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`, `plugin_description`) VALUES ((SELECT plugin_id from tbl_plugins where plugin_code='Shopify'), '1', 'Shopify', '');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOPIFY_SINGLE_VENDOR_PLUGIN_INFO', '1', 'Shopify Store to sync data', '1');
