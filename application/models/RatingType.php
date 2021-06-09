@@ -55,8 +55,8 @@ class RatingType extends MyAppModel
         return [
             self::TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
             self::TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId),
-            self::TYPE_DELIVERY => Labels::getLabel('LBL_DELIVERY', $langId),
-            self::TYPE_OTHER => Labels::getLabel('LBL_OTHER', $langId),
+            self::TYPE_DELIVERY => Labels::getLabel('LBL_SHOP', $langId),
+            self::TYPE_OTHER => Labels::getLabel('LBL_Category', $langId),
         ];
     }
 

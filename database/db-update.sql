@@ -891,5 +891,7 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`, `plugin_description`) VALUES ((SELECT plugin_id from tbl_plugins where plugin_code='Shopify'), '1', 'Shopify', '');
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOPIFY_SINGLE_VENDOR_PLUGIN_INFO', '1', 'Please create a private app from you Shopify dashbaord for data sync', '1');
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SELLER_PLUGIN_SETTINGS', '1', 'Settings', '1');
-
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', '1', 'Default rating for Products. Cannot be switched off.', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOP_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop. Can be switched off.', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_DELIVERY_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop delivery. Can be switched off.', '1');
 
