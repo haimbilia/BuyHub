@@ -124,6 +124,10 @@ $(document).ready(function () {
 						var countryId = currObj.data('countryid');
 						var totalStates = $(".country_" + countryId + " .state--js").length;
 						var disabledStates = $(".country_" + countryId + " .state--js:disabled").length;
+                                                var count = $('.country_' + countryId).find('input[type="checkbox"]:checked').length;
+                                                $('.selectedStateCount--js_' + countryId).html(count);
+                                                
+                                                
 						if (0 < totalStates && totalStates == disabledStates) {
 							$(".checkbox_country_" + countryId).attr('disabled', 'disabled');
 							currObj.addClass('disabled');
