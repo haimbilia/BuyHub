@@ -17573,6 +17573,8 @@ html.quick-view--open {
       line-height: 30px;
       text-transform: uppercase;
       width: 85px; }
+    .badges-2.badges-left {
+      transform: rotate(-90deg); }
   .badges-3 {
     display: flex;
     align-items: center;
@@ -17590,6 +17592,8 @@ html.quick-view--open {
       width: 90px;
       top: 7px;
       margin-left: -6px; }
+    .badges-4.badges-left {
+      transform: rotate(-90deg); }
   .badges-5 {
     top: 1rem;
     right: 1rem;
@@ -17611,6 +17615,20 @@ html.quick-view--open {
   .badges-right {
     right: 10px;
     top: 10px; }
+
+[direction="rtl"] .badges-4 .text {
+  left: -22px;
+  top: 10px; }
+
+[direction="rtl"] .badges-4.badges-left {
+  transform: none; }
+
+[direction="rtl"] .badges-2 .text {
+  left: -14px;
+  top: 10px; }
+
+[direction="rtl"] .badges-2.badges-right {
+  transform: rotate(-90deg); }
 
 .scroll {
   overflow: auto;
