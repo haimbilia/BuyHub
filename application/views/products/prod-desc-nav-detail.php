@@ -1,13 +1,29 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); ?>
+$youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); 
+$product['filteredPreviewAttachment'] = [];
+foreach ($product['preview_attachments'] as $attachments) {
+    if (!empty($attachments['preview'])) {
+        $product['filteredPreviewAttachment'][] = $attachments;
+    }
+}
+
+$product['filteredPreviewLinks'] = [];
+foreach ($product['preview_links'] as $links) {
+    if (!empty($links['pdl_preview_link'])) {
+        $product['filteredPreviewLinks'][] = $links;
+    }
+}
+
+?>
 
 <!-- Don't remove scrollUpTo-js span -->
 <span id="scrollUpTo-js"></span>
 <div class="nav-detail nav-detail-js">
     <ul>
-        <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
+        <?php
+        if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && ( 0 < count($product['filteredPreviewAttachment']) || 0 < count($product['filteredPreviewLinks']) )) { ?>
             <li>
-                <a class="nav-scroll-js is-active" href="#specifications">
+                <a class="nav-scroll-js is-active" href="#prev-files">
                     <?php echo Labels::getLabel('LBL_FILES', $siteLangId); ?>
                 </a>
             </li>
@@ -44,7 +60,7 @@ $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video
 <section class="section">
     <div class="row justify-content-center">
         <div class="col-xl-7">
-            <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
+            <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['filteredPreviewAttachment']) || 0 < count($product['filteredPreviewLinks']))) { ?>
                 <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
             <?php } ?>
             <?php if (count($productSpecifications) > 0) { ?>
