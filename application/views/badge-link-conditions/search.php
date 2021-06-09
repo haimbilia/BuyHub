@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $adminLangId),
-    'record_condition' => Labels::getLabel('LBL_TRIGGER', $adminLangId),
-    BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
-    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
+    'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
+    'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $siteLangId),
+    'record_condition' => Labels::getLabel('LBL_TRIGGER', $siteLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
     'action' => '',
 );
 
@@ -40,15 +40,15 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             
             case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $adminLangId), true);
+                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $siteLangId), true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
-                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $adminLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId);
+                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $siteLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $siteLangId);
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
             case 'record_condition':
                 $condition = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
-                $recordCondition = BadgeLinkCondition::getRecordConditionArr($adminLangId)[$condition];
+                $recordCondition = BadgeLinkCondition::getRecordConditionArr($siteLangId)[$condition];
                 $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordCondition . '</span>';;
                 if (BadgeLinkCondition::REC_COND_MANUAL == $condition) {
                     $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordCondition . '</span>';
@@ -56,7 +56,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId) : Labels::getLabel('LBL_N/R', $adminLangId));
+                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $siteLangId) : Labels::getLabel('LBL_N/R', $siteLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
@@ -76,10 +76,10 @@ foreach ($arr_listing as $sn => $row) {
                 if ($canEdit) {
                     $funcName = (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) ? 'badgeForm' : 'ribbonForm';
                     $function = $funcName . "(" . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ", " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'] . ", " . $row[Badge::DB_TBL_PREFIX . 'type'] . ")";
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {
-                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $adminLangId), true);
+                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
                 }
                 break;
             default : 
@@ -105,5 +105,5 @@ echo $tbl->getHtml(); ?>
 echo FatUtility::createHiddenFormFromData($postedData, array(
     'name' => 'frmSrchPaging'
 ));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $siteLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

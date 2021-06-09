@@ -34,7 +34,7 @@
     }
     &-2 {
         top: 3px;
-        right: 3px;
+        #{$end-direction}: 3px;
         width: 70px;
         height: 70px;
         .text {
@@ -47,6 +47,9 @@
             line-height: 30px;
             text-transform: uppercase;
             width: 85px;
+        }
+        &.badges-left {
+            transform: rotate(-90deg);
         }
     }
     &-3 {
@@ -68,10 +71,13 @@
             top: 7px;
             margin-left: -6px;
         }
+        &.badges-left {
+            transform: rotate(-90deg);
+        }
     }
     &-5 {
         top: 1rem;
-        right: 1rem;
+        #{$end-direction}: 1rem;
         width: 60px;
         height: 60px;
         display: flex;
@@ -95,4 +101,25 @@
         top:10px;
     }
 }
- 
+ [direction="rtl"]{
+    .badges {
+        &-4 {
+            .text {
+                #{$start-direction}: -22px;
+                top: 10px;
+            }
+            &.badges-left {
+                transform: none;
+            }
+        }
+        &-2 {
+            .text {
+                #{$start-direction}: -14px;
+                top: 10px;
+            }                        
+            &.badges-right {
+                transform: rotate(-90deg);
+            }
+        }
+    }
+ }

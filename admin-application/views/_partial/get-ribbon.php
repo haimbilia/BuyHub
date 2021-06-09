@@ -1,16 +1,16 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $ribbon = "";
-if (is_array($row) && !empty($row)) {
-    $type = $row['badge_shape_type'];
-    $color = $row['badge_color'];
-    $text = $title = $row['badge_name'];
-    $displayInside = $row['badge_display_inside'];
+if (is_array($ribbRow) && !empty($ribbRow)) {
+    $type = $ribbRow['badge_shape_type'];
+    $color = $ribbRow['badge_color'];
+    $text = $title = $ribbRow['badge_name'];
+    $displayInside = $ribbRow['badge_display_inside'];
     if (applicationConstants::NO == $displayInside) {
         $text = "";
     }
 
-    $class = 'badges-right';
+    $class = '';
     if (isset($position) && 0 < $position) {
         $class = Badge::RIBB_POS_TLEFT == $position  ? 'badges-left' : 'badges-right';
     }
