@@ -1,9 +1,15 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php
+
+use PhpParser\Node\Stmt\Label;
+
+defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php 
     $arr_flds = array(
         'listserial' => Labels::getLabel('LBL_#', $siteLangId),
         'product_identifier' => Labels::getLabel('LBL_Product', $siteLangId),
+        'badge' => Labels::getLabel('LBL_BADGE', $siteLangId),
+        'ribbon' => Labels::getLabel('LBL_RIBBON', $siteLangId),
         //'attrgrp_name' => Labels::getLabel('LBL_Attribute_Group', $siteLangId),
         'product_model' => Labels::getLabel('LBL_Model', $siteLangId),
         'product_active' => Labels::getLabel('LBL_Status', $siteLangId),
@@ -28,7 +34,6 @@
 
     foreach ($arr_listing as $sn => $row) {
         $tr = $tbl->appendElement('tr', array('class' => ''));
-
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
@@ -42,6 +47,25 @@
 						<div class="item__brand"> (' . $row[$key] . ') </div>
 					</div></div>';
                     $td->appendElement('plaintext', array(), $html, true);
+                    break;
+                case 'badge':
+                    $bdgProdId = $row['product_id'];
+                    $bdgSize = 20;
+                    $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD, BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP];
+                    $frontReturn = true;
+
+                    include (CONF_THEME_PATH . '_partial/get-badge.php');
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
+                    $td->appendElement('plaintext', [], $html, true);
+                    break;
+                case 'ribbon':
+                    $ribProdId = $row['product_id'];
+                    $frontReturn = true;
+                    
+                    include (CONF_THEME_PATH . '_partial/get-ribbon.php');
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
+                    $html = '<div class="badge-wrap">' . $html . '</div>';
+                    $td->appendElement('plaintext', [], $html, true);
                     break;
                 case 'attrgrp_name':
                     $td->appendElement('plaintext', array(), CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);

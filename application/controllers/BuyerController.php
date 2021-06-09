@@ -1553,9 +1553,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-            $ratingAspects = (0 < count($ratingTypes)) ? $ratingTypes : $ratingAspects;
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet()); 
         }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        }        
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -1663,9 +1666,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-            $ratingAspects = (0 < count($ratingTypes)) ? $ratingTypes : $ratingAspects;
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());          
         }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        } 
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);

@@ -188,6 +188,9 @@ Fixes:
     => 054597 - generate label is coming on seller end on pickup order 
     => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
     => 054612 - login with otp is working with default otp 0000
+    => 054616 - after submitting review> getting error on review page- front end
+    => 054717 - on recently view product error coming on product detail page
+    => 054731 - when review is placed with media then there is no need to add show more on 6th image 
 
 
 New Features:
@@ -198,9 +201,16 @@ New Features:
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
     => 053978 - Forget password label language issue in admin
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming
+    => 054242 - paystack gateway not supporting ZAR currency    
+    => 054279 - warranty needs to be optional when product is digital         
+    => 054644 - Admin > Shipping Company User > Wrong validation message is showing.   
+    => 054689 - 404 error page - issue with few produc urls when subscription in enabled
+    => 054718 - Categories added are not listing in admin.
+    => 054728 -	Aftership order status should be automatically marked delivered.
 
 Enhancements :
-   => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.

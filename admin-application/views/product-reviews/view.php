@@ -99,21 +99,13 @@ $frm->developerTags['fld_default_col'] = 12;
 									$uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
 									$imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($spreview_id, 0, 'MINITHUMB', $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 									$largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($spreview_id, 0, 'LARGE', $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-
-									if (5 > $i || 5 < $i) { ?>
-										<li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
-											<a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this);">
-												<img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
-											</a>
-										</li>
-									<?php } else { ?>
-										<li class="more-media" onclick="loadMoreImages(this);">
-											<a class="uploaded-file" href="javascript:void(0)" data-count="<?php echo count($images); ?>+">
-												<img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
-											</a>
-										</li>
-								<?php }
-									$i++;
+                                                                        ?>
+                                                                        <li>
+                                                                            <a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this);">
+                                                                                    <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
+                                                                            </a>
+                                                                        </li>
+                                                                        <?php 
 								} ?>
 							</ul>
 						</div>

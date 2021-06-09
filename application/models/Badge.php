@@ -51,6 +51,9 @@ class Badge extends MyAppModel
     private $prodId = 0;  //Priority 2
     private $shopId = 0;  //Priority 3
 
+    public const APPROVAL_STATUS_REQUESTED = 1; 
+    public const APPROVAL_STATUS_OPEN = 0; 
+
     /**
      * __construct
      *
@@ -202,7 +205,7 @@ class Badge extends MyAppModel
      */
     public static function getRequiredApprovalName(int $status, int $langId): string
     {
-        return (applicationConstants::YES == $status ? Labels::getLabel('LBL_REQUESTED', $langId) : Labels::getLabel('LBL_OPEN', $langId));
+        return (self::APPROVAL_STATUS_REQUESTED == $status ? Labels::getLabel('LBL_REQUESTED', $langId) : Labels::getLabel('LBL_OPEN', $langId));
     }
     
     /**
@@ -468,6 +471,7 @@ class Badge extends MyAppModel
         $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
         // $srch->addOrder('blinkcond_record_type', 'ASC');
         $srch->addOrder('blinkcond_id', 'DESC');
+        
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
         

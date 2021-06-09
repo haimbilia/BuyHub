@@ -211,8 +211,7 @@ class SubscriptionCart extends FatModel
 
         $WalletAmountCharge = ($this->isCartUserWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
         $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
-
-
+        $orderPaymentGatewayCharges = round($orderPaymentGatewayCharges,2);
 
         $cartSummary = array(
         'cartTotal' => $cartTotal,
@@ -221,7 +220,7 @@ class SubscriptionCart extends FatModel
         'cartWalletSelected' => $this->isCartUserWalletSelected(),
         'cartRewardPoints' => $cartRewardPoints,
         'cartAdjustableAmount' => $cartAdjustableAmount,
-        'orderNetAmount' => $orderNetAmount,
+        'orderNetAmount' => round($orderNetAmount,2),
         'WalletAmountCharge' => $WalletAmountCharge,
         'orderPaymentGatewayCharges' => $orderPaymentGatewayCharges,
         );
