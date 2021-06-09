@@ -90,6 +90,7 @@ trait ProductsDigitalDownloads
             $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
         } else {
             $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
+            $records = DigitalDownloadSearch::processAttachmentsWithPreview($records);
         }
         
         $canDelete = DigitalDownload::canDelete($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, true, true);
@@ -344,6 +345,20 @@ trait ProductsDigitalDownloads
 
         if (1 > $refId || 1 > $linkId) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $reference = DigitalDownload::getAttributesById($refId);
+        
+        if (false == $reference) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        
+        $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], Product::CATALOG_TYPE_INVENTORY, 0, $this->adminLangId, true, true);
+
+        if (false == $canDelete) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Not_allowed_to_delete_link', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 

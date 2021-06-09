@@ -1722,6 +1722,8 @@ class CustomProductsController extends AdminBaseController
         $prodRefType = Product::CATALOG_TYPE_REQUEST;
 
         $attachments = DigitalDownloadSearch::getAttachments($preqId, Product::CATALOG_TYPE_REQUEST, $optionComb, $langId);
+
+        $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
         $this->set('attachments', $attachments);
         
         $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);

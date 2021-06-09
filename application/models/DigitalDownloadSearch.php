@@ -98,7 +98,7 @@ class DigitalDownloadSearch extends SearchBase
         $optionCombi = null,
         $langId = 0,
         $fileType = null,
-        $attr = null
+        $attr = []
     ) {
         $srch = static::getSearchObject();
 
@@ -120,15 +120,12 @@ class DigitalDownloadSearch extends SearchBase
         if (0 < $langId) {
             $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
         }
-        if (null != $attr) {
-            if (is_array($attr)) {
-                $srch->addMultipleFields($attr);
-            } elseif (is_string($attr)) {
-                $srch->addFld($attr);
-            }
+        if (is_array($attr) ) {
+            $srch->addMultipleFields($attr);
         } else {
             $srch->addMultipleFields(['pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_name', 'afile_lang_id', 'afile_id', 'afile_type']);
         }
+
 
         if (null != $fileType) {
             if (is_array($fileType)) {
@@ -150,7 +147,7 @@ class DigitalDownloadSearch extends SearchBase
         $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs, 'afile_id');
 
-        $rows = static::processAttachmentsWithPreview($rows);
+        /* $rows = static::processAttachmentsWithPreview($rows); */
 
         return $rows;
     }

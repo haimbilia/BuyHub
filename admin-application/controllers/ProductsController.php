@@ -1821,6 +1821,8 @@ class ProductsController extends AdminBaseController
 
         $attachments = DigitalDownloadSearch::getAttachments($productId, Product::CATALOG_TYPE_PRIMARY, $optionComb, $langId);
 
+        $attachments = static::processAttachmentsWithPreview($attachments);
+
         $this->set('attachments', $attachments);
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $languages;
