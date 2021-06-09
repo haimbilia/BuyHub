@@ -1179,6 +1179,7 @@ class ProductSearch extends SearchBase
             if ($langId > 0) {
                 $srch->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossubslang_lang_id = ' . $langId, 'ossl');
             }
+            $srch->addCondition('oss.ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
             $srch->addCondition('o.order_type', '=', ORDERS::ORDER_SUBSCRIPTION);
             $srch->addCondition('o.order_payment_status', '=', 1);
             $srch->doNotCalculateRecords();
