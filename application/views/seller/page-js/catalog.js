@@ -113,6 +113,7 @@ $(document).on('change', '.language-js', function () {
 	}
 
 	clearSearch = function () {
+		$('input[name="badge_id"], input[name="ribbon_id"], select[name="badge_name"], select[name="ribbon_name"]').val('').trigger('change');
 		document.frmSearchCatalogProduct.reset();
 		searchCatalogProducts(document.frmSearchCatalogProduct);
 	};
@@ -373,40 +374,40 @@ $(document).on('change', '.language-js', function () {
 			var recordSelector = "input[name='ribbon_id']";
 		}
 
-        selector.select2({
-            closeOnSelect: true,
-            dir: langLbl.layoutDirection,
-            allowClear: true,
-            placeholder: selector.attr('placeholder'),
-            ajax: {
-                url: function () {
-                    return fcom.makeUrl('Seller', 'badgeAutocomplete', [type, RECORD_TYPE_PRODUCT]);
-                },
-                dataType: 'json',
-                delay: 250,
-                method: 'post',
-                data: function (params) {
-                    return { keyword: params.term };
-                },
-                processResults: function (data, params) {
-                    return { results: data.badges };
-                },
-                cache: true
-            },
-            minimumInputLength: 0,
-            templateResult: function (result) {
-                return result.name;
-            },
-            templateSelection: function (result) {
-                return result.name || result.text;
-            }
-        }).on('select2:selecting', function (e) {
-            $(recordSelector).val(e.params.args.data.id);
+		selector.select2({
+			closeOnSelect: true,
+			dir: langLbl.layoutDirection,
+			allowClear: true,
+			placeholder: selector.attr('placeholder'),
+			ajax: {
+				url: function () {
+					return fcom.makeUrl('Seller', 'badgeAutocomplete', [type, RECORD_TYPE_PRODUCT]);
+				},
+				dataType: 'json',
+				delay: 250,
+				method: 'post',
+				data: function (params) {
+					return { keyword: params.term };
+				},
+				processResults: function (data, params) {
+					return { results: data.badges };
+				},
+				cache: true
+			},
+			minimumInputLength: 0,
+			templateResult: function (result) {
+				return result.name;
+			},
+			templateSelection: function (result) {
+				return result.name || result.text;
+			}
+		}).on('select2:selecting', function (e) {
+			$(recordSelector).val(e.params.args.data.id);
 
-        }).on('select2:unselecting', function (e) {
-            $(recordSelector).val("");
-        });
-    }
+		}).on('select2:unselecting', function (e) {
+			$(recordSelector).val("");
+		});
+	}
 })();
 
 $(document).ready(function () {

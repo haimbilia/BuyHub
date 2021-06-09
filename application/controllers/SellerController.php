@@ -1522,15 +1522,16 @@ class SellerController extends SellerBaseController
         /* echo $page; die; */
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
 
-        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $ribbonId = FatApp::getPostedData('ribbon_id', FatUtility::VAR_INT, 0);
-
         //$srch = Product::getSearchObject($this->siteLangId);
         $srch = new ProductSearch($this->siteLangId, null, null, false, false);
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
 
+
+        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $ribbonId = FatApp::getPostedData('ribbon_id', FatUtility::VAR_INT, 0);
+        
         $badgeJoin = 'LEFT';
         $condition = 'TRUE';
         if (0 < $badgeId || 0 < $ribbonId) {

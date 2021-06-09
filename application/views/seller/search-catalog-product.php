@@ -1,4 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php
+
+use PhpParser\Node\Stmt\Label;
+
+defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php 
     $arr_flds = array(
@@ -51,6 +55,7 @@
                     $frontReturn = true;
 
                     include (CONF_THEME_PATH . '_partial/get-badge.php');
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $td->appendElement('plaintext', [], $html, true);
                     break;
                 case 'ribbon':
@@ -58,7 +63,7 @@
                     $frontReturn = true;
                     
                     include (CONF_THEME_PATH . '_partial/get-ribbon.php');
-
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $html = '<div class="badge-wrap">' . $html . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                     break;
