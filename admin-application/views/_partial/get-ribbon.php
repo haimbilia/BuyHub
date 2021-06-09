@@ -10,7 +10,7 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
         $text = "";
     }
 
-    $class = 'badges-right';
+    $class = '';
     if (isset($position) && 0 < $position) {
         $class = Badge::RIBB_POS_TLEFT == $position  ? 'badges-left' : 'badges-right';
     }

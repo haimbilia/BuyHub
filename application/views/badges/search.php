@@ -1,22 +1,22 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_PUBLISH', $adminLangId),
-    'action' => '',
+    'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
+    'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $siteLangId),
+    'action' => Labels::getLabel('LBL_REQUEST', $siteLangId),
 );
 
 if (!$canEdit) {
     unset($arr_flds['select_all'], $arr_flds['action']);
 }
 
-$approvalStatusArr = Badge::getApprovalStatusArr($adminLangId);
+$approvalStatusArr = Badge::getApprovalStatusArr($siteLangId);
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
+
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
@@ -47,7 +47,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', [], $name, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $adminLangId), true);
+                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $siteLangId), true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
@@ -56,16 +56,17 @@ foreach ($arr_listing as $sn => $row) {
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 } else {
                     $ribbRow = $row;
+                    $frontReturn = true;
                     include CONF_THEME_PATH . '/_partial/get-ribbon.php';
                     $html = '<div class="badge-wrap">' . $ribbon . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                 }
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
-                $class = applicationConstants::YES == $row[$key] ? 'badge--unified-danger' : 'badge--unified-brand'; 
-                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $adminLangId) . '</span>';;
+                $class = applicationConstants::YES == $row[$key] ? 'label-danger' : 'label-success'; 
+                $htm = ' <span class="label label-inline label-info">' . Labels::getLabel('LBL_NOT_REQUIRED', $siteLangId) . '</span>';;
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
-                    $htm = ' <span class="badge ' . $class . ' badge--inline badge--pill">' . $approvalStatusArr[$row[$key]] . '</span>';
+                    $htm = ' <span class="label label-inline ' . $class . '">' . $approvalStatusArr[$row[$key]] . '</span>';
                 }
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
@@ -83,12 +84,17 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', [], $str, true);
                 break;
             case 'action':
-                if ($canEdit) {
-                    $function = "form(" . $row[Badge::DB_TBL_PREFIX . 'id'] . ", " . $row[Badge::DB_TBL_PREFIX . 'type'] . ")";
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "deleteRecord(event, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                if ($canEdit && (applicationConstants::YES == $row[Badge::DB_TBL_PREFIX . 'required_approval'])) {
+                    $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);
+                    $li = $ul->appendElement("li");
+                    $li->appendElement(
+                        'a',
+                        array('href' => 'javascript:void(0)', 'class' => 'icn-highlighted', 'onClick' => 'request(' .$row[Badge::DB_TBL_PREFIX . 'id'] . ')', 'title' => Labels::getLabel('LBL_REQUEST_TO_ADD', $siteLangId), true),
+                        '<i class="fa fa-plus-square"></i>',
+                        true
+                    );
                 } else {
-                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $adminLangId), true);
+                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
                 }
                 break;
         }
@@ -113,5 +119,5 @@ echo $tbl->getHtml(); ?>
 echo FatUtility::createHiddenFormFromData($postedData, array(
     'name' => 'frmSrchPaging'
 ));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $siteLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
