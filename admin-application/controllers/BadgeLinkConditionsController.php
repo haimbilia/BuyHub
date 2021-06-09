@@ -139,7 +139,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $srch->descOrder();
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

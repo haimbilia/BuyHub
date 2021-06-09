@@ -73,7 +73,7 @@ class BadgesController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

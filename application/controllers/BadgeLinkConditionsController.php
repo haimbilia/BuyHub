@@ -126,7 +126,7 @@ class BadgeLinkConditionsController extends SellerPluginBaseController
         $srch->descOrder();
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks($this->sellerId, true));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

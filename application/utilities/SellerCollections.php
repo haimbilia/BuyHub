@@ -15,7 +15,7 @@ trait SellerCollections
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
         $records = ShopCollection::getCollectionGeneralDetail($shopDetails['shop_id']);
         $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->_template->render(false, false);
     }
 

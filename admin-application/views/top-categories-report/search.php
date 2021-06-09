@@ -14,7 +14,7 @@ foreach ($arrFlds as $val) {
 }
 
 $sr_no = 0;
-foreach ($arr_listing as $sn=>$row){
+foreach ($arrListing as $sn=>$row){
 	$sr_no++;
 	$tr = $tbl->appendElement('tr', array('class' => ($row['prodcat_active'] != applicationConstants::ACTIVE || $row['prodcat_deleted'] == applicationConstants::YES) ? 'fat-inactive' : '', 'title' => ($row['prodcat_active'] != applicationConstants::ACTIVE || $row['prodcat_deleted'] == applicationConstants::YES) ? 'In-Active Or Record Deleted' : '' ));
 		
@@ -43,7 +43,7 @@ foreach ($arr_listing as $sn=>$row){
 		}
 	}
 }
-if (count($arr_listing) == 0){
+if (count($arrListing) == 0){
 	$tbl->appendElement('tr')->appendElement('td', array(
 	'colspan'=>count($arrFlds)), 
 	Labels::getLabel('LBL_No_Records_Found',$adminLangId)

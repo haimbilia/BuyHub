@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
-<?php if (count($arr_listing) == 0) {
+<?php if (count($arrListing) == 0) {
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
 } else {
     $arr_flds = array(
@@ -16,7 +16,7 @@
     }
 
     $sr_no = ($page == 1) ? 0 : ($pageSize*($page-1));
-    foreach ($arr_listing as $sn => $row) {
+    foreach ($arrListing as $sn => $row) {
         $sr_no++;
         $tr = $tbl->appendElement('tr', array());
 

@@ -79,7 +79,7 @@ class ContentBlockController extends AdminBaseController
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $this->set("activeInactiveArr", $activeInactiveArr);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
 
 
         $this->set("canView", $this->canView);

@@ -65,7 +65,7 @@ class BlogPostCategoriesController extends AdminBaseController
         $pageCount = $srch->pages();
 
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $pageCount);
         $this->set('parentData', $parentCatData);
         $this->set('postedData', $post);

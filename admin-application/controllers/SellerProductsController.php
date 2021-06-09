@@ -1804,7 +1804,7 @@ class SellerProductsController extends AdminBaseController
         $srch->addOrder('selProdId', 'desc');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'ppoint_id');
         $this->set("selprod_id", $selprod_id);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -1857,12 +1857,12 @@ class SellerProductsController extends AdminBaseController
 
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $arr_listing = array();
+        $arrListing = array();
         if ($rs) {
-            $arr_listing = $db->fetchAll($rs);
+            $arrListing = $db->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $arr_listing);
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -2211,9 +2211,9 @@ class SellerProductsController extends AdminBaseController
 
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $arr_listing = $db->fetchAll($rs);
+        $arrListing = $db->fetchAll($rs);
 
-        $this->set("arr_listing", $arr_listing);
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -2327,7 +2327,7 @@ class SellerProductsController extends AdminBaseController
         $db = FatApp::getDb();
 
         $products = $db->fetchAll($rs, 'selprod_id');
-        $this->set("arr_listing", $products);
+        $this->set("arrListing", $products);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);

@@ -65,7 +65,7 @@ class ShippingProfileController extends SellerBaseController
             $zones = $this->getZones($profileIds);
         }
 
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('zones', $zones);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

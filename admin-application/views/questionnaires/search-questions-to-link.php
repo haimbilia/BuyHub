@@ -13,7 +13,7 @@ foreach ($arr_flds as $val) {
 }
 
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
     if ($row['question_active'] != applicationConstants::ACTIVE) {
@@ -51,7 +51,7 @@ foreach ($arr_listing as $sn => $row) {
         }
     }
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement(
         'td',
         array(

@@ -28,7 +28,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $name = $row[Badge::DB_TBL_PREFIX . 'identifier'];
     if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $row) && !empty($row[Badge::DB_TBL_PREFIX . 'name'])) {
@@ -95,7 +95,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no--;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
 }
 

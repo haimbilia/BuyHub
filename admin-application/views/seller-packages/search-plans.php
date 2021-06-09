@@ -20,7 +20,7 @@
             ]
         ];
 
-        if ($canEdit && $spackageData[sellerPackages::DB_TBL_PREFIX . 'type'] != sellerPackages::FREE_TYPE || ($spackageData[sellerPackages::DB_TBL_PREFIX . 'type'] == sellerPackages::FREE_TYPE && empty($arr_listing))) {
+        if ($canEdit && $spackageData[sellerPackages::DB_TBL_PREFIX . 'type'] != sellerPackages::FREE_TYPE || ($spackageData[sellerPackages::DB_TBL_PREFIX . 'type'] == sellerPackages::FREE_TYPE && empty($arrListing))) {
             $data['otherButtons'][] = [
                 'attr' => [
                     'href' => 'javascript:void(0)',
@@ -59,7 +59,7 @@
         }
 
         $sr_no = 0;
-        foreach ($arr_listing as $sn => $row) {
+        foreach ($arrListing as $sn => $row) {
             $sr_no++;
             $tr = $tbl->appendElement('tr');
             $tr->setAttribute("id", $row[SellerPackagePlans::DB_TBL_PREFIX . 'id']);
@@ -92,7 +92,7 @@
                 }
             }
         }
-        if (count($arr_listing) == 0) {
+        if (count($arrListing) == 0) {
             $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
         }
         echo $tbl->getHtml();?>

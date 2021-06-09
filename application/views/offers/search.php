@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (!empty($arr_listing) && is_array($arr_listing) ){
-		foreach ($arr_listing as $sn => $row){
+if (!empty($arrListing) && is_array($arrListing) ){
+		foreach ($arrListing as $sn => $row){
 			$discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE)?$row['coupon_discount_value'].' %':CommonHelper::displayMoneyFormat($row['coupon_discount_value']);
 		?>
 			<div class="col-md-6">

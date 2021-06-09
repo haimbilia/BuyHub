@@ -8,16 +8,16 @@ $arr_flds = [
     'plugin_active' => Labels::getLabel('LBL_Status', $adminLangId),
     'action' => '',
 ];
-$allPlugins = $arr_listing;
+$allPlugins = $arrListing;
 $pluginType = (!empty($allPlugins)) ? (array_shift($allPlugins))['plugin_type'] : '';
 
 if (!in_array($pluginType, Plugin::HAVING_SEPARATE_ICON)) {
     unset($arr_flds['plugin_icon']);
 }
 
-if (!$canEdit || 2 > count($arr_listing) || in_array($pluginType, Plugin::HAVING_KINGPIN)) {
+if (!$canEdit || 2 > count($arrListing) || in_array($pluginType, Plugin::HAVING_KINGPIN)) {
     unset($arr_flds['dragdrop']);
-    if (!$canEdit || in_array($pluginType, Plugin::HAVING_KINGPIN) || 1 > count($arr_listing)) {
+    if (!$canEdit || in_array($pluginType, Plugin::HAVING_KINGPIN) || 1 > count($arrListing)) {
         unset($arr_flds['select_all']);
     }
 }
@@ -33,7 +33,7 @@ foreach ($arr_flds as $key => $val) {
 $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
 $sr_no = 0;
 $msg = '';
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr', array('id' => $row['plugin_id'], 'class' => ''));
     foreach ($arr_flds as $key => $val) {
@@ -117,7 +117,7 @@ foreach ($arr_listing as $sn => $row) {
         }
     }
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
 
