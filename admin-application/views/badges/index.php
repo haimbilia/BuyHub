@@ -11,7 +11,7 @@ $data = [
         [
             'attr' => [
                 'href' => 'javascript:void(0)',
-                'onclick' => 'form(0, ' . Badge::TYPE_BADGE . ')',
+                'onclick' => 'form(' . Badge::TYPE_BADGE . ')',
                 'title' => $addBadgeLabel
             ],
             'label' => $addBadgeLabel
@@ -19,7 +19,7 @@ $data = [
         [
             'attr' => [
                 'href' => 'javascript:void(0)',
-                'onclick' => 'form(0, ' . Badge::TYPE_RIBBON . ')',
+                'onclick' => 'form(' . Badge::TYPE_RIBBON . ')',
                 'title' => $addRibbonLabel
             ],
             'label' => $addRibbonLabel

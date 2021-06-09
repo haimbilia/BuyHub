@@ -148,7 +148,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function form(int $badgeLinkCondId, int $recordType, int $badgeType)
+    public function form(int $badgeType, int $badgeLinkCondId = 0)
     {
         $this->objPrivilege->canEditBadgeLinks();
 
@@ -226,7 +226,6 @@ class BadgeLinkConditionsController extends AdminBaseController
         $frm->fill($dataToFill);
 
         $this->set('frm', $frm);
-        $this->set('recordType', $recordType);
         $this->set('badgeType', $badgeType);
         $this->set('rowData', $dataToFill);
         $this->set('blinkcond_id', $badgeLinkCondId);

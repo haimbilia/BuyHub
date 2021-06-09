@@ -82,7 +82,7 @@ class BadgesController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function form(int $badgeId, int $type)
+    public function form(int $type, int $badgeId = 0)
     {
         $this->objPrivilege->canEditBadges();
         $frm = $this->getForm($type);

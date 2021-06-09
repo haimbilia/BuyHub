@@ -84,7 +84,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $function = "form(" . $row[Badge::DB_TBL_PREFIX . 'id'] . ", " . $row[Badge::DB_TBL_PREFIX . 'type'] . ")";
+                    $function = "form(" . $row[Badge::DB_TBL_PREFIX . 'type'] . ", " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")";
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "deleteRecord(event, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {

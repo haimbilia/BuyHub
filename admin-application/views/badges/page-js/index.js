@@ -37,8 +37,8 @@ $(document).on('change', '.icon-language-js', function () {
         });
     };
 
-    form = function (badge_id, type) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [badge_id, type]), '', function (t) {
+    form = function (type, badge_id = 0) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [type, badge_id]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
             if ('' != $("input[name='badge_id']").val()) {
@@ -59,7 +59,6 @@ $(document).on('change', '.icon-language-js', function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             reloadList();
-            // form(t.badge_id, t.badge_type);
             backToListing();
         });
     };
