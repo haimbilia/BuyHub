@@ -115,6 +115,7 @@ Fixes:
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
     => 054447 - when product having multiple options then on detail page> options are not listing properly
     => 054613 - Error display on invoice pdf page
+    => 054742 - wrong message is populating on button on tooltip
 
 
 Develop
