@@ -265,7 +265,7 @@ $action = strtolower($action);
                         </li>
                     <?php } ?>
 
-                    <?php if ($userPrivilege->canViewBadges(UserAuthentication::getLoggedUserId(), true)) { ?>
+                    <?php /* if ($userPrivilege->canViewBadges(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'relatedproducts') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'RelatedProducts'); ?>">
@@ -288,7 +288,7 @@ $action = strtolower($action);
                                 </a>
                             </div>
                         </li>
-                    <?php } ?>
+                    <?php }  */?>
 
                     <li class="divider"></li>
                 <?php } ?>
