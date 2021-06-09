@@ -303,7 +303,7 @@ class BadgesController extends AdminBaseController
         $pagesize = 20;
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
 
-        $srch = new BadgeSearch($this->adminLangId, Badge::APPROVAL_STATUS_OPEN, applicationConstants::ACTIVE);
+        $srch = new BadgeSearch($this->adminLangId, -1, applicationConstants::ACTIVE);
         $srch->setPageSize($pagesize);
         if (!empty($keyword)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');

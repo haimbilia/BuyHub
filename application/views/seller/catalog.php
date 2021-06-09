@@ -58,13 +58,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                                 $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-                                $submitFld->developerTags['col'] = 1;
+                                $submitFld->developerTags['col'] = 2;
                                 $submitFld->developerTags['noCaptionTag'] = true;
 
                                 $fldClear = $frmSearchCatalogProduct->getField('btn_clear');
                                 $fldClear->setFieldTagAttribute('onclick', 'clearSearch()');
                                 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-                                $fldClear->developerTags['col'] = 1;
+                                $fldClear->developerTags['col'] = 2;
                                 $fldClear->developerTags['noCaptionTag'] = true;
                                 /* if( User::canAddCustomProductAvailableToAllSellers() ){
                                       $submitFld = $frmSearchCatalogProduct->getField('btn_submit');

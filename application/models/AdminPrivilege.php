@@ -121,10 +121,10 @@ class AdminPrivilege
     public const SECTION_BUYERS_REPORT = 115;
     public const SECTION_SELLERS_REPORT = 116;
     public const SECTION_SUBSCRIPTION_REPORT = 117;
-    public const SECTION_FINANCIAL_REPORT = 117;
-    public const SECTION_ORDERS_REPORT = 118;
-    public const SECTION_BADGES = 119;
-    public const SECTION_BADGE_LINKS = 120;
+    public const SECTION_FINANCIAL_REPORT = 118;
+    public const SECTION_ORDERS_REPORT = 119;
+    public const SECTION_BADGES = 120;
+    public const SECTION_BADGE_LINKS = 121;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;

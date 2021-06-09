@@ -10,18 +10,18 @@ $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $si
 $keyFld->developerTags['col'] = 4;
 
 $fld = $frmSearch->getField('badge_name');
-$fld->developerTags['col'] = 3;
+$fld->developerTags['col'] = 2;
 
 $fld = $frmSearch->getField('ribbon_name');
-$fld->developerTags['col'] = 3;
+$fld->developerTags['col'] = 2;
 
 $submitBtnFld = $frmSearch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-$submitBtnFld->developerTags['col'] = 1;
+$submitBtnFld->developerTags['col'] = 2;
 
 $cancelBtnFld = $frmSearch->getField('btn_clear');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-$cancelBtnFld->developerTags['col'] = 1;
+$cancelBtnFld->developerTags['col'] = 2;
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
