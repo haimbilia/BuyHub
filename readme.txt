@@ -191,7 +191,8 @@ Fixes:
     => 054612 - login with otp is working with default otp 0000
     => 054616 - after submitting review> getting error on review page- front end
     => 054717 - on recently view product error coming on product detail page
-    => 054731 - when review is placed with media then there is no need to add show more on 6th image 
+    => 054731 - when review is placed with media then there is no need to add show more on 6th image
+    => 054761 - despite having sku non mandatory it's not adding inventory from seller end
 
 
 New Features:
