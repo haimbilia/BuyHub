@@ -162,6 +162,7 @@ class UserPrivilege
                 static::SECTION_VOLUME_DISCOUNT => Labels::getLabel('LBL_Volume_Discount', $langId),
                 static::SECTION_BUY_TOGETHER_PRODUCTS => Labels::getLabel('LBL_Buy_Together_Products', $langId),
                 static::SECTION_RELATED_PRODUCTS => Labels::getLabel('LBL_Related_Products', $langId),
+                static::SECTION_ADVERTISEMENT_FEED => Labels::getLabel('LBL_ADVERTISEMENT_FEED', $langId),
                 static::SECTION_BADGES => Labels::getLabel('LBL_BADGES', $langId),
                 static::SECTION_BADGE_LINKS => Labels::getLabel('LBL_BADGE_LINKS', $langId),
             ),
