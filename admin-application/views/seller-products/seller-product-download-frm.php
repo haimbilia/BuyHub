@@ -98,7 +98,7 @@ if (false == $canDo) {
             <div class="row">
                 <?php if (true == $canDo) { ?>
                     <?php if (true === $showFldAttachWithExistingOrders) { ?>
-                        <div class="col-md-4">
+                        <div class="col-md-4 attach_with_existing_orders-js">
                             <div class="field-set">
                                 <div class="caption-wraper">
                                     <label class="field_label">
@@ -154,7 +154,11 @@ if (false == $canDo) {
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn'); ?>
+                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn');
+                                    $restBtn = $downloadFrm->getField('reset');
+                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;');
+                                    echo $downloadFrm->getFieldHtml('reset');
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -200,6 +204,9 @@ if (false == $canDo) {
                                 <div class="field_cover">
                                     <?php
                                     echo $downloadFrm->getFieldHtml('attachement_upload_btn');
+                                    $restBtn = $downloadFrm->getField('reset');
+                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;' );
+                                    echo $downloadFrm->getFieldHtml('reset');
                                     ?>
                                 </div>
                             </div>
@@ -220,10 +227,14 @@ if (false == $canDo) {
                     </div>
                 <?php } ?>
             </div>
-            <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('selprod_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
+            <?php
+            echo $downloadFrm->getFieldHtml('product_id');
+            echo $downloadFrm->getFieldHtml('selprod_id');
+            echo $downloadFrm->getFieldHtml('dd_link_id');
+            echo $downloadFrm->getFieldHtml('dd_link_ref_id');
+            echo $downloadFrm->getFieldHtml('is_preview');
+            echo $downloadFrm->getFieldHtml('ref_file_id');
+            ?>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
     </div>

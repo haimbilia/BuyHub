@@ -74,7 +74,8 @@ foreach ($attachments as $sn => $row) {
                         array(
                             'class' => 'btn btn-light btn-sm',
                             'title' => Labels::getLabel('LBL_Delete', $adminLangId),
-                            'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)', 'href' => 'javascript:void(0);'
+                            'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)',
+                            'href' => 'javascript:void(0);'
                         ),
                         '<i class="fa fa-trash  icon"></i>',
                         true
@@ -87,8 +88,8 @@ foreach ($attachments as $sn => $row) {
                             'class' => 'btn btn-light btn-sm',
                             'title' => Labels::getLabel('LBL_Add', $adminLangId),
                             'href' => 'javascript:void(0);',
-                            /* 'onclick' => 'addPreviewFile('. $row['afile_id'] .')', */
-                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
+                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;',
+                            'href' => 'javascript:void(0);'
                         ),
                         '<i class="fa fa-plus  icon"></i>',
                         true
@@ -111,33 +112,26 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $lang_name, true);
                 break;
             case 'action':
-                if (1 < $row['afile_id']) {
+                if (1 < $row['afile_id'] || 1 < $row['prev_afile_id']) {
+                    $fileId = $row['afile_id'];
+                    $isPreview = 0;
+                    if (1 > $row['afile_id']) {
+                        $fileId = $row['prev_afile_id'];
+                        $isPreview = 1;
+                    }
+
                     $td->appendElement(
                         "a",
                         array(
                             'class' => 'btn btn-clean btn-sm btn-icon',
                             'title' => Labels::getLabel('LBL_Delete', $adminLangId),
-                            'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                            'onclick' => 'deleteDigitalFile(' . $fileId . ', ' . $row['afile_record_id'] . ', ' . $isPreview . ', 1)',
+                            'href' => 'javascript:void(0);'
                         ),
                         '<i class="fa fa-trash  icon"></i>',
                         true
                     );
                 }
-
-                /*if(true == $canDo) {
-                    if (empty($row['preview'])) {
-                        $td->appendElement(
-                            "a",
-                            array(
-                                'class' => 'btn btn-clean btn-sm btn-icon',
-                                'title' => Labels::getLabel('LBL_Preview', $adminLangId),
-                                'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;', 'href' => 'javascript:void(0);'
-                            ),
-                            '<i class="fa fa-caret-square-right icon"></i>',
-                            true
-                        );
-                    }
-                } */
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

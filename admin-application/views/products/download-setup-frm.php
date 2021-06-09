@@ -206,8 +206,7 @@ if (false == $canDo) {
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <?php echo $downloadFrm->getFieldHtml('attachement_upload_btn'); ?>
-                                    <?php 
+                                    <?php echo $downloadFrm->getFieldHtml('attachement_upload_btn');
                                     $restBtn = $downloadFrm->getField('reset');
                                     $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;' );
                                     echo $downloadFrm->getFieldHtml('reset'); ?>

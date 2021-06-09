@@ -591,7 +591,7 @@ saveDownloadFiles = function()
     });
 
     fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
-
+    var productId = $("input[name='product_id']").val();
     $.ajax({
         url : fcom.makeUrl('Products', 'setupDigitalDownloads'),
         type: "POST",
@@ -605,9 +605,10 @@ saveDownloadFiles = function()
                 return;
             }
             fcom.displaySuccessMessage(ans.msg);
-            $('.downloadable_file').val('');
+            /* $('.downloadable_file').val('');
             $(".downloadable_file_input").show();
-            getDigitalDownloads();
+            getDigitalDownloads(); */
+            downloadsForm(productId, 0, true);
         },
         error: function(jqXHR, textStatus, errorThrown){
             alert("Error Occurred.");
@@ -712,14 +713,41 @@ deleteDigitallink = function(linkId, refId)
     });
 }
 
-deleteDigitalFile = function(afileId, prodId, isPreview)
+deleteDigitalFile = function(afileId, prodId, isPreview, fullRow)
+{
+    var agree = confirm(langLbl.confirmDelete);
+    if( !agree ){ return false; }
+
+    var isPreview = isPreview || 0;
+    var fullRow = fullRow || 0;
+
+    var data = '&afile_id=' + afileId + '&ref_id=' + prodId;
+    if (1 == isPreview) {
+        data += '&is_preview=1'
+    }
+    data += '&frow=' + fullRow;
+
+    fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+
+    fcom.ajax( fcom.makeUrl( 'Products', 'deleteDigitalFile'), data , function(res) {
+        var ans = $.parseJSON(res);
+        if( ans.status == 1 ){
+            fcom.displaySuccessMessage(ans.msg);
+        } else {
+            fcom.displayErrorMessage(ans.msg);
+        }
+        getDigitalDownloads();
+    });
+};
+
+/* deleteRow = function(afileId, prodId, isPreview)
 {
     var agree = confirm(langLbl.confirmDelete);
     if( !agree ){ return false; }
 
     var isPreview = isPreview || 0;
 
-    var data = '&afile_id=' + afileId + '&ref_id=' + prodId;
+    var data = '&afile_id=' + afileId + '&ref_id=' + prodId + '&frow=1';
     if (1 == isPreview) {
         data += '&is_preview=1'
     }
@@ -735,7 +763,7 @@ deleteDigitalFile = function(afileId, prodId, isPreview)
         }
         getDigitalDownloads();
     });
-};
+}; */
 
 resetForm = function() {
     var productId = $("input[name='product_id']").val();

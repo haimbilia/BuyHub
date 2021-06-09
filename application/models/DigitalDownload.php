@@ -109,7 +109,7 @@ class DigitalDownload extends MyAppModel
         return true;
     }
 
-    public function deleteAttachment($aFileId, $refRecordId, $isPreview = 0)
+    public function deleteAttachment($aFileId, $refRecordId, $isPreview = 0, $delFullRow = 0)
     {
         $aFileObj = new AttachedFile();
         
@@ -120,6 +120,15 @@ class DigitalDownload extends MyAppModel
         if (false == $aFileObj->deleteFile($fileType, $refRecordId, $aFileId)) {
             $this->error = $aFileObj->getError();
             return false;
+        }
+
+        if (1 == $delFullRow) {
+            $aFileObj->deleteFile(
+                AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
+                $refRecordId,
+                0,
+                $aFileId
+            );
         }
 
         return true;
@@ -517,6 +526,17 @@ class DigitalDownload extends MyAppModel
             'afile_lang_id' => $langId
         ];
         foreach ($rows as $key => $op) {
+            /* don't attach new files only with not expired orders [*/
+
+            $dateAvailable = '';
+            if ($op['op_selprod_download_validity_in_days'] != '-1') {
+                $dateAvailable = date('Y-m-d', strtotime($op['order_date_added'] . ' + ' . $op['op_selprod_download_validity_in_days'] . ' days'));
+            }
+            
+            if ($dateAvailable != '' && $dateAvailable < date('Y-m-d')) {
+                continue;
+            }
+            /* ] */
             $fileData['afile_record_id'] = $op['op_id'];
             $afileObj->setMainTableRecordId(0);
             $afileObj->assignValues($fileData);
@@ -527,7 +547,9 @@ class DigitalDownload extends MyAppModel
 
     public function attachLinkWithOrderedProducts($downloadLink, $recordId, $requestType, $langId, $option)
     {
-        if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])) {
+        if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])
+            || '' == $downloadLink
+        ) {
             return;
         }
 
@@ -539,6 +561,18 @@ class DigitalDownload extends MyAppModel
 
         $linkData['opddl_downloadable_link'] = $downloadLink;
         foreach ($rows as $key => $op) {
+            /* don't attach new files only with not expired orders [*/
+
+            $dateAvailable = '';
+            if ($op['op_selprod_download_validity_in_days'] != '-1') {
+                $dateAvailable = date('Y-m-d', strtotime($op['order_date_added'] . ' + ' . $op['op_selprod_download_validity_in_days'] . ' days'));
+            }
+            
+            if ($dateAvailable != '' && $dateAvailable < date('Y-m-d')) {
+                continue;
+            }
+            /* ] */
+
             $linkData['opddl_op_id'] = $op['op_id'];
             FatApp::getDb()->insertFromArray(OrderProductDigitalLinks::DB_TBL, $linkData);
         }
@@ -566,7 +600,9 @@ class DigitalDownload extends MyAppModel
 
         $opSrchObj->addMultipleFields([
             'op_id',
-            'op_order_id'
+            'op_order_id',
+            'order_date_added',
+            'op_selprod_download_validity_in_days'
         ]);
         $opSrchObj->addDigitalDownloadCondition();
         $opSrchObj->doNotCalculateRecords();
