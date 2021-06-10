@@ -50,6 +50,7 @@ class RatingTypesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
+        $this->set('types', RatingType::getTypeArr($this->adminLangId));
         $this->_template->render(false, false);
     }
 

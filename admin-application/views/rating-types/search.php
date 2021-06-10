@@ -3,6 +3,7 @@ $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'ratingtype_name' => Labels::getLabel('LBL_RATING_TYPE', $adminLangId),
+    'ratingtype_type' => Labels::getLabel('LBL_TYPE', $adminLangId),
     'ratingtype_active' => Labels::getLabel('LBL_STATUS', $adminLangId),
     'action' => '',
 );
@@ -37,12 +38,30 @@ foreach ($arrListing as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
+            case 'ratingtype_type':
+                $td->appendElement('plaintext', array(), $types[$row[$key]], true);
+                break;
             case 'ratingtype_name':
                 $name = array_key_exists('ratingtype_name', $row) && !empty($row[$key]) ? $row[$key]  . ' (' . $row['ratingtype_identifier'] . ')' : $row['ratingtype_identifier'];
 
                 if (array_key_exists('ratingtype_active', $row) && applicationConstants::YES == $row['ratingtype_default']) {
                     $name .= ' <span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
                 }
+                $infoLabel = '';
+                switch($row['ratingtype_id']){
+                    case RatingType::TYPE_PRODUCT:
+                        $infoLabel = Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $adminLangId); 
+                    break;
+                    case RatingType::TYPE_SHOP:
+                        $infoLabel = Labels::getLabel('LBL_SHOP_RATING_TYPE_TOOLTIP_INFO', $adminLangId); 
+                    break;
+                    case RatingType::TYPE_DELIVERY:
+                        $infoLabel = Labels::getLabel('LBL_DELIVERY_RATING_TYPE_TOOLTIP_INFO', $adminLangId);
+                    break;
+                }
+                if(!empty($infoLabel)){
+                    $name .=' <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="'.$infoLabel.'"></i>';
+                } 
 
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
