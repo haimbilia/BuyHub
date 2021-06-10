@@ -115,12 +115,12 @@ class BadgeLinkConditionsController extends AdminBaseController
 
         $badgeType = $post['badge_type'];
         if (!empty($badgeType)) {
-            $srch->addBadgeTypeCondition([$badgeType]);
+            $srch->addHaving(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
         $recordType = $post['blinkcond_record_type']; //Link Type
         if (!empty($recordType)) {
-            $srch->addRecordTypesCondition([$recordType]);
+            $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', '=',  $recordType);
         }
 
         $trigger = $post['record_condition']; //Trigger
@@ -134,9 +134,9 @@ class BadgeLinkConditionsController extends AdminBaseController
 
         $conditionType = $post['blinkcond_condition_type'];
         if (!empty($conditionType)) {
-            $srch->addConditionTypesCondition([$conditionType]);
+            $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type', '=',  $conditionType);
         }
-        $srch->descOrder();
+        $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set("arrListing", $records);

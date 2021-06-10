@@ -8,9 +8,7 @@ $bdgExcludeCndType = isset($bdgExcludeCndType) && is_array($bdgExcludeCndType) ?
 $frontReturn = isset($frontReturn) ? $frontReturn : false;
 
 $obj = new Badge();
-$badgeUrlArr = $obj->setSellerProdudtId($bdgSelProdId)
-                    ->setProductId($bdgProdId)
-                    ->setShopId($bdgShopId)
+$badgeUrlArr = $obj->setRecordId($bdgSelProdId, $bdgProdId, $bdgShopId)
                     ->getBadgeUrl($siteLangId, $bdgSize);
 $html = "";
 if (is_array($badgeUrlArr) && !empty($badgeUrlArr)) {

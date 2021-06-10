@@ -14,6 +14,8 @@ if (!$canEdit) {
     unset($arr_flds['select_all'], $arr_flds['action']);
 }
 
+$typeArr = Badge::getTypeArr($adminLangId);
+
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -40,7 +42,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             
             case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $adminLangId), true);
+                $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $adminLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId);
@@ -75,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 if ($canEdit) {
                     $funcName = (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) ? 'badgeForm' : 'ribbonForm';
-                    $function = $funcName . "(" . $row[Badge::DB_TBL_PREFIX . 'type'] . ", " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")";
+                    $function = $funcName . "(" . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")";
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {

@@ -34,37 +34,4 @@ class BadgeSearch extends SearchBase
             $this->addCondition(Badge::DB_TBL_PREFIX . 'active', '=', $active);
         }
     }
-
-    /**
-     * addTypesCondition
-     *
-     * @param  array $typesArr
-     * @return void
-     */
-    public function addTypesCondition(array $typesArr)
-    {
-        $this->addCondition(Badge::DB_TBL_PREFIX . 'type', 'IN',  $typesArr);
-    }
-
-    /**
-     * addShapeTypesCondition
-     *
-     * @param  array $shapeTypesArr
-     * @return void
-     */
-    public function addShapeTypesCondition(array $shapeTypesArr)
-    {
-        $this->addCondition(Badge::DB_TBL_PREFIX . 'shape_type', 'IN',  $shapeTypesArr);
-    }
-
-    /**
-     * descOrder
-     *
-     * @param  array $descOrder
-     * @return void
-     */
-    public function descOrder()
-    {
-        $this->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
-    }
 }

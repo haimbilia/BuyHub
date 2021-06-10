@@ -14,7 +14,7 @@ if (!$canEdit) {
 }
 
 $approvalStatusArr = Badge::getApprovalStatusArr($siteLangId);
-
+$typeArr = Badge::getTypeArr($siteLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 
@@ -47,7 +47,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $name, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $siteLangId), true);
+                $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {

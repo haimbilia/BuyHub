@@ -14,6 +14,8 @@ if (!$canEdit) {
     unset($arr_flds['select_all'], $arr_flds['action']);
 }
 
+$typeArr = Badge::getTypeArr($siteLangId);
+
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -40,7 +42,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             
             case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $siteLangId), true);
+                $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $siteLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $siteLangId);

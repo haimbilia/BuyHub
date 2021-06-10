@@ -108,7 +108,7 @@ $(document).on('change', '.icon-language-js', function () {
         }
 
         var data = "badge_name=" + badge_name + "&toLangId=" + toLangId;
-        fcom.updateWithAjax(fcom.makeUrl(controller, 'translatedCategoryData'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'translate'), data, function (t) {
             if (t.status == 1) {
                 $("input[name='badge_name[" + toLangId + "]']").val(t.badge_name);
             }

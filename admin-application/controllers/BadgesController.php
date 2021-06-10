@@ -59,7 +59,7 @@ class BadgesController extends AdminBaseController
 
         $badgeType = $post['badge_type'];
         if (!empty($badgeType)) {
-            $srch->addTypesCondition([$badgeType]);
+            $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
         $approval = $post['badge_required_approval'];
@@ -68,7 +68,7 @@ class BadgesController extends AdminBaseController
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
 
-        $srch->descOrder();
+        $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -89,8 +89,7 @@ class BadgesController extends AdminBaseController
 
         $dataToFill = [];
         if ($badgeId > 0) {
-            $srch = new Badge($badgeId);
-            $langData = $srch->getAllLangData($this->adminLangId);
+            $langData = Badge::getLangDataArr($badgeId, array_merge(Badge::ATTR, Badge::LANG_ATTR), true);
             if (empty($langData)) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
@@ -142,11 +141,59 @@ class BadgesController extends AdminBaseController
         $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
         $attachments = FatApp::getPostedData('attachment_ids', FatUtility::VAR_STRING, '');
 
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        if (is_array($post[Badge::DB_TBL_PREFIX . 'name']) && array_key_exists($siteDefaultLangId, $post[Badge::DB_TBL_PREFIX . 'name'])) {
+            $identifier = $post[Badge::DB_TBL_PREFIX . 'name'][$siteDefaultLangId];
+        } else {
+            $identifier = $post[Badge::DB_TBL_PREFIX . 'name'];
+        }
+
         $record = new Badge($badgeId);
-        if (!$record->add($post)) {
+        $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $identifier);
+        $record->assignValues($post);
+        if (!$record->save()) {
             FatUtility::dieJsonError($record->getError());
         }
         $badgeId = $record->getMainTableRecordId();
+
+        if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name'])) {
+            $langNames = Language::getAllNames();
+            foreach ($post[Badge::DB_TBL_PREFIX . 'name'] as $langId => $name) {
+                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                $tranlateToOtherLang = array_key_exists('auto_update_other_langs_data', $post) ? $post['auto_update_other_langs_data'] : 0;
+                if (empty($name) && !empty($translatorSubscriptionKey) && 0 < $tranlateToOtherLang) {
+                    $updateLangDataobj = new TranslateLangData(Badge::DB_TBL_LANG);
+                    $translatedText = $updateLangDataobj->directTranslate([Badge::DB_TBL_PREFIX . 'name' => $identifier]);
+                    if (false === $translatedText) {
+                        continue;
+                    }
+                    $name = current($translatedText)[Badge::DB_TBL_PREFIX . 'name'];
+                }
+
+                if (!empty($name) && Badge::TYPE_RIBBON == $post[Badge::DB_TBL_PREFIX . 'type']) {
+                    if (Badge::RIBB_TEXT_MIN_LEN > strlen($name)) {
+                        $error = Labels::getLabel('LBL_INVALID_LENGTH_OF_{LANG}_NAME', $langId);
+                        $error = CommonHelper::replaceStringData($error, ['{LANG}' => $langNames[$langId]]);
+                        FatUtility::dieJsonError($error);
+                    }
+
+                    if (Badge::RIBB_TEXT_MAX_LEN < strlen($name)) {
+                        $name = substr($name, 0, (Badge::RIBB_TEXT_MAX_LEN - 1));
+                    }
+                }
+
+                $recordLangData = [
+                    Badge::DB_TBL_LANG_PREFIX . 'badge_id' => $badgeId,
+                    Badge::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
+                    Badge::DB_TBL_PREFIX . 'name' => $name
+                ];
+
+                $badgeObj = new Badge($badgeId);
+                if (!$badgeObj->updateLangData($langId, $recordLangData)) {
+                    FatUtility::dieJsonError($badgeObj->getError());
+                }
+            }
+        }
 
         if (!empty($attachments)) {
             $attachmentIdsArr = json_decode($attachments, true);
@@ -215,8 +262,8 @@ class BadgesController extends AdminBaseController
         }
 
         if (Badge::TYPE_BADGE == $type) {
-            $requireApprovalArr = [Labels::getLabel('LBL_OPEN', $this->adminLangId), Labels::getLabel('LBL_REQUESTED', $this->adminLangId)];
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL_STATUS', $this->adminLangId), 'badge_required_approval', $requireApprovalArr);
+            $requireApprovalArr = Badge::getApprovalStatusArr($this->adminLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $requireApprovalArr);
             $fld->requirement->setRequired(true);
         }
 
@@ -263,9 +310,7 @@ class BadgesController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $badgeIdsArr = FatUtility::int(FatApp::getPostedData('badgeIds'));
         if (empty($badgeIdsArr) || -1 == $status) {
-            FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
         foreach ($badgeIdsArr as $badge_id) {
@@ -282,9 +327,7 @@ class BadgesController extends AdminBaseController
     private function updateStatus(int $badge_id, int $status)
     {
         if (1 > $badge_id || -1 == $status) {
-            FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
         $brandObj = new Badge($badge_id);
@@ -293,16 +336,18 @@ class BadgesController extends AdminBaseController
         }
     }
 
-    public function translatedCategoryData()
+    public function translate()
     {
         $badge_name = FatApp::getPostedData('badge_name', FatUtility::VAR_STRING, '');
         $toLangId = FatApp::getPostedData('toLangId', FatUtility::VAR_INT, 0);
         $data['badge_name'] = $badge_name;
-        $productCategory = new ProductCategory();
-        $translatedData = $productCategory->getTranslatedCategoryData($data, $toLangId);
-        if (!$translatedData) {
-            FatUtility::dieJsonError($productCategory->getError());
+
+        $translateLangobj = new TranslateLangData(Badge::DB_TBL_LANG);
+        $translatedData = $translateLangobj->directTranslate($data, $toLangId);
+        if (false === $translatedData) {
+            FatUtility::dieJsonError($translateLangobj->getError());
         }
+
         $this->set('badge_name', $translatedData[$toLangId]['badge_name']);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -319,7 +364,7 @@ class BadgesController extends AdminBaseController
         }
 
         if (0 < $badgeType) {
-            $srch->addTypesCondition([$badgeType]);
+            $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
         $srch->addMultipleFields([Badge::DB_TBL_PREFIX . 'id as id', Badge::DB_TBL_PREFIX . 'name as name']);
@@ -332,9 +377,7 @@ class BadgesController extends AdminBaseController
         $this->objPrivilege->canEditBadges();
         $badgeIdsArr = FatUtility::int(FatApp::getPostedData('badgeIds'));
         if (empty($badgeIdsArr)) {
-            FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
         foreach ($badgeIdsArr as $badge_id) {
@@ -377,7 +420,7 @@ class BadgesController extends AdminBaseController
             FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId));
         }
 
-        Badge::deleteImagesWithOutBadgeId($file_type);
+        Badge::deleteImagesWithOutBadgeId();
 
         $fileHandlerObj = new AttachedFile($afileId);
         if (!$res = $fileHandlerObj->saveImage(
@@ -409,7 +452,7 @@ class BadgesController extends AdminBaseController
         $badgeId = FatUtility::int($badgeId);
         $langId = FatUtility::int($langId);
         if (!$afileId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
         $fileType = AttachedFile::FILETYPE_BADGE;
         $fileHandlerObj = new AttachedFile();
