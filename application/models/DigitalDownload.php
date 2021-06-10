@@ -117,6 +117,7 @@ class DigitalDownload extends MyAppModel
         if (1 == $isPreview) {
             $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW;
         }
+        
         if (false == $aFileObj->deleteFile($fileType, $refRecordId, $aFileId)) {
             $this->error = $aFileObj->getError();
             return false;
@@ -185,7 +186,7 @@ class DigitalDownload extends MyAppModel
         
         $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Attach_with_existing_orders', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'));
+        $frm->addSelectBox(Labels::getLabel('LBL_Attach_with_existing_orders', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
         
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Downloadable_Link', $langId), 'product_downloadable_link');
         /* $fld->requirements()->setRequired(); */
@@ -448,12 +449,17 @@ class DigitalDownload extends MyAppModel
         
         if (true == $validateAllowedWithInventory) {
             if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
-                return static::returnResponseOrDie(true, true);
+                return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
             } else {
-                return static::returnResponseOrDie(true, false);
+                return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
             }
         }
-        return static::returnResponseOrDie(true, true);
+
+        if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
+            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+        } else {
+            return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $langId));
+        }
     }
 
     public static function returnResponseOrDie($returnResult = false, $response = false, $message = '')

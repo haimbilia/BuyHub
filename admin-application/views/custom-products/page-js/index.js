@@ -721,6 +721,6 @@ deleteDigitalFile = function(afile_id, prod_id, isPreview, fullRow)
 };
 
 resetForm = function() {
-    var productId = $("input[name='product_id']").val();
-    downloadsForm(productId);
+    var preqId = $("input[name='preq_id']").val();
+    downloadsForm(preqId, 0, true);
 }

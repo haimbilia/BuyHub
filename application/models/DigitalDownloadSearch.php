@@ -327,6 +327,7 @@ class DigitalDownloadSearch extends SearchBase
     
     public static function processAttachmentsWithPreview($attachments)
     {
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $attachments], 1);
         if (0 > count($attachments)) {
             return [];
         }
@@ -334,7 +335,7 @@ class DigitalDownloadSearch extends SearchBase
         foreach ($attachments as $key => $attachment) {
             if ($attachment['afile_type'] == AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD) {
                 if (!array_key_exists($key, $rows)) {
-                    $rows[$key]['pddr_id'] = $attachment['pddr_id'];
+                    $rows[$key]['pddr_id'] = $attachment['pddr_id'] . 1;
                     $rows[$key]['pddr_options_code'] = $attachment['pddr_options_code'];
                     $rows[$key]['afile_record_id'] = $attachment['afile_record_id'];
                     $rows[$key]['mainfile'] = $attachment['afile_name'];
@@ -358,7 +359,7 @@ class DigitalDownloadSearch extends SearchBase
             }
             
             if (!array_key_exists($attachment['afile_record_subid'], $rows)) {
-                $rows[$attachment['afile_record_subid']]['pddr_id'] = $attachment['pddr_id'];
+                $rows[$attachment['afile_record_subid']]['pddr_id'] = $attachment['pddr_id'] . 3;
                 $rows[$attachment['afile_record_subid']]['pddr_options_code'] = $attachment['pddr_options_code'];
                 $rows[$attachment['afile_record_subid']]['afile_record_id'] = $attachment['afile_record_id'];
                 $rows[$attachment['afile_record_subid']]['afile_lang_id'] = $attachment['afile_lang_id'];

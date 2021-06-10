@@ -1271,11 +1271,11 @@ saveDownloadLinks = function ()
     var data = fcom.frmData(document.frmDownload);
 
     if (optionCombi == '') {
-        data = data + '&option_comb_id=0';
+        data.append('option_comb_id', 0);
     }
 
-    data = data + '&prod_ref_type=1';
-
+    data.append('prod_ref_type', 1);
+    
     fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 
     fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function(t) {
@@ -1316,6 +1316,9 @@ saveDownloadFiles = function()
     
     data.append('prod_ref_type', 1);
     fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+
+    var preqId = $("input[name='preq_id']").val();
+
     $.ajax({
         url : fcom.makeUrl('Seller', 'setupDigitalDownloads'),
         type: "POST",
@@ -1330,7 +1333,7 @@ saveDownloadFiles = function()
                 return;
             }
             fcom.displaySuccessMessage(ans.msg);
-            getDigitalDownloads();
+            downloadsForm(preqId, 0, true);
         },
         error: function(jqXHR, textStatus, errorThrown){
             alert("Error Occurred.");
@@ -1346,7 +1349,10 @@ attachDigitalPreviewFile = function (option, langId, refId, subRefId)
     $('#frmDownload input[name=dd_link_ref_id]').val(subRefId);
 
     $(".downloadable_file_input").hide();
-    $("#attachement_upload_btn").attr('onclick', 'saveDigitalPreviewFile(); return false;');
+    $('#frmDownload input[name=is_preview]').val(1);
+    $('#frmDownload input[name=ref_file_id]').val(subRefId);
+
+    $("#attachement_upload_btn").attr('onclick', 'saveDownloadFiles(); return false;');
 }
 
 saveDigitalPreviewFile = function()
@@ -1426,15 +1432,24 @@ deleteDigitallink = function(linkId, refId)
     }, {}, true);
 }
 
-deleteDigitalFile = function(afile_id, prod_id)
+deleteDigitalFile = function(afile_id, prod_id, isPreview, fullRow)
 {
     var agree = confirm(langLbl.confirmDelete);
     if( !agree ){ return false; }
 
     var data = '&afile_id=' + afile_id + '&ref_id=' + prod_id;
+
+    data += '&is_preview=' + isPreview;
+    data += '&frow=' + fullRow;
+
     fcom.updateWithAjax( fcom.makeUrl( 'Seller', 'deleteDigitalFile'), data , function(res) {
         if( res.status == 1 ){
             getDigitalDownloads();
         }
     }, {}, true);
 };
+
+resetForm = function() {
+    var preqId = $("input[name='preq_id']").val();
+    downloadsForm(preqId);
+}

@@ -13,7 +13,7 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
-// CommonHelper::printArray([$links] );
+
 $sr_no = 0;
 foreach ($links as $sn => $row) {
     $sr_no++;
@@ -57,17 +57,6 @@ foreach ($links as $sn => $row) {
                 }
                 break;
             case 'action':
-                /* $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_Edit', $adminLangId),
-                        'onclick' => 'downloadsForm(' . $row['pddr_record_id'] . ', ' . $row['pdl_id'] . ')', 'href' => 'javascript:void(0);'
-                    ),
-                    '<i class="fa fa-edit  icon"></i>',
-                    true
-                ); */
-
                 $td->appendElement(
                     "a",
                     array(

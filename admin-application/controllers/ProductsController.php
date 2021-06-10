@@ -1739,8 +1739,15 @@ class ProductsController extends AdminBaseController
     {
         $this->objPrivilege->canEditProducts();
 
+        
         $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
         $previewLink = FatApp::getPostedData('product_preview_link', null, '');
+
+        if ('' == $downloadLink && '' == $previewLink) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->adminLangId));
+            return false;
+        }
+
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
         $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
@@ -1821,7 +1828,7 @@ class ProductsController extends AdminBaseController
 
         $attachments = DigitalDownloadSearch::getAttachments($productId, Product::CATALOG_TYPE_PRIMARY, $optionComb, $langId);
 
-        $attachments = static::processAttachmentsWithPreview($attachments);
+        $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
 
         $this->set('attachments', $attachments);
         $languages = Language::getAllNames();

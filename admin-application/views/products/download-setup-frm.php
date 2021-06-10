@@ -102,7 +102,7 @@ if (false == $canDo) {
             <?php if (true == $canDo) { ?>
                 <div class="row">
                     <?php if (true === $showFldAttachWithExistingOrders) { ?>
-                        <div class="col-md-4">
+                        <div class="col-md-4 attach_with_existing_orders-js">
                             <div class="field-set">
                                 <div class="caption-wraper">
                                     <label class="field_label">
@@ -158,8 +158,7 @@ if (false == $canDo) {
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn'); ?>
-                                    <?php
+                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn');
                                     $restBtn = $downloadFrm->getField('reset');
                                     $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;');
                                     echo $downloadFrm->getFieldHtml('reset'); ?>
@@ -216,11 +215,11 @@ if (false == $canDo) {
                     </div>
                 </div>
             <?php } ?>
-            <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('is_preview'); ?>
-            <?php echo $downloadFrm->getFieldHtml('ref_file_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('product_id');
+            echo $downloadFrm->getFieldHtml('dd_link_id');
+            echo $downloadFrm->getFieldHtml('dd_link_ref_id');
+            echo $downloadFrm->getFieldHtml('is_preview');
+            echo $downloadFrm->getFieldHtml('ref_file_id'); ?>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
     </div>

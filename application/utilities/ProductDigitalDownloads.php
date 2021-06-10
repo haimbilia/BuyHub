@@ -93,6 +93,7 @@ trait ProductDigitalDownloads
             $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
         } else {
             $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
+            $records = DigitalDownloadSearch::processAttachmentsWithPreview($records);
         }
 
         $canDelete = DigitalDownload::canDelete($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);

@@ -1650,12 +1650,18 @@ class CustomProductsController extends AdminBaseController
 
         $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
         $previewLink = FatApp::getPostedData('product_preview_link', null, '');
+
+        if ('' == $downloadLink && '' == $previewLink) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
         $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
         
         if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
-            FatUtility::dieJsonError($digitalDownload->getError());
+            FatUtility::dieJsonError($ddObj->getError());
         }
 
         if (1 <= $ddLinkId) {
