@@ -133,6 +133,7 @@ Fixes:
     => 054689 - 404 error page - issue with few produc urls when subscription in enabled
     => 054718 - Categories added are not listing in admin.
     => 054728 -	Aftership order status should be automatically marked delivered.
+    => 054698 - on clicking of delete button in shipping profile there needs to be confirmation popup
 
 Enhancements :
    => Make provision to made seller
