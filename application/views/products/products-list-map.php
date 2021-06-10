@@ -6,16 +6,16 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
     $displayProductNotAvailableLable = true;
 }
 ?>
-<div id="productsList">
-    <?php
+
+<?php
     $productsByShop = [];
     if ($products) {
         ?>
-        <div class="interactive-stores__list stores">
+<div class="interactive-stores__list stores">
 
-            <div class="stores-body scroll scroll-y">
-                <ul id="mapProducts--js">
-                    <?php
+    <div class="stores-body scroll scroll-y">
+        <ul id="mapProducts--js">
+            <?php
                     foreach ($products as $product) {
                         $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                         $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
@@ -26,50 +26,34 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                         $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
                         ?>
 
-                        <li data-shopId="<?php echo $product['shop_id']; ?>">
-                            <a class="store" href="<?php echo $productUrl; ?>">
-                                <div class="store__img">
-                                    <img loading='lazy' data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
-                                </div>
-                                <div class="store__detail">
-                                    <h6><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?></h6>
-                                    <p class="location"> 
-                                        <?php echo $product['prodcat_name']; ?>
-                                    </p>                                        
-                                    <div class="store__detail-foot">                                        
-                                        <?php
-                                        if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                                            $rating = round($product['prod_rating'], 1);
-                                            if (round($product['totReviews']) > 0) {
-                                                ?>
-                                                <div class="products__rating">      
-                                                    <?php for ($ii = 0; $ii < $rating; $ii++) { ?> 
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                            </use>
-                                                            </svg>
-                                                        </i> 
-                                                    <?php } ?>
-                                                    <span class="rate">(<?php echo round($product['totReviews'], 1); ?> <?php echo Labels::getLabel('LBL_Customer_Reviews', $siteLangId); ?>)</span>
-                                                </div>
-                                                <?php
-                                            }
-                                        }
-                                        include(CONF_THEME_PATH . '_partial/collection/product-price.php');
-                                        ?>
-                                    </div> 
-                                </div>
-                            </a>
-                        </li>
-                    <?php } ?>
+            <li data-shopId="<?php echo $product['shop_id']; ?>">
+                <a class="store" href="<?php echo $productUrl; ?>">
+                    <div class="store__img">
+                        <img loading='lazy' data-ratio="1:1"
+                            src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                            alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>"
+                            title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
+                    </div>
+                    <div class="store__detail">
+                        <h6><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
+                        </h6>
+                        <p class="location">
+                            <?php echo $product['prodcat_name']; ?>
+                        </p>
+                        <div class="store__detail-foot">
+                            <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <?php } ?>
 
-                </ul>
-            </div>
-        </div>
+        </ul>
+    </div>
+</div>
 
 
-        <?php
+<?php
         $searchFunction = 'goToProductListingSearchPage';
         if (isset($pagingFunc)) {
             $searchFunction = $pagingFunc;
@@ -81,7 +65,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
         $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
         $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
         ?>
-        <?php
+<?php
     } else {
         $arr['recordDisplayCount'] = $recordCount;
         echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
@@ -89,17 +73,17 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     }
     ?>
-</div>
+
 <?php
 
 foreach ($productsByShop as &$marker) {
-    $contentString = '<ul>';
+    $contentString = '<ul class="gmap-list">';
     foreach ($marker['products'] as $product) {
         $contentString .= '<li>
-            <figure class="product-profile">
-                <img class="product-img" src="' . $product['img'] . '" alt="Trulli">
-                <figcaption class="product-name"><a href="' . $product['url'] . '">' . $product['name'] . '</a></figcaption>
-            </figure>
+            <div class="product-profile">
+                <div class="product-profile__thumbnail"><img class="product-img" src="' . $product['img'] . '" alt=""></div>
+                <div class="product-profile__data"><div class="title"><a href="' . $product['url'] . '"><strong>' . $product['name'] . '</strong></a></div></div>
+            </div>
             </li>';
     }
     $contentString .= '</ul>';
@@ -108,13 +92,14 @@ foreach ($productsByShop as &$marker) {
 }
 ?>
 <script>
-    var markers = <?php echo json_encode($productsByShop); ?>;
-    $(document).ready(function () {
-        if (typeof map == 'undefined') {
-            initMutipleMapMarker(markers, 'productMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'), dragCallback);
-        } else {
-            clearMarkers();
-            createMarkers(markers);
-        }
-    });
+var markers = <?php echo json_encode($productsByShop); ?>;
+$(document).ready(function() {
+    if (typeof map == 'undefined') {
+        initMutipleMapMarker(markers, 'productMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
+            dragCallback);
+    } else {
+        clearMarkers();
+        createMarkers(markers);
+    }
+});
 </script>

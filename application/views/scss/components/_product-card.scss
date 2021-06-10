@@ -101,11 +101,11 @@
 .products {
     position: relative;
     text-align: center;
-    background: #fff;
+    background: $bg-white;
     //border-radius: $radius4;
     overflow: hidden;
     //border: $border;
-    outline: $border;
+    outline: $border; 
     transition: all 0.2s linear;
     animation: slideRight 600ms ease both;
     a {
@@ -188,12 +188,14 @@
             }
         }
         .products__img {
+            --aspect-ratio: 1/1;
             display: block;
             margin: 0 0 15px;
-            padding: 0 0 100%;
+            padding-bottom: calc(100%/(var(--aspect-ratio)));
             position: relative;
             width: 100%;
             overflow: hidden;
+            background-color:#fcfcfc;
             &:before {
                 color: #dadada;
                 //content: "";
@@ -209,7 +211,8 @@
                 top: calc(50% - 10px);
                 width: 20px;
             }
-            img {
+            img {mix-blend-mode: multiply;
+                object-fit: cover;
                 max-width: 100%;
                 width: 100%;
                 bottom: 0;
@@ -268,7 +271,7 @@
         font-weight: 300;
         color: lighten($body-color, 50%);
         line-height: 1;
-        text-decoration: line-through;
+        text-decoration: line-through; 
     }
     .products-head-specification {
         color: lighten($body-color, 50%);
