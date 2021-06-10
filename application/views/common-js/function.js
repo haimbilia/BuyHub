@@ -97,10 +97,11 @@ $(document).ready(function () {
         return false;
         setSlider();
     });
-
-    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0 && CONF_MAINTENANCE == 0 &&  ( getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController' )) {
-        accessLocation();
+    
+    if (CONF_ENABLE_GEO_LOCATION){
+        googleAddressAutocomplete('ga-autoComplete-header');
     }
+    
 });
 
 $(document).on('afterClose.facebox',$('.location-permission').closest("#facebox"), function(){
@@ -609,27 +610,6 @@ function getLocation() {
     };
 }
 
-function accessLocation(force = false) {
-    var location = getLocation();
-    if ("" == location.lat || "" == location.lng || "" == location.countryCode || force) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Home', 'accessLocation'), '', function (t) {
-                try {
-                    var json = $.parseJSON(t);
-                    if (1 > json.status) {
-                        $.mbsmessage(json.msg, false, 'alert--danger');
-                    }
-                    $(document).trigger('close.facebox');
-                    return false;
-                } catch (exc) {
-                    $.facebox(t, 'location-popup-width');
-                    googleAddressAutocomplete();
-                }
-            });
-        });
-    }
-}
-
 function loadGeoLocation() {
     if (!CONF_ENABLE_GEO_LOCATION) {
         return;
@@ -717,8 +697,8 @@ function getCookie(cname) {
 }
 
 function displayGeoAddress(address) {
-    if (0 < $("#js-curent-zip-code").length) {
-        $("#js-curent-zip-code").text(address);
+    if (0 < $("#ga-autoComplete-header").length) {
+        $("#ga-autoComplete-header").text(address);
     }
 }
 
@@ -734,7 +714,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     var options = { types: ['(regions)'] }
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        var place = autocomplete.getPlace();
+        var place = autocomplete.getPlace();       
         var lat = place['geometry']['location'].lat();
         var lng = place['geometry']['location'].lng();
         var address = '';
@@ -764,8 +744,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
                 $.systemMessage(msg, 'alert--danger');
             }
 
-            $("#" + elementId).val(address);
-            displayGeoAddress(address);
+            $("#" + elementId).val(address);         
         }
 
         if (0 < $("#facebox #" + elementId).length) {
