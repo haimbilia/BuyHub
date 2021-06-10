@@ -7281,6 +7281,38 @@ a.text-dark:hover, a.text-dark:focus {
     @media (max-width: 1199.98px) {
       .header .last-bar {
         border: none; } }
+  .header-location {
+    display: flex;
+    align-items: center; }
+    .header-location input, .header-location .form input[type="text"], .form .header-location input[type="text"], .header-location .form input[type="email"], .form .header-location input[type="email"], .header-location .form input[type="phone"], .form .header-location input[type="phone"], .header-location .form input[type="search"], .form .header-location input[type="search"], .header-location .form input[type="password"], .form .header-location input[type="password"], .header-location .form input[type="date"], .form .header-location input[type="date"], .header-location .form input[type="url"], .form .header-location input[type="url"], .header-location .form input[type="tel"], .form .header-location input[type="tel"], .header-location .form input[type="number"], .form .header-location input[type="number"], .header-location .form input[type="file"], .form .header-location input[type="file"], .header-location .form select, .form .header-location select, .header-location .form .custom-select, .form .header-location .custom-select, .header-location .form textarea, .form .header-location textarea {
+      border: none;
+      background-color: transparent;
+      border-radius: 0;
+      color: #fff;
+      font-size: .875rem;
+      background-image: url("../images/icon__map.svg");
+      background-repeat: no-repeat;
+      background-position: left center;
+      padding-left: 30px; }
+      .header-location input::-webkit-input-placeholder, .header-location .form input[type="text"]::-webkit-input-placeholder, .form .header-location input[type="text"]::-webkit-input-placeholder, .header-location .form input[type="email"]::-webkit-input-placeholder, .form .header-location input[type="email"]::-webkit-input-placeholder, .header-location .form input[type="phone"]::-webkit-input-placeholder, .form .header-location input[type="phone"]::-webkit-input-placeholder, .header-location .form input[type="search"]::-webkit-input-placeholder, .form .header-location input[type="search"]::-webkit-input-placeholder, .header-location .form input[type="password"]::-webkit-input-placeholder, .form .header-location input[type="password"]::-webkit-input-placeholder, .header-location .form input[type="date"]::-webkit-input-placeholder, .form .header-location input[type="date"]::-webkit-input-placeholder, .header-location .form input[type="url"]::-webkit-input-placeholder, .form .header-location input[type="url"]::-webkit-input-placeholder, .header-location .form input[type="tel"]::-webkit-input-placeholder, .form .header-location input[type="tel"]::-webkit-input-placeholder, .header-location .form input[type="number"]::-webkit-input-placeholder, .form .header-location input[type="number"]::-webkit-input-placeholder, .header-location .form input[type="file"]::-webkit-input-placeholder, .form .header-location input[type="file"]::-webkit-input-placeholder, .header-location .form select::-webkit-input-placeholder, .form .header-location select::-webkit-input-placeholder, .header-location .form .custom-select::-webkit-input-placeholder, .form .header-location .custom-select::-webkit-input-placeholder, .header-location .form textarea::-webkit-input-placeholder, .form .header-location textarea::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        color: #fff; }
+      .header-location input::-moz-placeholder, .header-location .form input[type="text"]::-moz-placeholder, .form .header-location input[type="text"]::-moz-placeholder, .header-location .form input[type="email"]::-moz-placeholder, .form .header-location input[type="email"]::-moz-placeholder, .header-location .form input[type="phone"]::-moz-placeholder, .form .header-location input[type="phone"]::-moz-placeholder, .header-location .form input[type="search"]::-moz-placeholder, .form .header-location input[type="search"]::-moz-placeholder, .header-location .form input[type="password"]::-moz-placeholder, .form .header-location input[type="password"]::-moz-placeholder, .header-location .form input[type="date"]::-moz-placeholder, .form .header-location input[type="date"]::-moz-placeholder, .header-location .form input[type="url"]::-moz-placeholder, .form .header-location input[type="url"]::-moz-placeholder, .header-location .form input[type="tel"]::-moz-placeholder, .form .header-location input[type="tel"]::-moz-placeholder, .header-location .form input[type="number"]::-moz-placeholder, .form .header-location input[type="number"]::-moz-placeholder, .header-location .form input[type="file"]::-moz-placeholder, .form .header-location input[type="file"]::-moz-placeholder, .header-location .form select::-moz-placeholder, .form .header-location select::-moz-placeholder, .header-location .form .custom-select::-moz-placeholder, .form .header-location .custom-select::-moz-placeholder, .header-location .form textarea::-moz-placeholder, .form .header-location textarea::-moz-placeholder {
+        /* Firefox 19+ */
+        color: #fff; }
+      .header-location input:-ms-input-placeholder, .header-location .form select:-ms-input-placeholder, .form .header-location select:-ms-input-placeholder, .header-location .form .custom-select:-ms-input-placeholder, .form .header-location .custom-select:-ms-input-placeholder, .header-location .form textarea:-ms-input-placeholder, .form .header-location textarea:-ms-input-placeholder {
+        /* IE 10+ */
+        color: #fff; }
+      .header-location input:-moz-placeholder, .header-location .form select:-moz-placeholder, .form .header-location select:-moz-placeholder, .header-location .form .custom-select:-moz-placeholder, .form .header-location .custom-select:-moz-placeholder, .header-location .form textarea:-moz-placeholder, .form .header-location textarea:-moz-placeholder {
+        /* Firefox 18- */
+        color: #fff; }
+      .header-location input:focus, .header-location .form select:focus, .form .header-location select:focus, .header-location .form .custom-select:focus, .form .header-location .custom-select:focus, .header-location .form textarea:focus, .form .header-location textarea:focus {
+        background-color: transparent;
+        color: #fff; }
+    .header-location__icon {
+      margin-left: 1rem;
+      width: 40px;
+      cursor: pointer; }
 
 .short-links {
   display: flex;
@@ -17974,7 +18006,7 @@ html.quick-view--open {
   66.6% {
     transform: skewX(-0.78125deg) skewY(-0.78125deg); }
   77.7% {
-    transform: skewX(0.39063deg) skewY(0.39063deg); }
+    transform: skewX(0.39062deg) skewY(0.39062deg); }
   88.8% {
     transform: skewX(-0.19531deg) skewY(-0.19531deg); } }
 
@@ -17994,7 +18026,7 @@ html.quick-view--open {
   66.6% {
     transform: skewX(-0.78125deg) skewY(-0.78125deg); }
   77.7% {
-    transform: skewX(0.39063deg) skewY(0.39063deg); }
+    transform: skewX(0.39062deg) skewY(0.39062deg); }
   88.8% {
     transform: skewX(-0.19531deg) skewY(-0.19531deg); } }
 

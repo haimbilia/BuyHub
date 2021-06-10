@@ -74,6 +74,21 @@
                             </a>
 
                         <?php } ?>
+                        
+                        <div class="header-location">
+                            <div class="header-location__field">
+                             <input autocomplete="no" id="ga-autoComplete" class="form-control pac-target-input" title="Enter Your Location" placeholder="Type Your Address..." data-field-caption="Type Your Address" data-fatreq="{&quot;required&quot;:false}" type="text" name="location" value="">
+                            </div>
+                            <div class="header-location__icon">
+                                <i class="icn">
+                                    <svg class="svg" width="15px" height="15px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps">
+                                        </use>
+                                    </svg>
+                                </i>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="top-bar__right">
                         <div class="short-links">

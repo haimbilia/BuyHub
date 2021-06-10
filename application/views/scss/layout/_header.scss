@@ -85,6 +85,42 @@
       }
     }
   }
+  &-location{
+      display: flex;
+      align-items: center;
+      input{
+          border:none;
+          background-color: transparent;
+          border-radius: 0;
+          color: #fff;  
+          font-size: .875rem;background-image:url('../images/icon__map.svg');
+          background-repeat: no-repeat;
+          background-position: left center;
+          padding-#{$start-direction}:30px;
+          
+          &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            color: #fff;
+          }
+          &::-moz-placeholder { /* Firefox 19+ */
+            color: #fff;
+          }
+          &:-ms-input-placeholder { /* IE 10+ */
+            color: #fff;
+          }
+          &:-moz-placeholder { /* Firefox 18- */
+            color: #fff;
+          }
+          &:focus{ 
+            background-color: transparent;
+            color: #fff;
+          }
+      }
+      &__icon{
+          margin-#{$start-direction}: 1rem;
+          width: 40px;
+          cursor: pointer;
+      }
+  }
 }
 
 .short-links {
