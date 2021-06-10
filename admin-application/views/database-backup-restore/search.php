@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (count($arr_listing) > 0): ?>
+<?php if (count($arrListing) > 0): ?>
 <table class="table table-justified table-responsive" id="dtTable">
 	<thead>
 		<tr>
@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 		<?php
-		foreach ($arr_listing as $sn => $row) { ?>
+		foreach ($arrListing as $sn => $row) { ?>
 		<tr>
 			<td><?php echo $row ?></td>
 			<td><?php echo date("d/m/Y H:i:s", filectime(CONF_DB_BACKUP_DIRECTORY_FULL_PATH . "/" . $row)); ?></td>

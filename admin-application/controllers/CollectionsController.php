@@ -84,7 +84,7 @@ class CollectionsController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('page', $page);
         $this->set('collection_layout_type', $collection_layout_type);
         $this->_template->render(false, false);
@@ -199,7 +199,7 @@ class CollectionsController extends AdminBaseController
 
         $post['collection_identifier'] = $post['collection_name'][$siteDefaultLangId];
         $post['collection_primary_records'] = $this->getLayoutLimit($post['collection_layout_type']);
-
+        /*
         if ($collectionId == 0) {
             $record = Collections::getAttributesByIdentifier($post['collection_identifier']);
             if (!empty($record) && $record['collection_deleted'] == applicationConstants::YES) {
@@ -207,6 +207,8 @@ class CollectionsController extends AdminBaseController
                 $post['collection_deleted'] = applicationConstants::NO;
             }
         }
+         * 
+         */
         $collectionForApp = isset($post['collection_for_app']) ? $post['collection_for_app'] : 0;
         $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::APP_COLLECTIONS_ONLY) ? 1 : $collectionForApp;
         $collection = new Collections($collectionId);
@@ -600,7 +602,7 @@ class CollectionsController extends AdminBaseController
         $records = Collections::getBanners($collectionId, $this->adminLangId);
 
         $this->set('collection_id', $collectionId);
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('bannerTypeArr', Banner::getBannerTypesArr($this->adminLangId));
         $this->set('linkTargetsArr', applicationConstants::getLinkTargetsArr($this->adminLangId));
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
@@ -1195,7 +1197,7 @@ class CollectionsController extends AdminBaseController
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
-
+    
     private function markAsDeleted($collection_id)
     {
         $collection_id = FatUtility::int($collection_id);
@@ -1205,12 +1207,12 @@ class CollectionsController extends AdminBaseController
             );
         }
         $collectionObj = new Collections($collection_id);
-        if (!$collectionObj->canRecordMarkDelete($collection_id)) {
+        if (!$row = Collections::getAttributesById($collection_id)) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
-        }
+        }       
 
-        $collectionObj->assignValues(array(Collections::tblFld('deleted') => 1));
+        $collectionObj->assignValues(array(Collections::tblFld('deleted') => 1 ,'collection_identifier' => $row['collection_identifier']." {del}$collection_id"));
         if (!$collectionObj->save()) {
             Message::addErrorMessage($collectionObj->getError());
             FatUtility::dieJsonError(Message::getHtml());

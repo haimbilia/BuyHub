@@ -61,7 +61,7 @@ $cancelBtnFld->developerTags['col'] = 3;
 						  <th><?php echo Labels::getLabel('LBL_Clicks',$siteLangId) ?></th>
 						  <th><?php echo Labels::getLabel('LBL_Orders',$siteLangId) ?></th>
 						</tr>
-						<?php $cnt=0;  foreach ($arr_listing as $sn=>$row): $sn++;  ?>
+						<?php $cnt=0;  foreach ($arrListing as $sn=>$row): $sn++;  ?>
 						<tr>
 						  <td><span class="cellcaption"><?php echo Labels::getLabel('LBL_Date',$siteLangId) ?></span><?php echo FatDate::format($row["lprom_date"]) ?></td>
 						  <td class="cellitem"><span class="cellcaption"><?php echo Labels::getLabel('LBL_Impressions',$siteLangId) ?></span><?php echo $row["lprom_impressions"] ?>

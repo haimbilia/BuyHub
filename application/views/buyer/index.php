@@ -109,7 +109,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                 <?php } ?> </div>
                         </div>
                         <div class="card-body ">
-                        <div class="js-scrollable table-wrap">
+                        <div class="js-scrollable table-wrap scroll scroll-x">
                             <table class="table table-justified">
                                 <thead>
                                     <tr class="">
@@ -210,7 +210,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                             <div class="action"> <?php if (count($offers) > 0) { ?> <a href="<?php echo UrlHelper::generateUrl('buyer', 'offers'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a> <?php } ?> </div>
                         </div>
                         <div class="card-body">
-                        <div class="js-scrollable table-wrap">
+                        <div class="js-scrollable table-wrap scroll scroll-x">
                          <table class="table">
                                 <thead>
                                     <tr class="">
@@ -259,7 +259,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                 </div> <?php } ?>
                         </div>
                         <div class="card-body ">
-                        <div class="js-scrollable table-wrap">
+                        <div class="js-scrollable table-wrap scroll scroll-x">
                             <table class="table table-justified">
                                 <thead>
 
@@ -331,7 +331,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                 </div> <?php } ?>
                         </div>
                         <div class="card-body ">
-                        <div class="js-scrollable table-wrap">
+                        <div class="js-scrollable table-wrap scroll scroll-x">
                             <table class="table ">
                                 <thead>
                                     <tr class="">

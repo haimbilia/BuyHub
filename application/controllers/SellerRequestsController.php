@@ -48,7 +48,7 @@ class SellerRequestsController extends SellerBaseController
         $requestedBrands = FatApp::getDb()->fetchAll($rs);
 
         $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
-        $this->set("arr_listing", $requestedBrands);
+        $this->set("arrListing", $requestedBrands);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -73,7 +73,7 @@ class SellerRequestsController extends SellerBaseController
         $requestedCategories = FatApp::getDb()->fetchAll($rs);
 
         $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
-        $this->set("arr_listing", $requestedCategories);
+        $this->set("arrListing", $requestedCategories);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -95,9 +95,9 @@ class SellerRequestsController extends SellerBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        $arr_listing = FatApp::getDb()->fetchAll($rs);
+        $arrListing = FatApp::getDb()->fetchAll($rs);
 
-        foreach ($arr_listing as $key => $row) {
+        foreach ($arrListing as $key => $row) {
             $content = (!empty($row['preq_content'])) ? json_decode($row['preq_content'], true) : array();
             $langContent = (!empty($row['preq_lang_data'])) ? json_decode($row['preq_lang_data'], true) : array();
 
@@ -116,10 +116,10 @@ class SellerRequestsController extends SellerBaseController
                 'product_identifier' => $row['product_identifier'],
                 'product_name' => (!empty($row['product_name'])) ? $row['product_name'] : '',
             );
-            $arr_listing[$key] = $arr;
+            $arrListing[$key] = $arr;
         }
         $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
-        $this->set("arr_listing", $arr_listing);
+        $this->set("arrListing", $arrListing);
         $this->set('recordCount', $srch->recordCount());
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);

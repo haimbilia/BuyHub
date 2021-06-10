@@ -67,6 +67,10 @@ class Product extends MyAppModel
 
     public static $optionValueName = '';
 
+    public const CATALOG_TYPE_PRIMARY = 0;
+    public const CATALOG_TYPE_REQUEST = 1;
+    public const CATALOG_TYPE_INVENTORY = 2;
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -1444,7 +1448,7 @@ class Product extends MyAppModel
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
                 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
                 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-                'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty'
+                'selprod_sold_count', 'selprod_return_policy', 'shop_id', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty'
             )
         );
 
@@ -2044,5 +2048,4 @@ END,   special_price_found ) as special_price_found'
         }
         return $records['ptpp_product_id'];
     }
-
 }

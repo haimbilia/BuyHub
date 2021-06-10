@@ -58,7 +58,7 @@ class ToolTipsController extends AdminBaseController
         //echo '<pre>';
         //print_r($records);die;
         
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);

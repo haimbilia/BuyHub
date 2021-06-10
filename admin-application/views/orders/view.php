@@ -9,6 +9,13 @@ if ($order['order_is_wallet_selected'] == applicationConstants::YES) {
 if ($order['order_reward_point_used'] > 0) {
     $selected_method .= ($selected_method != '') ? ' + ' . Labels::getLabel("LBL_Rewards", $adminLangId) : Labels::getLabel("LBL_Rewards", $adminLangId);
 }
+$selProdTotalSpecialPrice = 0;
+$cartTotal = 0;
+foreach ($order["products"] as $op) {
+    $selProdTotalSpecialPrice += $op['op_special_price'] * $op["op_qty"];
+    $cartTotal += CommonHelper::orderProductAmount($op, 'cart_total');
+}
+$totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $order['order_volume_discount_total'];
 ?>
 <div class="page">
     <div class="container container-fluid">
@@ -96,6 +103,11 @@ if ($order['order_reward_point_used'] > 0) {
                                 <td><strong><?php echo Labels::getLabel('LBL_Volume/Loyalty_Discount', $adminLangId); ?>:
                                     </strong>-<?php echo CommonHelper::displayMoneyFormat($order['order_volume_discount_total'], true, true); ?>
                                 </td>
+                                <?php if(0 < $totalSaving){ ?>
+                                <td class="text-success"><strong><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $adminLangId); ?>:
+                                    </strong><?php echo CommonHelper::displayMoneyFormat($totalSaving, true, true); ?>
+                                </td>
+                                <?php } ?>
                             </tr>
                         </table>
                     </div>

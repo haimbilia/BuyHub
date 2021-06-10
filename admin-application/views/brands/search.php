@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
 }else{
 $arr_flds = array(
@@ -26,7 +26,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['brand_id']);
 
@@ -85,7 +85,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no--;
 }
-// if (count($arr_listing) == 0) {
+// if (count($arrListing) == 0) {
 //     //$tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 //     $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
 // }

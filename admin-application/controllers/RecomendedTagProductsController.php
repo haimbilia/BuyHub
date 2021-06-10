@@ -54,7 +54,7 @@ class RecomendedTagProductsController extends AdminBaseController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs);
         
-        $this->set("arr_listing", $row);
+        $this->set("arrListing", $row);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

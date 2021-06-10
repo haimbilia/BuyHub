@@ -1,51 +1,40 @@
  @-webkit-keyframes moltinShake {
      12.5% {
-         -webkit-transform: translateX(-6px) rotateY(-5deg);
          transform: translateX(-6px) rotateY(-5deg)
      }
      37.5% {
-         -webkit-transform: translateX(5px) rotateY(4deg);
          transform: translateX(5px) rotateY(4deg)
      }
      62.5% {
-         -webkit-transform: translateX(-3px) rotateY(-2deg);
          transform: translateX(-3px) rotateY(-2deg)
      }
      87.5% {
-         -webkit-transform: translateX(2px) rotateY(1deg);
          transform: translateX(2px) rotateY(1deg)
      }
      100% {
-         -webkit-transform: translateX(0);
          transform: translateX(0)
      }
  }
  
  @keyframes moltinShake {
      12.5% {
-         -webkit-transform: translateX(-6px) rotateY(-5deg);
          transform: translateX(-6px) rotateY(-5deg)
      }
      37.5% {
-         -webkit-transform: translateX(5px) rotateY(4deg);
          transform: translateX(5px) rotateY(4deg)
      }
      62.5% {
-         -webkit-transform: translateX(-3px) rotateY(-2deg);
          transform: translateX(-3px) rotateY(-2deg)
      }
      87.5% {
-         -webkit-transform: translateX(2px) rotateY(1deg);
          transform: translateX(2px) rotateY(1deg)
      }
      100% {
-         -webkit-transform: translateX(0);
          transform: translateX(0)
      }
  }
  
  .invalid {
-     -webkit-animation: moltinShake .4s ease-in-out .1s normal forwards 1 running;
      animation: moltinShake .4s ease-in-out .1s normal forwards 1 running
  }
  
@@ -111,7 +100,6 @@
          padding: 0;
          .arrow {
              display: inline-block;
-             -webkit-transition: all .2s ease-in-out;
              transition: all .2s ease-in-out;
              .svg {
                  width: 12px;
@@ -122,7 +110,6 @@
          }
          &:hover {
              .arrow {
-                 -webkit-transform: translateX(.25rem);
                  transform: translateX(.25rem);
              }
          }
@@ -171,20 +158,15 @@
          #{$end-direction}: 0;
          background: $brand-color;
          color: $brand-color-inverse;
-         -webkit-transform-origin: bottom left;
          transform-origin: bottom left;
-         -webkit-transform: scaleX(1);
          transform: scaleX(1);
          transition: -webkit-transform .3s ease-in-out;
-         -webkit-transition: -webkit-transform .3s ease-in-out;
          transition: transform .3s ease-in-out;
          transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
      }
      &:hover {
          &:after {
-             -webkit-transform: scaleX(0);
              transform: scaleX(0);
-             -webkit-transform-origin: bottom right;
              transform-origin: bottom right;
          }
      }
@@ -197,13 +179,11 @@
      white-space: nowrap;
      color: $brand-color;
      display: block;
-     -webkit-transform: translateX(26px);
      transform: translateX(26px);
      transition: -webkit-transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
      transition: transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
      transition: transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1), -webkit-transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
      &:hover {
-         -webkit-transform: translateX(0);
          transform: translateX(0);
          svg {
              opacity: 1;

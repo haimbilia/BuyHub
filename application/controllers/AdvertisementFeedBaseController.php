@@ -6,6 +6,8 @@ class AdvertisementFeedBaseController extends SellerPluginBaseController
     {
         parent::__construct($action);
 
+        $this->userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId());
+
         $class = get_called_class();
         if (!defined($class . '::KEY_NAME')) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_PLUGIN', $this->siteLangId));

@@ -1,5 +1,18 @@
 <div class="form-side-inner">
-    <a class="form-item_logo" href=""> <img src="http://localhost/yokart/image/site-logo/1?t=1608690809" alt=""> </a>
+    <?php
+    if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
+        $logoUrl = UrlHelper::generateUrl('home', 'index');
+    } else {
+        $logoUrl = UrlHelper::generateUrl();
+    }
+    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+    $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+    $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    ?>
+    <a class="form-item_logo" href="<?php echo $logoUrl; ?>">
+        <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+    </a>
     <div class="card-sign">
         <div class="card-sign_head">
             <h2 class="title">

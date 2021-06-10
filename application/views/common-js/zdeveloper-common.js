@@ -515,7 +515,7 @@ function getSlickGallerySettings(imagesForNav, layoutDirection, slidesToShow = 4
             focusOnSelect: true,
             autoplay: true,
             arrows: true,
-            vertical: true,
+            vertical: false,
             verticalSwiping: true,
             responsive: [{
                     breakpoint: 1499,
@@ -787,6 +787,30 @@ function defaultSetUpLogin(frm, v) {
             $.facebox(t, cls);
             $.systemMessage.close();
             fcom.resetFaceboxHeight();
+        },
+
+        displayProcessing: function(msg, cls, autoclose) {
+            if (typeof msg == 'undefined' || msg == 'undefined') {
+                msg = langLbl.processing;
+            }
+            $.systemMessage(msg, 'alert--process', autoclose);
+        },
+
+        displaySuccessMessage: function (msg, cls, autoclose) {
+            if (typeof cls == 'undefined' || cls == 'undefined') {
+                cls = 'alert--success';
+            }
+            $.systemMessage(msg, cls, autoclose);
+        },
+        displayErrorMessage: function (msg, cls, autoclose) {
+            if (typeof cls == 'undefined' || cls == 'undefined') {
+                cls = 'alert--danger';
+            }
+            $.systemMessage(msg, cls, autoclose);
+        },
+
+        closeAlertMessage: function(msg, cls, autoclose) {
+            $.systemMessage.close();
         },
     });
 
@@ -1471,7 +1495,7 @@ function quickDetail(selprod_id) {
 
 function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = false) {
     var inputList = document.querySelectorAll(element);
-    var country = '' == langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode;
+    var country = ('' == langLbl.defaultCountryCode || 'undefined' == typeof langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode);
     inputList.forEach(function(input) {
         if (true == destroy) {
             $(input).removeAttr('style');
@@ -1485,7 +1509,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
 
             var elementName = ($(input).attr('name') + '_dcode');
             var dialCodeElement = $('input[name="' + elementName + '"]');
-            if (0 < dialCodeElement.length && '' != dialCodeElement.val()) {
+            if (0 < dialCodeElement.length && '' != dialCodeElement.val() && 'undefined' != typeof dialCodeElement.val()) {
                 var elementVal = dialCodeElement.val();
                 var countryCodePos = elementVal.indexOf('-');
                 if (0 < countryCodePos) {
@@ -1517,8 +1541,11 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
             input.addEventListener('countrychange', function(e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
                     var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
-                    var parent = $(input).parent();
-                    parent.find('input[name="' + elementName + '"]').val(dCode);
+                    if ($('input[name="' + elementName + '"]').length < 1) {
+                        $.systemMessage($(input).attr('name') + " " + langLbl.dialCodeFieldNotFound, 'alert-danger');
+                        return;
+                    }
+                    $('input[name="' + elementName + '"]').val(dCode);
                 }
             });
         }
@@ -1904,7 +1931,7 @@ $(document).on('click', '.v-tabs--js ul li', function(e){
 var imagesPreview = function (input, placeToInsertImagePreview) {
     if (input.files) {
         if (1 > $(placeToInsertImagePreview + ' ul').length) {
-            $(placeToInsertImagePreview).html('<ul class="review-media-list"></ul>');
+            $(placeToInsertImagePreview).html('<ul class="js-review-media-list"></ul>');
         }
 
         var fileFldName = $(input).attr('name');
@@ -1914,7 +1941,7 @@ var imagesPreview = function (input, placeToInsertImagePreview) {
 
             var reader = new FileReader();
             reader.onload = function (event) {
-                var htm = '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><a href="javascript:void(0);" class="file-remove fileRemove--js" data-filefld="' + fileFldName + '"></a></div></li>';
+                var htm = '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><a href="javascript:void(0);" class="close-layer close-layer-sm fileRemove--js" data-filefld="' + fileFldName + '"></a></div></li>';
                 $(placeToInsertImagePreview + ' ul').append(htm);
                 $($.parseHTML('<img class="imgToUpload--js" title="' + selectedFile.name + '">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview + ' ul li:last-child .uploaded-file__thumb');
             }
@@ -1968,3 +1995,26 @@ function loadMoreImages(obj) {
     $(obj).removeClass('more-media').removeAttr('onclick');
     $(obj).nextAll().removeClass('d-none');
 }
+
+$.extend(fcom, {
+    copyToClipboard: function (targetId)
+    {
+        var targetId = targetId || "_copytext_";
+        
+        var target = document.getElementById(targetId);
+        
+        target.select();
+        target.focus();
+        target.setSelectionRange(0, target.value.length);
+
+        var succeed = true;
+        try {
+            succeed = document.execCommand("copy");
+            fcom.displaySuccessMessage(langLbl.copied);
+        } catch(e) {
+            succeed = false;
+        }
+
+        return succeed;
+    }
+});

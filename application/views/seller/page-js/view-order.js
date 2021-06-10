@@ -101,3 +101,40 @@ $(document).ready(function () {
 function pageRedirect(op_id) {
     window.location.replace(fcom.makeUrl('Seller', 'viewOrder', [op_id]));
 }
+
+
+(function () {
+    uploadAdditionalAttachment = function () {
+        /* $inputs = $('#additional_attachments input[type=hidden]');
+        $inputs.each(function() { data.append( this.name,$(this).val());}); */
+
+        var data = new FormData();
+
+        var opId = $("input[name='op_id']").val();
+        data.append('op_id', opId);
+
+        $.each($('#downloadable_file')[0].files, function (i, file) {
+            data.append('additional_attachment', file);
+        });
+
+        $.ajax({
+            url: fcom.makeUrl('Seller', 'setupAdditionalOpAttachment'),
+            type: "POST",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (t) {
+                var ans = $.parseJSON(t);
+                if (ans.status == 0) {
+                    $.systemMessage(ans.msg, 'alert alert--danger');
+                    return;
+                }
+                $.systemMessage(ans.msg, 'alert alert--success');
+                setTimeout("pageRedirect(" + opId + ")", 1000);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error Occurred.");
+            }
+        });
+    }
+})();

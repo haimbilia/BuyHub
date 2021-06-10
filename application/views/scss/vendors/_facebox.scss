@@ -6,7 +6,7 @@
     /*text-align: left;*/
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
+   
     animation-fill-mode: both;
 }
 
@@ -100,7 +100,7 @@
     color: $body-color;
     font-size: 1.5rem;
     text-align: center;
-    font-family: $family-primary;
+    
     /*margin-bottom: 20px;*/
     padding: 10px;
     /*border-bottom: $border;*/
@@ -213,8 +213,8 @@
 	to {-moz-transform: rotate(360deg);}
 }
 @-webkit-keyframes spin180 {
-	from {-webkit-transform: rotate(0deg);}
-	to {-webkit-transform: rotate(360deg);}
+	from {}
+	to {}
 }
 @-o-keyframes spin180 {
 	from {-o-transform: rotate(0deg);}

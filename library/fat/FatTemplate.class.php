@@ -185,7 +185,7 @@ class FatTemplate
     /** Display Template **/
 
     public function render($include_header = true, $include_footer = true, $tplpath = null, $return_content = false, $convertVariablesToHtmlentities = true)
-    {
+    { 
         $themeDirName = FatUtility::camel2dashed(substr($this->_controller, 0, - (strlen('controller'))));
         $actionName = FatUtility::camel2dashed($this->_action) . '.php';
 

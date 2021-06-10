@@ -113,7 +113,7 @@
                             <?php } ?>
                         </div>
                         <div class="card-body ">
-							<div class="js-scrollable table-wrap">
+							<div class="js-scrollable table-wrap scroll scroll-x">
 								<table class="table table-justified">                                
 								    <thead>
 										<tr class="">
@@ -189,7 +189,7 @@
                             <?php } ?>
                         </div>
                         <div class="card-body ">
-                            <div class="js-scrollable table-wrap">
+                            <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table">
                                     <thead>
                                         <tr class="">

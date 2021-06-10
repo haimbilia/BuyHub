@@ -364,7 +364,7 @@ class UserAuthentication extends FatModel
         if (!$row = $db->fetch($rs)) {
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME', $this->commonLangId);
             if ($withPhone) {
-                $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_INVALID_OTP', $this->commonLangId);
             }
             return false;
         }

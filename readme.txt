@@ -6,11 +6,13 @@ New Feature :
     => 82248 : DPO Payment Gateway Integration
     => 82892 : Easypost Shipping API Integration
     =>  Shopify sync module for SV seller
+    => 85399 : QNB payment gateway 
 
 Updates:
     => Tax Module update
     => Admin can create users 
-    => 83842 : Out of stock fixes    
+    => 83842 : Out of stock fixes 
+    => Display Total Savings on Checkout page
 
 Fixes:
     => 047746 - Get current location not working
@@ -93,6 +95,27 @@ Fixes:
     => 052450 - Separate Tracking URL and Tracking Courier if Aftership enabled
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
     => 052463 - Setup shipping of other product not working with EasyPost
+    => 053622 - Load all font family variants
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053985 - Stripe connect unable to debit site commission
+    => 054023 - admin> settings> ppc management> language> sponsored shops/product headings are not making any sense as they are calling from collections
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming      
+    => 054242 - paystack gateway not supporting ZAR currency
+    => 054262 - some issue with collection 
+    => 054255 - Unable to reach location if redirect from notification listing in admin.
+    => 054265 - missing sms template on seller end
+    => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054613 - Error display on invoice pdf page
+    => 054742 - wrong message is populating on button on tooltip
 
 
 Develop
@@ -118,19 +141,85 @@ Fixes:
     => 053365 -	While sharing shop page on whatsapp then meta image not displaying
     => 053276 - shipping is not changing on changing address during checkout
     => 053155 - Button labels are not changing as per language
+    => 053430 - While sending SMTP email code crashed in between if unable to send email
+    => 052088 - when product having multiple options then on quick view popup> dropdown is affecting popup
+    => 053466 - There is no deducted discount amount shown in the printed invoice of admin and seller panel even after the buyer has applied a discount coupon.
+    => 053465 - some issue with promotion
+    => 053442 - "When a registered user shares any information throught contact us form: - The email is recieved by the site owner, but when the site owner tries to reply the from email i,e user email is not getting fetched. " 
+    => 053621 -	commission is not getting charged when tax is collected by seller and shipping is non refundable and whole order is returned and shipping remains with seller
+    => 053673  - Allow seller to cancel COD orders.
+    => 053779 - seller> reports> currency symbol is missing in tax and shipping column
+    => 053782 - admin> reports> sales reports> on accessing reports for particular date> there needs to be filter to search on basis of invoice or order by time (latest on top and vice versa)
+    => 053816 - admin> reports> buyers report>sorting is not working
+    => 053823 - seller reports> total order count is listing of child orders while on seller end it's counting parent order.
+    => 053833 - currency symbol changed to euro (€) is not populating on exporting reports
+    => 053501 - seller> unable to define slots for pickup- getting error 
+    => 053763 - admin> users> add button> icon is not there
+    => 053749 - in reports> PRODUCT > on entering character value in from price filed> errors are listing there
+    => 053753 - Shop >> filters >> conditions are not getting displayed under conditions filter
+    => 053861 - In Side bar only number of items displayed.
+    => 053822 - seller reports> balance is not populating
+    => 053883 - pickup slots are not getting listed on front end while placing order on selection of address
+    => 053882 - getting error on product detail page under recommended products
+    => 053817 - on registration screen> logo is not displaying
+    => 053832 - rating star color is different in admin and front end
+    => 053932 - while placing order> when no coupon or discount is there then getting entry on name of saving
+    => 053954 - Not storing Product unit price so in report data not coming
+    => 053985 - Stripe connect unable to debit site commission
+    => 053850 - admin> advertiser report> data is not populating.
+    => 053849 - admin> advertiser report> keyword search needs to be there in filter
+    => 053751 - after applying filters and exporting file in reports> all data is exporting instead of filtered data
+    => 053935 - when buyer purchases multiple qty (incl. tax) then on seller end in transactions it's listing $1000.02 and under reports it's listing $1000 and on buyer end it's listing $0.01 as rounding off amount
+    => 053948 - getting invalid slot when buyer changes date for pickup (admin's place)
+    => 053855 - admin> reports> top products> filter> search by keyword is missing 
+    => 054351 - when seller B purchases subscription then in Subscription Seller Report> subscription name for seller A changes similar to seller B
+    => 054278 - if for any digital item there is no preview available then preview tab shouldn't be displayed
+    => 054144 - Set Default Location not populating on front end after set by admin
+    => 054071 - Product Download Attachments At Inventory Level for catalog is missing in import/export
+    => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox.
+    => 054526 - when seller purchases subscription then on order success screen> neither adjusted amount is listing (if there), nor the original amount of package
+    => 054441 - admin> shipping> Shipped Products By Admin> pagination is not working on facebox
+    => 054499 - reviews added with category are not listing in admin
+    => 054557 - admin> catalog> categories> count is mismatching
+    => 054527 - Blog >> some error is there
+    => 054599 - when order is on pickup and status is changed to ready for pickup it gets stuck and on refreshing the page> getting error on screen
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054529 - On FAQ >> if any letter is in caps then it is not highlighting on search
+    => 054545 - when subscription is downgraded and after adjustment amount becomes 0 then on applying coupon it's getting the total in negative
+    => 054597 - generate label is coming on seller end on pickup order 
+    => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
+    => 054612 - login with otp is working with default otp 0000
+    => 054616 - after submitting review> getting error on review page- front end
+    => 054717 - on recently view product error coming on product detail page
+    => 054731 - when review is placed with media then there is no need to add show more on 6th image
+    => 054761 - despite having sku non mandatory it's not adding inventory from seller end
 
 
 New Features:
     => Admin shipped products listing page
+    => 053451 - missing country code plugin with phone number field
+    => 053462 - Instagram login not working after configuration, gives error
+    => 053757 - when order status is changed then sms are not triggering to buyer for the same
+    => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
+    => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
+    => 053978 - Forget password label language issue in admin
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming
+    => 054242 - paystack gateway not supporting ZAR currency    
+    => 054279 - warranty needs to be optional when product is digital         
+    => 054644 - Admin > Shipping Company User > Wrong validation message is showing.   
+    => 054689 - 404 error page - issue with few produc urls when subscription in enabled
+    => 054718 - Categories added are not listing in admin.
+    => 054728 -	Aftership order status should be automatically marked delivered.
 
 Enhancements :
-   => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.
    => Performance optimization
    => Upgrades in GEO location module to configure default location.  
    => Price surge based on special price. 
+   => Admin Reports.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
@@ -219,3 +308,21 @@ Notes:
         Reference : https://stackoverflow.com/a/11391550
 
 
+=======================================
+
+Released Version:
+
+Tasks:
+    task-84719 Preview module for digital files
+    task-85619 Adding files when digital order is delivered
+
+=======================================
+
+Released Version:
+
+bugs:
+    #054201	while adding catalog for digital item> only option to add attachment at inventory level is either Yes or No
+    #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
+    #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
+    #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
+    #054212	while adding inventory> when we add link and url is long then UI is not proper

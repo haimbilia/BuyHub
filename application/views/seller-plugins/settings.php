@@ -12,7 +12,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="pop-up-title">
-  <?php echo Labels::getLabel('LBL_PLUGIN_SETTINGS',$siteLangId);?>
+  <?php echo $plugin_name." ". Labels::getLabel('LBL_SELLER_PLUGIN_SETTINGS',$siteLangId);?>
 </div>
 
 <?php echo $frm->getFormHtml(); ?>

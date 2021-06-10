@@ -74,8 +74,10 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
                             <?php $fld = $productFrm->getField('product_warranty');
                               echo $fld->getCaption();
                             ?>
-                        </label>
-                        <span class="spn_must_field">*</span>
+                        </label>          
+                        <?php if($fld->requirements()->isRequired()){ ?>
+                            <span class="spn_must_field">*</span> 
+                        <?php } ?>
                      </div>
                      <div class="field-wraper">
                          <div class="field_cover">

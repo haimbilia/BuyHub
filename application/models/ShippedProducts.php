@@ -1,11 +1,13 @@
 <?php
 class ShippedProducts extends SearchBase
 {
-    public function __construct(int $landId = 0)
+    private $langId;
+    public function __construct(int $langId = 0)
     {
         parent::__construct(Product::DB_TBL, 'tp');
-        if (0 < $landId) {
-            $this->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'productlang_product_id = tp.product_id	AND productlang_lang_id = ' . $landId, 'tp_l');
+        $this->langId = $langId;
+        if (0 < $this->langId) {
+            $this->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'productlang_product_id = tp.product_id	AND productlang_lang_id = ' . $langId, 'tp_l');
         }
     }
 
@@ -24,9 +26,19 @@ class ShippedProducts extends SearchBase
         $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'sppro.shippro_product_id = tp.product_id', 'sppro');
     }
 
-    public function joinShippingProfile()
+    public function joinShippingProfile(int $langId = 0)
     {
         $this->joinTable(ShippingProfile::DB_TBL, 'LEFT OUTER JOIN', 'sppro.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
+        $langId = (0 < $langId) ? $langId : $this->langId;
+        if (0 < $langId) {
+            $this->joinTable(
+                ShippingProfile::DB_TBL_LANG,
+                'LEFT OUTER JOIN',
+                'spprof_l.' . ShippingProfile::DB_TBL_LANG_PREFIX . ShippingProfile::tblFld('id') . ' = spprof.' . ShippingProfile::tblFld('id') . ' and
+        spprof_l.' . ShippingProfile::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
+                'spprof_l'
+            );
+        }
     }
 
     public function joinUserTable()

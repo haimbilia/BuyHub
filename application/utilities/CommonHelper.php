@@ -1,5 +1,4 @@
 <?php
-
 class CommonHelper extends FatUtility
 {
     private static $_ip;
@@ -76,9 +75,10 @@ class CommonHelper extends FatUtility
             self::$_currency_id,
             array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
         );
-        
+
         $langData = Language::getAttributesById(
-            self::$_lang_id,['language_country_code','language_code']
+            self::$_lang_id,
+            ['language_country_code', 'language_code']
         );
 
         self::$_lang_code = $langData['language_code'];
@@ -114,7 +114,7 @@ class CommonHelper extends FatUtility
     {
         return self::$_lang_code;
     }
-    
+
     public static function getLangCountryCode()
     {
         return self::$_lang_country_code;
@@ -390,8 +390,8 @@ class CommonHelper extends FatUtility
         if ($requestRow['op_commission_include_tax'] && $taxPerQty /* && FatApp::getConfig('CONF_COMMISSION_INCLUDING_TAX', FatUtility::VAR_INT, 0) */) {
             $commissionCostValue = $commissionCostValue + $taxPerQty;
         }
-
-        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost) {
+         
+        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0)) {
             $commissionCostValue = $commissionCostValue + $perUnitShippingCost;
         }
 
@@ -540,7 +540,7 @@ class CommonHelper extends FatUtility
     {
         //$currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyValue = self::getCurrencyValue();
-        $defaultCurrencyValue = $val / $currencyValue;
+        $defaultCurrencyValue = ((float) $val) / $currencyValue;
         return static::displayMoneyFormat($defaultCurrencyValue, $format, true, $displaySymbol);
     }
 
@@ -1362,34 +1362,7 @@ class CommonHelper extends FatUtility
 
         $specialPrice = $product['theprice'];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
-        return $disVal = round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
-        /* $str = '';
-        $listPrice = $product['splprice_display_list_price'];
-        if( $listPrice > 0 ){
-            $disVal = $product['splprice_display_dis_val'];
-            $disVal = $disVal + 0;
-            if (($disVal * 100) % 100 > 0) {
-                $disVal = number_format($disVal, 2, '.', '');
-            }
-
-            $str .= Labels::getLabel( 'LBL_Save_{saveprice}_({offprice})', $langId );
-            if( $product['splprice_display_dis_type'] == applicationConstants::PERCENTAGE ){
-                $disVal .= '%';
-            }
-            elseif( $product['splprice_display_dis_type'] == applicationConstants::FLAT ){
-                $disVal = static::displayMoneyFormat($listPrice) ;
-            }
-
-            $arrReplacements = array(
-                '{saveprice}' => static::displayMoneyFormat($listPrice),
-                '{offprice}'=> $disVal
-            );
-
-            foreach ($arrReplacements as $key => $val) {
-                $str = str_replace($key, $val, $str);
-            }
-        }
-        return $str;*/
+        return round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
     }
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)

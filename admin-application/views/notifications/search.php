@@ -11,7 +11,7 @@ $th = $tbl->appendElement('thead')->appendElement('tr',array('class'=>'tr--first
 
 $sr_no = $page==1?0:$pageSize*($page-1);
 
-foreach ($arr_listing as $sn=>$row){
+foreach ($arrListing as $sn=>$row){
 	$sr_no++;
 	/* CommonHelper::printArray($labelArr); die; */
 
@@ -45,7 +45,7 @@ foreach ($arr_listing as $sn=>$row){
 		}
 	}
 }
-if (count($arr_listing) == 0){
+if (count($arrListing) == 0){
 	$tbl->appendElement('tr')->appendElement('td', array('colspan'=>count($arr_flds)), Labels::getLabel('LBL_No_Records_Found',$adminLangId));
 }
 echo $tbl->getHtml();

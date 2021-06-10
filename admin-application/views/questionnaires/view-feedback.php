@@ -27,7 +27,7 @@ if(!empty($questions)){
 	<?php for($j=1;$j<=$rateOutOf;$j++){ ?>	
 		<li class="<?php echo $j<=round($answer)?"active":"in-active" ?>">
 			<svg xml:space="preserve" enable-background="new 0 0 70 70" viewBox="0 0 70 70" height="18px" width="18px" y="0px" x="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Layer_1" version="1.1">
-		<g><path d="M51,42l5.6,24.6L35,53.6l-21.6,13L19,42L0,25.4l25.1-2.2L35,0l9.9,23.2L70,25.4L51,42z M51,42" fill="<?php echo $j<=round($answer)?"#ff3a59":"#474747" ?>" /></g></svg>
+		<g><path d="M51,42l5.6,24.6L35,53.6l-21.6,13L19,42L0,25.4l25.1-2.2L35,0l9.9,23.2L70,25.4L51,42z M51,42" fill="<?php echo $j<=round($answer)?"#f5851f":"#474747" ?>" /></g></svg>
 		</li>
 	<?php } ?>
 	</ul>

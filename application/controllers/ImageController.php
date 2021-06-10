@@ -1360,4 +1360,52 @@ class ImageController extends FatController
                 break;
         }
     }
+
+    public function productVideo($afileId)
+    {
+        $afileId = FatUtility::int($afileId);
+        if ($afileId < 0) {
+            return false;
+        }
+        
+        $res = AttachedFile::getAttributesById($afileId);
+        if (false === $res) {
+            return false;
+        }
+        if ($res['afile_type'] != AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW) {
+            return false;
+        }
+        
+        echo AttachedFile::getVideo($res['afile_physical_path']);
+        exit;
+    }
+
+    public function badgeIcon($badgeId, $langId = 0, $sizeType = '')
+    {
+        $badgeId = FatUtility::int($badgeId);
+        $langId = FatUtility::int($langId);
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $langId);
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+
+        $filePath = AttachedFile::FILETYPE_BADGE_IMAGE_PATH;
+        switch (strtoupper($sizeType)) {
+            case 'THUMB':
+                $w = 60;
+                $h = 60;
+                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+            break;
+            case 'MINI':
+                $w = 35;
+                $h = 35;
+                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+            break;
+            default:
+                if (is_numeric($sizeType)) {
+                    AttachedFile::displayImage($image_name, $sizeType, $sizeType, '', $filePath);
+                } else {
+                    AttachedFile::displayOriginalImage($image_name, '', $filePath);
+                }
+            break;
+        }
+    }
 }

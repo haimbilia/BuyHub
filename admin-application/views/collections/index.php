@@ -41,7 +41,13 @@
                                 <li>
                                     <span class="lable"><?php echo $layout; ?></span>
                                     <div class="actions">
-                                        <a href="javascript:void(0)" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutType; ?>, 0)" title="<?php echo Labels::getLabel('LBL_Add_Collection', $adminLangId); ?>" class="btn-clean btn-sm btn-icon btn-secondary "><i class="fas fa-plus"></i></a>
+                                        <a href="javascript:void(0)" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutType; ?>, 0)" title="<?php echo Labels::getLabel('LBL_Add_Collection', $adminLangId); ?>" class="btn-clean btn-sm btn-icon btn-secondary ">
+                                        <i class="fas fa-plus">
+                                    <!-- <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<//?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg> -->
+                                </i></a>
                                         <a rel="facebox" onClick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/collection_layouts/<?php echo Collections::getLayoutImagesArr()[$layoutType]; ?>');" href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_Layout_Instruction', $adminLangId); ?>" class="btn-clean btn-sm btn-icon btn-secondary "><i class="fas fa-file-image"></i></a>
                                     </div>
                                 </li>
@@ -65,7 +71,12 @@
                                             'onclick' => 'collectionForm(0)',
                                             'title' => Labels::getLabel('Lbl_Add_Collection', $adminLangId)
                                         ],
-                                        'label' => '<i class="fas fa-plus"></i>'
+                                        'label' => '<i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </i>'
                                     ];
                                 } */
 

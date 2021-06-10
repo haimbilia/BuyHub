@@ -268,34 +268,30 @@
 .review-block {
     margin-bottom: 2rem;
     font-size: 0.8rem;
+    border-radius: $radius4;
+    border: $border;
+    color: $txt-gray;
     >li {
         padding: 1rem;
         display: flex;
-        @include media-breakpoint-down(md) {
-            & {
-                display: block;
-                font-size: 1rem;
-            }
+        border-bottom: $border;
+        flex-direction: column;
+        justify-content: space-between;
+        &:last-child {
+            border-bottom: none;
         }
     }
     &__label {
-        flex: 0 0 20%;
-        max-width: 20%;
-        padding-#{$end-direction}: 1rem;
+        color: $txt-body;
+        font-size: 0.99rem;
         margin-bottom: 0.5rem;
-        font-weight: 600;
-        @include media-breakpoint-down(md) {
-            & {
-                flex: 1;
-                max-width: none;
-            }
-        }
+        font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
     &__content {
         flex: 1;
-        padding-#{$end-direction}: 1rem;
-        margin-bottom: 0.5rem;
-        color: $txt-gray;
         overflow: hidden;
         .selected-slot {
             font-weight: 600;
@@ -587,36 +583,57 @@
     }
 }
 
-.list-addresses {
-    .list-group-item {
-        padding: 1rem;
-        position: relative;
-        .delivery-address {
-            font-size: 0.85rem;
-            color: $txt-gray;
-            line-height: 1.5;
-            margin: 0;
-            h5 {
-                font-weight: 500;
-                font-size: 0.9rem;
-                margin-bottom: 10px;
+.list-addresses { max-height: 318px;
+    >ul {
+        border: $border;
+        border-radius: $radius4;
+        >li {
+            border-bottom: $border;
+            padding: 1rem;
+            position: relative;
+            &:last-child {
+                border-bottom: none;
+            }
+            .label-block {
                 display: flex;
                 align-items: flex-start;
             }
-            .tag {
-                margin: 0 5px;
-                border: solid 1px $success-color;
-                border-radius: 40px;
-                color: $success-color;
-                padding: 2px 0.6rem;
-                line-height: 1;
-                font-size: 0.75rem;
-                font-weight: 400;
-                text-transform: uppercase;
+            .checkbox_wrap {
+                margin-top: 3px;
+                margin-#{$end-direction}: 10px;
             }
-            .phone-txt {
-                margin-top: 5px;
-                font-weight: 600;
+            .delivery-address {
+                font-size: 0.85rem;
+                color: $txt-gray;
+                line-height: 1.5;
+                margin: 0;
+                flex: 1;
+                h5 {
+                    font-weight: 500;
+                    font-size: 0.9rem;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: flex-start;
+                }
+                .tag {
+                    margin: 0 5px;
+                    border: solid 1px $success-color;
+                    border-radius: 40px;
+                    color: $success-color;
+                    padding: 2px 0.6rem;
+                    line-height: inherit;
+                    font-size: 0.75rem;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                }
+                .phone-txt {
+                    margin-top: 10px;
+                    font-weight: 600;
+                }
+            }
+            .list-actions {
+                margin-#{$start-direction}: auto;
+                padding-#{$start-direction}: 10px;
             }
         }
     }
@@ -727,11 +744,14 @@
     margin-bottom: 1.5rem;
     font-size: 0.8rem;
     .shipping-select {
+        font-size: 0.85rem;
+        background-color: $bg-gray;
         padding-#{$end-direction}: 5px;
-        align-items: center;
+        //align-items: center;
         flex-direction: initial;
         display: flex;
         justify-content: space-between;
+        flex-direction: column;
     }
     .pickup-select {
         display: flex;
@@ -739,11 +759,21 @@
         flex-direction: initial;
     }
     .shop-name {
-        font-size: 0.85rem;
-        font-weight: 600;
-        padding-#{$end-direction}: 1rem;
+        display: flex;
+        justify-content: space-between;
+        color: $txt-body;
         /* flex: 0 0 20%;
         max-width: 20%;*/
+        h6 {
+            margin: 0;
+            font-size: inherit;
+            padding-#{$end-direction}: 1rem;
+        }
+        .svg {
+            width: 1rem;
+            height: 1rem;
+            margin-#{$end-direction}: 5px;
+        }
     }
     .shop-address {
         flex: 1;
@@ -762,6 +792,7 @@
             padding-#{$start-direction}: 10px;
             padding-#{$end-direction}: 2rem;
             height: auto;
+            background-color: transparent;
         }
     }
 }

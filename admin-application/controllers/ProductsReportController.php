@@ -202,7 +202,7 @@ class ProductsReportController extends AdminBaseController
                         case 'commissionCharged':
                         case 'refundedCommission':
                         case 'adminSalesEarnings':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];
@@ -219,8 +219,8 @@ class ProductsReportController extends AdminBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            $arr_listing = $db->fetchAll($rs);
-            $this->set("arr_listing", $arr_listing);
+            $arrListing = $db->fetchAll($rs);
+            $this->set("arrListing", $arrListing);
             $this->set('pageCount', $srch->pages());
             $this->set('recordCount', $srch->recordCount());
             $this->set('page', $page);

@@ -417,13 +417,15 @@ class ImportexportCommon extends FatModel
             if ((0 == $userId && $shippedBy) || !$shippedBy) {
                 // $arr['ps_free'] = Labels::getLabel('LBL_Free_Shipping', $langId);
                 $arr['product_cod_enabled'] = Labels::getLabel('LBL_COD_available', $langId);
-            }
-
+            }            
+            
             $arr['product_featured'] = Labels::getLabel('LBL_Featured', $langId);
             $arr['product_approved'] = Labels::getLabel('LBL_Approved', $langId);
             $arr['product_active'] = Labels::getLabel('LBL_Active', $langId);
             $arr['product_deleted'] = Labels::getLabel('LBL_Deleted', $langId);
-        }
+            $arr['product_attachements_with_inventory'] = Labels::getLabel('LBL_DOWNLOAD_ATTACHMENTS_AT_INVENTORY', $langId);
+        }        
+        
 
         return $arr;
     }
@@ -1249,7 +1251,7 @@ class ImportexportCommon extends FatModel
         return $row = $this->db->fetchAllAssoc($rs);
     }
 
-    public function getCountriesArr($byId = true, $countryIdOrCode = false)
+    public function getCountriesAssocArr($byId = true, $countryIdOrCode = false)
     {
         $srch = Countries::getSearchObject(false, false);
         $srch->doNotCalculateRecords();

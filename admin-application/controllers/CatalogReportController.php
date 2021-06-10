@@ -63,7 +63,7 @@ class CatalogReportController extends AdminBaseController
         $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
         $srch->joinBrands($this->adminLangId, false, true);
         $srch->joinProductToCategory();
-        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = opq.product_id', 'opq');
+        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields($selectedFlds);
         $srch->addGroupBy('p.product_id');
 
@@ -116,7 +116,7 @@ class CatalogReportController extends AdminBaseController
                         case 'commissionCharged':
                         case 'refundedCommission':
                         case 'adminSalesEarnings':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];
@@ -133,8 +133,8 @@ class CatalogReportController extends AdminBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            $arr_listing = $db->fetchAll($rs);
-            $this->set("arr_listing", $arr_listing);
+            $arrListing = $db->fetchAll($rs);
+            $this->set("arrListing", $arrListing);
             $this->set('pageCount', $srch->pages());
             $this->set('recordCount', $srch->recordCount());
             $this->set('page', $page);

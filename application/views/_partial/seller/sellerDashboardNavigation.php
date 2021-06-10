@@ -34,7 +34,7 @@ $action = strtolower($action);
         } ?>
         <div class="js-hamburger hamburger-toggle <?php echo $isOpened; ?>"><span class="bar-top"></span><span class="bar-mid"></span><span class="bar-bot"></span></div>
     </div>
-    <div class="sidebar__content custom-scrollbar" id="scrollElement-js" data-simplebar>
+    <div class="sidebar__content custom-scrollbar scroll scroll-y" id="scrollElement-js">
         <nav class="dashboard-menu">
             <ul>
                 <?php
@@ -111,22 +111,23 @@ $action = strtolower($action);
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?></span></a></div>
                         </li>
                     <?php } ?>
-                     <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>
+                    <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'seller-plugins' && $action == 'index') ? 'is-active' : ''; ?>">
-                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_DATA_MIGRATION', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins','index',[Plugin::TYPE_DATA_MIGRATION]); ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_DATA_MIGRATION', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [Plugin::TYPE_DATA_MIGRATION]); ?>">
                                     <i class="icn shop"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests"></use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_DATA_MIGRATION', $siteLangId); ?></span></a></div>
                         </li>
-                    <?php } ?>    
-                        
+                    <?php } ?>
+
                     <li class="divider"></li>
                 <?php } ?>
-                
-                <?php if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0) &&
+
+                <?php if (
+                    FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0) &&
                     ($userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) ||
-                    $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true))
+                        $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true))
                 ) { ?>
                     <li class="menu__item">
                         <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Shipping', $siteLangId); ?></span></div>
@@ -199,7 +200,10 @@ $action = strtolower($action);
                     $userPrivilege->canViewSpecialPrice(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewVolumeDiscount(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewBuyTogetherProducts(UserAuthentication::getLoggedUserId(), true) ||
-                    $userPrivilege->canViewRelatedProducts(UserAuthentication::getLoggedUserId(), true)
+                    $userPrivilege->canViewRelatedProducts(UserAuthentication::getLoggedUserId(), true) ||
+                    $userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true) ||
+                    $userPrivilege->canViewBadges(UserAuthentication::getLoggedUserId(), true) ||
+                    $userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)
                 ) { ?>
                     <li class="menu__item">
                         <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></span></div>
@@ -246,7 +250,7 @@ $action = strtolower($action);
                     <?php } ?>
                     <?php $obj = new Plugin();
                     $pluginData = $obj->getDefaultPluginData(Plugin::TYPE_ADVERTISEMENT_FEED, null, $siteLangId);
-                    if (false !== $pluginData && !empty($pluginData) && 0 < $pluginData['plugin_active'] && $userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
+                    if ($userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true) && false !== $pluginData && !empty($pluginData) && 0 < $pluginData['plugin_active'] && $userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == strtolower($pluginData['plugin_code'])) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo $pluginData['plugin_name']; ?>" href="<?php echo UrlHelper::generateUrl($pluginData['plugin_code']); ?>">
@@ -260,6 +264,32 @@ $action = strtolower($action);
                             </div>
                         </li>
                     <?php } ?>
+
+                    <?php /* if ($userPrivilege->canViewBadges(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item <?php echo ($controller == 'Badges' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Badges', 'index'); ?>">
+                                    <i class="icn fas fa-award"></i>
+                                    <span class="menu-item__title">
+                                        <?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>
+                                    </span>
+                                </a>
+                            </div>
+                        </li>
+                    <?php } ?>
+                    <?php if ($userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item <?php echo ($controller == 'BadgeLinkConditions' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('BadgeLinkConditions', 'index'); ?>">
+                                    <i class="icn fas fa-award"></i>
+                                    <span class="menu-item__title">
+                                        <?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $siteLangId); ?>
+                                    </span>
+                                </a>
+                            </div>
+                        </li>
+                    <?php } */ ?>
+
                     <li class="divider"></li>
                 <?php } ?>
                 <?php if (
@@ -322,30 +352,61 @@ $action = strtolower($action);
                 <?php } ?>
                 <?php if (
                     $userPrivilege->canViewSalesReport(UserAuthentication::getLoggedUserId(), true) ||
+                    $userPrivilege->canViewCatalogReport(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewPerformanceReport(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId(), true)
                 ) { ?>
                     <li class="menu__item">
-                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Reports", $siteLangId); ?></span></div>
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Sales_Report", $siteLangId); ?></span></div>
                     </li>
                     <?php if ($userPrivilege->canViewSalesReport(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'salesreport') ? 'is-active' : ''; ?>">
-                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Sales_Report', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'SalesReport'); ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Sales_Over_Time', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'SalesReport'); ?>">
                                     <i class="icn shop"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
                                         </svg>
-                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Sales_Report', $siteLangId); ?></span></a></div>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Sales_Over_Time', $siteLangId); ?></span></a></div>
                         </li>
                     <?php } ?>
-                    <?php if ($userPrivilege->canViewPerformanceReport(UserAuthentication::getLoggedUserId(), true)) { ?>
-                        <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsperformance') ? 'is-active' : ''; ?>">
-                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Performance', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'ProductsPerformance'); ?>">
+                    <?php if ($userPrivilege->canViewCatalogReport(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item <?php echo ($controller == 'CatalogReport' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('CatalogReport', 'index'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-product-performance" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-product-performance"></use>
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
                                         </svg>
-                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products_Performance', $siteLangId); ?></span></a></div>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products', $siteLangId); ?></span></a></div>
                         </li>
                     <?php } ?>
+                    <?php if ($userPrivilege->canViewFinancialReport(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item">
+                            <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Financial_Report", $siteLangId); ?></span></div>
+                        </li>
+                        <li class="menu__item <?php echo ($controller == 'ProductProfitReport' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Profit_by_products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Profit_by_products', $siteLangId); ?></span></a></div>
+                        </li>
+                        <li class="menu__item <?php echo ($controller == 'PayoutReport' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Payout', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('PayoutReport'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Payout', $siteLangId); ?></span></a></div>
+                        </li>
+                        <li class="menu__item <?php echo ($controller == 'TransactionReport' && $action == 'index') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Transaction_Report', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-sales-report"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Transaction_Report', $siteLangId); ?></span></a></div>
+                        </li>
+                    <?php } ?>
+
+                    <li class="menu__item">
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Reports", $siteLangId); ?></span></div>
+                    </li>
                     <?php if ($userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsinventory') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Inventory', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'productsInventory'); ?>">
@@ -362,6 +423,17 @@ $action = strtolower($action);
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products_Inventory_Stock_Status', $siteLangId); ?></span></a></div>
                         </li>
                     <?php } ?>
+
+                    <?php if ($userPrivilege->canViewPerformanceReport(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsperformance') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Performance', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'ProductsPerformance'); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-product-performance" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#dash-product-performance"></use>
+                                        </svg>
+                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products_Performance', $siteLangId); ?></span></a></div>
+                        </li>
+                    <?php } ?>
+
                     <li class="divider"></li>
                 <?php } ?>
                 <li class="menu__item">

@@ -277,7 +277,7 @@ class HomeController extends MyAppController
         }
 
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock'));
+        $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'shop_id'));
         return $productSrchObj;
     }
 
@@ -1012,13 +1012,12 @@ class HomeController extends MyAppController
         $srchSlide->joinPromotions($langId, true, true, true);
         $srchSlide->addPromotionTypeCondition();
         $srchSlide->joinUserWallet();
-        $srchSlide->joinActiveUser();
-        $srchSlide->addMinimiumWalletbalanceCondition();
+        $srchSlide->joinActiveUser();      
         $srchSlide->addSkipExpiredPromotionAndSlideCondition();
         $srchSlide->joinBudget();
         $srchSlide->joinAttachedFile();
         $srchSlide->addMultipleFields(array('slide_id', 'slide_record_id', 'slide_type', 'IFNULL(promotion_name, promotion_identifier) as promotion_name,IFNULL(slide_title, slide_identifier) as slide_title', 'slide_target', 'slide_url', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'slide_img_updated_on'));
-
+     
         $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
         $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
 
@@ -1161,11 +1160,11 @@ class HomeController extends MyAppController
         $productSrchSponObj = clone $productSrchObj;
         $productSrchSponObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
         $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));
-        $productSrchSponObj->addOrder('theprice', 'ASC');
         $productSrchSponObj->joinSellers();
         $productSrchSponObj->joinSellerSubscription($langId);
         $productSrchSponObj->addGroupBy('selprod_id');
         $productSrchSponObj->addOrder('', 'rand()');
+        //$productSrchSponObj->addOrder('theprice', 'ASC');
         return $productSrchSponObj;
     }
 
@@ -1268,8 +1267,12 @@ class HomeController extends MyAppController
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesArr($this->siteLangId);
         $arr_country = array();
-        foreach ($countriesArr as $key => $val) {
-            $arr_country[] = array("id" => $key, 'name' => $val);
+        foreach ($countriesArr as $country) {
+            $arr_country[] = [
+                "id" => $country['country_id'],
+                'name' => $country['country_name'],
+                'country_code' => $country['country_code'],
+            ];
         }
         $this->set('countries', $arr_country);
         $this->_template->render();
@@ -1387,7 +1390,7 @@ class HomeController extends MyAppController
                     'src' => $iconUrl,
                     'sizes' => $val . 'x' . $val,
                     'type' => 'image/png',
-                    'purpose'=> 'any maskable'
+                    'purpose' => 'any maskable'
                 ];
                 $arr['icons'][] = $icons;
             }

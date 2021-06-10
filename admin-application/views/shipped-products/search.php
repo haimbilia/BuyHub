@@ -39,7 +39,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Change_Status', $adminLangId), "onclick" => "updateProductsShipping(" . $row['shippro_product_id'] . ", " . $row['shippro_shipprofile_id'] . ")"), '<i class="fas fa-toggle-off"></i>', true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Update_Shipping_Profile', $adminLangId), "onclick" => "updateProductsShipping(" . $row['shippro_product_id'] . ", " . $row['shippro_shipprofile_id'] . ")"), '<i class="fas fa-toggle-off"></i>', true);
                 }
                 break;
             default:

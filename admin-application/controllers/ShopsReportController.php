@@ -154,7 +154,7 @@ class ShopsReportController extends AdminBaseController
                         case 'commissionCharged':
                         case 'refundedCommission':
                         case 'adminSalesEarnings':
-                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:
                             $arr[] = $row[$key];
@@ -170,9 +170,9 @@ class ShopsReportController extends AdminBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            $arr_listing = $db->fetchAll($rs);
+            $arrListing = $db->fetchAll($rs);
 
-            $this->set("arr_listing", $arr_listing);
+            $this->set("arrListing", $arrListing);
             $this->set('pageCount', $srch->pages());
             $this->set('recordCount', $srch->recordCount());
             $this->set('page', $page);
@@ -229,27 +229,27 @@ class ShopsReportController extends AdminBaseController
                 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
                 'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->adminLangId),
 
-                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
-                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $this->adminLangId),
-                'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->adminLangId),
+               // 'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
+               'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
+               // 'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->adminLangId),
 
-                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
-                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $this->adminLangId),
-                'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->adminLangId),
+               // 'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
+               'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
+               // 'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->adminLangId),
 
-                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
-                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
-                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
+               // 'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
+               'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
+               // 'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
 
-                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
-                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
-                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
-
-                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
+               'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
+               // 'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
+               'refundedShippingFromSeller' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
+               // 'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
+               'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
 
                 'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->adminLangId),
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->adminLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->adminLangId),
                 'totalFavorites' =>    Labels::getLabel('LBL_Favorites', $this->adminLangId),
                 'totReviews'    =>    Labels::getLabel('LBL_Reviews', $this->adminLangId),
                 'totRating'        =>    Labels::getLabel('LBL_Rating', $this->adminLangId),

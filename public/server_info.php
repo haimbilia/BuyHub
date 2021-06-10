@@ -30,9 +30,9 @@ function apacheGetModules()
 $title = 'System Requirement check';
 $text_install_php = '1. Please configure your PHP settings to match requirements listed below.';
 $text_install_extension = '2. Please make sure the PHP extensions listed below are installed.';
-$text_msql_version = '3. Please make sure you have Mysql version 5.6 or greater than 5.6';
+$text_msql_version = '3. Please make sure you have Mysql version 8.0';
 $text_note = 'Note: In some server environment, script unable to detect server settings. So if you have configured your server as per required settings, You can install <a href="http://www.fatbit.com/" target="_blank">FatBit</a> Powered Scripts. ';
-$text_strict_trans_tables = '4. sql_mode - strict_trans_tables should be disabled.';
+$text_strict_trans_tables = '4. sql_mode = NO_ENGINE_SUBSTITUTION and SET GLOBAL log_bin_trust_function_creators = 1';
 $text_composer = '5. PHP Composer should be installed.';
 $text_setting = 'PHP Settings';
 $text_current = 'Current Settings';
@@ -395,10 +395,12 @@ $calendar = extension_loaded('calendar');
                                     <td>32M or 32M+</td>
                                     <td class="text-center"><?php if ($memory_limit >= 32) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg></i></span>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg></i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -410,12 +412,14 @@ $calendar = extension_loaded('calendar');
                                     <td>7.4</td>
                                     <td class="text-center"><?php if ($php_version >= '7.3' && $php_version < '7.5') { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -432,12 +436,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($ioncube) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -454,12 +460,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if (!$register_globals) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -476,12 +484,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if (!$magic_quotes_gpc) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -498,12 +508,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($file_uploads) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -520,12 +532,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($allow_url_fopen) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -542,12 +556,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if (!$session_auto_start) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -584,12 +600,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($rewrite_url) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -626,12 +644,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($db) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -648,12 +668,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($gd) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -670,12 +692,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($curl) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -693,12 +717,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($zlib) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -715,12 +741,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($zip) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -737,12 +765,14 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td class="text-center"><?php if ($json) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -761,12 +791,14 @@ $calendar = extension_loaded('calendar');
                                     <td class="text-center">
                                         <?php if ($iconv) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -785,12 +817,14 @@ $calendar = extension_loaded('calendar');
                                     <td class="text-center">
                                         <?php if ($mbstring) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -809,12 +843,14 @@ $calendar = extension_loaded('calendar');
                                     <td class="text-center">
                                         <?php if ($fileinfo) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -833,12 +869,14 @@ $calendar = extension_loaded('calendar');
                                     <td class="text-center">
                                         <?php if ($calendar) { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Circle" /></svg>
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
 
                                                 </i></span>
                                         <?php } else { ?>
                                             <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
-                                                        <use xlink:href="#Check_Close" /></svg></i></span>
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
                                         <?php } ?>
                                     </td>
                                 </tr>

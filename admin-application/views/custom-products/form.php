@@ -102,6 +102,11 @@ $productEanUpcFld->addFieldTagAttribute( 'onBlur', 'validateEanUpcCode(this.valu
                                     <?php echo Labels::getLabel('LBL_EAN/UPC_setup', $adminLangId); ?></a>
                             </li>
                         <?php } ?>
+                        <?php if (true == $displayDownloadTab) { ?>
+                            <li><a <?php echo ($preqId) ? "onClick='productDownloads(" . $preqId . ", 0, 1);'" : ""; ?> href="javascript:void(0);">
+                                    <?php echo Labels::getLabel('LBL_Downloads', $adminLangId); ?></a>
+                            </li>
+                        <?php } ?>
                         <li>
                             <a <?php echo ($preqId) ? "onClick='updateStatusForm( " . $preqId . ");'" : ""; ?> href="javascript:void(0);">
                                 <?php echo Labels::getLabel('LBL_Change_Status', $adminLangId); ?>

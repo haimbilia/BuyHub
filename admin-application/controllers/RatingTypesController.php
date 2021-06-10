@@ -1,7 +1,4 @@
 <?php
-
-use PhpParser\Node\Stmt\Label;
-
 class RatingTypesController extends AdminBaseController
 {
     public function __construct($action)
@@ -47,12 +44,13 @@ class RatingTypesController extends AdminBaseController
 
         $this->set('restrictTypes', $restrictTypes);
         $this->set("canEdit", $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
+        $this->set('types', RatingType::getTypeArr($this->adminLangId));
         $this->_template->render(false, false);
     }
 

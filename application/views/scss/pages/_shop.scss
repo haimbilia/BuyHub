@@ -8,12 +8,8 @@
 .shop-nav {
     padding: 10px 0 0 0;
     ul {
-
         display: flex;
-        -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
-        
-        
         justify-content: center;
         flex-wrap: wrap;
         @include media-breakpoint-down(md) {
@@ -61,12 +57,8 @@
         width: 200px;
         margin: 0 auto;
         margin-bottom: 1rem;
-
         display: flex;
-
         align-items: center;
-        
-        
         justify-content: center;
         overflow: hidden;
         img {

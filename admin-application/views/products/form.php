@@ -45,6 +45,18 @@
                                      <div class="tabs-title"> <?php echo Labels::getLabel('LBL_Media', $adminLangId); ?><span><?php echo Labels::getLabel('LBL_Add_Option_Based_Media', $adminLangId); ?></span></div>
                                  </div>
                              </a></li>
+                        <li>
+                            <a rel="tabs_006" class="tabs_006" href="javascript:void(0)" >
+                                <div class="tabs-head">
+                                    <div class="tabs-title">
+                                        <?php echo Labels::getLabel('LBL_Downloads', $adminLangId); ?>
+                                        <span>
+                                            <?php echo Labels::getLabel('LBL_Add_Catalog_Inventory_Based_Downloads', $adminLangId); ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
                      </ul>
                      
                      <div class="tabs_panel_wrap">
@@ -53,6 +65,7 @@
                         <div id="tabs_003" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_004" class="tabs_panel" style="display: none;"></div>
                         <div id="tabs_005" class="tabs_panel" style="display: none;"></div>
+                        <div id="tabs_006" class="tabs_panel" style="display: none;"></div>
                      </div>
                 </div>
             </div>
@@ -61,10 +74,19 @@
 </div>
 <script>
 productInitialSetUpFrm(<?php echo $productId; ?>, <?php echo $prodCatId; ?>);
+var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
 var product_type =  '<?php echo $productType; ?>';
 var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
+var PRODUCT_TYPE_PHYSICAL = '<?php echo Product::PRODUCT_TYPE_PHYSICAL; ?>';
 if(product_type == PRODUCT_TYPE_DIGITAL){
     hideShippingTab();
+    if (0 == attachDownloadsWithInv) {
+        showDownloadTab();
+    } else {
+        hideDownloadTab();
+    }
+} else {
+    hideDownloadTab();
 }
 </script>
 

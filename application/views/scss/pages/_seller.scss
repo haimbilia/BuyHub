@@ -93,7 +93,7 @@
             #{$start-direction}: -280px;
             bottom: 0;
             overflow-y: auto;
-            -webkit-transform: translate3d(0, 0, 0);
+            
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             width: 280px;
@@ -389,7 +389,7 @@
             #{$start-direction}: -280px;
             bottom: 0;
             overflow-y: auto;
-            -webkit-transform: translate3d(0, 0, 0);
+            
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             width: 280px;

@@ -140,7 +140,7 @@ class ShopsController extends AdminBaseController
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -579,7 +579,7 @@ class ShopsController extends AdminBaseController
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'shop_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true, 'country_code');
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true, 'country_code');
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'shop_country_code', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 
@@ -809,7 +809,7 @@ class ShopsController extends AdminBaseController
     public function searchShopCollections($shopId)
     {
         $records = ShopCollection::getCollectionGeneralDetail($shopId);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("shopId", $shopId);
         $this->_template->render(false, false);
     }

@@ -35,7 +35,7 @@ class ShippedProductsController extends AdminBaseController
         $srch->addPhyProductCheckCondition();
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addMultipleFields(array('sppro.shippro_shipprofile_id, sppro.shippro_product_id, ifnull(tp_l.product_name, tp.product_identifier) as product_name, spprof.shipprofile_name, tp.product_added_by_admin_id'));
+        $srch->addMultipleFields(array('sppro.shippro_shipprofile_id, sppro.shippro_product_id, ifnull(tp_l.product_name, tp.product_identifier) as product_name, COALESCE(spprof_l.shipprofile_name, spprof.shipprofile_identifier) as shipprofile_name, tp.product_added_by_admin_id'));
         $srch->addGroupBy('sppro.shippro_product_id');
         $srch->addOrder('shippro_product_id', 'DESC');
         if (!empty($keyword)) {
@@ -51,8 +51,10 @@ class ShippedProductsController extends AdminBaseController
             $cond = $srch->addCondition('u.user_name', 'like', '%' . $userName . '%');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $userName . '%');
         }
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
+
 
 
         /* Get Catelog shipped by Admin/seller */
@@ -95,67 +97,53 @@ class ShippedProductsController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditShippedProducts(0, true));
         $this->_template->render(false, false);
     }
-
-    public function viewSellerList($productId, $adminShip = false)
+    
+    public function viewSellerList()
     {
         $this->objPrivilege->canViewShippedProducts();
-        $productId = FatUtility::int($productId);
+        
+        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT); 
+        $adminShip = FatApp::getPostedData('adminShip', FatUtility::VAR_INT, 0);
 
         if (1 > $productId) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
-
+        $post = FatApp::getPostedData();
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);       
         /* Get all Products */
-        $allProd = new ShippedProducts();
-        $allProd->joinShipProfileProd();
-        $allProd->joinShippingProfile();
-        $allProd->joinSelProdTable();
-        $allProd->joinSellerShop();
-        $allProd->joinUserTable();
-        $allProd->addProductDeletedCondition();
-        $allProd->addPhyProductCheckCondition();
-        $allProd->addCondition('tp.product_id', '=', $productId);
-        // $allProd->addCondition('sppro.shippro_user_id', '!=', '0');
-        $allProd->addMultipleFields(array('u.user_name, u.user_id, shop.shop_identifier,  spprof.shipprofile_name'));
-        /* End here */
-
-        /* Get Catelog shipped by seller */
-        $selProd = clone $allProd;
-        $selProd->joinShippedBySeller();
-        $resu = $selProd->getResultSet();
-        $selRecords = FatApp::getDb()->fetchAll($resu);
-        $mainArr = [];
-        if (!empty($selRecords)) {
-            $selArr = array_unique(array_column($selRecords, 'user_name'));
-            $shopArr = array_unique(array_column($selRecords, 'shop_identifier'));
-            // $shipProdArr = array_unique(array_column($selRecords, 'shipprofile_name'));
-            $mainArr = array_combine($selArr, $shopArr);
+        $srch = new ShippedProducts($this->adminLangId);
+        $srch->joinShipProfileProd();
+        $srch->joinShippingProfile();
+        $srch->joinSelProdTable();
+        $srch->joinSellerShop();
+        $srch->joinUserTable();
+        $srch->addProductDeletedCondition();
+        $srch->addPhyProductCheckCondition();
+        $srch->addCondition('tp.product_id', '=', $productId);      
+        $srch->addMultipleFields(array('u.user_name', 'u.user_id', 'shop.shop_identifier','shop.shop_id'));
+        $srch->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT OUTER JOIN', 'psbs.psbs_product_id = tp.product_id and psbs.psbs_user_id = sp.selprod_user_id', 'psbs');
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addGroupBy('u.user_id');
+        
+        if( applicationConstants::YES == $adminShip){
+            $srch->addCondition('psbs.psbs_product_id', 'is', 'mysql_func_NULL', 'AND', true);
+        }else{
+            $srch->addCondition('psbs.psbs_product_id', 'is not', 'mysql_func_NULL', 'AND', true);
         }
-        /* End here */
-
-        /* Get Catelog shipped by Admin */
-        if ($adminShip == true) {
-            $userIdArr = array_unique(array_column($selRecords, 'user_id'));
-            $selProd = clone $allProd;
-            if (!empty($userIdArr)) {
-                $selProd->addCondition('sp.selprod_user_id', 'NOT IN', $userIdArr);
-            }
-            $resu = $selProd->getResultSet();
-            $notShipRecords = FatApp::getDb()->fetchAll($resu);
-            $maindataArr = [];
-            if (!empty($notShipRecords)) {
-                $notSelShipArr = array_unique(array_column($notShipRecords, 'user_name'));
-                $selshopArr = array_unique(array_column($notShipRecords, 'shop_identifier'));
-                $maindataArr = array_combine($notSelShipArr, $selshopArr);
-            }
-            $this->set('notSelShipArr', $maindataArr);
-        }
-        /* End here */
-        $this->set('sellerNameArr', $mainArr);
-        $this->set('sellerNameArr', $mainArr);
+        
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+   
+        $this->set("arrListing", $records);
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
         $this->set('adminShip', $adminShip);
         $this->set('adminLangId', $this->adminLangId);
+        $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
 
@@ -214,7 +202,7 @@ class ShippedProductsController extends AdminBaseController
         $frm = new Form('frmShippedProductsSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $shipProfileArr = ShippingProfile::getProfileArr(0, true, true);
+        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
         $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
@@ -226,7 +214,7 @@ class ShippedProductsController extends AdminBaseController
     private function productsShippingForm()
     {
         $frm = new Form('productsShippingForm');
-        $shipProfileArr = ShippingProfile::getProfileArr(0, true, true);
+        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0,  true, true);
         $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'productId', 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));

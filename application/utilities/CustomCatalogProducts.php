@@ -712,7 +712,7 @@ trait CustomCatalogProducts
 
         $result = array();
         $result['prodcat_id'] = $prodCatId;
-        $str = "<div class='slider-item col-lg-4 col-md-4 col-sm-3 col-xs-12 slider-item-js categoryblock-js' rel=" . $blockCount . " id='categoryblock" . $blockCount . "' ><div class='box-border box-categories' data-simplebar>";
+        $str = "<div class='slider-item col-lg-4 col-md-4 col-sm-3 col-xs-12 slider-item-js categoryblock-js' rel=" . $blockCount . " id='categoryblock" . $blockCount . "' ><div class='box-border box-categories scroll scroll-y'>";
         //$result['msg'] = Labels::getLabel('MSG_Loaded_successfully',$this->siteLangId);
         if (!empty($listing)) {
             $str .= "<ul>";
@@ -743,7 +743,7 @@ trait CustomCatalogProducts
 
         $emptyBlock = '';
         for ($i = $blockCount + 1; $i <= 3; $i++) {
-            $str .= "<div class='slider-item col-lg-4 col-md-4 col-sm-3 col-xs-12 slider-item-js categoryblock-js' id='categoryblock" . $blockCount . "' ><div class='box-border box-categories ' data-simplebar></div></div>";
+            $str .= "<div class='slider-item col-lg-4 col-md-4 col-sm-3 col-xs-12 slider-item-js categoryblock-js' id='categoryblock" . $blockCount . "' ><div class='box-border box-categories  scroll scroll-y'></div></div>";
         }
 
         $result['structure'] = $str;
@@ -1027,15 +1027,18 @@ trait CustomCatalogProducts
         $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId());
         $this->canAddCustomCatalogProduct(true);
         $preqId = FatUtility::int($preqId);
-        $productType = 0;
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::NO;
         if (0 < $preqId) {
             $productReqContent = ProductRequest::getAttributesById($preqId, 'preq_content');
             if (!empty($productReqContent)) {
                 $productData = json_decode($productReqContent, true);
                 $productType = array_key_exists('product_type', $productData) ? $productData['product_type'] : 0;
+                $attachDownloadsWithInv = array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : 0;
             }
         }
         $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->set('preqId', $preqId);
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
 
@@ -1049,6 +1052,10 @@ trait CustomCatalogProducts
         $preqId = FatUtility::int($preqId);
         $customProductFrm = $this->getCustomProductIntialSetUpFrm(0, $preqId);
         $languages = Language::getAllNames();
+
+        $productType = Product::PRODUCT_TYPE_PHYSICAL;
+        $attachDownloadsWithInv = applicationConstants::NO;
+
         if ($preqId > 0) {
             $productReqRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_prodcat_id', 'preq_content'));
             $userArr = User::getAuthenticUserIds(UserAuthentication::getLoggedUserId(), $this->userParentId);
@@ -1059,6 +1066,7 @@ trait CustomCatalogProducts
             $prodcatId = $productReqRow['preq_prodcat_id'];
             $prodcatId = FatUtility::int($prodcatId);
             $productData = json_decode($productReqRow['preq_content'], true);
+            // CommonHelper::printArray([$productData], 1);
             unset($productReqRow['preq_content']);
             $productReqRow = array_merge($productReqRow, $productData, array('preq_prodcat_id' => $prodcatId));
             $productReqRow['ptc_prodcat_id'] = $prodcatId;
@@ -1080,6 +1088,10 @@ trait CustomCatalogProducts
             }
             $productReqRow = array_merge($productReqRow, $langData);
             $customProductFrm->fill($productReqRow);
+
+            $productType = $productData['product_type'];
+            $attachDownloadsWithInv = (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO);
+
         }
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -1088,6 +1100,9 @@ trait CustomCatalogProducts
         $this->set('otherLanguages', $languages);
         $this->set('productFrm', $customProductFrm);
         $this->set('preqId', $preqId);
+        $this->set('productType', $productType);
+        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
+        
         $this->_template->render(false, false);
     }
 

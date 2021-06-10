@@ -13,7 +13,7 @@
             #{$start-direction}: -280px;
             bottom: 0;
             overflow-y: auto;
-            -webkit-transform: translate3d(0, 0, 0);
+            
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             width: 280px;
@@ -114,7 +114,7 @@
             }
             &.active {
                 &:before {
-                    -webkit-transform: rotate(0deg);
+                    
                     transform: rotate(0deg);
                 }
             }
@@ -293,7 +293,7 @@
 }
 
 .cat-accordion .acc-trigger.is--active:before {
-    -webkit-transform: rotate(0deg);
+    
     transform: rotate(0deg);
 }
 
@@ -393,8 +393,7 @@
     font-size: 13px;
     #{$start-direction}: 5px;
     margin-#{$end-direction}: 3px;
-    -webkit-padding-start: 3px;
-    -moz-padding-start: 3px;
+    
     padding-#{$start-direction}: 3px;
     position: absolute;
     top: 10px;

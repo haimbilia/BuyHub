@@ -141,14 +141,14 @@ switch ($frmType) {
 </ul>
 <div class="tabs_panel_wrap">
     <?php echo $frm->getFormHtml(); ?>
-    <?php if ($displayMap && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
         <div id="map" style="width:900px; height:500px"></div>
     <?php } ?>
 </div>
 
 <script language="javascript">
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-    <?php if ($displayMap && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
         getStatesByCountryCode($("#geo_country_code").val(), '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code', 'state_code');
     <?php } ?>
 
@@ -197,11 +197,11 @@ switch ($frmType) {
     });
 </script>
 <script>
-    <?php if ($displayMap && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
         $(document).ready(function() {
             var lat = $('#lat').val();
             var lng = $('#lng').val();
-            initMap(lat, lng);
+            initMap(lat, lng);     
         });
     <?php } else { ?>
         getCountryStates($("#user_country_id").val(), '<?php echo $stateData; ?>', '#user_state_id');

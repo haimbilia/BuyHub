@@ -5,8 +5,8 @@ if (empty($orderDate)) {
     $frmSrch->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';
     $frmSrch->developerTags['fld_default_col'] = 4;
 } else {
-    $frmSrch->developerTags['colClassPrefix'] = 'col-lg-3 col-md-';
-    $frmSrch->developerTags['fld_default_col'] = 3;
+    $frmSrch->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';
+    $frmSrch->developerTags['fld_default_col'] = 4;
 }
 
 ?>
@@ -34,11 +34,9 @@ if (empty($orderDate)) {
                         <div class="card-body">
                             <div class="replaced">
                                 <?php
-                                $dateFrm = $frmSrch->getField('date_from');
-                                // $dateFrm->developerTags['noCaptionTag'] = true;
+                                $dateFrm = $frmSrch->getField('date_from');                               
 
                                 $dateTo = $frmSrch->getField('date_to');
-                                // $dateTo->developerTags['noCaptionTag'] = true;
 
                                 $sortBy = $frmSrch->getField('sortBy');
                                 $sortBy->setFieldTagAttribute('id', 'sortBy');
@@ -54,7 +52,11 @@ if (empty($orderDate)) {
                                 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 
                                 if (!empty($orderDate)) {
+                                    $keyword = $frmSrch->getField('keyword');
+                                    $keyword->setFieldTagAttribute('placeholder', Labels::getLabel("LBL_Keyword", $siteLangId));
+
                                     $sortOrder->developerTags['noCaptionTag'] = true;
+                                    $keyword->developerTags['noCaptionTag'] = true;
                                     $sortBy->developerTags['noCaptionTag'] = true;
                                     $submitFld->developerTags['noCaptionTag'] = true;
                                     $fldClear->developerTags['noCaptionTag'] = true;
@@ -70,7 +72,7 @@ if (empty($orderDate)) {
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body p-0">
                             <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                         </div>
                     </div>

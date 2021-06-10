@@ -51,7 +51,7 @@ class ThemeColorController extends AdminBaseController
             $frm->addHiddenField("", 'CONF_THEME_FONT_FAMILY_URL');
             $fld = $frm->addSelectBox(Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId), 'CONF_THEME_FONT_FAMILY', [], '', array('placeholder' => Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId)));
             $fld->requirement->setRequired(true);
-            $link = "<a href='https://fonts.google.com' target='_blanlk'>https://fonts.google.com</a>";
+            $link = "<a href='https://fonts.google.com' target='_blank'>https://fonts.google.com</a>";
             $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->adminLangId), ['{URL}' => $link]);
             $fld->htmlAfterField = '<small>' . $url . ' </small>';
         }
@@ -83,11 +83,15 @@ class ThemeColorController extends AdminBaseController
         }
 
         $googleFontsResp = json_decode(json_encode($curl->response), true);
-
+        
         $fonts = [];
         foreach ($googleFontsResp['items'] as $font) {
+            $fontName = str_replace(' ', '+', $font['family']);
+            $i = 1;
+            $allWeights = [];
+            $allSubsets = [];
             foreach ($font['variants'] as $variant) {
-                $name = str_replace(' ', '+', $font['family']) . '-' . $variant;
+                $name = $fontName . '-' . $variant;
                 $fonts[] = [
                     'id' => $name,
                     'name' => $font['family'] . ' - ' . ucwords($variant),
@@ -95,6 +99,19 @@ class ThemeColorController extends AdminBaseController
                     'weight' => $variant,
                     'subset' => implode(',', $font['subsets']),
                 ];
+
+                $allWeights[] = $variant;
+                $allSubsets = array_merge($allSubsets, $font['subsets']);
+                if (1 < count($font['variants']) && $i == count($font['variants'])) {
+                    $fonts[] = [
+                        'id' => $fontName . '-' . Labels::getLabel('LBL_ALL', $this->adminLangId),
+                        'name' => $font['family'] . ' - ' . Labels::getLabel('LBL_ALL', $this->adminLangId),
+                        'text' => $fontName . '-' . Labels::getLabel('LBL_ALL', $this->adminLangId),
+                        'weight' => implode(',', $allWeights),
+                        'subset' => implode(',', array_unique($allSubsets)),
+                    ];
+                }
+                $i++;
             }
         }
 
@@ -107,7 +124,6 @@ class ThemeColorController extends AdminBaseController
             $json['html'] = '';
             FatUtility::dieJsonError($json);
         }
-
         $font = new GoogleFonts(FatApp::getPostedData(), true);
         $json['html'] = $font->load();
         FatUtility::dieJsonSuccess($json);

@@ -58,7 +58,11 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
 								<?php echo Labels::getLabel('LBL_Print', $siteLangId); ?>">
                                 <i class="fas fa-print"></i>
                             </a>
-                            <?php if ($shippedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
+                            <a target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'],$orderDetail['op_id']]); ?>" class="btn btn-outline-brand btn-sm no-print" title="
+				<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>">
+                                <i class="fas fa-print"></i>
+                            </a>
+                            <?php if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP  &&  $shippedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
                                 $opId = $orderDetail['op_id'];
                                 $plugin = new Plugin();
                                 $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
@@ -74,8 +78,13 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                         <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
                                     <?php } ?>
                                 <?php }
+<<<<<<< HEAD
                                 if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || $allowedForPlugin) && empty($orderDetail['opship_tracking_number'])) { 
                                     if ($allowedForPlugin) {
+=======
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || 'EasyPost' == $keyName) && empty($orderDetail['opship_tracking_number']) && $orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) {
+                                    if ('EasyPost' == $keyName) {
+>>>>>>> develop
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                     } else {
                                         $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $siteLangId);
@@ -174,7 +183,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             </div>
                         </div>
                     </div>
-                    <div class="js-scrollable table-wrap">
+                    <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table">
                             <thead>
                                 <tr class="">
@@ -496,6 +505,19 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             </table>
                         </div>
                     <?php } ?>
+                    <?php if (true === $canAttachMoreFiles) { ?>
+                        <span class="gap"></span>
+                        <div class="section--repeated no-print">
+                            <h5><?php echo Labels::getLabel('LBL_Add_more_attachments', $siteLangId); ?></h5>
+                            <?php 
+                            $moreAttachmentsFrm->setFormTagAttribute('class', 'form');
+                            $moreAttachmentsFrm->setFormTagAttribute('id', 'additional_attachments');
+                            $fld = $moreAttachmentsFrm->getField('downloadable_file');
+                            $fld->setFieldTagAttribute('onchange', 'uploadAdditionalAttachment(this); return false;');
+                            echo $moreAttachmentsFrm->getFormHtml();
+                            ?>
+                        </div>
+                    <?php } ?>
                     <span class="gap"></span>
                     <?php if (!empty($digitalDownloads)) { ?>
                         <div class="section--repeated js-scrollable table-wrap">
@@ -520,8 +542,8 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                             $lang_name = $languages[$row['afile_lang_id']];
                                         }
 
-                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
-                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
+                                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
+                                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><i class="fa fa-download"></i></a></li>';
 
                                         $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
                                         if ($row['expiry_date'] != '') {
@@ -534,7 +556,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                         } ?>
                                         <tr>
                                             <td><?php echo $sr_no; ?></td>
-                                            <td><?php echo $fileName; ?></td>
+                                            <td><?php echo '<div class="text-break">' . $fileName . '</div>'; ?></td>
                                             <td><?php echo $lang_name; ?></td>
                                             <td><?php echo $downloadableCount; ?></td>
                                             <td><?php echo $row['afile_downloaded_times']; ?></td>
@@ -579,7 +601,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                         } ?>
                                         <tr>
                                             <td><?php echo $sr_no; ?></td>
-                                            <td><a target="_blank" href="<?php echo $row['opddl_downloadable_link']; ?>" title="<?php echo Labels::getLabel('LBL_Click_to_download', $siteLangId); ?>"><?php echo $row['opddl_downloadable_link']; ?></a></td>
+                                            <td><div class="text-break"><a target="_blank" href="<?php echo $row['opddl_downloadable_link']; ?>" title="<?php echo Labels::getLabel('LBL_Click_to_download', $siteLangId); ?>"><?php echo $row['opddl_downloadable_link']; ?></a></div></td>
                                             <td><?php echo $downloadableCount; ?></td>
                                             <td><?php echo $row['opddl_downloaded_times']; ?></td>
                                             <td><?php echo $expiry; ?></td>

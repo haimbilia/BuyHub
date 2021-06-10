@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
     <?php 
     $arr_flds = array(
         // 'select_all'=>'',
@@ -41,7 +41,7 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'upsell_products':
-                    $div = $td->appendElement('div', array("class" => "list-tag-wrapper", "data-scroll-height" => "150", "data-simplebar" => ""));
+                    $div = $td->appendElement('div', array("class" => "list-tag-wrapper"));
                     $ul = $div->appendElement("ul", array("class" => "list-tags"));
                     foreach ($upsellProds as $upsellProd) {
                         $options = SellerProduct::getSellerProductOptions($upsellProd['selprod_id'], true, $siteLangId);

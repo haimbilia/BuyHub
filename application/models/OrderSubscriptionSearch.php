@@ -99,19 +99,25 @@ class OrderSubscriptionSearch extends SearchBase
         }
         $this->joinTable(SellerPackagePlans::DB_TBL, 'LEFT OUTER JOIN', 'spp.' . SellerPackagePlans::DB_TBL_PREFIX . 'id = oss.' . OrderSubscription::DB_TBL_PREFIX . 'plan_id ', 'spp');
     }
-    
+
     public function joinPackage($langId = 0)
     {
         $this->joinTable(SellerPackages::DB_TBL, 'LEFT OUTER JOIN', 'spp.spplan_spackage_id = sp.spackage_id', 'sp');
         if ($langId > 0) {
             $this->joinTable(
-                    SellerPackages::DB_TBL_LANG,
-                    'LEFT OUTER JOIN',
-                    'sp_l.' . SellerPackages::DB_TBL_LANG_PREFIX . 'spackage_id = sp.' . SellerPackages::DB_TBL_PREFIX . 'id
+                SellerPackages::DB_TBL_LANG,
+                'LEFT OUTER JOIN',
+                'sp_l.' . SellerPackages::DB_TBL_LANG_PREFIX . 'spackage_id = sp.' . SellerPackages::DB_TBL_PREFIX . 'id
 			AND sp_l.' . SellerPackages::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
-                    'sp_l'
+                'sp_l'
             );
         }
+    }
+
+    public function addCompletedOrderCondition()
+    {
+        $status = array_diff(unserialize(FatApp::getConfig("CONF_SELLER_SUBSCRIPTION_STATUS")), (array)FatApp::getConfig("CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS"));
+        $this->addStatusCondition($status);
     }
 
     public function addStatusCondition($op_status)
@@ -179,5 +185,45 @@ class OrderSubscriptionSearch extends SearchBase
             trigger_error(Labels::getLabel('MSG_Order_Price_Condition_cannot_be_applied,_as_Orders_Table_is_not_Joined,_So,_Please_Use_joinOrders()_first,_then_try_to_add_Order_Price_condition', $this->commonLangId), E_USER_ERROR);
         }
         $this->addCondition('o.order_net_amount', '<=', $priceTo);
+    }
+
+    public function joinOtherCharges()
+    {
+        $srch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition('opcharge_order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addMultipleFields(array('opcharge_op_id', 'sum(opcharge_amount) as op_other_charges'));
+        $srch->addGroupBy('opc.opcharge_op_id');
+
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'oss.ossubs_id = opcc.opcharge_op_id', 'opcc');
+    }
+
+    public function joinWithCurrentSubscription()
+    {
+        $srch = new SearchBase(Orders::DB_TBL, 'o');
+        $srch->addCondition('o.order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION, 'o_temp');
+        $srch->addMultipleFields(['COALESCE(o_temp.order_id, o.order_id) as currentOrderId']);
+        $srch->addGroupBy('o.order_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+
+        $this->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'oscurr.currentOrderId = oss.ossubs_order_id', 'oscurr');
+    }
+
+    public function includeCount()
+    {
+        $srch = new OrderSubscriptionSearch(0, true, true);
+        $srch->joinSubscription();
+        $srch->joinOrderUser();
+        $srch->joinOtherCharges();
+        $srch->addCondition('o.order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addGroupBy('o.order_user_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCompletedOrderCondition();
+        $srch->addMultipleFields(['o.order_user_id', 'sum(oss.ossubs_price + ifnull(op_other_charges,0)) as subscriptionCharges', 'count(DISTINCT(if(o.order_renew = 1 and order_payment_status = ' . Orders::ORDER_PAYMENT_PAID . ', o.order_id, null))) as spRenewals', 'count(DISTINCT(if(oss.ossubs_status_id = ' . OrderSubscription::CANCELLED_SUBSCRIPTION . ', o.order_id, null))) as spackageCancelled']);
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'subscount.order_user_id = o.order_user_id', 'subscount');
     }
 }

@@ -1,56 +1,56 @@
-$(document).ready(function(){
+$(document).ready(function () {
     var canShipByPlugin = 1;
-	$(document).on('click','ul.linksvertical li a.redirect--js',function(event){
-		event.stopPropagation();
-	});		
+    $(document).on('click', 'ul.linksvertical li a.redirect--js', function (event) {
+        event.stopPropagation();
+    });
 
-	$(document).on('click','input.manualShipping-js',function(){
+    $(document).on('click', 'input.manualShipping-js', function () {
         if ($(this).is(":checked")) {
             setTimeout(() => {
                 trackingUrlFld();
             }, 500);
         }
-	});		
-	
+    });
+
 });
 function pageRedirect(op_id) {
-	window.location.replace(fcom.makeUrl('SellerOrders', 'view',[op_id]));
+    window.location.replace(fcom.makeUrl('SellerOrders', 'view', [op_id]));
 }
-(function() {
-	updateStatus = function(frm){		
-		if (!$(frm).validate()) return;
-		var op_id = $(frm.op_id).val();		
+(function () {
+    updateStatus = function (frm) {
+        if (!$(frm).validate()) return;
+        var op_id = $(frm.op_id).val();
         var data = fcom.frmData(frm);
         var orderStatusId = $(frm.op_status_id).val();
 
-        if (0 < $(".shippingUser-js").length && '' == $(".shippingUser-js").val()){
-            $.systemMessage(langLbl.shippingUser,'alert--danger', false);
+        if (0 < $(".shippingUser-js").length && '' == $(".shippingUser-js").val()) {
+            $.systemMessage(langLbl.shippingUser, 'alert--danger', false);
             return;
         }
 
         var manualShipping = 0;
         if (0 < $("input.manualShipping-js").length) {
-            manualShipping = $("input.manualShipping-js:checked").val();	
+            manualShipping = $("input.manualShipping-js:checked").val();
         }
 
         if (0 < canShipByPlugin && 1 != manualShipping && orderShippedStatus == orderStatusId) {
             proceedToShipment(op_id);
         } else {
-            fcom.updateWithAjax(fcom.makeUrl('SellerOrders', 'changeOrderStatus'), data, function(t) {
-                setTimeout("pageRedirect("+op_id+")", 1000);
+            fcom.updateWithAjax(fcom.makeUrl('SellerOrders', 'changeOrderStatus'), data, function (t) {
+                setTimeout("pageRedirect(" + op_id + ")", 1000);
             });
         }
-	};	
-	
-	updateShippingCompany = function(frm){
-		var data = fcom.frmData(frm);	
-		var op_id = $(frm.op_id).val();				
-		if (!$(frm).validate()) return;
-		fcom.updateWithAjax(fcom.makeUrl('SellerOrders', 'updateShippingCompany'), data, function(t) {
-			setTimeout("pageRedirect("+op_id+")", 1000);
-		});
     };
-    
+
+    updateShippingCompany = function (frm) {
+        var data = fcom.frmData(frm);
+        var op_id = $(frm.op_id).val();
+        if (!$(frm).validate()) return;
+        fcom.updateWithAjax(fcom.makeUrl('SellerOrders', 'updateShippingCompany'), data, function (t) {
+            setTimeout("pageRedirect(" + op_id + ")", 1000);
+        });
+    };
+
     /* ShipStation */
     generateLabel = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
@@ -59,16 +59,16 @@ function pageRedirect(op_id) {
     }
 
     proceedToShipment = function (opId) {
-        $.systemMessage(langLbl.processing,'alert--process', false);
-        if ('' == $(".shippingUser-js").val()){
-            $.systemMessage(langLbl.shippingUser,'alert--danger', false);
+        $.systemMessage(langLbl.processing, 'alert--process', false);
+        if ('' == $(".shippingUser-js").val()) {
+            $.systemMessage(langLbl.shippingUser, 'alert--danger', false);
             return;
         }
         fcom.ajax(fcom.makeUrl('ShippingServices', 'proceedToShipment', [opId]), '', function (t) {
             $.systemMessage.close();
             t = $.parseJSON(t);
             $.systemMessage(t.msg, 'alert--success', false);
-            if(1 > t.status){
+            if (1 > t.status) {
                 $.systemMessage(t.msg, 'alert--danger', false);
                 return;
             }
@@ -103,12 +103,47 @@ function pageRedirect(op_id) {
         $('.courierBlk--js').addClass('d-none');
         $('.courierFld--js').attr('data-fatreq', '{"required": false}');
     }
-
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
                 $.facebox(res, 'medium-fb-width');
             });
+        });
+    }
+})();
+
+(function () {
+    uploadAdditionalAttachment = function () {
+        var data = new FormData();
+        var opId = $("input[name='op_id']").val();
+
+        /* $inputs = $('#additional_attachments input[type=hidden]');
+        $inputs.each(function() { data.append( this.name,$(this).val());}); */
+
+        data.append('op_id', opId);
+
+        $.each($('#downloadable_file')[0].files, function (i, file) {
+            data.append('additional_attachment', file);
+        });
+
+        $.ajax({
+            url: fcom.makeUrl('SellerOrders', 'setupAdditionalOpAttachment'),
+            type: "POST",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (t) {
+                var ans = $.parseJSON(t);
+                if (ans.status == 0) {
+                    $.systemMessage(ans.msg, 'alert alert--danger');
+                    return;
+                }
+                $.systemMessage(ans.msg, 'alert alert--success');
+                setTimeout("pageRedirect(" + opId + ")", 1000);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error Occurred.");
+            }
         });
     }
 })();

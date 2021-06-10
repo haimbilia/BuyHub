@@ -1553,7 +1553,7 @@ class Importexport extends ImportexportCommon
                     $colValue = (!empty($row['product_weight_unit']) && array_key_exists($row['product_weight_unit'], $weightUnitsArr) ? $weightUnitsArr[$row['product_weight_unit']] : '');
                 }
 
-                if (in_array($columnKey, array('ps_free', 'product_cod_enabled', 'product_featured', 'product_approved', 'product_active', 'product_deleted')) && !$this->settings['CONF_USE_O_OR_1']) {
+                if (in_array($columnKey, array('ps_free', 'product_cod_enabled', 'product_featured', 'product_approved', 'product_active', 'product_deleted', 'product_attachements_with_inventory')) && !$this->settings['CONF_USE_O_OR_1']) {
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
                 }
                 $sheetData[] = $this->parseContentForExport($colValue);
@@ -1730,6 +1730,7 @@ class Importexport extends ImportexportCommon
                         case 'product_approved':
                         case 'product_active':
                         case 'product_deleted':
+                        case 'product_attachements_with_inventory':    
                             if ($this->settings['CONF_USE_O_OR_1']) {
                                 $colValue = (FatUtility::int($colValue) == 1) ? applicationConstants::YES : applicationConstants::NO;
                             } else {
@@ -1874,7 +1875,7 @@ class Importexport extends ImportexportCommon
                             $columnKey = 'ps_from_country_id';
                             $colValue = mb_strtolower($colValue);
                             if (!array_key_exists($colValue, $countryArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getCountriesArr(false, $colValue), CASE_LOWER);
+                                $res = $this->array_change_key_case_unicode($this->getCountriesAssocArr(false, $colValue), CASE_LOWER);
                                 if (!$res) {
                                     $invalid = true;
                                 } else {
@@ -2826,7 +2827,7 @@ class Importexport extends ImportexportCommon
                         case 'country_id':
                             $colValue = mb_strtolower($colValue);
                             if ('country_code' == $columnKey && !array_key_exists($colValue, $countryCodeArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getCountriesArr(false, $colValue), CASE_LOWER);
+                                $res = $this->array_change_key_case_unicode($this->getCountriesAssocArr(false, $colValue), CASE_LOWER);
                                 if (!$res) {
                                     $invalid = true;
                                 } else {
@@ -5424,9 +5425,9 @@ class Importexport extends ImportexportCommon
         $rowIndex = 1;
 
         if ($this->settings['CONF_USE_COUNTRY_ID']) {
-            $countryCodes = $this->getCountriesArr(true);
+            $countryCodes = $this->getCountriesAssocArr(true);
         } else {
-            $countryIds = $this->getCountriesArr(false);
+            $countryIds = $this->getCountriesAssocArr(false);
         }
 
         $coloumArr = $this->getStatesColoumArr($langId);

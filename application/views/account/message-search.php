@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (!empty($arr_listing) && is_array($arr_listing)) { ?>
+if (!empty($arrListing) && is_array($arrListing)) { ?>
     <div class="messages-list">
         <ul>
             <?php
-            foreach ($arr_listing as $sn => $row) {
+            foreach ($arrListing as $sn => $row) {
 
                 $liClass = 'is-read';
 

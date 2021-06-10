@@ -44,7 +44,9 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
                               echo $fld->getCaption();
                             ?>
                         </label>
-                        <span class="spn_must_field">*</span>
+                        <?php if($fld->requirements()->isRequired()){ ?>
+                            <span class="spn_must_field">*</span> 
+                        <?php } ?>                       
                      </div>
                      <div class="field-wraper">
                          <div class="field_cover">

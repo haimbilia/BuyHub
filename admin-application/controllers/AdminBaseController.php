@@ -81,6 +81,9 @@ class AdminBaseController extends FatController
         $this->str_setup_successful = Labels::getLabel('LBL_Setup_Successful', $this->adminLangId);
         $this->str_export_successfull = Labels::getLabel('LBL_Export_Successful', $this->adminLangId);
         $this->str_add_update_record = $this->str_update_record;
+        
+        $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
+        $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
         $jsVariables = array(
             'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->adminLangId),
@@ -162,6 +165,15 @@ class AdminBaseController extends FatController
             'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
             'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
             'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->adminLangId),
+            'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
+            'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
+            'defaultCountryCode' => $defaultCountryCode,
+            'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
+            'copied' => Labels::getLabel('LBL_Copied', $this->adminLangId),
+            'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
+            'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
+            'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
+            'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);
@@ -337,7 +349,7 @@ class AdminBaseController extends FatController
         $frm->addEmailField(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 
@@ -399,6 +411,17 @@ class AdminBaseController extends FatController
 
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
 
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->adminLangId), '', array(), '');
+
+        /* $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
+        $downloadAttachementsWithInventoryTrue->setRequired();
+        $downloadAttachementsWithInventoryFalse = new FormFieldRequirement('product_attachements_with_inventory', 'value');
+        $downloadAttachementsWithInventoryFalse->setRequired(false);
+
+        $prodTypeFld = $frm->getField('product_type');
+        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryTrue);
+        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryFalse); */
+
         if ($type == 'REQUESTED_CATALOG_PRODUCT') {
             $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand/Manfacturer', $this->adminLangId), 'brand_name');
             if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
@@ -426,7 +449,9 @@ class AdminBaseController extends FatController
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
-
+        if (Product::PRODUCT_TYPE_DIGITAL == $productType) {
+            $fld->requirements()->setRequired(false);
+        }    
         $taxCategories = Tax::getSaleTaxCatArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
 

@@ -34,7 +34,7 @@
                             <?php } ?>
                             <div id="cartList"></div>
                         </div>    
-                        <div class="col-xl-4 col-lg-5">
+                        <div class="col-xl-4 col-lg-5 mt-5 mt-md-0">
                             <div class="sticky-summary">
                                 <div class="card">
                                     <div class="card-body">

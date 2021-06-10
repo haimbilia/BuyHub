@@ -62,7 +62,7 @@ if (null != $btn) {
           </div>
           <div class="gap"></div>
           <?php if (!empty($request)) { ?>
-            <div class="js-scrollable table-wrap">
+            <div class="js-scrollable table-wrap scroll scroll-x">
               <table class="table">
                 <thead>
                   <tr class="">
@@ -108,7 +108,7 @@ if (null != $btn) {
               </table>
             </div>
             <div class="gap"></div>
-            <div class="js-scrollable table-wrap">
+            <div class="js-scrollable table-wrap scroll scroll-x">
               <table class="table">
                 <thead>
                   <tr class="">

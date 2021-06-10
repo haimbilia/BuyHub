@@ -29,7 +29,7 @@ class Orders extends MyAppModel
 
     public const DB_TBL_CHARGES = 'tbl_order_product_charges';
     public const DB_TBL_CHARGES_PREFIX = 'opcharge_';
-    
+
     public const DB_ORDER_TO_PLUGIN_ORDER = 'tbl_orders_to_plugin_order';
     public const DB_ORDER_TO_PLUGIN_ORDER_PREFIX = 'opo_';
 
@@ -295,6 +295,7 @@ class Orders extends MyAppModel
 
     private function addUpdateProductOrder($data = array(), $langId = 1)
     {
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $data], 1);
         $db = FatApp::getDb();
 
         $ordersLangData = [];
@@ -446,6 +447,9 @@ class Orders extends MyAppModel
                 }
 
                 /* Saving of digital download data[ */
+
+                // $product['product_attachements_with_inventory'] = 1;
+
                 if ($product['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                     $db->deleteRecords(
                         AttachedFile::DB_TBL,
@@ -454,7 +458,24 @@ class Orders extends MyAppModel
                             'vals' => array(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op_id)
                         )
                     );
-                    $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $product['op_selprod_id'], 0, -1);
+
+                    $selProdOption = explode('_', $product['op_selprod_code']);
+                    array_shift($selProdOption);
+                    if (0 < count($selProdOption)) {
+                        $optionComb = implode('_', $selProdOption);
+                    } else {
+                        $optionComb = '0';
+                    }
+
+                    $recordId = $product['op_selprod_id'];
+                    $productType = Product::CATALOG_TYPE_INVENTORY;
+                    if (0 == $product['product_attachements_with_inventory']) {
+                        $recordId = $product['selprod_product_id'];
+                        $productType = Product::CATALOG_TYPE_PRIMARY;
+                    }
+
+                    /* TODO Get all download main files references and save */
+                    /* $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $product['op_selprod_id'], 0, -1);
                     if (!empty($attachments)) {
                         foreach ($attachments as $digitalFile) {
                             unset($digitalFile['afile_id']);
@@ -466,13 +487,68 @@ class Orders extends MyAppModel
                                 return false;
                             }
                         }
-                    }
-                }
-                /*]*/
+                    } */
+                    $attrs = [
+                        'pddr_id',
+                        'pddr_options_code',
+                        'afile.afile_record_id as afile_record_id',
+                        'afile.afile_name as mainfile',
+                        'afile.afile_lang_id as afile_lang_id',
+                        'afile.afile_id as afile_id',
+                        'afile.afile_physical_path as mainfile_physical_path',
+                    ];
 
-                /* Saving of digital download Links[ */
-                if ($product['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-                    $linkData = array();
+                    $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb, 0, $attrs);
+
+                    if ('0' != $optionComb) {
+                        $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0', 0, $attrs);
+                        $records = array_replace($records, $commonRecords);
+                    }
+
+                    if (0 < count($records)) {
+                        foreach ($records as $digitalFile) {
+                            unset($digitalFile['afile_id']);
+                            $dataToSave = [];
+                            $dataToSave['afile_record_id'] = $op_id;
+                            $dataToSave['afile_screen'] = 0;
+                            $dataToSave['afile_physical_path'] = $digitalFile['mainfile_physical_path'];
+                            $dataToSave['afile_name'] = $digitalFile['mainfile'];
+                            $dataToSave['afile_downloaded_times'] = 0;
+                            $dataToSave['afile_updated_at'] = date('Y-m-d H:i:s');
+                            $dataToSave['afile_type'] = AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD;
+                            if (!$db->insertFromArray(AttachedFile::DB_TBL, $dataToSave)) {
+                                $db->rollbackTransaction();
+                                $this->error = $db->getError();
+                                return false;
+                            }
+                        }
+                    }
+                    /*]*/
+
+                    /* Saving of digital download Links[ */
+                    /* TODO Get all download main links and save*/
+
+                    $records = [];
+
+                    $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb);
+
+                    if ('0' != $optionComb) {
+                        $commonRecords = DigitalDownloadSearch::getLinks($recordId, $productType, '0');
+                        $records = array_replace($records, $commonRecords);
+                    }
+                    if (0 < count($records)) {
+                        foreach ($records as $link) {
+                            $linkData['opddl_op_id'] = $op_id;
+                            $linkData['opddl_downloadable_link'] = $link['pdl_download_link'];
+                            if (!$db->insertFromArray(OrderProductDigitalLinks::DB_TBL, $linkData)) {
+                                $db->rollbackTransaction();
+                                $this->error = $opLangRecordObj->getError();
+                                return false;
+                            }
+                        }
+                    }
+
+                    /* $linkData = array();
                     $sellerProduct = SellerProduct::getAttributesById($product['op_selprod_id'], array('selprod_downloadable_link'), false);
                     $downlodableLinks = preg_split("/\n|,/", $sellerProduct['selprod_downloadable_link']);
                     foreach ($downlodableLinks as $link) {
@@ -486,7 +562,8 @@ class Orders extends MyAppModel
                             $this->error = $opLangRecordObj->getError();
                             return false;
                         }
-                    }
+                    } */
+                    /*]*/
                 }
                 /*]*/
 
@@ -984,6 +1061,7 @@ class Orders extends MyAppModel
             $srch->joinTable(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'LEFT OUTER JOIN', 'optosu.optsu_op_id = op.op_id', 'optosu');
             $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
             $srch->joinTable(OrderProduct::DB_TBL_SETTINGS, 'LEFT OUTER JOIN', 'op.op_id = opst.opsetting_op_id', 'opst');
+            $srch->joinTable(OrderProductSpecifics::DB_TBL, 'LEFT JOIN', 'opspec.ops_op_id = op.op_id', 'opspec');
 
             if (true === $joinSellerProducts) {
                 $srch->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_id = op.op_selprod_id and op.op_is_batch = 0', 'sp');
@@ -1307,11 +1385,11 @@ class Orders extends MyAppModel
             $emailObj->newOrderBuyerAdmin($orderId, $orderInfo['order_language_id']);
             $emailObj->newOrderVendor($orderId, 0, $paymentMethodCode);
         }
-        
-        $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());        
+
+        $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
         if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()),$orderInfo['order_user_id']);
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()), $orderInfo['order_user_id']);
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_PURCHASE);
             foreach ($subOrders as $op) {
                 $productTitle = ($op['op_selprod_title']) ? $op['op_selprod_title'] : $op['op_product_name'];
@@ -1619,35 +1697,25 @@ class Orders extends MyAppModel
                         }
                     }
                 }
+
+                $opRefundArr = array(
+                    'op_refund_qty' => $childOrderInfo["op_qty"],
+                    'op_refund_amount' => $txnAmount,
+                    'op_refund_commission' => $childOrderInfo["op_commission_charged"],
+                    'op_refund_shipping' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+                    'op_refund_affiliate_commission' => $childOrderInfo["op_affiliate_commission_charged"],
+                    'op_refund_tax' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
+                );
+                if (!$db->updateFromArray(
+                    Orders::DB_TBL_ORDER_PRODUCTS,
+                    $opRefundArr,
+                    array('smt' => 'op_id = ? ', 'vals' => array($op_id))
+                )) {
+                    $this->error = $db->getError();
+                    return false;
+                }
                 /* ]*/
             }
-            
-            $opRefundArr = array(
-                'op_refund_qty' => $childOrderInfo["op_qty"],
-                'op_refund_amount' => $txnAmount,
-                'op_refund_commission' => $childOrderInfo["op_commission_charged"],
-                'op_refund_shipping' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
-                'op_refund_affiliate_commission' => $childOrderInfo["op_affiliate_commission_charged"],
-                'op_refund_tax' => $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] ?? 0,
-            );
-            if (!$db->updateFromArray(
-                            Orders::DB_TBL_ORDER_PRODUCTS,
-                            $opRefundArr,
-                            array('smt' => 'op_id = ? ', 'vals' => array($op_id))
-                    )) {
-                $this->error = $db->getError();
-                return false;
-            }
-            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId),$childOrderInfo['order_user_id']);
-                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
-                $et->addProduct($childOrderInfo['op_selprod_id']);
-                $et->addTransaction($childOrderInfo['op_order_id']);
-                $et->addEvent('Ecommerce', 'Refund');
-                $et->sendRequest();
-            }
-            
         }
         /* ] */
 
@@ -1730,7 +1798,7 @@ class Orders extends MyAppModel
                     }
                 }
                 /* ]*/
-            }            
+            }
             $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
             if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
                 $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
@@ -1739,7 +1807,7 @@ class Orders extends MyAppModel
                 $et->addTransaction($childOrderInfo['op_order_id']);
                 $et->addEvent('Ecommerce', 'Refund');
                 $et->sendRequest();
-            }            
+            }
         }
         /* ] */
 
@@ -1836,7 +1904,7 @@ class Orders extends MyAppModel
             $txnAmount = ($availQty * $childOrderInfo['op_unit_price']) - $deductVolumeDiscount + $shipCharges;
 
             if ($childOrderInfo['op_tax_collected_by_seller']) {
-                $unitTaxCharges = round(($taxCharges / $childOrderInfo['op_qty']), 2);
+                $unitTaxCharges = round((($taxCharges + $childOrderInfo['op_rounding_off']) / $childOrderInfo['op_qty']), 2);
                 $txnAmount = $txnAmount + ($unitTaxCharges * $availQty);
             }
 
@@ -1979,7 +2047,7 @@ class Orders extends MyAppModel
 
     public function getVendorAllowedUpdateOrderStatuses($fetchForDigitalProduct = false, $fetchForCOD = false, $fetchForPayPickup = false)
     {
-        $processingStatuses = array_merge(unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")), (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        $processingStatuses = array_merge(unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")), (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0), (array) FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0));
@@ -2402,7 +2470,7 @@ class Orders extends MyAppModel
     private function generateOrderId()
     {
         $order_id = 'O';
-        $order_id .= mt_rand(1000000000,9999999999);
+        $order_id .= mt_rand(1000000000, 9999999999);
 
         if ($this->checkUniqueOrderId($order_id)) {
             return $order_id;
@@ -2689,7 +2757,7 @@ class Orders extends MyAppModel
         $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
-    
+
     public static function getOrderIdByPlugin(int $pluginId, int $pluginOrderId): string
     {
         $srch = new SearchBase(static::DB_ORDER_TO_PLUGIN_ORDER);
@@ -2697,10 +2765,46 @@ class Orders extends MyAppModel
         $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_order_id', '=', $pluginOrderId);
         $srch->addFld('opo_order_id');
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetch($rs); 
+        $records = FatApp::getDb()->fetch($rs);
         if (!$records) {
             return 0;
         }
         return $records['opo_order_id'];
+    }
+
+    public static function afterShipOrderStatusDelivered()
+    {
+        $srch = new OrderProductSearch(0, true);
+        $srch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'op_id = oshistory_op_id', 'tosh');
+        $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED, OrderStatus::ORDER_DELIVERED));
+        $srch->addDirectCondition("oshistory_tracking_number != ''");
+        $srch->addDirectCondition("oshistory_courier != ''");
+        $srch->addMultipleFields(array('order_language_id', 'op_id', 'oshistory_tracking_number', 'oshistory_courier'));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addOrder('op_id', 'DESC');
+        $rs = $srch->getResultSet();
+        $ordersDetail = FatApp::getDb()->fetchAll($rs);
+        if (!empty($ordersDetail)) {
+            $shipmentTracking = new ShipmentTracking();
+            if (false === $shipmentTracking->init(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
+                $message = $shipmentTracking->getError();
+                Message::addErrorMessage($message);
+                FatUtility::dieWithError(Message::getHtml());
+            }
+            $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            foreach ($ordersDetail as $data) {
+                $response = $shipmentTracking->getTrackingInfo($data["oshistory_tracking_number"], $data["oshistory_courier"], FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+                if ($response['meta']['code'] == 200) {
+                    if (strtolower($response['data']['tracking']['tag']) == 'delivered') {
+                        $order = new Orders();
+                        $order->addChildProductOrderHistory($data['op_id'], $data["order_language_id"], OrderStatus::ORDER_COMPLETED, $comment, 1);
+                        $where = array('smt' => 'op_id = ? ', 'vals' => array($data['op_id']));
+                        FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS, array('op_confirm_date' => date('Y-m-d H:i:s')), $where);
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

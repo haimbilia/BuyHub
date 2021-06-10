@@ -43,7 +43,7 @@ foreach ($arrListing as $sn => $row) {
         }
         switch ($key) {
             case 'listserial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $span->appendElement('plaintext', array(), $sr_no);
                 break;
 
             case 'orderDate':
@@ -60,20 +60,14 @@ foreach ($arrListing as $sn => $row) {
 
             case 'grossSales':
             case 'transactionAmount':
-            case 'inventoryValue':
-            case 'taxTotal':
+            case 'inventoryValue':           
             case 'adminTaxTotal':
             case 'sellerTaxTotal':
-            case 'shippingTotal':
-            case 'sellerShippingTotal':
-            case 'adminShippingTotal':
-            case 'discountTotal':
-            case 'couponDiscount':
+            case 'sellerShippingTotal':            
             case 'volumeDiscount':
-            case 'rewardDiscount':
             case 'refundedAmount':
-            case 'refundedShipping':
-            case 'refundedTax':
+            case 'refundedShippingFromSeller':
+            case 'refundedTaxFromSeller':           
             case 'orderNetAmount':
             case 'commissionCharged':
             case 'refundedCommission':
@@ -82,7 +76,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
 
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $span->appendElement('plaintext', array(), $row[$key], true);
                 break;
         }
     }
@@ -105,4 +99,5 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 	var actualWidth = x / 7;
 	$('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
 	$('.datatable_cell_left').children('span').css('display', 'block');
+    $('.datatable_cell_left').children('span').css('white-space', 'normal');
 </script>

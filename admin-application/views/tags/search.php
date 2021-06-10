@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
 } else {
 $arr_flds = array(
@@ -21,7 +21,7 @@ foreach ($arr_flds as $key => $val) {
 }
 $productsArr = array();
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $productsArr[] = $row['product_id'];
     $tr = $tbl->appendElement('tr', array('class' => ''));
 
@@ -56,7 +56,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no--;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
 
@@ -78,7 +78,7 @@ echo FatUtility::createHiddenFormFromData($postedData, array(
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 
-<?php if (count($arr_listing) > 0) { ?>
+<?php if (count($arrListing) > 0) { ?>
     <script>
         var productsArr = [ <?php echo '"' . implode('","', $productsArr) . '"' ?> ];      
         $("document").ready(function() {

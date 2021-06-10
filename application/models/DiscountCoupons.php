@@ -734,12 +734,13 @@ AND couponlang_lang_id = ' . $langId,
             return false;
         }
 
-        $cartSubTotal = $scartObj->getSubTotal($langId);
+       /* $cartSubTotal = $scartObj->getSubTotal($langId); */
+        $cartSubTotalAfterAdjustment = $scartObj->getSubTotalAfterAdjustment();       
 
-        if ($couponData['coupon_min_order_value'] > $cartSubTotal) {
+        if ($couponData['coupon_min_order_value'] > $cartSubTotalAfterAdjustment) {
             $status = false;
         }
-
+        
         $chistorySrch = CouponHistory::getSearchObject();
         $chistorySrch->addCondition('couponhistory_coupon_id', '=', $couponData['coupon_id']);
         $chistorySrch->addMultipleFields(array('count(couponhistory_id) as total'));
@@ -818,6 +819,7 @@ AND couponlang_lang_id = ' . $langId,
         if ($status) {
             return array_merge($couponData, array("products" => $subscriptionData['product']));
         }
+        return false;
     }
 
     public function addUpdateCouponCategory($coupon_id, $prodcat_id)

@@ -3,7 +3,7 @@
 class ConfigurationsController extends AdminBaseController
 {
     /* these variables must be only those which will store array type data and will saved as serialized array [*/
-    private $serializeArrayValues = array('CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_DIGITAL_RETURN_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_PURCHASE_ORDER_STATUS', 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', 'CONF_SUBSCRIPTION_ORDER_STATUS', 'CONF_SELLER_SUBSCRIPTION_STATUS', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES');
+    private $serializeArrayValues = array('CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_DIGITAL_RETURN_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_PURCHASE_ORDER_STATUS', 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', 'CONF_SUBSCRIPTION_ORDER_STATUS', 'CONF_SELLER_SUBSCRIPTION_STATUS', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES');
     /* ] */
 
     public function __construct($action)
@@ -632,7 +632,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Timezone', $this->adminLangId), 'CONF_TIMEZONE', Configurations::dateTimeZoneArr(), false, array(), '');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_Current", $this->adminLangId) . ' <span id="currentDate">' . CommonHelper::currentDateTime(null, true) . '</span></small>';
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+                $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'CONF_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
@@ -816,7 +816,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $this->adminLangId) . "</small>";
 
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true, 'country_code');
+                $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true, 'country_code');
                 $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'CONF_GEO_DEFAULT_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
@@ -1106,6 +1106,10 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $this->adminLangId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, $enableDigitalDownloads, array('class' => 'list-inline'));
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_access_their_downloadable_Products.", $this->adminLangId) . "</small>";
 
+                $statusesToAttachMoreFiles = (!empty($arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'])) ? $arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'] : 0;
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $this->adminLangId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, $statusesToAttachMoreFiles, array('class' => 'list-inline'));
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_order_statuses_to_allow_seller_or_admin_to_attach_more_files_with_order_products", $this->adminLangId) . "</small>";
+
                 /* $purchaseOrderSelected = (!empty($arrValues['CONF_PURCHASE_ORDER_STATUS'])) ? $arrValues['CONF_PURCHASE_ORDER_STATUS'] : 0;
                 $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Purchases_Calculation_(For_Buyers)",$this->adminLangId),'CONF_PURCHASE_ORDER_STATUS',$orderStatusArr,$purchaseOrderSelected,array('class' => 'list-inline'));
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_are_considered_in_buyer's_purchase.",$this->adminLangId) . "</small>"; */
@@ -1159,6 +1163,7 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_COMMISSION:
                 /* $frm->addHtml('','Commission','<h3>'.Labels::getLabel("LBL_Commission",$this->adminLangId) . '</h3>'); */
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Maximum_Site_Commission", $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COMMISSION', '');
+                $fld->requirements()->setFloatPositive();
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_maximum_commission/Fees_that_will_be_charged_on_a_particular_product.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_shipping", $this->adminLangId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);
@@ -1452,6 +1457,13 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addHtml('', 'GoogleFontsAPI', '<h3>' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $this->adminLangId), 'CONF_GOOGLE_FONTS_API_KEY');
+
+                /* JW player Settings */
+                $frm->addHtml('', 'JWPlayerSettings', '<h3>' . Labels::getLabel("LBL_JW_Player_Settings", $this->adminLangId) . '</h3>');
+
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_JW_Player_Key", $this->adminLangId), 'CONF_JW_PLAYER_KEY');
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_key_provided_by_JW_PLAYER", $this->adminLangId) . "</small>";
+                /* JW player Settings */
                 break;
             case Configurations::FORM_REFERAL:
                 $fld = $frm->addRadioButtons(
@@ -1573,8 +1585,18 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Before_How_many_Days_email_needs_to_be_sent_to_user_before_ending_subscription.", $this->adminLangId) . "</small>";
                 //$fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Subscription_Order_Statuses",$this->adminLangId),'CONF_SUBSCRIPTION_ORDER_STATUS',$orderSubscriptionStatusArr,$subscriptionOrderSelected,array('class' => 'list-inline'));
 
+                $fld = $frm->addSelectBox(
+                    Labels::getLabel("LBL_In-Active_Order_Status", $this->adminLangId),
+                    'CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS',
+                    $orderSubscriptionStatusArr,
+                    false,
+                    array(),
+                    ''
+                );
+
                 $subscriptionSellerOrderSelected = (!empty($arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'])) ? $arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'] : 0;
                 $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Subscription_Statuses", $this->adminLangId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, $subscriptionSellerOrderSelected, array('class' => 'list-inline'));
+
                 break;
 
             case Configurations::FORM_SYSTEM:
@@ -1586,7 +1608,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->requirements()->setInt();
                 break;
             case Configurations::FORM_PPC:
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId), 'CONF_PPC_MIN_WALLET_BALANCE');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId), 'CONF_PPC_MIN_WALLET_BALANCE');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Minimum_wallet_balance_to_start_promotion", $this->adminLangId) . '</small>';
 
                 /* $fld = $frm->addTextBox( Labels::getLabel('LBL_Wallet_Balance_Alert',$this->adminLangId), 'CONF_PPC_WALLET_BALANCE_ALERT' );
@@ -1595,13 +1617,16 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Days_Interval_to_Charge_Wallet', $this->adminLangId), 'CONF_PPC_WALLET_CHARGE_DAYS_INTERVAL');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Days_Interval_to_Charge_Wallet", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(product)', $this->adminLangId), 'CONF_CPC_PRODUCT');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(product)', $this->adminLangId), 'CONF_CPC_PRODUCT');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_Product", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(shop)', $this->adminLangId), 'CONF_CPC_SHOP');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(shop)', $this->adminLangId), 'CONF_CPC_SHOP');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_shop", $this->adminLangId) . '</small>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Cost_Per_Click_(slide)', $this->adminLangId), 'CONF_CPC_SLIDES');
+                $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost_Per_Click_(slide)', $this->adminLangId), 'CONF_CPC_SLIDES');
+                $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_PPC_cost_per_click_for_slide", $this->adminLangId) . '</small>';
 
                 /* $fld = $frm->addTextBox( Labels::getLabel('LBL_Cost_Per_Click_(banner)',$this->adminLangId), 'CONF_CPC_BANNER' );
@@ -1959,10 +1984,6 @@ class ConfigurationsController extends AdminBaseController
 
                 break;
 
-            case Configurations::FORM_PPC:
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_products_home_page_caption', $this->adminLangId), 'CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_' . $langId);
-                $frm->addTextBox(Labels::getLabel('LBL_PPC_shops_home_page_caption', $this->adminLangId), 'CONF_PPC_SHOPS_HOME_PAGE_CAPTION_' . $langId);
-                break;
             case Configurations::FORM_SERVER:
                 $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Maintenance_Text', $this->adminLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
                 $fld->requirements()->setRequired(true);

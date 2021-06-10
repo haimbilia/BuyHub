@@ -171,7 +171,7 @@ class BuyerController extends BuyerBaseController
 
         $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
 
-        $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);        
         $srch->joinOrderProductShipment();
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
@@ -180,6 +180,7 @@ class BuyerController extends BuyerBaseController
         $srch->addOrderProductCharges();
         $srch->joinShippingCharges();
         $srch->joinAddress();
+        $srch->joinOrderProductSpecifics();
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '=', $orderId);
 
@@ -209,7 +210,7 @@ class BuyerController extends BuyerBaseController
             );
             $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request'));
         }
-
+        
         $rs = $srch->getResultSet();
 
         $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
@@ -294,140 +295,7 @@ class BuyerController extends BuyerBaseController
 
         $this->_template->render();
     }
-
-    public function viewInvoice($orderId, $opId = 0)
-    {
-        if (!$orderId) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $opId = FatUtility::int($opId);
-        if (0 < $opId) {
-            $opOrderId = OrderProduct::getAttributesById($opId, 'op_order_id');
-            if ($orderId != $opOrderId) {
-                $message = Labels::getLabel('MSG_Invalid_Order', $this->siteLangId);
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($message);
-                }
-                Message::addErrorMessage($message);
-                CommonHelper::redirectUserReferer();
-            }
-        }
-
-        $orderObj = new Orders();
-        $userId = UserAuthentication::getLoggedUserId();
-
-        $orderDetail = $orderObj->getOrderById($orderId, $this->siteLangId);
-        if (!$orderDetail || ($orderDetail && $orderDetail['order_user_id'] != $userId)) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
-
-        $srch = new OrderProductSearch($this->siteLangId, true, true);
-        $srch->joinPaymentMethod();
-        $srch->joinSellerProducts();
-        $srch->joinShop();
-        $srch->joinShopSpecifics();
-        $srch->joinShopCountry();
-        $srch->joinShopState();
-        $srch->addOrderProductCharges();
-        $srch->addCondition('order_user_id', '=', $userId);
-        $srch->addCondition('order_id', '=', $orderId);
-        if (0 < $opId) {
-            $srch->addCondition('op_id', '=', $opId);
-            $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS")));
-        }
-        $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'));
-        $rs = $srch->getResultSet();
-
-        $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
-
-        if (count($childOrderDetail)) {
-            foreach ($childOrderDetail as &$arr) {
-                $arr['options'] = SellerProduct::getSellerProductOptions($arr['op_selprod_id'], true, $this->siteLangId);
-            }
-        }
-
-        foreach ($childOrderDetail as $op_id => $val) {
-            $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
-
-            $opChargesLog = new OrderProductChargeLog($op_id);
-            $taxOptions = $opChargesLog->getData($this->siteLangId);
-            $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
-        }
-
-        if (empty($childOrderDetail) || 1 > count($childOrderDetail)) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
-        $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
-        $orderDetail['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE])) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : array();
-
-        $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
-        $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
-
-        /* $this->set('orderDetail', $orderDetail);
-        $this->set('childOrderDetail', $childOrderDetail);
-        $this->set('opId', $opId);
-        $this->_template->render(false, false); */
-
-        $template = new FatTemplate('', '');
-        $template->set('siteLangId', $this->siteLangId);
-        $template->set('orderDetail', $orderDetail);
-        $template->set('childOrderDetail', $childOrderDetail);
-        $template->set('opId', $opId);
-
-        require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
-        $pdf->SetKeywords(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
-        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->SetHeaderMargin(0);
-        $pdf->SetHeaderData('', 0, '', '', array(255, 255, 255), array(255, 255, 255));
-        $pdf->setFooterData(array(0, 0, 0), array(200, 200, 200));
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetMargins(10, 10, 10);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();
-        $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-        $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-
-        // set LTR direction for english translation
-        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
-        // set font
-        $pdf->SetFont('dejavusans');
-
-        $templatePath = "buyer/view-invoice.php";
-        $html = $template->render(false, false, $templatePath, true, true);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->lastPage();
-
-        ob_end_clean();
-        // $saveFile = CONF_UPLOADS_PATH . 'demo-pdf.pdf';
-        //$pdf->Output($saveFile, 'F');
-        $pdf->Output('tax-invoice.pdf', 'I');
-        return true;
-    }
-
+    
     public function downloadDigitalFile($aFileId, $recordId = 0)
     {
         $aFileId = FatUtility::int($aFileId);
@@ -1685,9 +1553,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-            $ratingAspects = (0 < count($ratingTypes)) ? $ratingTypes : $ratingAspects;
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet()); 
         }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        }        
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -1795,9 +1666,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-            $ratingAspects = (0 < count($ratingTypes)) ? $ratingTypes : $ratingAspects;
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());          
         }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        } 
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -2268,7 +2142,7 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
