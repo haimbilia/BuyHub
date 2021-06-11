@@ -20,7 +20,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
         $arr_flds['product_shipped_by'] = Labels::getLabel('LBL_Shipped_by_me', $siteLangId);
     }
     $tableClass = '';
-    if (0 < count($arr_listing)) {
+    if (0 < count($arrListing)) {
         $tableClass = "table-justified";
     }
     $arr_flds['action'] = '';
@@ -32,7 +32,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 
-    foreach ($arr_listing as $sn => $row) {
+    foreach ($arrListing as $sn => $row) {
         $tr = $tbl->appendElement('tr', array('class' => ''));
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
@@ -151,7 +151,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
         $sr_no--;
     }
     echo $tbl->getHtml();
-    if (count($arr_listing) == 0) {
+    if (count($arrListing) == 0) {
         $message = Labels::getLabel('LBL_Searched_product_is_not_found_in_catalog', $siteLangId);
         $linkArr = array();
         if (User::canAddCustomProductAvailableToAllSellers()) {

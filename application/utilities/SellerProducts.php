@@ -2156,7 +2156,7 @@ trait SellerProducts
         $srch->addOrder('selProdId', 'desc');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'ppoint_id');
         $this->set("selprod_id", $selprod_id);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

@@ -84,7 +84,7 @@ class CollectionsController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('page', $page);
         $this->set('collection_layout_type', $collection_layout_type);
         $this->_template->render(false, false);
@@ -602,7 +602,7 @@ class CollectionsController extends AdminBaseController
         $records = Collections::getBanners($collectionId, $this->adminLangId);
 
         $this->set('collection_id', $collectionId);
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('bannerTypeArr', Banner::getBannerTypesArr($this->adminLangId));
         $this->set('linkTargetsArr', applicationConstants::getLinkTargetsArr($this->adminLangId));
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));

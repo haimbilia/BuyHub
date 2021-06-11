@@ -69,7 +69,7 @@ class PluginsController extends AdminBaseController
         $this->set("type", $type);
         $this->set("pluginTypes", $pluginTypes);
         $this->set("otherPluginTypes", $otherPluginTypes);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->_template->render(false, false);
     }

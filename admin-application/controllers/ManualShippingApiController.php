@@ -74,7 +74,7 @@ class ManualShippingApiController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
         
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

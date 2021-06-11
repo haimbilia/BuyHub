@@ -48,7 +48,7 @@ class DatabaseBackupRestoreController extends AdminBaseController
         $this->objPrivilege->canViewDatabaseBackupView();
         $settingsObj = new Settings();
         $files_array = $settingsObj->getDatabaseDirectoryFiles();
-        $this->set("arr_listing", $files_array);
+        $this->set("arrListing", $files_array);
         $this->_template->render(false, false);
     }
 

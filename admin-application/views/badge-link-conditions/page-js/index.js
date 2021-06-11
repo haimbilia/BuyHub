@@ -106,8 +106,8 @@ $(document).on('change', formClass + '.recCond--js', function () {
         });
     };
 
-    badgeForm = function (blinkcond_id, recordType = 0) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [blinkcond_id, recordType, TYPE_BADGE]), '', function (t) {
+    badgeForm = function (blinkcond_id) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, blinkcond_id]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
 
@@ -142,8 +142,8 @@ $(document).on('change', formClass + '.recCond--js', function () {
         });
     };
 
-    ribbonForm = function (blinkcond_id, recordType = 0) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [blinkcond_id, recordType, TYPE_RIBBON]), '', function (t) {
+    ribbonForm = function (blinkcond_id) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_RIBBON, blinkcond_id]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
 

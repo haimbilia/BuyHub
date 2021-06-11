@@ -19,7 +19,7 @@
     }
 
     $sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
-    foreach ($arr_listing as $sn => $row) {
+    foreach ($arrListing as $sn => $row) {
         $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
@@ -67,7 +67,7 @@
             }
         }
     }
-    if (count($arr_listing) == 0) {
+    if (count($arrListing) == 0) {
         $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId), false);
     } else {
         echo $tbl->getHtml();

@@ -140,7 +140,7 @@ class ShopsController extends AdminBaseController
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -809,7 +809,7 @@ class ShopsController extends AdminBaseController
     public function searchShopCollections($shopId)
     {
         $records = ShopCollection::getCollectionGeneralDetail($shopId);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("shopId", $shopId);
         $this->_template->render(false, false);
     }

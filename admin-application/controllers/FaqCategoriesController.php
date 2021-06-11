@@ -61,7 +61,7 @@ class FaqCategoriesController extends AdminBaseController
         $canViewFaq = $this->objPrivilege->canViewFaq(0, true);
         $this->set("canViewFaq", $canViewFaq);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

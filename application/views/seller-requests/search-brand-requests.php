@@ -13,7 +13,7 @@ $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $vari
         $arr_flds['action'] = '';
     }
     $tableClass = '';
-    if (0 < count($arr_listing)) {
+    if (0 < count($arrListing)) {
         $tableClass = "table-justified";
     }
     $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
@@ -23,7 +23,7 @@ $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $vari
     }
 
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-    foreach ($arr_listing as $sn => $row) {
+    foreach ($arrListing as $sn => $row) {
         $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
@@ -70,7 +70,7 @@ $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $vari
     }
 
     echo $tbl->getHtml();
-    if (count($arr_listing) == 0) {
+    if (count($arrListing) == 0) {
         $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     } ?>

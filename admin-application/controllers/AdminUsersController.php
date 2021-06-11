@@ -161,7 +161,7 @@ class AdminUsersController extends AdminBaseController
         }
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
 
         $this->set('recordCount', $srch->recordCount());
         $this->set('adminLoggedInId', $this->admin_id);
@@ -394,7 +394,7 @@ class AdminUsersController extends AdminBaseController
 
         $permissionModules = AdminPrivilege::getPermissionModulesArr();
         /* $permissionModules = array(0 => Labels::getLabel('MSG_All_Modules',$this->adminLangId)) + $permissionModules; */
-        $this->set('arr_listing', $permissionModules);
+        $this->set('arrListing', $permissionModules);
         $this->set('userData', $userData);
         $this->set('canViewAdminPermissions', $this->objPrivilege->canViewAdminPermissions(AdminAuthentication::getLoggedAdminId(), true));
         $this->_template->render(false, false);

@@ -35,7 +35,7 @@ class OptionValuesController extends LoggedUserController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("langId", $this->siteLangId);
         $this->_template->render(false, false);
     }

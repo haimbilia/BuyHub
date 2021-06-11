@@ -14,7 +14,7 @@ if (!$canEdit) {
 }
 
 $approvalStatusArr = Badge::getApprovalStatusArr($siteLangId);
-
+$typeArr = Badge::getTypeArr($siteLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 
@@ -28,7 +28,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $name = $row[Badge::DB_TBL_PREFIX . 'identifier'];
     if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $row) && !empty($row[Badge::DB_TBL_PREFIX . 'name'])) {
@@ -47,7 +47,7 @@ foreach ($arr_listing as $sn => $row) {
                 $td->appendElement('plaintext', [], $name, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], Badge::getTypeName($row[$key], $siteLangId), true);
+                $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
@@ -101,7 +101,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no--;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
 }
 

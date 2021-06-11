@@ -10,10 +10,8 @@ if (isset($ribbRow) && !empty($ribbRow)) {
     $frontReturn = isset($frontReturn) ? $frontReturn : false;
 
     $obj = new Badge();
-    $ribbonDetail = $obj->setSellerProdudtId($ribSelProdId)
-        ->setProductId($ribProdId)
-        ->setShopId($ribShopId)
-        ->getRibbonOrBadge($siteLangId);
+    $ribbonDetail = $obj->setRecordId($ribSelProdId, $ribProdId, $ribShopId)
+                        ->getRibbonOrBadge($siteLangId);
 
     if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
         foreach ($ribbonDetail as $ribbRow) {

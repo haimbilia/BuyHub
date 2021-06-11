@@ -85,7 +85,7 @@ class PushNotificationsController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
         $statusArr = PushNotification::getStatusArr($this->adminLangId);
 
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);

@@ -85,7 +85,7 @@ class ExtraAttributesController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
         
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $pageCount);
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);

@@ -24,7 +24,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = 1;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
 
     foreach ($arr_flds as $key => $val) {
@@ -99,7 +99,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no++;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
 }
 

@@ -37,8 +37,8 @@ $(document).on('change', '.icon-language-js', function () {
         });
     };
 
-    form = function (badge_id, type) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [badge_id, type]), '', function (t) {
+    form = function (type, badge_id = 0) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [type, badge_id]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
             if ('' != $("input[name='badge_id']").val()) {
@@ -59,7 +59,6 @@ $(document).on('change', '.icon-language-js', function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             reloadList();
-            // form(t.badge_id, t.badge_type);
             backToListing();
         });
     };
@@ -109,7 +108,7 @@ $(document).on('change', '.icon-language-js', function () {
         }
 
         var data = "badge_name=" + badge_name + "&toLangId=" + toLangId;
-        fcom.updateWithAjax(fcom.makeUrl(controller, 'translatedCategoryData'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'translate'), data, function (t) {
             if (t.status == 1) {
                 $("input[name='badge_name[" + toLangId + "]']").val(t.badge_name);
             }

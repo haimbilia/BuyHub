@@ -72,11 +72,18 @@ class BadgeLinkCondition extends MyAppModel
      */
     public static function getRecordTypeArr(int $langId): array
     {
-        return [
-            self::RECORD_TYPE_SELLER_PRODUCT => Labels::getLabel('LBL_SELLER_PRODUCT', $langId),
-            self::RECORD_TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
-            self::RECORD_TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId)
-        ];
+        $arr = FatCache::get('getBadgeLinkRecordTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::RECORD_TYPE_SELLER_PRODUCT => Labels::getLabel('LBL_SELLER_PRODUCT', $langId),
+                self::RECORD_TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
+                self::RECORD_TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId)
+            ];
+            FatCache::set('getBadgeLinkRecordTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+
+        return json_decode($arr, true);
     }
     
     /**
@@ -103,15 +110,21 @@ class BadgeLinkCondition extends MyAppModel
      */
     public static function getConditionTypesArr(int $langId): array
     {
-        return [
-            self::COND_TYPE_AVG_RATING_SELPROD => Labels::getLabel('LBL_AVERAGE_RATING_SELLER_PRODUCT_(%)', $langId),
-            self::COND_TYPE_AVG_RATING_SHOP => Labels::getLabel('LBL_AVERAGE_RATING_SHOP_(%)', $langId),
-            self::COND_TYPE_ORDER_COMPLETION_RATE => Labels::getLabel('LBL_ORDER_COMPLETION_RATE_(%)', $langId),
-            self::COND_TYPE_COMPLETED_ORDERS => Labels::getLabel('LBL_COMPLETED_ORDERS', $langId),
-            self::COND_TYPE_RETURN_ACCEPTANCE => Labels::getLabel('LBL_RETURN/_REFUND_ACCEPTANCE_RATE_(%)', $langId),
-            self::COND_TYPE_ORDER_CANCELLED => Labels::getLabel('LBL_ORDER_CANCELLED_BY_SELLER_(%)', $langId),
-            
-        ];
+        $arr = FatCache::get('getBadgeLinkConditionTypesArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::COND_TYPE_AVG_RATING_SELPROD => Labels::getLabel('LBL_AVERAGE_RATING_SELLER_PRODUCT_(%)', $langId),
+                self::COND_TYPE_AVG_RATING_SHOP => Labels::getLabel('LBL_AVERAGE_RATING_SHOP_(%)', $langId),
+                self::COND_TYPE_ORDER_COMPLETION_RATE => Labels::getLabel('LBL_ORDER_COMPLETION_RATE_(%)', $langId),
+                self::COND_TYPE_COMPLETED_ORDERS => Labels::getLabel('LBL_COMPLETED_ORDERS', $langId),
+                self::COND_TYPE_RETURN_ACCEPTANCE => Labels::getLabel('LBL_RETURN/_REFUND_ACCEPTANCE_RATE_(%)', $langId),
+                self::COND_TYPE_ORDER_CANCELLED => Labels::getLabel('LBL_ORDER_CANCELLED_BY_SELLER_(%)', $langId),
+            ];
+            FatCache::set('getBadgeLinkConditionTypesArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+
+        return json_decode($arr, true);
     }
 
     /**
@@ -138,10 +151,17 @@ class BadgeLinkCondition extends MyAppModel
      */
     public static function getRecordConditionArr(int $langId): array
     {
-        return [
-            self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUALLY', $langId),
-            self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATICALLY', $langId),
-        ];
+        $arr = FatCache::get('getBadgeLinkRecordConditionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUALLY', $langId),
+                self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATICALLY', $langId),
+            ];
+            FatCache::set('getBadgeLinkRecordConditionArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+
+        return json_decode($arr, true);
     }
     
     /**
@@ -227,8 +247,8 @@ class BadgeLinkCondition extends MyAppModel
         $srch->addFld('blinkcond_badge_id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addBadgeTypeCondition([$badgeType]);
-        $srch->addRecordTypesCondition([$recordType]);
+        $srch->addHaving(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
+        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', '=',  $recordType);
         if (Badge::TYPE_RIBBON == $badgeType && 0 < $position) {
             $srch->addCondition('blinkcond_position', '=', $position);
         }
