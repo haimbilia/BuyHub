@@ -81,7 +81,13 @@ class ShippingZonesController extends SellerBaseController
             }
             $zoneLocations = $this->getLocations($zoneId);
         }
-        $zones = Zone::getZoneWithCountries($this->siteLangId, true);
+        $zones = FatCache::get('zonesWithStateCountry' . $this->siteLangId, 108000, '.txt');
+        if (!$zones) {
+            $zones = Zone::getZoneWithCountriesStates($this->siteLangId);
+            FatCache::set('zonesWithStateCountry' . $this->siteLangId, serialize($zones), '.txt');
+        }else{
+            $zones =  unserialize($zones); 
+        }
         $excludeLocations = $this->getExcludeLocations($profileId, $zoneId);
 
         $this->set('profile_id', $profileId);
@@ -267,8 +273,8 @@ class ShippingZonesController extends SellerBaseController
 
         if (!empty($excludeLocations)) {
             $isRestOfWorld = (isset($data['rest_of_the_world'])) ? $data['rest_of_the_world'] : 0;
-            $postedCountries = (isset($data['shiploc_country_ids'])) ? $data['shiploc_country_ids'] : array();
-            $postedStates = (isset($data['shiploc_state_ids'])) ? $data['shiploc_state_ids'] : array();
+            $postedCountries = (isset($data['c_id'])) ? $data['c_id'] : array();
+            $postedStates = (isset($data['s_id'])) ? $data['s_id'] : array();
             $countryIds = array();
             $stateIds = array();
 
@@ -316,8 +322,8 @@ class ShippingZonesController extends SellerBaseController
             $states = (isset($zoneLocationData['states'])) ? $zoneLocationData['states'] : array();
 
             $countriesList = array();
-            if (isset($data['shiploc_country_ids'])) {
-                $countryData = $data['shiploc_country_ids'];
+            if (isset($data['c_id'])) {
+                $countryData = $data['c_id'];
                 foreach ($countryData as $data) {
                     $arr = explode('-', $data);
                     $countriesList[] = $arr[1];
@@ -325,8 +331,8 @@ class ShippingZonesController extends SellerBaseController
                 sort($countriesList);
             }
             $statesList = array();
-            if (isset($data['shiploc_state_ids'])) {
-                $statesData = $data['shiploc_state_ids'];
+            if (isset($data['s_id'])) {
+                $statesData = $data['s_id'];
                 foreach ($statesData as $data) {
                     $arr = explode('-', $data);
                     $statesList[] = $arr[2];
@@ -435,8 +441,8 @@ class ShippingZonesController extends SellerBaseController
                 //FatUtility::dieJsonError(Message::getHtml());
                 return false;
             }
-        } elseif (isset($data['shiploc_country_ids'])) {
-            foreach ($data['shiploc_country_ids'] as $countryData) {
+        } elseif (isset($data['c_id'])) {
+            foreach ($data['c_id'] as $countryData) {
                 $arr = explode('-', $countryData);
                 $zoneId = $arr[0];
                 $countryId = $arr[1];
@@ -455,15 +461,15 @@ class ShippingZonesController extends SellerBaseController
                 }
             }
         }
-        if (isset($data['shiploc_state_ids'])) {
+        if (isset($data['s_id'])) {
             $countryIds = array();
-            if (isset($data['shiploc_country_ids'])) {
-                foreach ($data['shiploc_country_ids'] as $countryData) {
+            if (isset($data['c_id'])) {
+                foreach ($data['c_id'] as $countryData) {
                     $arr = explode('-', $countryData);
                     $countryIds[] = $arr[1];
                 }
             }
-            foreach ($data['shiploc_state_ids'] as $stateData) {
+            foreach ($data['s_id'] as $stateData) {
                 $arr = explode('-', $stateData);
                 $zoneId = $arr[0];
                 $countryId = $arr[1];

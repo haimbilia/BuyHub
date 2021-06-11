@@ -89,4 +89,46 @@ class Zone extends MyAppModel
         }
         return $zoneContryArray;
     }
+    
+    public static function getZoneWithCountriesStates($langId, $isActive = true)
+    {
+        $srch = static::getSearchObject($isActive, $langId);
+        $srch->joinTable(Countries::DB_TBL, 'INNER  JOIN', 'c.country_zone_id = zone.zone_id and c.' . Countries::tblFld('active') . ' = '.applicationConstants::ACTIVE, 'c');
+
+        $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.' . Countries::DB_TBL_LANG_PREFIX . 'country_id = c.' . Countries::tblFld('id') . ' and c_l.' . Countries::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'c_l');
+        $srch->joinTable(States::DB_TBL, 'INNER JOIN', 's.state_country_id = c.country_id  and s.' . States::tblFld('active') . ' = '.applicationConstants::ACTIVE, 's');
+        $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND s_l.statelang_lang_id = ' . $langId, 's_l');        
+        $srch->addMultipleFields(
+            array(
+                'zone_id',
+                'if(zone_name is null, zone_identifier, zone_name) as zone_name', 'country_id', 'if(country_name is null, country_code, country_name) as country_name','if(state_name is null, state_identifier, state_name) as  state_name,state_id'
+            )
+        );
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addOrder('zone_name', 'ASC');
+        $srch->addOrder('country_name', 'ASC');
+        $srch->addOrder('state_name', 'ASC');
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
+
+        $zoneCountryStateArray = []; 
+        if (!empty($records)) {
+            foreach ($records as $record) {
+                $zone_id = $record['zone_id'];                
+                $zoneCountryStateArray[$zone_id]['zone_name'] = $record['zone_name'];
+                $zoneCountryStateArray[$zone_id]['zone_id'] = $record['zone_id'];
+
+                $countryId = $record['country_id'];
+                $zoneCountryStateArray[$zone_id]['countries'][$countryId]['country_name'] = $record['country_name'];
+                $zoneCountryStateArray[$zone_id]['countries'][$countryId]['country_id'] = $record['country_id'];
+
+                $state_id = $record['state_id'];
+                $zoneCountryStateArray[$zone_id]['countries'][$countryId]['states'][$state_id]['state_name'] = $record['state_name'];
+                $zoneCountryStateArray[$zone_id]['countries'][$countryId]['states'][$state_id]['state_id'] = $record['state_id'];
+            }
+        }      
+        return $zoneCountryStateArray;
+    }
 }
