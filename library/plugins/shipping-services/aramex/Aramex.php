@@ -13,7 +13,6 @@ class Aramex extends ShippingServicesBase
     private const REQUEST_TRACKING = 4;
 
     private $resp;
-    private $soapClient;
     private $ratesReference = '';
     private $orderQty = 1;
     private $weight;
@@ -22,7 +21,6 @@ class Aramex extends ShippingServicesBase
     private $fromAddress = [];
     private $addressReference;
     private $serviceRequest = 0;
-    private $env = Plugin::ENV_SANDBOX;
 
     private $clientInfoCols = [];
 
@@ -79,11 +77,6 @@ class Aramex extends ShippingServicesBase
      */
     private function getClientInfo(): array
     {
-        $this->env = FatUtility::int($this->getKey('env'));
-        if (Plugin::ENV_SANDBOX == $this->env) {
-            require('AramexTestCredentials.php');
-        }
-
         if (false == $this->validateSettings($this->langId)) {
             return [];
         }
@@ -103,16 +96,13 @@ class Aramex extends ShippingServicesBase
      */
     private function getSoapClient(): object
     {
-        $dir = (Plugin::ENV_SANDBOX == $this->settings['env']) ? 'test' : 'live';
-        // libxml_disable_entity_loader(false);
-
         $service = $this->serviceRequest;
         $options = [
             'trace' => true,
             'cache_wsdl' => WSDL_CACHE_MEMORY,
-            'stream_context' => stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false)))
+            'stream_context' => stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]])
         ];
-        $wsdl = dirname(__FILE__) . '/wsdls/' . $dir;
+        $wsdl = dirname(__FILE__) . '/wsdls';
 
         switch ($service) {
             case self::REQUEST_SHIPPING:
@@ -185,19 +175,22 @@ class Aramex extends ShippingServicesBase
             'CountryCode' => $args[6]
         ];
 
-        $this->setServiceRequest(self::REQUEST_VALIDATE_ADDRESS);
+        /* Not Required As API Not Working Correctly. */
+            /* $this->setServiceRequest(self::REQUEST_VALIDATE_ADDRESS);
 
-        $requestParam = [
-            'ClientInfo' => $this->getClientInfo(),
-            'Transaction' => [
-                'Reference1' => $this->addressReference
-            ],
-            'Address' => $address
-        ];
+            $requestParam = [
+                'ClientInfo' => $this->getClientInfo(),
+                'Transaction' => [
+                    'Reference1' => $this->addressReference
+                ],
+                'Address' => $address
+            ];
 
-        if (false === $this->doRequest($requestParam)) {
-            return false;
-        }
+            if (false === $this->doRequest($requestParam)) {
+                return false;
+            } */
+        /* ----------------------------- */
+
         $this->resp = $address;
         return true;
     }
@@ -353,9 +346,6 @@ class Aramex extends ShippingServicesBase
     {
         $this->setServiceRequest(self::REQUEST_RATE);
 
-        $productGroup = (strtolower($this->toAddress['CountryCode']) == strtolower($this->fromAddress['CountryCode'])) ? 'DOM' : 'EXP';
-        $productType = ('DOM' == $productGroup ? 'OND' : 'PPX');
-
         $requestParam = [
             'ClientInfo' => $this->getClientInfo(),
             'Transaction' => [
@@ -365,8 +355,8 @@ class Aramex extends ShippingServicesBase
             'DestinationAddress' => $this->toAddress,
             'ShipmentDetails' => [
                 'PaymentType' => 'P',
-                'ProductGroup' => $productGroup,
-                'ProductType' => $productType,
+                'ProductGroup' => 'EXP',
+                'ProductType' => 'PPX', /* When EPX Used Failed to get Rate */
                 'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                 'ChargeableWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
                 'NumberOfPieces' => $this->orderQty
@@ -447,8 +437,6 @@ class Aramex extends ShippingServicesBase
         $this->setServiceRequest(self::REQUEST_SHIPPING);
         $clientInfo = $this->getClientInfo();
 
-        $productGroup = (strtolower($this->toAddress['CountryCode']) == strtolower($this->fromAddress['CountryCode'])) ? 'DOM' : 'EXP';
-
         $requestParam = array(
             'Shipments' => array(
                 'Shipment' => array(
@@ -471,8 +459,8 @@ class Aramex extends ShippingServicesBase
                     'Details' => array(
                         'Dimensions' => $this->dimensions,
                         'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
-                        'ProductGroup' => $productGroup,
-                        'ProductType' => 'OND',
+                        'ProductGroup' => 'EXP',
+                        'ProductType' => 'EPX',
                         'PaymentType' => 'P',
                         'NumberOfPieces' => $systemOrderDetail['op_qty'],
                         'Items' => [
@@ -498,9 +486,7 @@ class Aramex extends ShippingServicesBase
             ),
         );
 
-        // CommonHelper::printArray($requestParam);
         if (false === $this->doRequest($requestParam)) {
-            // CommonHelper::printArray($this->getError(), true);
             return false;
         }
 

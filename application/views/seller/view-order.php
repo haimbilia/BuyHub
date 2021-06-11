@@ -1,8 +1,6 @@
 <?php
-
-use function GuzzleHttp\json_decode;
-
 defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 if (!$print) {
     $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <?php
@@ -14,9 +12,7 @@ $orderStatus = '';
 if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPartyorderInfo"]['orderStatus'])) {
     $orderStatus = $orderDetail["thirdPartyorderInfo"]['orderStatus'];
     $orderStatusLbl = strpos($orderStatus, "_") ? str_replace('_', ' ', $orderStatus) : $orderStatus;
-}
-
-?>
+} ?>
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
         <?php if (!$print) { ?>
@@ -78,13 +74,8 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                         <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
                                     <?php } ?>
                                 <?php }
-<<<<<<< HEAD
-                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || $allowedForPlugin) && empty($orderDetail['opship_tracking_number'])) { 
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || $allowedForPlugin) && empty($orderDetail['opship_tracking_number']) && $orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) { 
                                     if ($allowedForPlugin) {
-=======
-                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || 'EasyPost' == $keyName) && empty($orderDetail['opship_tracking_number']) && $orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) {
-                                    if ('EasyPost' == $keyName) {
->>>>>>> develop
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                     } else {
                                         $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $siteLangId);
