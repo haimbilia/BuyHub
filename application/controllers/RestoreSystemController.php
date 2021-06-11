@@ -58,6 +58,8 @@ class RestoreSystemController extends MyAppController
 
         $this->unlinkRestoreProcessFile();
 
+        FatCache::clearAll();
+
         Message::addMessage('Restored Successfully!');
         FatUtility::dieJsonSuccess(Message::getHtml());
     }
