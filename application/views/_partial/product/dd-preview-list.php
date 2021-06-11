@@ -6,13 +6,13 @@
     </div>
     <div class="bg-gray p-4 mb-4">
         <?php 
-        if (0 < count($product['preview_links']) || 0 < count($product['filteredPreviewAttachment'])) {
+        if (0 < count($product['preview_links']) || 0 < count($product['preview_attachments'])) {
             if (0 < count($product['preview_links'])) { ?>
                 <div class="h6"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
                 <ul class="list-files">
                     <?php
                     foreach ($product['preview_links'] as $keys => $link) {
-                        if('' == $link['pdl_preview_link']) {
+                        if ('' == $link['pdl_preview_link']) {
                             continue;
                         }    
                     ?>
@@ -22,10 +22,10 @@
                     <?php } ?>
                 </ul>
             <?php }
-            if (0 < count($product['filteredPreviewAttachment'])) { ?>
+            if (0 < count($product['preview_attachments'])) { ?>
                 <div class="prod-attached-files"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></div>
                 <ul class="list-files">
-                    <?php foreach ($product['filteredPreviewAttachment'] as $keys => $attachment) {
+                    <?php foreach ($product['preview_attachments'] as $keys => $attachment) {
                         if (0 < strlen($attachment['preview'])) {
                             $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
                             $fileExt = strtolower($fileExt);

@@ -152,7 +152,7 @@ class DigitalDownloadSearch extends SearchBase
         return $rows;
     }
     
-    public static function getLinks($recordId, $recordType, $optionCombi = null, $langId = 0, $attr = null)
+    public static function getLinks($recordId, $recordType, $optionCombi = null, $langId = 0, $attr = null, $onlyPreview = false)
     {
         $srch = static::getSearchObject();
 
@@ -172,6 +172,9 @@ class DigitalDownloadSearch extends SearchBase
 
         if (0 < $langId) {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);
+        }
+        if (true == $onlyPreview) {
+            $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'preview_link', '!=', '');
         }
 
         if (null != $attr) {

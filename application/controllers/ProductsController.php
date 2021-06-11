@@ -490,7 +490,7 @@ class ProductsController extends MyAppController
                 $productType = Product::CATALOG_TYPE_PRIMARY;
             }
 
-            $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb);
+            $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb, 0, null, true);
 
             $product['preview_links'] = $records;
 
