@@ -165,7 +165,7 @@ class DigitalDownloadSearch extends SearchBase
         if (null != $optionCombi) {
             if (is_array($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
-            } else if(is_string($optionCombi) && '0' != $optionCombi) {
+            } elseif (is_string($optionCombi) && '0' != $optionCombi) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
             }
         }
@@ -185,7 +185,7 @@ class DigitalDownloadSearch extends SearchBase
         $srch->doNotCalculateRecords();
 
         $srch->addOrder(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $srch->getQuery()], 1);
+
         $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs, 'pdl_id');
 
@@ -261,6 +261,7 @@ class DigitalDownloadSearch extends SearchBase
         array_shift($selProdOption);
         if (0 < count($selProdOption)) {
             $optionComb = implode('_', $selProdOption);
+            $optionComb = ['0', $optionComb];
         } else {
             $optionComb = '0';
         }
@@ -278,11 +279,11 @@ class DigitalDownloadSearch extends SearchBase
         }
 
         $records = static::getLinks($recordId, $productType, $optionComb, $langId);
-        $commonRecords = [];
+        /* $commonRecords = [];
         if ('0' != $optionComb) {
             $commonRecords = static::getLinks($recordId, $productType, '0', $langId);
         }
-        $records = array_replace($records, $commonRecords);
+        $records = array_replace($records, $commonRecords); */
 
         return $records;
     }
@@ -298,6 +299,7 @@ class DigitalDownloadSearch extends SearchBase
         array_shift($selProdOption);
         if (0 < count($selProdOption)) {
             $optionComb = implode('_', $selProdOption);
+            $optionComb = ['0', $optionComb];
         } else {
             $optionComb = '0';
         }
@@ -315,12 +317,12 @@ class DigitalDownloadSearch extends SearchBase
             $productType = Product::CATALOG_TYPE_PRIMARY;
         }
         $records = static::getAttachments($recordId, $productType, $optionComb, $langId);
-        $commonRecords = [];
+        /* $commonRecords = [];
         if ('0' != $optionComb) {
             $commonRecords = static::getAttachments($recordId, $productType, '0', $langId);
         }
         
-        $records = array_replace($records, $commonRecords);
+        $records = array_replace($records, $commonRecords); */
         
         return $records;
     }

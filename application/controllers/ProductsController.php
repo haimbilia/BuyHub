@@ -478,10 +478,11 @@ class ProductsController extends MyAppController
             array_shift($selProdOption);
             if (0 < count($selProdOption)) {
                 $optionComb = implode('_', $selProdOption);
+                $optionComb = ['0', $optionComb];
             } else {
                 $optionComb = '0';
             }
-
+            
             $recordId = $selprod_id;
             $productType = Product::CATALOG_TYPE_INVENTORY;
             if (0 == $product['product_attachements_with_inventory']) {
@@ -491,22 +492,15 @@ class ProductsController extends MyAppController
 
             $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb);
 
-            if ('0' != $optionComb) {
-                $commonRecords = DigitalDownloadSearch::getLinks($recordId, $productType, '0');
-                $records = array_replace($records, $commonRecords);
-            }
-
             $product['preview_links'] = $records;
 
             $records = [];
 
-            $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb);
-
-            if ('0' != $optionComb) {
-                $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0');
-                $records = array_replace($records, $commonRecords);
-            }
-
+            $attrs = [
+                'afile_id as prev_afile_id', 'pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_name as preview', 'afile_type', 'afile_id'
+            ];
+            
+            $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb, 0, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW, $attrs);
             $product['preview_attachments'] = $records;
         }
 
