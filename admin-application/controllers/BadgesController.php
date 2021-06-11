@@ -430,7 +430,7 @@ class BadgesController extends AdminBaseController
             0,
             $_FILES['cropped_image']['name'],
             -1,
-            $unique_record = false,
+            false,
             $lang_id,
             $_FILES['cropped_image']['type'],
             $slide_screen

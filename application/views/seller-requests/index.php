@@ -8,7 +8,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                 <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?>
                 </h2>
             </div>
-            <?php if ($canEdit && !$noRecordFound) { ?>
+            <?php
+            if ($canEdit && !$noRecordFound) { ?>
                 <div class="col-auto">
                     <div class="dropdown dashboard-user">
                         <button class="btn btn-outline-brand dropdown-toggle" type="button" id="dashboardDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -18,17 +19,30 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                             <ul class="nav nav-block">
                                 <?php if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
                                     <li class="nav__item">
-                                        <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('Seller', 'customCatalogProductForm'); ?>"><?php echo Labels::getLabel('LBL_Marketplace_Product', $siteLangId); ?></a>
+                                        <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('Seller', 'customCatalogProductForm'); ?>">
+                                            <?php echo Labels::getLabel('LBL_Marketplace_Product', $siteLangId); ?>
+                                        </a>
                                     </li>
                                 <?php } ?>
                                 <?php if (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) { ?>
                                     <li class="nav__item">
-                                        <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addBrandReqForm(0)"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?></a>
+                                        <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addBrandReqForm(0)">
+                                            <?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>
+                                        </a>
                                     </li>
                                 <?php } ?>
                                 <?php if (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) { ?>
                                     <li class="nav__item">
-                                        <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addCategoryReqForm(0)"><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?></a>
+                                        <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addCategoryReqForm(0)">
+                                            <?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                                <?php if ($canRequestBadge) { ?>
+                                    <li class="nav__item">
+                                        <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addBadgeReqForm(0)">
+                                            <?php echo Labels::getLabel('LBL_BADGE_REQUEST', $siteLangId); ?>
+                                        </a>
                                     </li>
                                 <?php } ?>
                             </ul>
@@ -47,7 +61,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                                     <div class="col-md-6">
                                         <div class="info">
                                             <span> <svg class="svg">
-                                                    <use xlink:href="/yokartv8/images/retina/sprite.svg#info" href="/yokartv8/images/retina/sprite.svg#info">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info">
                                                     </use>
                                                 </svg><?php echo Labels::getLabel('LBL_Generate_requests_using_buttons_below', $siteLangId); ?></span>
                                         </div>
@@ -55,10 +69,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                                 </div>
                                 <div class="row justify-content-center">
                                     <?php if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="no-data-found">
                                                 <div class="img">
-                                                    <img src="images/retina/no-product-requests.svg" width="70px" height="70px">
+                                                    <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-product-requests.svg" width="70px" height="70px">
                                                 </div>
                                                 <div class="data">
                                                     <div class="action">
@@ -69,10 +83,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                                         </div>
                                     <?php } ?>
                                     <?php if (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) { ?>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="no-data-found">
                                                 <div class="img">
-                                                    <img src="images/retina/no-brand-requests.svg" width="70px" height="70px">
+                                                    <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
                                                 </div>
                                                 <div class="data">
                                                     <div class="action">
@@ -83,10 +97,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                                         </div>
                                     <?php } ?>
                                     <?php if (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) { ?>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="no-data-found">
                                                 <div class="img">
-                                                    <img src="images/retina/no-category-requests.svg" width="70px" height="70px">
+                                                    <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-category-requests.svg" width="70px" height="70px">
                                                 </div>
                                                 <div class="data">
                                                     <div class="action">
@@ -96,8 +110,26 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                                             </div>
                                         </div>
                                     <?php } ?>
+                                    <?php if ($canRequestBadge) { ?>
+                                        <div class="col-md-3">
+                                            <div class="no-data-found">
+                                                <div class="img">
+                                                    <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
+                                                </div>
+                                                <div class="data">
+                                                    <div class="action">
+                                                        <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onClick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             <?php } else { ?>
+                                <?php
+                                    $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canRequestBadge' => $canRequestBadge);
+                                    $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $variables, false);
+                                ?>
                                 <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                             <?php } ?>
                         </div>
@@ -113,9 +145,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
     var canRequestCustomProduct = <?php echo FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0); ?>;
     $(document).ready(function() {
         if (canRequestCustomProduct) {
-            searchCustomCatalogProducts(document.frmSearchCustomCatalogProducts);
+            searchCustomCatalogProducts();
         } else {
-            searchBrandRequests(document.frmSearchBrandRequest);
+            searchBrandRequests();
         }
     });
 </script>

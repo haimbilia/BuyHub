@@ -325,4 +325,40 @@ class Badge extends MyAppModel
         }
         return $urls;
     }
+    
+    /**
+     * getAllBadgesAndRibbons
+     *
+     * @param  int $langId
+     * @param  int $type
+     * @param  int $approvalStatus
+     * @param  bool $assoc
+     * @return array
+     */
+    public static function getAllBadgesAndRibbons(int $langId, int $type = 0, int $approvalStatus = -1, bool $assoc = true): array
+    {
+        $srch = new BadgeSearch($langId);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+
+        if (0 < $type) {
+            $srch->addCondition('badge_type', '=', $type);
+        }
+
+        if (-1 < $approvalStatus) {
+            $srch->addCondition('badge_required_approval', '=', $approvalStatus);
+        }
+
+        if (true === $assoc) {
+            $srch->addMultipleFields([
+                    'badge_id',
+                    'COALESCE(badge_name, badge_identifier) as badge_name'
+                ]
+            );
+            return (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        }
+
+        $srch->addMultipleFields(array_merge(self::ATTR, ['COALESCE(badge_name, badge_identifier) as badge_name']));
+        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
 }

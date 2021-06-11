@@ -884,7 +884,22 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('LBL_N/R', '1', 'N/R', '1') ON DUPLICATE KEY UPDATE label_caption = 'N/R';
 
 ALTER TABLE `tbl_badges_lang` CHANGE `badge_name` `badge_name` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_Generate_requests_using_buttons_below', '1', 'Categories, brands, products and badge have to be requested from the site admin. Please generate requests using buttons below.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Categories, brands, products and badge have to be requested from the site admin. Please generate requests using buttons below.';
+
+CREATE TABLE `tbl_badge_requests` (
+    `breq_id` INT NOT NULL AUTO_INCREMENT,
+    `breq_badge_id` INT NOT NULL,
+    `breq_user_id` BIGINT NOT NULL COMMENT 'Seller Id',
+    `breq_message` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    `breq_status` TINYINT(2) NOT NULL,
+    `breq_requested_on` datetime NOT NULL,
+    `breq_status_updated_on` datetime NOT NULL,
+    PRIMARY KEY (`breq_id`)
+) ENGINE = InnoDB CHARSET = utf8mb4 COLLATE utf8mb4_general_ci;
+
 -- --- Badges & Ribbons --- --
+
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
 
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
