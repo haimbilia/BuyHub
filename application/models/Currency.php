@@ -50,7 +50,7 @@ class Currency extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-            'IFNULL(curr_l.currency_name,curr.currency_code) as currency_name'
+                'IFNULL(curr_l.currency_name,curr.currency_code) as currency_name'
             )
         );
 
@@ -59,6 +59,11 @@ class Currency extends MyAppModel
 
     public static function getCurrencyAssoc($langId)
     {
+        $currencyGetCurrencyAssoc = FatCache::get('currencyGetCurrencyAssoc' .  $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($currencyGetCurrencyAssoc) {
+            return json_decode($currencyGetCurrencyAssoc, true);
+        }
+
         $langId = FatUtility::int($langId);
         $srch = self::getListingObj($langId, array('currency_id', 'currency_code'));
         $srch->doNotCalculateRecords();
@@ -69,6 +74,7 @@ class Currency extends MyAppModel
         if (!is_array($row)) {
             return false;
         }
+        FatCache::set('currencyGetCurrencyAssoc' . $langId, FatUtility::convertToJson($row), '.txt');
         return $row;
     }
 
@@ -78,8 +84,8 @@ class Currency extends MyAppModel
         $srch = self::getSearchObject($langId);
         $srch->addMultipleFields(
             array(
-            'currency_id',
-            'CONCAT(IFNULL(curr_l.currency_name,curr.currency_code)," (",currency_code ,")") as currency_name_code'
+                'currency_id',
+                'CONCAT(IFNULL(curr_l.currency_name,curr.currency_code)," (",currency_code ,")") as currency_name_code'
             )
         );
         $srch->doNotCalculateRecords();
@@ -118,7 +124,7 @@ class Currency extends MyAppModel
             $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_CONVERTER_API_ACTIVE', CommonHelper::getLangId());
             return false;
         }
-        
+
         return Plugin::getAttributesById($defaultCurrConvAPI, 'plugin_code');
     }
 
