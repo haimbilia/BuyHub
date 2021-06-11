@@ -48,7 +48,7 @@ class AttributesController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
         
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -274,7 +274,7 @@ class AttributesController extends AdminBaseController
         $rs = $srch->getResultSet();
         $attributes = $db->fetchAll($rs);
         
-        $this->set('arr_listing', $attributes);
+        $this->set('arrListing', $attributes);
         $this->set('attrgrp_row', $attrgrp_row);
         $this->set('attrgrp_id', $attrgrp_id);
         $this->set('postedData', $post);

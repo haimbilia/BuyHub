@@ -23,7 +23,7 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 $sr_no = 0;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['scollection_id']);
@@ -76,7 +76,7 @@ foreach ($arr_listing as $sn => $row) {
         }
     }
 }
-if (count($arr_listing) == 0) { ?>
+if (count($arrListing) == 0) { ?>
     <div class="sectionhead nopadding">
         <h4><?php echo Labels::getLabel('LBL_No_Collection_found', $adminLangId); ?></h4>
         <a href="javascript:void(0);" class="btn-default btn-sm" onclick="getShopCollectionGeneralForm(<?php echo $shopId; ?>, 0)"><?php echo Labels::getLabel('LBL_Add_Collection', $adminLangId); ?></a>

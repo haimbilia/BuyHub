@@ -27,7 +27,7 @@ class SellerPluginsController extends SellerPluginBaseController
         $srch->addOrder(Plugin::DB_TBL_PREFIX . 'display_order', 'ASC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("defaultPluginId", SellerPlugin::getDefaultPluginId($type, $userId));
         $this->set('canEdit', $this->userPrivilege->canEditSellerPLugins($userId, true));
         $this->_template->render(false, false);

@@ -153,54 +153,66 @@ class Report extends SearchBase
     /**
      * joinOrderProductTaxCharges
      *
+     * @param  bool $includeFlds
      * @return object
      */
-    public function joinOrderProductTaxCharges(): object
+    public function joinOrderProductTaxCharges($includeFlds = true): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_TAX, 'optax');
         $this->joinSettings();
-        $this->addFld('(SUM(IFNULL(optax.opcharge_amount,0))) as taxTotal');
-        $this->addFld('SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0)) as sellerTaxTotal');
-        $this->addFld('SUM(if(opst.op_tax_collected_by_seller = 0,IFNULL(optax.opcharge_amount,0),0)) as adminTaxTotal');
+        if (true === $includeFlds) {
+            $this->addFld('(SUM(IFNULL(optax.opcharge_amount,0))) as taxTotal');
+            $this->addFld('SUM(if(opst.op_tax_collected_by_seller > 0,IFNULL(optax.opcharge_amount,0),0)) as sellerTaxTotal');
+            $this->addFld('SUM(if(opst.op_tax_collected_by_seller = 0,IFNULL(optax.opcharge_amount,0),0)) as adminTaxTotal');
+        }
         return $this;
     }
 
     /**
      * joinOrderProductShipCharges
      *
+     * @param  bool $includeFlds
      * @return object
      */
-    public function joinOrderProductShipCharges(): object
+    public function joinOrderProductShipCharges($includeFlds = true): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
         $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFt JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
-        $this->addFld('(SUM(IFNULL(opship.opcharge_amount,0))) as shippingTotal');
-        $this->addFld('SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0)) as sellerShippingTotal');
-        $this->addFld('SUM(if(ops.opshipping_by_seller_user_id = 0,IFNULL(opship.opcharge_amount,0),0)) as adminShippingTotal');
+        if (true === $includeFlds) {
+            $this->addFld('(SUM(IFNULL(opship.opcharge_amount,0))) as shippingTotal');
+            $this->addFld('SUM(if(ops.opshipping_by_seller_user_id > 0,IFNULL(opship.opcharge_amount,0),0)) as sellerShippingTotal');
+            $this->addFld('SUM(if(ops.opshipping_by_seller_user_id = 0,IFNULL(opship.opcharge_amount,0),0)) as adminShippingTotal');
+        }
         return $this;
     }
 
     /**
      * joinOrderProductDicountCharges
      *
+     * @param  bool $includeFlds
      * @return object
      */
-    public function joinOrderProductDicountCharges(): object
+    public function joinOrderProductDicountCharges($includeFlds = true): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_DISCOUNT, 'opDis');
-        $this->addFld('(SUM(IFNULL(opDis.opcharge_amount,0))) as couponDiscount');
+        if (true === $includeFlds) {
+            $this->addFld('(SUM(IFNULL(opDis.opcharge_amount,0))) as couponDiscount');
+        }
         return $this;
     }
 
     /**
      * joinOrderProductVolumeCharges
      *
+     * @param  bool $includeFlds
      * @return object
      */
-    public function joinOrderProductVolumeCharges(): object
+    public function joinOrderProductVolumeCharges($includeFlds = true): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, 'opVolDis');
-        $this->addFld('(SUM(IFNULL(opVolDis.opcharge_amount, 0))) as volumeDiscount');
+        if (true === $includeFlds) {
+            $this->addFld('(SUM(IFNULL(opVolDis.opcharge_amount, 0))) as volumeDiscount');
+        }
         return $this;
     }
 
@@ -209,10 +221,12 @@ class Report extends SearchBase
      *
      * @return object
      */
-    public function joinOrderProductRewardCharges(): object
+    public function joinOrderProductRewardCharges($includeFlds = true): object
     {
         $this->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT, 'opRewardDis');
-        $this->addFld('(SUM(IFNULL(opRewardDis.opcharge_amount, 0))) as rewardDiscount');
+        if (true === $includeFlds) {
+            $this->addFld('(SUM(IFNULL(opRewardDis.opcharge_amount, 0))) as rewardDiscount');
+        }
         return $this;
     }
 

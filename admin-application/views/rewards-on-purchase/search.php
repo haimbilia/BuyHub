@@ -7,7 +7,7 @@ $arr_flds = array(
     'action' => '',
 );
 
-if (!$canEdit || empty($arr_listing)) {
+if (!$canEdit || empty($arrListing)) {
     unset($arr_flds['select_all']);
 }
 if (!$canEdit) {
@@ -27,7 +27,7 @@ foreach ($arr_flds as $key => $val) {
 
 
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
 
@@ -52,7 +52,7 @@ foreach ($arr_listing as $sn => $row) {
         }
     }
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
 }
 $frm = new Form('frmRewardsOnPurchaseListing', array('id' => 'frmRewardsOnPurchaseListing'));

@@ -19,7 +19,7 @@ foreach ($arr_flds as $val) {
 $arrYesNo = applicationConstants::getYesNoArr($siteLangId);
 $activeInactiveArr = applicationConstants::getActiveInactiveArr($siteLangId);
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['promotion_id']);
@@ -52,7 +52,7 @@ foreach ($arr_listing as $sn => $row) {
     }
 }
 echo $tbl->getHtml();
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
 }

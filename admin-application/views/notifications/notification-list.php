@@ -1,8 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $ul = new HtmlElement("ul",array("class"=>"columlist"));
-if(count($arr_listing) > 0){
-	foreach($arr_listing as $key=>$row){
+if(count($arrListing) > 0){
+	foreach($arrListing as $key=>$row){
 		$li = $ul->appendElement("li");
 		
 		$img = '<img src="'.UrlHelper::generateFullUrl('Image','user',array($row['notification_user_id'],'MINI',true),CONF_WEBROOT_FRONT_URL).'" />';

@@ -17,7 +17,7 @@
         'action' => '',
     );
 	$tableClass = '';
-	if (0 < count($arr_listing)) {
+	if (0 < count($arrListing)) {
 		$tableClass = "table-justified";
 	}
     $tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table '.$tableClass));

@@ -489,7 +489,11 @@ class BuyerController extends BuyerBaseController
         $this->_template->render(true, true);
     }
 
-    /*use downloads_new function when app work is done */
+    /**
+     * downloads - Used For APPs.
+     *
+     * downloadSearch and downloadLinksSearch merged
+     */
     public function downloads()
     {
         $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
@@ -497,56 +501,7 @@ class BuyerController extends BuyerBaseController
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
-
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-        $user_id = UserAuthentication::getLoggedUserId();
-
-        $srch = new OrderProductSearch($this->siteLangId, true);
-        $srch->joinOrderUser();
-        $srch->joinDigitalDownloads(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, 'LEFT JOIN');
-        $srch->joinDigitalDownloadLinks('LEFT JOIN');
-        $srch->addDigitalDownloadCondition();
-        $srch->joinSellerProducts();
-        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
-        $srch->addMultipleFields(array('op_id', 'op_invoice_number', 'order_user_id', 'op_product_type', 'order_date_added', 'op_qty', 'op_status_id', 'op_selprod_max_download_times', 'op_selprod_id', 'product_updated_on', 'selprod_product_id', 'op_selprod_download_validity_in_days', 'opd.*', 'opa.*', 'IFNULL(op_selprod_title, op_product_name) as selprod_title'));
-        $srch->setPageNumber($page);
-        $srch->addCondition('order_user_id', '=', $user_id);
-        $srch->addOrder('order_date_added', 'desc');
-        $srch->setPageSize($pagesize);
-        $keyword = FatApp::getPostedData('keyword', null, '');
-        if (!empty($keyword)) {
-            $srch->addKeywordSearch($keyword);
-            $frm->fill(array('keyword' => $keyword));
-        }
-
-        $rs = $srch->getResultSet();
-        $downloads = FatApp::getDb()->fetchAll($rs);
-
-        $downloads = Orders::digitalDownloadFormat($downloads);
-        $downloads = Orders::digitalDownloadLinksFormat($downloads);
-        $this->set('downloads', $downloads);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('postedData', $post);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render();
-    }
-
-    /**
-     * downloads - Used For APPs.
-     *
-     * downloadSearch and downloadLinksSearch merged
-     */
-    public function downloads_new()
-    {
-        $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
-        }
-
+        $post = [];
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $user_id = UserAuthentication::getLoggedUserId();
@@ -571,7 +526,7 @@ class BuyerController extends BuyerBaseController
 
         $rs = $srch->getResultSet();
         $orderProducts = FatApp::getDb()->fetchAll($rs);
-
+        
         foreach ($orderProducts as &$op) {
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
@@ -1553,9 +1508,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-            $ratingAspects = (0 < count($ratingTypes)) ? $ratingTypes : $ratingAspects;
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet()); 
         }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        }        
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -1663,9 +1621,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-            $ratingAspects = (0 < count($ratingTypes)) ? $ratingTypes : $ratingAspects;
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());          
         }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        } 
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -2136,7 +2097,7 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

@@ -1,10 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-array_walk($downloads, function (&$row) use ($siteLangId) {
-    $uploadedTime = AttachedFile::setTimeParam($row['product_updated_on']);
-    $row['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($row['selprod_product_id'], "CLAYOUT3", $row['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $row['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $row['afile_id'] . '/' . $row['afile_record_id'];
-});
+foreach ($downloads as $key => &$op) {
+    $uploadedTime = AttachedFile::setTimeParam($op['product_updated_on']);
+    $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], "CLAYOUT3", $op['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+    $op['files'] = array_values($op['files']);
+
+    foreach ($op['files'] as &$file) {        
+        $file['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $file['afile_id'] . '/' . $file['afile_record_id'];
+    }
+}
 
 $data = array(
     'downloads' => $downloads,
@@ -16,3 +21,6 @@ $data = array(
 if (1 > $recordCount) {
     $status = applicationConstants::OFF;
 }
+
+
+

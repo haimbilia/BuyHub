@@ -172,10 +172,12 @@ class SubscriptionCart extends FatModel
         foreach ($susbscriptions as $subscription) {
             $cartTotal = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : 0;
         }
-
-
-
         return $cartTotal;
+    }
+    
+    public function getSubTotalAfterAdjustment()
+    {
+        return $this->getSubTotal() - $this->getAdjustableAmount();
     }
 
     public function getSubscriptionCartFinancialSummary($langId)
@@ -209,8 +211,7 @@ class SubscriptionCart extends FatModel
 
         $WalletAmountCharge = ($this->isCartUserWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
         $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
-
-
+        $orderPaymentGatewayCharges = round($orderPaymentGatewayCharges,2);
 
         $cartSummary = array(
         'cartTotal' => $cartTotal,
@@ -219,7 +220,7 @@ class SubscriptionCart extends FatModel
         'cartWalletSelected' => $this->isCartUserWalletSelected(),
         'cartRewardPoints' => $cartRewardPoints,
         'cartAdjustableAmount' => $cartAdjustableAmount,
-        'orderNetAmount' => $orderNetAmount,
+        'orderNetAmount' => round($orderNetAmount,2),
         'WalletAmountCharge' => $WalletAmountCharge,
         'orderPaymentGatewayCharges' => $orderPaymentGatewayCharges,
         );
@@ -248,6 +249,8 @@ class SubscriptionCart extends FatModel
                     }
                 }
             }
+            
+            $cartSubTotalAfterAdjustment = $subTotal - $this->getAdjustableAmount();
 
             if ($couponInfo['coupon_discount_in_percent'] == applicationConstants::FLAT) {
                 $couponInfo['coupon_discount_value'] = min($couponInfo['coupon_discount_value'], $subTotal);
@@ -275,6 +278,7 @@ class SubscriptionCart extends FatModel
                 }
                 $discountTotal += $discount;
             }
+            $discountTotal = min($discountTotal, $cartSubTotalAfterAdjustment);
 
             // If discount greater than total
             /*if ($discountTotal > $couponInfo['coupon_max_discount_value']) {

@@ -213,3 +213,10 @@ ALTER TABLE `tbl_order_product_shipment` ADD CONSTRAINT `opship_op_id` FOREIGN K
 
 -- -------------------------tbl_order_product_shipping-------------------------
 ALTER TABLE `tbl_order_product_shipment` ADD CONSTRAINT `opshipping_op_id` FOREIGN KEY (`opshipping_op_id`) REFERENCES `tbl_order_products`(`op_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+
+
+
+-- -------------------------tbl_badge_links-------------------------
+ALTER TABLE `tbl_badge_links` ADD CONSTRAINT `badgelink_badge_id` FOREIGN KEY (`badgelink_badge_id`) REFERENCES `tbl_badges`(`badge_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;

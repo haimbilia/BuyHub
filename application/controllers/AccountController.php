@@ -2398,7 +2398,7 @@ class AccountController extends LoggedUserController
         }
 
         /*CommonHelper::printArray($records); die;*/
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('loggedUserId', $userId);
@@ -2534,7 +2534,7 @@ class AccountController extends LoggedUserController
 
         $allowedUserIds = User::getParentAndTheirChildIds($this->userParentId, false, true);
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
 
         $srch = new MessageSearch();
         $srch->joinThreadMessage();

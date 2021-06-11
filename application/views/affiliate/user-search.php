@@ -17,7 +17,7 @@
 	}
 
 	$sr_no = 0;
-	foreach ($arr_listing as $sn => $row){
+	foreach ($arrListing as $sn => $row){
 		$sr_no++;
 
 		$tr = $tbl->appendElement('tr',array('class' =>'' ));
@@ -48,7 +48,7 @@
 		}
 	}
 	echo $tbl->getHtml();
-	if (count($arr_listing) == 0) {
+	if (count($arrListing) == 0) {
 		$message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
 		$this->includeTemplate('_partial/no-record-found.php', array('siteLangId'=>$siteLangId,'message'=>$message));
 	} ?>

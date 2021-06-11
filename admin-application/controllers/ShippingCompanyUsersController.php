@@ -85,7 +85,7 @@ class ShippingCompanyUsersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs, 'user_id');
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -194,7 +194,7 @@ class ShippingCompanyUsersController extends AdminBaseController
 
         $user_id = $userObj->getMainTableRecordId();
         if ($post['user_id'] <= 0) {
-            $post['user_password'] = $post['credential_username'] . '@123';
+            $post['user_password'] = CommonHelper::getRandomPassword(10);
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], $post['user_password'], 1, 1)) {
                 Message::addErrorMessage(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->adminLangId) . $userObj->getError());
                 FatUtility::dieWithError(Message::getHtml());
@@ -225,7 +225,7 @@ class ShippingCompanyUsersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

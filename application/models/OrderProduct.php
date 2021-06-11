@@ -267,4 +267,99 @@ class OrderProduct extends MyAppModel
         $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
         return $frm;
     }
+        
+    /**
+     * getOrderActionRate
+     *
+     * @param  int $sellerId
+     * @param  int $status
+     * @return float
+     */
+    private static function getOrderActionRate(int $sellerId, int $status)
+    {
+        $srch = new OrderProductSearch();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition('op_selprod_user_id', '=', $sellerId);
+        $srch->addMultipleFields(['((SUM(CASE WHEN op_status_id = ' . $status . ' THEN 1 ELSE 0 END)/count(op_id)) * 100) as rate']);
+        $compltedOrderRate = (array) FatApp::getDb()->fetch($srch->getResultSet());
+        if (empty($compltedOrderRate)) {
+            return 0;
+        }
+        return (float) CommonHelper::numberFormat($compltedOrderRate['rate'], true, true, 1);
+    }
+
+    /**
+     * getCompletionRate
+     *
+     * @param  int $sellerId
+     * @return float
+     */
+    public static function getCompletionRate(int $sellerId): float
+    {
+        $status = FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", FatUtility::VAR_STRING, '');
+        if (empty($status)) {
+            return 0;
+        }
+
+        return self::getOrderActionRate($sellerId, $status);
+    }
+
+    /**
+     * getCancellationRate
+     *
+     * @param  int $sellerId
+     * @return float
+     */
+    public static function getCancellationRate(int $sellerId): float
+    {
+        $status = FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_STRING, '');
+        if (empty($status)) {
+            return 0;
+        }
+
+        return self::getOrderActionRate($sellerId, $status);
+    }
+
+    /**
+     * getReturnAcceptanceRate
+     *
+     * @param  int $sellerId
+     * @return float
+     */
+    public static function getReturnAcceptanceRate(int $sellerId): float
+    {
+        $status = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_STRING, '');
+        if (empty($status)) {
+            return 0;
+        }
+
+        return self::getOrderActionRate($sellerId, $status);
+    }
+    
+    /**
+     * getCompltedOrderCount
+     *
+     * @param  int $sellerId
+     * @return int
+     */
+    public static function getCompltedOrderCount(int $sellerId): int
+    {
+        $completedOrderStatus = FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", FatUtility::VAR_STRING, '');
+        if (empty($completedOrderStatus)) {
+            return 0;
+        }
+
+        $srch = new OrderProductSearch();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition('op_selprod_user_id', '=', $sellerId);
+        $srch->addMultipleFields(['count(op_id) as completedOrdersCount']);
+        $srch->addCondition('op_status_id', '=', $completedOrderStatus);
+        $compltedOrderRate = (array) FatApp::getDb()->fetch($srch->getResultSet());
+        if (empty($compltedOrderRate)) {
+            return 0;
+        }
+        return (int) $compltedOrderRate['completedOrdersCount'];
+    }    
 }

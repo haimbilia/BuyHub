@@ -106,7 +106,7 @@ class ImageAttributesController extends AdminBaseController
         $srch->addOrder('afile_id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('moduleType', (isset($post['select_module'])) ? $post['select_module'] : AttachedFile::FILETYPE_PRODUCT_IMAGE);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

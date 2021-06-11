@@ -597,11 +597,12 @@ function formAction(frm, callback) {
         $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
         return false;
     }
-
+    
     $.systemMessage.loading();
     data = fcom.frmData(frm);
 
     fcom.updateWithAjax(frm.action, data, function (resp) {
+        console.log(callback);
         callback();
         showActionsBtns();
     });
@@ -614,7 +615,6 @@ function toggleBulkStatues(status, msg = '') {
 		element = '';
 	}
     element = element + 'form.actionButtons-js';
-	
     if (1 > $(element).length) {
         $.systemMessage(langLbl.actionButtonsClass, 'alert--danger', true);
         return false;

@@ -24,7 +24,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = 0;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
     if ($row['bpcategory_active'] == applicationConstants::ACTIVE) {
@@ -94,7 +94,7 @@ foreach ($arr_listing as $sn => $row) {
         }
     }
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
 $frm = new Form('frmBlogPostCatListing', array('id' => 'frmBlogPostCatListing'));

@@ -165,10 +165,15 @@ class AdminBaseController extends FatController
             'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
             'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
             'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->adminLangId),
+            'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
             'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
             'defaultCountryCode' => $defaultCountryCode,
             'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
             'copied' => Labels::getLabel('LBL_Copied', $this->adminLangId),
+            'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
+            'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
+            'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
+            'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);

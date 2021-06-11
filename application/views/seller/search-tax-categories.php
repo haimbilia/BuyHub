@@ -9,7 +9,7 @@
     if ($activatedTaxServiceId) {
         $arr_flds['taxcat_code'] = Labels::getLabel('LBL_Tax_Code', $siteLangId);
     } else {
-        if (0 < count($arr_listing)) {
+        if (0 < count($arrListing)) {
             $tableClass = "table-justified";
         }
         $arr_flds['tax_rates'] = Labels::getLabel('LBL_Tax_Rates', $siteLangId);
@@ -23,7 +23,7 @@
     
     $defaultStringLength = applicationConstants::DEFAULT_STRING_LENGTH;
     $sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
-    foreach ($arr_listing as $sn => $row) {
+    foreach ($arrListing as $sn => $row) {
         $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
@@ -59,7 +59,7 @@
     }
 
     echo $tbl->getHtml();
-    if (count($arr_listing) == 0) {
+    if (count($arrListing) == 0) {
         $message = Labels::getLabel('LBL_No_Record_found', $siteLangId);
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     } ?>

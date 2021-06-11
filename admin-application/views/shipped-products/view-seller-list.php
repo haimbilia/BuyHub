@@ -21,7 +21,13 @@
                     case 'listserial':
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
-                    default:
+                    case 'user_name':
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",' . $row['user_id'] . ')'), $row[$key]);
+                        break;
+                    case 'shop_identifier':
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Shops') . '",' . $row['shop_id'] . ')'), $row[$key]);
+                        break;                    
+                    default:    
                         $td->appendElement('plaintext', array(), $row[$key], true);
                         break;
                 }

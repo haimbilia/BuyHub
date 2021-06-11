@@ -1,25 +1,25 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
-    <?php $arr_flds = array();
-    if (count($arrListing) > 0 && $canEdit) {
-        $arr_flds['select_all'] = '';
-    }
-    $arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
-    /* if( count($arrListing) && is_array($arrListing) && is_array($arrListing[0]['options']) && count($arrListing[0]['options']) ){ */
-    $arr_flds['name'] = Labels::getLabel('LBL_Name', $siteLangId);
-    /* } */
-    $arr_flds['selprod_price'] = Labels::getLabel('LBL_Price', $siteLangId);
-    $arr_flds['selprod_stock'] = Labels::getLabel('LBL_Quantity', $siteLangId);
-    $arr_flds['selprod_available_from'] = Labels::getLabel('LBL_Available_From', $siteLangId);
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$arr_flds = array(
+    'select_all' => '',
+    'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+    'name' => Labels::getLabel('LBL_Name', $siteLangId),
+    'badge' => Labels::getLabel('LBL_BADGE', $siteLangId),
+    'ribbon' => Labels::getLabel('LBL_RIBBON', $siteLangId),
+    'selprod_price' => Labels::getLabel('LBL_Price', $siteLangId),
+    'selprod_stock' => Labels::getLabel('LBL_Quantity', $siteLangId),
+    'selprod_available_from' => Labels::getLabel('LBL_Available_From', $siteLangId),
+    'selprod_active' => Labels::getLabel('LBL_Status', $siteLangId),
+    'action' => ''
+);
 
-    if ($canEdit) {
-        $arr_flds['selprod_active'] = Labels::getLabel('LBL_Status', $siteLangId);
-        $arr_flds['action'] = '';
-    }
-    $tableClass = '';
-    if (0 < count($arrListing)) {
-        $tableClass = "table-justified";
-    }
+if (1 > count($arrListing) || !$canEdit) {
+    unset($arr_flds['select_all'], $arr_flds['selprod_active'], $arr_flds['action']);
+}
+
+$tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
+
+<div class="js-scrollable table-wrap scroll scroll-x">
+    <?php
     $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
     foreach ($arr_flds as $key => $val) {
@@ -48,9 +48,14 @@
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'name':
-                    $variantStr = '<div class="item"><figure class="item__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure><div class="item__description">
-				<div class="item__title">' . wordwrap($row['product_name'], 150, "<br>\n") . '</div>';
+                    $variantStr = '<div class="item">
+                                        <figure class="item__pic">
+                                            <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '">
+                                        </figure>
+                                    <div class="item__description">
+				                        <div class="item__title">' . wordwrap($row['product_name'], 150, "<br>\n") . '</div>';
                     $variantStr .= ($row['selprod_title'] != '') ? '<div class="item__sub_title">' . wordwrap($row['selprod_title'], 150, "<br>\n") . '</div>' : '';
+                    
                     if (is_array($row['options']) && count($row['options'])) {
                         $variantStr .= '<div class="item__specification">';
                         $count = count($row['options']);
@@ -66,6 +71,25 @@
                     $variantStr .= '</div></div>';
                     $td->appendElement('plaintext', array(), $variantStr, true);
                     break;
+                case 'badge':
+                    $bdgSelProdId = $row['selprod_id'];
+                    $bdgSize = 20;
+                    $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP];
+                    $frontReturn = true;
+
+                    include (CONF_THEME_PATH . '_partial/get-badge.php');
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
+                    $td->appendElement('plaintext', [], $html, true);
+                    break;
+                case 'ribbon':
+                    $ribSelProdId = $row['selprod_id'];
+                    $frontReturn = true;
+                    
+                    include (CONF_THEME_PATH . '_partial/get-ribbon.php');
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
+                    $html = '<div class="badge-wrap">' . $html . '</div>';
+                    $td->appendElement('plaintext', [], $html, true);
+                    break;
                 case 'selprod_price':
                     $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
                     break;
@@ -79,7 +103,6 @@
                     $td->appendElement('plaintext', array(), FatDate::format($row[$key], false), true);
                     break;
                 case 'selprod_active':
-                    /* $td->appendElement( 'plaintext', array(), $activeInactiveArr[$row[$key]],true ); */
                     $active = "";
                     if (applicationConstants::ACTIVE == $row['selprod_active']) {
                         $active = 'checked';
@@ -129,13 +152,10 @@
         echo $tbl->getHtml();
         $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-        // $tbl->appendElement('tr')->appendElement('td', array('colspan'=>count($arr_flds)), Labels::getLabel('LBL_No_products_found_under_your_publication', $siteLangId));
-        //$this->includeTemplate('_partial/no-record-found.php' , array('siteLangId'=>$siteLangId));
     } else {
         $frm = new Form('frmSellerProductsListing', array('id' => 'frmSellerProductsListing'));
         $frm->setFormTagAttribute('class', 'form actionButtons-js');
         $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
-        // $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Seller', 'deleteBulkSellerProducts'));
         $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Seller', 'toggleBulkStatuses'));
         $frm->addHiddenField('', 'status');
 
@@ -143,13 +163,12 @@
         echo $frm->getFieldHtml('status');
         echo $tbl->getHtml(); ?>
         </form>
+    <?php } ?>
 </div>
-<?php
-    }
 
-    if (!$product_id) {
-        $postedData['page'] = $page;
-        echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSellerProductSearchPaging'));
-        $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSellerProductSearchPage');
-        $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-    }
+<?php if (!$product_id) {
+    $postedData['page'] = $page;
+    echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSellerProductSearchPaging'));
+    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSellerProductSearchPage');
+    $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+}

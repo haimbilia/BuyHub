@@ -59,7 +59,7 @@ class QuestionnairesController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs, 'questionnaire_id');
         
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -260,7 +260,7 @@ class QuestionnairesController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -337,7 +337,7 @@ class QuestionnairesController extends AdminBaseController
         $srch->addOrder('qfeedback_added_on', 'desc');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -415,7 +415,7 @@ class QuestionnairesController extends AdminBaseController
         $srch->setPageSize($pagesize);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'question_id');
         $this->set("questionnaire_id", $questionnaire_id);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

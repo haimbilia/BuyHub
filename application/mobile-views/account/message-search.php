@@ -1,13 +1,13 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $data = array(
-    'messages' => $arr_listing,
+    'messages' => $arrListing,
     'pageCount' => $pageCount,
     'recordCount' => $recordCount,
     'page' => $page,
     'pageSize' => $pageSize,
 );
 
-if (empty($arr_listing)) {
+if (empty($arrListing)) {
     $status = applicationConstants::OFF;
 }

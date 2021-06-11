@@ -71,7 +71,7 @@ class SubscriptionSellerReportController extends AdminBaseController
                         case 'listserial':
                             $arr[] = $count;
                             break;
-                        case 'amountPaid':
+                        case 'subscriptionCharges':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         case 'ossubs_from_date':
@@ -152,7 +152,7 @@ class SubscriptionSellerReportController extends AdminBaseController
                 'ossubs_till_date' => Labels::getLabel('LBL_Expiry_Date', $this->adminLangId),
                 'spRenewals' => Labels::getLabel('LBL_Renewed', $this->adminLangId),
                 'spackageCancelled' => Labels::getLabel('LBL_Cancellation', $this->adminLangId),
-                'amountPaid' => Labels::getLabel('LBL_Amount_paid', $this->adminLangId)
+                'subscriptionCharges' => Labels::getLabel('LBL_Amount_paid', $this->adminLangId)
             ];
             FatCache::set('spackageSReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
         } else {

@@ -642,6 +642,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
 }
 
 function geocodeAddress(geocoder, resultsMap, infowindow, address) {
+    console.log(address);
     geocoder.geocode(address, function (results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
             resultsMap.setCenter(results[0].geometry.location);
@@ -697,9 +698,13 @@ function geocodeSetData(results) {
                 }
             }
         }
-     
         $('#geo_postal_code').val(data.postal_code);
-        $('#geo_city').val(data.city);
+        if (data.hasOwnProperty("city")) {
+            $('#geo_city').val(data.city);
+        }else{
+            $('#geo_city').val(data.state);
+        }
+        
         $('#geo_country_code option').each(function () {
             if (this.text == data.country) {
                 $('#geo_country_code').val(this.value);

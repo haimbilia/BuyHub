@@ -79,7 +79,6 @@ class CustomRouter
         }
         define('MOBILE_APP_USER_TYPE', $userType);
 
-        // self::checkRequiredParam($controller, $action);
         /* Handled CDN url for static contents and 404 for other requests. Specially when mapped on same root directory[*/
         if (CDN_DOMAIN_URL != '' && (strpos(CDN_DOMAIN_URL, $_SERVER['SERVER_NAME']) !== false)) {
             if (!UrlHelper::staticContentProvider($controller, $action)) {
@@ -187,25 +186,4 @@ class CustomRouter
             }
         }
     }
-
-    /* private static function checkRequiredParam($controller, $action)
-    {
-        if (empty($action)) {
-            return false;
-        }
-        $action = FatUtility::dashed2Camel($action);
-        $controller = FatUtility::dashed2Camel($controller . 'Controller', true);
-        if (!file_exists(CONF_APPLICATION_PATH . 'controllers/' . $controller . '.php')) {
-            return false;
-        }
-        try {
-            $reflection = new ReflectionMethod($controller, $action);
-            $requiredParamCount = $reflection->getNumberOfRequiredParameters();
-            if ($requiredParamCount > 0 && $requiredParamCount + 2 > count(explode('/', trim($_SERVER['REQUEST_URI'], '\/')))) {
-                FatUtility::exitWithErrorCode(404);
-            }
-        } catch (Exception $exc) {
-            FatUtility::exitWithErrorCode(404);
-        }
-    } */
 }

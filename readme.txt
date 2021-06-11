@@ -115,6 +115,8 @@ Fixes:
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
     => 054447 - when product having multiple options then on detail page> options are not listing properly
     => 054613 - Error display on invoice pdf page
+    => 054742 - wrong message is populating on button on tooltip
+
 
 Develop
 
@@ -181,7 +183,17 @@ Fixes:
     => 054557 - admin> catalog> categories> count is mismatching
     => 054527 - Blog >> some error is there
     => 054599 - when order is on pickup and status is changed to ready for pickup it gets stuck and on refreshing the page> getting error on screen
+    => 054447 - when product having multiple options then on detail page> options are not listing properly
+    => 054529 - On FAQ >> if any letter is in caps then it is not highlighting on search
+    => 054545 - when subscription is downgraded and after adjustment amount becomes 0 then on applying coupon it's getting the total in negative
+    => 054597 - generate label is coming on seller end on pickup order 
+    => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
     => 054612 - login with otp is working with default otp 0000
+    => 054616 - after submitting review> getting error on review page- front end
+    => 054717 - on recently view product error coming on product detail page
+    => 054731 - when review is placed with media then there is no need to add show more on 6th image
+    => 054761 - despite having sku non mandatory it's not adding inventory from seller end
+
 
 New Features:
     => Admin shipped products listing page
@@ -191,9 +203,17 @@ New Features:
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
     => 053978 - Forget password label language issue in admin
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming
+    => 054242 - paystack gateway not supporting ZAR currency    
+    => 054279 - warranty needs to be optional when product is digital         
+    => 054644 - Admin > Shipping Company User > Wrong validation message is showing.   
+    => 054689 - 404 error page - issue with few produc urls when subscription in enabled
+    => 054718 - Categories added are not listing in admin.
+    => 054728 -	Aftership order status should be automatically marked delivered.
+    => 054698 - on clicking of delete button in shipping profile there needs to be confirmation popup
 
 Enhancements :
-   => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.

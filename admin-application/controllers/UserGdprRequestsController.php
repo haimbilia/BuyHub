@@ -70,7 +70,7 @@ class UserGdprRequestsController extends AdminBaseController
         
         $userRequestTypeArr = UserGdprRequest::getUserRequestTypesArr($this->adminLangId);
         $userRequestStatusArr = UserGdprRequest::getUserRequestStatusesArr($this->adminLangId);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("userRequestTypeArr", $userRequestTypeArr);
         $this->set("userRequestStatusArr", $userRequestStatusArr);
         $this->set('pageCount', $srch->pages());

@@ -9,7 +9,7 @@ $rewardPointsDetail = array(
 
 $data = array(
     'rewardPointsDetail' => $rewardPointsDetail,
-    'rewardPointsStatement' => $arr_listing,
+    'rewardPointsStatement' => $arrListing,
     'pageCount' => $pageCount,
     'recordCount' => $recordCount,
     'page' => $page,
@@ -17,6 +17,6 @@ $data = array(
     'convertReward' => $convertReward,
 );
 
-if (empty($arr_listing)) {
+if (empty($arrListing)) {
     $status = applicationConstants::OFF;
 }

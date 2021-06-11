@@ -41,14 +41,14 @@ class PluginSettingController extends LoggedUserController
     {
         $this->setFormObj();
         $pluginSetting = new PluginSetting(0, $this->keyName, UserAuthentication::getLoggedUserId());
-        $settings = $pluginSetting->get();
+        $settings = $pluginSetting->get($this->siteLangId);
         if (false === $settings) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId));
         }
-        $this->frmObj->fill($settings);
-        $identifier = isset($settings['plugin_identifier']) ? $settings['plugin_identifier'] : '';
+        $this->frmObj->fill($settings); 
         $this->set('frm', $this->frmObj);
-        $this->set('identifier', $identifier);
+        $this->set('plugin_name', $settings['plugin_name']);
+    
         $this->_template->render(false, false, 'seller-plugins/settings.php');
     }
 

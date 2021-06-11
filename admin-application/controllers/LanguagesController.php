@@ -65,7 +65,7 @@ class LanguagesController extends AdminBaseController
         }
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
