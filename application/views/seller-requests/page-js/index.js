@@ -289,10 +289,26 @@
     addBadgeReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $('.pagebody--js').hide();
+                $('.editRecord--js').html(t);
             });
         });
     };
+
+    searchBadgeRequests = function () {
+        checkRunningAjax();
+        $(dv).html(fcom.getLoader());
+        markActive('a.badgeReq--js');
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBadgeRequests'), '', function (res) {
+            runningAjaxReq = false;
+            $(dv).html(res);
+        });
+    }
+
+    backToListing = function () {
+        $('.editRecord--js').html("");
+        $('.pagebody--js').fadeIn();
+    }
 
     badgeReqPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {

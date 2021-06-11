@@ -5,7 +5,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
     <div class="content-wrapper content-space">
         <div class="content-header row ">
             <div class="col">
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?>
+                <h2 class="content-header-title">
+                    <?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?>
                 </h2>
             </div>
             <?php
@@ -55,7 +56,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body pagebody--js">
                             <?php if ($noRecordFound) { ?>
                                 <div class="row justify-content-center my-5">
                                     <div class="col-md-6">
@@ -133,6 +134,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                                 <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                             <?php } ?>
                         </div>
+                        <span class="editRecord--js"></span>
                     </div>
                 </div>
             </div>

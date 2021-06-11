@@ -170,6 +170,13 @@ class SellerRequestsController extends SellerBaseController
         return $srch;
     }
 
+    private function getRequestedBadgeObj()
+    {
+        $srch = BadgeRequest::getSearchObject($this->siteLangId);
+        $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'added_on', 'DESC');
+        return $srch;
+    }
+
     /* ------Product Category Request [------*/
 
     public function categoryReqForm($categoryReqId = 0)
@@ -694,6 +701,29 @@ class SellerRequestsController extends SellerBaseController
 
 
     /* ------Badge Request ------*/
+    public function searchBadgeRequests()
+    {
+        $post = FatApp::getPostedData();
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+
+        $srch = $this->getRequestedBadgeObj();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $rs = $srch->getResultSet();
+        $requestedBadges = FatApp::getDb()->fetchAll($rs);
+
+        $this->set('canEdit', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
+        $this->set("arrListing", $requestedBadges);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', $post);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('statusArr', BadgeRequest::getStatusArr($this->siteLangId));
+        $this->_template->render(false, false);
+    }
 
     public function badgeReqForm($badgeReqId = 0)
     {
