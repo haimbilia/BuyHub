@@ -253,9 +253,21 @@ $(document).on('mouseover mouseout', '#mapProducts--js li', function (e) {
         });
     });
 
-$(document).on('click', '.listing-map-view-toggle--js', function () {   
-    $("form[name=frmProductSearch] input[name=vtype]").val('map');
-    window.location.href = getSearchQueryUrl(true);
+$(document).on('click', '.listing-view-toggle--js', function () {
+    var vtype = $(this).data('vtype');
+    var currentActiveVType = $('.listing-view-toggle--js.active').data('vtype');
+    if(vtype == 'map' || currentActiveVType == 'map'){
+        $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
+        window.location.href = getSearchQueryUrl(true);
+    }else{
+        if(vtype == 'list'){
+            $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
+        }else{
+            $('#productsList').removeClass('listing-products--grid').addClass('listing-products--grid');
+        }        
+    }    
+    $("form[name=frmProductSearch] input[name=vtype]").val(vtype);    
+    
 });
 
 /* function updateQueryStringParameter(uri, key, value) {
