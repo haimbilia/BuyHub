@@ -35,7 +35,7 @@ class BadgeRequest extends MyAppModel
      * @param  int $langId
      * @return void
      */
-    public static function getStatusArr(int $langId)
+    public static function getStatusArr(int $langId): array
     {
         $arr = FatCache::get('getBadgeRequestStatusArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {

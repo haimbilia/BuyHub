@@ -107,23 +107,56 @@
                               <li><a href="<?php echo UrlHelper::generateUrl('Tags'); ?>"><?php echo Labels::getLabel('LBL_Tags', $adminLangId); ?></a>
                               </li>
                           <?php } ?>
-                          <?php
-                            if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Brands', 'BrandRequests'); ?>"><?php echo Labels::getLabel('LBL_Brand_Requests', $adminLangId); ?><?php if ($brandReqCount) { ?><span class='badge'>(<?php echo $brandReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                          <?php
-                            if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ProductCategories', 'requests'); ?>"><?php echo Labels::getLabel('LBL_Categories_Requests', $adminLangId); ?><?php if ($categoryReqCount) { ?><span class='badge'>(<?php echo $categoryReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('CustomProducts'); ?>"><?php echo Labels::getLabel('LBL_Custom_Product_Catalog_Requests', $adminLangId); ?>
-                                      <?php if ($custProdReqCount) { ?><span class='badge'>(<?php echo $custProdReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
                           <?php /* if($objPrivilege->canViewSellerCatalogRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_SELLER_CAN_REQUEST_PRODUCT', FatUtility::VAR_INT, 0)){?>
                     <li><a href="<?php echo UrlHelper::generateUrl('Users','sellerCatalogRequests');?>"><?php echo Labels::getLabel('LBL_Product_Catalog_Requests',$adminLangId);?> <?php if($catReqCount){ ?><span class='badge'>(<?php echo $catReqCount; ?>)</span><?php } ?></a></li>
                     <?php } */ ?>
                       </ul>
                   </li>
+              <?php } ?>
+
+              <?php if (
+                  $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
+                  $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                  $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                  $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)
+              ) { ?>
+                <li class="haschild">
+                      <a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_REQUESTS', $adminLangId); ?></a>
+                      <ul>
+                        <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) { ?>
+                        <li>
+                            <a href="<?php echo UrlHelper::generateUrl('Brands', 'BrandRequests'); ?>">
+                                <?php echo Labels::getLabel('LBL_Brand_Requests', $adminLangId); ?>
+                                <?php if ($brandReqCount) { ?><span class='badge'>(<?php echo $brandReqCount; ?>)</span><?php } ?>
+                            </a>
+                        </li>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li>
+                            <a href="<?php echo UrlHelper::generateUrl('ProductCategories', 'requests'); ?>">
+                                <?php echo Labels::getLabel('LBL_Categories_Requests', $adminLangId); ?>
+                                <?php if ($categoryReqCount) { ?><span class='badge'>(<?php echo $categoryReqCount; ?>)</span><?php } ?>
+                            </a>
+                        </li>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
+                        <li>
+                            <a href="<?php echo UrlHelper::generateUrl('CustomProducts'); ?>">
+                                <?php echo Labels::getLabel('LBL_Custom_Product_Catalog_Requests', $adminLangId); ?>
+                                <?php if ($custProdReqCount) { ?><span class='badge'>(<?php echo $custProdReqCount; ?>)</span><?php } ?>
+                            </a>
+                        </li>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li>
+                            <a href="<?php echo UrlHelper::generateUrl('BadgeRequests'); ?>">
+                                <?php echo Labels::getLabel('LBL_BADGE_REQUESTS', $adminLangId); ?>
+                                <?php if ($badgeRequestCount) { ?><span class='badge'>(<?php echo $badgeRequestCount; ?>)</span><?php } ?>
+                            </a>
+                        </li>
+                        <?php } ?>
+                      </ul>
+                </li>
               <?php } ?>
 
               <?php if (

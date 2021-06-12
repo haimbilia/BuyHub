@@ -125,6 +125,7 @@ class AdminPrivilege
     public const SECTION_ORDERS_REPORT = 119;
     public const SECTION_BADGES = 120;
     public const SECTION_BADGE_LINKS = 121;
+    public const SECTION_BADGE_REQUESTS = 122;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -282,6 +283,7 @@ class AdminPrivilege
 
             static::SECTION_BADGES => Labels::getLabel('MSG_BADGES_&_RIBBONS', CommonHelper::getLangId()),
             static::SECTION_BADGE_LINKS => Labels::getLabel('MSG_BADGE_LINKS', CommonHelper::getLangId()),
+            static::SECTION_BADGE_REQUESTS => Labels::getLabel('MSG_BADGE_REQUESTS', CommonHelper::getLangId()),
 
             /* static::SECTION_Languages => Labels::getLabel('MSG_Languages',CommonHelper::getLangId()),
         static::SECTION_Languages => Labels::getLabel('MSG_Order_Status',CommonHelper::getLangId()), */
@@ -1614,5 +1616,15 @@ class AdminPrivilege
     public function canEditBadgeLinks($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewBadgeRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGE_REQUESTS, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditBadgeRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGE_REQUESTS, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

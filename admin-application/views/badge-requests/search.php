@@ -2,10 +2,11 @@
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php
     $arr_flds = array(
-        'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-        'badge_name' => Labels::getLabel('LBL_BADGE', $siteLangId),
-        'breq_status' => Labels::getLabel('LBL_Status', $siteLangId),
-        'breq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $siteLangId),
+        'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+        'badge_name' => Labels::getLabel('LBL_BADGE', $adminLangId),
+        'download' => Labels::getLabel('LBL_DOWNLOAD', $adminLangId),
+        'breq_status' => Labels::getLabel('LBL_Status', $adminLangId),
+        'breq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $adminLangId),
     );
     if ($canEdit) {
         $arr_flds['action'] = '';
@@ -43,7 +44,10 @@
                     $td->appendElement('small', array('class' => 'ml-1'), (isset($row['breq_status_updated_on']) && $row['breq_status_updated_on'] != '0000-00-00 00:00:00') ? FatDate::Format($row['breq_status_updated_on']) : '', true);
                     break;
                 case 'breq_requested_on':
-                    $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key]) : Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key]) : Labels::getLabel('LBL_NA', $adminLangId), true);
+                    break;
+                case 'download':
+                    $td->appendElement('plaintext', array(), 'Download Link', true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);
@@ -51,7 +55,7 @@
                     if ($row['breq_status'] == BadgeRequest::REQUEST_PENDING) {
                         $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $adminLangId)),
                             '<i class="fa fa-edit"></i>',
                             true
                         );
@@ -67,8 +71,8 @@
 
     echo $tbl->getHtml();
     if (count($arrListing) == 0) {
-        $message = Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId);
-        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+        $message = Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId, 'message' => $message));
     } ?>
 </div>
 <?php $postedData['page'] = $page;

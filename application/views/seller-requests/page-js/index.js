@@ -10,7 +10,7 @@
         runningAjaxReq = true;
     };
 
-    markActive = function(element) {
+    markActive = function (element) {
         $('ul.tabs_nav-js li.is-active').removeClass('is-active');
         $(element).closest('li').addClass('is-active');
     }
@@ -296,27 +296,28 @@
 
     setupBadgeReq = function (frm) {
         if (!$(frm).validate()) return;
-        
-		let formData = new FormData(frm);        
+
+        let formData = new FormData(frm);
         $.ajax({
-			url: fcom.makeUrl('SellerRequests', 'setupBadgeReq'),
-			type: 'post',
-			dataType: 'json',
-			data: formData,
-			cache: false,
-			contentType: false,
-			processData: false,
-			beforeSend: function() {
-				$.mbsmessage(langLbl.processing, false,'alert--process');
-			},
-			success: function(ans) {
-				$.mbsmessage.close();
+            url: fcom.makeUrl('SellerRequests', 'setupBadgeReq'),
+            type: 'post',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $.mbsmessage(langLbl.processing, false, 'alert--process');
+            },
+            success: function (ans) {
+                $.mbsmessage(ans.msg, true, 'alert--success');
+                $(document).trigger('close.facebox');
                 searchBadgeRequests();
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
     };
 
     searchBadgeRequests = function () {
@@ -328,84 +329,5 @@
             $(dv).html(res);
         });
     }
-
-    backToListing = function () {
-        $('.editRecord--js').html("");
-        $('.pagebody--js').fadeIn();
-    }
-
-    badgeReqPopupImage = function (inputBtn) {
-        if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'imgCropper'), '', function (t) {
-                $.facebox(t, 'faceboxWidth');
-                var file = inputBtn.files[0];
-                var options = {
-                    aspectRatio: 1 / 1,
-                    data: {
-                        width: 300,
-                        height: 300,
-                    },
-                    minCropBoxWidth: 300,
-                    minCropBoxHeight: 300,
-                    toggleDragModeOnDblclick: false,
-                    imageSmoothingQuality: 'high',
-                    imageSmoothingEnabled: true,
-                };
-                $(inputBtn).val('');
-                return cropImage(file, options, 'uploadBadgeImage', inputBtn);
-            });
-        }
-    };
-
-    uploadBadgeImage = function (formData) {
-        var badgeReqId = $("[name='breq_id']").val();
-        if ('' == badgeReqId) { badgeReqId = 0; }
-        var fileType = $("[name='file_type']").val();
-
-        formData.append('file_type', fileType);
-        $.ajax({
-            url: fcom.makeUrl('SellerRequests', 'setupBadgeRequestImage'),
-            type: 'post',
-            dataType: 'json',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function () {
-                $('#loader-js').html(fcom.getLoader());
-            },
-            complete: function () {
-                $('#loader-js').html(fcom.getLoader());
-            },
-            success: function (ans) {
-                if (ans.status == 1) {
-                    fcom.displaySuccessMessage(ans.msg);
-                    $('input[name="attachment_id"]').val(ans.attachFileId);
-
-                    badgeRequestImages(badgeReqId);
-                } else {
-                    fcom.displayErrorMessage(ans.msg);
-                }
-                $(document).trigger('close.facebox');
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-            }
-        });
-    }
-
-    badgeRequestImages = function (badgeReqId) {
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeRequestImage', [badgeReqId]), '', function (t) {
-            $('.uploadedImage--js').html(t);
-        });
-    };
-
-    deleteBadgeRequestImage = function (fileId, badgeReqId) {
-        if (!confirm(langLbl.confirmDelete)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'removeBadgeRequestImage', [fileId, badgeReqId]), '', function (t) {
-            $('.uploadedImage--js').html('');
-            $('input[name="attachment_id"]').val("");
-        });
-    };
 
 })();

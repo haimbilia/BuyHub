@@ -775,7 +775,6 @@ class SellerRequestsController extends SellerBaseController
         }
 
         $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
-        $attachmentId = FatApp::getPostedData('attachment_id', FatUtility::VAR_INT, 0);
 
         $post['breq_requested_on'] = date('Y-m-d H:i:s');
         $post['breq_user_id'] = UserAuthentication::getLoggedUserId();
@@ -786,7 +785,6 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError($msg);
         }
 
-
         $record = new BadgeRequest($badgeReqId);
         $record->assignValues($post);
 
@@ -795,12 +793,9 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        echo $badgeReqId = $record->getMainTableRecordId();
-        CommonHelper::printArray($_FILES);
-        if (!empty($attachmentId)) {
-            $this->setupBadgeRequestImage($badgeReqId);
-        }
-die;
+        $badgeReqId = $record->getMainTableRecordId();
+        $this->setupBadgeRequestImage($badgeReqId);
+        
         $this->set('msg', Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId));
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false, 'json-success.php');
