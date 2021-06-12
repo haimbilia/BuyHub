@@ -1,81 +1,88 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
-    <?php
-    $arr_flds = array(
-        'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-        'badge_name' => Labels::getLabel('LBL_BADGE', $adminLangId),
-        'download' => Labels::getLabel('LBL_DOWNLOAD', $adminLangId),
-        'breq_status' => Labels::getLabel('LBL_Status', $adminLangId),
-        'breq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $adminLangId),
-    );
-    if ($canEdit) {
-        $arr_flds['action'] = '';
-    }
-    $tableClass = '';
-    if (0 < count($arrListing)) {
-        $tableClass = "table-justified";
-    }
-    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
-    $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-    foreach ($arr_flds as $val) {
-        $e = $th->appendElement('th', array(), $val);
-    }
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 
-    $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-    foreach ($arrListing as $sn => $row) {
-        $tr = $tbl->appendElement('tr', array('class' => ''));
+$arr_flds = array(
+    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'shop_name' => Labels::getLabel('LBL_REQUESTED_BY', $adminLangId),
+    'badge_name' => Labels::getLabel('LBL_BADGE', $adminLangId),
+    'download' => Labels::getLabel('LBL_DOWNLOAD', $adminLangId),
+    'breq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $adminLangId),
+);
+if ($canEdit) {
+    $arr_flds['action'] = '';
+}
+$tableClass = '';
+if (0 < count($arrListing)) {
+    $tableClass = "table table-responsive table--hovered";
+}
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
+$th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
+foreach ($arr_flds as $val) {
+    $e = $th->appendElement('th', array(), $val);
+}
 
-        foreach ($arr_flds as $key => $val) {
-            $td = $tr->appendElement('td');
-            switch ($key) {
-                case 'listserial':
-                    $td->appendElement('plaintext', array(), $sr_no, true);
-                    break;
-                case 'badge_name':
-                    $name = $row[$key]; 
-                    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeRequest::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
-                    $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-                    $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
-                    break;
-                case 'breq_status':
-                    $class = (BadgeRequest::REQUEST_PENDING == $row[$key]) ? 'label-info' : ((BadgeRequest::REQUEST_APPROVED == $row[$key]) ? 'label-success' : 'label-success');
+$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+foreach ($arrListing as $sn => $row) {
+    $tr = $tbl->appendElement('tr', array('class' => ''));
 
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $class), $statusArr[$row[$key]] . '<br>', true);
-                    $td->appendElement('small', array('class' => 'ml-1'), (isset($row['breq_status_updated_on']) && $row['breq_status_updated_on'] != '0000-00-00 00:00:00') ? FatDate::Format($row['breq_status_updated_on']) : '', true);
-                    break;
-                case 'breq_requested_on':
-                    $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key]) : Labels::getLabel('LBL_NA', $adminLangId), true);
-                    break;
-                case 'download':
-                    $td->appendElement('plaintext', array(), 'Download Link', true);
-                    break;
-                case 'action':
-                    $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);
-                    $li = $ul->appendElement("li");
-                    if ($row['breq_status'] == BadgeRequest::REQUEST_PENDING) {
-                        $li->appendElement(
-                            'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $adminLangId)),
-                            '<i class="fa fa-edit"></i>',
-                            true
-                        );
-                    }
-                    break;
-                default:
-                    $td->appendElement('plaintext', array(), $row[$key], true);
-                    break;
-            }
+    foreach ($arr_flds as $key => $val) {
+        $td = $tr->appendElement('td');
+        switch ($key) {
+            case 'listserial':
+                $td->appendElement('plaintext', array(), $sr_no, true);
+                break;
+            case 'shop_name':
+                $name = $row['shop_name'] . '(' . $row['user_name'] . ')';
+                $td->appendElement('plaintext', array(), $name);
+                break;
+            case 'badge_name':
+                $name = $row[$key];
+                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeRequest::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
+                $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+                $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
+                break;
+            case 'breq_requested_on':
+                $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key]) : Labels::getLabel('LBL_NA', $adminLangId), true);
+                break;
+            case 'download':
+                $fileName = '<a href="'.UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($row['breq_id'])).'">
+                <i class="fas fa-download"></i></a>';
+
+                $td->appendElement('div', ['class' => "text-break"], $fileName, true);
+                break;
+            case 'action':
+                if ($canEdit) {
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => "form(" . $row['breq_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                } else {
+                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $adminLangId), true);
+                }
+                break;
+            default:
+                $td->appendElement('plaintext', array(), $row[$key], true);
+                break;
         }
-        $sr_no--;
     }
+    $sr_no--;
+}
 
-    echo $tbl->getHtml();
-    if (count($arrListing) == 0) {
-        $message = Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId);
-        $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId, 'message' => $message));
-    } ?>
-</div>
-<?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchBadgeRequest'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'callBackJsFunc' => 'goToBadgeSearchPage');
+if (count($arrListing) == 0) {
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
+}
+
+$frm = new Form('frmSearchListing');
+$frm->setFormTagAttribute('class', 'web_form last_td_nowrap badgeRequestList--js');
+$frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
+
+echo $frm->getFormTag();
+echo $tbl->getHtml(); ?>
+</form>
+<?php
+if (count($arrListing) == 0) {
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
+}
+
+$postedData['page'] = $page;
+echo FatUtility::createHiddenFormFromData($postedData, array(
+    'name' => 'frmSrchPaging'
+));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

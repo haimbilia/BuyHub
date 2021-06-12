@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'form form--horizontal');
-$frm->setFormTagAttribute('onsubmit', 'setupBadgeReq(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 

@@ -7,7 +7,7 @@ class BadgeRequest extends MyAppModel
 
     public const REQUEST_PENDING = 0;
     public const REQUEST_APPROVED = 1;
-    public const REQUEST_CANCELLED = 2;
+    public const REQUEST_REJECTED = 2;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
@@ -42,7 +42,7 @@ class BadgeRequest extends MyAppModel
             $arr = [
                 self::REQUEST_PENDING => Labels::getLabel('LBL_PENDING', $langId),
                 self::REQUEST_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
-                self::REQUEST_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId)
+                self::REQUEST_REJECTED => Labels::getLabel('LBL_REJECTED', $langId)
             ];
             FatCache::set('getBadgeRequestStatusArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;

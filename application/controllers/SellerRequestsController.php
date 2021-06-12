@@ -12,19 +12,23 @@ class SellerRequestsController extends SellerBaseController
         $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
 
         $srch = $this->getRequestedbrandObj();
-        $rs = $srch->getResultSet();
-        $reqBrands = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize(1);
+        $reqBrands = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $srch = $this->getRequestedCatObj();
-        $rs = $srch->getResultSet();
-        $reqCategories = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize(1);
+        $reqCategories = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $srch = $this->getRequestedProdObj();
-        $rs = $srch->getResultSet();
-        $reqProducts = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize(1);
+        $reqProducts = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $srch = $this->getRequestedBadgeObj();
+        $srch->setPageSize(1);
+        $reqBadges = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $noRecordFound = false;
-        if (empty($reqBrands) && empty($reqCategories) && empty($reqProducts)) {
+        if (empty($reqBrands) && empty($reqCategories) && empty($reqProducts) && empty($reqBadges)) {
             $noRecordFound = true;
         }
 

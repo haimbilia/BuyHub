@@ -31,8 +31,19 @@ class BadgeRequestsController extends AdminBaseController
         }
 
         $srch = $this->getRequestedBadgeObj();
-
+        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = breq_user_id', 'u');
+        $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
         $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', BadgeRequest::REQUEST_PENDING);
+        
+        $srch->addMultipleFields(array_merge(
+            BadgeRequest::ATTR,
+            [
+                'COALESCE(badge_name, badge_identifier) as badge_name',
+                'shop_name',
+                'user_name'
+            ]
+        ));
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -50,7 +61,6 @@ class BadgeRequestsController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
         $this->set("canEdit", $this->objPrivilege->canEditBadgeRequests($this->admin_id, true));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
@@ -66,12 +76,6 @@ class BadgeRequestsController extends AdminBaseController
         $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
         $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = breq_badge_id', 'bdg');
         $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->adminLangId, 'bdg_l');
-
-        $srch->addMultipleFields(array_merge(
-            BadgeRequest::ATTR,
-            ['COALESCE(badge_name, badge_identifier) as badge_name']
-        ));
-
         $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
         return $srch;
     }
@@ -83,6 +87,10 @@ class BadgeRequestsController extends AdminBaseController
 
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
+            $srch->addMultipleFields(array_merge(
+                BadgeRequest::ATTR,
+                ['COALESCE(badge_name, badge_identifier) as badge_name']
+            ));
             $srch->addCondition('breq_id', '=', $badgeReqId);
             $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
             if ($requestedBadge === false) {
@@ -98,7 +106,7 @@ class BadgeRequestsController extends AdminBaseController
 
     public function setup()
     {
-        $this->userPrivilege->canEditBadgeRequests();
+        $this->objPrivilege->canEditBadgeRequests();
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -117,7 +125,7 @@ class BadgeRequestsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         
-        $this->set('msg', Labels::getLabel("MSG_UPDATED_SUCCESSFULLY", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_UPDATED_SUCCESSFULLY", $this->adminLangId));
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -152,5 +160,22 @@ class BadgeRequestsController extends AdminBaseController
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->adminLangId));
         return $frm;
+    }
+
+    public function downloadFile(int $recordId)
+    {
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $recordId);
+        if ($res == false) {
+            Message::addErrorMessage(Labels::getLabel("MSG_Not_available_to_download", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
+        }
+
+        if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
+            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
+        }
+
+        $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'];
+        AttachedFile::downloadAttachment($filePath, $res['afile_name']);
     }
 }
