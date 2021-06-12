@@ -286,13 +286,37 @@
     };
 
     /* Badge Request [ */
-    addBadgeReqForm = function (id) {
+    addBadgeReqForm = function (badgeReqId) {
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeReqForm', [id]), '', function (t) {
-                $('.pagebody--js').hide();
-                $('.editRecord--js').html(t);
+            fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeReqForm', [badgeReqId]), '', function (t) {
+                $.facebox(t, 'medium-fb-width catalog-bg');
             });
         });
+    };
+
+    setupBadgeReq = function (frm) {
+        if (!$(frm).validate()) return;
+        
+		let formData = new FormData(frm);        
+        $.ajax({
+			url: fcom.makeUrl('SellerRequests', 'setupBadgeReq'),
+			type: 'post',
+			dataType: 'json',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function() {
+				$.mbsmessage(langLbl.processing, false,'alert--process');
+			},
+			success: function(ans) {
+				$.mbsmessage.close();
+                searchBadgeRequests();
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
     };
 
     searchBadgeRequests = function () {
@@ -334,8 +358,8 @@
     };
 
     uploadBadgeImage = function (formData) {
-        var bReqBadgeId = $("[name='breq_badge_id']").val();
-        if ('' == bReqBadgeId) { bReqBadgeId = 0; }
+        var badgeReqId = $("[name='breq_id']").val();
+        if ('' == badgeReqId) { badgeReqId = 0; }
         var fileType = $("[name='file_type']").val();
 
         formData.append('file_type', fileType);
@@ -358,8 +382,7 @@
                     fcom.displaySuccessMessage(ans.msg);
                     $('input[name="attachment_id"]').val(ans.attachFileId);
 
-                    badgeRequestImages(bReqBadgeId);
-                    reloadList();
+                    badgeRequestImages(badgeReqId);
                 } else {
                     fcom.displayErrorMessage(ans.msg);
                 }
@@ -371,15 +394,15 @@
         });
     }
 
-    badgeRequestImages = function (badge_id) {
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeRequestImage', [badge_id,]), '', function (t) {
-            $('.uploadedImage--js').replaceWith(t);
+    badgeRequestImages = function (badgeReqId) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeRequestImage', [badgeReqId]), '', function (t) {
+            $('.uploadedImage--js').html(t);
         });
     };
 
-    deleteImage = function (fileId, badge_id, imageType) {
-        if (!confirm(langLbl.confirmDeleteImage)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'removeBadgeRequestImage', [fileId, badge_id]), '', function (t) {
+    deleteBadgeRequestImage = function (fileId, badgeReqId) {
+        if (!confirm(langLbl.confirmDelete)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'removeBadgeRequestImage', [fileId, badgeReqId]), '', function (t) {
             $('.uploadedImage--js').html('');
             $('input[name="attachment_id"]').val("");
         });

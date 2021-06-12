@@ -22,7 +22,6 @@
 
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
     foreach ($arrListing as $sn => $row) {
-        $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
         foreach ($arr_flds as $key => $val) {

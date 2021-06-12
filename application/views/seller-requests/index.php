@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
-?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <div class="content-header row ">
@@ -134,7 +133,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
                                 <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                             <?php } ?>
                         </div>
-                        <span class="editRecord--js"></span>
+                        <span class="card-body editRecord--js"></span>
                     </div>
                 </div>
             </div>

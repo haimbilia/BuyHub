@@ -28,29 +28,6 @@ class BadgeRequest extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $ratingTypeId);
         $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
     }
-        
-    /**
-     * getSearchObject
-     *
-     * @param  int $langId
-     * @param  array $attr
-     * @return object
-     */
-    public static function getSearchObject(int $langId, array $attr = []): object
-    {
-        $srch = new SearchBase(self::DB_TBL, 'breq');
-        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = breq_badge_id', 'bdg');
-        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $langId, 'bdg_l');
-
-        if (empty($attr)) {
-            $srch->addMultipleFields(array_merge(
-                self::ATTR,
-                ['COALESCE(badge_name, badge_identifier) as badge_name']
-            ));
-        }
-
-        return $srch;
-    }
     
     /**
      * getStatusArr
@@ -60,10 +37,35 @@ class BadgeRequest extends MyAppModel
      */
     public static function getStatusArr(int $langId)
     {
-        return [
-            self::REQUEST_PENDING => Labels::getLabel('LBL_PENDING', $langId),
-            self::REQUEST_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
-            self::REQUEST_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId)
-        ];
+        $arr = FatCache::get('getBadgeRequestStatusArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::REQUEST_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+                self::REQUEST_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+                self::REQUEST_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId)
+            ];
+            FatCache::set('getBadgeRequestStatusArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+    
+        return json_decode($arr, true);
+    }
+
+    /**
+     * getRequestStatus
+     *
+     * @param  int $badgeId
+     * @param  int $sellerId
+     * @return int
+     */
+    public static function getRequestStatus(int $badgeId, int $sellerId): int
+    {
+        $srch = new SearchBase(self::DB_TBL, 'breq');
+        $srch->addCondition(self::DB_TBL_PREFIX . 'badge_id', '=', $badgeId);
+        $srch->addCondition(self::DB_TBL_PREFIX . 'user_id', '=', $sellerId);
+        $srch->addCondition(self::DB_TBL_PREFIX . 'status', 'IN', [self::REQUEST_PENDING, self::REQUEST_APPROVED]);
+        $srch->addFld(self::DB_TBL_PREFIX . 'status');
+        $row = (array) FatApp::getDb()->fetch($srch->getResultSet());
+        return (int) (empty($row) ? -1 : $row[self::DB_TBL_PREFIX . 'status']);
     }
 }

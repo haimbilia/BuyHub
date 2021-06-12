@@ -172,8 +172,16 @@ class SellerRequestsController extends SellerBaseController
 
     private function getRequestedBadgeObj()
     {
-        $srch = BadgeRequest::getSearchObject($this->siteLangId);
-        $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'added_on', 'DESC');
+        $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
+        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = breq_badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
+
+        $srch->addMultipleFields(array_merge(
+            BadgeRequest::ATTR,
+            ['COALESCE(badge_name, badge_identifier) as badge_name']
+        ));
+
+        $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
         return $srch;
     }
 
@@ -710,8 +718,7 @@ class SellerRequestsController extends SellerBaseController
         $srch = $this->getRequestedBadgeObj();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $requestedBadges = FatApp::getDb()->fetchAll($rs);
+        $requestedBadges = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set('canEdit', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $requestedBadges);
@@ -730,11 +737,13 @@ class SellerRequestsController extends SellerBaseController
         $this->userPrivilege->canEditBadges();
         $frm = $this->getBadgeForm();
         if (0 < $badgeReqId) {
-            /* $data = Brand::getAttributesById($badgeReqId, array('brand_id', 'brand_identifier'));
-            if ($data === false) {
+            $srch = $this->getRequestedBadgeObj();
+            $srch->addCondition('breq_id', '=', $badgeReqId);
+            $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
+            if ($requestedBadge === false) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
-            $frm->fill($data); */
+            $frm->fill($requestedBadge);
         }
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
@@ -745,14 +754,12 @@ class SellerRequestsController extends SellerBaseController
     {
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
-        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BADGE_REQUEST);
-        $frm->addHiddenField('', 'attachment_id');
 
         $approvalRequiredBadges = Badge::getAllBadgesAndRibbons($this->siteLangId, Badge::TYPE_BADGE, applicationConstants::YES);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_badge_id', $approvalRequiredBadges);
         $fld->requirements()->setRequired(true);
         $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
-        $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_image', array('accept' => 'image/*'));
+        $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->siteLangId));
         return $frm;
     }
@@ -764,18 +771,23 @@ class SellerRequestsController extends SellerBaseController
         $frm = $this->getBadgeForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
-        $attachmentId = FatApp::getPostedData('attachFileId', FatUtility::VAR_INT, 0);
+        $attachmentId = FatApp::getPostedData('attachment_id', FatUtility::VAR_INT, 0);
 
-        $post['brand_requested_on'] = date('Y-m-d H:i:s');
-        $post['brand_seller_id'] = UserAuthentication::getLoggedUserId();
-        unset($post['breq_image'], $post['attachFileId']);
+        $post['breq_requested_on'] = date('Y-m-d H:i:s');
+        $post['breq_user_id'] = UserAuthentication::getLoggedUserId();
 
-        $record = new Brand($badgeReqId);
+        $status = BadgeRequest::getRequestStatus($post['breq_badge_id'], UserAuthentication::getLoggedUserId());
+        if (BadgeRequest::REQUEST_APPROVED == $status || BadgeRequest::REQUEST_PENDING == $status) {
+            $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/PENDING', $this->siteLangId);
+            FatUtility::dieJsonError($msg);
+        }
+
+
+        $record = new BadgeRequest($badgeReqId);
         $record->assignValues($post);
 
         if (!$record->save()) {
@@ -783,78 +795,38 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $badgeReqId = $record->getMainTableRecordId();
-
+        echo $badgeReqId = $record->getMainTableRecordId();
+        CommonHelper::printArray($_FILES);
         if (!empty($attachmentId)) {
-            $badgeReqRecord = ['afile_record_id' => $badgeReqId];
-            $where = array('smt' => 'afile_id = ?', 'vals' => [$attachmentId]);
-            FatApp::getDb()->updateFromArray(AttachedFile::DB_TBL, $badgeReqRecord, $where);
+            $this->setupBadgeRequestImage($badgeReqId);
         }
-
+die;
         $this->set('msg', Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId));
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setupBadgeRequestImage()
+    private function setupBadgeRequestImage(int $badgeReqId)
     {
-        $this->userPrivilege->canEditBadges();
-        $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
-        $bReqBadgeId = FatApp::getPostedData('breq_badge_id', FatUtility::VAR_INT, 0);
-
-        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
+        if (!isset($_FILES) || empty($_FILES)) {
+            return true;
         }
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->saveImage(
-            $_FILES['cropped_image']['tmp_name'],
-            $file_type,
-            $bReqBadgeId,
+            $_FILES['breq_file']['tmp_name'],
+            AttachedFile::FILETYPE_BADGE_REQUEST,
+            $badgeReqId,
             0,
-            $_FILES['cropped_image']['name'],
+            $_FILES['breq_file']['name'],
             -1,
             false,
             0,
-            $_FILES['cropped_image']['type'],
+            $_FILES['breq_file']['type'],
             0
         )) {
             FatUtility::dieJsonError($fileHandlerObj->getError());
         }
-
-        $this->set('attachFileId', $fileHandlerObj->getMainTableRecordId());
-        $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('breq_badge_id', $bReqBadgeId);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeBadgeRequestImage($afileId, $bReqBadgeId)
-    {
-        $this->userPrivilege->canEditBadges();
-        $afileId = FatUtility::int($afileId);
-        $bReqBadgeId = FatUtility::int($bReqBadgeId);
-        if (!$afileId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-        }
-        $fileType = AttachedFile::FILETYPE_BADGE;
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile($fileType, $bReqBadgeId, $afileId)) {
-            FatUtility::dieJsonError($fileHandlerObj->getError());
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function badgeRequestImage($bReqBadgeId)
-    {
-        $canEdit = $this->userPrivilege->canEditBadges(0, true);
-        $bReqBadgeId = FatUtility::int($bReqBadgeId);
-        $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $bReqBadgeId);
-        $this->set('image', $image);
-        $this->set('languages', Language::getAllNames());
-        $this->set('canEdit', $canEdit);
-        $this->_template->render(false, false);
+        return true;
     }
 }
