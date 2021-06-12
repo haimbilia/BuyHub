@@ -503,7 +503,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $post = [];
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = $page <= 0 ? 1 : $page;
 
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
