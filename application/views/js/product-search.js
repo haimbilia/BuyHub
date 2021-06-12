@@ -166,23 +166,6 @@ $(document).ready(function() {
         initialize();
     })
 
-    /* for toggling of grid/list view[ */
-
-    $(document).on('click', '.list-grid-toggle', function() {
-               //   var txt = $(".icon").hasClass('icon-grid') ? 'List' : 'Grid';
-        $('.icon').toggleClass('icon-grid');
-        if ($(".icon").hasClass('icon-grid')) {
-            $("form[name=frmProductSearch] input[name=vtype]").val('grid');
-            $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
-        } else {
-            $("form[name=frmProductSearch] input[name=vtype]").val('list');
-            $('#productsList').removeClass('listing-products--list').addClass('listing-products--grid');
-        }
-        /* $(".label").text(txt); */
-    });
-
-    /* ] */
-
     /******** function for left collapseable links  ****************/
     $(".block__body-js").show();
     $(".block__head-js").click(function() {
@@ -252,7 +235,8 @@ $(document).on('mouseover mouseout', '#mapProducts--js li', function (e) {
             }
         });
     });
-
+    
+/* for toggling of grid/list view[ */
 $(document).on('click', '.listing-view-toggle--js', function () {
     var vtype = $(this).data('vtype');
     var currentActiveVType = $('.listing-view-toggle--js.active').data('vtype');
@@ -260,10 +244,12 @@ $(document).on('click', '.listing-view-toggle--js', function () {
         $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
         window.location.href = getSearchQueryUrl(true);
     }else{
+        $('.listing-view-toggle--js').removeClass('active');
+        $(this).addClass('active')
         if(vtype == 'list'){
-            $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
-        }else{
-            $('#productsList').removeClass('listing-products--grid').addClass('listing-products--grid');
+           $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
+        }else{    
+            $('#productsList').removeClass('listing-products--list').addClass('listing-products--grid');            
         }        
     }    
     $("form[name=frmProductSearch] input[name=vtype]").val(vtype);    

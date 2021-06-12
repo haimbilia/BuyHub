@@ -698,7 +698,7 @@ function getCookie(cname) {
 
 function displayGeoAddress(address) {
     if (0 < $("#ga-autoComplete-header").length) {
-        $("#ga-autoComplete-header").text(address);
+        $("#ga-autoComplete-header").val(address);
     }
 }
 
@@ -753,7 +753,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
         if (eval("typeof " + callback) == 'function') {
             window[callback](data);
         }
-        return data;
+        location.reload();   
     });
 }
 
@@ -924,6 +924,7 @@ var mapMarker = [];
 var map;
 var searchAsMapMove = false;
 var dragenMapListener;
+var infowindow;
 
 function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, dragendCallback) {
     /*  
@@ -991,6 +992,7 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
         centerControlDiv.appendChild(labelTag);
 
         inputHtml.addEventListener("click", (e) => {
+            infowindow.close();
             var targetElement = event.target || event.srcElement;
             if (targetElement.checked == true) {
                 addDragendListiner(map, dragendCallback);
@@ -1023,7 +1025,7 @@ function removeDragendListiner(map,dragendCallback){
 
 
 function createMarkers(markers) {
-    var infowindow = new google.maps.InfoWindow();
+    infowindow = new google.maps.InfoWindow();
     $.each(markers, function (index, marker) {
         if (!("lat" in marker) || !("lng" in marker) || !("content" in marker)) {
             console.log(marker);
@@ -1042,6 +1044,7 @@ function createMarkers(markers) {
 
             google.maps.event.addListener(newMarker, 'click', (function (newMarker, index) {
                 return function () {
+                    infowindow.close();
                     infowindow.setContent(marker['content']);
                     infowindow.open(map, newMarker);
                 }

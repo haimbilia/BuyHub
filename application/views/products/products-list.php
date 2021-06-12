@@ -7,9 +7,9 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
 
 $vtype = $postedData['vtype'] ?? false;
 $productListClass = '';
-if ($vtype == 'grid') {
+if ($vtype == 'list') {
     $productListClass = 'listing-products--list';
-} elseif ($vtype == 'list') {
+} elseif ($vtype == 'grid') {
     $productListClass = 'listing-products--grid';
 }
 

@@ -13,10 +13,20 @@ if (!empty($allShops)) {
         <ul id="mapShops--js">
             <?php
             foreach ($allShops as $shop) {
+                $contentString ='
+                <ul class="gmap-list">
+                    <li>
+                        <div class="product-profile">
+                            <div class="product-profile__thumbnail"><img class="product-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" alt="'. $shop['shop_name'].'"></div>
+                            <div class="product-profile__data"><div class="title"><a href="' . UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true) . '"><strong>' . $shop['shop_name'] . '</strong></a></div></div>
+                        </div>
+                    </li>
+                </ul>';                
+                
                 $markers[$shop['shop_id']] = [
                     'lat' => $shop['shop_lat'],
                     'lng' => $shop['shop_lng'],
-                    'content' => $shop['shop_name'],
+                    'content' => $contentString,
                 ];
             ?>
                 <li data-shopId="<?php echo $shop['shop_id']; ?>">

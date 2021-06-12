@@ -72,7 +72,7 @@ $(document).ready(function(){
 	};
         dragCallback = function(dragendMap){
                 canSetCookie = true;
-                codeLatLng(dragendMap.getCenter().lat(),dragendMap.getCenter().lng(),function(data){ 
+                codeLatLng(dragendMap.getCenter().lat(),dragendMap.getCenter().lng(),function(data){                
                     displayGeoAddress(setGeoAddress(data));  
                     if(typeof dragTimeOutEvent != "undefined"){
                         clearTimeout(dragTimeOutEvent); 
