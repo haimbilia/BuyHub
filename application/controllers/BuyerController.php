@@ -496,12 +496,16 @@ class BuyerController extends BuyerBaseController
     public function downloads()
     {
         $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
+        
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
+
         $post = [];
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = $page <= 0 ? 1 : $page;
+
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $user_id = UserAuthentication::getLoggedUserId();
 
@@ -586,7 +590,7 @@ class BuyerController extends BuyerBaseController
             }
             $op['links'] = $links;
         }
-
+        
         $this->set('downloads', $orderProducts);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
@@ -2439,8 +2443,8 @@ class BuyerController extends BuyerBaseController
     {
         $frm = new Form('frmSrch');
         $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
+        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;
     }
