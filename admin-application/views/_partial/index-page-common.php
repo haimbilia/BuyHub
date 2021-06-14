@@ -23,7 +23,7 @@ $actionButtons = isset($actionButtons) ? $actionButtons : true;
                         <div class="sectionbody space togglewrap" style="display:none;">
                             <?php
                             $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
-                            $frmSearch->setFormTagAttribute('class', 'web_form');
+                            $frmSearch->setFormTagAttribute('class', 'web_form formSearch--js');
                             $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
                             $frmSearch->developerTags['fld_default_col'] = 6;
 

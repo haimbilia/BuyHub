@@ -3,6 +3,15 @@ defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $div = new HtmlElement("div", array("class" => "btn-group"));
 $msg = isset($msg) ? $msg : '';
+if ((!isset($statusButtons) || true === $statusButtons)) {
+    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn-clean btn-sm btn-icon btn-secondary toolbar-btn-js d-none', 'title' => Labels::getLabel('LBL_Publish', $siteLangId), "onclick" => "toggleBulkStatues(1, '" . $msg . "')"), '<i class="fas fa-eye"></i>', true);
+
+    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn-clean btn-sm btn-icon btn-secondary toolbar-btn-js d-none', 'title' => Labels::getLabel('LBL_Unpublish', $siteLangId), "onclick" => "toggleBulkStatues(0, '" . $msg . "')"), '<i class="fas fa-eye-slash"></i>', true);
+}
+
+if (!isset($deleteButton) || true === $deleteButton) {
+    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn-clean btn-sm btn-icon btn-secondary toolbar-btn-js d-none', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSelected()"), '<i class="fas fa-trash"></i>', true);
+}
 
 if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
