@@ -210,13 +210,13 @@ class EmailHandler extends FatModel
         try {
             $mail->CharSet = 'UTF-8';
             $mail->IsSMTP();
-            $mail->SMTPAuth = true;
+            $mail->SMTPAuth = (strtolower($host) == 'localhost')? false : true;
             $mail->IsHTML(true);
             $mail->Host = $host;
             $mail->Port = $port;
             $mail->Username = $username;
             $mail->Password = $password;
-            $mail->SMTPSecure = $secure;
+            $mail->SMTPSecure = (strtolower($host) == 'localhost')? 'none' : $secure;
             $mail->SMTPDebug = false;
             $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
             $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
