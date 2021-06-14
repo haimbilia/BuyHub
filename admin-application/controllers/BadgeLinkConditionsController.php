@@ -336,7 +336,8 @@ class BadgeLinkConditionsController extends AdminBaseController
 
                 $linkData = array(
                     'badgelink_blinkcond_id' => $badgeLinkCondId,
-                    'badgelink_record_id' => $recordId
+                    'badgelink_record_id' => $recordId,
+                    'badgelink_status' => applicationConstants::ACTIVE
                 );
                 $db->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData);
             }
@@ -551,7 +552,8 @@ class BadgeLinkConditionsController extends AdminBaseController
 
         $linkData = array(
             'badgelink_blinkcond_id' => $blinkcond_id,
-            'badgelink_record_id' => $record_id
+            'badgelink_record_id' => $record_id,
+            'badgelink_status' => applicationConstants::ACTIVE
         );
         $db = FatApp::getDb();
         if (!$db->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData)) {
