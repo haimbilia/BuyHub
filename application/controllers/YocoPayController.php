@@ -5,8 +5,6 @@ class YocoPayController extends PaymentController
 
     public const KEY_NAME = 'Yoco';
 
-    private $error = false;
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -39,14 +37,13 @@ class YocoPayController extends PaymentController
         }
 
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+        $paymentAmount = $this->convertToCents($orderPaymentObj->getOrderPaymentGatewayAmount());
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
-            $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
+            $this->setErrorAndRedirect(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId), FatUtility::isAjaxCall());
         }
-    
+
         $this->set('orderInfo', $orderInfo);
         $this->set('paymentAmount', $paymentAmount);
         $this->set('exculdeMainHeaderDiv', true);
@@ -61,77 +58,34 @@ class YocoPayController extends PaymentController
     }
 
     /**
-     * createOrder
-     *
-     * @param  string $orderId
-     * @return string json
+     * 
+     * @param type $orderId
      */
-    public function createOrder()
+    public function chargeCard($orderId)
     {
-        $token = FatApp::getPostedData('token', FatUtility::VAR_STRING);
-        $amount = FatApp::getPostedData('amount', FatUtility::VAR_INT, 0);
-        $currencyCode = FatApp::getPostedData('currencyCode', FatUtility::VAR_STRING);
-        if (false === $this->plugin->chargeCard($token, $amount, $currencyCode)) {
-//            $error = $this->plugin->getError();
-//            $msg = is_array($error) && isset($error['error']) ? $error['error'] . ' : ' . $error['error_description'] : $error;
-//            $msg = is_array($msg) && isset($msg['message']) ? $msg['message'] : $msg;
-//            $this->setErrorAndRedirect($msg, true);
-        }
-//        $order = $this->plugin->getResponse();
-//        echo json_encode($order->result, JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * captureOrder
-     *
-     * @param  mixed $paypalOrderId
-     * @return string json
-     */
-    public function captureOrder(string $paypalOrderId)
-    {
-        //=== Save order either by retrieving order from paypal OR the order we still have in session
-        if (false === $this->plugin->captureOrder($paypalOrderId)) {
-            $error = $this->plugin->getError();
-            $msg = is_array($error) && isset($error['error']) ? $error['error'] . ' : ' . $error['error_description'] : $error;
-            $this->setErrorAndRedirect($msg, true);
-        }
-        $order = $this->plugin->getResponse();
-        echo json_encode($order->result, JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * callback
-     *
-     * @param  string $orderId
-     * @return void
-     */
-    public function callback(string $orderId)
-    {
-        $post = FatApp::getPostedData();
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
-        if ('COMPLETED' != $post['status']) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($post));
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED_:_{STATUS}", $this->siteLangId);
-            $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $post['status']]);
-            $orderPaymentObj->addOrderPaymentComments($msg);
-            $this->setErrorAndRedirect($msg, true);
-        }
-
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-        $paypalOrderId = $post['id'];
-        $currencyCode = $orderInfo["order_currency_code"];
-        $paymentAmount = $this->convertToCents($orderPaymentObj->getOrderPaymentGatewayAmount());
 
-        if (false === $this->plugin->validatePaymentRequest($paypalOrderId, $orderId, $currencyCode, $paymentAmount)) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($post));
-            FatUtility::dieJsonError($this->plugin->getError());
+        if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
+            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall(), false);
+        }
+        $token = FatApp::getPostedData('token', FatUtility::VAR_STRING);
+
+        if (false === $this->plugin->chargeCard($token, $this->convertToCents($paymentAmount), $orderInfo["order_currency_code"])) {
+            $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall(), false);
         }
 
-        /* Recording Payment in DB */
-        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paypalOrderId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post));
-        /* End Recording Payment in DB */
-        $json['redirecUrl'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
-        FatUtility::dieJsonSuccess($json);
+        $response = $this->plugin->getResponse();
+        if (isset($response['status']) && strtolower($response['status']) == 'successful') {
+            $orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['id'], ($paymentAmount), Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($response));
+            die(json_encode(['status' => 1, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId))]));
+        }
+        $msg = $response['displayMessage'] ?? Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+        $orderPaymentObj->addOrderPaymentComments($msg);
+        die(json_encode(['status' => 0, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentFailed'), 'msg' => $msg]));
     }
 
     /**
@@ -152,8 +106,8 @@ class YocoPayController extends PaymentController
 
     private function getPaymentForm(): object
     {
-
         $frm = new Form('frmPaymentForm');
+        $frm->addHtml('', 'card_frame', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
         return $frm;
     }

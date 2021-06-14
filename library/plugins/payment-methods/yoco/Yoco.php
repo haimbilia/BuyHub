@@ -10,7 +10,7 @@ class Yoco extends PaymentMethodBase
 
     private $publicKey;
     private $secretKey;
-    private $resp;
+    private $response;
 
     /**
      * __construct
@@ -88,14 +88,11 @@ class Yoco extends PaymentMethodBase
         $result = curl_exec($ch);
         curl_close($ch);
         if ($result === false) {
-            $this->error = curl_error($ch);          
-            return false;         
+            $this->error = curl_error($ch);
+            return false;
         }
-        $result = json_decode($result);
-        
-        $this->response = ['status' => true,'id'=>$result->ch_awLYujNDMwzorIBO1iQkrikLq];
-
-        die();
+        $this->response = json_decode($result, true);
+        return true;
     }
 
     public function getPublicKey(): string
@@ -107,7 +104,7 @@ class Yoco extends PaymentMethodBase
     {
         return (string) $this->secretKey;
     }
-    
+
     public function getResponse()
     {
         return $this->response;
