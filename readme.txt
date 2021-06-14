@@ -5,6 +5,7 @@ Multivendor - Released Version : RV-9.3.0
 
 New Feature : 
     => 82248 : DPO Payment Gateway Integration
+    => 86472 : YoCo payment gateway
 
 Updates : 
     => 83842 : Out of stock fixes
