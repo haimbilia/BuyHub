@@ -94,7 +94,6 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
-            echo 'klk';
             $srch->addCondition('badge_name', 'LIKE', '%' . $keyword . '%');
         }
 
