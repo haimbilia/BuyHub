@@ -21,8 +21,7 @@ $pagesTabsData = ([
     'siteLangId' => $siteLangId,
     'controllerName' => $controllerName,
     'action' => $action,
-    'canEdit' => $canEdit,
-    'adminCatalogs' => $adminCatalogs
+    'canEdit' => $canEdit
 ] + $otherTabsData);
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
