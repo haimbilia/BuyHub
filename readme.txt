@@ -134,6 +134,7 @@ Fixes:
     => 054718 - Categories added are not listing in admin.
     => 054728 -	Aftership order status should be automatically marked delivered.
     => 054698 - on clicking of delete button in shipping profile there needs to be confirmation popup
+    => 055010 - SMTP handling - In case of Godaddy email hosting.
 
 Enhancements :
    => Make provision to made seller
