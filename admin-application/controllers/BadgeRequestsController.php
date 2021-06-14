@@ -150,7 +150,7 @@ class BadgeRequestsController extends AdminBaseController
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
 
-        $approvalRequiredBadges = Badge::getAllBadgesAndRibbons($this->adminLangId, Badge::TYPE_BADGE, applicationConstants::YES);
+        $approvalRequiredBadges = Badge::getApprovalRequestBadges($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->adminLangId), 'breq_badge_id', $approvalRequiredBadges);
         $fld->requirements()->setRequired(true);
         $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->adminLangId), 'breq_message');

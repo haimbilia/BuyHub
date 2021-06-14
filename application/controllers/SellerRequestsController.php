@@ -759,11 +759,12 @@ class SellerRequestsController extends SellerBaseController
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
 
-        $approvalRequiredBadges = Badge::getAllBadgesAndRibbons($this->siteLangId, Badge::TYPE_BADGE, applicationConstants::YES);
+        $approvalRequiredBadges = Badge::getApprovalRequestBadges($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_badge_id', $approvalRequiredBadges);
         $fld->requirements()->setRequired(true);
         $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
         $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
+        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->siteLangId));
         return $frm;
     }
@@ -807,10 +808,10 @@ class SellerRequestsController extends SellerBaseController
 
     private function setupBadgeRequestImage(int $badgeReqId)
     {
-        if (!isset($_FILES) || empty($_FILES)) {
+        if (!array_key_exists('breq_file', $_FILES) || empty($_FILES['breq_file']['name'])) {
             return true;
         }
-
+        
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->saveImage(
             $_FILES['breq_file']['tmp_name'],
