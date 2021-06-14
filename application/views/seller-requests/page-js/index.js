@@ -330,6 +330,22 @@
         });
     }
 
+    getRecordTypeURL = function () {
+        var searchSelector = $(formClass + "select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
+        $("#" + searchSelector).html("");
+        var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+        if (RECORD_TYPE_PRODUCT == recordType) {
+            return fcom.makeUrl('Products', 'autoComplete');
+        } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
+            return fcom.makeUrl('SellerProducts', 'autoCompleteProducts');
+        } else if (RECORD_TYPE_SHOP == recordType) {
+            return fcom.makeUrl('Shops', 'autoComplete');
+        } else {
+            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            return false;
+        }
+    }
+
     bindRecordsSelect2 = function () {
         var selector = $(formClass + "select.recordIds--js");
         selector.select2({
