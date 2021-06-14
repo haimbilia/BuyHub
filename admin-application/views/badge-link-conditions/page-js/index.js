@@ -10,11 +10,11 @@ $(document).on('change', formClass + 'select[name="blinkcond_condition_type"]', 
         return;
     }
 
-    var selector = $(formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
+    var selector = $(formClass + 'input[name="blinkcond_from_value"], ' + formClass + 'input[name="blinkcond_to_value"]');
 
     var ratePercElements = [COND_TYPE_RETURN_ACCEPTANCE, COND_TYPE_ORDER_CANCELLED];
-    var toSelector = $(formClass + 'input[name="blinkcond_condition_to"]');
-    var fromSelector = $(formClass + 'input[name="blinkcond_condition_from"]');
+    var toSelector = $(formClass + 'input[name="blinkcond_to_value"]');
+    var fromSelector = $(formClass + 'input[name="blinkcond_from_value"]');
     $(fromSelector).closest('.field-set').show();
     $(toSelector).closest('.field-set').show();
 
@@ -66,7 +66,7 @@ $(document).on('change', formClass + '.recCond--js', function () {
     var recordNameSelector = $(formClass + 'select.recordIds--js');
     var parent = recordNameSelector.closest('.field-set').parent();
 
-    var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
+    var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_from_value"], ' + formClass + 'input[name="blinkcond_to_value"]');
     if (REC_COND_AUTO == recordCondition) {
         parent.hide();
         recordNameSelector.val("").trigger('change');
@@ -132,7 +132,7 @@ $(document).on('change', formClass + '.recCond--js', function () {
                 $(formClass + ".conditionType--js").hide();
                 $(formClass + 'select[name="blinkcond_record_type"]').trigger('change');
 
-                var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
+                var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_from_value"], ' + formClass + 'input[name="blinkcond_to_value"]');
                 conditionSelectors.attr('data-fatreq', JSON.stringify({ required: false }));
             }
             

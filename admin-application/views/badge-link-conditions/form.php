@@ -10,13 +10,13 @@ if (null != $fld) {
 	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
 
-$fld = $frm->getField('blinkcond_condition_from');
+$fld = $frm->getField('blinkcond_from_value');
 if (null != $fld) {
 	$fld->developerTags['colClassPrefix'] = 'col-md-';
 	$fld->developerTags['col'] = 3;
 }
 
-$fld = $frm->getField('blinkcond_condition_to');
+$fld = $frm->getField('blinkcond_to_value');
 if (null != $fld) {
 	$fld->developerTags['colClassPrefix'] = 'col-md-';
 	$fld->developerTags['col'] = 3;
@@ -220,13 +220,13 @@ if (null != $fld) {
 								<div class="caption-wraper">
 									<label class="field_label">
 										<?php
-										$fld = $frm->getField('blinkcond_condition_from');
+										$fld = $frm->getField('blinkcond_from_value');
 										echo $fld->getCaption();
 										?>
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('blinkcond_condition_from'); ?>
+										<?php echo $frm->getFieldHtml('blinkcond_from_value'); ?>
 									</div>
 								</div>
 							</div>
@@ -236,13 +236,13 @@ if (null != $fld) {
 								<div class="caption-wraper">
 									<label class="field_label">
 										<?php
-										$fld = $frm->getField('blinkcond_condition_to');
+										$fld = $frm->getField('blinkcond_to_value');
 										echo $fld->getCaption();
 										?>
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('blinkcond_condition_to'); ?>
+										<?php echo $frm->getFieldHtml('blinkcond_to_value'); ?>
 									</div>
 								</div>
 							</div>

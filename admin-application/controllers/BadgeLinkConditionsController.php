@@ -277,19 +277,19 @@ class BadgeLinkConditionsController extends AdminBaseController
                     case BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP:
                     case BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE:
                         $type = (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS == $conditionType) ? FatUtility::VAR_INT : FatUtility::VAR_FLOAT;
-                        $fromCond = FatApp::getPostedData('blinkcond_condition_from', $type, 0);
-                        $toCond = FatApp::getPostedData('blinkcond_condition_to', $type, 0);
+                        $fromCond = FatApp::getPostedData('blinkcond_from_value', $type, 0);
+                        $toCond = FatApp::getPostedData('blinkcond_to_value', $type, 0);
                         if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond) {
                             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
                         }
                         break;
                     case BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE:
                     case BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED:
-                        $rate = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
+                        $rate = FatApp::getPostedData('blinkcond_from_value', FatUtility::VAR_FLOAT, 0);
                         if (0 > $rate || 100 < $rate) {
                             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RATE_VALUE', $this->adminLangId));
                         }
-                        $post['blinkcond_condition_from'] = $rate;
+                        $post['blinkcond_from_value'] = $rate;
                         break;
 
                     default:
@@ -299,8 +299,8 @@ class BadgeLinkConditionsController extends AdminBaseController
             } else {
                 unset(
                     $post['blinkcond_condition_type'],
-                    $post['blinkcond_condition_from'],
-                    $post['blinkcond_condition_to'],
+                    $post['blinkcond_from_value'],
+                    $post['blinkcond_to_value'],
                 );
             }
         }
@@ -419,10 +419,10 @@ class BadgeLinkConditionsController extends AdminBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'blinkcond_condition_type', $conditionTypesArr);
         $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_FROM', $this->adminLangId), 'blinkcond_condition_from');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_FROM', $this->adminLangId), 'blinkcond_from_value');
         $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));
 
-        $frm->addTextBox(Labels::getLabel('LBL_TO', $this->adminLangId), 'blinkcond_condition_to');
+        $frm->addTextBox(Labels::getLabel('LBL_TO', $this->adminLangId), 'blinkcond_to_value');
 
         return $frm;
     }
