@@ -20,8 +20,8 @@ var cart = {
             } else {
                 $('span.cartQuantity').html(ans.total);
                 $('html, body').animate({ scrollTop: 0 }, 'slow');
-				/*$('html').toggleClass("cart-is-active");
-				$('.cart').toggleClass("cart-is-active");*/
+                /*$('html').toggleClass("cart-is-active");
+                $('.cart').toggleClass("cart-is-active");*/
                 $('#cartSummary').load(fcom.makeUrl('cart', 'getCartSummary'));
             }
 
@@ -58,8 +58,8 @@ var cart = {
         }
     },
 
-    update: function (key, loadDiv, fulfilmentType = 0) {    
-        if(true === isAjaxRunning){
+    update: function (key, loadDiv, fulfilmentType = 0) {
+        if (true === isAjaxRunning) {
             return false;
         }
         isAjaxRunning = true;
@@ -80,7 +80,7 @@ var cart = {
             if (0 < fulfilmentType) {
                 listCartProducts(fulfilmentType);
             }
-            // $.mbsmessage.close();
+            /* $.mbsmessage.close(); */
         });
     },
 
