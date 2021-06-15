@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     /* for navigation drop down */
     var isOnDiv = false;
-    $('.navchild').mouseenter(function() { isOnDiv = true; });
-    $('.navchild').mouseleave(function() { isOnDiv = false; });
+    $('.navchild').mouseenter(function () { isOnDiv = true; });
+    $('.navchild').mouseleave(function () { isOnDiv = false; });
 
-    $('.navchild').hover(function() {
+    $('.navchild').hover(function () {
         var el = $("body");
         if (isOnDiv === true) {
             $('.navchild').removeClass('active');
@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 
     /* for mobile navigations */
-    $('.link__mobilenav').click(function() {
+    $('.link__mobilenav').click(function () {
 
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
@@ -38,11 +38,11 @@ $(document).ready(function() {
 
 
     /* for mobile toggle navigation */
-    $('.navs_toggle').click(function() {
+    $('.navs_toggle').click(function () {
 
         /* if($('html').hasClass('cart-is-active')){
-        	$('.cart').removeClass('cart-is-active');
-        	$('html').removeClass("cart-is-active");
+            $('.cart').removeClass('cart-is-active');
+            $('html').removeClass("cart-is-active");
         } */
         if ($('html').hasClass('toggled-user')) {
             $('.dropdown__trigger-js').parent('.dropdown').removeClass("is-active");
@@ -56,27 +56,21 @@ $(document).ready(function() {
         return false;
     });
 
-    $('body').click(function() {
+    $('body').click(function () {
         if ($('body').hasClass('toggled_left')) {
             $('.navs_toggle').removeClass("active");
             $('body').removeClass('toggled_left');
         }
     });
 
-    $('.mobile__overlay').click(function() {
+    $('.mobile__overlay').click(function () {
         if ($('body').hasClass('toggled_left')) {
             $('.navs_toggle').removeClass("active");
             $('body').removeClass('toggled_left');
         }
     });
 
-
-    $('.navigation-wrapper,.section_primary').click(function(e) {
+    $('.navigation-wrapper,.section_primary').click(function (e) {
         e.stopPropagation();
-        //return false;
     });
-
-
-
-
 });
