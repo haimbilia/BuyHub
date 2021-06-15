@@ -149,7 +149,7 @@ $(document).ready(function () {
                 if (0 < $('.dateTime--js').length) {
                     $('.dateTime--js').datetimepicker({
                         minDate: new Date(),
-                        format:'y-m-d H:i'
+                        format:'Y-m-d H:i'
                     });
                 } 
 

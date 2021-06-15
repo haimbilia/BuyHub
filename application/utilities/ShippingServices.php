@@ -437,7 +437,7 @@ trait ShippingServices
         unset($post['btn_submit']);
 
         $data = $this->getOrderProductDetail($post['op_id']);
-        $data['op_id'] = $opId;
+        $data += $post;
         if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->createPickup($data)) {
             $msg = $this->shippingService->getError();
             if (empty($msg)) {
@@ -447,6 +447,6 @@ trait ShippingServices
         }
 
         $resp = $this->shippingService->getResponse();
-        CommonHelper::printArray($post, true);
+        echo 'lkl';
     }
 }

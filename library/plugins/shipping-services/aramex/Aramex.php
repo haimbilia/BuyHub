@@ -107,6 +107,7 @@ class Aramex extends ShippingServicesBase
 
         switch ($service) {
             case self::REQUEST_SHIPPING:
+            case self::REQUEST_PICKUP:
                 $wsdl .= '/shipping.wsdl';
                 break;
 
@@ -607,7 +608,7 @@ class Aramex extends ShippingServicesBase
                 'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
                 'attributes' => [
                     'readonly' => 'readonly',
-                    'class' => 'dateTime--js'
+                    'class' => 'date--js'
                 ]
             ],
             'ReadyTime' => [
@@ -616,7 +617,7 @@ class Aramex extends ShippingServicesBase
                 'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
                 'attributes' => [
                     'readonly' => 'readonly',
-                    'class' => 'dateTime--js'
+                    'class' => 'time--js'
                 ]
             ],
             'LastPickupTime' => [
@@ -625,7 +626,7 @@ class Aramex extends ShippingServicesBase
                 'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
                 'attributes' => [
                     'readonly' => 'readonly',
-                    'class' => 'dateTime--js'
+                    'class' => 'time--js'
                 ]
             ],
             'ClosingTime' => [
@@ -634,7 +635,7 @@ class Aramex extends ShippingServicesBase
                 'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
                 'attributes' => [
                     'readonly' => 'readonly',
-                    'class' => 'dateTime--js'
+                    'class' => 'time--js'
                 ]
             ],
         ];
@@ -642,7 +643,11 @@ class Aramex extends ShippingServicesBase
 
     public function createPickup(array $orderData)
     {
-        $this->setServiceRequest(self::REQUEST_PICKUP);
+        if ($orderData['ReadyTime'] > $orderData['LastPickupTime'] || $orderData['ReadyTime'] > $orderData['ClosingTime'] || $orderData['ClosingTime'] < $orderData['LastPickupTime'] || time() > strtotime($orderData['PickupDate'])) {
+            $this->error = Labels::getLabel('LBL_INVALID_TIME', $this->langId);
+            return false;
+        }
+
         $systemOrderDetail = $this->getSystemOrder($orderData['op_id']);
         $fromAddress = $this->getShopAddress($systemOrderDetail['opshipping_by_seller_user_id']);
         if (!empty($fromAddress)) {
@@ -675,72 +680,63 @@ class Aramex extends ShippingServicesBase
             );
         }
 
-        $comments =  $orderData['op_order_id'] . ' - ' . $orderData['op_invoice_number'];
+        $this->setDimensions($systemOrderDetail['op_product_length'], $systemOrderDetail['op_product_width'], $systemOrderDetail['op_product_height'], $systemOrderDetail['op_product_dimension_unit']);
 
-        $params = array(
-            'ClientInfo' => $this->getClientInfo(),
-            'Transaction' => array(
-                'Reference1' => $orderData['op_invoice_number']
-            ),
+        $this->setWeight($systemOrderDetail['op_product_weight']);
+
+        $comments =  $orderData['op_order_id'] . ' - ' . $orderData['op_invoice_number'];
+        $pickupDate = date('Y-m-d\TH:i:s', strtotime($orderData['PickupDate'] . ' ' . $orderData['ReadyTime']));
+        $lastPickupTime = date('Y-m-d\TH:i:s', strtotime($orderData['PickupDate'] . ' ' . $orderData['LastPickupTime']));
+        $closingTime = date('Y-m-d\TH:i:s', strtotime($orderData['PickupDate'] . ' ' . $orderData['ClosingTime']));
+
+        $requestParam = array(
             'Pickup' => array(
-                'PickupContact' => $shipperContact,
                 'PickupAddress' => $this->fromAddress,
-                'PickupDate' => $readyTime,
-                'ReadyTime' => $readyTime,
-                'LastPickupTime' => $closingTime,
+                'PickupContact' => $shipperContact,
+                'PickupLocation' => 'Reception',
+                'PickupDate' => $pickupDate,
+                'ReadyTime' => $pickupDate,
+                'LastPickupTime' => $lastPickupTime,
                 'ClosingTime' => $closingTime,
+                'ShippingDateTime' => $pickupDate,
                 'Comments' => $comments,
                 'Reference1' => $orderData['op_invoice_number'],
-                'Shipments' => array(
-                    'Shipment' => array(
-                        'Shipper' => array(
-                            'AccountNumber' => $this->settings['AccountNumber'],
-                            'PartyAddress' => $this->fromAddress,
-                            'Contact' => $shipperContact,
-                        ),
-                        'Consignee' => array(
-                            'Reference1' => $orderData['op_invoice_number'],
-                            'PartyAddress' => $this->toAddress,
-                            'Contact' => $consigneeContact,
-                        ),
-                        'Reference1' => $orderData['op_invoice_number'],
-                        'TransportType' => 0,
-                        'ShippingDateTime' => time(),
-                        'DueDate' => time(),
-                        'Comments' => $comments,
-
-                        'Details' => array(
-                            'Dimensions' => $this->dimensions,
-                            'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
-                            'ProductGroup' => 'EXP',
-                            'ProductType' => 'EPX',
-                            'PaymentType' => 'P',
-                            'NumberOfPieces' => $systemOrderDetail['op_qty'],
-                            'Items' => [
-                                [
-                                    'PackageType' => 'Box',
-                                    'Quantity' => $systemOrderDetail['op_qty'],
-                                    'Weight' => array('Value' => $this->weight, 'Unit' => 'KG'),
-                                    'Comments' => $comments,
-                                    'Reference' => $orderData['op_invoice_number']
-                                ]
-                            ]
-                        ),
-                    ),
-                ),
+                // 'Vehicle' => '',
+                'Status' => 'Pending', //'Ready/Pending',
                 'PickupItems' => array(
                     'PickupItemDetail' => array(
                         'ProductGroup' => 'EXP',
                         'ProductType' => 'EPX',
                         'Payment' => 'P',
                         'NumberOfShipments' => $systemOrderDetail['op_qty'],
+                        // 'PackageType' => 'Box',
                         'NumberOfPieces' => $systemOrderDetail['op_qty'],
+                        'Comments' => $comments,
+                        'ShipmentWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
+                        'ShipmentVolume' => array('Value' => $this->weight, 'Unit' => 'KG'),
+                        'ShipmentDimensions' => $this->dimensions
                     )
-                ),
-                'Status' => 'Ready/Pending'
-            )
+                )
+            ),
+            'ClientInfo' => $this->getClientInfo(),
+            'Transaction' => array(
+                'Reference1' => $orderData['op_invoice_number']
+            ),
+            'LabelInfo' => array(
+                'ReportID' => 9201,
+                'ReportType' => 'URL',
+            ),
         );
-        CommonHelper::printArray($params, true);
+
+        $this->setServiceRequest(self::REQUEST_PICKUP);
+        $this->doRequest($requestParam);
+
+        /* Need to Discuss */
+        /* if (false === $this->doRequest($requestParam)) {
+            return false;
+        } */
+
+        // $trackingDetail = $this->getResponse();
     }
 
     /**
@@ -809,6 +805,7 @@ class Aramex extends ShippingServicesBase
             }
             return true;
         } catch (Exception $e) {
+            CommonHelper::printArray($e, true);
             $msg = $e->getMessage();
             if (!empty($e->param)) {
                 $error = Labels::getLabel('MSG_INVALID_PARAM:_{PARAM}', $this->langId);
