@@ -11,7 +11,7 @@ trait ShippingServices
     private $tpResponse = []; /* Third Party API Response */
         
     /**
-     * init
+     * init - This function is already called where this trait included.
      *
      * @param  bool $return
      * @return void
@@ -359,7 +359,6 @@ trait ShippingServices
             LibHelper::dieJsonError($opObj->getError());
         }
     }
-
     
     /**
      * fetchTrackingDetail
@@ -370,10 +369,84 @@ trait ShippingServices
      */
     public function fetchTrackingDetail(string $trackingId, string $opInvoiceId)
     {
-        $this->init();
-
         $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $opInvoiceId);
         $this->set('trackingData', $trackingData);
         $this->_template->render(false,false);
+    }
+
+    /**
+     * getPickupForm
+     *
+     * @return object
+     */
+    private function getPickupForm(): object
+    {
+        if (false === $this->shippingService->canCreatePickup()) {
+            $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->siteLangId);
+            LibHelper::dieJsonError($msg);
+        }
+
+        $frm = new Form('frm' . $this->keyName);
+        $frm->addHiddenField('', 'op_id');
+        $formElements = $this->shippingService->getPickupFormElementsArr();
+        foreach ($formElements as $colName => $colLabel) {
+            $htmlAfterField = $fieldFn = "";
+            $required = true;
+            $attributes = [];
+            if (is_array($colLabel)) {
+                $htmlAfterField = array_key_exists('htmlAfterField', $colLabel) ? $colLabel['htmlAfterField'] : '';
+                $fieldFn = array_key_exists('fieldType', $colLabel) ? $colLabel['fieldType'] : '' ;
+                $required = array_key_exists('required', $colLabel) ? $colLabel['required'] : true ;
+                $attributes = array_key_exists('attributes', $colLabel) ? $colLabel['attributes'] : [];
+                $colLabel = array_key_exists('label', $colLabel) ? $colLabel['label'] : '';
+            }
+            $fieldFn = !empty($fieldFn) ? $fieldFn : (('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox');
+
+            $fld = $frm->$fieldFn($colLabel, $colName, '', $attributes);
+            $fld->requirement->setRequired($required);
+            $fld->htmlAfterField = $htmlAfterField;
+        }
+
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+        return $frm;
+    }
+    
+    /**
+     * pickupForm
+     *
+     * @param  mixed $opId
+     * @return void
+     */
+    public function pickupForm(int $opId)
+    {
+        $frm = $this->getPickupForm();
+        $frm->fill(['op_id' => $opId]);
+        $this->set('frm', $frm);
+        $this->_template->render(false,false);
+    }
+
+    /**
+     * createPickup
+     *
+     * @return void
+     */
+    public function createPickup()
+    {
+        $frm = $this->getPickupForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        unset($post['btn_submit']);
+
+        $data = $this->getOrderProductDetail($post['op_id']);
+        $data['op_id'] = $opId;
+        if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->createPickup($data)) {
+            $msg = $this->shippingService->getError();
+            if (empty($msg)) {
+                $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->siteLangId);
+            }
+            LibHelper::dieJsonError($msg);
+        }
+
+        $resp = $this->shippingService->getResponse();
+        CommonHelper::printArray($post, true);
     }
 }

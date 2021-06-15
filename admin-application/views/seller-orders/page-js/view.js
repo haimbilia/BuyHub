@@ -57,6 +57,7 @@ function pageRedirect(op_id) {
             window.location.reload();
         });
     }
+    /* ShipStation */
 
     proceedToShipment = function (opId) {
         $.systemMessage(langLbl.processing, 'alert--process', false);
@@ -88,7 +89,6 @@ function pageRedirect(op_id) {
             }
         });
     }
-    /* ShipStation */
 
     courierFld = function () {
         $('.courierBlk--js').removeClass('d-none');
@@ -110,9 +110,7 @@ function pageRedirect(op_id) {
             });
         });
     }
-})();
 
-(function () {
     uploadAdditionalAttachment = function () {
         var data = new FormData();
         var opId = $("input[name='op_id']").val();
@@ -143,6 +141,19 @@ function pageRedirect(op_id) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Error Occurred.");
+            }
+        });
+    }
+
+    createPickup = function (opId) {
+        $.systemMessage(langLbl.processing, 'alert--process', false);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup', [opId]), '', function (t) {
+            $.systemMessage.close();
+            t = $.parseJSON(t);
+            $.systemMessage(t.msg, 'alert--success', false);
+            if (1 > t.status) {
+                $.systemMessage(t.msg, 'alert--danger', false);
+                return;
             }
         });
     }

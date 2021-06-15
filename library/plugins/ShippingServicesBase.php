@@ -129,4 +129,14 @@ class ShippingServicesBase extends PluginBase
     {
         return true;
     }
+
+    /**
+     * canCreatePickup
+     *
+     * @return bool
+     */
+    public function canCreatePickup(): bool
+    {
+        return false;
+    }
 }

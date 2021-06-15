@@ -126,14 +126,15 @@ class PluginSettingController extends AdminBaseController
         $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
         $envFld->requirement->setRequired(true);
         foreach ($labelsArr as $colName => $colLabel) {
-            $htmlAfterField = "";
+            $htmlAfterField = $fieldFn = "";
             if (is_array($colLabel)) {
                 $htmlAfterField = $colLabel['htmlAfterField'];
                 $colLabel = $colLabel['label'];
+                $fieldFn = isset($colLabel['fieldType']) ? $colLabel['label'] : '' ;
             }
 
             /* Sanbox Key Field */
-            $fieldFn = ('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox';
+            $fieldFn = !empty($fieldFn) ? $fieldFn : (('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox');
             $fld = $frm->$fieldFn($colLabel, $colName);
             $fld->htmlAfterField = $htmlAfterField;
 

@@ -96,14 +96,11 @@ $(document).ready(function () {
             });
         });
     }
-})();
 
-function pageRedirect(op_id) {
-    window.location.replace(fcom.makeUrl('Seller', 'viewOrder', [op_id]));
-}
+    pageRedirect = function (op_id) {
+        window.location.replace(fcom.makeUrl('Seller', 'viewOrder', [op_id]));    
+    }
 
-
-(function () {
     uploadAdditionalAttachment = function () {
         /* $inputs = $('#additional_attachments input[type=hidden]');
         $inputs.each(function() { data.append( this.name,$(this).val());}); */
@@ -135,6 +132,44 @@ function pageRedirect(op_id) {
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Error Occurred.");
             }
+        });
+    }
+
+    getPickupForm = function (opId) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
+                $.facebox(res, 'medium-fb-width');
+                if (0 < $('.date--js').length) {
+                    $('.date--js').datepicker({
+                        minDate: new Date(),
+                        dateFormat:'yy-mm-dd'
+                    });
+                } 
+                
+                if (0 < $('.dateTime--js').length) {
+                    $('.dateTime--js').datetimepicker({
+                        minDate: new Date(),
+                        format:'y-m-d H:i'
+                    });
+                } 
+
+                if (0 < $('.time--js').length) {
+                    $('.time--js').datetimepicker({
+                        datepicker: false,
+                        format:'H:i',
+                        step: 30
+                    });
+                }
+            });
+        });
+    }
+    createPickup = function (frm) {
+        if (!$(frm).validate()) {
+            return;
+        }
+        var data = fcom.frmData(frm);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (res) {
+            console.log(res);
         });
     }
 })();

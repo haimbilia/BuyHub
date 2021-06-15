@@ -11,6 +11,7 @@ class Aramex extends ShippingServicesBase
     private const REQUEST_SHIPPING = 2;
     private const REQUEST_VALIDATE_ADDRESS = 3;
     private const REQUEST_TRACKING = 4;
+    private const REQUEST_PICKUP = 5;
 
     private $resp;
     private $ratesReference = '';
@@ -176,7 +177,7 @@ class Aramex extends ShippingServicesBase
         ];
 
         /* Not Required As API Not Working Correctly. */
-            /* $this->setServiceRequest(self::REQUEST_VALIDATE_ADDRESS);
+        /* $this->setServiceRequest(self::REQUEST_VALIDATE_ADDRESS);
 
             $requestParam = [
                 'ClientInfo' => $this->getClientInfo(),
@@ -442,7 +443,7 @@ class Aramex extends ShippingServicesBase
                 'Shipment' => array(
                     'Shipper' => array(
                         'AccountNumber' => $this->settings['AccountNumber'],
-                        'PartyAddress'    => $this->fromAddress,
+                        'PartyAddress' => $this->fromAddress,
                         'Contact' => $shipperContact,
                     ),
                     'Consignee' => array(
@@ -549,26 +550,197 @@ class Aramex extends ShippingServicesBase
         }
 
         $trackingDetail = $this->getResponse();
-        $description = $dateTime = $location = $comments = "";
-        if (!empty($trackingDetail) && array_key_exists('TrackingResults', $trackingDetail)) {
-            $trackingResult = $trackingDetail['TrackingResults']['KeyValueOfstringArrayOfTrackingResultmFAkxlpY']['Value']['TrackingResult'];
-            $description = $trackingResult['UpdateDescription'];
-            $dateTime = $trackingResult['UpdateDateTime'];
-            $location = $trackingResult['UpdateLocation'];
-            $comments = $trackingResult['Comments'];
+        $data = [];
+
+        if (!empty($trackingDetail)) {
+            $data = [
+                'detail' => [],
+                'response' => $trackingDetail,
+            ];
+
+            if (array_key_exists('TrackingResults', $trackingDetail)) {
+                $trackingResult = $trackingDetail['TrackingResults']['KeyValueOfstringArrayOfTrackingResultmFAkxlpY']['Value']['TrackingResult'];
+                if (is_array($trackingResult) && array_key_exists(0, $trackingResult)) {
+                    foreach ($trackingResult as $trkData) {
+                        $data['detail'][] = [
+                            'description' => $trkData['UpdateDescription'],
+                            'dateTime' => $trkData['UpdateDateTime'],
+                            'location' => $trkData['UpdateLocation'],
+                            'comments' => $trkData['Comments']
+                        ];
+                    }
+                } else {
+                    $data['detail'][] = [
+                        'description' => $trackingResult['UpdateDescription'],
+                        'dateTime' => $trackingResult['UpdateDateTime'],
+                        'location' => $trackingResult['UpdateLocation'],
+                        'comments' => $trackingResult['Comments']
+                    ];
+                }
+            }
         }
 
+        return $data;
+    }
+
+    /**
+     * canCreatePickup
+     *
+     * @return bool
+     */
+    public function canCreatePickup(): bool
+    {
+        return true;
+    }
+
+    /**
+     * getPickupFormElementsArr
+     *
+     * @return array
+     */
+    public function getPickupFormElementsArr(): array
+    {
         return [
-            'detail' => [
-                [
-                    'description' => $description,
-                    'dateTime' => $dateTime,
-                    'location' => $location,
-                    'comments' => $comments
+            'PickupDate' => [
+                'label' => Labels::getLabel('LBL_PICKUP_DATE', $this->langId),
+                'required' => true,
+                'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
+                'attributes' => [
+                    'readonly' => 'readonly',
+                    'class' => 'dateTime--js'
                 ]
             ],
-            'response' => $trackingDetail,
+            'ReadyTime' => [
+                'label' => Labels::getLabel('LBL_READY_TIME', $this->langId),
+                'required' => true,
+                'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
+                'attributes' => [
+                    'readonly' => 'readonly',
+                    'class' => 'dateTime--js'
+                ]
+            ],
+            'LastPickupTime' => [
+                'label' => Labels::getLabel('LBL_LAST_PICKUP_TIME', $this->langId),
+                'required' => true,
+                'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
+                'attributes' => [
+                    'readonly' => 'readonly',
+                    'class' => 'dateTime--js'
+                ]
+            ],
+            'ClosingTime' => [
+                'label' => Labels::getLabel('LBL_CLOSING_TIME', $this->langId),
+                'required' => true,
+                'fieldType' => Plugin::FLD_TYPE_TEXTBOX,
+                'attributes' => [
+                    'readonly' => 'readonly',
+                    'class' => 'dateTime--js'
+                ]
+            ],
         ];
+    }
+
+    public function createPickup(array $orderData)
+    {
+        $this->setServiceRequest(self::REQUEST_PICKUP);
+        $systemOrderDetail = $this->getSystemOrder($orderData['op_id']);
+        $fromAddress = $this->getShopAddress($systemOrderDetail['opshipping_by_seller_user_id']);
+        if (!empty($fromAddress)) {
+            if (false === $this->setFromAddress('', $fromAddress['line1'], $fromAddress['line2'], $fromAddress['city'], $fromAddress['state'], $fromAddress['postalCode'], $fromAddress['countryCode'])) {
+                return false;
+            }
+        }
+
+        $shipperContact = [];
+        $sellerInfo = $this->getSellerInfo($systemOrderDetail['op_selprod_user_id']);
+        if (!empty($sellerInfo)) {
+            $shipperContact = array(
+                'PersonName' => $sellerInfo['user_name'],
+                'CompanyName' => $sellerInfo['shop_name'],
+                'PhoneNumber1' => ValidateElement::formatDialCode($sellerInfo['user_phone_dcode']) . $sellerInfo['user_phone'],
+                'CellPhone' => ValidateElement::formatDialCode($sellerInfo['user_phone_dcode']) . $sellerInfo['user_phone'],
+                'EmailAddress' => $sellerInfo['credential_email']
+            );
+        }
+
+        $consigneeContact = [];
+        $buyerInfo = $this->getBuyerInfo($systemOrderDetail['order_user_id']);
+        if (!empty($buyerInfo)) {
+            $consigneeContact = array(
+                'PersonName' => $buyerInfo['user_name'],
+                'CompanyName' => $buyerInfo['user_name'],
+                'PhoneNumber1' => ValidateElement::formatDialCode($buyerInfo['user_phone_dcode']) . $buyerInfo['user_phone'],
+                'CellPhone' => ValidateElement::formatDialCode($buyerInfo['user_phone_dcode']) . $buyerInfo['user_phone'],
+                'EmailAddress' => $buyerInfo['credential_email']
+            );
+        }
+
+        $comments =  $orderData['op_order_id'] . ' - ' . $orderData['op_invoice_number'];
+
+        $params = array(
+            'ClientInfo' => $this->getClientInfo(),
+            'Transaction' => array(
+                'Reference1' => $orderData['op_invoice_number']
+            ),
+            'Pickup' => array(
+                'PickupContact' => $shipperContact,
+                'PickupAddress' => $this->fromAddress,
+                'PickupDate' => $readyTime,
+                'ReadyTime' => $readyTime,
+                'LastPickupTime' => $closingTime,
+                'ClosingTime' => $closingTime,
+                'Comments' => $comments,
+                'Reference1' => $orderData['op_invoice_number'],
+                'Shipments' => array(
+                    'Shipment' => array(
+                        'Shipper' => array(
+                            'AccountNumber' => $this->settings['AccountNumber'],
+                            'PartyAddress' => $this->fromAddress,
+                            'Contact' => $shipperContact,
+                        ),
+                        'Consignee' => array(
+                            'Reference1' => $orderData['op_invoice_number'],
+                            'PartyAddress' => $this->toAddress,
+                            'Contact' => $consigneeContact,
+                        ),
+                        'Reference1' => $orderData['op_invoice_number'],
+                        'TransportType' => 0,
+                        'ShippingDateTime' => time(),
+                        'DueDate' => time(),
+                        'Comments' => $comments,
+
+                        'Details' => array(
+                            'Dimensions' => $this->dimensions,
+                            'ActualWeight' => array('Value' => $this->weight, 'Unit' => 'KG'),
+                            'ProductGroup' => 'EXP',
+                            'ProductType' => 'EPX',
+                            'PaymentType' => 'P',
+                            'NumberOfPieces' => $systemOrderDetail['op_qty'],
+                            'Items' => [
+                                [
+                                    'PackageType' => 'Box',
+                                    'Quantity' => $systemOrderDetail['op_qty'],
+                                    'Weight' => array('Value' => $this->weight, 'Unit' => 'KG'),
+                                    'Comments' => $comments,
+                                    'Reference' => $orderData['op_invoice_number']
+                                ]
+                            ]
+                        ),
+                    ),
+                ),
+                'PickupItems' => array(
+                    'PickupItemDetail' => array(
+                        'ProductGroup' => 'EXP',
+                        'ProductType' => 'EPX',
+                        'Payment' => 'P',
+                        'NumberOfShipments' => $systemOrderDetail['op_qty'],
+                        'NumberOfPieces' => $systemOrderDetail['op_qty'],
+                    )
+                ),
+                'Status' => 'Ready/Pending'
+            )
+        );
+        CommonHelper::printArray($params, true);
     }
 
     /**
@@ -605,6 +777,9 @@ class Aramex extends ShippingServicesBase
                     break;
                 case self::REQUEST_TRACKING:
                     $resp = $soapClient->TrackShipments($requestParam);
+                    break;
+                case self::REQUEST_PICKUP:
+                    $resp = $soapClient->CreatePickup($requestParam);
                     break;
 
                 default:

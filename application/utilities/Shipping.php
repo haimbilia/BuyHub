@@ -251,7 +251,7 @@ class Shipping
     private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr): bool
     {
         $pluginId = $this->getPluginId();
-        if (1 > $pluginId) {
+        if (1 > $pluginId || 'Aramex' == $this->shippingApiObj::KEY_NAME) {
             return false;
         }
 

@@ -615,6 +615,7 @@ class SellerController extends SellerBaseController
         $urlParts = array_filter(FatApp::getParameters());
         $this->set('urlParts', $urlParts);
 
+        $this->_template->addJs(array('js/jquery.datetimepicker.js'));
         $this->_template->render(true, true);
     }
 
