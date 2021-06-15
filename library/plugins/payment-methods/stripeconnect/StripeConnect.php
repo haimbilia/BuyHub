@@ -697,7 +697,7 @@ class StripeConnect extends PaymentMethodBase
             'external_account.routing_number' => [
                 'title' => Labels::getLabel("MSG_BANK_ROUTING_NUMBER", $this->langId),
                 'description' => Labels::getLabel('API_THE_ROUTING_NUMBER', $this->langId),
-                'required' => true
+                'required' => false
             ],
             'tos_acceptance' => [
                 'title' => Labels::getLabel("LBL_I_AGREE_TO_THE_TERMS_OF_SERVICE", $this->langId),

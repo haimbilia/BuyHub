@@ -7,52 +7,52 @@
  * Under MIT License
  */
 
-(function(global, factory) {
+(function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :
-        (global = global || self, global.SimpleBar = factory());
-}(this, function() {
+            (global = global || self, global.SimpleBar = factory());
+}(this, function () {
     'use strict';
 
-    var _isObject = function(it) {
+    var _isObject = function (it) {
         return typeof it === 'object' ? it !== null : typeof it === 'function';
     };
 
-    var _anObject = function(it) {
+    var _anObject = function (it) {
         if (!_isObject(it)) throw TypeError(it + ' is not an object!');
         return it;
     };
 
-    // 7.2.1 RequireObjectCoercible(argument)
-    var _defined = function(it) {
+    /* 7.2.1 RequireObjectCoercible(argument) */
+    var _defined = function (it) {
         if (it == undefined) throw TypeError("Can't call method on  " + it);
         return it;
     };
 
-    // 7.1.13 ToObject(argument)
+    /* 7.1.13 ToObject(argument) */
 
-    var _toObject = function(it) {
+    var _toObject = function (it) {
         return Object(_defined(it));
     };
 
-    // 7.1.4 ToInteger
+    /* 7.1.4 ToInteger */
     var ceil = Math.ceil;
     var floor = Math.floor;
-    var _toInteger = function(it) {
+    var _toInteger = function (it) {
         return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
     };
 
-    // 7.1.15 ToLength
+    /* 7.1.15 ToLength */
 
     var min = Math.min;
-    var _toLength = function(it) {
-        return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+    var _toLength = function (it) {
+        return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; /* pow(2, 53) - 1 == 9007199254740991 */
     };
 
-    // true  -> String#at
-    // false -> String#codePointAt
-    var _stringAt = function(TO_STRING) {
-        return function(that, pos) {
+    /* true  -> String#at
+    false -> String#codePointAt */
+    var _stringAt = function (TO_STRING) {
+        return function (that, pos) {
             var s = String(_defined(that));
             var i = _toInteger(pos);
             var l = s.length;
@@ -67,15 +67,15 @@
 
     var at = _stringAt(true);
 
-    // `AdvanceStringIndex` abstract operation
-    // https://tc39.github.io/ecma262/#sec-advancestringindex
-    var _advanceStringIndex = function(S, index, unicode) {
+    /* `AdvanceStringIndex` abstract operation
+    https://tc39.github.io/ecma262/#sec-advancestringindex */
+    var _advanceStringIndex = function (S, index, unicode) {
         return index + (unicode ? at(S, index).length : 1);
     };
 
     var toString = {}.toString;
 
-    var _cof = function(it) {
+    var _cof = function (it) {
         return toString.call(it).slice(8, -1);
     };
 
@@ -85,29 +85,29 @@
         return module = { exports: {} }, fn(module, module.exports), module.exports;
     }
 
-    var _core = createCommonjsModule(function(module) {
+    var _core = createCommonjsModule(function (module) {
         var core = module.exports = { version: '2.6.2' };
-        if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+        if (typeof __e == 'number') __e = core; /* eslint-disable-line no-undef */
     });
     var _core_1 = _core.version;
 
-    var _global = createCommonjsModule(function(module) {
-        // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+    var _global = createCommonjsModule(function (module) {
+        /* https://github.com/zloirock/core-js/issues/86#issuecomment-115759028 */
         var global = module.exports = typeof window != 'undefined' && window.Math == Math ?
             window : typeof self != 'undefined' && self.Math == Math ? self
-            // eslint-disable-next-line no-new-func
-            :
-            Function('return this')();
-        if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+                /* eslint-disable-next-line no-new-func */
+                :
+                Function('return this')();
+        if (typeof __g == 'number') __g = global; /*  eslint-disable-line no-undef */
     });
 
     var _library = false;
 
-    var _shared = createCommonjsModule(function(module) {
+    var _shared = createCommonjsModule(function (module) {
         var SHARED = '__core-js_shared__';
         var store = _global[SHARED] || (_global[SHARED] = {});
 
-        (module.exports = function(key, value) {
+        (module.exports = function (key, value) {
             return store[key] || (store[key] = value !== undefined ? value : {});
         })('versions', []).push({
             version: _core.version,
@@ -118,17 +118,17 @@
 
     var id = 0;
     var px = Math.random();
-    var _uid = function(key) {
+    var _uid = function (key) {
         return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
     };
 
-    var _wks = createCommonjsModule(function(module) {
+    var _wks = createCommonjsModule(function (module) {
         var store = _shared('wks');
 
         var Symbol = _global.Symbol;
         var USE_SYMBOL = typeof Symbol == 'function';
 
-        var $exports = module.exports = function(name) {
+        var $exports = module.exports = function (name) {
             return store[name] || (store[name] =
                 USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : _uid)('Symbol.' + name));
         };
@@ -136,38 +136,38 @@
         $exports.store = store;
     });
 
-    // getting tag from 19.1.3.6 Object.prototype.toString()
+    /* getting tag from 19.1.3.6 Object.prototype.toString() */
 
     var TAG = _wks('toStringTag');
-    // ES3 wrong here
-    var ARG = _cof(function() { return arguments; }()) == 'Arguments';
+    /* ES3 wrong here */
+    var ARG = _cof(function () { return arguments; }()) == 'Arguments';
 
-    // fallback for IE11 Script Access Denied error
-    var tryGet = function(it, key) {
+    /* fallback for IE11 Script Access Denied error */
+    var tryGet = function (it, key) {
         try {
             return it[key];
         } catch (e) { /* empty */ }
     };
 
-    var _classof = function(it) {
+    var _classof = function (it) {
         var O, T, B;
         return it === undefined ? 'Undefined' : it === null ? 'Null'
-            // @@toStringTag case
+            /* @@toStringTag case */
             :
-            typeof(T = tryGet(O = Object(it), TAG)) == 'string' ? T
-            // builtinTag case
-            :
-            ARG ? _cof(O)
-            // ES3 arguments fallback
-            :
-            (B = _cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+            typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+                /* builtinTag case */
+                :
+                ARG ? _cof(O)
+                    /* ES3 arguments fallback */
+                    :
+                    (B = _cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
     };
 
     var builtinExec = RegExp.prototype.exec;
 
-    // `RegExpExec` abstract operation
-    // https://tc39.github.io/ecma262/#sec-regexpexec
-    var _regexpExecAbstract = function(R, S) {
+    /* `RegExpExec` abstract operation
+    https://tc39.github.io/ecma262/#sec-regexpexec */
+    var _regexpExecAbstract = function (R, S) {
         var exec = R.exec;
         if (typeof exec === 'function') {
             var result = exec.call(R, S);
@@ -182,9 +182,9 @@
         return builtinExec.call(R, S);
     };
 
-    // 21.2.5.3 get RegExp.prototype.flags
+    /* 21.2.5.3 get RegExp.prototype.flags */
 
-    var _flags = function() {
+    var _flags = function () {
         var that = _anObject(this);
         var result = '';
         if (that.global) result += 'g';
@@ -196,16 +196,16 @@
     };
 
     var nativeExec = RegExp.prototype.exec;
-    // This always refers to the native implementation, because the
-    // String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
-    // which loads this file before patching the method.
+    /*   This always refers to the native implementation, because the
+      String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
+      which loads this file before patching the method. */
     var nativeReplace = String.prototype.replace;
 
     var patchedExec = nativeExec;
 
     var LAST_INDEX = 'lastIndex';
 
-    var UPDATES_LAST_INDEX_WRONG = (function() {
+    var UPDATES_LAST_INDEX_WRONG = (function () {
         var re1 = /a/,
             re2 = /b*/g;
         nativeExec.call(re1, 'a');
@@ -213,7 +213,7 @@
         return re1[LAST_INDEX] !== 0 || re2[LAST_INDEX] !== 0;
     })();
 
-    // nonparticipating capturing group, copied from es5-shim's String#split patch.
+    /* nonparticipating capturing group, copied from es5-shim's String#split patch. */
     var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
 
     var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED;
@@ -234,10 +234,10 @@
                 re[LAST_INDEX] = re.global ? match.index + match[0].length : lastIndex;
             }
             if (NPCG_INCLUDED && match && match.length > 1) {
-                // Fix browsers whose `exec` methods don't consistently return `undefined`
-                // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
-                // eslint-disable-next-line no-loop-func
-                nativeReplace.call(match[0], reCopy, function() {
+                /*  Fix browsers whose `exec` methods don't consistently return `undefined`
+                 for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
+                 eslint-disable-next-line no-loop-func */
+                nativeReplace.call(match[0], reCopy, function () {
                     for (i = 1; i < arguments.length - 2; i++) {
                         if (arguments[i] === undefined) match[i] = undefined;
                     }
@@ -250,7 +250,7 @@
 
     var _regexpExec = patchedExec;
 
-    var _fails = function(exec) {
+    var _fails = function (exec) {
         try {
             return !!exec();
         } catch (e) {
@@ -258,32 +258,32 @@
         }
     };
 
-    // Thank's IE8 for his funny defineProperty
-    var _descriptors = !_fails(function() {
-        return Object.defineProperty({}, 'a', { get: function() { return 7; } }).a != 7;
+    /* Thank's IE8 for his funny defineProperty */
+    var _descriptors = !_fails(function () {
+        return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
     });
 
     var document$1 = _global.document;
-    // typeof document.createElement is 'object' in old IE
+    /* typeof document.createElement is 'object' in old IE */
     var is = _isObject(document$1) && _isObject(document$1.createElement);
-    var _domCreate = function(it) {
+    var _domCreate = function (it) {
         return is ? document$1.createElement(it) : {};
     };
 
-    var _ie8DomDefine = !_descriptors && !_fails(function() {
-        return Object.defineProperty(_domCreate('div'), 'a', { get: function() { return 7; } }).a != 7;
+    var _ie8DomDefine = !_descriptors && !_fails(function () {
+        return Object.defineProperty(_domCreate('div'), 'a', { get: function () { return 7; } }).a != 7;
     });
 
-    // 7.1.1 ToPrimitive(input [, PreferredType])
+    /* 7.1.1 ToPrimitive(input [, PreferredType])
 
-    // instead of the ES6 spec version, we didn't implement @@toPrimitive case
-    // and the second argument - flag - preferred type is a string
-    var _toPrimitive = function(it, S) {
+    instead of the ES6 spec version, we didn't implement @@toPrimitive case
+    and the second argument - flag - preferred type is a string */
+    var _toPrimitive = function (it, S) {
         if (!_isObject(it)) return it;
         var fn, val;
-        if (S && typeof(fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-        if (typeof(fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
-        if (!S && typeof(fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
+        if (S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
+        if (typeof (fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
+        if (!S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
         throw TypeError("Can't convert object to primitive value");
     };
 
@@ -305,7 +305,7 @@
         f: f
     };
 
-    var _propertyDesc = function(bitmap, value) {
+    var _propertyDesc = function (bitmap, value) {
         return {
             enumerable: !(bitmap & 1),
             configurable: !(bitmap & 2),
@@ -314,29 +314,29 @@
         };
     };
 
-    var _hide = _descriptors ? function(object, key, value) {
+    var _hide = _descriptors ? function (object, key, value) {
         return _objectDp.f(object, key, _propertyDesc(1, value));
-    } : function(object, key, value) {
+    } : function (object, key, value) {
         object[key] = value;
         return object;
     };
 
     var hasOwnProperty = {}.hasOwnProperty;
-    var _has = function(it, key) {
+    var _has = function (it, key) {
         return hasOwnProperty.call(it, key);
     };
 
-    var _redefine = createCommonjsModule(function(module) {
+    var _redefine = createCommonjsModule(function (module) {
         var SRC = _uid('src');
         var TO_STRING = 'toString';
         var $toString = Function[TO_STRING];
         var TPL = ('' + $toString).split(TO_STRING);
 
-        _core.inspectSource = function(it) {
+        _core.inspectSource = function (it) {
             return $toString.call(it);
         };
 
-        (module.exports = function(O, key, val, safe) {
+        (module.exports = function (O, key, val, safe) {
             var isFunction = typeof val == 'function';
             if (isFunction) _has(val, 'name') || _hide(val, 'name', key);
             if (O[key] === val) return;
@@ -351,44 +351,44 @@
             } else {
                 _hide(O, key, val);
             }
-            // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+            /*  add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative */
         })(Function.prototype, TO_STRING, function toString() {
             return typeof this == 'function' && this[SRC] || $toString.call(this);
         });
     });
 
-    var _aFunction = function(it) {
+    var _aFunction = function (it) {
         if (typeof it != 'function') throw TypeError(it + ' is not a function!');
         return it;
     };
 
-    // optional / simple context binding
+    /* optional / simple context binding */
 
-    var _ctx = function(fn, that, length) {
+    var _ctx = function (fn, that, length) {
         _aFunction(fn);
         if (that === undefined) return fn;
         switch (length) {
             case 1:
-                return function(a) {
+                return function (a) {
                     return fn.call(that, a);
                 };
             case 2:
-                return function(a, b) {
+                return function (a, b) {
                     return fn.call(that, a, b);
                 };
             case 3:
-                return function(a, b, c) {
+                return function (a, b, c) {
                     return fn.call(that, a, b, c);
                 };
         }
-        return function( /* ...args */ ) {
+        return function ( /* ...args */) {
             return fn.apply(that, arguments);
         };
     };
 
     var PROTOTYPE = 'prototype';
 
-    var $export = function(type, name, source) {
+    var $export = function (type, name, source) {
         var IS_FORCED = type & $export.F;
         var IS_GLOBAL = type & $export.G;
         var IS_STATIC = type & $export.S;
@@ -400,29 +400,29 @@
         var key, own, out, exp;
         if (IS_GLOBAL) source = name;
         for (key in source) {
-            // contains in native
+            /* contains in native */
             own = !IS_FORCED && target && target[key] !== undefined;
-            // export native or passed
+            /* export native or passed */
             out = (own ? target : source)[key];
-            // bind timers to global for call from export context
+            /* bind timers to global for call from export context */
             exp = IS_BIND && own ? _ctx(out, _global) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
-            // extend global
+            /* extend global */
             if (target) _redefine(target, key, out, type & $export.U);
-            // export
+            /* export */
             if (exports[key] != out) _hide(exports, key, exp);
             if (IS_PROTO && expProto[key] != out) expProto[key] = out;
         }
     };
     _global.core = _core;
-    // type bitmap
-    $export.F = 1; // forced
-    $export.G = 2; // global
-    $export.S = 4; // static
-    $export.P = 8; // proto
-    $export.B = 16; // bind
-    $export.W = 32; // wrap
-    $export.U = 64; // safe
-    $export.R = 128; // real proto method for `library`
+    /* type bitmap */
+    $export.F = 1; /* forced */
+    $export.G = 2; /* global */
+    $export.S = 4; /* static */
+    $export.P = 8; /* proto */
+    $export.B = 16; /* bind */
+    $export.W = 32; /* wrap */
+    $export.U = 64; /* safe */
+    $export.R = 128; /* real proto method for `library` */
     var _export = $export;
 
     _export({
@@ -435,12 +435,12 @@
 
     var SPECIES = _wks('species');
 
-    var REPLACE_SUPPORTS_NAMED_GROUPS = !_fails(function() {
-        // #replace needs built-in support for named groups.
-        // #match works fine because it just return the exec results, even if it has
-        // a "grops" property.
+    var REPLACE_SUPPORTS_NAMED_GROUPS = !_fails(function () {
+        /* #replace needs built-in support for named groups.
+        #match works fine because it just return the exec results, even if it has
+        a "grops" property. */
         var re = /./;
-        re.exec = function() {
+        re.exec = function () {
             var result = [];
             result.groups = { a: '7' };
             return result;
@@ -448,35 +448,35 @@
         return ''.replace(re, '$<a>') !== '7';
     });
 
-    var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = (function() {
-        // Chrome 51 has a buggy "split" implementation when RegExp#exec !== nativeExec
+    var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = (function () {
+        /* Chrome 51 has a buggy "split" implementation when RegExp#exec !== nativeExec */
         var re = /(?:)/;
         var originalExec = re.exec;
-        re.exec = function() { return originalExec.apply(this, arguments); };
+        re.exec = function () { return originalExec.apply(this, arguments); };
         var result = 'ab'.split(re);
         return result.length === 2 && result[0] === 'a' && result[1] === 'b';
     })();
 
-    var _fixReWks = function(KEY, length, exec) {
+    var _fixReWks = function (KEY, length, exec) {
         var SYMBOL = _wks(KEY);
 
-        var DELEGATES_TO_SYMBOL = !_fails(function() {
-            // String methods call symbol-named RegEp methods
+        var DELEGATES_TO_SYMBOL = !_fails(function () {
+            /* String methods call symbol-named RegEp methods */
             var O = {};
-            O[SYMBOL] = function() { return 7; };
-            return '' [KEY](O) != 7;
+            O[SYMBOL] = function () { return 7; };
+            return ''[KEY](O) != 7;
         });
 
-        var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL ? !_fails(function() {
-            // Symbol-named RegExp methods call .exec
+        var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL ? !_fails(function () {
+            /* Symbol-named RegExp methods call .exec */
             var execCalled = false;
             var re = /a/;
-            re.exec = function() { execCalled = true; return null; };
+            re.exec = function () { execCalled = true; return null; };
             if (KEY === 'split') {
-                // RegExp[@@split] doesn't call the regex's exec method, but first creates
-                // a new one. We need to return the patched regex when creating the new one.
+                /* RegExp[@@split] doesn't call the regex's exec method, but first creates
+                a new one. We need to return the patched regex when creating the new one. */
                 re.constructor = {};
-                re.constructor[SPECIES] = function() { return re; };
+                re.constructor[SPECIES] = function () { return re; };
             }
             re[SYMBOL]('');
             return !execCalled;
@@ -487,17 +487,17 @@
             (KEY === 'replace' && !REPLACE_SUPPORTS_NAMED_GROUPS) ||
             (KEY === 'split' && !SPLIT_WORKS_WITH_OVERWRITTEN_EXEC)
         ) {
-            var nativeRegExpMethod = /./ [SYMBOL];
+            var nativeRegExpMethod = /./[SYMBOL];
             var fns = exec(
                 _defined,
                 SYMBOL,
-                '' [KEY],
+                ''[KEY],
                 function maybeCallNative(nativeMethod, regexp, str, arg2, forceStringMethod) {
                     if (regexp.exec === _regexpExec) {
                         if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
-                            // The native String method already delegates to @@method (this
-                            // polyfilled function), leasing to infinite recursion.
-                            // We avoid it by directly calling the native @@method method.
+                            /*  The native String method already delegates to @@method (this
+                             polyfilled function), leasing to infinite recursion.
+                             We avoid it by directly calling the native @@method method. */
                             return { done: true, value: nativeRegExpMethod.call(regexp, str, arg2) };
                         }
                         return { done: true, value: nativeMethod.call(str, regexp, arg2) };
@@ -510,15 +510,15 @@
 
             _redefine(String.prototype, KEY, strfn);
             _hide(RegExp.prototype, SYMBOL, length == 2
-                // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
-                // 21.2.5.11 RegExp.prototype[@@split](string, limit)
+                /* 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
+                21.2.5.11 RegExp.prototype[@@split](string, limit) */
                 ?
 
-                function(string, arg) { return rxfn.call(string, this, arg); }
-                // 21.2.5.6 RegExp.prototype[@@match](string)
-                // 21.2.5.9 RegExp.prototype[@@search](string)
+                function (string, arg) { return rxfn.call(string, this, arg); }
+                /* 21.2.5.6 RegExp.prototype[@@match](string)
+                21.2.5.9 RegExp.prototype[@@search](string) */
                 :
-                function(string) { return rxfn.call(string, this); }
+                function (string) { return rxfn.call(string, this); }
             );
         }
     };
@@ -529,15 +529,15 @@
     var SUBSTITUTION_SYMBOLS = /\$([$&`']|\d\d?|<[^>]*>)/g;
     var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&`']|\d\d?)/g;
 
-    var maybeToString = function(it) {
+    var maybeToString = function (it) {
         return it === undefined ? it : String(it);
     };
 
-    // @@replace logic
-    _fixReWks('replace', 2, function(defined, REPLACE, $replace, maybeCallNative) {
+    /* @@replace logic */
+    _fixReWks('replace', 2, function (defined, REPLACE, $replace, maybeCallNative) {
         return [
-            // `String.prototype.replace` method
-            // https://tc39.github.io/ecma262/#sec-string.prototype.replace
+            /* `String.prototype.replace` method
+            https://tc39.github.io/ecma262/#sec-string.prototype.replace */
             function replace(searchValue, replaceValue) {
                 var O = defined(this);
                 var fn = searchValue == undefined ? undefined : searchValue[REPLACE];
@@ -545,9 +545,9 @@
                     fn.call(searchValue, O, replaceValue) :
                     $replace.call(String(O), searchValue, replaceValue);
             },
-            // `RegExp.prototype[@@replace]` method
-            // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@replace
-            function(regexp, replaceValue) {
+            /* `RegExp.prototype[@@replace]` method
+            https://tc39.github.io/ecma262/#sec-regexp.prototype-@@replace */
+            function (regexp, replaceValue) {
                 var res = maybeCallNative($replace, regexp, this, replaceValue);
                 if (res.done) return res.value;
 
@@ -576,11 +576,11 @@
                     var matched = String(result[0]);
                     var position = max(min$1(_toInteger(result.index), S.length), 0);
                     var captures = [];
-                    // NOTE: This is equivalent to
-                    //   captures = result.slice(1).map(maybeToString)
-                    // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
-                    // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
-                    // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
+                    /*  NOTE: This is equivalent to
+                       captures = result.slice(1).map(maybeToString)
+                     but for some reason `nativeSlice.call(result, 1, result.length)` (called in
+                     the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
+                     causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it. */
                     for (var j = 1; j < result.length; j++) captures.push(maybeToString(result[j]));
                     var namedCaptures = result.groups;
                     if (functionalReplace) {
@@ -599,7 +599,7 @@
             }
         ];
 
-        // https://tc39.github.io/ecma262/#sec-getsubstitution
+        /* https://tc39.github.io/ecma262/#sec-getsubstitution */
         function getSubstitution(matched, str, position, captures, namedCaptures, replacement) {
             var tailPos = position + matched.length;
             var m = captures.length;
@@ -608,7 +608,7 @@
                 namedCaptures = _toObject(namedCaptures);
                 symbols = SUBSTITUTION_SYMBOLS;
             }
-            return $replace.call(replacement, symbols, function(match, ch) {
+            return $replace.call(replacement, symbols, function (match, ch) {
                 var capture;
                 switch (ch.charAt(0)) {
                     case '$':
@@ -643,10 +643,10 @@
     var nameRE = /^\s*function ([^ (]*)/;
     var NAME = 'name';
 
-    // 19.2.4.2 name
+    /* 19.2.4.2 name */
     NAME in FProto || _descriptors && dP$1(FProto, NAME, {
         configurable: true,
-        get: function() {
+        get: function () {
             try {
                 return ('' + this).match(nameRE)[1];
             } catch (e) {
@@ -655,19 +655,19 @@
         }
     });
 
-    // @@match logic
-    _fixReWks('match', 1, function(defined, MATCH, $match, maybeCallNative) {
+    /* @@match logic */
+    _fixReWks('match', 1, function (defined, MATCH, $match, maybeCallNative) {
         return [
-            // `String.prototype.match` method
-            // https://tc39.github.io/ecma262/#sec-string.prototype.match
+            /* `String.prototype.match` method
+            https://tc39.github.io/ecma262/#sec-string.prototype.match */
             function match(regexp) {
                 var O = defined(this);
                 var fn = regexp == undefined ? undefined : regexp[MATCH];
                 return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
             },
-            // `RegExp.prototype[@@match]` method
-            // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@match
-            function(regexp) {
+            /* `RegExp.prototype[@@match]` method
+            https://tc39.github.io/ecma262/#sec-regexp.prototype-@@match */
+            function (regexp) {
                 var res = maybeCallNative($match, regexp, this);
                 if (res.done) return res.value;
                 var rx = _anObject(regexp);
@@ -689,86 +689,86 @@
         ];
     });
 
-    // 22.1.3.31 Array.prototype[@@unscopables]
+    /* 22.1.3.31 Array.prototype[@@unscopables] */
     var UNSCOPABLES = _wks('unscopables');
     var ArrayProto = Array.prototype;
     if (ArrayProto[UNSCOPABLES] == undefined) _hide(ArrayProto, UNSCOPABLES, {});
-    var _addToUnscopables = function(key) {
+    var _addToUnscopables = function (key) {
         ArrayProto[UNSCOPABLES][key] = true;
     };
 
-    var _iterStep = function(done, value) {
+    var _iterStep = function (done, value) {
         return { value: value, done: !!done };
     };
 
     var _iterators = {};
 
-    // fallback for non-array-like ES3 and non-enumerable old V8 strings
+    /* fallback for non-array-like ES3 and non-enumerable old V8 strings
 
-    // eslint-disable-next-line no-prototype-builtins
-    var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function(it) {
+    eslint-disable-next-line no-prototype-builtins */
+    var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
         return _cof(it) == 'String' ? it.split('') : Object(it);
     };
 
-    // to indexed object, toObject with fallback for non-array-like ES3 strings
+    /* to indexed object, toObject with fallback for non-array-like ES3 strings */
 
 
-    var _toIobject = function(it) {
+    var _toIobject = function (it) {
         return _iobject(_defined(it));
     };
 
     var max$1 = Math.max;
     var min$2 = Math.min;
-    var _toAbsoluteIndex = function(index, length) {
+    var _toAbsoluteIndex = function (index, length) {
         index = _toInteger(index);
         return index < 0 ? max$1(index + length, 0) : min$2(index, length);
     };
 
-    // false -> Array#indexOf
-    // true  -> Array#includes
+    /* false -> Array#indexOf
+    true  -> Array#includes */
 
 
 
-    var _arrayIncludes = function(IS_INCLUDES) {
-        return function($this, el, fromIndex) {
+    var _arrayIncludes = function (IS_INCLUDES) {
+        return function ($this, el, fromIndex) {
             var O = _toIobject($this);
             var length = _toLength(O.length);
             var index = _toAbsoluteIndex(fromIndex, length);
             var value;
-            // Array#includes uses SameValueZero equality algorithm
-            // eslint-disable-next-line no-self-compare
+            /*    Array#includes uses SameValueZero equality algorithm
+               eslint-disable-next-line no-self-compare */
             if (IS_INCLUDES && el != el)
                 while (length > index) {
                     value = O[index++];
-                    // eslint-disable-next-line no-self-compare
+                    /* eslint-disable-next-line no-self-compare */
                     if (value != value) return true;
-                    // Array#indexOf ignores holes, Array#includes - not
+                    /* Array#indexOf ignores holes, Array#includes - not */
                 } else
-                    for (; length > index; index++)
-                        if (IS_INCLUDES || index in O) {
-                            if (O[index] === el) return IS_INCLUDES || index || 0;
-                        }
+                for (; length > index; index++)
+                    if (IS_INCLUDES || index in O) {
+                        if (O[index] === el) return IS_INCLUDES || index || 0;
+                    }
             return !IS_INCLUDES && -1;
         };
     };
 
     var shared = _shared('keys');
 
-    var _sharedKey = function(key) {
+    var _sharedKey = function (key) {
         return shared[key] || (shared[key] = _uid(key));
     };
 
     var arrayIndexOf = _arrayIncludes(false);
     var IE_PROTO = _sharedKey('IE_PROTO');
 
-    var _objectKeysInternal = function(object, names) {
+    var _objectKeysInternal = function (object, names) {
         var O = _toIobject(object);
         var i = 0;
         var result = [];
         var key;
         for (key in O)
             if (key != IE_PROTO) _has(O, key) && result.push(key);
-            // Don't enum bug & hidden keys
+        /* Don't enum bug & hidden keys */
         while (names.length > i)
             if (_has(O, key = names[i++])) {
                 ~arrayIndexOf(result, key) || result.push(key);
@@ -776,12 +776,12 @@
         return result;
     };
 
-    // IE 8- don't enum bug keys
+    /*  IE 8- don't enum bug keys */
     var _enumBugKeys = (
         'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
     ).split(',');
 
-    // 19.1.2.14 / 15.2.3.14 Object.keys(O)
+    /* 19.1.2.14 / 15.2.3.14 Object.keys(O) */
 
 
 
@@ -802,17 +802,17 @@
     var document$2 = _global.document;
     var _html = document$2 && document$2.documentElement;
 
-    // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+    /* 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties]) */
 
 
 
     var IE_PROTO$1 = _sharedKey('IE_PROTO');
-    var Empty = function() { /* empty */ };
+    var Empty = function () { /* empty */ };
     var PROTOTYPE$1 = 'prototype';
 
-    // Create object with fake `null` prototype: use iframe Object with cleared prototype
-    var createDict = function() {
-        // Thrash, waste and sodomy: IE GC bug
+    /* Create object with fake `null` prototype: use iframe Object with cleared prototype */
+    var createDict = function () {
+        /* Thrash, waste and sodomy: IE GC bug */
         var iframe = _domCreate('iframe');
         var i = _enumBugKeys.length;
         var lt = '<';
@@ -820,9 +820,9 @@
         var iframeDocument;
         iframe.style.display = 'none';
         _html.appendChild(iframe);
-        iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-        // createDict = iframe.contentWindow.Object;
-        // html.removeChild(iframe);
+        iframe.src = 'javascript:'; /* eslint-disable-line no-script-url */
+        /*  createDict = iframe.contentWindow.Object;
+         html.removeChild(iframe); */
         iframeDocument = iframe.contentWindow.document;
         iframeDocument.open();
         iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
@@ -838,7 +838,7 @@
             Empty[PROTOTYPE$1] = _anObject(O);
             result = new Empty();
             Empty[PROTOTYPE$1] = null;
-            // add "__proto__" for Object.getPrototypeOf polyfill
+            /* add "__proto__" for Object.getPrototypeOf polyfill */
             result[IE_PROTO$1] = O;
         } else result = createDict();
         return Properties === undefined ? result : _objectDps(result, Properties);
@@ -848,27 +848,27 @@
 
     var TAG$1 = _wks('toStringTag');
 
-    var _setToStringTag = function(it, tag, stat) {
+    var _setToStringTag = function (it, tag, stat) {
         if (it && !_has(it = stat ? it : it.prototype, TAG$1)) def(it, TAG$1, { configurable: true, value: tag });
     };
 
     var IteratorPrototype = {};
 
-    // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-    _hide(IteratorPrototype, _wks('iterator'), function() { return this; });
+    /* 25.1.2.1.1 %IteratorPrototype%[@@iterator]() */
+    _hide(IteratorPrototype, _wks('iterator'), function () { return this; });
 
-    var _iterCreate = function(Constructor, NAME, next) {
+    var _iterCreate = function (Constructor, NAME, next) {
         Constructor.prototype = _objectCreate(IteratorPrototype, { next: _propertyDesc(1, next) });
         _setToStringTag(Constructor, NAME + ' Iterator');
     };
 
-    // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+    /* 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O) */
 
 
     var IE_PROTO$2 = _sharedKey('IE_PROTO');
     var ObjectProto = Object.prototype;
 
-    var _objectGpo = Object.getPrototypeOf || function(O) {
+    var _objectGpo = Object.getPrototypeOf || function (O) {
         O = _toObject(O);
         if (_has(O, IE_PROTO$2)) return O[IE_PROTO$2];
         if (typeof O.constructor == 'function' && O instanceof O.constructor) {
@@ -878,16 +878,16 @@
     };
 
     var ITERATOR = _wks('iterator');
-    var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+    var BUGGY = !([].keys && 'next' in [].keys()); /* Safari has buggy iterators w/o `next` */
     var FF_ITERATOR = '@@iterator';
     var KEYS = 'keys';
     var VALUES = 'values';
 
-    var returnThis = function() { return this; };
+    var returnThis = function () { return this; };
 
-    var _iterDefine = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
+    var _iterDefine = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
         _iterCreate(Constructor, NAME, next);
-        var getMethod = function(kind) {
+        var getMethod = function (kind) {
             if (!BUGGY && kind in proto) return proto[kind];
             switch (kind) {
                 case KEYS:
@@ -906,26 +906,26 @@
         var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
         var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
         var methods, key, IteratorPrototype;
-        // Fix native
+        /* Fix native */
         if ($anyNative) {
             IteratorPrototype = _objectGpo($anyNative.call(new Base()));
             if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
-                // Set @@toStringTag to native iterators
+                /* Set @@toStringTag to native iterators */
                 _setToStringTag(IteratorPrototype, TAG, true);
-                // fix for some old engines
+                /* fix for some old engines */
                 if (!_library && typeof IteratorPrototype[ITERATOR] != 'function') _hide(IteratorPrototype, ITERATOR, returnThis);
             }
         }
-        // fix Array#{values, @@iterator}.name in V8 / FF
+        /* fix Array#{values, @@iterator}.name in V8 / FF */
         if (DEF_VALUES && $native && $native.name !== VALUES) {
             VALUES_BUG = true;
             $default = function values() { return $native.call(this); };
         }
-        // Define iterator
+        /* Define iterator */
         if ((!_library || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
             _hide(proto, ITERATOR, $default);
         }
-        // Plug for library
+        /* Plug for library */
         _iterators[NAME] = $default;
         _iterators[TAG] = returnThis;
         if (DEFAULT) {
@@ -942,16 +942,16 @@
         return methods;
     };
 
-    // 22.1.3.4 Array.prototype.entries()
-    // 22.1.3.13 Array.prototype.keys()
-    // 22.1.3.29 Array.prototype.values()
-    // 22.1.3.30 Array.prototype[@@iterator]()
-    var es6_array_iterator = _iterDefine(Array, 'Array', function(iterated, kind) {
-        this._t = _toIobject(iterated); // target
-        this._i = 0; // next index
-        this._k = kind; // kind
-        // 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-    }, function() {
+    /* 22.1.3.4 Array.prototype.entries()
+    22.1.3.13 Array.prototype.keys()
+    22.1.3.29 Array.prototype.values()
+    22.1.3.30 Array.prototype[@@iterator]() */
+    var es6_array_iterator = _iterDefine(Array, 'Array', function (iterated, kind) {
+        this._t = _toIobject(iterated); /* target */
+        this._i = 0; /* next index */
+        this._k = kind; /* kind */
+        /* 22.1.5.2.1 %ArrayIteratorPrototype%.next() */
+    }, function () {
         var O = this._t;
         var kind = this._k;
         var index = this._i++;
@@ -964,7 +964,7 @@
         return _iterStep(0, [index, O[index]]);
     }, 'values');
 
-    // argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+    /* argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7) */
     _iterators.Arguments = _iterators.Array;
 
     _addToUnscopables('keys');
@@ -976,7 +976,7 @@
     var ArrayValues = _iterators.Array;
 
     var DOMIterables = {
-        CSSRuleList: true, // TODO: Not spec compliant, should be false.
+        CSSRuleList: true, /* TODO: Not spec compliant, should be false. */
         CSSStyleDeclaration: false,
         CSSValueList: false,
         ClientRectList: false,
@@ -989,7 +989,7 @@
         HTMLCollection: false,
         HTMLFormElement: false,
         HTMLSelectElement: false,
-        MediaList: true, // TODO: Not spec compliant, should be false.
+        MediaList: true, /* TODO: Not spec compliant, should be false. */
         MimeTypeArray: false,
         NamedNodeMap: false,
         NodeList: true,
@@ -1003,7 +1003,7 @@
         SVGStringList: false,
         SVGTransformList: false,
         SourceBufferList: false,
-        StyleSheetList: true, // TODO: Not spec compliant, should be false.
+        StyleSheetList: true, /* TODO: Not spec compliant, should be false. */
         TextTrackCueList: false,
         TextTrackList: false,
         TouchList: false
@@ -1068,12 +1068,12 @@
             var ownKeys = Object.keys(source);
 
             if (typeof Object.getOwnPropertySymbols === 'function') {
-                ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+                ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 }));
             }
 
-            ownKeys.forEach(function(key) {
+            ownKeys.forEach(function (key) {
                 _defineProperty(target, key, source[key]);
             });
         }
@@ -1081,13 +1081,13 @@
         return target;
     }
 
-    var scrollbarWidth = createCommonjsModule(function(module, exports) {
+    var scrollbarWidth = createCommonjsModule(function (module, exports) {
         /*! scrollbarWidth.js v0.1.3 | felixexter | MIT | https://github.com/felixexter/scrollbarWidth */
-        (function(root, factory) {
+        (function (root, factory) {
             {
                 module.exports = factory();
             }
-        }(commonjsGlobal, function() {
+        }(commonjsGlobal, function () {
 
             function scrollbarWidth() {
                 if (typeof document === 'undefined') {
@@ -1190,7 +1190,7 @@
      * }, _.now());
      * // => Logs the number of milliseconds it took for the deferred invocation.
      */
-    var now = function() {
+    var now = function () {
         return root.Date.now();
     };
 
@@ -1282,11 +1282,11 @@
         }
 
         function leadingEdge(time) {
-            // Reset any `maxWait` timer.
+            /* Reset any `maxWait` timer. */
             lastInvokeTime = time;
-            // Start the timer for the trailing edge.
+            /* Start the timer for the trailing edge. */
             timerId = setTimeout(timerExpired, wait);
-            // Invoke the leading edge.
+            /* Invoke the leading edge. */
             return leading ? invokeFunc(time) : result;
         }
 
@@ -1302,9 +1302,9 @@
             var timeSinceLastCall = time - lastCallTime,
                 timeSinceLastInvoke = time - lastInvokeTime;
 
-            // Either this is the first call, activity has stopped and we're at the
-            // trailing edge, the system time has gone backwards and we're treating
-            // it as the trailing edge, or we've hit the `maxWait` limit.
+            /* Either this is the first call, activity has stopped and we're at the
+            trailing edge, the system time has gone backwards and we're treating
+            it as the trailing edge, or we've hit the `maxWait` limit. */
             return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
                 (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
         }
@@ -1314,15 +1314,15 @@
             if (shouldInvoke(time)) {
                 return trailingEdge(time);
             }
-            // Restart the timer.
+            /* Restart the timer. */
             timerId = setTimeout(timerExpired, remainingWait(time));
         }
 
         function trailingEdge(time) {
             timerId = undefined;
 
-            // Only invoke if we have `lastArgs` which means `func` has been
-            // debounced at least once.
+            /* Only invoke if we have `lastArgs` which means `func` has been
+            debounced at least once. */
             if (trailing && lastArgs) {
                 return invokeFunc(time);
             }
@@ -1355,7 +1355,7 @@
                     return leadingEdge(lastCallTime);
                 }
                 if (maxing) {
-                    // Handle invocations in a tight loop.
+                    /* Handle invocations in a tight loop. */
                     timerId = setTimeout(timerExpired, wait);
                     return invokeFunc(lastCallTime);
                 }
@@ -1630,7 +1630,7 @@
      * }, _.now());
      * // => Logs the number of milliseconds it took for the deferred invocation.
      */
-    var now$1 = function() {
+    var now$1 = function () {
         return root$1.Date.now();
     };
 
@@ -1722,11 +1722,11 @@
         }
 
         function leadingEdge(time) {
-            // Reset any `maxWait` timer.
+            /* Reset any `maxWait` timer. */
             lastInvokeTime = time;
-            // Start the timer for the trailing edge.
+            /* Start the timer for the trailing edge. */
             timerId = setTimeout(timerExpired, wait);
-            // Invoke the leading edge.
+            /* Invoke the leading edge. */
             return leading ? invokeFunc(time) : result;
         }
 
@@ -1742,9 +1742,9 @@
             var timeSinceLastCall = time - lastCallTime,
                 timeSinceLastInvoke = time - lastInvokeTime;
 
-            // Either this is the first call, activity has stopped and we're at the
-            // trailing edge, the system time has gone backwards and we're treating
-            // it as the trailing edge, or we've hit the `maxWait` limit.
+            /* Either this is the first call, activity has stopped and we're at the
+            trailing edge, the system time has gone backwards and we're treating
+            it as the trailing edge, or we've hit the `maxWait` limit. */
             return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
                 (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
         }
@@ -1754,15 +1754,15 @@
             if (shouldInvoke(time)) {
                 return trailingEdge(time);
             }
-            // Restart the timer.
+            /* Restart the timer. */
             timerId = setTimeout(timerExpired, remainingWait(time));
         }
 
         function trailingEdge(time) {
             timerId = undefined;
 
-            // Only invoke if we have `lastArgs` which means `func` has been
-            // debounced at least once.
+            /*  Only invoke if we have `lastArgs` which means `func` has been
+             debounced at least once. */
             if (trailing && lastArgs) {
                 return invokeFunc(time);
             }
@@ -1795,7 +1795,7 @@
                     return leadingEdge(lastCallTime);
                 }
                 if (maxing) {
-                    // Handle invocations in a tight loop.
+                    /* Handle invocations in a tight loop. */
                     timerId = setTimeout(timerExpired, wait);
                     return invokeFunc(lastCallTime);
                 }
@@ -1993,13 +1993,13 @@
      * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
      */
     function isHostObject(value) {
-        // Many host objects are `Object` objects that can coerce to strings
-        // despite having improperly defined `toString` methods.
+        /*  Many host objects are `Object` objects that can coerce to strings
+         despite having improperly defined `toString` methods. */
         var result = false;
         if (value != null && typeof value.toString != 'function') {
             try {
                 result = !!(value + '');
-            } catch (e) {}
+            } catch (e) { }
         }
         return result;
     }
@@ -2013,7 +2013,7 @@
     var coreJsData = root$2['__core-js_shared__'];
 
     /** Used to detect methods masquerading as native. */
-    var maskSrcKey = (function() {
+    var maskSrcKey = (function () {
         var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
         return uid ? ('Symbol(src)_1.' + uid) : '';
     }());
@@ -2034,7 +2034,7 @@
     /** Used to detect if a method is native. */
     var reIsNative = RegExp('^' +
         funcToString.call(hasOwnProperty$1).replace(reRegExpChar, '\\$&')
-        .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+            .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
     );
 
     /** Built-in value references. */
@@ -2135,7 +2135,7 @@
         return this;
     }
 
-    // Add methods to `Hash`.
+    /* Add methods to `Hash`. */
     Hash.prototype.clear = hashClear;
     Hash.prototype['delete'] = hashDelete;
     Hash.prototype.get = hashGet;
@@ -2247,7 +2247,7 @@
         return this;
     }
 
-    // Add methods to `ListCache`.
+    /* Add methods to `ListCache`. */
     ListCache.prototype.clear = listCacheClear;
     ListCache.prototype['delete'] = listCacheDelete;
     ListCache.prototype.get = listCacheGet;
@@ -2282,7 +2282,7 @@
     function mapCacheClear() {
         this.__data__ = {
             'hash': new Hash,
-            'map': new(Map$1 || ListCache),
+            'map': new (Map$1 || ListCache),
             'string': new Hash
         };
     }
@@ -2446,10 +2446,10 @@
         if (func != null) {
             try {
                 return funcToString.call(func);
-            } catch (e) {}
+            } catch (e) { }
             try {
                 return (func + '');
-            } catch (e) {}
+            } catch (e) { }
         }
         return '';
     }
@@ -2502,7 +2502,7 @@
         if (typeof func != 'function' || (resolver && typeof resolver != 'function')) {
             throw new TypeError(FUNC_ERROR_TEXT$2);
         }
-        var memoized = function() {
+        var memoized = function () {
             var args = arguments,
                 key = resolver ? resolver.apply(this, args) : args[0],
                 cache = memoized.cache;
@@ -2514,11 +2514,11 @@
             memoized.cache = cache.set(key, result);
             return result;
         };
-        memoized.cache = new(memoize.Cache || MapCache);
+        memoized.cache = new (memoize.Cache || MapCache);
         return memoized;
     }
 
-    // Assign cache to `_.memoize`.
+    /* Assign cache to `_.memoize`. */
     memoize.Cache = MapCache;
 
     /**
@@ -2575,8 +2575,8 @@
      * // => false
      */
     function isFunction(value) {
-        // The use of `Object#toString` avoids issues with the `typeof` operator
-        // in Safari 8-9 which returns 'object' for typed array and other constructors.
+        /*  The use of `Object#toString` avoids issues with the `typeof` operator
+         in Safari 8-9 which returns 'object' for typed array and other constructors. */
         var tag = isObject$2(value) ? objectToString$2.call(value) : '';
         return tag == funcTag || tag == genTag;
     }
@@ -2620,7 +2620,7 @@
      * modules as they cover only a limited range of use cases.
      */
     /* eslint-disable require-jsdoc, valid-jsdoc */
-    var MapShim = (function() {
+    var MapShim = (function () {
         if (typeof Map !== 'undefined') {
             return Map;
         }
@@ -2633,7 +2633,7 @@
          */
         function getIndex(arr, key) {
             var result = -1;
-            arr.some(function(entry, index) {
+            arr.some(function (entry, index) {
                 if (entry[0] === key) {
                     result = index;
                     return true;
@@ -2642,7 +2642,7 @@
             });
             return result;
         }
-        return /** @class */ (function() {
+        return /** @class */ (function () {
             function class_1() {
                 this.__entries__ = [];
             }
@@ -2650,7 +2650,7 @@
                 /**
                  * @returns {boolean}
                  */
-                get: function() {
+                get: function () {
                     return this.__entries__.length;
                 },
                 enumerable: true,
@@ -2660,7 +2660,7 @@
              * @param {*} key
              * @returns {*}
              */
-            class_1.prototype.get = function(key) {
+            class_1.prototype.get = function (key) {
                 var index = getIndex(this.__entries__, key);
                 var entry = this.__entries__[index];
                 return entry && entry[1];
@@ -2670,7 +2670,7 @@
              * @param {*} value
              * @returns {void}
              */
-            class_1.prototype.set = function(key, value) {
+            class_1.prototype.set = function (key, value) {
                 var index = getIndex(this.__entries__, key);
                 if (~index) {
                     this.__entries__[index][1] = value;
@@ -2682,7 +2682,7 @@
              * @param {*} key
              * @returns {void}
              */
-            class_1.prototype.delete = function(key) {
+            class_1.prototype.delete = function (key) {
                 var entries = this.__entries__;
                 var index = getIndex(entries, key);
                 if (~index) {
@@ -2693,13 +2693,13 @@
              * @param {*} key
              * @returns {void}
              */
-            class_1.prototype.has = function(key) {
+            class_1.prototype.has = function (key) {
                 return !!~getIndex(this.__entries__, key);
             };
             /**
              * @returns {void}
              */
-            class_1.prototype.clear = function() {
+            class_1.prototype.clear = function () {
                 this.__entries__.splice(0);
             };
             /**
@@ -2707,7 +2707,7 @@
              * @param {*} [ctx=null]
              * @returns {void}
              */
-            class_1.prototype.forEach = function(callback, ctx) {
+            class_1.prototype.forEach = function (callback, ctx) {
                 if (ctx === void 0) { ctx = null; }
                 for (var _i = 0, _a = this.__entries__; _i < _a.length; _i++) {
                     var entry = _a[_i];
@@ -2723,8 +2723,8 @@
      */
     var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined' && window.document === document;
 
-    // Returns global object of a current environment.
-    var global$1 = (function() {
+    /* Returns global object of a current environment. */
+    var global$1 = (function () {
         if (typeof global !== 'undefined' && global.Math === Math) {
             return global;
         }
@@ -2734,7 +2734,7 @@
         if (typeof window !== 'undefined' && window.Math === Math) {
             return window;
         }
-        // eslint-disable-next-line no-new-func
+        /* eslint-disable-next-line no-new-func */
         return Function('return this')();
     })();
 
@@ -2744,17 +2744,17 @@
      *
      * @returns {number} Requests' identifier.
      */
-    var requestAnimationFrame$1 = (function() {
+    var requestAnimationFrame$1 = (function () {
         if (typeof requestAnimationFrame === 'function') {
-            // It's required to use a bounded function because IE sometimes throws
-            // an "Invalid calling object" error if rAF is invoked without the global
-            // object on the left hand side.
+            /*   It's required to use a bounded function because IE sometimes throws
+              an "Invalid calling object" error if rAF is invoked without the global
+              object on the left hand side. */
             return requestAnimationFrame.bind(global$1);
         }
-        return function(callback) { return setTimeout(function() { return callback(Date.now()); }, 1000 / 60); };
+        return function (callback) { return setTimeout(function () { return callback(Date.now()); }, 1000 / 60); };
     })();
 
-    // Defines minimum timeout before adding a trailing call.
+    /* Defines minimum timeout before adding a trailing call. */
     var trailingTimeout = 2;
     /**
      * Creates a wrapper function which ensures that provided callback will be
@@ -2801,14 +2801,14 @@
         function proxy() {
             var timeStamp = Date.now();
             if (leadingCall) {
-                // Reject immediately following calls.
+                /* Reject immediately following calls. */
                 if (timeStamp - lastCallTime < trailingTimeout) {
                     return;
                 }
-                // Schedule new call to be in invoked when the pending one is resolved.
-                // This is important for "transitions" which never actually start
-                // immediately so there is a chance that we might miss one if change
-                // happens amids the pending invocation.
+                /* Schedule new call to be in invoked when the pending one is resolved.
+                This is important for "transitions" which never actually start
+                immediately so there is a chance that we might miss one if change
+                happens amids the pending invocation. */
                 trailingCall = true;
             } else {
                 leadingCall = true;
@@ -2820,17 +2820,17 @@
         return proxy;
     }
 
-    // Minimum delay before invoking the update of observers.
+    /* Minimum delay before invoking the update of observers. */
     var REFRESH_DELAY = 20;
-    // A list of substrings of CSS properties used to find transition events that
-    // might affect dimensions of observed elements.
+    /*  A list of substrings of CSS properties used to find transition events that
+     might affect dimensions of observed elements. */
     var transitionKeys = ['top', 'right', 'bottom', 'left', 'width', 'height', 'size', 'weight'];
-    // Check if MutationObserver is available.
+    /* Check if MutationObserver is available. */
     var mutationObserverSupported = typeof MutationObserver !== 'undefined';
     /**
      * Singleton controller class which handles updates of ResizeObserver instances.
      */
-    var ResizeObserverController = /** @class */ (function() {
+    var ResizeObserverController = /** @class */ (function () {
         /**
          * Creates a new instance of ResizeObserverController.
          *
@@ -2870,11 +2870,11 @@
          * @param {ResizeObserverSPI} observer - Observer to be added.
          * @returns {void}
          */
-        ResizeObserverController.prototype.addObserver = function(observer) {
+        ResizeObserverController.prototype.addObserver = function (observer) {
             if (!~this.observers_.indexOf(observer)) {
                 this.observers_.push(observer);
             }
-            // Add listeners if they haven't been added yet.
+            /* Add listeners if they haven't been added yet. */
             if (!this.connected_) {
                 this.connect_();
             }
@@ -2885,14 +2885,14 @@
          * @param {ResizeObserverSPI} observer - Observer to be removed.
          * @returns {void}
          */
-        ResizeObserverController.prototype.removeObserver = function(observer) {
+        ResizeObserverController.prototype.removeObserver = function (observer) {
             var observers = this.observers_;
             var index = observers.indexOf(observer);
-            // Remove observer if it's present in registry.
+            /* Remove observer if it's present in registry. */
             if (~index) {
                 observers.splice(index, 1);
             }
-            // Remove listeners if controller has no connected observers.
+            /* Remove listeners if controller has no connected observers. */
             if (!observers.length && this.connected_) {
                 this.disconnect_();
             }
@@ -2903,10 +2903,10 @@
          *
          * @returns {void}
          */
-        ResizeObserverController.prototype.refresh = function() {
+        ResizeObserverController.prototype.refresh = function () {
             var changesDetected = this.updateObservers_();
-            // Continue running updates if changes have been detected as there might
-            // be future ones caused by CSS transitions.
+            /* Continue running updates if changes have been detected as there might
+            be future ones caused by CSS transitions. */
             if (changesDetected) {
                 this.refresh();
             }
@@ -2919,17 +2919,17 @@
          * @returns {boolean} Returns "true" if any observer has detected changes in
          *      dimensions of it's elements.
          */
-        ResizeObserverController.prototype.updateObservers_ = function() {
-            // Collect observers that have active observations.
-            var activeObservers = this.observers_.filter(function(observer) {
+        ResizeObserverController.prototype.updateObservers_ = function () {
+            /* Collect observers that have active observations. */
+            var activeObservers = this.observers_.filter(function (observer) {
                 return observer.gatherActive(), observer.hasActive();
             });
-            // Deliver notifications in a separate cycle in order to avoid any
-            // collisions between observers, e.g. when multiple instances of
-            // ResizeObserver are tracking the same element and the callback of one
-            // of them changes content dimensions of the observed target. Sometimes
-            // this may result in notifications being blocked for the rest of observers.
-            activeObservers.forEach(function(observer) { return observer.broadcastActive(); });
+            /* Deliver notifications in a separate cycle in order to avoid any
+            collisions between observers, e.g. when multiple instances of
+            ResizeObserver are tracking the same element and the callback of one
+            of them changes content dimensions of the observed target. Sometimes
+            this may result in notifications being blocked for the rest of observers. */
+            activeObservers.forEach(function (observer) { return observer.broadcastActive(); });
             return activeObservers.length > 0;
         };
         /**
@@ -2938,15 +2938,15 @@
          * @private
          * @returns {void}
          */
-        ResizeObserverController.prototype.connect_ = function() {
-            // Do nothing if running in a non-browser environment or if listeners
-            // have been already added.
+        ResizeObserverController.prototype.connect_ = function () {
+            /* Do nothing if running in a non-browser environment or if listeners
+            have been already added. */
             if (!isBrowser || this.connected_) {
                 return;
             }
-            // Subscription to the "Transitionend" event is used as a workaround for
-            // delayed transitions. This way it's possible to capture at least the
-            // final state of an element.
+            /* Subscription to the "Transitionend" event is used as a workaround for
+            delayed transitions. This way it's possible to capture at least the
+            final state of an element. */
             document.addEventListener('transitionend', this.onTransitionEnd_);
             window.addEventListener('resize', this.refresh);
             if (mutationObserverSupported) {
@@ -2969,9 +2969,9 @@
          * @private
          * @returns {void}
          */
-        ResizeObserverController.prototype.disconnect_ = function() {
-            // Do nothing if running in a non-browser environment or if listeners
-            // have been already removed.
+        ResizeObserverController.prototype.disconnect_ = function () {
+            /* Do nothing if running in a non-browser environment or if listeners
+            have been already removed. */
             if (!isBrowser || !this.connected_) {
                 return;
             }
@@ -2994,11 +2994,11 @@
          * @param {TransitionEvent} event
          * @returns {void}
          */
-        ResizeObserverController.prototype.onTransitionEnd_ = function(_a) {
+        ResizeObserverController.prototype.onTransitionEnd_ = function (_a) {
             var _b = _a.propertyName,
                 propertyName = _b === void 0 ? '' : _b;
-            // Detect whether transition may affect dimensions of an element.
-            var isReflowProperty = transitionKeys.some(function(key) {
+            /* Detect whether transition may affect dimensions of an element. */
+            var isReflowProperty = transitionKeys.some(function (key) {
                 return !!~propertyName.indexOf(key);
             });
             if (isReflowProperty) {
@@ -3010,7 +3010,7 @@
          *
          * @returns {ResizeObserverController}
          */
-        ResizeObserverController.getInstance = function() {
+        ResizeObserverController.getInstance = function () {
             if (!this.instance_) {
                 this.instance_ = new ResizeObserverController();
             }
@@ -3032,7 +3032,7 @@
      * @param {Object} props - Properties to be defined.
      * @returns {Object} Target object.
      */
-    var defineConfigurable = (function(target, props) {
+    var defineConfigurable = (function (target, props) {
         for (var _i = 0, _a = Object.keys(props); _i < _a.length; _i++) {
             var key = _a[_i];
             Object.defineProperty(target, key, {
@@ -3051,17 +3051,17 @@
      * @param {Object} target
      * @returns {Object}
      */
-    var getWindowOf = (function(target) {
-        // Assume that the element is an instance of Node, which means that it
-        // has the "ownerDocument" property from which we can retrieve a
-        // corresponding global object.
+    var getWindowOf = (function (target) {
+        /* Assume that the element is an instance of Node, which means that it
+        has the "ownerDocument" property from which we can retrieve a
+        corresponding global object. */
         var ownerGlobal = target && target.ownerDocument && target.ownerDocument.defaultView;
-        // Return the local global object if it's not possible extract one from
-        // provided element.
+        /*  Return the local global object if it's not possible extract one from
+         provided element. */
         return ownerGlobal || global$1;
     });
 
-    // Placeholder of an empty content rectangle.
+    /* Placeholder of an empty content rectangle. */
     var emptyRect = createRectInit(0, 0, 0, 0);
     /**
      * Converts provided string to a number.
@@ -3084,7 +3084,7 @@
         for (var _i = 1; _i < arguments.length; _i++) {
             positions[_i - 1] = arguments[_i];
         }
-        return positions.reduce(function(size, position) {
+        return positions.reduce(function (size, position) {
             var value = styles['border-' + position + '-width'];
             return size + toFloat(value);
         }, 0);
@@ -3123,18 +3123,18 @@
      * @returns {DOMRectInit}
      */
     function getHTMLElementContentRect(target) {
-        // Client width & height properties can't be
-        // used exclusively as they provide rounded values.
+        /*  Client width & height properties can't be
+         used exclusively as they provide rounded values. */
         var clientWidth = target.clientWidth,
             clientHeight = target.clientHeight;
-        // By this condition we can catch all non-replaced inline, hidden and
-        // detached elements. Though elements with width & height properties less
-        // than 0.5 will be discarded as well.
-        //
-        // Without it we would need to implement separate methods for each of
-        // those cases and it's not possible to perform a precise and performance
-        // effective test for hidden elements. E.g. even jQuery's ':visible' filter
-        // gives wrong results for elements with width & height less than 0.5.
+        /* By this condition we can catch all non-replaced inline, hidden and
+        detached elements. Though elements with width & height properties less
+        than 0.5 will be discarded as well.
+        
+        Without it we would need to implement separate methods for each of
+        those cases and it's not possible to perform a precise and performance
+        effective test for hidden elements. E.g. even jQuery's ':visible' filter
+        gives wrong results for elements with width & height less than 0.5. */
         if (!clientWidth && !clientHeight) {
             return emptyRect;
         }
@@ -3142,21 +3142,21 @@
         var paddings = getPaddings(styles);
         var horizPad = paddings.left + paddings.right;
         var vertPad = paddings.top + paddings.bottom;
-        // Computed styles of width & height are being used because they are the
-        // only dimensions available to JS that contain non-rounded values. It could
-        // be possible to utilize the getBoundingClientRect if only it's data wasn't
-        // affected by CSS transformations let alone paddings, borders and scroll bars.
+        /* Computed styles of width & height are being used because they are the
+        only dimensions available to JS that contain non-rounded values. It could
+        be possible to utilize the getBoundingClientRect if only it's data wasn't
+        affected by CSS transformations let alone paddings, borders and scroll bars. */
         var width = toFloat(styles.width),
             height = toFloat(styles.height);
-        // Width & height include paddings and borders when the 'border-box' box
-        // model is applied (except for IE).
+        /* Width & height include paddings and borders when the 'border-box' box
+        model is applied (except for IE). */
         if (styles.boxSizing === 'border-box') {
-            // Following conditions are required to handle Internet Explorer which
-            // doesn't include paddings and borders to computed CSS dimensions.
-            //
-            // We can say that if CSS dimensions + paddings are equal to the "client"
-            // properties then it's either IE, and thus we don't need to subtract
-            // anything, or an element merely doesn't have paddings/borders styles.
+            /* Following conditions are required to handle Internet Explorer which
+            doesn't include paddings and borders to computed CSS dimensions.
+            
+            We can say that if CSS dimensions + paddings are equal to the "client"
+            properties then it's either IE, and thus we don't need to subtract
+            anything, or an element merely doesn't have paddings/borders styles. */
             if (Math.round(width + horizPad) !== clientWidth) {
                 width -= getBordersSize(styles, 'left', 'right') + horizPad;
             }
@@ -3164,22 +3164,22 @@
                 height -= getBordersSize(styles, 'top', 'bottom') + vertPad;
             }
         }
-        // Following steps can't be applied to the document's root element as its
-        // client[Width/Height] properties represent viewport area of the window.
-        // Besides, it's as well not necessary as the <html> itself neither has
-        // rendered scroll bars nor it can be clipped.
+        /* Following steps can't be applied to the document's root element as its
+        client[Width/Height] properties represent viewport area of the window.
+        Besides, it's as well not necessary as the <html> itself neither has
+        rendered scroll bars nor it can be clipped. */
         if (!isDocumentElement(target)) {
-            // In some browsers (only in Firefox, actually) CSS width & height
-            // include scroll bars size which can be removed at this step as scroll
-            // bars are the only difference between rounded dimensions + paddings
-            // and "client" properties, though that is not always true in Chrome.
+            /* In some browsers (only in Firefox, actually) CSS width & height
+            include scroll bars size which can be removed at this step as scroll
+            bars are the only difference between rounded dimensions + paddings
+            and "client" properties, though that is not always true in Chrome. */
             var vertScrollbar = Math.round(width + horizPad) - clientWidth;
             var horizScrollbar = Math.round(height + vertPad) - clientHeight;
-            // Chrome has a rather weird rounding of "client" properties.
-            // E.g. for an element with content width of 314.2px it sometimes gives
-            // the client width of 315px and for the width of 314.7px it may give
-            // 314px. And it doesn't happen all the time. So just ignore this delta
-            // as a non-relevant.
+            /*  Chrome has a rather weird rounding of "client" properties.
+             E.g. for an element with content width of 314.2px it sometimes gives
+             the client width of 315px and for the width of 314.7px it may give
+             314px. And it doesn't happen all the time. So just ignore this delta
+             as a non-relevant. */
             if (Math.abs(vertScrollbar) !== 1) {
                 width -= vertScrollbar;
             }
@@ -3195,16 +3195,16 @@
      * @param {Element} target - Element to be checked.
      * @returns {boolean}
      */
-    var isSVGGraphicsElement = (function() {
-        // Some browsers, namely IE and Edge, don't have the SVGGraphicsElement
-        // interface.
+    var isSVGGraphicsElement = (function () {
+        /*  Some browsers, namely IE and Edge, don't have the SVGGraphicsElement
+         interface. */
         if (typeof SVGGraphicsElement !== 'undefined') {
-            return function(target) { return target instanceof getWindowOf(target).SVGGraphicsElement; };
+            return function (target) { return target instanceof getWindowOf(target).SVGGraphicsElement; };
         }
-        // If it's so, then check that element is at least an instance of the
-        // SVGElement and that it has the "getBBox" method.
-        // eslint-disable-next-line no-extra-parens
-        return function(target) {
+        /*  If it's so, then check that element is at least an instance of the
+         SVGElement and that it has the "getBBox" method.
+         eslint-disable-next-line no-extra-parens */
+        return function (target) {
             return (target instanceof getWindowOf(target).SVGElement &&
                 typeof target.getBBox === 'function');
         };
@@ -3245,10 +3245,10 @@
             y = _a.y,
             width = _a.width,
             height = _a.height;
-        // If DOMRectReadOnly is available use it as a prototype for the rectangle.
+        /* If DOMRectReadOnly is available use it as a prototype for the rectangle. */
         var Constr = typeof DOMRectReadOnly !== 'undefined' ? DOMRectReadOnly : Object;
         var rect = Object.create(Constr.prototype);
-        // Rectangle's properties are not writable and non-enumerable.
+        /* Rectangle's properties are not writable and non-enumerable. */
         defineConfigurable(rect, {
             x: x,
             y: y,
@@ -3279,7 +3279,7 @@
      * Class that is responsible for computations of the content rectangle of
      * provided DOM element and for keeping track of it's changes.
      */
-    var ResizeObservation = /** @class */ (function() {
+    var ResizeObservation = /** @class */ (function () {
         /**
          * Creates an instance of ResizeObservation.
          *
@@ -3312,7 +3312,7 @@
          *
          * @returns {boolean}
          */
-        ResizeObservation.prototype.isActive = function() {
+        ResizeObservation.prototype.isActive = function () {
             var rect = getContentRect(this.target);
             this.contentRect_ = rect;
             return (rect.width !== this.broadcastWidth ||
@@ -3324,7 +3324,7 @@
          *
          * @returns {DOMRectInit} Last observed content rectangle.
          */
-        ResizeObservation.prototype.broadcastRect = function() {
+        ResizeObservation.prototype.broadcastRect = function () {
             var rect = this.contentRect_;
             this.broadcastWidth = rect.width;
             this.broadcastHeight = rect.height;
@@ -3333,7 +3333,7 @@
         return ResizeObservation;
     }());
 
-    var ResizeObserverEntry = /** @class */ (function() {
+    var ResizeObserverEntry = /** @class */ (function () {
         /**
          * Creates an instance of ResizeObserverEntry.
          *
@@ -3342,18 +3342,18 @@
          */
         function ResizeObserverEntry(target, rectInit) {
             var contentRect = createReadOnlyRect(rectInit);
-            // According to the specification following properties are not writable
-            // and are also not enumerable in the native implementation.
-            //
-            // Property accessors are not being used as they'd require to define a
-            // private WeakMap storage which may cause memory leaks in browsers that
-            // don't support this type of collections.
+            /* According to the specification following properties are not writable
+            and are also not enumerable in the native implementation.
+            
+            Property accessors are not being used as they'd require to define a
+            private WeakMap storage which may cause memory leaks in browsers that
+            don't support this type of collections. */
             defineConfigurable(this, { target: target, contentRect: contentRect });
         }
         return ResizeObserverEntry;
     }());
 
-    var ResizeObserverSPI = /** @class */ (function() {
+    var ResizeObserverSPI = /** @class */ (function () {
         /**
          * Creates a new instance of ResizeObserver.
          *
@@ -3391,11 +3391,11 @@
          * @param {Element} target - Element to be observed.
          * @returns {void}
          */
-        ResizeObserverSPI.prototype.observe = function(target) {
+        ResizeObserverSPI.prototype.observe = function (target) {
             if (!arguments.length) {
                 throw new TypeError('1 argument required, but only 0 present.');
             }
-            // Do nothing if current environment doesn't have the Element interface.
+            /* Do nothing if current environment doesn't have the Element interface. */
             if (typeof Element === 'undefined' || !(Element instanceof Object)) {
                 return;
             }
@@ -3403,13 +3403,13 @@
                 throw new TypeError('parameter 1 is not of type "Element".');
             }
             var observations = this.observations_;
-            // Do nothing if element is already being observed.
+            /* Do nothing if element is already being observed. */
             if (observations.has(target)) {
                 return;
             }
             observations.set(target, new ResizeObservation(target));
             this.controller_.addObserver(this);
-            // Force the update of observations.
+            /* Force the update of observations. */
             this.controller_.refresh();
         };
         /**
@@ -3418,11 +3418,11 @@
          * @param {Element} target - Element to stop observing.
          * @returns {void}
          */
-        ResizeObserverSPI.prototype.unobserve = function(target) {
+        ResizeObserverSPI.prototype.unobserve = function (target) {
             if (!arguments.length) {
                 throw new TypeError('1 argument required, but only 0 present.');
             }
-            // Do nothing if current environment doesn't have the Element interface.
+            /* Do nothing if current environment doesn't have the Element interface. */
             if (typeof Element === 'undefined' || !(Element instanceof Object)) {
                 return;
             }
@@ -3430,7 +3430,7 @@
                 throw new TypeError('parameter 1 is not of type "Element".');
             }
             var observations = this.observations_;
-            // Do nothing if element is not being observed.
+            /* Do nothing if element is not being observed. */
             if (!observations.has(target)) {
                 return;
             }
@@ -3444,7 +3444,7 @@
          *
          * @returns {void}
          */
-        ResizeObserverSPI.prototype.disconnect = function() {
+        ResizeObserverSPI.prototype.disconnect = function () {
             this.clearActive();
             this.observations_.clear();
             this.controller_.removeObserver(this);
@@ -3455,10 +3455,10 @@
          *
          * @returns {void}
          */
-        ResizeObserverSPI.prototype.gatherActive = function() {
+        ResizeObserverSPI.prototype.gatherActive = function () {
             var _this = this;
             this.clearActive();
-            this.observations_.forEach(function(observation) {
+            this.observations_.forEach(function (observation) {
                 if (observation.isActive()) {
                     _this.activeObservations_.push(observation);
                 }
@@ -3470,14 +3470,14 @@
          *
          * @returns {void}
          */
-        ResizeObserverSPI.prototype.broadcastActive = function() {
-            // Do nothing if observer doesn't have active observations.
+        ResizeObserverSPI.prototype.broadcastActive = function () {
+            /* Do nothing if observer doesn't have active observations. */
             if (!this.hasActive()) {
                 return;
             }
             var ctx = this.callbackCtx_;
-            // Create ResizeObserverEntry instance for every active observation.
-            var entries = this.activeObservations_.map(function(observation) {
+            /* Create ResizeObserverEntry instance for every active observation. */
+            var entries = this.activeObservations_.map(function (observation) {
                 return new ResizeObserverEntry(observation.target, observation.broadcastRect());
             });
             this.callback_.call(ctx, entries, ctx);
@@ -3488,7 +3488,7 @@
          *
          * @returns {void}
          */
-        ResizeObserverSPI.prototype.clearActive = function() {
+        ResizeObserverSPI.prototype.clearActive = function () {
             this.activeObservations_.splice(0);
         };
         /**
@@ -3496,21 +3496,21 @@
          *
          * @returns {boolean}
          */
-        ResizeObserverSPI.prototype.hasActive = function() {
+        ResizeObserverSPI.prototype.hasActive = function () {
             return this.activeObservations_.length > 0;
         };
         return ResizeObserverSPI;
     }());
 
-    // Registry of internal observers. If WeakMap is not available use current shim
-    // for the Map collection as it has all required methods and because WeakMap
-    // can't be fully polyfilled anyway.
+    /* Registry of internal observers. If WeakMap is not available use current shim
+    for the Map collection as it has all required methods and because WeakMap
+    can't be fully polyfilled anyway. */
     var observers = typeof WeakMap !== 'undefined' ? new WeakMap() : new MapShim();
     /**
      * ResizeObserver API. Encapsulates the ResizeObserver SPI implementation
      * exposing only those methods and properties that are defined in the spec.
      */
-    var ResizeObserver = /** @class */ (function() {
+    var ResizeObserver = /** @class */ (function () {
         /**
          * Creates a new instance of ResizeObserver.
          *
@@ -3530,20 +3530,20 @@
         }
         return ResizeObserver;
     }());
-    // Expose public methods of ResizeObserver.
+    /* Expose public methods of ResizeObserver. */
     [
         'observe',
         'unobserve',
         'disconnect'
-    ].forEach(function(method) {
-        ResizeObserver.prototype[method] = function() {
+    ].forEach(function (method) {
+        ResizeObserver.prototype[method] = function () {
             var _a;
             return (_a = observers.get(this))[method].apply(_a, arguments);
         };
     });
 
-    var index = (function() {
-        // Export existing implementation if available.
+    var index = (function () {
+        /* Export existing implementation if available. */
         if (typeof global$1.ResizeObserver !== 'undefined') {
             return global$1.ResizeObserver;
         }
@@ -3560,13 +3560,13 @@
 
     var SimpleBar =
         /*#__PURE__*/
-        function() {
+        function () {
             function SimpleBar(element, options) {
                 var _this = this;
 
                 _classCallCheck(this, SimpleBar);
 
-                this.onScroll = function() {
+                this.onScroll = function () {
                     if (!_this.scrollXTicking) {
                         window.requestAnimationFrame(_this.scrollX);
                         _this.scrollXTicking = true;
@@ -3578,7 +3578,7 @@
                     }
                 };
 
-                this.scrollX = function() {
+                this.scrollX = function () {
                     if (_this.axis.x.isOverflowing) {
                         _this.showScrollbar('x');
 
@@ -3588,7 +3588,7 @@
                     _this.scrollXTicking = false;
                 };
 
-                this.scrollY = function() {
+                this.scrollY = function () {
                     if (_this.axis.y.isOverflowing) {
                         _this.showScrollbar('y');
 
@@ -3598,13 +3598,13 @@
                     _this.scrollYTicking = false;
                 };
 
-                this.onMouseEnter = function() {
+                this.onMouseEnter = function () {
                     _this.showScrollbar('x');
 
                     _this.showScrollbar('y');
                 };
 
-                this.onMouseMove = function(e) {
+                this.onMouseMove = function (e) {
                     _this.mouseX = e.clientX;
                     _this.mouseY = e.clientY;
 
@@ -3617,7 +3617,7 @@
                     }
                 };
 
-                this.onMouseLeave = function() {
+                this.onMouseLeave = function () {
                     _this.onMouseMove.cancel();
 
                     if (_this.axis.x.isOverflowing || _this.axis.x.forceVisible) {
@@ -3632,14 +3632,14 @@
                     _this.mouseY = -1;
                 };
 
-                this.onWindowResize = function() {
-                    // Recalculate scrollbarWidth in case it's a zoom
+                this.onWindowResize = function () {
+                    /* Recalculate scrollbarWidth in case it's a zoom */
                     _this.scrollbarWidth = scrollbarWidth();
 
                     _this.hideNativeScrollbar();
                 };
 
-                this.hideScrollbars = function() {
+                this.hideScrollbars = function () {
                     _this.axis.x.track.rect = _this.axis.x.track.el.getBoundingClientRect();
                     _this.axis.y.track.rect = _this.axis.y.track.el.getBoundingClientRect();
 
@@ -3656,7 +3656,7 @@
                     }
                 };
 
-                this.onPointerEvent = function(e) {
+                this.onPointerEvent = function (e) {
                     var isWithinBoundsY, isWithinBoundsX;
                     _this.axis.x.scrollbar.rect = _this.axis.x.scrollbar.el.getBoundingClientRect();
                     _this.axis.y.scrollbar.rect = _this.axis.y.scrollbar.el.getBoundingClientRect();
@@ -3667,13 +3667,13 @@
 
                     if (_this.axis.y.isOverflowing || _this.axis.y.forceVisible) {
                         isWithinBoundsY = _this.isWithinBounds(_this.axis.y.scrollbar.rect);
-                    } // If any pointer event is called on the scrollbar
+                    } /* If any pointer event is called on the scrollbar */
 
 
                     if (isWithinBoundsY || isWithinBoundsX) {
-                        // Preventing the event's default action stops text being
-                        // selectable during the drag.
-                        e.preventDefault(); // Prevent event leaking
+                        /*  Preventing the event's default action stops text being
+                         selectable during the drag. */
+                        e.preventDefault(); /* Prevent event leaking */
 
                         e.stopPropagation();
 
@@ -3689,7 +3689,7 @@
                     }
                 };
 
-                this.drag = function(e) {
+                this.drag = function (e) {
                     var eventOffset;
                     var track = _this.axis[_this.draggedAxis].track;
                     var trackSize = track.rect[_this.axis[_this.draggedAxis].sizeAttr];
@@ -3701,14 +3701,14 @@
                         eventOffset = e.pageY;
                     } else {
                         eventOffset = e.pageX;
-                    } // Calculate how far the user's mouse is from the top/left of the scrollbar (minus the dragOffset).
+                    } /* Calculate how far the user's mouse is from the top/left of the scrollbar (minus the dragOffset). */
 
 
-                    var dragPos = eventOffset - track.rect[_this.axis[_this.draggedAxis].offsetAttr] - _this.axis[_this.draggedAxis].dragOffset; // Convert the mouse position into a percentage of the scrollbar height/width.
+                    var dragPos = eventOffset - track.rect[_this.axis[_this.draggedAxis].offsetAttr] - _this.axis[_this.draggedAxis].dragOffset; /* Convert the mouse position into a percentage of the scrollbar height/width. */
 
-                    var dragPerc = dragPos / track.rect[_this.axis[_this.draggedAxis].sizeAttr]; // Scroll the content by the same percentage.
+                    var dragPerc = dragPos / track.rect[_this.axis[_this.draggedAxis].sizeAttr]; /*  Scroll the content by the same percentage. */
 
-                    var scrollPos = dragPerc * _this.contentEl[_this.axis[_this.draggedAxis].scrollSizeAttr]; // Fix browsers inconsistency on RTL
+                    var scrollPos = dragPerc * _this.contentEl[_this.axis[_this.draggedAxis].scrollSizeAttr]; /* Fix browsers inconsistency on RTL */
 
                     if (_this.draggedAxis === 'x') {
                         scrollPos = _this.isRtl && SimpleBar.getRtlHelpers().isRtlScrollbarInverted ? scrollPos - (trackSize + scrollbar.size) : scrollPos;
@@ -3718,7 +3718,7 @@
                     _this.contentEl[_this.axis[_this.draggedAxis].scrollOffsetAttr] = scrollPos;
                 };
 
-                this.onEndDrag = function(e) {
+                this.onEndDrag = function (e) {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -3769,7 +3769,7 @@
                         track: {},
                         scrollbar: {}
                     }
-                }; // Don't re-instantiate over an existing one
+                }; /* Don't re-instantiate over an existing one */
 
                 if (this.el.SimpleBar) {
                     return;
@@ -3781,7 +3781,7 @@
                 this.onWindowResize = lodash_debounce(this.onWindowResize.bind(this), 64, {
                     leading: true
                 });
-                SimpleBar.getRtlHelpers = lodash_memoize(SimpleBar.getRtlHelpers); // getContentElement is deprecated
+                SimpleBar.getRtlHelpers = lodash_memoize(SimpleBar.getRtlHelpers); /* getContentElement is deprecated */
 
                 this.getContentElement = this.getScrollElement;
                 this.init();
@@ -3801,8 +3801,8 @@
             _createClass(SimpleBar, [{
                 key: "init",
                 value: function init() {
-                    // Save a reference to the instance, so we know this DOM node has already been instancied
-                    this.el.SimpleBar = this; // We stop here on server-side
+                    /* Save a reference to the instance, so we know this DOM node has already been instancied */
+                    this.el.SimpleBar = this; /* We stop here on server-side */
 
                     if (canUseDom) {
                         this.initDOM();
@@ -3816,11 +3816,11 @@
                 value: function initDOM() {
                     var _this2 = this;
 
-                    // make sure this element doesn't have the elements yet
-                    if (Array.prototype.filter.call(this.el.children, function(child) {
-                            return child.classList.contains(_this2.classNames.wrapper);
-                        }).length) {
-                        // assume that element has his DOM already initiated
+                    /* make sure this element doesn't have the elements yet */
+                    if (Array.prototype.filter.call(this.el.children, function (child) {
+                        return child.classList.contains(_this2.classNames.wrapper);
+                    }).length) {
+                        /* assume that element has his DOM already initiated */
                         this.wrapperEl = this.el.querySelector(".".concat(this.classNames.wrapper));
                         this.contentEl = this.el.querySelector(".".concat(this.classNames.content));
                         this.offsetEl = this.el.querySelector(".".concat(this.classNames.offset));
@@ -3832,7 +3832,7 @@
                         this.axis.x.track.el = this.el.querySelector(".".concat(this.classNames.track, ".").concat(this.classNames.horizontal));
                         this.axis.y.track.el = this.el.querySelector(".".concat(this.classNames.track, ".").concat(this.classNames.vertical));
                     } else {
-                        // Prepare DOM
+                        /* Prepare DOM */
                         this.wrapperEl = document.createElement('div');
                         this.contentEl = document.createElement('div');
                         this.offsetEl = document.createElement('div');
@@ -3893,17 +3893,17 @@
                 value: function initListeners() {
                     var _this3 = this;
 
-                    // Event listeners
+                    /* Event listeners */
                     if (this.options.autoHide) {
                         this.el.addEventListener('mouseenter', this.onMouseEnter);
                     }
 
-                    ['mousedown', 'click', 'dblclick', 'touchstart', 'touchend', 'touchmove'].forEach(function(e) {
+                    ['mousedown', 'click', 'dblclick', 'touchstart', 'touchend', 'touchmove'].forEach(function (e) {
                         _this3.el.addEventListener(e, _this3.onPointerEvent, true);
                     });
                     this.el.addEventListener('mousemove', this.onMouseMove);
                     this.el.addEventListener('mouseleave', this.onMouseLeave);
-                    this.contentEl.addEventListener('scroll', this.onScroll); // Browser zoom triggers a window resize
+                    this.contentEl.addEventListener('scroll', this.onScroll); /* Browser zoom triggers a window resize */
 
                     window.addEventListener('resize', this.onWindowResize);
                     this.resizeObserver = new index(this.recalculate);
@@ -3913,39 +3913,39 @@
             }, {
                 key: "recalculate",
                 value: function recalculate() {
-                        var isHeightAuto = this.heightAutoObserverEl.offsetHeight <= 1;
-                        var isWidthAuto = this.heightAutoObserverEl.offsetWidth <= 1;
-                        this.elStyles = window.getComputedStyle(this.el);
-                        this.isRtl = this.elStyles.direction === 'rtl';
-                        this.resizeWrapperEl.style.padding = "".concat(this.elStyles.paddingTop, " ").concat(this.elStyles.paddingRight, " ").concat(this.elStyles.paddingBottom, " ").concat(this.elStyles.paddingLeft);
-                        this.wrapperEl.style.margin = "-".concat(this.elStyles.paddingTop, " -").concat(this.elStyles.paddingRight, " -").concat(this.elStyles.paddingBottom, " -").concat(this.elStyles.paddingLeft);
-                        this.contentEl.style.height = isHeightAuto ? 'auto' : '100%'; // Determine placeholder size
+                    var isHeightAuto = this.heightAutoObserverEl.offsetHeight <= 1;
+                    var isWidthAuto = this.heightAutoObserverEl.offsetWidth <= 1;
+                    this.elStyles = window.getComputedStyle(this.el);
+                    this.isRtl = this.elStyles.direction === 'rtl';
+                    this.resizeWrapperEl.style.padding = "".concat(this.elStyles.paddingTop, " ").concat(this.elStyles.paddingRight, " ").concat(this.elStyles.paddingBottom, " ").concat(this.elStyles.paddingLeft);
+                    this.wrapperEl.style.margin = "-".concat(this.elStyles.paddingTop, " -").concat(this.elStyles.paddingRight, " -").concat(this.elStyles.paddingBottom, " -").concat(this.elStyles.paddingLeft);
+                    this.contentEl.style.height = isHeightAuto ? 'auto' : '100%'; /* Determine placeholder size */
 
-                        this.placeholderEl.style.width = isWidthAuto ? "".concat(this.resizeWrapperEl.clientWidth, "px") : 'auto';
-                        this.placeholderEl.style.height = "".concat(this.resizeWrapperEl.scrollHeight, "px"); // Set isOverflowing to false if scrollbar is not necessary (content is shorter than offset)
+                    this.placeholderEl.style.width = isWidthAuto ? "".concat(this.resizeWrapperEl.clientWidth, "px") : 'auto';
+                    this.placeholderEl.style.height = "".concat(this.resizeWrapperEl.scrollHeight, "px"); /* Set isOverflowing to false if scrollbar is not necessary (content is shorter than offset) */
 
-                        this.axis.x.isOverflowing = this.contentEl.scrollWidth > this.contentEl.clientWidth;
-                        this.axis.y.isOverflowing = this.contentEl.scrollHeight > this.contentEl.clientHeight; // Set isOverflowing to false if user explicitely set hidden overflow
+                    this.axis.x.isOverflowing = this.contentEl.scrollWidth > this.contentEl.clientWidth;
+                    this.axis.y.isOverflowing = this.contentEl.scrollHeight > this.contentEl.clientHeight; /* Set isOverflowing to false if user explicitely set hidden overflow */
 
-                        this.axis.x.isOverflowing = this.elStyles.overflowX === 'hidden' ? false : this.axis.x.isOverflowing;
-                        this.axis.y.isOverflowing = this.elStyles.overflowY === 'hidden' ? false : this.axis.y.isOverflowing;
-                        this.hideNativeScrollbar();
-                        this.axis.x.track.rect = this.axis.x.track.el.getBoundingClientRect();
-                        this.axis.y.track.rect = this.axis.y.track.el.getBoundingClientRect();
-                        this.axis.x.forceVisible = this.options.forceVisible === 'x' || this.options.forceVisible === true;
-                        this.axis.y.forceVisible = this.options.forceVisible === 'y' || this.options.forceVisible === true;
-                        this.axis.x.scrollbar.size = this.getScrollbarSize('x');
-                        this.axis.y.scrollbar.size = this.getScrollbarSize('y');
-                        this.axis.x.scrollbar.el.style.width = "".concat(this.axis.x.scrollbar.size, "px");
-                        this.axis.y.scrollbar.el.style.height = "".concat(this.axis.y.scrollbar.size, "px");
-                        this.positionScrollbar('x');
-                        this.positionScrollbar('y');
-                        this.toggleTrackVisibility('x');
-                        this.toggleTrackVisibility('y');
-                    }
-                    /**
-                     * Calculate scrollbar size
-                     */
+                    this.axis.x.isOverflowing = this.elStyles.overflowX === 'hidden' ? false : this.axis.x.isOverflowing;
+                    this.axis.y.isOverflowing = this.elStyles.overflowY === 'hidden' ? false : this.axis.y.isOverflowing;
+                    this.hideNativeScrollbar();
+                    this.axis.x.track.rect = this.axis.x.track.el.getBoundingClientRect();
+                    this.axis.y.track.rect = this.axis.y.track.el.getBoundingClientRect();
+                    this.axis.x.forceVisible = this.options.forceVisible === 'x' || this.options.forceVisible === true;
+                    this.axis.y.forceVisible = this.options.forceVisible === 'y' || this.options.forceVisible === true;
+                    this.axis.x.scrollbar.size = this.getScrollbarSize('x');
+                    this.axis.y.scrollbar.size = this.getScrollbarSize('y');
+                    this.axis.x.scrollbar.el.style.width = "".concat(this.axis.x.scrollbar.size, "px");
+                    this.axis.y.scrollbar.el.style.height = "".concat(this.axis.y.scrollbar.size, "px");
+                    this.positionScrollbar('x');
+                    this.positionScrollbar('y');
+                    this.toggleTrackVisibility('x');
+                    this.toggleTrackVisibility('y');
+                }
+                /**
+                 * Calculate scrollbar size
+                 */
 
             }, {
                 key: "getScrollbarSize",
@@ -3959,7 +3959,7 @@
                         return;
                     }
 
-                    var scrollbarRatio = trackSize / contentSize; // Calculate new height/position of drag handle.
+                    var scrollbarRatio = trackSize / contentSize; /* Calculate new height/position of drag handle. */
 
                     scrollbarSize = Math.max(~~(scrollbarRatio * trackSize), this.options.scrollbarMinSize);
 
@@ -3997,7 +3997,7 @@
                     } else {
                         track.style.visibility = 'hidden';
                         this.contentEl.style[this.axis[axis].overflowAttr] = 'hidden';
-                    } // Even if forceVisible is enabled, scrollbar itself should be hidden
+                    } /* Even if forceVisible is enabled, scrollbar itself should be hidden */
 
 
                     if (this.axis[axis].isOverflowing) {
@@ -4009,18 +4009,18 @@
             }, {
                 key: "hideNativeScrollbar",
                 value: function hideNativeScrollbar() {
-                        this.offsetEl.style[this.isRtl ? 'left' : 'right'] = this.axis.y.isOverflowing || this.axis.y.forceVisible ? "-".concat(this.scrollbarWidth || this.minScrollbarWidth, "px") : 0;
-                        this.offsetEl.style.bottom = this.axis.x.isOverflowing || this.axis.x.forceVisible ? "-".concat(this.scrollbarWidth || this.minScrollbarWidth, "px") : 0; // If floating scrollbar
+                    this.offsetEl.style[this.isRtl ? 'left' : 'right'] = this.axis.y.isOverflowing || this.axis.y.forceVisible ? "-".concat(this.scrollbarWidth || this.minScrollbarWidth, "px") : 0;
+                    this.offsetEl.style.bottom = this.axis.x.isOverflowing || this.axis.x.forceVisible ? "-".concat(this.scrollbarWidth || this.minScrollbarWidth, "px") : 0; /* If floating scrollbar */
 
-                        if (!this.scrollbarWidth) {
-                            var paddingDirection = [this.isRtl ? 'paddingLeft' : 'paddingRight'];
-                            this.contentEl.style[paddingDirection] = this.axis.y.isOverflowing || this.axis.y.forceVisible ? "".concat(this.minScrollbarWidth, "px") : 0;
-                            this.contentEl.style.paddingBottom = this.axis.x.isOverflowing || this.axis.x.forceVisible ? "".concat(this.minScrollbarWidth, "px") : 0;
-                        }
+                    if (!this.scrollbarWidth) {
+                        var paddingDirection = [this.isRtl ? 'paddingLeft' : 'paddingRight'];
+                        this.contentEl.style[paddingDirection] = this.axis.y.isOverflowing || this.axis.y.forceVisible ? "".concat(this.minScrollbarWidth, "px") : 0;
+                        this.contentEl.style.paddingBottom = this.axis.x.isOverflowing || this.axis.x.forceVisible ? "".concat(this.minScrollbarWidth, "px") : 0;
                     }
-                    /**
-                     * On scroll event handling
-                     */
+                }
+                /**
+                 * On scroll event handling
+                 */
 
             }, {
                 key: "onMouseMoveForAxis",
@@ -4057,21 +4057,21 @@
                  * Show scrollbar
                  */
                 value: function showScrollbar() {
-                        var axis = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'y';
-                        var scrollbar = this.axis[axis].scrollbar.el;
+                    var axis = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'y';
+                    var scrollbar = this.axis[axis].scrollbar.el;
 
-                        if (!this.axis[axis].isVisible) {
-                            scrollbar.classList.add(this.classNames.visible);
-                            this.axis[axis].isVisible = true;
-                        }
-
-                        if (this.options.autoHide) {
-                            this.hideScrollbars();
-                        }
+                    if (!this.axis[axis].isVisible) {
+                        scrollbar.classList.add(this.classNames.visible);
+                        this.axis[axis].isVisible = true;
                     }
-                    /**
-                     * Hide Scrollbar
-                     */
+
+                    if (this.options.autoHide) {
+                        this.hideScrollbars();
+                    }
+                }
+                /**
+                 * Hide Scrollbar
+                 */
 
             }, {
                 key: "onDragStart",
@@ -4080,19 +4080,19 @@
                  * on scrollbar handle drag movement starts
                  */
                 value: function onDragStart(e) {
-                        var axis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'y';
-                        var scrollbar = this.axis[axis].scrollbar.el; // Measure how far the user's mouse is from the top of the scrollbar drag handle.
+                    var axis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'y';
+                    var scrollbar = this.axis[axis].scrollbar.el; /* Measure how far the user's mouse is from the top of the scrollbar drag handle. */
 
-                        var eventOffset = axis === 'y' ? e.pageY : e.pageX;
-                        this.axis[axis].dragOffset = eventOffset - scrollbar.getBoundingClientRect()[this.axis[axis].offsetAttr];
-                        this.draggedAxis = axis;
-                        this.el.classList.add(this.classNames.dragging);
-                        document.addEventListener('mousemove', this.drag);
-                        document.addEventListener('mouseup', this.onEndDrag);
-                    }
-                    /**
-                     * Drag scrollbar handle
-                     */
+                    var eventOffset = axis === 'y' ? e.pageY : e.pageX;
+                    this.axis[axis].dragOffset = eventOffset - scrollbar.getBoundingClientRect()[this.axis[axis].offsetAttr];
+                    this.draggedAxis = axis;
+                    this.el.classList.add(this.classNames.dragging);
+                    document.addEventListener('mousemove', this.drag);
+                    document.addEventListener('mouseup', this.onEndDrag);
+                }
+                /**
+                 * Drag scrollbar handle
+                 */
 
             }, {
                 key: "getScrollElement",
@@ -4106,52 +4106,52 @@
             }, {
                 key: "removeListeners",
                 value: function removeListeners() {
-                        var _this4 = this;
+                    var _this4 = this;
 
-                        // Event listeners
-                        if (this.options.autoHide) {
-                            this.el.removeEventListener('mouseenter', this.onMouseEnter);
-                        }
-
-                        ['mousedown', 'click', 'dblclick', 'touchstart', 'touchend', 'touchmove'].forEach(function(e) {
-                            _this4.el.removeEventListener(e, _this4.onPointerEvent);
-                        });
-                        this.el.removeEventListener('mousemove', this.onMouseMove);
-                        this.el.removeEventListener('mouseleave', this.onMouseLeave);
-                        this.contentEl.removeEventListener('scroll', this.onScroll);
-                        window.removeEventListener('resize', this.onWindowResize);
-                        this.mutationObserver && this.mutationObserver.disconnect();
-                        this.resizeObserver.disconnect(); // Cancel all debounced functions
-
-                        this.recalculate.cancel();
-                        this.onMouseMove.cancel();
-                        this.hideScrollbars.cancel();
-                        this.onWindowResize.cancel();
+                    /* Event listeners */
+                    if (this.options.autoHide) {
+                        this.el.removeEventListener('mouseenter', this.onMouseEnter);
                     }
-                    /**
-                     * UnMount mutation observer and delete SimpleBar instance from DOM element
-                     */
+
+                    ['mousedown', 'click', 'dblclick', 'touchstart', 'touchend', 'touchmove'].forEach(function (e) {
+                        _this4.el.removeEventListener(e, _this4.onPointerEvent);
+                    });
+                    this.el.removeEventListener('mousemove', this.onMouseMove);
+                    this.el.removeEventListener('mouseleave', this.onMouseLeave);
+                    this.contentEl.removeEventListener('scroll', this.onScroll);
+                    window.removeEventListener('resize', this.onWindowResize);
+                    this.mutationObserver && this.mutationObserver.disconnect();
+                    this.resizeObserver.disconnect(); /* Cancel all debounced functions */
+
+                    this.recalculate.cancel();
+                    this.onMouseMove.cancel();
+                    this.hideScrollbars.cancel();
+                    this.onWindowResize.cancel();
+                }
+                /**
+                 * UnMount mutation observer and delete SimpleBar instance from DOM element
+                 */
 
             }, {
                 key: "unMount",
                 value: function unMount() {
-                        this.removeListeners();
-                        this.el.SimpleBar = null;
-                    }
-                    /**
-                     * Recursively walks up the parent nodes looking for this.el
-                     */
+                    this.removeListeners();
+                    this.el.SimpleBar = null;
+                }
+                /**
+                 * Recursively walks up the parent nodes looking for this.el
+                 */
 
             }, {
                 key: "isChildNode",
                 value: function isChildNode(el) {
-                        if (el === null) return false;
-                        if (el === this.el) return true;
-                        return this.isChildNode(el.parentNode);
-                    }
-                    /**
-                     * Check if mouse is within bounds
-                     */
+                    if (el === null) return false;
+                    if (el === this.el) return true;
+                    return this.isChildNode(el.parentNode);
+                }
+                /**
+                 * Check if mouse is within bounds
+                 */
 
             }, {
                 key: "isWithinBounds",
@@ -4172,70 +4172,70 @@
                     scrollbarDummyEl.scrollLeft = 999;
                     var dummyContainerScrollOffsetAfterScroll = SimpleBar.getOffset(dummyContainerChild);
                     return {
-                        // determines if the scrolling is responding with negative values
+                        /* determines if the scrolling is responding with negative values */
                         isRtlScrollingInverted: dummyContainerOffset.left !== dummyContainerChildOffset.left && dummyContainerChildOffset.left - dummyContainerScrollOffsetAfterScroll.left !== 0,
-                        // determines if the origin scrollbar position is inverted or not (positioned on left or right)
+                        /* determines if the origin scrollbar position is inverted or not (positioned on left or right) */
                         isRtlScrollbarInverted: dummyContainerOffset.left !== dummyContainerChildOffset.left
                     };
                 }
             }, {
                 key: "initHtmlApi",
                 value: function initHtmlApi() {
-                        this.initDOMLoadedElements = this.initDOMLoadedElements.bind(this); // MutationObserver is IE11+
+                    this.initDOMLoadedElements = this.initDOMLoadedElements.bind(this); /* MutationObserver is IE11+ */
 
-                        if (typeof MutationObserver !== 'undefined') {
-                            // Mutation observer to observe dynamically added elements
-                            this.globalObserver = new MutationObserver(function(mutations) {
-                                mutations.forEach(function(mutation) {
-                                    Array.prototype.forEach.call(mutation.addedNodes, function(addedNode) {
-                                        if (addedNode.nodeType === 1) {
-                                            if (addedNode.dataset.simplebar) {
-                                                !addedNode.SimpleBar && new SimpleBar(addedNode, SimpleBar.getElOptions(addedNode));
-                                            } else {
-                                                Array.prototype.forEach.call(addedNode.querySelectorAll('[data-simplebar]'), function(el) {
-                                                    !el.SimpleBar && new SimpleBar(el, SimpleBar.getElOptions(el));
-                                                });
-                                            }
+                    if (typeof MutationObserver !== 'undefined') {
+                        /* Mutation observer to observe dynamically added elements */
+                        this.globalObserver = new MutationObserver(function (mutations) {
+                            mutations.forEach(function (mutation) {
+                                Array.prototype.forEach.call(mutation.addedNodes, function (addedNode) {
+                                    if (addedNode.nodeType === 1) {
+                                        if (addedNode.dataset.simplebar) {
+                                            !addedNode.SimpleBar && new SimpleBar(addedNode, SimpleBar.getElOptions(addedNode));
+                                        } else {
+                                            Array.prototype.forEach.call(addedNode.querySelectorAll('[data-simplebar]'), function (el) {
+                                                !el.SimpleBar && new SimpleBar(el, SimpleBar.getElOptions(el));
+                                            });
                                         }
-                                    });
-                                    Array.prototype.forEach.call(mutation.removedNodes, function(removedNode) {
-                                        if (removedNode.nodeType === 1) {
-                                            if (removedNode.dataset.simplebar && removedNode.dataset.simplebar !== 'init') {
-                                                removedNode.SimpleBar && removedNode.SimpleBar.unMount();
-                                            } else {
-                                                Array.prototype.forEach.call(removedNode.querySelectorAll('[data-simplebar]'), function(el) {
-                                                    el.SimpleBar && el.SimpleBar.unMount();
-                                                });
-                                            }
+                                    }
+                                });
+                                Array.prototype.forEach.call(mutation.removedNodes, function (removedNode) {
+                                    if (removedNode.nodeType === 1) {
+                                        if (removedNode.dataset.simplebar && removedNode.dataset.simplebar !== 'init') {
+                                            removedNode.SimpleBar && removedNode.SimpleBar.unMount();
+                                        } else {
+                                            Array.prototype.forEach.call(removedNode.querySelectorAll('[data-simplebar]'), function (el) {
+                                                el.SimpleBar && el.SimpleBar.unMount();
+                                            });
                                         }
-                                    });
+                                    }
                                 });
                             });
-                            this.globalObserver.observe(document, {
-                                childList: true,
-                                subtree: true
-                            });
-                        } // Taken from jQuery `ready` function
-                        // Instantiate elements already present on the page
+                        });
+                        this.globalObserver.observe(document, {
+                            childList: true,
+                            subtree: true
+                        });
+                    } /* Taken from jQuery `ready` function */
+                    /* Instantiate elements already present on the page */
 
 
-                        if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
-                            // Handle it asynchronously to allow scripts the opportunity to delay init
-                            window.setTimeout(this.initDOMLoadedElements);
-                        } else {
-                            document.addEventListener('DOMContentLoaded', this.initDOMLoadedElements);
-                            window.addEventListener('load', this.initDOMLoadedElements);
-                        }
-                    } // Helper function to retrieve options from element attributes
+                    if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
+                        /* Handle it asynchronously to allow scripts the opportunity to delay init */
+                        window.setTimeout(this.initDOMLoadedElements);
+                    } else {
+                        document.addEventListener('DOMContentLoaded', this.initDOMLoadedElements);
+                        window.addEventListener('load', this.initDOMLoadedElements);
+                    }
+                } /* Helper function to retrieve options from element attributes */
 
             }, {
                 key: "getElOptions",
                 value: function getElOptions(el) {
-                    var options = Array.prototype.reduce.call(el.attributes, function(acc, attribute) {
+                    var options = Array.prototype.reduce.call(el.attributes, function (acc, attribute) {
                         var option = attribute.name.match(/data-simplebar-(.+)/);
 
                         if (option) {
-                            var key = option[1].replace(/\W+(.)/g, function(x, chr) {
+                            var key = option[1].replace(/\W+(.)/g, function (x, chr) {
                                 return chr.toUpperCase();
                             });
 
@@ -4271,7 +4271,7 @@
                 value: function initDOMLoadedElements() {
                     document.removeEventListener('DOMContentLoaded', this.initDOMLoadedElements);
                     window.removeEventListener('load', this.initDOMLoadedElements);
-                    Array.prototype.forEach.call(document.querySelectorAll('[data-simplebar]'), function(el) {
+                    Array.prototype.forEach.call(document.querySelectorAll('[data-simplebar]'), function (el) {
                         if (!el.SimpleBar) new SimpleBar(el, SimpleBar.getElOptions(el));
                     });
                 }
