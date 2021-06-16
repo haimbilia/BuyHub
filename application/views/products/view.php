@@ -780,29 +780,32 @@ $(function() {
     });
 </script>
 <!-- Product Schema Code -->
-<?php if (FatApp::getConfig("CONF_DEFAULT_SCHEMA_CODES_SCRIPT", FatUtility::VAR_STRING, '')) {
-    $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
-    <script type="application/ld+json">
-        {
-            "@context": "http://schema.org",
-            "@type": "Product",
-            "aggregateRating": {
+<?php
+$image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Product",
+        <?php if (isset($reviews['prod_rating']) && 0 < $reviews['prod_rating']) { ?> "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "<?php echo round(FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT), 1); ?>",
                 "reviewCount": "<?php echo FatUtility::int($reviews['totReviews']); ?>"
             },
-            "description": "<?php echo CommonHelper::renderHtml($product['product_description']); ?>",
-            "name": "<?php echo $product['selprod_title']; ?>",
-            "image": "<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>",
-            "offers": {
-                "@type": "Offer",
-                "availability": "http://schema.org/InStock",
-                "price": "<?php echo $product['theprice']; ?>",
-                "priceCurrency": "<?php echo CommonHelper::getCurrencyCode(); ?>"
-            }
+        <?php } ?> "description": "<?php echo CommonHelper::renderHtml($product['product_description']); ?>",
+        "name": "<?php echo $product['selprod_title']; ?>",
+        <?php if (isset($product['brand_name']) && $product['brand_name'] != '') { ?> "brand": "<?php echo $product['brand_name']; ?>",
+        <?php } ?>
+        <?php if (isset($product['selprod_sku']) && $product['selprod_sku'] != '') { ?> "sku": "<?php echo $product['selprod_sku']; ?>",
+        <?php } ?> "image": "<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>",
+        "offers": {
+            "@type": "Offer",
+            "availability": "http://schema.org/InStock",
+            "price": "<?php echo $product['theprice']; ?>",
+            "priceCurrency": "<?php echo CommonHelper::getCurrencyCode(); ?>"
         }
-    </script>
-<?php } ?>
+    }
+</script>
+
 <!-- End Product Schema Code -->
 
 <!--Here is the facebook OG for this product  -->

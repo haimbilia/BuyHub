@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $(document).on('keypress', 'input.zip-js', function(e) {
+$(document).ready(function () {
+    $(document).on('keypress', 'input.zip-js', function (e) {
         var regex = new RegExp("^[a-zA-Z0-9]+$");
         var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(str)) {
@@ -11,29 +11,29 @@ $(document).ready(function() {
     });
     $('[data-toggle="tooltip"]').tooltip();
 
-    $(document).ajaxComplete(function() {
+    $(document).ajaxComplete(function () {
         stylePhoneNumberFld('.phone-js');
     });
 });
 
-(function($) {
+(function ($) {
     var screenHeight = $(window).height() - 100;
-    window.onresize = function(event) {
+    window.onresize = function (event) {
         var screenHeight = $(window).height() - 100;
     };
 
     $.extend(fcom, {
 
-        waitAndRedirect: function(msg, url, time) {
+        waitAndRedirect: function (msg, url, time) {
             var time = time || 3000;
             var url = url || fcom.makeUrl();
             $.systemMessage(msg);
-            setTimeout(function() {
+            setTimeout(function () {
                 location.href = url;
             }, time);
         },
 
-        scrollToTop: function(obj) {
+        scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
                 $('html, body').animate({
                     scrollTop: $('html, body').offset().top - 100
@@ -45,7 +45,7 @@ $(document).ready(function() {
             }
         },
 
-        resetEditorInstance: function() {
+        resetEditorInstance: function () {
             if (typeof oUtil != 'undefined') {
 
                 var editors = oUtil.arrEditor;
@@ -57,16 +57,16 @@ $(document).ready(function() {
             }
         },
 
-        resetEditorWidth: function(width = "100%") {
+        resetEditorWidth: function (width = "100%") {
             if (typeof oUtil != 'undefined') {
-                (oUtil.arrEditor).forEach(function(input) {
+                (oUtil.arrEditor).forEach(function (input) {
                     var oEdit1 = eval(input);
                     $("#idArea" + oEdit1.oName).attr("width", width);
                 });
             }
         },
 
-        setEditorLayout: function(lang_id) {
+        setEditorLayout: function (lang_id) {
             var editors = oUtil.arrEditor;
             layout = langLbl['language' + lang_id];
             for (x in editors) {
@@ -78,7 +78,7 @@ $(document).ready(function() {
             }
         },
 
-        resetFaceboxHeight: function() {
+        resetFaceboxHeight: function () {
             $('html').css('overflow', 'hidden');
             facebocxHeight = screenHeight;
             var fbContentHeight = parseInt($('#facebox .content').height()) + parseInt(100);
@@ -92,11 +92,11 @@ $(document).ready(function() {
             }
         },
 
-        getLoader: function() {
+        getLoader: function () {
             return '<div class="circularLoader"><svg class="circular" height="30" width="30"><circle class="path" cx="25" cy="25.2" r="19.9" fill="none" stroke-width="6" stroke-miterlimit="10"></circle> </svg> </div>';
         },
 
-        updateFaceboxContent: function(t, cls) {
+        updateFaceboxContent: function (t, cls) {
             if (typeof cls == 'undefined' || cls == 'undefined') {
                 cls = '';
             }
@@ -104,19 +104,19 @@ $(document).ready(function() {
             $.systemMessage.close();
             fcom.resetFaceboxHeight();
         },
-        displayProcessing: function(msg, cls, autoclose) {
+        displayProcessing: function (msg, cls, autoclose) {
             if (typeof msg == 'undefined' || msg == 'undefined') {
                 msg = langLbl.processing;
             }
             $.systemMessage(msg, 'alert--process', autoclose);
         },
-        displaySuccessMessage: function(msg, cls, autoclose) {
+        displaySuccessMessage: function (msg, cls, autoclose) {
             if (typeof cls == 'undefined' || cls == 'undefined') {
                 cls = 'alert--success';
             }
             $.systemMessage(msg, cls, autoclose);
         },
-        displayErrorMessage: function(msg, cls, autoclose) {
+        displayErrorMessage: function (msg, cls, autoclose) {
             if (typeof cls == 'undefined' || cls == 'undefined') {
                 cls = 'alert--danger';
             }
@@ -124,25 +124,25 @@ $(document).ready(function() {
         }
     });
 
-    $(document).bind('reveal.facebox', function() {
+    $(document).bind('reveal.facebox', function () {
         fcom.resetFaceboxHeight();
     });
 
-    $(window).on("orientationchange", function() {
+    $(window).on("orientationchange", function () {
         fcom.resetFaceboxHeight();
     });
 
-    $(document).bind('loading.facebox', function() {
+    $(document).bind('loading.facebox', function () {
 
         $('#facebox .content').addClass('fbminwidth');
     });
 
     $(document).bind('afterClose.facebox', fcom.resetEditorInstance);
-    $(document).bind('afterClose.facebox', function() {
+    $(document).bind('afterClose.facebox', function () {
         $('html').css('overflow', '')
     });
 
-    $.systemMessage = function(data, cls, autoClose = true) {
+    $.systemMessage = function (data, cls, autoClose = true) {
         if ("" == data) {
             return;
         }
@@ -158,10 +158,10 @@ $(document).ready(function() {
         settings: {
             closeimage: siteConstants.webroot + 'images/facebox/close.gif',
         },
-        loading: function() {
+        loading: function () {
             $('.alert').show();
         },
-        fillSysMessage: function(data, cls, autoClose) {
+        fillSysMessage: function (data, cls, autoClose) {
             $('.alert').removeClass('alert--success');
             $('.alert').removeClass('alert--danger');
             $('.alert').removeClass('alert--process');
@@ -171,15 +171,15 @@ $(document).ready(function() {
             $('.system_message').fadeIn();
             if (autoClose && CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
                 var time = CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 2000;
-                setTimeout(function() {
+                setTimeout(function () {
                     $.systemMessage.close();
                 }, time);
             }
             /* setTimeout(function() {
-            	$('.system_message').hide('fade', {}, 500)
+                $('.system_message').hide('fade', {}, 500)
             }, 5000); */
         },
-        close: function() {
+        close: function () {
             $(document).trigger('close.sysmsgcontent');
         },
     });
@@ -188,7 +188,7 @@ $(document).ready(function() {
         $('.alert .close').click($.systemMessage.close);
     }
 
-    $(document).bind('close.sysmsgcontent', function() {
+    $(document).bind('close.sysmsgcontent', function () {
         $('.alert').fadeOut();
     });
 
@@ -198,7 +198,7 @@ $(document).ready(function() {
     if ($.datepicker) {
 
         var old_goToToday = $.datepicker._gotoToday
-        $.datepicker._gotoToday = function(id) {
+        $.datepicker._gotoToday = function (id) {
             old_goToToday.call(this, id);
             this._selectDate(id);
             $(id).blur();
@@ -207,18 +207,18 @@ $(document).ready(function() {
     }
 
 
-    refreshCaptcha = function(elem) {
+    refreshCaptcha = function (elem) {
         $(elem).attr('src', siteConstants.webroot + 'helper/captcha?sid=' + Math.random());
     }
 
-    clearCache = function() {
+    clearCache = function () {
         $.systemMessage(langLbl.processing, 'alert--process');
-        fcom.ajax(fcom.makeUrl('Home', 'clear'), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Home', 'clear'), '', function (t) {
             window.location.reload();
         });
     }
 
-    SelectText = function(element) {
+    SelectText = function (element) {
         var doc = document,
             text = doc.getElementById(element),
             range, selection;
@@ -234,14 +234,14 @@ $(document).ready(function() {
             selection.addRange(range);
         }
     }
-    getSlugUrl = function(obj, str, extra, pos) {
+    getSlugUrl = function (obj, str, extra, pos) {
         if (pos == undefined)
             pos = 'pre';
         var str = str.toString().toLowerCase()
-            .replace(/\s+/g, '-') // Replace spaces with -
-            .replace(/[^\w\-\/]+/g, '') // Remove all non-word chars
-            .replace(/\-\-+/g, '-') // Replace multiple - with single -
-            .replace(/^-+/, '') // Trim - from start of text
+            .replace(/\s+/g, '-') /* Replace spaces with - */
+            .replace(/[^\w\-\/]+/g, '') /* Remove all non-word chars */
+            .replace(/\-\-+/g, '-') /* Replace multiple - with single - */
+            .replace(/^-+/, '') /* Trim - from start of text */
             .replace(/-+$/, '');
         if (extra && pos == 'pre') {
             str = extra + '/' + str;
@@ -254,7 +254,7 @@ $(document).ready(function() {
 
     };
 
-    redirectfunc = function(url, id, nid, newTab) {
+    redirectfunc = function (url, id, nid, newTab) {
         newTab = (typeof newTab != "undefined") ? newTab : true;
         if (nid > 0) {
             $.systemMessage(langLbl.processing, 'alert--process');
@@ -266,22 +266,22 @@ $(document).ready(function() {
         }
     };
 
-    markRead = function(nid, url, id) {
+    markRead = function (nid, url, id) {
         if (nid.length < 1) {
             return false;
         }
         var data = 'record_ids=' + nid + '&status=' + 1 + '&markread=1';
-        fcom.updateWithAjax(fcom.makeUrl('Notifications', 'changeStatus'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Notifications', 'changeStatus'), data, function (t) {
             var form = '<input type="hidden" name="id" value="' + id + '">';
             $('<form action="' + url + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
         });
     };
 
     /* $(document).click(function(event) {
-    	$('ul.dropdown-menu').hide();
+        $('ul.dropdown-menu').hide();
     }); */
 
-    autofillLangData = function(autoFillBtn, frm) {
+    autofillLangData = function (autoFillBtn, frm) {
         var actionUrl = autoFillBtn.data('action');
 
         var defaultLangField = $('input.defaultLang', frm);
@@ -291,7 +291,7 @@ $(document).ready(function() {
         }
         var proceed = true;
         var stringToTranslate = '';
-        defaultLangField.each(function(index) {
+        defaultLangField.each(function (index) {
             if ('' != $(this).val()) {
                 if (0 < index) {
                     stringToTranslate += "&";
@@ -307,10 +307,10 @@ $(document).ready(function() {
 
         if (true == proceed) {
             fcom.displayProcessing();
-            fcom.ajax(actionUrl, stringToTranslate, function(t) {
+            fcom.ajax(actionUrl, stringToTranslate, function (t) {
                 var res = $.parseJSON(t);
-                $.each(res, function(langId, values) {
-                    $.each(values, function(selector, value) {
+                $.each(res, function (langId, values) {
+                    $.each(values, function (selector, value) {
                         $("input.langField_" + langId + "[name='" + selector + "']").val(value);
                     });
                 });
@@ -336,29 +336,29 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
             prevArrow: '<a data-role="none" class="slick-prev" aria-label="previous"></a>',
             nextArrow: '<a data-role="none" class="slick-next" aria-label="next"></a>',
             responsive: [{
-                    breakpoint: 1050,
-                    settings: {
-                        slidesToShow: slidesToShow - 1,
-                    }
-                },
-                {
-                    breakpoint: 990,
-                    settings: {
-                        slidesToShow: 3,
-                    }
-                },
-                {
-                    breakpoint: 767,
-                    settings: {
-                        slidesToShow: 2,
-                    }
-                },
-                {
-                    breakpoint: 400,
-                    settings: {
-                        slidesToShow: 1,
-                    }
+                breakpoint: 1050,
+                settings: {
+                    slidesToShow: slidesToShow - 1,
                 }
+            },
+            {
+                breakpoint: 990,
+                settings: {
+                    slidesToShow: 3,
+                }
+            },
+            {
+                breakpoint: 767,
+                settings: {
+                    slidesToShow: 2,
+                }
+            },
+            {
+                breakpoint: 400,
+                settings: {
+                    slidesToShow: 1,
+                }
+            }
             ]
         }
     } else {
@@ -370,47 +370,47 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
             prevArrow: '<a data-role="none" class="slick-prev" aria-label="previous"></a>',
             nextArrow: '<a data-role="none" class="slick-next" aria-label="next"></a>',
             responsive: [{
-                    breakpoint: 1050,
-                    settings: {
-                        slidesToShow: slidesToShow - 1,
-                    }
-                },
-                {
-                    breakpoint: 990,
-                    settings: {
-                        slidesToShow: 3,
-                    }
-                },
-                {
-                    breakpoint: 767,
-                    settings: {
-                        slidesToShow: 2,
-                    }
-                },
-                {
-                    breakpoint: 400,
-                    settings: {
-                        slidesToShow: 1,
-                    }
+                breakpoint: 1050,
+                settings: {
+                    slidesToShow: slidesToShow - 1,
                 }
+            },
+            {
+                breakpoint: 990,
+                settings: {
+                    slidesToShow: 3,
+                }
+            },
+            {
+                breakpoint: 767,
+                settings: {
+                    slidesToShow: 2,
+                }
+            },
+            {
+                breakpoint: 400,
+                settings: {
+                    slidesToShow: 1,
+                }
+            }
             ]
         }
     }
 }
-(function() {
+(function () {
 
-    Slugify = function(str, str_val_id, is_slugify) {
+    Slugify = function (str, str_val_id, is_slugify) {
         var str = str.toString().toLowerCase()
-            .replace(/\s+/g, '-') // Replace spaces with -
-            .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-            .replace(/\-\-+/g, '-') // Replace multiple - with single -
-            .replace(/^-+/, '') // Trim - from start of text
+            .replace(/\s+/g, '-') /* Replace spaces with - */
+            .replace(/[^\w\-]+/g, '') /* Remove all non-word chars */
+            .replace(/\-\-+/g, '-') /* Replace multiple - with single - */
+            .replace(/^-+/, '') /* Trim - from start of text */
             .replace(/-+$/, '');
         if ($("#" + is_slugify).val() == 0)
             $("#" + str_val_id).val(str);
     };
 
-    callChart = function(dv, $labels, $series, $position) {
+    callChart = function (dv, $labels, $series, $position) {
 
 
         new Chartist.Bar('#' + dv, {
@@ -427,7 +427,7 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
 
             axisY: {
                 position: $position,
-                labelInterpolationFnc: function(value) {
+                labelInterpolationFnc: function (value) {
 
                     return (value / 1000) + 'k';
 
@@ -435,7 +435,7 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
 
             }
 
-        }).on('draw', function(data) {
+        }).on('draw', function (data) {
 
             if (data.type === 'bar') {
 
@@ -451,7 +451,7 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
 
     }
 
-    $(document).on('click', ".group__head-js", function() {
+    $(document).on('click', ".group__head-js", function () {
         if ($(this).parents('.group-js').hasClass('is-active')) {
             $(this).siblings('.group__body-js').slideUp();
             $('.group-js').removeClass('is-active');
@@ -510,7 +510,7 @@ function googleCaptcha() {
     var inputObj = $("form input[name='g-recaptcha-response']");
     var submitBtn = inputObj.closest("form").find('input[type="submit"]');
     submitBtn.attr("disabled", "disabled");
-    var checkToken = setInterval(function() {
+    var checkToken = setInterval(function () {
         if (true === gCaptcha) {
             submitBtn.removeAttr("disabled");
             clearInterval(checkToken);
@@ -518,10 +518,10 @@ function googleCaptcha() {
     }, 500);
 
     /*Google reCaptcha V3  */
-    setTimeout(function() {
+    setTimeout(function () {
         if (0 < inputObj.length && 'undefined' !== typeof grecaptcha) {
-            grecaptcha.ready(function() {
-                grecaptcha.execute(langLbl.captchaSiteKey, { action: inputObj.data('action') }).then(function(token) {
+            grecaptcha.ready(function () {
+                grecaptcha.execute(langLbl.captchaSiteKey, { action: inputObj.data('action') }).then(function (token) {
                     inputObj.val(token);
                     gCaptcha = true;
                 });
@@ -536,7 +536,7 @@ var map;
 var marker;
 var geocoder;
 var infowindow;
-// Initialize the map.
+/* Initialize the map. */
 function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     var lat = parseFloat(lat);
     var lng = parseFloat(lng);
@@ -552,9 +552,9 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
 
-    // address = document.getElementById('postal_code').value;
-    /*address = {lat: parseFloat(lat), lng: parseFloat(lat)};
-	geocodeAddress(geocoder, map, infowindow, { 'location': latlng });*/
+    /* address = document.getElementById('postal_code').value;
+    address = {lat: parseFloat(lat), lng: parseFloat(lat)};
+    geocodeAddress(geocoder, map, infowindow, { 'location': latlng });*/
 
     var sel = document.getElementById('shop_country_code');
     var country = sel.options[sel.selectedIndex].text;
@@ -564,7 +564,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
 
     geocodeAddress(geocoder, map, infowindow, { 'address': address });
 
-    document.getElementById('postal_code').addEventListener('blur', function() {
+    document.getElementById('postal_code').addEventListener('blur', function () {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
@@ -574,7 +574,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         geocodeAddress(geocoder, map, infowindow, { 'address': address });
     });
 
-    document.getElementById('shop_state').addEventListener('change', function() {
+    document.getElementById('shop_state').addEventListener('change', function () {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
@@ -586,7 +586,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         geocodeAddress(geocoder, map, infowindow, { 'address': address });
     });
 
-    document.getElementById('shop_country_code').addEventListener('change', function() {
+    document.getElementById('shop_country_code').addEventListener('change', function () {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
@@ -595,14 +595,14 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
 
     /* for (i = 0; i < document.getElementsByClassName('addressSelection-js').length; i++) {
         document.getElementsByClassName('addressSelection-js')[i].addEventListener("change", function(e) {
-    		address = e.target.options[e.target.selectedIndex].text;
-    		geocodeAddress(geocoder, map, infowindow, {'address': address});
-      	});
+            address = e.target.options[e.target.selectedIndex].text;
+            geocodeAddress(geocoder, map, infowindow, {'address': address});
+            });
     } */
 }
 
 function geocodeAddress(geocoder, resultsMap, infowindow, address) {
-    geocoder.geocode(address, function(results, status) {
+    geocoder.geocode(address, function (results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
             resultsMap.setCenter(results[0].geometry.location);
             if (marker && marker.setMap) {
@@ -614,8 +614,8 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 draggable: true
             });
             geocodeSetData(results);
-            google.maps.event.addListener(marker, 'dragend', function() {
-                geocoder.geocode({ 'latLng': marker.getPosition() }, function(results, status) {
+            google.maps.event.addListener(marker, 'dragend', function () {
+                geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                         geocodeSetData(results);
                     }
@@ -656,11 +656,11 @@ function geocodeSetData(results) {
             }
         }
         $('#postal_code').val(data.postal_code);
-        $('#shop_country_code option').each(function() {
+        $('#shop_country_code option').each(function () {
             if (this.text == data.country) {
                 $('#shop_country_code').val(this.value);
                 var state = 0;
-                $('#shop_state option').each(function() {
+                $('#shop_state option').each(function () {
                     if (this.value == data.state_code || this.text == data.state) {
                         return state = this.value;
                     }
@@ -677,7 +677,7 @@ function queryStringToJSON(qs) {
 
     var pairs = qs.split('&');
     var result = {};
-    pairs.forEach(function(p) {
+    pairs.forEach(function (p) {
         var pair = p.split('=');
         var key = pair[0];
         var value = decodeURIComponent(pair[1] || '');
@@ -699,7 +699,7 @@ function queryStringToJSON(qs) {
 function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = false) {
     var inputList = document.querySelectorAll(element);
     var country = ('' == langLbl.defaultCountryCode || 'undefined' == typeof langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode);
-    inputList.forEach(function(input) {
+    inputList.forEach(function (input) {
         if (true == destroy) {
             $(input).removeAttr('style');
             var clone = input.cloneNode(true);
@@ -739,7 +739,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                 }).insertAfter(input);
             }
 
-            input.addEventListener('countrychange', function(e) {
+            input.addEventListener('countrychange', function (e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
                     var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
                     if ($('input[name="' + elementName + '"]').length < 1) {
@@ -755,6 +755,6 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
 
 function getCountryIso2CodeFromDialCode(dialCode) {
     var countriesData = window.intlTelInputGlobals.getCountryData();
-    var countryData = countriesData.filter(function(country) { return country.dialCode == dialCode });
+    var countryData = countriesData.filter(function (country) { return country.dialCode == dialCode });
     return countryData[0].iso2;
 }
