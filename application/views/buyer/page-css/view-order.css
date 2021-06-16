@@ -112,5 +112,9 @@
     }
     .panel__right--full {
         width: 100%
-    }
+    }    
+    
+}
+.table-wrap .item__description{
+    min-width: 100px;
 }

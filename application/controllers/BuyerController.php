@@ -171,7 +171,7 @@ class BuyerController extends BuyerBaseController
 
         $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
 
-        $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);        
         $srch->joinOrderProductShipment();
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
@@ -180,6 +180,7 @@ class BuyerController extends BuyerBaseController
         $srch->addOrderProductCharges();
         $srch->joinShippingCharges();
         $srch->joinAddress();
+        $srch->joinOrderProductSpecifics();
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '=', $orderId);
 
@@ -209,7 +210,7 @@ class BuyerController extends BuyerBaseController
             );
             $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request'));
         }
-
+        
         $rs = $srch->getResultSet();
 
         $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
@@ -294,140 +295,7 @@ class BuyerController extends BuyerBaseController
 
         $this->_template->render();
     }
-
-    public function viewInvoice($orderId, $opId = 0)
-    {
-        if (!$orderId) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $opId = FatUtility::int($opId);
-        if (0 < $opId) {
-            $opOrderId = OrderProduct::getAttributesById($opId, 'op_order_id');
-            if ($orderId != $opOrderId) {
-                $message = Labels::getLabel('MSG_Invalid_Order', $this->siteLangId);
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($message);
-                }
-                Message::addErrorMessage($message);
-                CommonHelper::redirectUserReferer();
-            }
-        }
-
-        $orderObj = new Orders();
-        $userId = UserAuthentication::getLoggedUserId();
-
-        $orderDetail = $orderObj->getOrderById($orderId, $this->siteLangId);
-        if (!$orderDetail || ($orderDetail && $orderDetail['order_user_id'] != $userId)) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
-
-        $srch = new OrderProductSearch($this->siteLangId, true, true);
-        $srch->joinPaymentMethod();
-        $srch->joinSellerProducts();
-        $srch->joinShop();
-        $srch->joinShopSpecifics();
-        $srch->joinShopCountry();
-        $srch->joinShopState();
-        $srch->addOrderProductCharges();
-        $srch->addCondition('order_user_id', '=', $userId);
-        $srch->addCondition('order_id', '=', $orderId);
-        if (0 < $opId) {
-            $srch->addCondition('op_id', '=', $opId);
-            $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS")));
-        }
-        $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'));
-        $rs = $srch->getResultSet();
-
-        $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
-
-        if (count($childOrderDetail)) {
-            foreach ($childOrderDetail as &$arr) {
-                $arr['options'] = SellerProduct::getSellerProductOptions($arr['op_selprod_id'], true, $this->siteLangId);
-            }
-        }
-
-        foreach ($childOrderDetail as $op_id => $val) {
-            $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
-
-            $opChargesLog = new OrderProductChargeLog($op_id);
-            $taxOptions = $opChargesLog->getData($this->siteLangId);
-            $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
-        }
-
-        if (empty($childOrderDetail) || 1 > count($childOrderDetail)) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
-        $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
-        $orderDetail['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE])) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : array();
-
-        $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
-        $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
-
-        /* $this->set('orderDetail', $orderDetail);
-        $this->set('childOrderDetail', $childOrderDetail);
-        $this->set('opId', $opId);
-        $this->_template->render(false, false); */
-
-        $template = new FatTemplate('', '');
-        $template->set('siteLangId', $this->siteLangId);
-        $template->set('orderDetail', $orderDetail);
-        $template->set('childOrderDetail', $childOrderDetail);
-        $template->set('opId', $opId);
-
-        require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
-        $pdf->SetKeywords(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
-        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->SetHeaderMargin(0);
-        $pdf->SetHeaderData('', 0, '', '', array(255, 255, 255), array(255, 255, 255));
-        $pdf->setFooterData(array(0, 0, 0), array(200, 200, 200));
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetMargins(10, 10, 10);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();
-        $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-        $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-
-        // set LTR direction for english translation
-        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
-        // set font
-        $pdf->SetFont('dejavusans');
-
-        $templatePath = "buyer/view-invoice.php";
-        $html = $template->render(false, false, $templatePath, true, true);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->lastPage();
-
-        ob_end_clean();
-        // $saveFile = CONF_UPLOADS_PATH . 'demo-pdf.pdf';
-        //$pdf->Output($saveFile, 'F');
-        $pdf->Output('tax-invoice.pdf', 'I');
-        return true;
-    }
-
+    
     public function downloadDigitalFile($aFileId, $recordId = 0)
     {
         $aFileId = FatUtility::int($aFileId);
@@ -621,65 +489,24 @@ class BuyerController extends BuyerBaseController
         $this->_template->render(true, true);
     }
 
-    /*use downloads_new function when app work is done */
-    public function downloads()
-    {
-        $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
-        }
-
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-        $user_id = UserAuthentication::getLoggedUserId();
-
-        $srch = new OrderProductSearch($this->siteLangId, true);
-        $srch->joinOrderUser();
-        $srch->joinDigitalDownloads(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, 'LEFT JOIN');
-        $srch->joinDigitalDownloadLinks('LEFT JOIN');
-        $srch->addDigitalDownloadCondition();
-        $srch->joinSellerProducts();
-        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
-        $srch->addMultipleFields(array('op_id', 'op_invoice_number', 'order_user_id', 'op_product_type', 'order_date_added', 'op_qty', 'op_status_id', 'op_selprod_max_download_times', 'op_selprod_id', 'product_updated_on', 'selprod_product_id', 'op_selprod_download_validity_in_days', 'opd.*', 'opa.*', 'IFNULL(op_selprod_title, op_product_name) as selprod_title'));
-        $srch->setPageNumber($page);
-        $srch->addCondition('order_user_id', '=', $user_id);
-        $srch->addOrder('order_date_added', 'desc');
-        $srch->setPageSize($pagesize);
-        $keyword = FatApp::getPostedData('keyword', null, '');
-        if (!empty($keyword)) {
-            $srch->addKeywordSearch($keyword);
-            $frm->fill(array('keyword' => $keyword));
-        }
-
-        $rs = $srch->getResultSet();
-        $downloads = FatApp::getDb()->fetchAll($rs);
-
-        $downloads = Orders::digitalDownloadFormat($downloads);
-        $downloads = Orders::digitalDownloadLinksFormat($downloads);
-        $this->set('downloads', $downloads);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('postedData', $post);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render();
-    }
-
     /**
      * downloads - Used For APPs.
      *
      * downloadSearch and downloadLinksSearch merged
      */
-    public function downloads_new()
+    public function downloads()
     {
         $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
+        
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $post = [];
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = $page <= 0 ? 1 : $page;
+
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $user_id = UserAuthentication::getLoggedUserId();
 
@@ -703,7 +530,7 @@ class BuyerController extends BuyerBaseController
 
         $rs = $srch->getResultSet();
         $orderProducts = FatApp::getDb()->fetchAll($rs);
-
+        
         foreach ($orderProducts as &$op) {
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
@@ -764,7 +591,7 @@ class BuyerController extends BuyerBaseController
             }
             $op['links'] = $links;
         }
-
+        
         $this->set('downloads', $orderProducts);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
@@ -1667,11 +1494,46 @@ class BuyerController extends BuyerBaseController
             CommonHelper::redirectUserReferer();
         }
 
+        $srch = new ShopSearch($this->siteLangId);
+        $srch->setDefinedCriteria($this->siteLangId);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(
+            array('shop_id', 'shop_user_id', 'shop_created_on', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_description', 'u.user_regdate')
+        );
+        $srch->addCondition('shop_id', '=', $opDetail['op_shop_id']);
+        $shopRs = $srch->getResultSet();
+        $shop = FatApp::getDb()->fetch($shopRs);
 
-        $frm = $this->getOrderFeedbackForm($opId, $this->siteLangId, $opDetail['op_product_type'], $opDetail['opshipping_fulfillment_type']);
+        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
+
+        $orderProd = new OrderProduct($opId);
+        $specifics = $orderProd->getSpecifics();
+        if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
+            $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
+            $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
+            $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet()); 
+        }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        }        
+
+        $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
+        $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+
+        if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) {
+            $ratingAspects = (0 < count($shopRatingTypesArr)) ? ($shopRatingTypesArr + $ratingAspects) : $ratingAspects;
+            $ratingAspects = (0 < count($deliveryRatingTypesArr)) ? ($deliveryRatingTypesArr + $ratingAspects) : $ratingAspects;
+        }
+
+        $frm = $this->getOrderFeedbackForm($opId, $this->siteLangId, $ratingAspects);
         $this->set('frm', $frm);
         $this->set('opDetail', $opDetail);
-        $this->_template->addJs(array('js/jquery.barrating.min.js'));
+        $this->set('ratingAspects', $ratingAspects);
+        $this->set('shopRatingTypesArr', $shopRatingTypesArr);
+        $this->set('deliveryRatingTypesArr', $deliveryRatingTypesArr);
+        $this->set('shop', $shop);
         $this->_template->render(true, true);
     }
 
@@ -1680,11 +1542,7 @@ class BuyerController extends BuyerBaseController
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
+            LibHelper::dieJsonError($message);
         }
 
         $userId = UserAuthentication::getLoggedUserId();
@@ -1701,11 +1559,7 @@ class BuyerController extends BuyerBaseController
 
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail) || !(FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0))) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
+            LibHelper::dieJsonError($message);
         }
 
         if ($opDetail['op_is_batch']) {
@@ -1717,11 +1571,7 @@ class BuyerController extends BuyerBaseController
 
         if (1 > FatUtility::int($selProdId)) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
+            LibHelper::dieJsonError($message);
         }
 
         if (!in_array($opDetail["op_status_id"], SelProdReview::getBuyerAllowedOrderReviewStatuses())) {
@@ -1733,11 +1583,7 @@ class BuyerController extends BuyerBaseController
                 $statusNames[] = $orderStatuses[$status];
             }
             $message = sprintf(Labels::getLabel('MSG_Feedback_can_be_placed_', $this->siteLangId), implode(',', $statusNames));
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
+            LibHelper::dieJsonError($message);
         }
 
 
@@ -1747,11 +1593,7 @@ class BuyerController extends BuyerBaseController
             if (!empty($enteredAbusiveWordsArr)) {
                 $errStr = Labels::getLabel("LBL_Word_{abusiveword}_is/are_not_allowed_to_post", $this->siteLangId);
                 $errStr = str_replace("{abusiveword}", '"' . implode(", ", $enteredAbusiveWordsArr) . '"', $errStr);
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($errStr);
-                }
-                Message::addErrorMessage($errStr);
-                CommonHelper::redirectUserReferer();
+                LibHelper::dieJsonError($errStr);
                 //FatUtility::dieWithError( Message::getHtml() );
             }
         }
@@ -1772,22 +1614,39 @@ class BuyerController extends BuyerBaseController
 
         if (!$canSubmitFeedback) {
             $message = Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
+            LibHelper::dieJsonError($message);
         }
 
-        $frm = $this->getOrderFeedbackForm($opId, $this->siteLangId, $opDetail['op_product_type'], $opDetail['opshipping_fulfillment_type']);
+        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
+
+        $orderProd = new OrderProduct($opId);
+        $specifics = $orderProd->getSpecifics();
+        if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
+            $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
+            $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
+            $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());          
+        }
+        
+        if(0 < count($ratingTypes)){
+            $ratingAspects = $ratingAspects + $ratingTypes;
+        } 
+
+        $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
+        $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+
+        if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) {
+            $ratingAspects = (0 < count($shopRatingTypesArr)) ? ($shopRatingTypesArr + $ratingAspects) : $ratingAspects;
+            $ratingAspects = (0 < count($deliveryRatingTypesArr)) ? ($deliveryRatingTypesArr + $ratingAspects) : $ratingAspects;
+        }
+
+        $frm = $this->getOrderFeedbackForm($opId, $this->siteLangId, $ratingAspects);
         $post = FatApp::getPostedData();
 
         if (false === MOBILE_APP_API_CALL) {
             $post = $frm->getFormDataFromArray($post);
             if (false === $post) {
-                Message::addErrorMessage($frm->getValidationErrors());
-                $this->orderFeedback($opId);
-                return true;
+                LibHelper::dieJsonError($frm->getValidationErrors());
             }
         }
 
@@ -1810,37 +1669,44 @@ class BuyerController extends BuyerBaseController
 
         if (!$selProdReview->save()) {
             $db->rollbackTransaction();
-            $this->orderFeedback($opId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($selProdReview->getError());
-            }
-            Message::addErrorMessage($selProdReview->getError());
-            return true;
+            LibHelper::dieJsonError($selProdReview->getError());
         }
         $spreviewId = $selProdReview->getMainTableRecordId();
+        
         $ratingsPosted = FatApp::getPostedData('review_rating');
-        if ($opDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $ratingAspects = SelProdRating::getDigitalOrderAspectsArr($this->siteLangId);
-        } else {
-            $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
-        }
 
         foreach ($ratingsPosted as $ratingAspect => $ratingValue) {
-            if (isset($ratingAspects[$ratingAspect])) {
+            if (array_key_exists($ratingAspect, $ratingAspects)) {
                 $selProdRating = new SelProdRating();
-                $ratingRow = array('sprating_spreview_id' => $spreviewId, 'sprating_rating_type' => $ratingAspect, 'sprating_rating' => $ratingValue);
+                $ratingRow = array('sprating_spreview_id' => $spreviewId, 'sprating_ratingtype_id' => $ratingAspect, 'sprating_rating' => $ratingValue);
                 $selProdRating->assignValues($ratingRow);
                 if (!$selProdRating->save()) {
-                    Message::addErrorMessage($selProdRating->getError());
                     $db->rollbackTransaction();
-                    $this->orderFeedback($opId);
-                    if (true === MOBILE_APP_API_CALL) {
-                        LibHelper::dieJsonError($selProdRating->getError());
-                    }
-                    return true;
+                    LibHelper::dieJsonError($selProdRating->getError());
                 }
             }
         }
+
+        if (!empty($_FILES) && array_key_exists('spreview_image', $_FILES) && is_array($_FILES['spreview_image']['tmp_name'])) {
+            foreach ($_FILES['spreview_image']['tmp_name'] as $index => $tmpName) {
+                if (!is_uploaded_file($tmpName)) {
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->adminLangId));
+                }
+        
+                $fileHandlerObj = new AttachedFile();
+                if (!$fileHandlerObj->saveAttachment(
+                    $tmpName,
+                    AttachedFile::FILETYPE_ORDER_FEEDBACK,
+                    $spreviewId,
+                    0,
+                    $_FILES['spreview_image']['name'][$index]
+                )) {
+                    FatUtility::dieJsonError($fileHandlerObj->getError());
+                }
+            }
+                
+        }
+
         $db->commitTransaction();
         $emailNotificationObj = new EmailHandler();
         if ($post['spreview_status'] == SelProdReview::STATUS_APPROVED) {
@@ -1866,12 +1732,7 @@ class BuyerController extends BuyerBaseController
 
             if (!Notification::saveNotifications($notificationData)) {
                 $message = Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId);
-                Message::addErrorMessage($message);
-                $this->orderFeedback($opId);
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($message);
-                }
-                return true;
+                LibHelper::dieJsonError($message);
             }
         } else {
             $notificationData = array(
@@ -1884,23 +1745,18 @@ class BuyerController extends BuyerBaseController
 
             if (!Notification::saveNotifications($notificationData)) {
                 $message = Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId);
-                Message::addErrorMessage($message);
-                $this->orderFeedback($opId);
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($message);
-                }
-                return true;
+                LibHelper::dieJsonError($message);
             }
         }
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        Message::addMessage(Labels::getLabel('MSG_Feedback_Submitted_Successfully', $this->siteLangId));
-        if (isset($post['referrer']) && !empty($post['referrer'])) {
-            FatApp::redirectUser($post['referrer']);
-        } else {
-            FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'Orders'));
-        }
+
+        $redirectUrl = isset($post['referrer']) && !empty($post['referrer']) ? $post['referrer'] : UrlHelper::generateUrl('Buyer', 'Orders');
+
+        $this->set('msg', Labels::getLabel('MSG_Feedback_Submitted_Successfully', $this->siteLangId));
+        $this->set('redirectUrl', $redirectUrl);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function orderReturnRequest($op_id)
@@ -2245,7 +2101,7 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -2617,8 +2473,8 @@ class BuyerController extends BuyerBaseController
     {
         $frm = new Form('frmSrch');
         $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
+        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;
     }
@@ -2668,16 +2524,10 @@ class BuyerController extends BuyerBaseController
         return $frm;
     }
 
-    private function getOrderFeedbackForm($op_id, $langId, $productType, $fulfillmentType)
+    private function getOrderFeedbackForm($op_id, $langId, $ratingAspects)
     {
         $langId = FatUtility::int($langId);
         $frm = new Form('frmOrderFeedback');
-
-        if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
-            $ratingAspects = SelProdRating::getDigitalOrderAspectsArr($langId);
-        } else {
-            $ratingAspects = SelProdRating::getRatingAspectsArr($langId, $fulfillmentType);
-        }
 
         foreach ($ratingAspects as $aspectVal => $aspectLabel) {
             $fld = $frm->addSelectBox($aspectLabel, "review_rating[$aspectVal]", array("1" => "1", "2" => "2", "3" => "3", "4" => "4", "5" => "5"), "", array('class' => "star-rating"), Labels::getLabel('L_Rate', $langId));
@@ -2687,7 +2537,10 @@ class BuyerController extends BuyerBaseController
 
         $frm->addRequiredField(Labels::getLabel('LBL_Title', $langId), 'spreview_title');
         $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();        
-        $arr = ["{website_name}" => FatApp::getConfig("CONF_WEBSITE_NAME_" . $langId)]; 
+
+        $frm->addFileUpload('', 'spreview_image[]', array('accept' => 'image/*', 'data-frm' => 'frmOrderFeedback'));
+
+        $arr = ["{website-name}" => FatApp::getConfig("CONF_WEBSITE_NAME_" . $langId)];
         $frm->addCheckBox(strtr(Labels::getLabel('LBL_I_agree_that_my_review,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId),$arr), 'agree', 1);
         $frm->addHiddenField('', 'op_id', $op_id);
         $frm->addHiddenField('', 'referrer', CommonHelper::redirectUserReferer(true));

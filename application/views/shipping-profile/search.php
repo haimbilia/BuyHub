@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
-    <?php if (count($arr_listing) == 0) {
+<div class="js-scrollable table-wrap scroll scroll-x">
+    <?php if (count($arrListing) == 0) {
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
     } else {
         $arr_flds = array(
@@ -11,7 +11,7 @@
             'action' => Labels::getLabel('', $siteLangId)
         );
         $tableClass = '';
-        if (0 < count($arr_listing)) {
+        if (0 < count($arrListing)) {
             $tableClass = "table-justified";
         }
         $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
@@ -21,7 +21,7 @@
         }
 
         $sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
-        foreach ($arr_listing as $sn => $row) {
+        foreach ($arrListing as $sn => $row) {
             $sr_no++;
             $tr = $tbl->appendElement('tr', array());
 

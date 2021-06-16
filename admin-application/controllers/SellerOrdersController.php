@@ -205,7 +205,7 @@ class SellerOrdersController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $vendorOrdersList = FatApp::getDb()->fetchAll($rs);
-        
+
         $oObj = new Orders();
         foreach ($vendorOrdersList as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id']);
@@ -258,7 +258,7 @@ class SellerOrdersController extends AdminBaseController
             Message::addErrorMessage($this->str_invalid_request);
             CommonHelper::redirectUserReferer();
         }
-        
+
         if ($opRow['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
             /* ShipStation */
             $this->loadShippingService();
@@ -325,7 +325,10 @@ class SellerOrdersController extends AdminBaseController
         if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
             // $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"));
+        } else {
+            $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
+
         $frm = $this->getOrderCommentsForm($opRow, $processingStatuses);
         $frm->fill($data);
 
@@ -348,14 +351,28 @@ class SellerOrdersController extends AdminBaseController
         }
 
         $digitalDownloads = array();
+        $digitalDownloadLinks = array();
+        $canAttachMoreFiles = false;
         if ($opRow['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+            $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
+            $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
+
+            if (DigitalOrderProduct::canAttachMoreFiles($opRow['op_status_id'])) {
+                $canAttachMoreFiles = true;
+                $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->adminLangId);
+                $moreAttachmentsFrm->fill(['op_id' => $opRow['op_id']]);
+                $this->set('moreAttachmentsFrm', $moreAttachmentsFrm);
+            }
+        }
+
+        /* if ($opRow['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $digitalDownloads = Orders::getOrderProductDigitalDownloads($op_id);
         }
 
         $digitalDownloadLinks = array();
         if ($opRow['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op_id);
-        }
+        } */
 
         $opChargesLog = new OrderProductChargeLog($op_id);
         $taxOptions = $opChargesLog->getData($this->adminLangId);
@@ -368,6 +385,8 @@ class SellerOrdersController extends AdminBaseController
         $this->set('orderStatuses', $orderStatuses);
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
+        $this->set('canAttachMoreFiles', $canAttachMoreFiles);
+
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
         $this->set('displayForm', (in_array($opRow['op_status_id'], $processingStatuses) && $this->canEdit && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED));
         $this->set('displayShippingUserForm', $displayShippingUserForm);
@@ -654,7 +673,7 @@ class SellerOrdersController extends AdminBaseController
         if ($rs) {
             $orderDetail = FatApp::getDb()->fetch($rs);
         }
-        
+
         if (empty($orderDetail)) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
@@ -669,39 +688,42 @@ class SellerOrdersController extends AdminBaseController
         }
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
         $post = $frm->getFormDataFromArray($post);
-        
+
         if (!false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $restrictOrderStatusChange = array_merge(
             (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"),
             (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"),
             (array) FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")
         );
-        
+
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
 
             if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && $pluginValidation) {
-                if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
+                if (0 < $manualShipping) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
-                        "opship_tracking_number" => $post['tracking_number'],
-                    //    "opship_tracking_url" => $post['opship_tracking_url'],
+                        "opship_tracking_number" => $trackingNumber,
+                        //    "opship_tracking_url" => $post['opship_tracking_url'],
                     ];
-                    
-                    if(array_key_exists('opship_tracking_url', $post)){
-                        $updateData['opship_tracking_url'] =  $post['opship_tracking_url'];
+
+                    $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
+                    if (!empty($opship_tracking_url)) {
+                        $updateData['opship_tracking_url'] =  $opship_tracking_url;
                     }
-                    if(array_key_exists('oshistory_courier', $post)){
-                        $trackingCourierCode = $post['oshistory_courier'];
+
+                    $oshistory_courier = FatApp::getPostedData('oshistory_courier', FatUtility::VAR_STRING, '');
+                    if (!empty($oshistory_courier)) {
+                        $trackingCourierCode = $oshistory_courier;
                     }
 
                     if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
@@ -877,7 +899,7 @@ class SellerOrdersController extends AdminBaseController
         $srch->addCondition('op_id', '=', $op_id);
         $rs = $srch->getResultSet();
         $orderDetail = (array) FatApp::getDb()->fetch($rs);
-        
+
         if (empty($orderDetail)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -996,11 +1018,11 @@ class SellerOrdersController extends AdminBaseController
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
 
-            $shipmentTracking = new ShipmentTracking(); 
+            $shipmentTracking = new ShipmentTracking();
             if (false !== $shipmentTracking->init($this->adminLangId) && false !== $shipmentTracking->getTrackingCouriers()) {
                 $trackCarriers = $shipmentTracking->getResponse();
                 $frm->addSelectBox(Labels::getLabel('LBL_TRACKING_COURIER', $this->adminLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
-               
+
                 $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->adminLangId));
                 $trackCarrierFldUnReqObj->setRequired(false);
 
@@ -1008,7 +1030,7 @@ class SellerOrdersController extends AdminBaseController
                 $trackCarrierFldReqObj->setRequired(true);
 
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'oshistory_courier', $trackCarrierFldReqObj);
-                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);        
+                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);
             }
         }
 
@@ -1078,5 +1100,59 @@ class SellerOrdersController extends AdminBaseController
 
         $this->set('trackingInfo', $trackingInfo);
         $this->_template->render(false, false);
+    }
+
+    public function setupAdditionalOpAttachment()
+    {
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        if (1 > $opId) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId) . __LINE__);
+        }
+
+        $opSrch = OrderProduct::getSearchObject();
+
+        $opSrch->addCondition('op_id', '=', $opId);
+        $opSrch->addCondition('op_product_type', '=', Product::PRODUCT_TYPE_DIGITAL);
+
+        $opSrch->addMultipleFields(['op_status_id', 'op_selprod_user_id']);
+
+        $opSrch->doNotCalculateRecords();
+        $opSrch->setPageSize(1);
+
+        $rs = $opSrch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+
+        if (!is_array($row)) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
+        }
+
+        if (!DigitalOrderProduct::canAttachMoreFiles($row['op_status_id'])) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
+        }
+
+        if (
+            !isset($_FILES['additional_attachment']['tmp_name'])
+            || !is_uploaded_file($_FILES['additional_attachment']['tmp_name'])
+        ) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $fileHandlerObj = new AttachedFile();
+
+        if ($fileHandlerObj->saveAttachment(
+            $_FILES['additional_attachment']['tmp_name'],
+            AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD,
+            $opId,
+            0,
+            $_FILES['additional_attachment']['name'],
+            -1,
+            false,
+            0
+        )) {
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_File_uploaded_successfully', $this->adminLangId));
+        }
+
+        FatUtility::dieJsonError($fileHandlerObj->getError());
     }
 }

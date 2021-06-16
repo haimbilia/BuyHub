@@ -355,7 +355,10 @@ $(document).ready(function () {
     /* for Accordian */
     //Set default open/close settings
     $('.accordiancontent').hide(); //Hide/close all containers
-    $('.accordians_container').find('.accordianhead:first').addClass('active').next().show(); //Add "active" class to first trigger, then show/open the immediate next container
+    
+    if($('.accordians_container:first').attr('data-isdefaulthidden') == undefined){
+        $('.accordians_container').find('.accordianhead:first').addClass('active').next().show(); //Add "active" class to first trigger, then show/open the immediate next container
+    }
 
     //On Click
     //$('.accordianhead').click(function() {
@@ -594,11 +597,12 @@ function formAction(frm, callback) {
         $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
         return false;
     }
-
+    
     $.systemMessage.loading();
     data = fcom.frmData(frm);
 
     fcom.updateWithAjax(frm.action, data, function (resp) {
+        console.log(callback);
         callback();
         showActionsBtns();
     });
@@ -611,7 +615,6 @@ function toggleBulkStatues(status, msg = '') {
 		element = '';
 	}
     element = element + 'form.actionButtons-js';
-	
     if (1 > $(element).length) {
         $.systemMessage(langLbl.actionButtonsClass, 'alert--danger', true);
         return false;

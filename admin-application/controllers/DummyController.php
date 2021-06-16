@@ -133,11 +133,11 @@ class DummyController extends AdminBaseController
     {
         $this->_template->render(true, true);
     }
-    
+
     public function dataMigration()
     {
         $dataMigration = new DataMigration();
         $dataMigration->sync();
-    } 
-  
+
+    }
 }

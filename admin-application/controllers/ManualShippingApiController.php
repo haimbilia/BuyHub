@@ -74,7 +74,7 @@ class ManualShippingApiController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
         
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -280,7 +280,7 @@ class ManualShippingApiController extends AdminBaseController
         $frm->addSelectbox(Labels::getLabel('LBL_Duration', $this->adminLangId), 'sduration_id', array( -1 => 'Does not Matter' ) + $durationArr, '', array(), '');
         
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country_id', array( -1 => 'Does not Matter' ) + $countriesArr, '', array(), '');
         
         $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
@@ -306,7 +306,7 @@ class ManualShippingApiController extends AdminBaseController
         $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->adminLangId), 'mshipapi_cost');
         
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'mshipapi_country_id', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         
         $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'mshipapi_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));

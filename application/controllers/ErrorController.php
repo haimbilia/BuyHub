@@ -9,6 +9,7 @@ class ErrorController extends MyAppController
 
     public function index()
     {
-        $this->_template->render();
+        $this->set('exculdeMainHeaderDiv', true);
+        $this->_template->render(true, false);
     }
 }

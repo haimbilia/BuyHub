@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 <?php $arr_flds = array(
         'dragdrop' => '',
         'optionvalue_identifier' => Labels::getLabel('LBL_OPTION_VALUE_NAME', $langId),
         'action'  =>  '',
     );
 $tableClass = '';
-if (0 < count($arr_listing)) {
+if (0 < count($arrListing)) {
 	$tableClass = "table-justified";
 }
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table sortable--js '.$tableClass, 'id' => 'optionvalues'));
@@ -16,7 +16,7 @@ foreach ($arr_flds as $val) {
 }
 
 $sr_no = 0;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['optionvalue_id']);
@@ -55,7 +55,7 @@ foreach ($arr_listing as $sn => $row) {
     }
 }
 echo $tbl->getHtml();
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_No_Record_found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
 } ?>

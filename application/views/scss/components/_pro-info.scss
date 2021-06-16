@@ -1,7 +1,6 @@
 .prod-info {
     width: 100%;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -17,7 +16,7 @@
 }
 
 .prod-info__left {
-    -webkit-box-flex: 0;
+    
     -ms-flex: 0 0 80px;
     flex: 0 0 80px;
     max-width: 80px;
@@ -25,8 +24,7 @@
 
 .prod-info__right {
     width: calc(100% - 80px);
-    -webkit-padding-start: 20px;
-    -moz-padding-start: 20px;
+    
     padding-#{$start-direction}: 20px;
     color: #fff;
 }

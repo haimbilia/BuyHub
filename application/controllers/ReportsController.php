@@ -5,11 +5,6 @@ class ReportsController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
-        if (!User::canAccessSupplierDashboard()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
-        }
-        $this->set('bodyClass', 'is--dashboard');
     }
 
     public function index()
@@ -89,8 +84,8 @@ class ReportsController extends SellerBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Product', $this->siteLangId), Labels::getLabel('LBL_Custom_Title', $this->siteLangId), Labels::getLabel('LBL_Options', $this->siteLangId), Labels::getLabel('LBL_Brand', $this->siteLangId),Labels::getLabel('LBL_SKU', $this->siteLangId), Labels::getLabel('LBL_WishList_User_Counts', $this->siteLangId));
-            
+            $arr = array(Labels::getLabel('LBL_Product', $this->siteLangId), Labels::getLabel('LBL_Custom_Title', $this->siteLangId), Labels::getLabel('LBL_Options', $this->siteLangId), Labels::getLabel('LBL_Brand', $this->siteLangId), Labels::getLabel('LBL_SKU', $this->siteLangId), Labels::getLabel('LBL_WishList_User_Counts', $this->siteLangId));
+
             if ($topPerformed) {
                 array_push($arr, Labels::getLabel('LBL_Sold_Quantity', $this->siteLangId));
             } else {
@@ -99,8 +94,8 @@ class ReportsController extends SellerBaseController
 
             array_push($sheetData, $arr);
             while ($row = FatApp::getDb()->fetch($rs)) {
-                $arr = array($row['op_product_name'], $row['op_selprod_title'], $row['op_selprod_options'],  $row['op_brand_name'],$row['op_selprod_sku'], $row['wishlist_user_counts']);
-             
+                $arr = array($row['op_product_name'], $row['op_selprod_title'], $row['op_selprod_options'],  $row['op_brand_name'], $row['op_selprod_sku'], $row['wishlist_user_counts']);
+
                 if ($topPerformed) {
                     array_push($arr, $row['totSoldQty']);
                 } else {
@@ -182,7 +177,7 @@ class ReportsController extends SellerBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Product', $this->siteLangId), Labels::getLabel('LBL_Custom_Title', $this->siteLangId), Labels::getLabel('LBL_Brand', $this->siteLangId),Labels::getLabel('LBL_SKU', $this->siteLangId), Labels::getLabel('LBL_User_Counts', $this->siteLangId));
+            $arr = array(Labels::getLabel('LBL_Product', $this->siteLangId), Labels::getLabel('LBL_Custom_Title', $this->siteLangId), Labels::getLabel('LBL_Brand', $this->siteLangId), Labels::getLabel('LBL_SKU', $this->siteLangId), Labels::getLabel('LBL_User_Counts', $this->siteLangId));
             array_push($sheetData, $arr);
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = array($row['product_name'], $row['selprod_title'], $row['brand_name'], $row['selprod_sku'], $row['wishlist_user_counts']);
@@ -219,43 +214,98 @@ class ReportsController extends SellerBaseController
     public function productsInventory()
     {
         $this->userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId());
-        if (!User::canAccessSupplierDashboard()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
-        }
-        $frmSrch = $this->getProductInventorySearchForm($this->siteLangId);
+        $fields = $this->productsInventoryColumns($this->siteLangId);
+        $frmSrch = $this->getProductInventorySearchForm($fields);
         $this->set('frmSrch', $frmSrch);
         $this->_template->render(true, true);
     }
 
     public function searchProductsInventory($export = "")
     {
-        if (!User::canAccessSupplierDashboard()) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $post = FatApp::getPostedData();
-        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
+        $fields = $this->productsInventoryColumns($this->siteLangId);
+        $frmSrch = $this->getProductInventorySearchForm($fields);
+        $post = $frmSrch->getFormDataFromArray(FatApp::getPostedData());
+
+        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         if ($page < 2) {
             $page = 1;
         }
-        $userId = $this->userParentId;
-        $srch = SellerProduct::getSearchObject($this->siteLangId);
-        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
-        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'p.product_brand_id = b.brand_id', 'b');
-        $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id  AND brandlang_lang_id = ' . $this->siteLangId, 'b_l');
-        $srch->addCondition('selprod_user_id', '=', $userId);
-        $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addOrder('selprod_active', 'DESC');
-        $srch->addOrder('product_name');
-        $srch->addMultipleFields(
-            array(
-                'selprod_id', 'selprod_user_id', 'selprod_cost', 'selprod_price', 'selprod_stock', 'selprod_product_id', 'selprod_sku',
-                'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'b_l.brand_name'
-            )
-        );
+
+        $opSrch = new Report(0, array_keys($fields), true);
+        $opSrch->joinOrders();
+        $opSrch->joinPaymentMethod();
+        $opSrch->joinOtherCharges(true);
+        $opSrch->joinOrderProductTaxCharges();
+        $opSrch->joinOrderProductShipCharges();
+        $opSrch->joinOrderProductDicountCharges();
+        $opSrch->joinOrderProductVolumeCharges();
+        $opSrch->joinOrderProductRewardCharges();
+        $opSrch->setPaymentStatusCondition();
+        $opSrch->setCompletedOrdersCondition();
+        $opSrch->excludeDeletedOrdersCondition();
+        $opSrch->addTotalOrdersCount('selprod_id');
+        $opSrch->setGroupBy('selprod_id');
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opSrch->removeFld(['product_name', 'followers', 'selprod_price', 'selprod_sku']);
+        $opSrch->addCondition('op.op_selprod_user_id', '=', $this->userParentId);
+
+        /* get Seller product Options[ */
+        $spOptionSrch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
+        $spOptionSrch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
+        $spOptionSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $this->siteLangId, 'ov_lang');
+        $spOptionSrch->joinTable(Option::DB_TBL, 'INNER JOIN', '`option`.option_id = ov.optionvalue_option_id', '`option`');
+        $spOptionSrch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', '`option`.option_id = option_lang.optionlang_option_id AND option_lang.optionlang_lang_id = ' . $this->siteLangId, 'option_lang');
+        $spOptionSrch->doNotCalculateRecords();
+        $spOptionSrch->doNotLimitRecords();
+        $spOptionSrch->addGroupBy('spo.selprodoption_selprod_id');
+        $spOptionSrch->addMultipleFields(array('spo.selprodoption_selprod_id', 'IFNULL(option_name, option_identifier) as option_name', 'IFNULL(optionvalue_name, optionvalue_identifier) as optionvalue_name', 'GROUP_CONCAT(option_name) as grouped_option_name', 'GROUP_CONCAT(optionvalue_name) as grouped_optionvalue_name'));
+        /* ] */
+
+        /* Sub Query to get, how many users added current product in his/her wishlist[ */
+        $uWsrch = new UserWishListProductSearch($this->siteLangId);
+        $uWsrch->doNotCalculateRecords();
+        $uWsrch->doNotLimitRecords();
+        $uWsrch->joinWishLists();
+        $uWsrch->addMultipleFields(array('uwlp_selprod_id', 'uwlist_user_id'));
+        /* ] */
+
+        $srch = new ProductSearch($this->siteLangId, '', '', false, false, false);
+        $srch->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'p.product_id = selprod.selprod_product_id', 'selprod');
+        $srch->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'selprod.selprod_id = sprod_l.selprodlang_selprod_id AND sprod_l.selprodlang_lang_id = ' . $this->siteLangId, 'sprod_l');
+        $srch->joinSellers();
+        $srch->joinBrands($this->siteLangId, false, true);
+        //$srch->addCondition('brand_id', '!=', 'NULL');
+        $srch->joinShops($this->siteLangId, false, false);
+        $srch->joinTable('(' . $spOptionSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'selprod_id = spoq.selprodoption_selprod_id', 'spoq');
+        $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'selprod.selprod_id = opq.op_selprod_id', 'opq');
+        $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = selprod.selprod_id', 'tquwl');
+        $srch->joinProductToCategory();
+        $srch->addCondition('selprod.selprod_id', '!=', 'NULL');
+        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'selprod_sku', 'opq.*'));
+
+        /* groupby added, because if same product is linked with multiple categories, then showing in repeat for each category[ */
+        $srch->addGroupBy('selprod_id');
+        /* ] */
+
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
+        }
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
+        if (!empty($keyword)) {
+            $srch->addKeywordSearch($keyword);
+        }
 
         if ($keyword = FatApp::getPostedData('keyword')) {
             $cnd = $srch->addCondition('product_name', 'like', "%$keyword%");
@@ -268,10 +318,61 @@ class ReportsController extends SellerBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Product', $this->siteLangId), Labels::getLabel('LBL_Custom_Title(If_Any)', $this->siteLangId), Labels::getLabel('LBL_Product_SKU', $this->siteLangId), Labels::getLabel('LBL_Brand', $this->siteLangId), Labels::getLabel('LBL_Stock_Quantity', $this->siteLangId));
-            array_push($sheetData, $arr);
+
+            array_push($sheetData, array_values($fields));
             while ($row = FatApp::getDb()->fetch($rs)) {
-                $arr = array($row['product_name'], $row['selprod_title'], $row['selprod_sku'], $row['brand_name'], $row['selprod_stock']);
+                $arr = [];
+                foreach ($fields as $key => $val) {
+                    switch ($key) {
+                        case 'product_name':
+                            $name = ($row['selprod_title'] != '') ? $row['selprod_title'] : $row['product_name'];
+
+                            if ($row['grouped_option_name'] != '') {
+                                $groupedOptionNameArr = explode(',', $row['grouped_option_name']);
+                                $groupedOptionValueArr = explode(',', $row['grouped_optionvalue_name']);
+                                if (!empty($groupedOptionNameArr)) {
+                                    foreach ($groupedOptionNameArr as $key => $optionName) {
+                                        $name .= "\n" . $optionName . ':</strong> ' . $groupedOptionValueArr[$key];
+                                    }
+                                }
+                            }
+
+                            if ($row['brand_name'] != '') {
+                                $name .= "\n" . Labels::getLabel('LBL_Brand', $this->siteLangId) . ": " . $row['brand_name'];
+                            }
+
+                            if ($row['shop_name'] != '') {
+                                $name .= "\n" . Labels::getLabel('LBL_Sold_By', $this->siteLangId) . ': ' . $row['shop_name'];
+                            }
+                            $arr[] = html_entity_decode($name, ENT_QUOTES, 'utf-8');
+                            break;
+                        case 'grossSales':
+                        case 'transactionAmount':
+                        case 'inventoryValue':
+                        case 'taxTotal':
+                        case 'adminTaxTotal':
+                        case 'sellerTaxTotal':
+                        case 'shippingTotal':
+                        case 'sellerShippingTotal':
+                        case 'discountTotal':
+                        case 'couponDiscount':
+                        case 'volumeDiscount':
+                        case 'rewardDiscount':
+                        case 'refundedAmount':
+                        case 'refundedShippingFromSeller':
+                        case 'refundedTaxFromSeller':
+                        case 'orderNetAmount':
+                        case 'commissionCharged':
+                        case 'refundedCommission':
+                        case 'adminSalesEarnings':
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
+                            break;
+                        default:
+                            $arr[] = $row[$key];
+                            break;
+                    }
+                }
+
                 array_push($sheetData, $arr);
             }
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Inventory_Report', $this->siteLangId) . date("Y-m-d") . '.csv', ',');
@@ -294,6 +395,9 @@ class ReportsController extends SellerBaseController
             $this->set('postedData', $post);
             $this->set('recordCount', $srch->recordCount());
             $this->set('arrListing', $arrListing);
+            $this->set('fields', $fields);
+            $this->set('sortBy', $sortBy);
+            $this->set('sortOrder', $sortOrder);
             $this->_template->render(false, false);
         }
     }
@@ -354,7 +458,7 @@ class ReportsController extends SellerBaseController
         $srch->addMultipleFields(
             array(
                 'selprod_id', 'selprod_user_id', 'selprod_cost', 'selprod_price', 'selprod_stock', 'selprod_product_id',
-                'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title','selprod_sku',
+                'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_sku',
                 'b_l.brand_name', 'IFNULL(qryop.stock_on_order, 0) as stock_on_order'
             )
         );
@@ -403,16 +507,6 @@ class ReportsController extends SellerBaseController
         $this->searchProductsInventoryStockStatus("export");
     }
 
-    private function getProductInventorySearchForm($langId)
-    {
-        $frm = new Form('frmProductInventorySrch');
-        $frm->addTextBox('', 'keyword', '');
-        $frm->addHiddenField('', 'page');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
-        return $frm;
-    }
-
     private function getProductInventoryStockStatusSearchForm($langId)
     {
         $frm = new Form('frmProductInventoryStockStatusSrch');
@@ -437,7 +531,9 @@ class ReportsController extends SellerBaseController
         if (!User::canAccessSupplierDashboard()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
         }
-        $frmSrch = $this->getSalesReportSearchForm($orderDate);
+        $flds = $this->getFormColumns($orderDate);
+        $frmSrch = $this->getSalesReportSearchForm($flds, $orderDate);
+        $frmSrch->fill(['sortBy' => 'orderDate', 'sortOrder' => 'DESC']);
         $this->set('frmSrch', $frmSrch);
         $this->set('orderDate', $orderDate);
         $this->_template->render(true, true);
@@ -451,7 +547,8 @@ class ReportsController extends SellerBaseController
         }
 
         $orderDate = FatApp::getPostedData('orderDate', FatUtility::VAR_STRING, '');
-        $srchFrm = $this->getSalesReportSearchForm($orderDate);
+        $fields = $this->getFormColumns($orderDate);
+        $srchFrm = $this->getSalesReportSearchForm($fields, $orderDate);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
 
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
@@ -460,70 +557,107 @@ class ReportsController extends SellerBaseController
             $page = 1;
         }
         $userId = UserAuthentication::getLoggedUserId();
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderDate');
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
-        $srch = Report::salesReportObject();
+        $srch = new Report(0, array_keys($fields), true);
+        $srch->joinOrders();
+        $srch->joinPaymentMethod();
+        $srch->joinOtherCharges(true);
+        $srch->joinOrderProductTaxCharges();
+        $srch->joinOrderProductShipCharges();
+        $srch->joinOrderProductDicountCharges();
+        $srch->joinOrderProductVolumeCharges();
+        $srch->joinOrderProductRewardCharges();
+        $srch->setPaymentStatusCondition();
+        $srch->setCompletedOrdersCondition();
+        $srch->excludeDeletedOrdersCondition();
+        $fromDate = $toDate = $orderDate;
         if (empty($orderDate)) {
-            $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
-            if (!empty($date_from)) {
-                $srch->addCondition('o.order_date_added', '>=', $date_from . ' 00:00:00');
-            }
-
-            $date_to = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
-            if (!empty($date_to)) {
-                $srch->addCondition('o.order_date_added', '<=', $date_to . ' 23:59:59');
-            }
-            $srch->addGroupBy('DATE(o.order_date_added)');
+            $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
+            $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
+            $srch->setGroupBy('orderDate');
+            $srch->addTotalOrdersCount('order_date_added', $userId);
+            $srch->addFld('totOrders');
         } else {
-            $this->set('orderDate', $orderDate);
-            $srch->addGroupBy('op_invoice_number');
-            $srch->addCondition('o.order_date_added', '>=', $orderDate . ' 00:00:00');
-            $srch->addCondition('o.order_date_added', '<=', $orderDate . ' 23:59:59');
-            $srch->addFld(array('op_invoice_number'));
-        }
-        $srch->addCondition('op_selprod_user_id', '=', $userId);
+            $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+            if (!empty($keyword)) {
+                $cnd = $srch->addCondition('op_invoice_number', 'like', '%' . $keyword . '%');
+                $cnd->attachCondition('order_id', 'like', '%' . $keyword . '%');
+            }
 
-        $srch->addOrder('order_date', 'desc');
+            $this->set('orderDate', $orderDate);
+            $srch->setGroupBy('op_invoice_number');
+            $srch->addFld('op_invoice_number');
+        }
+
+        $srch->setOrderBy($sortBy, $sortOrder);
+        $srch->setDateCondition($fromDate, $toDate);
+        $srch->addCondition('op_selprod_user_id', '=', $userId);
 
         if ($export == "export") {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            if (empty($orderDate)) {
-                $arr = array(Labels::getLabel('LBL_Date', $this->siteLangId), Labels::getLabel('LBL_No._of_Orders', $this->siteLangId), Labels::getLabel('LBL_No._of_Qty', $this->siteLangId), Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId), Labels::getLabel('LBL_Inventory_Value', $this->siteLangId), Labels::getLabel('LBL_Order_Net_Amount', $this->siteLangId), Labels::getLabel('LBL_Tax_Charged', $this->siteLangId), Labels::getLabel('LBL_Shipping_Charges', $this->siteLangId), Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId), Labels::getLabel('LBL_Commission_Charges', $this->siteLangId));
-            } else {
-                $arr = array(Labels::getLabel('LBL_Invoice_Number', $this->siteLangId), Labels::getLabel('LBL_No._of_Qty', $this->siteLangId), Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId), Labels::getLabel('LBL_Inventory_Value', $this->siteLangId), Labels::getLabel('LBL_Order_Net_Amount', $this->siteLangId), Labels::getLabel('LBL_Tax_Charged', $this->siteLangId), Labels::getLabel('LBL_Shipping_Charges', $this->siteLangId), Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId), Labels::getLabel('LBL_Commission_Charges', $this->siteLangId));
-            }
-
-            array_push($sheetData, $arr);
-            if (empty($orderDate)) {
-                while ($row = FatApp::getDb()->fetch($rs)) {
-                    $arr = array($row['order_date'], $row['totOrders'], $row['totQtys'], $row['totRefundedQtys'], $row['inventoryValue'], $row['orderNetAmount'], $row['taxTotal'], $row['shippingTotal'], $row['totalRefundedAmount'], $row['totalSalesEarnings']);
-                    array_push($sheetData, $arr);
+            array_push($sheetData, array_values($fields));
+            $count = 1;
+            while ($row = FatApp::getDb()->fetch($rs)) {
+                $arr = [];
+                foreach ($fields as $key => $val) {
+                    switch ($key) {
+                        case 'listserial':
+                            $arr[] = $count;
+                            break;
+                        case 'orderDate':
+                            $arr[] = FatDate::format($row['orderDate']);
+                            break;
+                        case 'grossSales':
+                        case 'transactionAmount':
+                        case 'inventoryValue':
+                        case 'adminTaxTotal':
+                        case 'sellerTaxTotal':
+                        case 'sellerShippingTotal':
+                        case 'volumeDiscount':
+                        case 'refundedAmount':
+                        case 'refundedShippingFromSeller':
+                        case 'refundedTaxFromSeller':
+                        case 'orderNetAmount':
+                        case 'commissionCharged':
+                        case 'refundedCommission':
+                        case 'adminSalesEarnings':
+                        case 'refundedShippingFromSeller':
+                        case 'refundedTaxFromSeller':
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
+                            break;
+                        default:
+                            $arr[] = $row[$key];
+                            break;
+                    }
                 }
-            } else {
-                while ($row = FatApp::getDb()->fetch($rs)) {
-                    $arr = array($row['op_invoice_number'], $row['totQtys'], $row['totRefundedQtys'], $row['inventoryValue'], $row['orderNetAmount'], $row['taxTotal'], $row['shippingTotal'], $row['totalRefundedAmount'], $row['totalSalesEarnings']);
-                    array_push($sheetData, $arr);
-                }
+
+                array_push($sheetData, $arr);
+                $count++;
             }
-
-
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Sales_Report', $this->siteLangId) . date("Y-m-d") . '.csv', ',');
             exit;
-        } else {
-            $srch->setPageNumber($page);
-            $srch->setPageSize($pageSize);
-            $rs = $srch->getResultSet();
-            $arrListing = FatApp::getDb()->fetchAll($rs);
-            $this->set('page', $page);
-            $this->set('pageSize', $pageSize);
-            $this->set('pageCount', $srch->pages());
-            $this->set('postedData', $post);
-            $this->set('recordCount', $srch->recordCount());
-            $this->set('arrListing', $arrListing);
-            $this->_template->render(false, false);
         }
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $rs = $srch->getResultSet();
+
+        $arrListing = FatApp::getDb()->fetchAll($rs);
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('pageCount', $srch->pages());
+        $this->set('postedData', $post);
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('arrListing', $arrListing);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->_template->render(false, false);
     }
 
     public function exportSalesReport()
@@ -531,17 +665,116 @@ class ReportsController extends SellerBaseController
         $this->searchSalesReport("export");
     }
 
-    private function getSalesReportSearchForm($orderDate = '')
+    private function getProductInventorySearchForm($fields = [])
+    {
+        $frm = new Form('frmProductInventorySrch');
+        $frm->addHiddenField('', 'page');
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        if (!empty($fields)) {
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
+        }
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        return $frm;
+    }
+
+    private function productsInventoryColumns($langId)
+    {
+        $selProdInventoryReportCacheVar = FatCache::get('selProdInventoryReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$selProdInventoryReportCacheVar) {
+            $arr = [
+                'product_name'    =>    Labels::getLabel('LBL_Product_name', $langId),
+                'selprod_sku'    =>    Labels::getLabel('LBL_SKU', $langId),
+                'followers'    =>    Labels::getLabel('LBL_Favorites', $langId),
+                'selprod_price'    =>    Labels::getLabel('LBL_Unit_Price', $langId),
+                'totOrders' => Labels::getLabel('LBL_Order_Placed', $langId),
+                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $langId),
+                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $langId),
+                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $langId),
+                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $langId),
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $langId),
+                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $langId),
+                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $langId),
+                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $langId),
+                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $langId),
+                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $langId),
+                'refundedShippingFromSeller' => Labels::getLabel('LBL_Refunded_Shipping', $langId),
+                'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $langId),
+                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $langId),
+                'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $langId),
+                'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $langId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $langId)
+            ];
+            FatCache::set('selProdInventoryReportCacheVar' . $langId, serialize($arr), '.txt');
+        } else {
+            $arr =  unserialize($selProdInventoryReportCacheVar);
+        }
+
+        return $arr;
+    }
+
+    private function getSalesReportSearchForm($fields = [], $orderDate = '')
     {
         $frm = new Form('frmSalesReportSrch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
         if (empty($orderDate)) {
-            $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-            $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        } else {
+            $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
         }
+
+        if (!empty($fields)) {
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
+        }
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
+    }
+
+    private function getFormColumns($orderDate = '')
+    {
+        $shopsReportCacheVar = FatCache::get('shopsReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$shopsReportCacheVar) {
+            $arr = [
+                'orderDate' => Labels::getLabel('LBL_Date', $this->siteLangId),
+                'totOrders' => Labels::getLabel('LBL_Order_Placed', $this->siteLangId),
+                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->siteLangId),
+                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId),
+                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->siteLangId),
+                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->siteLangId),
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
+                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->siteLangId),
+                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->siteLangId),
+                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->siteLangId),
+                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->siteLangId),
+                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId),
+                'refundedShippingFromSeller' => Labels::getLabel('LBL_Refunded_Shipping', $this->siteLangId),
+                'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
+                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
+                'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->siteLangId),
+                'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->siteLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId),
+            ];
+            FatCache::set('shopsReportCacheVar' . $this->siteLangId, serialize($arr), '.txt');
+        } else {
+            $arr =  unserialize($shopsReportCacheVar);
+        }
+
+        if (!empty($orderDate)) {
+            unset($arr['orderDate']);
+            unset($arr['totOrders']);
+            $arr = [
+                'op_invoice_number' => Labels::getLabel('LBL_invoice_number', $this->siteLangId),
+                'order_date_added' => Labels::getLabel('LBL_Date', $this->siteLangId),
+            ] + $arr;
+        }
+
+        return $arr;
     }
 }

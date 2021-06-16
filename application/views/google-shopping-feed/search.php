@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 <?php $arr_flds = [
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     'adsbatch_name' => Labels::getLabel('LBL_BATCH_NAME', $siteLangId),
@@ -49,7 +49,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'adsbatch_target_country_id':
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($siteLangId);
+                $countriesArr = $countryObj->getCountriesAssocArr($siteLangId);
                 $td->appendElement('plaintext', array(), $countriesArr[$row[$key]], true);
                 break;
             case 'adsbatch_expired_on':

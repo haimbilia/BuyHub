@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
 } else {
     $arr_flds1 = array(
@@ -31,7 +31,7 @@ if (count($arr_listing) == 0) {
     }
 
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-    foreach ($arr_listing as $sn => $row) {
+    foreach ($arrListing as $sn => $row) {
         $tr = $tbl->appendElement('tr', array());
 
         foreach ($arr_flds as $key => $val) {

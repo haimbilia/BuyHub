@@ -11,7 +11,7 @@ class ReportHelper
      * @param  int $langId
      * @return void
      */
-    public function __construct(int $langId)
+    public function __construct(int $langId = 0)
     {
         $this->langId = $langId;
         $this->init($langId);
@@ -26,6 +26,11 @@ class ReportHelper
     public function joinOrderProductCharges()
     {
         $this->srch->addOrderProductCharges();
+    }
+
+    public function joinPaymentMethod($langId = 0)
+    {
+        $this->srch->joinPaymentMethod();
     }
 
     public function joinSettings()
@@ -71,7 +76,7 @@ class ReportHelper
     {
         $this->srch->addCondition('o.order_date_added', '>=', $from . ' 00:00:00');
 
-        $this->srch->addCondition('o.order_date_added', '<=', $date_to . ' 23:59:59');
+        $this->srch->addCondition('o.order_date_added', '<=', $to . ' 23:59:59');
     }
 
     public function setPaidCondition()

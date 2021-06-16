@@ -19,7 +19,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr', array());
     $tr->setAttribute("id", $row['taxrule_id']);
@@ -30,7 +30,10 @@ foreach ($arr_listing as $sn => $row) {
         switch ($key) {    
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
-                break;      
+                break;  
+            case 'trr_rate':
+                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
+                break;
             case 'action':
                 if ($canEdit) {
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "ruleForm(".$row['taxrule_taxcat_id']."," . $row['taxrule_id'] . ")"), '<i class="far fa-edit icon"></i>', true);
@@ -44,7 +47,7 @@ foreach ($arr_listing as $sn => $row) {
     }
 }
 
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
 echo $tbl->getHtml(); ?>

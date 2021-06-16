@@ -3,7 +3,10 @@
            
 		   <div class="box--tabled">
    <div class="box__cell">
-	  <?php $this->includeTemplate('guest-user/loginFormTemplate.php', $loginFormData,false); ?>
+	  <?php 
+		$loginFormData['popup'] = true;
+	  	$this->includeTemplate('guest-user/loginPageTemplate.php', $loginFormData,false); 
+	  ?>
    </div>
    
    <div class="box__cell">

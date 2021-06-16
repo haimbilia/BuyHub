@@ -37,7 +37,7 @@ class ShippingPackagesController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->adminLangId));
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

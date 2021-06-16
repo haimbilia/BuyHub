@@ -9,6 +9,7 @@ class OrderSubscription extends MyAppModel
     public const DB_TBL_LANG_PREFIX = 'ossubslang_';
 
     public const ACTIVE_SUBSCRIPTION = 11;
+    public const CANCELLED_SUBSCRIPTION = 12;
 
     public function __construct($id = 0)
     {
@@ -40,10 +41,10 @@ class OrderSubscription extends MyAppModel
             trigger_error(Labels::getLabel('ERR_User_Id_Not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
-         
+
         $srch = new  OrderSearch($langId);
         $srch->joinTableOrderSellerSubscription();
-        $srch ->addCondition(Orders::DB_TBL_PREFIX . 'type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addCondition(Orders::DB_TBL_PREFIX . 'type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'user_id', '=', $userId);
         $srch->setPageSize(1);
@@ -65,7 +66,7 @@ class OrderSubscription extends MyAppModel
         $srch->joinPackage($langId);
 
         //$srch->addSubscriptionValidCondition();
-        $srch ->addCondition(Orders::DB_TBL_PREFIX . 'type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addCondition(Orders::DB_TBL_PREFIX . 'type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'user_id', '=', $userId);
         $srch->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
@@ -105,9 +106,10 @@ class OrderSubscription extends MyAppModel
         }
         return array(
 
-        OrderProduct::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_Order_Product_Discount_Charges', $langId),
+            OrderProduct::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_Order_Product_Discount_Charges', $langId),
 
-        OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_Order_Product_Reward_Point', $langId),
+            OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_Order_Product_Reward_Point', $langId),
+            OrderProduct::CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE => Labels::getLabel('LBL_Order_Adjustment', $langId),
 
         );
     }
@@ -233,6 +235,6 @@ class OrderSubscription extends MyAppModel
         $planText = ($plan['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $langId) : Labels::getLabel("LBL_For", $langId);
 
         return $plan['ossubs_subscription_name'] . " - " . CommonHelper::displayMoneyFormat($price) . $planText . " " . (($plan['ossubs_interval'] > 0) ? $plan['ossubs_interval'] : '')
-        . "  " . $subcriptionPeriodArr[$plan['ossubs_frequency']];
+            . "  " . $subcriptionPeriodArr[$plan['ossubs_frequency']];
     }
 }

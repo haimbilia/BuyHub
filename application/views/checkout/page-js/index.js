@@ -242,10 +242,14 @@ $("document").ready(function () {
             if (t.status == 1) {
                 if (t.loadAddressDiv) {
                     loadAddressDiv();
-                } else if($(".payment-js").hasClass('is-active')){
+                }
+                /*
+                else if($(".payment-js").hasClass('is-active')){
                     loadPaymentSummary();
                     loadFinancialSummary();
-                }else {
+                }
+                */
+                else {
                     if (t.hasPhysicalProduct) {
                         $(shippingSummaryDiv).show();
                     } else {
@@ -320,6 +324,7 @@ $("document").ready(function () {
         var data = 'address_type=' + address_type;
         fcom.ajax(fcom.makeUrl('Checkout', 'addresses'), data, function (ans) {
             $(pageContent).html(ans);
+            setCheckoutFlow('BILLING');
         });
 
     };

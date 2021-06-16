@@ -1,18 +1,14 @@
 [data-simplebar] {
     position: relative;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
     flex-direction: column;
-    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-box-pack:flex-start;
-    -ms-flex-pack:flex-start;
+    -webkit-box-pack: flex-start;
+    -ms-flex-pack: flex-start;
     justify-content: flex-start;
-    -ms-flex-line-pack:flex-start;
+    -ms-flex-line-pack: flex-start;
     align-content: flex-start;
-    -webkit-box-align:flex-start;
-    -ms-flex-align:flex-start;
+    -webkit-box-align: flex-start;
+    -ms-flex-align: flex-start;
     align-items: flex-start;
     width: inherit;
     /*height: inherit;*/

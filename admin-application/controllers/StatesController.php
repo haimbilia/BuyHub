@@ -30,7 +30,7 @@ class StatesController extends AdminBaseController
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
@@ -85,7 +85,7 @@ class StatesController extends AdminBaseController
         }
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -259,7 +259,7 @@ class StatesController extends AdminBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_State_Identifier', $this->adminLangId), 'state_identifier');
         $frm->addRequiredField(Labels::getLabel('LBL_State_Code', $this->adminLangId), 'state_code');
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'state_country_id', $countriesArr, '', array(), '');
 

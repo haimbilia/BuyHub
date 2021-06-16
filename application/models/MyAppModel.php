@@ -269,12 +269,16 @@ class MyAppModel extends FatModel
         return $row;
     }
 
-    public static function getLangDataArr($recordId, $attr = null)
+    public static function getLangDataArr($recordId, $attr = null, bool $includePrimaryTable = false)
     {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $db = FatApp::getDb();
-        $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
+        
+        $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
+        if (true === $includePrimaryTable) {
+            $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id');
+        }
         $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $recordId);
         if (null != $attr) {
             if (is_array($attr)) {

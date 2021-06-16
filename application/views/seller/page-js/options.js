@@ -64,7 +64,6 @@ $(document).ready(function(){
 		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId,id]), '', function(t) {
 			dv.html(t);
             optionValueListing(optionId);
-			jscolor.installByClassName('jscolor');
 		});
 	};
 

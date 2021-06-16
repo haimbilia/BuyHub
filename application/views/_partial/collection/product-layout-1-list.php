@@ -3,19 +3,11 @@
     <?php if ($product['selprod_stock'] <= 0) { ?>
         <span class="tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
     <?php  } ?>
-    <div class="products__quickview">
-        <a onClick='quickDetail(<?php echo $product['selprod_id']; ?>)' class="modaal-inline-content">
-            <span class="svg-icon">
-                <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#quick-view" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#quick-view">
-                    </use>
-                </svg>
-            </span><?php echo Labels::getLabel('LBL_Quick_View', $siteLangId); ?>
-        </a>
-    </div>
+    <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product,  'siteLangId' => $siteLangId], false); ?>
     <div class="products__body">
         <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
-            <div class="not-available"><svg class="svg">
+            <div class="not-available">
+                <svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                     </use>
                 </svg> <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></div>

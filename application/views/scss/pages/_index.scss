@@ -154,7 +154,7 @@
     }
     &:hover {
         .slick-arrow {
-            -webkit-transform: scale(1);
+            
             transform: scale(1);
             opacity: 1;
             &:hover {
@@ -262,7 +262,7 @@
             &:before {
                 content: attr(data-count);
                 opacity: 0.1;
-                font-family: $family-primary;
+                
                 color: #000;
                 font-size: 4rem;
                 font-weight: 300;
@@ -325,13 +325,13 @@
             width: 12px;
         }
         &:before {
-            -webkit-transform: rotate(90deg);
+            
             transform: rotate(90deg);
-            -webkit-transition: all 0.2s ease-in-out;
+            
             transition: all 0.2s ease-in-out;
         }
         &[aria-expanded='true']:before {
-            -webkit-transform: rotate(0deg);
+            
             transform: rotate(0deg);
         }
     }

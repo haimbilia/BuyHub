@@ -1559,7 +1559,7 @@ class Importexport extends ImportexportCommon
                     $colValue = (!empty($row['product_weight_unit']) && array_key_exists($row['product_weight_unit'], $weightUnitsArr) ? $weightUnitsArr[$row['product_weight_unit']] : '');
                 }
 
-                if (in_array($columnKey, array('ps_free', 'product_cod_enabled', 'product_featured', 'product_approved', 'product_active', 'product_deleted')) && !$this->settings['CONF_USE_O_OR_1']) {
+                if (in_array($columnKey, array('ps_free', 'product_cod_enabled', 'product_featured', 'product_approved', 'product_active', 'product_deleted', 'product_attachements_with_inventory')) && !$this->settings['CONF_USE_O_OR_1']) {
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
                 }
                 $sheetData[] = $this->parseContentForExport($colValue);
@@ -1604,7 +1604,7 @@ class Importexport extends ImportexportCommon
             $weightUnitsArr = array_flip($weightUnitsArr);
         }
 
-        $shippingProfileArr = ShippingProfile::getProfileArr(0, true, true, true);
+        $shippingProfileArr = ShippingProfile::getProfileArr($langId, 0, true, true, true);
         $adminDefaultShipProfileId =  array_key_first($shippingProfileArr);
         $coloumArr = $this->getProductsCatalogColoumArr($langId, $sellerId, $this->actionType);
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
@@ -1736,6 +1736,7 @@ class Importexport extends ImportexportCommon
                         case 'product_approved':
                         case 'product_active':
                         case 'product_deleted':
+                        case 'product_attachements_with_inventory':    
                             if ($this->settings['CONF_USE_O_OR_1']) {
                                 $colValue = (FatUtility::int($colValue) == 1) ? applicationConstants::YES : applicationConstants::NO;
                             } else {
@@ -1880,7 +1881,7 @@ class Importexport extends ImportexportCommon
                             $columnKey = 'ps_from_country_id';
                             $colValue = mb_strtolower($colValue);
                             if (!array_key_exists($colValue, $countryArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getCountriesArr(false, $colValue), CASE_LOWER);
+                                $res = $this->array_change_key_case_unicode($this->getCountriesAssocArr(false, $colValue), CASE_LOWER);
                                 if (!$res) {
                                     $invalid = true;
                                 } else {
@@ -2467,6 +2468,7 @@ class Importexport extends ImportexportCommon
         $srch->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'LEFT OUTER JOIN', Product::DB_PRODUCT_SPECIFICATION_PREFIX . 'id = ' . Product::DB_PRODUCT_LANG_SPECIFICATION_PREFIX . 'prodspec_id');
         $srch->addMultipleFields(array('prodspec_id', 'prodspeclang_lang_id', 'prodspec_name', 'prodspec_value', 'prodspec_group', 'product_id', 'product_identifier'));
         $srch->joinTable(Language::DB_TBL, 'INNER JOIN', 'language_id = prodspeclang_lang_id');
+        $srch->addCondition(Product::DB_PRODUCT_LANG_SPECIFICATION_PREFIX . 'lang_id', '=', $langId);
         $srch->doNotCalculateRecords();
         switch ($this->actionType) {
             case self::ACTION_ADMIN_PRODUCTS:
@@ -2831,7 +2833,7 @@ class Importexport extends ImportexportCommon
                         case 'country_id':
                             $colValue = mb_strtolower($colValue);
                             if ('country_code' == $columnKey && !array_key_exists($colValue, $countryCodeArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getCountriesArr(false, $colValue), CASE_LOWER);
+                                $res = $this->array_change_key_case_unicode($this->getCountriesAssocArr(false, $colValue), CASE_LOWER);
                                 if (!$res) {
                                     $invalid = true;
                                 } else {
@@ -2995,6 +2997,11 @@ class Importexport extends ImportexportCommon
 
         $errInSheet = false;
         $breakForeach = false;
+        
+        if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $allowed_images = SellerPackages::getAllowedLimit($userId, $langId, 'ossubs_products_allowed');
+            $optionLangCombinationImgCount = [];
+        }
         while (($row = $this->getFileRow($csvFilePointer)) !== false) {
             $rowIndex++;
 
@@ -3120,7 +3127,16 @@ class Importexport extends ImportexportCommon
                 }
             }
 
-            if (false === $errorInRow && count($prodCatalogMediaArr)) {
+            if (false === $errorInRow && count($prodCatalogMediaArr)) {                
+                if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                    $combinationkey = $prodCatalogMediaArr['afile_record_id'] . "-" . $prodCatalogMediaArr['afile_lang_id'] . "-" . $prodCatalogMediaArr['afile_record_subid'];
+                    $optionLangCombinationImgCount[$combinationkey] = isset($optionLangCombinationImgCount[$combinationkey]) ? $optionLangCombinationImgCount[$combinationkey] + 1 : 1;
+                    if ($optionLangCombinationImgCount[$combinationkey] > $allowed_images) {
+                        $errMsg = Labels::getLabel("MSG_You_have_crossed_your_package_limit.", $langId);
+                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, $errMsg));
+                        continue;
+                    }
+                }
                 unset($prodCatalogMediaArr['option_identifier']);
                 unset($prodCatalogMediaArr['option_id']);
                 $fileType = AttachedFile::FILETYPE_PRODUCT_IMAGE;
@@ -4104,7 +4120,7 @@ class Importexport extends ImportexportCommon
                             $rs = $prodSrch->getResultSet();
                             $productArr[$selProdId] = FatApp::getDb()->fetch($rs);
                         }
-                    } else if ('splprice_price' == $columnKey) {
+                    } /* else if ('splprice_price' == $columnKey) {
                         if ($colValue < $productArr[$selProdId]['product_min_selling_price'] || $colValue >= $productArr[$selProdId]['selprod_price']) {
                             $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $langId);
                             $minSellingPrice = CommonHelper::displayMoneyFormat($productArr[$selProdId]['product_min_selling_price'], false, true, true);
@@ -4113,7 +4129,7 @@ class Importexport extends ImportexportCommon
                             $errMsg = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
                             $invalid = true;
                         }
-                    } else if ('splprice_start_date' == $columnKey) {
+                    } */ else if ('splprice_start_date' == $columnKey) {
                         if (strtotime($colValue) < strtotime($productArr[$selProdId]['selprod_available_from'])) {
                             $str = Labels::getLabel('MSG_Special_Price_Date_Must_Be_Greater_Or_Than_Equal_To_{availablefrom}', $langId);
                             $errMsg = CommonHelper::replaceStringData($str, array('{availablefrom}' => date('Y-m-d', strtotime($productArr[$selProdId]['selprod_available_from']))));
@@ -4941,7 +4957,8 @@ class Importexport extends ImportexportCommon
                     }
                     if (in_array($columnKey, array('optionvalue_id', 'optionvalue_identifier'))) {
                         if ('optionvalue_id' == $columnKey) {
-                            $optionValueData = OptionValue::getAttributesById($colValue, array('optionvalue_id'));
+                            $optionValueData = OptionValue::getAttributesById($colValue, array('optionvalue_id', 'optionvalue_identifier'));
+                            $optionvalue_identifier = $optionValueData['optionvalue_identifier'];
                         } else {
                             $optionvalue_identifier = $colValue;
                         }
@@ -5414,9 +5431,9 @@ class Importexport extends ImportexportCommon
         $rowIndex = 1;
 
         if ($this->settings['CONF_USE_COUNTRY_ID']) {
-            $countryCodes = $this->getCountriesArr(true);
+            $countryCodes = $this->getCountriesAssocArr(true);
         } else {
-            $countryIds = $this->getCountriesArr(false);
+            $countryIds = $this->getCountriesAssocArr(false);
         }
 
         $coloumArr = $this->getStatesColoumArr($langId);

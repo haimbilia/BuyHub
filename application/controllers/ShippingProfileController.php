@@ -40,17 +40,18 @@ class ShippingProfileController extends SellerBaseController
         $prodCountSrch->addMultipleFields(array("COUNT(*) as totalProducts, shippro_shipprofile_id"));
         $prodCountQuery = $prodCountSrch->getQuery();
 
-        $srch = ShippingProfile::getSearchObject();
+        $srch = ShippingProfile::getSearchObject($this->siteLangId);
         $srch->addCondition('sprofile.shipprofile_user_id', '=', $this->userParentId);
         $srch->joinTable('(' . $prodCountQuery . ')', 'LEFT OUTER JOIN', 'sproduct.shippro_shipprofile_id = sprofile.shipprofile_id', 'sproduct');
 
-        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts'));
+        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts','IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
 
         $srch->addOrder('shipprofile_default', 'DESC');
         $srch->addOrder('shipprofile_id', 'ASC');
 
         if (!empty($post['keyword'])) {
-            $srch->addCondition('sprofile.shipprofile_name', 'like', '%' . $post['keyword'] . '%');
+            $cnd =  $srch->addCondition('sprofile_l.shipprofile_name', 'like', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('sprofile.shipprofile_identifier', 'like', '%' . $post['keyword'] . '%');            
         }
 
         $srch->setPageNumber($page);
@@ -64,7 +65,7 @@ class ShippingProfileController extends SellerBaseController
             $zones = $this->getZones($profileIds);
         }
 
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('zones', $zones);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -81,8 +82,10 @@ class ShippingProfileController extends SellerBaseController
         $profileId = FatUtility::int($profileId);
         $frm = $this->getForm($profileId);
         $data = [];
+        
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         if (0 < $profileId) {
-            $data = ShippingProfile::getAttributesById($profileId);
+            $data = ShippingProfile::getAttributesById($profileId);            
             if ($data === false) {
                 Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
@@ -90,7 +93,18 @@ class ShippingProfileController extends SellerBaseController
             if ($data['shipprofile_user_id'] != $userId) {
                 Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
+            }           
+  
+            $spObj = new ShippingProfile();        
+            foreach (Language::getAllNames() as $langId => $langName) {
+                $profileName = $spObj->getAttributesByLangId($langId, $profileId, 'shipprofile_name');
+                if (!empty($profileName)) {
+                    $data['shipprofile_name'][$langId] = $profileName;
+                }
             }
+            if(empty($data['shipprofile_name'][$siteDefaultLangId])){
+                $data['shipprofile_name'][$siteDefaultLangId] = $data['shipprofile_identifier'];
+            }          
             $frm->fill($data);
         }
 
@@ -98,6 +112,8 @@ class ShippingProfileController extends SellerBaseController
         $this->set('frm', $frm);
         $this->set('profileData', $data);
         $this->set('canEdit', $this->userPrivilege->canEditShippingProfiles(UserAuthentication::getLoggedUserId(), true));
+        $this->set('siteDefaultLangId', $siteDefaultLangId);
+        $this->set('languages', Language::getAllNames());
         $this->_template->render();
     }
 
@@ -110,16 +126,32 @@ class ShippingProfileController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
+        
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 
         $profileId = $post['shipprofile_id'];
         unset($post['shipprofile_id']);
+        
+        $post['shipprofile_identifier'] = $post['shipprofile_name'][$siteDefaultLangId] ?? '';
 
         $spObj = new ShippingProfile($profileId);
+        
         $spObj->assignValues($post);
 
         if (!$spObj->save()) {
             Message::addErrorMessage($spObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
+        }
+        
+        $languages = Language::getAllNames();
+        foreach ($post['shipprofile_name'] as $langId => $profileName) {                       
+            if(empty($profileName)){
+                continue;
+            }
+            if (!$spObj->updateLangData($langId, ['shipprofile_name'=> $profileName])) {
+                Message::addErrorMessage($spObj->getError());
+                FatUtility::dieWithError(Message::getHtml());
+            }
         }
 
         if (1 > $profileId) {
@@ -234,7 +266,15 @@ class ShippingProfileController extends SellerBaseController
         $frm = new Form('frmShippingProfile');
         $frm->addHiddenField('', 'shipprofile_id', $profileId);
         $frm->addHiddenField('', 'shipprofile_user_id', $userId);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->siteLangId), 'shipprofile_name', '', ['placeholder' => Labels::getLabel('LBL_Profile_Name', $this->siteLangId)]);
+        $languages = Language::getAllNames();
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        foreach ($languages as $langId => $langName) {
+            if ($langId == $siteDefaultLangId) {
+                $fld = $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->siteLangId) . " " . $langName, 'shipprofile_name[' . $langId . ']', '', ['placeholder' => Labels::getLabel('LBL_Profile_Name', $this->siteLangId)]);
+            } else {
+                $fld = $frm->addTextBox(Labels::getLabel('LBL_Profile_Name', $this->siteLangId) . " " . $langName, 'shipprofile_name[' . $langId . ']', '', ['placeholder' => Labels::getLabel('LBL_Profile_Name', $this->siteLangId)]);
+            }
+        }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }

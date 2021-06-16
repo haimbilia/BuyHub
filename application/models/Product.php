@@ -65,6 +65,12 @@ class Product extends MyAppModel
     public const PRODUCT_REVIEWS_ORGINAL_URL = 'reviews/product/';
     public const PRODUCT_MORE_SELLERS_ORGINAL_URL = 'products/sellers/';
 
+    public static $optionValueName = '';
+
+    public const CATALOG_TYPE_PRIMARY = 0;
+    public const CATALOG_TYPE_REQUEST = 1;
+    public const CATALOG_TYPE_INVENTORY = 2;
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -596,6 +602,65 @@ class Product extends MyAppModel
         return $row;
     }
 
+    private static function getOptions($product_id, $lang_id = 0, $option_is_separate_images = 0)
+    {
+        $srch = new SearchBase(static::DB_PRODUCT_TO_OPTION);
+
+        if (0 < $product_id) {
+            $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $product_id);
+        }
+
+        $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
+
+        $attr = array('option_id', 'option_identifier');
+        if (0 < $lang_id) {
+            $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT JOIN', 'lang.optionlang_option_id = ' . Option::DB_TBL_PREFIX . 'id AND optionlang_lang_id = ' . $lang_id, 'lang');
+            $attr[] = 'option_name';
+        }
+
+        $srch->addMultipleFields($attr);
+
+        if ($option_is_separate_images) {
+            $srch->addCondition('option_is_separate_images', '=', applicationConstants::YES);
+        }
+
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
+    }
+
+    public static function validateProductOptionValue(int $product_id, string $needle): bool
+    {
+        $records = self::getOptions($product_id);
+
+        if (!is_array($records) || 1 > count($records)) {
+            return false;
+        }
+
+        if (!empty($needle) && false !== strpos($needle, '|')) {
+            $optionValueIdsArr = explode('|', $needle);
+        } else if (!empty($needle) && false !== strpos($needle, '_')) {
+            $optionValueIdsArr = explode('_', $needle);
+        } else {
+            $optionValueIdsArr = (array) $needle;
+        }
+
+        if (count($records) != count($optionValueIdsArr)) {
+            return false;
+        }
+
+        $optionValues = [];
+        foreach ($records as $row) {
+            $optionValues = $optionValues + static::getOptionValues($row['option_id'], CommonHelper::getLangId());
+        }
+        
+        return count(array_intersect($optionValueIdsArr, array_keys($optionValues))) === count($optionValueIdsArr);
+    }
+
+    public static function setSearchOptionName($needle)
+    {
+        self::$optionValueName = $needle;
+    }
+
     public static function getProductOptions($product_id, $lang_id, $includeOptionValues = false, $option_is_separate_images = 0)
     {
         $product_id = FatUtility::convertToType($product_id, FatUtility::VAR_INT);
@@ -605,30 +670,30 @@ class Product extends MyAppModel
             return false;
         }
 
-        $srch = new SearchBase(static::DB_PRODUCT_TO_OPTION);
-        $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $product_id);
-        $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
+        $records = self::getOptions($product_id, $lang_id, $option_is_separate_images);
 
-        $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT JOIN', 'lang.optionlang_option_id = ' . Option::DB_TBL_PREFIX . 'id AND optionlang_lang_id = ' . $lang_id, 'lang');
-
-        $srch->addMultipleFields(array('option_id', 'option_name', 'option_identifier'));
-
-        if ($option_is_separate_images) {
-            $srch->addCondition('option_is_separate_images', '=', applicationConstants::YES);
-        }
-
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
+        $found = false;
         $data = array();
-        while ($row = $db->fetch($rs)) {
+        foreach ($records as $row) {
             if ($includeOptionValues) {
                 $row['optionValues'] = static::getOptionValues($row['option_id'], $lang_id);
+                $found = (false === $found ? !empty($row['optionValues']) : true);
             }
             $data[] = $row;
         }
+
+        if (true === $found) {
+            foreach ($data as &$options) {
+                if (empty($options['optionValues'])) {
+                    self::setSearchOptionName(''); /* Unset Search Option Value Name */
+                    $options['optionValues'] = static::getOptionValues($options['option_id'], $lang_id);
+                }
+            }
+        }
+
         return $data;
     }
-    
+
     public static function getSeparateImageOptions($product_id, $lang_id)
     {
         $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $lang_id));
@@ -740,6 +805,11 @@ class Product extends MyAppModel
         $srch = new SearchBase(OptionValue::DB_TBL);
         $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT JOIN', 'lang.optionvaluelang_optionvalue_id = ' . OptionValue::DB_TBL_PREFIX . 'id AND optionvaluelang_lang_id = ' . $lang_id, 'lang');
         $srch->addCondition(OptionValue::DB_TBL_PREFIX . 'option_id', '=', $option_id);
+
+        if (!empty(self::$optionValueName)) {
+            $srch->addCondition('optionvalue_name', 'LIKE', "%" . self::$optionValueName . "%");
+        }
+
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('optionvalue_display_order');
@@ -1378,7 +1448,7 @@ class Product extends MyAppModel
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
                 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
                 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-                'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty'
+                'selprod_sold_count', 'selprod_return_policy', 'shop_id', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty'
             )
         );
 
@@ -1410,7 +1480,7 @@ class Product extends MyAppModel
         if (true === $includeRating) {
             $selProdReviewObj = new SelProdReviewSearch();
             $selProdReviewObj->joinSelProdRating();
-            $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+            $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
             $selProdReviewObj->doNotCalculateRecords();
             $selProdReviewObj->doNotLimitRecords();
             $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -1582,7 +1652,7 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
-        $srch->addGroupBy('product_id');        
+        $srch->addGroupBy('product_id');
         if (!empty($keyword)) {
             $srch->addGroupBy('keywordmatched');
             $srch->addOrder('keywordmatched', 'desc');
@@ -1978,5 +2048,4 @@ END,   special_price_found ) as special_price_found'
         }
         return $records['ptpp_product_id'];
     }
-
 }

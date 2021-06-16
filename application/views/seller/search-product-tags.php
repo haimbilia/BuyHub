@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap">
+<div class="js-scrollable table-wrap scroll scroll-x">
 <?php $arr_flds = array(
     'listserial'=>'#',
     'product_identifier' => Labels::getLabel('LBL_Product', $siteLangId),
@@ -19,7 +19,7 @@ foreach ($arr_flds as $key => $val) {
 }
 $productsArr = array();
 $sr_no = ($page == 1) ? 0 : ($pageSize*($page-1));
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $productsArr[] = $row['product_id'];
     $sr_no++;
     $tr = $tbl->appendElement('tr', array('class' => ''));
@@ -42,7 +42,7 @@ foreach ($arr_listing as $sn => $row) {
                 }
                 $readOnly = (!$canEdit) ? 'readonly' : '';
                 $encodedData = htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8');
-                $td->appendElement('plaintext', array(), "<div class='product-tag scroll-y' id='product".$row['product_id']."' data-simplebar><input ".$readOnly." class='tag_name' type='text' name='tag_name".$row['product_id']."' value='".$encodedData."' data-product_id='".$row['product_id']."'></div>", true);
+                $td->appendElement('plaintext', array(), "<div class='product-tag scroll scroll-y' id='product".$row['product_id']."'><input ".$readOnly." class='tag_name' type='text' name='tag_name".$row['product_id']."' value='".$encodedData."' data-product_id='".$row['product_id']."'></div>", true);
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
@@ -51,7 +51,7 @@ foreach ($arr_listing as $sn => $row) {
     }
 }
 
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_You_need_to_create_private_products_in_order_to_add_tags', $siteLangId);
     $this->includeTemplate('_partial/no-record-found-with-info.php', array('siteLangId'=>$siteLangId,'message'=>$message));
 } else {
@@ -63,7 +63,7 @@ echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmCatal
 $pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'callBackJsFunc' => 'goToCatalogProductSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 ?>
-<?php if (count($arr_listing) > 0) { ?>
+<?php if (count($arrListing) > 0) { ?>
 <script>
 var productsArr = [<?php echo '"'.implode('","', $productsArr).'"' ?>];
 $("document").ready(function() {

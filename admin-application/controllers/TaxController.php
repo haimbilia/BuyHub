@@ -76,7 +76,7 @@ class TaxController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -526,7 +526,7 @@ class TaxController extends AdminBaseController
         $srch->setPageSize($pagesize);
         $srch->addOrder('taxrule_name', 'ASC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -692,7 +692,7 @@ class TaxController extends AdminBaseController
 
         /* [ TAX CATEGORY RULE LOCATIONS FORM */
         $countryObj = new Countries();
-        $countriesOptions = $countryObj->getCountriesArr($this->adminLangId, true);
+        $countriesOptions = $countryObj->getCountriesAssocArr($this->adminLangId, true);
         $countriesOptions = array(-1 => Labels::getLabel('LBL_Rest_of_the_world', $this->adminLangId)) + $countriesOptions;
         array_walk($countriesOptions, function (&$v) {
             $v = str_replace("'", "\'", trim($v));

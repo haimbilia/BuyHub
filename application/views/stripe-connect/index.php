@@ -35,14 +35,15 @@
                     <?php } else { ?>
                         <div class="text-center">
                             <h5>
-                                <?php 
-                                    echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; 
-                                    if ('custom' == $stripeAccountType) {
-                                ?>
+                                <?php  echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; ?>
+                                <?php if ('custom' == $stripeAccountType) { ?>
                                     <a class="btn btn-brand btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>" title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 <?php } ?>
+                                <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
+                                    <i class="fa fa-unlink"></i>
+                                </a>
                             </h5>
                         </div>
                 <?php } ?>

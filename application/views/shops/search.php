@@ -21,6 +21,11 @@ if (!empty($allShops)) {
                                     <div class="ftshops_location"><?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?></div>
                                 </div>
                             </div>
+                            <?php 
+                                $bdgShopId = $shop['shop_id'];
+                                $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
+                                include (CONF_THEME_PATH . '_partial/get-badge.php'); 
+                            ?>
                             <div class="ftshops_item_head_right">
                                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
                                     <div class="products__rating"> <i class="icn"><svg class="svg">

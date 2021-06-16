@@ -69,7 +69,7 @@ class CategoryRequestsController extends AdminBaseController
         }
         $statusArr = CategoryRequest::getCategoryReqStatusArr($this->adminLangId);
         $this->set('statusArr', $statusArr);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

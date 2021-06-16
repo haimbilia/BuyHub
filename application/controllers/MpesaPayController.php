@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MpesaPayController - M-Pesa services in 10 countries: Albania, the Democratic Republic of Congo, Egypt, Ghana, India, Kenya, Lesotho, Mozambique, Romania and Tanzania. 
  */
@@ -68,7 +69,7 @@ class MpesaPayController extends PaymentController
             $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
-        
+
         $customerPhone =  '';
         if (0 < $this->userId) {
             $userObj = new User($this->userId);
@@ -123,7 +124,7 @@ class MpesaPayController extends PaymentController
         }
         $this->_template->render(true, false);
     }
-    
+
     /**
      * callback
      *
@@ -135,23 +136,24 @@ class MpesaPayController extends PaymentController
         $json = file_get_contents('php://input');
         $post = json_decode($json, true);
         $orderPaymentObj = new OrderPayment($orderId);
+        $msg = "";
         if (json_last_error() == JSON_ERROR_NONE) {
-            $error = false;
-            /**
-             * 0 Success (for C2B).
-             * 00000000	Success (For APIs that are not C2B).
-             * 1 or any other number	Rejecting the transaction.
-             */
-            $stkCallback = isset($post['Body']['stkCallback']) ? $post['Body']['stkCallback'] : [];
+            $callbackResponse = array_key_exists('callback_response', $post) ? $post['callback_response'] : $post;
+            $stkCallback = isset($callbackResponse['Body']['stkCallback']) ? $callbackResponse['Body']['stkCallback'] : [];
             $checkoutRequestID = isset($stkCallback['CheckoutRequestID']) ? $stkCallback['CheckoutRequestID'] : '';
             $error = empty($checkoutRequestID);
             if (false === $error && isset($stkCallback['ResultCode']) && 0 == $stkCallback['ResultCode']) {
                 if (false === $this->plugin->STKPushQuery($checkoutRequestID)) {
                     $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
                 }
-    
+
                 $response = $this->plugin->getResponse();
-                if (array_key_exists('ResponseCode', $response) && 0 < $response['ResponseCode']) {
+                /**
+                 * 0 Success (for C2B).
+                 * 00000000	Success (For APIs that are not C2B).
+                 * 1 or any other number	Rejecting the transaction.
+                 */
+                if (array_key_exists('ResponseCode', $response) && 1 != $response['ResponseCode']) {
                     $error = ($response['ResultCode'] != $stkCallback['ResultCode']);
                     $json = false == $error ? $json : json_encode(array_merge(['callback_response' => $post], ['verification_response' => $response]));
                 } else {
@@ -179,10 +181,13 @@ class MpesaPayController extends PaymentController
                     $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $txnId, $payment_amount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $json);
                     return;
                 }
+            } else { 
+                $msg = array_key_exists('ResultDesc', $stkCallback) ? $stkCallback['ResultDesc'] : $this->getResultCodeName($stkCallback['ResultCode']);
             }
         }
         SystemLog::transaction($json, self::KEY_NAME . "-" . $orderId);
         $msg = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+
         $orderPaymentObj->addOrderPaymentComments($msg);
         return;
     }
@@ -200,5 +205,35 @@ class MpesaPayController extends PaymentController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_REQUEST', $this->siteLangId));
 
         return $frm;
+    }
+
+    /**
+     * getResultCodeName
+     *
+     * @param  int $code
+     * @return object
+     */
+    private function getResultCodeName(int $code): string
+    {
+        $arr = [
+            '0' => Labels::getLabel('MSG_SUCCESS', $this->siteLangId),
+            '1' => Labels::getLabel('MSG_INSUFFICIENT_FUNDS', $this->siteLangId),
+            '2' => Labels::getLabel('MSG_LESS_THAN_MINIMUM_TRANSACTION_VALUE', $this->siteLangId),
+            '3' => Labels::getLabel('MSG_MORE_THAN_MAXIMUM_TRANSACTION_VALUE', $this->siteLangId),
+            '4' => Labels::getLabel('MSG_WOULD_EXCEED_DAILY_TRANSFER_LIMIT', $this->siteLangId),
+            '5' => Labels::getLabel('MSG_WOULD_EXCEED_MINIMUM_BALANCE', $this->siteLangId),
+            '6' => Labels::getLabel('MSG_UNRESOLVED_PRIMARY_PARTY', $this->siteLangId),
+            '7' => Labels::getLabel('MSG_UNRESOLVED_RECEIVER_PARTY', $this->siteLangId),
+            '8' => Labels::getLabel('MSG_WOULD_EXCEED_MAXIUMUM_BALANCE', $this->siteLangId),
+            '11' => Labels::getLabel('MSG_DEBIT_ACCOUNT_INVALID', $this->siteLangId),
+            '12' => Labels::getLabel('MSG_CREDIT_ACCOUNT_INVALIUD', $this->siteLangId),
+            '13' => Labels::getLabel('MSG_UNRESOLVED_DEBIT_ACCOUNT', $this->siteLangId),
+            '14' => Labels::getLabel('MSG_UNRESOLVED_CREDIT_ACCOUNT', $this->siteLangId),
+            '15' => Labels::getLabel('MSG_DUPLICATE_DETECTED', $this->siteLangId),
+            '17' => Labels::getLabel('MSG_INTERNAL_FAILURE', $this->siteLangId),
+            '20' => Labels::getLabel('MSG_UNRESOLVED_INITIATOR', $this->siteLangId),
+            '26' => Labels::getLabel('MSG_TRAFFIC_BLOCKING_CONDITION_IN_PLACE', $this->siteLangId),
+        ];
+        return array_key_exists($code, $arr) ? $arr[$code] : '';
     }
 }

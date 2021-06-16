@@ -1,7 +1,7 @@
-<?php if (0 < count($arr_listing)) { ?>
+<?php if (0 < count($arrListing)) { ?>
     <div class="tax-rules">      
         <ul>
-            <?php foreach ($arr_listing as $sn => $row) {
+            <?php foreach ($arrListing as $sn => $row) {
                     $ruleSpecificCombinedData = $combinedData[$row['taxrule_id']] ?? [];
                 
                 ?>
@@ -10,7 +10,7 @@
                     
                     <h5  class="title"><?php echo Labels::getLabel('LBL_Rule', $siteLangId); ?>:
                         <?php echo $row['taxrule_name']; ?>
-                        <span class=""><?php echo Labels::getLabel('LBL_Tax_Rate(%)', $siteLangId); ?>: <?php echo !empty($row['user_rule_rate']) ? "<del>".$row['trr_rate']."</del>" : $row['trr_rate']; ?></del>&nbsp; <?php echo $row['user_rule_rate']; ?>
+                        <span class=""><?php echo Labels::getLabel('LBL_Tax_Rate(%)', $siteLangId); ?>: <?php echo !empty($row['user_rule_rate']) ? "<del>".CommonHelper::numberFormat($row['trr_rate'])."</del>" : CommonHelper::numberFormat($row['trr_rate']); ?></del>&nbsp; <?php echo CommonHelper::numberFormat($row['user_rule_rate']); ?>
                         </span></h5>
                     <ul class="tax-rules__states">   
                         <li>

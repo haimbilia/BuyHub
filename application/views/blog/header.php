@@ -12,11 +12,11 @@ if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
 $commonHeadData = array(
     'siteLangId' => $siteLangId,
     'siteLangCode' => $siteLangCode,
+    'siteLangCountryCode' => $siteLangCountryCode,
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,
     'extendEditorJs' => $extendEditorJs,
-    'themeDetail' => $themeDetail,
     'themeActive' => $themeActive,
     'currencySymbolLeft' => $currencySymbolLeft,
     'currencySymbolRight' => $currencySymbolRight,

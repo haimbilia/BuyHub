@@ -189,7 +189,10 @@ class StripeConnect extends PaymentMethodBase
                 'code' => $code
             ]);
             $this->stripeAccountId = $this->stripe->getResourceOwner($accessToken)->getId();
-            return $this->updateUserMeta('stripe_account_id', $this->stripeAccountId);
+            if ($this->updateUserMeta('stripe_account_id', $this->stripeAccountId)){
+                $this->updateUserMeta('stripe_form_submitted', 1);
+            }
+            return true;
         } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
@@ -225,7 +228,11 @@ class StripeConnect extends PaymentMethodBase
      */
     private function unsetUserAccountElements(): bool
     {
-        FatApp::getDb()->deleteRecords(User::DB_TBL_META, ['smt' => 'usermeta_user_id = ? AND usermeta_key LIKE ? ', 'vals' => [$this->userId, 'stripe_%']]);
+        $db = FatApp::getDb();
+        if (false == $db->deleteRecords(User::DB_TBL_META, ['smt' => 'usermeta_user_id = ? AND usermeta_key LIKE ? ', 'vals' => [$this->userId, 'stripe_%']])) {
+            $this->error = $db->getError();
+            return false;
+        }
         return true;
     }
 
@@ -690,7 +697,7 @@ class StripeConnect extends PaymentMethodBase
             'external_account.routing_number' => [
                 'title' => Labels::getLabel("MSG_BANK_ROUTING_NUMBER", $this->langId),
                 'description' => Labels::getLabel('API_THE_ROUTING_NUMBER', $this->langId),
-                'required' => true
+                'required' => false
             ],
             'tos_acceptance' => [
                 'title' => Labels::getLabel("LBL_I_AGREE_TO_THE_TERMS_OF_SERVICE", $this->langId),
@@ -964,6 +971,16 @@ class StripeConnect extends PaymentMethodBase
 
         $this->error = Labels::getLabel('MSG_UNABLE_TO_DELETE_THIS_ACCOUNT', $this->langId);
         return false;
+    }
+
+    /**
+     * unlinkAccount
+     *
+     * @return bool
+     */
+    public function unlinkAccount(): bool
+    {
+        return (bool) $this->unsetUserAccountElements();
     }
 
     /**

@@ -19,7 +19,7 @@
                 }
 
                 $sr_no = 0;
-                foreach ($arr_listing as $sn => $row) {
+                foreach ($arrListing as $sn => $row) {
                     $sr_no++;
                     $tr = $tbl->appendElement('tr');
 
@@ -35,6 +35,9 @@
                             case 'acsh_afcommsetting_user_id':
                                 $td->appendElement('plaintext', array(), CommonHelper::displayText($row['vendor']), true);
                                 break;
+                            case 'acsh_afcommsetting_fees':
+                                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
+                                break;
                             case 'acsh_added_on':
                                 $td->appendElement('plaintext', array(), FatDate::format($row[$key]), true);
                                 break;
@@ -44,7 +47,7 @@
                         }
                     }
                 }
-                if (count($arr_listing) == 0) {
+                if (count($arrListing) == 0) {
                     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Record_Found', $adminLangId));
                 }
                 echo $tbl->getHtml();

@@ -126,9 +126,11 @@ trait PluginHelper
             $error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
             return false;
         }
-
+        
         if (true === $checkActive && 1 > Plugin::isActive($keyName)) {
-            $error =  Labels::getLabel('MSG_PLUGIN_IS_NOT_ACTIVE', $langId);
+            $name = current(Plugin::getAttributesByCode($keyName, 'COALESCE(plugin_name, plugin_identifier) as plugin_name', $langId));
+            $str =  Labels::getLabel('MSG_{NAME}_IS_NOT_ACTIVE', $langId);
+            $error = CommonHelper::replaceStringData($str, ['{NAME}' => $name]);
             return false;
         }
 

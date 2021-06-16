@@ -7,12 +7,12 @@
             return  $b['fulfillment_type'] - $a['fulfillment_type'];
         });
     ?>
-        <ul class="list-group list-cart <?php echo (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) ? '' : 'list-cart-page'; ?>">
+        <ul class="list-cart <?php echo (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) ? '' : 'list-cart-page'; ?>">
             <?php
             //if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { 
             if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) {
             ?>
-                <li class="list-group-item">
+                <li class="">
                     <div class="info">
                         <span> <svg class="svg">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
@@ -24,11 +24,12 @@
                         </span>
                         <ul class="list-actions">
                             <li>
-                                <a href="javascript:void(0);" onClick="removePickupOnlyProducts();"><svg class="svg" width="24px" height="24px">
+                                <a href="javascript:void(0);" onClick="removePickupOnlyProducts();"><svg class="svg" width="20px" height="20px">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
                                         </use>
                                     </svg>
-                                </a></li>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -41,33 +42,46 @@
                     $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                     $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
                 ?>
-                    <li class="list-group-item <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?> list-saved-later">
-                        <div class="product-profile">
-                            <div class="product-profile__thumbnail">
-                                <a href="<?php echo $productUrl; ?>">
-                                    <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                                </a></div>
-                            <div class="product-profile__data">
-                                <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a> </div>
-                                <div class="options">
-                                    <p class=""> <?php
-                                                    if (isset($product['options']) && count($product['options'])) {
-                                                        foreach ($product['options'] as $key => $option) {
-                                                            if (0 < $key) {
-                                                                echo ' | ';
-                                                            }
-                                                            echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
-                                        <?php }
-                                                    } ?></p>
+                    <li class=" <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?> list-saved-later">
+                        <div class="list-cart_col">
+                            <div class="product-profile">
+                                <div class="product-profile__thumbnail">
+                                    <a href="<?php echo $productUrl; ?>">
+                                        <img class="img-fluid" data-ratio="1:1" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
+                                    </a>
                                 </div>
-                                <p class="txt-brand pt-2"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
+                                <div class="product-profile__data">
+                                    <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a> </div>
+                                    <div class="options">
+                                        <p class=""> <?php
+                                                        if (isset($product['options']) && count($product['options'])) {
+                                                            foreach ($product['options'] as $key => $option) {
+                                                                if (0 < $key) {
+                                                                    echo ' | ';
+                                                                }
+                                                                echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                            <?php }
+                                                        } ?></p>
+                                    </div>
+                                    <p class="text-danger pt-2"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
+                                </div>
                             </div>
+
+                            <button class="btn-saveforlater" type="button" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
+                            
+                             <i class="icn">
+                             <svg class="svg" width="20px" height="20px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#saveforlater">
+                            </use>
+                        </svg>
+
+                             </i>
+                            </button>
                         </div>
-                        <button class="btn btn-outline-brand btn-sm" type="button" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );"> <?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?></button>
                     </li>
                 <?php } ?>
         </ul>
-        <ul class="list-group list-cart list-cart-page">
+        <ul class="list-cart list-cart-page">
         <?php } ?>
 
         <?php foreach ($products as $product) {
@@ -82,96 +96,16 @@
             $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
         ?>
 
-            <li class="list-group-item <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
-                <div class="product-profile">
-                    <div class="product-profile__thumbnail">
-                        <a href="<?php echo $productUrl; ?>">
-                            <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                        </a></div>
-                    <div class="product-profile__data">
-                        <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a> </div>
-                        <div class="options">
-                            <p class=""> <?php
-                                            if (isset($product['options']) && count($product['options'])) {
-                                                foreach ($product['options'] as $key => $option) {
-                                                    if (0 < $key) {
-                                                        echo ' | ';
-                                                    }
-                                                    echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
-                                <?php }
-                                            } ?></p>
-                        </div>
-                        <p class="save-later">
-                            <?php
-                            $showAddToFavorite = true;
-                            if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
-                                $showAddToFavorite = false;
-                            }
-                            if ($showAddToFavorite) { ?>
-
-                                <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-                                    if (empty($product['ufp_id'])) {  ?>
-                                        <a href="javascript:void(0)" class="" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_favourites', $siteLangId); ?></a>
-                                    <?php } else {
-                                        echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId);
-                                    }
-                                } else {
-                                    if (empty($product['is_in_any_wishlist'])) { ?>
-                                        <a href="javascript:void(0)" class="" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?></a>
-                            <?php  } else {
-
-                                        echo Labels::getLabel('LBL_Already_added_to_your_wishlist.', $siteLangId);
-                                    }
-                                }
-                            } ?>
-                            / <a href="javascript:void(0)" class="" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?></a>
-                        </p>
-                    </div>
-                </div>
-                <div class="wrap-qty-price">
-                    <div class="product-quantity">
-                        <div class="quantity quantity-2" data-stock="<?php echo $product['selprod_stock']; ?>">
-                            <span class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>"><i class="fas fa-minus"></i></span>
-                            <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
-                            </div>
-                            <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>"><i class="fas fa-plus"></i></span>
-                        </div>
-                    </div>
-                    <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
-                </div>
-                <div class="product-action">
-                    <ul class="list-actions">
-                        <li>
-                            <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
-                                <svg class="svg" width="24px" height="24px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                                    </use>
-                                </svg>
-                            </a></li>
-                    </ul>
-                </div>
-            </li>
-        <?php } ?>
-
-        </ul>
-    <?php } ?>
-    <?php if (0 < count($saveForLaterProducts)) { ?>
-        <h5 class="cart-title"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?> (<?php echo count($saveForLaterProducts); ?>)</h5>
-        <ul class="list-group list-cart list-cart-page">
-            <?php foreach ($saveForLaterProducts as $product) {
-                $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
-                $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
-                $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
-            ?>
-                <li class="list-group-item <?php echo isset($product['key']) ? md5($product['key']) : ''; ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
+            <li class=" <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
+                <div class="cell cell_product">
                     <div class="product-profile">
                         <div class="product-profile__thumbnail">
                             <a href="<?php echo $productUrl; ?>">
-                                <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                            </a></div>
+                                <img class="img-fluid" data-ratio="1:1" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
+                            </a>
+                        </div>
                         <div class="product-profile__data">
-                            <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a></div>
+                            <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a> </div>
                             <div class="options">
                                 <p class=""> <?php
                                                 if (isset($product['options']) && count($product['options'])) {
@@ -183,19 +117,116 @@
                                     <?php }
                                                 } ?></p>
                             </div>
-                            <button class="btn btn-outline-brand btn-sm product-profile__btn" type="button" onclick="moveToCart(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event, <?php echo Shipping::FULFILMENT_SHIP; ?>)"><?php echo Labels::getLabel('LBL_Move_To_Bag', $siteLangId); ?></button>
+                            <p class="save-later">
+                                <?php
+                                $showAddToFavorite = true;
+                                if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
+                                    $showAddToFavorite = false;
+                                }
+                                if ($showAddToFavorite) { ?>
+
+                                    <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+                                        if (empty($product['ufp_id'])) {  ?>
+                                            <a href="javascript:void(0)" class="" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_favourites', $siteLangId); ?></a>
+                                        <?php } else {
+                                            echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId);
+                                        }
+                                    } else {
+                                        if (empty($product['is_in_any_wishlist'])) { ?>
+                                            <a href="javascript:void(0)" class="" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?></a>
+                                <?php  } else {
+
+                                            echo Labels::getLabel('LBL_Already_added_to_your_wishlist.', $siteLangId);
+                                        }
+                                    }
+                                } ?>
+                                / <a href="javascript:void(0)" class="" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?></a>
+                            </p>
                         </div>
                     </div>
-                    <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
-                    <div class="product-action">
-                        <ul class="list-actions">
-                            <li>
-                                <a href="javascript:void(0)" onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg class="svg" width="24px" height="24px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                </div>
+                <div class="cell cell_qty">
+
+                    <div class="product-quantity">
+                        <div class="quantity quantity-2" data-stock="<?php echo $product['selprod_stock']; ?>">
+                            <span class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>"><i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                         </use>
                                     </svg>
-                                </a></li>
-                        </ul>
+                                </i></span>
+                            <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
+                            </div>
+                            <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>"><i class="icn">
+                                    <svg class="svg" width="16px" height="16px">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </i></span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="cell cell_price">
+                    <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
+                </div>
+                <div class="cell cell_action">
+                    <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
+                        <svg class="svg" width="20px" height="20px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" >
+                            </use>
+                        </svg>
+                    </a>
+                </div>
+            </li>
+        <?php } ?>
+
+        </ul>
+    <?php } ?>
+    <?php if (0 < count($saveForLaterProducts)) { ?>
+        <h5 class="cart-title mt-5"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?> (<?php echo count($saveForLaterProducts); ?>)</h5>
+        <ul class="list-cart list-cart-page">
+            <?php foreach ($saveForLaterProducts as $product) {
+                $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
+                $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
+            ?>
+                <li class=" <?php echo isset($product['key']) ? md5($product['key']) : ''; ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
+                    <div class="cell cell_product">
+                        <div class="product-profile">
+                            <div class="product-profile__thumbnail">
+                                <a href="<?php echo $productUrl; ?>">
+                                    <img class="img-fluid" data-ratio="1:1" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
+                                </a>
+                            </div>
+                            <div class="product-profile__data">
+                                <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a></div>
+                                <div class="options">
+                                    <p class=""> <?php
+                                                    if (isset($product['options']) && count($product['options'])) {
+                                                        foreach ($product['options'] as $key => $option) {
+                                                            if (0 < $key) {
+                                                                echo ' | ';
+                                                            }
+                                                            echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                        <?php }
+                                                    } ?></p>
+                                </div>
+                                <button class="btn btn-outline-brand btn-sm product-profile__btn" type="button" onclick="moveToCart(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event, <?php echo Shipping::FULFILMENT_SHIP; ?>)"><?php echo Labels::getLabel('LBL_Move_To_Bag', $siteLangId); ?></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell cell_price">
+                        <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
+                    </div>
+                    <div class="cell cell_action">
+                        <a href="javascript:void(0)" onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg class="svg" width="20px" height="20px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                </use>
+                            </svg>
+                        </a>
                     </div>
                 </li>
             <?php } ?>

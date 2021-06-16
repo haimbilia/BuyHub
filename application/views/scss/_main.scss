@@ -1,9 +1,12 @@
 @import "themes/theme";
+//
 @import 'bootstrap/bootstrap.scss';
 @import 'bootstrap/variables';
+//
 @import 'layout/header';
 @import 'layout/nav';
 @import 'layout/footer';
+//
 @import 'components/main-search';
 @import 'components/accordion';
 @import 'components/categories';
@@ -76,6 +79,13 @@
 @import 'components/saved-cards';
 @import 'components/no-data';
 @import 'components/timeline';
+@import 'components/review-media';
+@import 'components/badges';
+@import 'components/scrollbar';
+@import 'components/file-upload';
+@import 'components/more-sellers';
+//
+
 @import 'vendors/animate';
 @import 'vendors/fontawesome';
 @import 'vendors/chartist';
@@ -89,6 +99,7 @@
 @import 'vendors/tagify';
 @import 'vendors/intlTelInput.min';
 @import 'vendors/nouislider.min';
+//
 @import 'pages/offline';
 @import 'pages/blog';
 @import 'pages/cart';
@@ -112,6 +123,5 @@
 @import 'pages/sitemap';
 @import 'pages/rtl';
 //
-// custom-theme
-//
-//@import 'custom-theme/';
+ 
+ 

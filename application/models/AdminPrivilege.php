@@ -116,6 +116,15 @@ class AdminPrivilege
     public const SECTION_SHIPPING_MANAGEMENT = 110;
     public const SECTION_IMAGE_ATTRIBUTES = 111;
     public const SECTION_PICKUP_ADDRESSES = 112;
+    public const SECTION_RATING_TYPES = 113;
+    public const SECTION_SHIPPED_PRODUCTS_LISTING = 114;
+    public const SECTION_BUYERS_REPORT = 115;
+    public const SECTION_SELLERS_REPORT = 116;
+    public const SECTION_SUBSCRIPTION_REPORT = 117;
+    public const SECTION_FINANCIAL_REPORT = 118;
+    public const SECTION_ORDERS_REPORT = 119;
+    public const SECTION_BADGES = 120;
+    public const SECTION_BADGE_LINKS = 121;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -264,7 +273,15 @@ class AdminPrivilege
             static::SECTION_SUBSCRIPTION_ORDERS => Labels::getLabel('MSG_Subscription_Orders', CommonHelper::getLangId()),
 
             static::SECTION_PICKUP_ADDRESSES => Labels::getLabel('MSG_Pickup_Addresses', CommonHelper::getLangId()),
+            static::SECTION_RATING_TYPES => Labels::getLabel('MSG_RATING_TYPES', CommonHelper::getLangId()),
+            static::SECTION_BUYERS_REPORT => Labels::getLabel('MSG_CUSTOMER_REPORT', CommonHelper::getLangId()),
+            static::SECTION_SELLERS_REPORT => Labels::getLabel('MSG_SELLER_REPORT', CommonHelper::getLangId()),
+            static::SECTION_SUBSCRIPTION_REPORT => Labels::getLabel('MSG_SUBSCRIPTION_REPORT', CommonHelper::getLangId()),
+            static::SECTION_FINANCIAL_REPORT => Labels::getLabel('MSG_FINANCIAL_REPORT', CommonHelper::getLangId()),
+            static::SECTION_ORDERS_REPORT => Labels::getLabel('MSG_ORDERS_REPORT', CommonHelper::getLangId()),
 
+            static::SECTION_BADGES => Labels::getLabel('MSG_BADGES_&_RIBBONS', CommonHelper::getLangId()),
+            static::SECTION_BADGE_LINKS => Labels::getLabel('MSG_BADGE_LINKS', CommonHelper::getLangId()),
 
             /* static::SECTION_Languages => Labels::getLabel('MSG_Languages',CommonHelper::getLangId()),
         static::SECTION_Languages => Labels::getLabel('MSG_Order_Status',CommonHelper::getLangId()), */
@@ -1128,6 +1145,28 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_USERS_REPORT, static::PRIVILEGE_READ, $returnResult);
     }
+    public function canViewSubscriptionReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SUBSCRIPTION_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+    public function canViewFinancialReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_FINANCIAL_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+    public function canViewOrdersReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_ORDERS_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canViewBuyersReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BUYERS_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canViewSellersReport($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SELLERS_REPORT, static::PRIVILEGE_READ, $returnResult);
+    }
 
     public function canEditProductsReport($adminId = 0, $returnResult = false)
     {
@@ -1526,6 +1565,16 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_PICKUP_ADDRESSES, static::PRIVILEGE_WRITE, $returnResult);
     }
 
+    public function canViewShippedProducts($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPED_PRODUCTS_LISTING, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditShippedProducts($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SHIPPED_PRODUCTS_LISTING, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
     public function canViewTrackingRelationCode()
     {
         $plugin = new Plugin();
@@ -1535,5 +1584,35 @@ class AdminPrivilege
             return true;
         }
         return false;
+    }
+
+    public function canViewRatingTypes($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_RATING_TYPES, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRatingTypes($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_RATING_TYPES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewBadges($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditBadges($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewBadgeLinks($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditBadgeLinks($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

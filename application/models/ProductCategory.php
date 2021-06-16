@@ -10,6 +10,9 @@ class ProductCategory extends MyAppModel
     public const DB_TBL_PROD_CAT_RELATIONS = 'tbl_product_category_relations';
     public const DB_TBL_PROD_CAT_REL_PREFIX = 'pcr_';
 
+    public const DB_TBL_PROD_CAT_RATING_TYPES = 'tbl_prodcat_rating_types';
+    public const DB_TBL_PROD_CAT_RT_PREFIX = 'prt_';
+
     public const REWRITE_URL_PREFIX = 'category/view/';
     public const REMOVED_OLD_IMAGE_TIME = 4;
     private $categoryTreeArr = array();
@@ -17,6 +20,8 @@ class ProductCategory extends MyAppModel
     public const REQUEST_PENDING = 0;
     public const REQUEST_APPROVED = 1;
     public const REQUEST_CANCELLED = 2;
+
+    private $pageNumber = 0;
 
     public function __construct($id = 0)
     {
@@ -1259,10 +1264,11 @@ class ProductCategory extends MyAppModel
         $srch = static::getSearchObject(false, $this->commonLangId, false);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', $this->mainTableRecordId);
-
+        
         if ($includeProductCount === true) {
             $srch->joinTable(self::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'cr.pcr_parent_id = m.prodcat_id', 'cr');
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id', 'ptc');
+            $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', 'p.product_id = ptc.ptc_product_id AND p.' . Product::DB_TBL_PREFIX . 'deleted = 0', 'p');
             $attr[] = 'SUM(IF(ptc.ptc_product_id IS NULL, 0, 1)) as category_products';
         }
 
@@ -1355,42 +1361,9 @@ class ProductCategory extends MyAppModel
     public static function updateCategoryRelations(int $recordId = 0, string $prodcatCode = ''): bool
     {
         $db = FatApp::getDb();
-        if (!empty($prodcatCode)) {
-            $prodCatCodeArr = [$recordId => $prodcatCode];
-        } else {
-            $prodCatSrch = new ProductCategorySearch(0, false);
-            if (0 < $recordId) {
-                $prodCatSrch->addCondition('prodcat_id', '=',  $recordId);
-            }
-            $prodCatSrch->addMultipleFields(['prodcat_id', 'prodcat_code']);
-            $rs = $prodCatSrch->getResultSet();
-            $prodCatCodeArr = $db->fetchAllAssoc($rs);
-        }
-
-        if (!empty($prodCatCodeArr)) {
-            foreach ($prodCatCodeArr as $prodCatId => $prodCatCode) {
-                $catCodeArr = explode('_', rtrim($prodCatCode, '_'));
-                $deleted = false;
-                foreach (array_reverse($catCodeArr) as $level => $code) {
-                    $catId = ltrim($code, 0);
-
-                    if (!$catId) {
-                        continue;
-                    }
-
-                    if (false === $deleted) {
-                        $db->deleteRecords(self::DB_TBL_PROD_CAT_RELATIONS, ['smt' => self::DB_TBL_PROD_CAT_REL_PREFIX . 'prodcat_id = ?', 'vals' => [$prodCatId]]);
-                        $deleted = true;
-                    }
-
-                    $dataToSave = [
-                        'pcr_prodcat_id' => $prodCatId,
-                        'pcr_parent_id' => $catId,
-                        'pcr_level' => ($catId == $prodCatId) ? 0 : ($level + 1),
-                    ];
-                    $db->insertFromArray(self::DB_TBL_PROD_CAT_RELATIONS, $dataToSave, false, array(), $dataToSave);
-                }
-            }
+        if (!$db->query('CALL updateCategoryRelations(' . $recordId . ')')) {
+            echo $db->getError();die;
+            return false;
         }
         return true;
     }
@@ -1497,5 +1470,135 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs, 'pcr_prodcat_id');
+    }
+
+    public function addUpdateRatingType(int $rtId)
+    {
+        if (1 > $this->mainTableRecordId || 1 > $rtId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+        $record = new TableRecord(static::DB_TBL_PROD_CAT_RATING_TYPES);
+
+        $data = [
+            static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id' => $this->mainTableRecordId,
+            static::DB_TBL_PROD_CAT_RT_PREFIX . 'ratingtype_id' => $rtId
+        ];
+
+        $record->assignValues($data);
+        if (!$record->addNew(array(), $data)) {
+            $this->error = $record->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function removeRatingType(int $rtId)
+    {
+        $db = FatApp::getDb();
+        if (1 > $this->mainTableRecordId || 1 > $rtId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+
+        if (!$db->deleteRecords(static::DB_TBL_PROD_CAT_RATING_TYPES, array('smt' => static::DB_TBL_PROD_CAT_RT_PREFIX . 'prodcat_id = ? AND ' . static::DB_TBL_PROD_CAT_RT_PREFIX . 'ratingtype_id = ?', 'vals' => array($this->mainTableRecordId, $rtId)))) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getRatingTypes(int $langId = 0, int $isActive = -1): array
+    {
+        $langId = 1 > $langId ? $this->commonLangId : $langId;
+
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
+            return [];
+        }
+
+        $srch = self::getRatingTypesObj($langId, $isActive);
+        $srch->addCondition('prt_prodcat_id', '=', $this->mainTableRecordId);
+        $srch->addCondition('ratingtype_active', '=', applicationConstants::ACTIVE);
+        $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'ratingtype_active', 'ratingtype_default']);
+
+        $rs = $srch->getResultSet();
+        return (array) FatApp::getDb()->fetchAll($rs);
+    }
+
+    public static function getRatingTypesObj(int $langId = 0, int $isActive = -1)
+    {
+        $srch = new SearchBase(static::DB_TBL_PROD_CAT_RATING_TYPES, 'prt');
+        $srch->joinTable(
+            RatingType::DB_TBL,
+            'INNER JOIN',
+            'rt.ratingtype_id = prt.prt_ratingtype_id',
+            'rt'
+        );
+        $srch->joinTable(
+            RatingType::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $langId,
+            'rt_l'
+        );
+
+        if (0 < $isActive) {
+            $srch->addCondition('ratingtype_active', '=', $isActive);
+        }
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        return $srch;
+    }
+
+    /**
+     * getCategoriesByLevel
+     *
+     * @param  int $langId
+     * @param  array $attr
+     * @param  array $level
+     * @return array
+     */
+    public function getCategoriesByLevel(int $langId, array $level, array $attr = []): array
+    {
+        $catId = $this->getMainTableRecordId();
+
+        $catSrch = self::getSearchObject(false, 0, false);
+        if (0 < $catId) {
+            $catSrch->addCondition('prodcat_id', '=', $catId);
+        }
+        $catSrch->addCondition('prodcat_parent', '=', 0);
+        $catSrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+        $catSrch->doNotCalculateRecords();
+        $catSrch->doNotLimitRecords();
+        $catSrch->addMultipleFields(['prodcat_id']);
+        
+        $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
+        if (empty($attr)) {
+            $attr = [
+                'c.prodcat_id',
+                'cr.pcr_parent_id',
+                'IFNULL(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name',
+                'cr.pcr_level'
+            ];
+        }
+        $srch->addMultipleFields($attr);
+        $srch->joinTable('(' . $catSrch->getQuery() . ')', 'INNER JOIN', 'cr.pcr_parent_id = prodcat_id', 'cj');
+        $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = c.prodcat_id', 'c');
+        $srch->joinTable(self::DB_TBL_LANG, 'LEFT JOIN', 'c_l.prodcatlang_prodcat_id = c.prodcat_id AND c_l.prodcatlang_lang_id = ' . $langId, 'c_l');
+        $srch->addCondition('c.prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('c.prodcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('c.prodcat_status', '=', self::REQUEST_APPROVED);
+        $srch->addCondition('pcr_level', 'IN', $level);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addOrder('pcr_parent_id');
+        $srch->addOrder('pcr_level');
+        $srch->addOrder('pcr_prodcat_id');
+        $rs = $srch->getResultSet();
+        
+        $result = (array) FatApp::getDb()->fetchAll($rs);
+        return $result;
     }
 }

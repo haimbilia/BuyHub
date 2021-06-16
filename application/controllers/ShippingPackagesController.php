@@ -43,7 +43,7 @@ class ShippingPackagesController extends SellerBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

@@ -50,7 +50,7 @@ if (empty($keyword)) {
             <?php foreach ($recentSearchArr as $keyword) { ?>
                 <li class="recent-search" data-keyword="<?php echo $keyword; ?>">
                     <div class="recent-search__cross">
-                        <a href="javascript:void(0)" onclick="clearSearchKeyword(this)" class="close-layer close-layer--sm" data-keyword="<?php echo $keyword; ?>"></a>
+                        <a href="javascript:void(0)" onclick="clearSearchKeyword(this)" class="close-layer close-layer-sm" data-keyword="<?php echo $keyword; ?>"></a>
                     </div>
 
                     <a class="recent-search__link recentSearch-js" href="javascript:void(0)"><span class=""><?php echo $keyword; ?></span></a>

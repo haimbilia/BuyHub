@@ -27,9 +27,7 @@
     </button>
 </aside>
 <div class="content" data-content="">
-    <div class="container checkout-content-js">
-        
-        
+    <div class="container checkout-content-js">       
     </div>
 </div>
 <script type="text/javascript">

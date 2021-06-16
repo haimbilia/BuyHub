@@ -13,7 +13,7 @@ $arr_flds = array(
     'action' => '',
 );
 $tableClass = '';
-if (0 < count($arr_listing)) {
+if (0 < count($arrListing)) {
 	$tableClass = "table-justified";
 }
 $tbl = new HtmlElement(
@@ -27,7 +27,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['promotion_id']);
 
@@ -64,12 +64,15 @@ foreach ($arr_listing as $sn => $row) {
             case 'promotion_end_date':
                 $txt = '';
                 if ($row[$key] < date("Y-m-d")) {
-                    $txt .= Labels::getLabel('LBL_Expired', $siteLangId);
-                } else {
-                    if ($row['promotion_start_date'] >= date("Y-m-d")) {
-                        $txt .= Labels::getLabel('LBL_RUNNING', $siteLangId);
+                    $txt = Labels::getLabel('LBL_Expired', $siteLangId);
+                } else { 
+                    if($row['promotion_start_date'] <= date("Y-m-d") && $row['promotion_end_date'] >= date("Y-m-d")  && $row['promotion_start_time'] <= date('H:i') && $row['promotion_end_time'] >= date('H:i')) {
+                        $txt = Labels::getLabel('LBL_RUNNING', $siteLangId);
+                        if(!$isPpcBalanceSufficent){
+                            $txt = Labels::getLabel('LBL_LOW_BALANCE', $siteLangId);
+                        }                        
                     } else {
-                        $txt .= Labels::getLabel('LBL_SCHEDULED', $siteLangId);
+                        $txt = Labels::getLabel('LBL_SCHEDULED', $siteLangId);
                     }
                 }
                 $td->appendElement('plaintext', array(), $txt, true);
@@ -128,7 +131,7 @@ foreach ($arr_listing as $sn => $row) {
     $sr_no--;
 }
 echo $tbl->getHtml();
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
 }

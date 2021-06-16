@@ -12,6 +12,9 @@ if ($lang_id > 0) {
 } else {
     $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 }
+
+$stateData = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
+$displayMap = false;
 switch ($frmType) {
     case Configurations::FORM_GENERAL:
         /* if( $lang_id == 0 ){
@@ -56,6 +59,40 @@ switch ($frmType) {
         if (FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) == applicationConstants::BASED_ON_RADIUS) {
             $lFld->setFieldTagAttribute('disabled', 'disabled');
         }
+
+        $fld = $frm->getField('CONF_DEFAULT_GEO_LOCATION');
+        $fld->setFieldTagAttribute('class', 'defaultLocationGeoFilter');
+
+        $countryFld = $frm->getField('CONF_GEO_DEFAULT_COUNTRY');
+        $stateFld = $frm->getField('CONF_GEO_DEFAULT_STATE');
+        /*  $defaultState = FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1);
+        $defaultState = (empty($defaultState)) ? 0 : $defaultState; */
+
+        if ($countryFld) {
+            $countryFld->setFieldTagAttribute('id', 'geo_country_code');
+            $countryFld->setFieldTagAttribute('onChange', 'getStatesByCountryCode(this.value,' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1) . ',\'#geo_state_code\', \'state_code\')');
+
+            $stateFld->setFieldTagAttribute('id', 'geo_state_code');
+        }
+        $stateData = FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_INT, 1);
+
+        $zipFld = $frm->getField('CONF_GEO_DEFAULT_ZIPCODE');
+        $zipFld->setFieldTagAttribute('id', 'geo_postal_code');
+
+        if (FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::YES) {
+            $countryFld->setFieldTagAttribute('disabled', 'disabled');
+            $stateFld->setFieldTagAttribute('disabled', 'disabled');
+            $zipFld->setFieldTagAttribute('disabled', 'disabled');
+        }
+
+        $latFld = $frm->getField('CONF_GEO_DEFAULT_LAT');
+        $latFld->setFieldTagAttribute('id', "lat");
+        $lngFld = $frm->getField('CONF_GEO_DEFAULT_LNG');
+        $lngFld->setFieldTagAttribute('id', "lng");
+        $lngFld = $frm->getField('CONF_GEO_DEFAULT_ADDR');
+        $lngFld->setFieldTagAttribute('id', "geo_city");
+
+        $displayMap = true;
         break;
     case Configurations::FORM_LOCAL:
         $countryFld = $frm->getField('CONF_COUNTRY');
@@ -67,7 +104,6 @@ switch ($frmType) {
             $stateFld->setFieldTagAttribute('id', 'user_state_id');
         }
         break;
-
     case Configurations::FORM_DISCOUNT:
         /* $discountValue = $frm->getField('CONF_FIRST_TIME_BUYER_COUPON_DISCOUNT_VALUE');
         $discountValue->requirements()->setRange(0, $record['CONF_FIRST_TIME_BUYER_COUPON_MIN_ORDER_VALUE']); */
@@ -105,13 +141,16 @@ switch ($frmType) {
 </ul>
 <div class="tabs_panel_wrap">
     <?php echo $frm->getFormHtml(); ?>
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+        <div id="map" style="width:900px; height:500px"></div>
+    <?php } ?>
 </div>
-<script language="javascript">
-    $(document).ready(function() {
-        getCountryStates($("#user_country_id").val(), <?php echo FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1); ?>, '#user_state_id');
-    });
 
+<script language="javascript">
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+        getStatesByCountryCode($("#geo_country_code").val(), '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code', 'state_code');
+    <?php } ?>
 
     $(document).on('change', '.prefRatio-js', function() {
         var inputElement = $(this).parents('.list-inline').next('input');
@@ -144,4 +183,27 @@ switch ($frmType) {
             });
         }
     });
+
+    $(document).on('change', '.defaultLocationGeoFilter', function() {
+        if ($(this).val() == 1) {
+            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
+            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
+            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
+        } else {
+            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', true); // enable
+            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', true); // enable
+            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
+        }
+    });
+</script>
+<script>
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+        $(document).ready(function() {
+            var lat = $('#lat').val();
+            var lng = $('#lng').val();
+            initMap(lat, lng);     
+        });
+    <?php } else { ?>
+        getCountryStates($("#user_country_id").val(), '<?php echo $stateData; ?>', '#user_state_id');
+    <?php } ?>
 </script>

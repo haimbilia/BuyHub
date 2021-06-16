@@ -1,11 +1,11 @@
 <?php
-
 class CommonHelper extends FatUtility
 {
     private static $_ip;
     private static $_user_agent;
     private static $_lang_id;
     private static $_lang_code;
+    private static $_lang_country_code;
     private static $_layout_direction;
     private static $_currency_id;
     private static $_currency_symbol_left;
@@ -71,15 +71,31 @@ class CommonHelper extends FatUtility
             }
         }
 
-        $currencyData = Currency::getAttributesById(
-            self::$_currency_id,
-            array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
-        );
-        
-        self::$_lang_code = Language::getAttributesById(
-            self::$_lang_id,
-            'language_code'
-        );
+        $currencyNdLangData = FatCache::get('currencyNdLangData' .  self::$_currency_id . '-' . self::$_lang_id, CONF_DEF_CACHE_TIME, '.txt');
+        if ($currencyNdLangData) {
+            $arr = json_decode($currencyNdLangData, true);
+            $currencyData = $arr['currencyData'];
+            $langData = $arr['langData'];
+        } else {
+            $currencyData = Currency::getAttributesById(
+                self::$_currency_id,
+                array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
+            );
+
+            $langData = Language::getAttributesById(
+                self::$_lang_id,
+                ['language_country_code', 'language_code']
+            );
+
+            $arr = [
+                'currencyData' => $currencyData,
+                'langData' => $langData
+            ];
+            FatCache::set('currencyGetCurrencyAssoc' . self::$_currency_id . '-' . self::$_lang_id, FatUtility::convertToJson($arr), '.txt');
+        }
+
+        self::$_lang_code = $langData['language_code'];
+        self::$_lang_country_code = $langData['language_country_code'];
 
         self::$_currency_symbol_left = $currencyData['currency_symbol_left'];
         self::$_currency_symbol_right = $currencyData['currency_symbol_right'];
@@ -110,6 +126,11 @@ class CommonHelper extends FatUtility
     public static function getLangCode()
     {
         return self::$_lang_code;
+    }
+
+    public static function getLangCountryCode()
+    {
+        return self::$_lang_country_code;
     }
 
     public static function getLayoutDirection()
@@ -383,7 +404,7 @@ class CommonHelper extends FatUtility
             $commissionCostValue = $commissionCostValue + $taxPerQty;
         }
 
-        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost) {
+        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0)) {
             $commissionCostValue = $commissionCostValue + $perUnitShippingCost;
         }
 
@@ -532,7 +553,7 @@ class CommonHelper extends FatUtility
     {
         //$currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyValue = self::getCurrencyValue();
-        $defaultCurrencyValue = $val / $currencyValue;
+        $defaultCurrencyValue = ((float) $val) / $currencyValue;
         return static::displayMoneyFormat($defaultCurrencyValue, $format, true, $displaySymbol);
     }
 
@@ -623,7 +644,7 @@ class CommonHelper extends FatUtility
             $sign = '-';
         }
 
-        $val = self::numberFormat($val,$numberFormat,$stringFormat);
+        $val = self::numberFormat($val, $numberFormat, $stringFormat);
 
         if ($stringFormat) {
             $val = static::numberStringFormat($val);
@@ -644,16 +665,16 @@ class CommonHelper extends FatUtility
         return trim($sign . $val);
     }
 
-    public static function numberFormat($val,$numberFormat=true,$stringFormat=false){
-        
+    public static function numberFormat($val, $numberFormat = true, $stringFormat = false, $decimals = 2)
+    {
         $decimalpoint =  FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.');
         $separator =  $decimalpoint == '.' ? ',' : '.';
 
         if ($numberFormat && !$stringFormat) {
-            $val = number_format($val, 2,$decimalpoint,$separator);
-        }else{
+            $val = number_format($val, $decimals, $decimalpoint, $separator);
+        } else {
             $afterDecimal = $val - floor($val);
-            $val = (0 < $afterDecimal ? number_format($val, 2, $decimalpoint,$separator) : $val);
+            $val = (0 < $afterDecimal ? number_format($val, $decimals, $decimalpoint, $separator) : floor($val));
         }
 
         return $val;
@@ -1354,34 +1375,7 @@ class CommonHelper extends FatUtility
 
         $specialPrice = $product['theprice'];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
-        return $disVal = round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
-        /* $str = '';
-        $listPrice = $product['splprice_display_list_price'];
-        if( $listPrice > 0 ){
-            $disVal = $product['splprice_display_dis_val'];
-            $disVal = $disVal + 0;
-            if (($disVal * 100) % 100 > 0) {
-                $disVal = number_format($disVal, 2, '.', '');
-            }
-
-            $str .= Labels::getLabel( 'LBL_Save_{saveprice}_({offprice})', $langId );
-            if( $product['splprice_display_dis_type'] == applicationConstants::PERCENTAGE ){
-                $disVal .= '%';
-            }
-            elseif( $product['splprice_display_dis_type'] == applicationConstants::FLAT ){
-                $disVal = static::displayMoneyFormat($listPrice) ;
-            }
-
-            $arrReplacements = array(
-                '{saveprice}' => static::displayMoneyFormat($listPrice),
-                '{offprice}'=> $disVal
-            );
-
-            foreach ($arrReplacements as $key => $val) {
-                $str = str_replace($key, $val, $str);
-            }
-        }
-        return $str;*/
+        return round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
     }
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)
@@ -1445,16 +1439,19 @@ class CommonHelper extends FatUtility
         return trim($string, '-');
     }
 
-    public static function recursiveDelete($str)
+    public static function recursiveDelete($str, $removeParent = false)
     {
         if (is_file($str)) {
             return @unlink($str);
         } elseif (is_dir($str)) {
             $scan = glob(rtrim($str, '/') . '/*');
             foreach ($scan as $index => $path) {
-                static::recursiveDelete($path);
+                static::recursiveDelete($path, true);
             }
-            return @rmdir($str);
+
+            if ($removeParent) {
+                return @rmdir($str);
+            }
         }
     }
 
@@ -1523,8 +1520,7 @@ class CommonHelper extends FatUtility
 
     public static function createSlug($string)
     {
-        $slug = preg_replace('/[^A-Za-z0-9-\/]+/', '-', ltrim($string, '/'));
-        return $slug;
+        return preg_replace('/[^A-Za-z0-9-\/]+/', '-', ltrim($string, '/'));
     }
 
     public static function getProdRatingInPercentage($rating, $total, $circleView)
@@ -1768,22 +1764,22 @@ class CommonHelper extends FatUtility
     }
 
     public static function getUserCookiesEnabled()
-    {   
-        $userId = UserAuthentication::getLoggedUserId(true);        
-        if($userId > 0){          
+    {
+        $userId = UserAuthentication::getLoggedUserId(true);
+        if ($userId > 0) {
             $user = new User($userId);
             $userSelectedCookies = $user->getUserSelectedCookies();
-            return !empty($userSelectedCookies) ? true : false; 
-        }else{  
-            return static::checkCookiesEnabledSession();          
-        } 
+            return !empty($userSelectedCookies) ? true : false;
+        } else {
+            return static::checkCookiesEnabledSession();
+        }
     }
-    
+
     public static function checkCookiesEnabledSession()
-    {   
-        return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false; 
+    {
+        return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false;
     }
-    
+
 
     public static function getDefaultCurrencySymbol()
     {
@@ -1897,9 +1893,9 @@ class CommonHelper extends FatUtility
         }
 
         if ($taxVal['inPercentage'] == Tax::TYPE_PERCENTAGE) {
-            return $taxVal['name'] . ' (' . $taxVal['percentageValue'] . '%)';
+            return $taxVal['name'] . ' (' . CommonHelper::numberFormat($taxVal['percentageValue']) . '%)';
         }
-        return $taxVal['name'] . ' (' . $taxVal['percentageValue'] . ')';
+        return $taxVal['name'] . ' (' . CommonHelper::numberFormat($taxVal['percentageValue']) . ')';
     }
 
 
@@ -2053,7 +2049,7 @@ class CommonHelper extends FatUtility
             return CommonHelper::displayMoneyFormat($childOrder['op_rounding_off']);
         }
         return false;
-    }    
+    }
 
     /**
      * stripAllTags - This differs from strip_tags() because it removes the contents of the <script> and <style> tags. 
@@ -2074,30 +2070,33 @@ class CommonHelper extends FatUtility
 
         return trim($string);
     }
-    
+
     public static function displayEncryptedEmail($email)
     {
-        $userEmail = preg_split( '/[@.]/', $email);
-        $emailFirstPart = substr($userEmail[0], 0, 1).str_repeat('*', strlen($userEmail[0]) - 1);
+        $userEmail = preg_split('/[@.]/', $email);
+        if (empty(array_filter($userEmail))) {
+            return;
+        }
+        $emailFirstPart = substr($userEmail[0], 0, 1) . str_repeat('*', strlen($userEmail[0]) - 1);
         $emailSecondPart = str_repeat('*', strlen($userEmail[1]));
-        $emailThirdPart = $userEmail[2];        
-        return $emailFirstPart.'@'.$emailSecondPart.'.'.$emailThirdPart;
+        $emailThirdPart = $userEmail[2];
+        return $emailFirstPart . '@' . $emailSecondPart . '.' . $emailThirdPart;
     }
-    
+
     public static function displayEncryptedDob($dob)
     {
         $userDob = explode('-', $dob);
-        $dobFirstPart = substr($userDob[0], 0, 1).str_repeat('*', strlen($userDob[0]) - 1);
+        $dobFirstPart = substr($userDob[0], 0, 1) . str_repeat('*', strlen($userDob[0]) - 1);
         $dobSecondPart = str_repeat('*', strlen($userDob[1]));
-        $dobThirdPart = str_repeat('*', strlen($userDob[2]) - 1).substr($userDob[2], strlen($userDob[2]) - 1, 1);
-        return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;
+        $dobThirdPart = str_repeat('*', strlen($userDob[2]) - 1) . substr($userDob[2], strlen($userDob[2]) - 1, 1);
+        return $dobFirstPart . '-' . $dobSecondPart . '-' . $dobThirdPart;
     }
-    
+
     public static function displayEncryptedFieldData($data)
     {
         $len = strlen($data);
-        return substr($data, 0, 1).str_repeat('*', $len - 2).substr($data, $len - 1, 1);
-        
+        return substr($data, 0, 1) . str_repeat('*', $len - 2) . substr($data, $len - 1, 1);
+
         /*$formattedNumber = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $phone);
         $userPhone = explode('-', $formattedNumber);
         $dobFirstPart = substr($userPhone[0], 0, 1).str_repeat('*', strlen($userPhone[0]) - 1);
@@ -2105,12 +2104,12 @@ class CommonHelper extends FatUtility
         $dobThirdPart = str_repeat('*', strlen($userPhone[2]) - 1).substr($userPhone[2], strlen($userPhone[2]) - 1, 1);
         return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;*/
     }
-    
+
     public static function isFieldEncrypted($data)
     {
-        if(strpos($data, '*') !== false){
+        if (strpos($data, '*') !== false) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

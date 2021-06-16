@@ -206,7 +206,7 @@ class ProductSearch extends SearchBase
             $splPriceForDate = $now;
         }
 
-        $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE, 'LEFT OUTER JOIN', 'msplpric.splprice_selprod_id = msellprod.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN msplpric.splprice_start_date AND msplpric.splprice_end_date AND msplpric.splprice_price < msellprod.selprod_price', 'msplpric');
+        $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE, 'LEFT OUTER JOIN', 'msplpric.splprice_selprod_id = msellprod.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN msplpric.splprice_start_date AND msplpric.splprice_end_date AND (msplpric.splprice_price < msellprod.selprod_price or msplpric.splprice_price > msellprod.selprod_price)', 'msplpric');
 
         $srch = new SearchBase(SellerProduct::DB_TBL, 'sprods');
 
@@ -295,7 +295,7 @@ class ProductSearch extends SearchBase
         $srch->joinTable(
             SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
             'LEFT OUTER JOIN',
-            'tsp.splprice_selprod_id = sprods.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN tsp.splprice_start_date AND tsp.splprice_end_date and tsp.splprice_price < sprods.selprod_price',
+            'tsp.splprice_selprod_id = sprods.selprod_id AND \'' . $splPriceForDate . '\' BETWEEN tsp.splprice_start_date AND tsp.splprice_end_date and (tsp.splprice_price < sprods.selprod_price or tsp.splprice_price > sprods.selprod_price )',
             'tsp'
         );
         $srch->addCondition('sprods.selprod_active', '=', applicationConstants::ACTIVE);
@@ -345,6 +345,7 @@ class ProductSearch extends SearchBase
         }
 
         $tmpQry = $srch->getQuery();
+
         /*if (!empty($criteria['keyword'])) {
             $this->joinTable('(' . $tmpQry . ')', 'INNER JOIN', '((pricetbl.selprod_product_id = msellprod.selprod_product_id AND (splprice_price = theprice OR selprod_price = theprice)) or (selprod_title LIKE '.FatApp::getDb()->quoteVariable('%'.$criteria['keyword'].'%').'))', 'pricetbl');
         } else {
@@ -1041,7 +1042,7 @@ class ProductSearch extends SearchBase
         }
     }
 
-    public function addMoreSellerCriteria($productCode, $sellerId = 0)
+    public function addMoreSellerCriteria($productCode, $sellerId = 0, $includeSeller = false)
     {
         $sellerId = FatUtility::int($sellerId);
         if ($productCode == '') {
@@ -1061,8 +1062,10 @@ class ProductSearch extends SearchBase
         $this->doNotCalculateRecords();
         $this->doNotLimitRecords();
         $this->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        if ($sellerId > 0) {
+        if ($sellerId > 0 && false === $includeSeller) {
             $this->addCondition('selprod_user_id', '!=', $sellerId);
+        } else if ($sellerId > 0 && true === $includeSeller) {
+            $this->addCondition('selprod_user_id', '=', $sellerId);
         }
         $this->addCondition('selprod_code', '=', $productCode);
     }
@@ -1090,7 +1093,7 @@ class ProductSearch extends SearchBase
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_rating_type', '=', SelProdRating::TYPE_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -1153,11 +1156,33 @@ class ProductSearch extends SearchBase
         }
 
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            $srch = new searchBase(Orders::DB_TBL, 'o');
+            /* $srch = new searchBase(Orders::DB_TBL, 'o');
             $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
             if ($langId > 0) {
                 $srch->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossubslang_lang_id = ' . $langId, 'ossl');
             }
+            $srch->addCondition('o.order_type', '=', ORDERS::ORDER_SUBSCRIPTION);
+            $srch->addCondition('o.order_payment_status', '=', 1);
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $srch->addGroupBy('o.order_user_id');
+            $srch->addMultipleFields(array('oss.*', 'order_user_id', 'order_id', 'order_type')); */
+            $sSrch = new SearchBase(Orders::DB_TBL, 'o');
+            $sSrch->addCondition('o.order_type', '=', Orders::ORDER_SUBSCRIPTION);
+            $sSrch->addCondition('o.order_payment_status', '=', 1);
+            $sSrch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION, 'o_temp');
+            $sSrch->addMultipleFields(['COALESCE(o_temp.order_id, o.order_id) as currentOrderId']);
+            $sSrch->addGroupBy('o.order_id');
+            $sSrch->doNotCalculateRecords();
+            $sSrch->doNotLimitRecords();
+
+            $srch = new searchBase(Orders::DB_TBL, 'o');
+            $srch->joinTable('(' . $sSrch->getQuery() . ')', 'INNER JOIN', 'otemp.currentOrderId=o.order_id', 'otemp');
+            $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            if ($langId > 0) {
+                $srch->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossubslang_lang_id = ' . $langId, 'ossl');
+            }
+            $srch->addCondition('oss.ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
             $srch->addCondition('o.order_type', '=', ORDERS::ORDER_SUBSCRIPTION);
             $srch->addCondition('o.order_payment_status', '=', 1);
             $srch->doNotCalculateRecords();
@@ -1231,9 +1256,12 @@ class ProductSearch extends SearchBase
         $this->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_product_id = selprod_product_id and ' . $joinCondition, 'spprod');
     }
 
-    public function joinShippingProfile()
+    public function joinShippingProfile($langId = 0)
     {
         $this->joinTable(ShippingProfile::DB_TBL, 'LEFT OUTER JOIN', 'spprod.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
+        if (0 < $langId) {
+            $this->joinTable(ShippingProfile::DB_TBL_LANG, 'LEFT OUTER JOIN', 'spprof_l.shipprofilelang_shipprofile_id = spprof.shipprofile_id and spprof_l.shipprofilelang_lang_id = ' . $langId, 'spprof_l');
+        }
     }
 
     public function joinShippingProfileZones()

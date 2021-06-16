@@ -21,7 +21,7 @@ foreach ($arr_flds as $val) {
 }
 
 $sr_no = 0;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['sformfield_id']);
@@ -65,7 +65,7 @@ foreach ($arr_listing as $sn => $row) {
         }
     }
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement(
         'td',
         array(

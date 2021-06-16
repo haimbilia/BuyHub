@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <?php if (!empty($shipRates)) { ?>
-					<div class="js-scrollable table-wrap">
+					<div class="js-scrollable table-wrap scroll scroll-x">
 						<table class="table table-justified table-rates mt-3">
 							<thead>
 								<tr>

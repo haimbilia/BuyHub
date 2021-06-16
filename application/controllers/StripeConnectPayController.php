@@ -322,11 +322,12 @@ class StripeConnectPayController extends PaymentController
 
         $savedCards = [];
         $defaultSource = "";
-        if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
-            $this->stripeConnect->loadCustomer();
+        if ((UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) && true === $this->stripeConnect->loadCustomer()) {
             $customerInfo = $this->stripeConnect->getResponse()->toArray();
-            $savedCards = $customerInfo['sources']['data'];
-            $defaultSource = $customerInfo['default_source'];
+            if (!empty($customerInfo)) {
+                $savedCards = array_key_exists('sources', $customerInfo) ? $customerInfo['sources']['data'] : [];
+                $defaultSource = array_key_exists('default_source', $customerInfo) ? $customerInfo['default_source'] : "";
+            }
         }
 
         $this->set('defaultSource', $defaultSource);
@@ -423,7 +424,11 @@ class StripeConnectPayController extends PaymentController
     public function distribute()
     {
         if (false === $this->stripeConnect->init()) {
-            return;
+            $error = [
+                'msg' => $this->stripeConnect->getError()
+            ];          
+            SystemLog::transaction(json_encode($error), self::KEY_NAME);
+            CommonHelper::printArray($error, true);
         }
 
         $payloadStr = @file_get_contents('php://input');
@@ -451,6 +456,7 @@ class StripeConnectPayController extends PaymentController
             ];  
             SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $recordId);
             return;
+
         }
 
         $paymentIntendId = isset($payload['data']['object']['id']) ? $payload['data']['object']['id'] : '';
@@ -461,6 +467,7 @@ class StripeConnectPayController extends PaymentController
             ];
             SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);        
             return;
+
         }
 
         $this->orderId = $orderId;
@@ -472,6 +479,7 @@ class StripeConnectPayController extends PaymentController
             ];     
             SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
             return;
+
         }
 
         $chargeResponse = isset($payload['data']['object']['charges']['data']) ? current($payload['data']['object']['charges']['data']) : [];
@@ -531,6 +539,10 @@ class StripeConnectPayController extends PaymentController
             $comments = Labels::getLabel($msg, $this->siteLangId);
             $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
             Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $netSellerAmount, $this->siteLangId, $comments, $op['op_id']);
+            
+            $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
+            $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
+            Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
 
             if (!empty($accountId)) {
                 $charge = [
@@ -557,6 +569,11 @@ class StripeConnectPayController extends PaymentController
                 $resp = $this->stripeConnect->getResponse();
 
                 if (empty($resp->id)) {
+                    $error = [
+                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER', $this->siteLangId),
+                        'response' => $resp,
+                    ];
+                    SystemLog::transaction(json_encode($error), self::KEY_NAME."-",$orderId);               
                     continue;
                 }
 
@@ -564,10 +581,6 @@ class StripeConnectPayController extends PaymentController
                 $comments = $comments . ' ' . Labels::getLabel('MSG_TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
                 $comments = CommonHelper::replaceStringData($comments, ['{account-id}' => $accountId]);
                 Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, $firstTransferAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
-
-                $comments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
-                $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
-                Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $comments, $op['op_id']);
             }
 
             if (0 < $pendingTransferAmount) {
@@ -581,11 +594,21 @@ class StripeConnectPayController extends PaymentController
                 $charge['description'] = $discountComments;
                 $charge['metadata']['source_transaction'] = $chargeId;
                 if (false === $this->stripeConnect->doTransfer($charge)) {
+                    $error = [
+                        'msg' => $this->stripeConnect->getError(),
+                        'response' => $this->stripeConnect->getResponse(),
+                    ];
+                    SystemLog::transaction(json_encode($error), self::KEY_NAME."-",$orderId);           
                     continue;
                 }
 
                 $resp = $this->stripeConnect->getResponse();
                 if (empty($resp->id)) {
+                    $error = [
+                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER_PENDING_AMOUNT', $this->siteLangId),
+                        'response' => $resp,
+                    ];
+                    SystemLog::transaction(json_encode($error), self::KEY_NAME."-",$orderId);             
                     continue;
                 }
 

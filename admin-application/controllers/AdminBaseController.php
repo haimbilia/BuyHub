@@ -67,6 +67,8 @@ class AdminBaseController extends FatController
         CommonHelper::initCommonVariables(true);
         $this->adminLangId = CommonHelper::getLangId();
         $this->layoutDirection = CommonHelper::getLayoutDirection();
+        $this->siteLangCode = CommonHelper::getLangCode();
+        $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
         $this->unAuthorizeAccess = Labels::getLabel('LBL_Unauthorized_Access', $this->adminLangId);
         $this->str_add_record = Labels::getLabel('LBL_Record_Added_Successfully', $this->adminLangId);
@@ -79,6 +81,9 @@ class AdminBaseController extends FatController
         $this->str_setup_successful = Labels::getLabel('LBL_Setup_Successful', $this->adminLangId);
         $this->str_export_successfull = Labels::getLabel('LBL_Export_Successful', $this->adminLangId);
         $this->str_add_update_record = $this->str_update_record;
+        
+        $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
+        $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
         $jsVariables = array(
             'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->adminLangId),
@@ -159,7 +164,16 @@ class AdminBaseController extends FatController
             'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->adminLangId),
             'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
             'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
-            'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),     
+            'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->adminLangId),
+            'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
+            'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
+            'defaultCountryCode' => $defaultCountryCode,
+            'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
+            'copied' => Labels::getLabel('LBL_Copied', $this->adminLangId),
+            'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
+            'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
+            'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
+            'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);
@@ -180,8 +194,8 @@ class AdminBaseController extends FatController
         $notifyCountResult = $db->fetch($notifyObject->getResultset());
         $notifyCount = FatUtility::int($notifyCountResult['countOfRec']);
 
-        $this->siteDefaultCurrencyCode = CommonHelper::getCurrencyCode();
-
+        $this->siteDefaultCurrencyCode = CommonHelper::getCurrencyCode();       
+        
         $this->set('adminLangId', $this->adminLangId);
         $this->set('siteDefaultCurrencyCode', $this->siteDefaultCurrencyCode);
         $this->set('jsVariables', $jsVariables);
@@ -189,7 +203,9 @@ class AdminBaseController extends FatController
         $this->set('languages', Language::getAllNames(false));
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
         $this->set('layoutDirection', $this->layoutDirection);
-
+        
+        $this->includeDatePickerLangJs();
+        
         if ($this->layoutDirection == 'rtl') {
             $this->_template->addCss('css/style--arabic.css');
         }
@@ -226,6 +242,43 @@ class AdminBaseController extends FatController
             $this->nodes[] = array('title' => $action);
         }
         return $this->nodes;
+    }
+    
+    public function includeDatePickerLangJs()
+    {
+        $langCode = strtolower($this->siteLangCode);
+        $langCountryCode = strtoupper($this->siteLangCountryCode);
+        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');        
+        if ($jsPath) {
+            if ($jsPath == 'notfound') {
+                return;
+            }
+            $this->_template->addJs($jsPath);
+            return;
+        } elseif ($jsPath == 'notfound') {
+            return;
+        }        
+        $jsPath = 'js/jqueryui-i18n/datepicker-' . $langCode . '-' . $langCountryCode . '.js';
+        $filePath = CONF_APPLICATION_PATH . '/views/' . $jsPath;
+
+        $fileFound = false;
+        if (file_exists($filePath)) {
+            $fileFound = true;
+        }
+        if (false == $fileFound) {
+            $jsPath = 'js/jqueryui-i18n/datepicker-' . $langCode . '.js';
+            $filePath = CONF_APPLICATION_PATH . '/views/' . $jsPath;
+            if (file_exists($filePath)) {
+                $fileFound = true;
+            }
+        }
+
+        if (true == $fileFound) {
+            $this->_template->addJs($jsPath);
+        } else {
+            $jsPath = 'notfound';
+        }
+        FatCache::set('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, $jsPath, '.txt');
     }
 
     public function getStates($countryId, $stateId = 0, $langId = 0, $idCol = 'state_id')
@@ -296,7 +349,7 @@ class AdminBaseController extends FatController
         $frm->addEmailField(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId);
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
 
@@ -358,6 +411,17 @@ class AdminBaseController extends FatController
 
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
 
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->adminLangId), '', array(), '');
+
+        /* $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
+        $downloadAttachementsWithInventoryTrue->setRequired();
+        $downloadAttachementsWithInventoryFalse = new FormFieldRequirement('product_attachements_with_inventory', 'value');
+        $downloadAttachementsWithInventoryFalse->setRequired(false);
+
+        $prodTypeFld = $frm->getField('product_type');
+        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryTrue);
+        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryFalse); */
+
         if ($type == 'REQUESTED_CATALOG_PRODUCT') {
             $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand/Manfacturer', $this->adminLangId), 'brand_name');
             if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
@@ -385,12 +449,14 @@ class AdminBaseController extends FatController
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
-
+        if (Product::PRODUCT_TYPE_DIGITAL == $productType) {
+            $fld->requirements()->setRequired(false);
+        }    
         $taxCategories = Tax::getSaleTaxCatArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
 
         if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
-            $shipProfileArr = ShippingProfile::getProfileArr(0, true, true);
+            $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
 
             if ($type == 'REQUESTED_CATALOG_PRODUCT') {

@@ -255,7 +255,7 @@ class StripeConnectController extends PaymentMethodBaseController
 
         $frm = new Form('frm' . self::KEY_NAME);
         $stateFldClass = '';
-        $i = 0;
+        $j = 0;
         foreach ($fieldsData as $field => $labelData) {
             $labelStr = $labelData;
             $htmlAfterField = "";
@@ -357,13 +357,13 @@ class StripeConnectController extends PaymentMethodBaseController
             } elseif (false !== strpos($field, 'country')) {
                 $stateFldClass = md5($name);
                 $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesArr($this->siteLangId, true, 'country_code');
+                $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true, 'country_code');
                 $fld = $frm->addSelectBox($labelStr, $name, $countriesArr, '', ['class' => 'country', 'data-statefield' => $stateFldClass], Labels::getLabel('LBL_Select', $this->siteLangId));
             } elseif ('tos_acceptance' == $field) {
                 $fld = $frm->addCheckBox('', 'tos_acceptance', 1);
             } elseif (false !== strpos($field, 'mcc')) {
-                $frm->addHiddenField('', $name, '', ['class' => 'mccValue-js' . $i]);
-                $fld = $frm->addTextBox($labelStr, 'merchantCatCode', '', ['class' => 'mcc-js', 'data-valfld' => 'mccValue-js' . $i]);
+                $frm->addHiddenField('', $name, '', ['class' => 'mccValue-js' . $j]);
+                $fld = $frm->addTextBox($labelStr, 'merchantCatCode', '', ['class' => 'mcc-js', 'data-valfld' => 'mccValue-js' . $j]);
             } elseif (false !== strpos($field, 'email')) {
                 $fld = $frm->addTextBox($labelStr, $name, $userEmail);
             } else {
@@ -373,11 +373,14 @@ class StripeConnectController extends PaymentMethodBaseController
             if (!empty($htmlAfterField)) {
                 $fld->htmlAfterField = '<p class="note">' . $htmlAfterField . '</p>';
             }
-            $i++;
+            $j++;
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearForm();'));
+        if (0 < $j) {
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+            $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearForm();'));
+        }
+
         return $frm;
     }
 
@@ -409,4 +412,18 @@ class StripeConnectController extends PaymentMethodBaseController
         }
         CommonHelper::jsonEncodeUnicode($data, true);
     }
+
+    /**
+     * unlinkAccount
+     *
+     * @return void
+     */
+    public function unlinkAccount()
+    {
+        if (false === $this->stripeConnect->unlinkAccount()) {
+            $this->setError();
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_UNLINKED_SUCCESSFULLY', $this->siteLangId));
+    }
+
 }

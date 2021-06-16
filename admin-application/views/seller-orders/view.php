@@ -67,6 +67,14 @@ if (!empty($order['opship_tracking_url'])) {
                                 ],
                                 'label' => '<i class="fas fa-print"></i>'
                             ];
+                            $data['otherButtons'][] = [
+                                'attr' => [
+                                    'href' => Fatutility::generateUrl('Orders', 'viewBuyerOrderInvoice', [$order['order_id'],$order['op_id']]),
+                                    'target' => '_blank',
+                                    'title' => Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $adminLangId)
+                                ],
+                                'label' => '<i class="fas fa-print"></i>'
+                            ];
 
                             if (!$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
                                 $plugin = new Plugin();
@@ -94,7 +102,7 @@ if (!empty($order['opship_tracking_url'])) {
                                     ];
                                 }
 
-                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || 'EasyPost' == $keyName) && empty($order['opship_tracking_number'])) {
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || 'EasyPost' == $keyName) && empty($order['opship_tracking_number']) && $order["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) {
                                     if ('EasyPost' == $keyName) {
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
                                     } else {
@@ -447,6 +455,23 @@ if (!empty($order['opship_tracking_url'])) {
                         </table>
                     </div>
                 </section>
+                <?php if (true === $canAttachMoreFiles && !$print) { ?>
+                    <section class="section no-print">
+                        <div class="sectionhead">
+                            <h4><?php echo Labels::getLabel('LBL_Add_more_attachments', $adminLangId); ?></h4>
+                        </div>
+                        <div class="sectionbody space">
+                            <?php 
+                            $moreAttachmentsFrm->setFormTagAttribute('class', 'web_form');
+                            $moreAttachmentsFrm->setFormTagAttribute('id', 'additional_attachments');
+                            $fld = $moreAttachmentsFrm->getField('downloadable_file');
+                            $fld->setFieldTagAttribute('onchange', 'uploadAdditionalAttachment(this); return false;');
+                            echo $moreAttachmentsFrm->getFormHtml();
+                            ?>
+                        </div>
+                    </section>
+                <?php } ?>
+                
                 <?php if (!empty($digitalDownloads) && !$print) { ?>
                     <section class="section no-print">
                         <div class="sectionhead">
@@ -481,7 +506,7 @@ if (!empty($order['opship_tracking_url'])) {
                                     } ?>
                                     <tr>
                                         <td><?php echo $sr_no; ?></td>
-                                        <td><?php echo $fileName; ?></td>
+                                        <td><?php echo '<div class="text-break">' . $fileName . '</div>'; ?></td>
                                         <td><?php echo $lang_name; ?></td>
                                         <td><?php echo $row['afile_downloaded_times']; ?></td>
                                         <td><?php echo $expiry; ?></td>
@@ -522,7 +547,7 @@ if (!empty($order['opship_tracking_url'])) {
                                     } ?>
                                     <tr>
                                         <td><?php echo $sr_no; ?></td>
-                                        <td><a target="_blank" href="<?php echo $row['opddl_downloadable_link']; ?>" title="<?php echo Labels::getLabel('LBL_Click_to_download', $adminLangId); ?>"><?php echo $row['opddl_downloadable_link']; ?></a></td>
+                                        <td><div class="text-break"><a target="_blank" href="<?php echo $row['opddl_downloadable_link']; ?>" title="<?php echo Labels::getLabel('LBL_Click_to_download', $adminLangId); ?>"><?php echo $row['opddl_downloadable_link']; ?></a></div></td>
                                         <td><?php echo $downloadableCount; ?></td>
                                         <td><?php echo $row['opddl_downloaded_times']; ?></td>
                                         <td><?php echo $expiry; ?></td>

@@ -31,7 +31,6 @@ $(document).ready(function() {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Configurations', 'form', [frmType]), '', function(t) {
             $(dv).html(t);
-            jscolor.installByClassName('jscolor');
         });
     };
 

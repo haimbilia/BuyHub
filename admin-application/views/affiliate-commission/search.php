@@ -8,7 +8,7 @@ $arr_flds = array(
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
 );
 
-if (!$canEdit || empty($arr_listing)) {
+if (!$canEdit || empty($arrListing)) {
     unset($arr_flds['select_all']);
 }
 
@@ -23,7 +23,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr');
 
@@ -43,6 +43,9 @@ foreach ($arr_listing as $sn => $row) {
                 break;
             case 'afcommsetting_user_id':
                 $td->appendElement('plaintext', array(), CommonHelper::displayText($row['credential_username']), true);
+                break;
+            case 'afcommsetting_fees':
+                $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
                 break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions actions--centered"));
@@ -71,7 +74,7 @@ foreach ($arr_listing as $sn => $row) {
         }
     }
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Record_Found', $adminLangId));
 }
 

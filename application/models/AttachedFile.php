@@ -65,21 +65,27 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_BRAND_IMAGE = 52;
     public const FILETYPE_SHOP_COLLECTION_IMAGE = 53;
     public const FILETYPE_PLUGIN_LOGO = 54;
-    public const FILETYPE_PRODCAT_IMAGE_PATH = 'category/';
-    public const FILETYPE_PRODUCT_IMAGE_PATH = 'product/';
-    public const FILETYPE_BLOG_POST_IMAGE_PATH = 'blog-post/';
-    public const FILETYPE_BULK_IMAGES_PATH = 'bulk-images/';
     public const FILETYPE_APP_MAIN_SCREEN_IMAGE = 55;
     public const FILETYPE_APP_LOGO = 56;
     public const FILETYPE_PUSH_NOTIFICATION_IMAGE = 57;
     public const FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE = 58;
     public const FILETYPE_META_IMAGE = 59;
+    public const FILETYPE_ORDER_FEEDBACK = 60;
+    public const FILETYPE_BADGE = 61;
+
+    public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 60;
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
 
     public const RATIO_TYPE_SQUARE = 1;
     public const RATIO_TYPE_RECTANGULAR = 2;
+    
+    public const FILETYPE_PRODCAT_IMAGE_PATH = 'category/';
+    public const FILETYPE_PRODUCT_IMAGE_PATH = 'product/';
+    public const FILETYPE_BLOG_POST_IMAGE_PATH = 'blog-post/';
+    public const FILETYPE_BULK_IMAGES_PATH = 'bulk-images/';
+    public const FILETYPE_BADGE_IMAGE_PATH = 'badge-images/';
 
     public function __construct($fileId = 0)
     {
@@ -239,7 +245,6 @@ class AttachedFile extends MyAppModel
         if ($size > 0) {
             $srch->setPageSize($size);
         }
-        /* die($srch->getQuery()); */
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
@@ -446,6 +451,9 @@ class AttachedFile extends MyAppModel
                 break;
             case self::FILETYPE_BULK_IMAGES:
                 $path .= self::FILETYPE_BULK_IMAGES_PATH;
+                break;
+            case self::FILETYPE_BADGE:
+                $path .= self::FILETYPE_BADGE_IMAGE_PATH;
                 break;
         }
         /* ] */
@@ -943,7 +951,6 @@ class AttachedFile extends MyAppModel
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
         }
-
         $db = FatApp::getDb();
         if (!$db->deleteRecords('tbl_attached_files', $deleteStatementArr)) {
             $this->error = $db->getError();
@@ -1023,4 +1030,43 @@ class AttachedFile extends MyAppModel
         }
         return $message;
     }
+
+    public static function getProductPreviewVideoUrl($afileId)
+    {
+        $mediaPath = '';
+
+        $res = static::getAttributesById($afileId);
+
+        if (false === $res){
+            return $mediaPath;
+        } 
+        
+        if ($res['afile_type'] !== static::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW) {
+            return $mediaPath;
+        }
+
+        $mediaPath =  LibHelper::generateFullUrl('image', 'productVideo', array($afileId)) . '?' . time();
+        /* if (defined('S3_SECRET') && !empty(S3_SECRET)) {
+            $mediaPath = self::FILETYPE_PRODUCT_VIDEOS_PATH . $file_row['afile_physical_path'];
+        } */ 
+
+        return $mediaPath;
+    }
+    
+    public static function getVideo($path)
+    {
+        if (empty($path)) {
+            return '';
+        }
+        $path = CONF_UPLOADS_PATH. $path;
+
+        $fileMimeType = mime_content_type($path);
+        header("Content-Type: " . $fileMimeType);
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        /* header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); */
+        header("Accept-Ranges: bytes");
+        header("Content-Length: " . filesize($path));
+        return readfile($path);
+    }
+
 }

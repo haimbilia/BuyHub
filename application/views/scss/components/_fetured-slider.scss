@@ -23,13 +23,11 @@
 }
 
 .fetured-slider .fetured-item {
-    
     border-#{$end-direction}: $border;
     padding: 0 20px;
 }
 
 .fetured-slider .fetured-item:last-child {
-    
     border-#{$end-direction}: none;
 }
 
@@ -43,7 +41,6 @@
     position: absolute;
     top: 50%;
     #{$start-direction}: 74%;
-    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-indent: -9999px;
     background-color: #ededed;
@@ -58,24 +55,21 @@
 
 .fetured-slider .slick-next:after {
     border-bottom: 3px solid #000000;
-    -webkit-border-end: 3px solid #000000;
-    -moz-border-end: 3px solid #000000;
     border-#{$end-direction}: 3px solid #000000;
     content: "";
     height: 15px;
     #{$start-direction}: 50%;
-    
     margin-#{$start-direction}: -9px;
     margin-top: -7px;
     position: absolute;
     top: 50%;
-    -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     width: 15px;
 }
 
 .fetured-slider .slick-next:hover {
-    background: $brand-color; color:$brand-color-inverse;
+    background: $brand-color;
+    color: $brand-color-inverse;
 }
 
 .fetured-slider .slick-next:hover:after {
@@ -102,6 +96,5 @@
 }
 
 .more-slider .more_slider_item:hover {
-    -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.20);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.20);
 }

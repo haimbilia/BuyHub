@@ -65,7 +65,7 @@ class LanguagesController extends AdminBaseController
         }
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -140,7 +140,7 @@ class LanguagesController extends AdminBaseController
             array('class' => 'list-inline')
         );
 		$countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesArr($this->adminLangId, true, 'country_code');
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true, 'country_code');
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
         $fld->requirement->setRequired(true);
         /* $arrFlags = $this->getlanguageFlags();

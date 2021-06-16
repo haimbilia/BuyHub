@@ -307,9 +307,9 @@ class SubscriptionCheckoutController extends LoggedUserController
                 }
 
                 $discount = 0;
-                if (!empty($cartSummary["cartDiscounts"]["discountedSPPlanId"])) {
-                    if (array_key_exists($subscriptionInfo['spplan_id'], $cartSummary["cartDiscounts"]["discountedSPPlanId"])) {
-                        $discount = $cartSummary["cartDiscounts"]["discountedSPPlanId"][$subscriptionInfo['spplan_id']];
+                if (!empty($cartSummary["cartDiscounts"]["discountedSelProdIds"])) {
+                    if (array_key_exists($subscriptionInfo['spplan_id'], $cartSummary["cartDiscounts"]["discountedSelProdIds"])) {
+                        $discount = $cartSummary["cartDiscounts"]["discountedSelProdIds"][$subscriptionInfo['spplan_id']];
                     }
                 }
 
@@ -620,8 +620,11 @@ class SubscriptionCheckoutController extends LoggedUserController
         if ($plugin_id) {
             $_SESSION['order_type'] = Orders::ORDER_SUBSCRIPTION;
             $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
+           /*
             $this->scartObj->clear();
             $this->scartObj->updateUserSubscriptionCart();
+            * 
+            */
         }
 
         /* if ( !$orderObj->addOrderHistory( $order_id, 1, Labels::getLabel("LBL_-NA-",$this->siteLangId), true, $this->siteLangId ) ){
@@ -693,8 +696,8 @@ class SubscriptionCheckoutController extends LoggedUserController
         $loggedUserId = $this->userParentId;
 
         $cartObj = new SubscriptionCart();
-        $cartSubTotal = $cartObj->getSubTotal($this->siteLangId);
-
+        /*$cartSubTotal = $cartObj->getSubTotal();   */    
+        $cartSubTotalAfterAdjustment = $cartObj->getSubTotalAfterAdjustment();
         /* coupon history[ */
         $cHistorySrch = CouponHistory::getSearchObject();
         $cHistorySrch->doNotLimitRecords();
@@ -752,7 +755,8 @@ class SubscriptionCheckoutController extends LoggedUserController
         $cnd->attachCondition('coupon_start_date', '<=', $currDate, 'OR');
         $cnd1 = $srch->addCondition('coupon_end_date', '=', '0000-00-00', 'AND');
         $cnd1->attachCondition('coupon_end_date', '>=', $currDate, 'OR');
-        $srch->addCondition('coupon_min_order_value', '<=', $cartSubTotal);
+
+        $srch->addCondition('coupon_min_order_value', '<', $cartSubTotalAfterAdjustment);
         $srch->addMultipleFields(array( 'dc.*', 'dc_l.coupon_description', 'IFNULL(COUNT(coupon_history.couponhistory_id), 0) as coupon_used_count', 'IFNULL(COUNT(coupon_hold.couponhold_coupon_id), 0) as coupon_hold_count', 'count(user_coupon_history.couponhistory_id) as user_coupon_used_count', 'ctplan.grouped_coupon_plans'));
 
         //$srch->addDirectCondition( 'IF(grouped_coupon_users != "NULL", FIND_IN_SET('.$loggedUserId.', grouped_coupon_users), 1 = 1 )');
@@ -768,7 +772,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addHaving('coupon_uses_count', '>', 'coupon_used_count + coupon_hold_count');
         $srch->addHaving('coupon_uses_coustomer', '>', 'mysql_func_user_coupon_used_count', 'AND', true);
         $srch->addGroupBy('dc.coupon_id');
-
+        
         $rs = $srch->getResultSet();
         $couponsList = FatApp::getDb()->fetchAll($rs, 'coupon_id');
         $this->set('couponsList', $couponsList);
