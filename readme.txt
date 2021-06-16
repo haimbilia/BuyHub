@@ -193,6 +193,8 @@ Fixes:
     => 054717 - on recently view product error coming on product detail page
     => 054731 - when review is placed with media then there is no need to add show more on 6th image
     => 054761 - despite having sku non mandatory it's not adding inventory from seller end
+    => 055069 - on product detail page undefined index: theprice notice coming
+    => 055077 - when cookies policy are turned off from admin then recently viewed items are not listing on detail page of product
 
 
 New Features:
