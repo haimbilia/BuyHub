@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     searchProfile(document.frmProfileSearch);
 });
 
-(function() {
-	var runningAjaxReq = false;
+(function () {
+    var runningAjaxReq = false;
     var dv = '#profilesListing';
-    goToSearchPage = function(page) {
+    goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -14,32 +14,31 @@ $(document).ready(function() {
         searchProfile(frm);
     }
 
-    reloadList = function() {
+    reloadList = function () {
         var frm = document.frmProfileSearchPaging;
         searchProfile(frm);
     };
-	
-	searchProfile = function(form) {
+
+    searchProfile = function (form) {
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('shippingProfile', 'search'), data, function(res) {
+        fcom.ajax(fcom.makeUrl('ShippingProfile', 'search'), data, function (res) {
             $(dv).html(res);
         });
-	}
-	
-	clearSearch = function() {
+    }
+
+    clearSearch = function () {
         document.frmSearch.reset();
         searchProfile(document.frmSearch);
     };
 
-    deleteRecord = function(shippingProfileId){
-        data = 'id='+shippingProfileId;
-        fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'deleteRecord'), data, function() { 
-            reloadList();           
+    deleteRecord = function (shippingProfileId) {
+        data = 'id=' + shippingProfileId;
+        fcom.updateWithAjax(fcom.makeUrl('ShippingProfile', 'deleteRecord'), data, function () {
+            reloadList();
         });
     };
-	
-})(); 
+})();

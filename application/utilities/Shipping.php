@@ -21,6 +21,7 @@ class Shipping
     private $shippingApiObj;
     private $selProdShipRates = [];
     private $selectedShippingService = [];
+    private $ratesNotFetchedSelprodIds = [];
 
     public const FULFILMENT_ALL = -1;
     public const FULFILMENT_PICKUP = 1;
@@ -198,7 +199,7 @@ class Shipping
         $srch->joinShippingLocations($countryId, $stateId, 0);
         $srch->addCondition('selprod_id', 'IN', $selProdIdArr);
         $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'shippro_shipprofile_id', 'shipprozone_id', 'shiprate_id', 'coalesce(shipr_l.shiprate_name, shipr.shiprate_identifier) as shiprate_name', 'shiprate_cost', 'shiprate_condition_type', 'shiprate_min_val', 'shiprate_max_val', 'psbs.psbs_user_id', 'product_id', 'shiploc_shipzone_id', 'shipprofile_default', 'shop_id', 'coalesce(spprof_l.shipprofile_name, spprof.shipprofile_identifier) as shipprofile_name', 'shop_postalcode', 'shiploc_country_id'));
-        if(0 < $shippedByAdminOnly){
+        if (0 < $shippedByAdminOnly) {
             $srch->addFld('0 as shiippingBySeller');
         } else {
             $srch->addFld('if(psbs_user_id > 0 or product_seller_id > 0, 1, 0) as shiippingBySeller');
@@ -251,7 +252,7 @@ class Shipping
     private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr): bool
     {
         $pluginId = $this->getPluginId();
-        if (1 > $pluginId || 'Aramex' == $this->shippingApiObj::KEY_NAME) {
+        if (1 > $pluginId) {
             return false;
         }
 
@@ -265,6 +266,15 @@ class Shipping
             if (!empty($carriers)) {
                 FatCache::set($cacheKey, serialize($carriers), '.txt');
             }
+        }
+
+        if (empty($carriers)) {
+            array_walk($this->selProdShipRates, function ($selProdData) {
+                if (!in_array($selProdData['selprod_id'], $this->ratesNotFetchedSelprodIds)) {
+                    $this->ratesNotFetchedSelprodIds[] =  $selProdData['selprod_id'];
+                }
+            });
+            return false;
         }
 
         if (method_exists($this->shippingApiObj, 'setAddressReference')) {
@@ -283,9 +293,20 @@ class Shipping
             if (in_array($rates['selprod_id'], $processedSelProds)) {
                 continue;
             }
+
             $processedSelProds[] = $rates['selprod_id'];
 
             $product = $productInfo[$rates['selprod_id']];
+
+            $useManualShipping = FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0);
+            if (0 < $rates['shiippingBySeller']) {
+                $useManualShipping = ShopSpecifics::getAttributesById($product['shop_id'], 'shop_use_manual_shipping_rates');
+            }
+
+            if (0 < $useManualShipping) {
+                $this->ratesNotFetchedSelprodIds[] = $rates['selprod_id'];
+                continue;
+            }
 
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
@@ -375,6 +396,7 @@ class Shipping
 
                 unset($physicalSelProdIdArr[$rates['selprod_id']]);
                 if (false == $shippingRates || empty($shippingRates)) {
+                    $this->ratesNotFetchedSelprodIds[] = $rates['selprod_id'];
                     continue;
                 }
 
@@ -487,7 +509,13 @@ class Shipping
 
         $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId);
 
-        if (false === $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr)) {
+        $pluginId = $this->getPluginId();
+        if (0 < $pluginId) {
+            $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
+        }
+
+        $useManualShippingIfFailed = FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS', FatUtility::VAR_INT, 0);
+        if (1 > $pluginId || 0 < $useManualShippingIfFailed) {
             $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr);
         }
 
@@ -853,7 +881,7 @@ class Shipping
     {
         $this->selectedShippingService = $selectedShippingService;
     }
-    
+
     /**
      * canFetchTrackingDetail
      *

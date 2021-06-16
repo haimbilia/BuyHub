@@ -902,4 +902,5 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 
 -- --- Aramex Shipping API--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Aramex', '8', 'Aramex', '0', '3');
+ALTER TABLE `tbl_shop_specifics` ADD `shop_use_manual_shipping_rates` TINYINT(2) NOT NULL AFTER `shop_pickup_interval`;
 -- --- Aramex Shipping API--- --

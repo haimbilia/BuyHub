@@ -3799,8 +3799,18 @@ class SellerController extends SellerBaseController
         $numericFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_numeric_value_is_allowed.', $this->siteLangId));
         $alphanumericFld->attachField($numericFld); */
 
+        $fld = $frm->addCheckBox(
+            Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
+            'shop_use_manual_shipping_rates',
+            1,
+            array(),
+            false,
+            0
+        );
+        $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_SELLER_SHIPPING.", $this->siteLangId) . "</span>";
+
         $fld = $frm->addTextarea(Labels::getLabel("LBL_Government_Information_on_invoices", $this->siteLangId), 'shop_invoice_codes');
-        $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Information_mandated_by_the_Government_on_invoices.", $this->siteLangId) . "</small>";
+        $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Information_mandated_by_the_Government_on_invoices.", $this->siteLangId) . "</span>";
 
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');

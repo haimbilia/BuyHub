@@ -947,10 +947,29 @@ class ConfigurationsController extends AdminBaseController
                 $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $this->adminLangId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
                 $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->adminLangId) . "</small>";
 
+                $fld1 = $frm->addCheckBox(
+                    Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->adminLangId),
+                    'CONF_MANUAL_SHIPPING_RATES_ADMIN',
+                    1,
+                    array(),
+                    false,
+                    0
+                );
+                $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_ADMIN_SHIPPING.", $this->adminLangId) . "</small>";
+                
+                $fld1 = $frm->addCheckBox(
+                    Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILED_TO_FETCH_RATES.", $this->adminLangId),
+                    'CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS',
+                    1,
+                    array(),
+                    false,
+                    0
+                );
+                
                 /* $frm->addHtml('','Checkout','<h3>'.Labels::getLabel("LBL_Checkout",$this->adminLangId) . '</h3>'); */
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_New_Order_Alert_Email", $this->adminLangId), 'CONF_NEW_ORDER_EMAIL', applicationConstants::getYesNoArr($this->adminLangId), '', array('class' => 'list-inline'));
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Send_an_email_to_store_owner_when_new_order_is_placed", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Send_an_email_to_store_owner_when_new_order_is_placed", $this->adminLangId) . "</small>";
 
                 $orderStatusArr = Orders::getOrderProductStatusArr($this->adminLangId);
 
