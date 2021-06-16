@@ -1,40 +1,40 @@
-// jQuery File Tree Plugin
-//
-// Version 1.01
-//
-// Cory S.N. LaViska
-// A Beautiful Site (http://abeautifulsite.net/)
-// 24 March 2008
-//
-// Visit http://abeautifulsite.net/notebook.php?article=58 for more information
-//
-// Usage: $('.fileTreeDemo').fileTree( options, callback )
-//
-// Options:  root           - root folder to display; default = /
-//           script         - location of the serverside AJAX file to use; default = jqueryFileTree.php
-//           folderEvent    - event to trigger expand/collapse; default = click
-//           expandSpeed    - default = 500 (ms); use -1 for no animation
-//           collapseSpeed  - default = 500 (ms); use -1 for no animation
-//           expandEasing   - easing function to use on expand (optional)
-//           collapseEasing - easing function to use on collapse (optional)
-//           multiFolder    - whether or not to limit the browser to one subfolder at a time
-//           loadMessage    - Message to display while initial tree loads (can be HTML)
-//
-// History:
-//
-// 1.01 - updated to work with foreign characters in directory/file names (12 April 2008)
-// 1.00 - released (24 March 2008)
-//
-// TERMS OF USE
-// 
-// This plugin is dual-licensed under the GNU General Public License and the MIT License and
-// is copyright 2008 A Beautiful Site, LLC. 
-//
+/* jQuery File Tree Plugin */
+
+/* Version 1.01 */
+
+/* Cory S.N. LaViska */
+/* A Beautiful Site (http://abeautifulsite.net/) */
+/* 24 March 2008 */
+
+/* Visit http://abeautifulsite.net/notebook.php?article=58 for more information */
+
+/* Usage: $('.fileTreeDemo').fileTree( options, callback ) */
+
+/* Options:  root           - root folder to display; default = / */
+/*           script         - location of the serverside AJAX file to use; default = jqueryFileTree.php */
+/*           folderEvent    - event to trigger expand/collapse; default = click */
+/*           expandSpeed    - default = 500 (ms); use -1 for no animation */
+/*           collapseSpeed  - default = 500 (ms); use -1 for no animation */
+/*           expandEasing   - easing function to use on expand (optional) */
+/*           collapseEasing - easing function to use on collapse (optional) */
+/*           multiFolder    - whether or not to limit the browser to one subfolder at a time */
+/*           loadMessage    - Message to display while initial tree loads (can be HTML) */
+
+/* History: */
+
+/* 1.01 - updated to work with foreign characters in directory/file names (12 April 2008) */
+/* 1.00 - released (24 March 2008) */
+
+/* TERMS OF USE */
+/*  */
+/* This plugin is dual-licensed under the GNU General Public License and the MIT License and */
+/* is copyright 2008 A Beautiful Site, LLC.  */
+
 if (jQuery) (function ($) {
 
     $.extend($.fn, {
         fileTree: function (o, h) {
-            // Defaults
+            /* Defaults */
             if (!o) var o = {};
             if (o.root == undefined) o.root = '/';
             if (o.script == undefined) o.script = 'jqueryFileTree.php';
@@ -63,16 +63,16 @@ if (jQuery) (function ($) {
                     $(t).find('LI A').bind(o.folderEvent, function () {
                         if ($(this).parent().hasClass('directory')) {
                             if ($(this).parent().hasClass('collapsed')) {
-                                // Expand
+                                /* Expand */
                                 if (!o.multiFolder) {
                                     $(this).parent().parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
                                     $(this).parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
                                 }
-                                $(this).parent().find('UL').remove(); // cleanup
+                                $(this).parent().find('UL').remove(); /* cleanup */
                                 showTree($(this).parent(), escape($(this).attr('rel').match(/.*\//)));
                                 $(this).parent().removeClass('collapsed').addClass('expanded');
                             } else {
-                                // Collapse
+                                /* Collapse */
                                 $(this).parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
                                 $(this).parent().removeClass('expanded').addClass('collapsed');
                             }
@@ -82,25 +82,25 @@ if (jQuery) (function ($) {
                         }
                         return false;
                     }).bind('mouseover', function (e) {
-                        //var ext = $(this).attr('rel').split('.').pop().toLowerCase();
-                        //if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) != -1) {
-                        //    $("#preview_id").html("<img id='imgFile' src='" + $(this).attr('rel') + "' style='width:70px;padding:4px;border:#cccccc 1px solid;background:#ffffff;margin-bottom:3px' /><br /><a style='position:absolute;top:-5px;right:-5px' href='javascript:deleteFile()'><img src='images/delete.png' style='border:none' /></a>");
-                        //    $("#preview_id").css("top", e.pageY + 2 + 'px');
-                        //    $("#preview_id").css("left", e.pageX + 2 + 'px');
-                        //}
+                        /* var ext = $(this).attr('rel').split('.').pop().toLowerCase(); */
+                        /* if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) != -1) { */
+                        /*    $("#preview_id").html("<img id='imgFile' src='" + $(this).attr('rel') + "' style='width:70px;padding:4px;border:#cccccc 1px solid;background:#ffffff;margin-bottom:3px' /><br /><a style='position:absolute;top:-5px;right:-5px' href='javascript:deleteFile()'><img src='images/delete.png' style='border:none' /></a>"); */
+                        /*    $("#preview_id").css("top", e.pageY + 2 + 'px'); */
+                        /*    $("#preview_id").css("left", e.pageX + 2 + 'px'); */
+                        /* } */
                         return false;
                     }).bind('mousemove', function (e) {
-                        //$("#preview_id").css("top", e.pageY + 2 + 'px');
-                        //$("#preview_id").css("left", e.pageX + 2 + 'px');
+                        /* $("#preview_id").css("top", e.pageY + 2 + 'px'); */
+                        /* $("#preview_id").css("left", e.pageX + 2 + 'px'); */
                         return false;
                     });
 
-                    // Prevent A from triggering the # on non-click events
+                    /* Prevent A from triggering the # on non-click events */
                     if (o.folderEvent.toLowerCase != 'click') $(t).find('LI A').bind('click', function () { return false; });
                 }
-                // Loading message
+                /* Loading message */
                 $(this).html('<ul class="jqueryFileTree start"><li class="wait">' + o.loadMessage + '<li></ul>');
-                // Get the initial file list
+                /* Get the initial file list */
                 showTree($(this), escape(o.root));
             });
         }
