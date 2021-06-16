@@ -197,7 +197,7 @@ Fixes:
     => 055077 - when cookies policy are turned off from admin then recently viewed items are not listing on detail page of product
     => 055104 - seller dashboard> data migration tab is not highlighting on accessing
     => 055093 - while changing seller approval request if admin declines request without message then on front end it's listing heading- reason for cancellation which is blank
-
+    => 055092 - when cookies are not allowed from admin still then user have option for the same in account
 
 New Features:
     => Admin shipped products listing page
