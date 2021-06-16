@@ -34,17 +34,17 @@ class PluginsController extends AdminBaseController
 
         $activeTaxPluginFound = false;
         if (Plugin::TYPE_TAX_SERVICES == $type) {
-            array_walk($records, function($val) use(&$activeTaxPluginFound) {
+            array_walk($records, function ($val) use (&$activeTaxPluginFound) {
                 if (Plugin::ACTIVE == $val[Plugin::DB_TBL_PREFIX . 'active']) {
                     $activeTaxPluginFound = true;
                     return;
                 }
             });
         }
-        
+
         $this->canEdit = $this->objPrivilege->canEditPlugins($this->admin_id, true);
         $pluginTypes = Plugin::getTypeArr($this->adminLangId);
-        
+
         $groupType = Plugin::getGroupType($type);
         $otherPluginTypes = '';
         if (!empty($groupType)) {
@@ -85,7 +85,7 @@ class PluginsController extends AdminBaseController
                 FatUtility::dieJsonError($this->str_invalid_request);
             }
 
-            if (in_array($pluginType, Plugin::HAVING_KINGPIN)) {
+            if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
                 $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $pluginType, FatUtility::VAR_INT, 0);
                 if (!empty($defaultCurrConvAPI)) {
                     $data['CONF_DEFAULT_PLUGIN_' . $pluginType] = $defaultCurrConvAPI;
@@ -116,7 +116,7 @@ class PluginsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         unset($post['plugin_id'], $post['plugin_type']);
-        
+
         if (1 > $pluginId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
@@ -148,8 +148,8 @@ class PluginsController extends AdminBaseController
             $pluginId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        
-        if (in_array($pluginType, Plugin::HAVING_KINGPIN)) {
+
+        if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
             $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $pluginType, FatUtility::VAR_INT, 0);
             if (!empty($post['CONF_DEFAULT_PLUGIN_' . $pluginType]) || empty($defaultCurrConvAPI)) {
                 $confVal = empty($defaultCurrConvAPI) ? $pluginId : $post['CONF_DEFAULT_PLUGIN_' . $pluginType];
@@ -227,10 +227,10 @@ class PluginsController extends AdminBaseController
         unset($post['lang_id']);
 
         $data = array(
-        'pluginlang_lang_id' => $lang_id,
-        'pluginlang_plugin_id' => $pluginId,
-        'plugin_name' => $post['plugin_name'],
-        'plugin_description' => FatApp::getPostedData('plugin_description', FatUtility::VAR_STRING, ''),
+            'pluginlang_lang_id' => $lang_id,
+            'pluginlang_plugin_id' => $pluginId,
+            'plugin_name' => $post['plugin_name'],
+            'plugin_description' => FatApp::getPostedData('plugin_description', FatUtility::VAR_STRING, ''),
         );
 
         $pluginObj = new Plugin($pluginId);
@@ -327,7 +327,7 @@ class PluginsController extends AdminBaseController
         if ($data == false) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
-        
+
         if (false == Plugin::updateStatus($data['plugin_type'], $status, $pluginId, $error)) {
             FatUtility::dieJsonError($error);
         }
@@ -358,14 +358,14 @@ class PluginsController extends AdminBaseController
         if (Plugin::ACTIVE == $status) {
             $groupType = Plugin::getGroupType($data['plugin_type']);
             $eiherPluginTypes = array_values(array_diff($groupType, [$data['plugin_type']]));
-            
+
             foreach ($eiherPluginTypes as $pluginType) {
                 if (false == Plugin::updateStatus($pluginType, Plugin::INACTIVE, null, $error)) {
                     FatUtility::dieJsonError($error);
                 }
             }
         }
-        
+
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -381,23 +381,23 @@ class PluginsController extends AdminBaseController
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
-        
-        if (in_array($pluginType, Plugin::HAVING_KINGPIN)) {
+
+        if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
             $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->adminLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $pluginId, array(), false, 0);
         }
 
-        if (in_array($pluginType, Plugin::HAVING_SEPARATE_ICON)) {
+        if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
             $fld = $frm->addButton(
                 'Icon',
                 'plugin_icon',
                 Labels::getLabel('LBL_Upload_File', $this->adminLangId),
-                array('class'=>'uploadFile-Js','id'=>'plugin_icon','data-plugin_id' => $pluginId)
+                array('class' => 'uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $pluginId)
             );
             $fld->htmlAfterField = '<span id="plugin_icon"></span>';
             if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $pluginId)) {
                 $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
                 $fld->htmlAfterField .= '<div class="uploaded--image">
-                <img src="'.UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($pluginId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').'"></div>';
+                <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($pluginId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></div>';
             }
         }
 
@@ -467,14 +467,14 @@ class PluginsController extends AdminBaseController
         if (Plugin::ACTIVE == $status) {
             $groupType = Plugin::getGroupType($pluginGroupType);
             $eiherPluginTypes = array_values(array_diff($groupType, [$pluginGroupType]));
-            
+
             foreach ($eiherPluginTypes as $pluginType) {
                 if (false == Plugin::updateStatus($pluginType, Plugin::INACTIVE, null, $error)) {
                     FatUtility::dieJsonError($error);
                 }
             }
         }
-        
+
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
