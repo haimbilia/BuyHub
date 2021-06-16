@@ -219,6 +219,59 @@ class StripeConnect extends PaymentMethodBase
         }
         return false;
     }
+    
+    /**
+     * checkUserAccountIsIncomplete
+     *
+     * @return bool
+     */
+    public function checkUserAccountIsIncomplete(): bool
+    {
+        if (false === $this->loadRemoteUserInfo()) {
+            return false;
+        }
+
+        $this->userInfoObj = $this->getResponse();
+        $requirements = $this->userInfoObj->requirements;
+        if (empty($requirements) || !isset($requirements->errors) || empty($requirements->errors) || !is_array($requirements->errors)) {
+            return false;
+        }
+
+        $this->error = Labels::getLabel('MSG_YOUR_ACCOUNT_HAS_BEEN_INCOMPLETE_/_RESTRICTED', $this->langId);
+        foreach ($requirements->errors as $error) {
+            $this->error = ' ' . $error['reason'];
+        }
+        return true;
+    }
+    
+    /**
+     * getCurrentlyDueFields
+     *
+     * @return array
+     */
+    public function getCurrentlyDueFields(): array
+    {
+        if (false === $this->loadRemoteUserInfo()) {
+            return [];
+        }
+
+        $this->userInfoObj = $this->getResponse();
+        if (!isset($this->userInfoObj->requirements) || !isset($this->userInfoObj->requirements->currently_due)) {
+            return [];
+        }
+
+        return (array) $this->userInfoObj->requirements->currently_due;
+    }
+    
+    /**
+     * userAccountIsValid
+     *
+     * @return bool
+     */
+    public function userAccountIsValid(): bool
+    {
+        return (!empty($this->getAccountId()) && empty($this->getCurrentlyDueFields()) && false === $this->checkUserAccountIsIncomplete() && false === $this->isUserAccountRejected());
+    }
 
     /**
      * unsetUserAccountElements
@@ -732,7 +785,7 @@ class StripeConnect extends PaymentMethodBase
                 }
 
                 if (false !== strpos($label, 'person_')) {
-                    $personId = $this->getUserMeta('stripe_person_id');
+                    $personId = (string) $this->getUserMeta('stripe_person_id');
                     $label = str_replace($personId, "Person", $label);
                 }
 
@@ -1449,7 +1502,11 @@ class StripeConnect extends PaymentMethodBase
                 if ($returnFullArray || false !== stripos($line, $keyword)) {
                     $lineContentArr = explode('-', $line, 2);
                     if (!empty($lineContentArr) && 1 < count($lineContentArr)) {
-                        $arr[trim($lineContentArr[0])] = trim($lineContentArr[1]);
+                        $id = trim($lineContentArr[0]);
+                        $arr[$id] = [
+                            'id' => $id,
+                            'name' => trim($lineContentArr[1]),
+                        ];
                     }
                     $rowIndex++;
                 }

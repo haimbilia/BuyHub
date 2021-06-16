@@ -18,17 +18,6 @@ trait StripeConnectFunctions
     ];
 
     /**
-     * readonlyParams - Used to get bool type request params
-     *
-     * @var array
-     */
-    public $readonlyParams = [
-        "business_profile.name",
-        "business_profile.support_phone",
-        "business_profile.support_email",
-    ];
-
-    /**
      * convertToBool
      *
      * @param  array $requestParam

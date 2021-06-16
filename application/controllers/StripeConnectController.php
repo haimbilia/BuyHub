@@ -85,9 +85,13 @@ class StripeConnectController extends PaymentMethodBaseController
             }
             $stripeUserData = $this->stripeConnect->getResponse()->toArray();
         }
-        // This will return url only for ExpressAccount connected to admin account.
+        /* This will return url only for ExpressAccount connected to admin account. */
         $this->stripeConnect->createLoginLink();
 
+        /* Check if user account has errors. */
+        $this->stripeConnect->checkUserAccountIsIncomplete();
+
+        $this->set('userAccountErrors', $this->stripeConnect->getError());
         $this->set('loginUrl', $this->stripeConnect->getLoginUrl());
         $this->set('accountId', $accountId);
         $this->set('requiredFields', $requiredFields);
@@ -114,36 +118,28 @@ class StripeConnectController extends PaymentMethodBaseController
         FatUtility::dieJsonSuccess($msg);
     }
 
-    /**
-     * login
-     *
-     * @return void
-     */
-    public function login()
-    {
-        FatApp::redirectUser($this->stripeConnect->getRedirectUri());
-    }
-
-    /**
-     * callback
-     *
-     * @return void
-     */
-    public function callback()
-    {
-        $error = FatApp::getQueryStringData('error');
-        $errorDescription = FatApp::getQueryStringData('error_description');
-        if (!empty($error)) {
-            $msg = $error . ' : ' . $errorDescription;
-            Message::addErrorMessage($msg);
-        } else {
-            $code = FatApp::getQueryStringData('code');
-            if (false == $this->stripeConnect->accessAccountId($code)) {
-                $this->setError();
-            }
+    /* Not Required. 16-Jun-2021 */
+        /* public function login()
+        {
+            FatApp::redirectUser($this->stripeConnect->getRedirectUri());
         }
-        FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
-    }
+
+        public function callback()
+        {
+            $error = FatApp::getQueryStringData('error');
+            $errorDescription = FatApp::getQueryStringData('error_description');
+            if (!empty($error)) {
+                $msg = $error . ' : ' . $errorDescription;
+                Message::addErrorMessage($msg);
+            } else {
+                $code = FatApp::getQueryStringData('code');
+                if (false == $this->stripeConnect->accessAccountId($code)) {
+                    $this->setError();
+                }
+            }
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
+        } */
+    /* ----------------- */
 
     /**
      * requiredFieldsForm
@@ -295,8 +291,6 @@ class StripeConnectController extends PaymentMethodBaseController
                 ];
                 // echo $businessType;
                 $fld = $frm->addSelectBox($labelStr, 'business_type', $options, $businessType, [], Labels::getLabel('LBL_Select', $this->siteLangId));
-            } elseif (in_array($field, $this->stripeConnect->readonlyParams)) {
-                $fld = $frm->addTextBox($labelStr, $name, '', ['readonly' => 'readonly']);
             } elseif (in_array(end($labelParts), $this->stripeConnect->boolParams)) {
                 $options = [
                     0 => Labels::getLabel('LBL_NO', $this->siteLangId),
@@ -363,7 +357,9 @@ class StripeConnectController extends PaymentMethodBaseController
                 $fld = $frm->addCheckBox('', 'tos_acceptance', 1);
             } elseif (false !== strpos($field, 'mcc')) {
                 $frm->addHiddenField('', $name, '', ['class' => 'mccValue-js' . $j]);
-                $fld = $frm->addTextBox($labelStr, 'merchantCatCode', '', ['class' => 'mcc-js', 'data-valfld' => 'mccValue-js' . $j]);
+                // $fld = $frm->addTextBox($labelStr, 'merchantCatCode', '', ['class' => 'mcc--js', 'data-valfld' => 'mccValue-js' . $j]);
+                $placeholder = Labels::getLabel('LBL_SEARCH...', $this->siteLangId);
+                $fld = $frm->addSelectBox($labelStr, 'merchantCatCode', [], '', ['class' => 'mcc--js', 'data-valfld' => 'mccValue-js' . $j, 'placeholder' => $placeholder], $placeholder);
             } elseif (false !== strpos($field, 'email')) {
                 $fld = $frm->addTextBox($labelStr, $name, $userEmail);
             } else {
@@ -400,16 +396,12 @@ class StripeConnectController extends PaymentMethodBaseController
     /**
      * getMerchantCategory
      *
-     * @param  bool $returnFullArray
      * @return void
      */
-    public function getMerchantCategory(bool $returnFullArray = false)
+    public function getMerchantCategory()
     {
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $data = $this->stripeConnect->getMerchantCategory($keyword, $returnFullArray);
-        if (true === $returnFullArray) {
-            return $data;
-        }
+        $data = $this->stripeConnect->getMerchantCategory($keyword);
         CommonHelper::jsonEncodeUnicode($data, true);
     }
 

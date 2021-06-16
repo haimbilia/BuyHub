@@ -789,6 +789,7 @@ $(document).on("change", ".state", function() {
             t = $.parseJSON(res);
             if (1 > t.status) {
                 $(contentDv).html(t.html);
+                bindMcc();
             } else {
                 $.mbsmessage(t.msg, false, 'alert--success');
                 $('.pluginPlatform-js').click();
@@ -796,6 +797,47 @@ $(document).on("change", ".state", function() {
             $(".loader-yk").remove();
         });
     };
+
+    bindMcc = function () {
+        var selector = $(".mcc--js");
+        if (0 < selector.length) {
+            selector.select2({
+                closeOnSelect: true,
+                dir: langLbl.layoutDirection,
+                allowClear: true,
+                placeholder: selector.attr('placeholder'),
+                ajax: {
+                    url: fcom.makeUrl(keyName, 'getMerchantCategory'),
+                    dataType: 'json',
+                    delay: 250,
+                    method: 'post',
+                    data: function(params) {
+                        return {
+                            keyword: params.term
+                        };
+                    },
+                    processResults: function(data, params) {
+                        console.log(data);
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 0,
+                templateResult: function(result) {
+                    return result.name;
+                },
+                templateSelection: function(result) {
+                    return result.name;
+                }
+            }).on('select2:selecting', function(e) {
+                $("." + valueFld).val(e.params.args.data.id);
+            }).on('select2:unselecting', function(e) {
+                $("." + valueFld).val("");
+            });
+        }
+    }
 
     clearForm = function() {
         requiredFieldsForm();

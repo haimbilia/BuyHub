@@ -27,25 +27,32 @@
                         <div class="text-center"> <a class="btn btn-outline-brand btn-sm mr-2" onClick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
                                 <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
                             </a>
-                            <a class="btn btn-brand btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'login') ?>" title="<?php echo Labels::getLabel('MSG_LOGIN', $siteLangId); ?>">
+                            <?php
+                            /* Not Required. */
+                            /* <a class="btn btn-brand btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'login') ?>" title="<?php echo Labels::getLabel('MSG_LOGIN', $siteLangId); ?>">
                                 <?php echo Labels::getLabel('LBL_ALREADY_HAVE_ACCOUNT_?', $siteLangId); ?>
-                            </a>
+                            </a> */ ?>
                         </div>
                     </div>
-                    <?php } else { ?>
-                        <div class="text-center">
-                            <h5>
-                                <?php  echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; ?>
-                                <?php if ('custom' == $stripeAccountType) { ?>
-                                    <a class="btn btn-brand btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>" title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                <?php } ?>
-                                <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
-                                    <i class="fa fa-unlink"></i>
+                <?php } else { ?>
+                    <div class="text-center">
+                        <h5>
+                            <?php echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; ?>
+                            <?php if ('custom' == $stripeAccountType) { ?>
+                                <a class="btn btn-brand btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>" title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
+                                    <i class="fa fa-trash"></i>
                                 </a>
-                            </h5>
-                        </div>
+                            <?php } ?>
+                            <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
+                                <i class="fa fa-unlink"></i>
+                            </a>
+                        </h5>
+                        <?php if (!empty($userAccountErrors)) { ?>
+                            <ul class="errorlist erlist_merchantCatCode">
+                                <li><a href="javascript:void(0);"><?php echo $userAccountErrors; ?></a></li>
+                            </ul>
+                        <?php } ?>
+                    </div>
                 <?php } ?>
                 <?php if (!empty($loginUrl)) { ?>
                     <a class="btn btn-brand btn-sm" href="<?php echo $loginUrl; ?>" target="_blank">
@@ -130,10 +137,9 @@
 </div>
 <script>
     var keyName = '<?php echo $keyName; ?>';
-    $(document).on('keyup', ".mcc-js", function() {
+    /* $(document).on('keyup', ".mcc--js", function() {
         var currObj = $(this);
         var valueFld = currObj.data('valfld');
-        console.log(valueFld);
         if ('' != currObj.val()) {
             currObj.siblings('ul.dropdown-menu').remove();
             currObj.autocomplete({
@@ -167,5 +173,5 @@
         } else {
             $("." + valueFld).val('');
         }
-    });
+    }); */
 </script>

@@ -25,22 +25,31 @@ class SellerBaseController extends LoggedUserController
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
         }
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
-        $plugin = new Plugin();
-        $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SPLIT_PAYMENT_METHOD);
-        $isStripeConnectLogin = (get_called_class() == 'StripeConnectController' && in_array($action, ['login', 'callback']));
 
-        if (!empty($keyName) && 'StripeConnect' == $keyName && !in_array(strtolower($action), ['shopform', 'shop']) && !$isStripeConnectLogin && !FatUtility::isAjaxCall() && UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            $resp = User::getUserMeta(UserAuthentication::getLoggedUserId(), 'stripe_account_id');
-            if (empty($resp)) {
-                if (true === MOBILE_APP_API_CALL) {
-                    $msg = Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId);
-                    FatUtility::dieJsonError($msg);
-                } else {
-                    Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId));
-                }
-                FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop', [$keyName]));
+        /* Validate Seller If stripe connect correctly configured. */
+        $isStripeConnectLogin = (get_called_class() == 'StripeConnectController' && in_array($action, ['login', 'callback']));
+        $stripeConnectObj = PluginHelper::callPlugin('StripeConnect', [$this->siteLangId]);
+
+        if (
+            false !== $stripeConnectObj && 
+            (
+                false === $stripeConnectObj->init(UserAuthentication::getLoggedUserId(), true) || 
+                false === $stripeConnectObj->userAccountIsValid()
+            ) && 
+            !$isStripeConnectLogin &&
+            !FatUtility::isAjaxCall() && 
+            UserPrivilege::isUserHasValidSubsription($this->userParentId) && 
+            !in_array(strtolower($action), ['shopform', 'shop'])
+        ) {
+            if (true === MOBILE_APP_API_CALL) {
+                $msg = Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId);
+                FatUtility::dieJsonError($msg);
+            } else {
+                Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId));
             }
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop', ['StripeConnect']));
         }
+        /* ----------------- */
 
         $this->set('bodyClass', 'is--dashboard');
     }
