@@ -196,6 +196,7 @@ Fixes:
     => 055069 - on product detail page undefined index: theprice notice coming
     => 055077 - when cookies policy are turned off from admin then recently viewed items are not listing on detail page of product
     => 055104 - seller dashboard> data migration tab is not highlighting on accessing
+    => 055093 - while changing seller approval request if admin declines request without message then on front end it's listing heading- reason for cancellation which is blank
 
 
 New Features:
