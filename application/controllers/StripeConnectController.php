@@ -195,7 +195,6 @@ class StripeConnectController extends PaymentMethodBaseController
     public function setupRequiredFields()
     {
         $post = array_filter(FatApp::getPostedData());
-
         $redirect = true;
         if (isset($post['fIsAjax'])) {
             $redirect = false;
@@ -357,9 +356,10 @@ class StripeConnectController extends PaymentMethodBaseController
                 $fld = $frm->addCheckBox('', 'tos_acceptance', 1);
             } elseif (false !== strpos($field, 'mcc')) {
                 $frm->addHiddenField('', $name, '', ['class' => 'mccValue-js' . $j]);
-                // $fld = $frm->addTextBox($labelStr, 'merchantCatCode', '', ['class' => 'mcc--js', 'data-valfld' => 'mccValue-js' . $j]);
                 $placeholder = Labels::getLabel('LBL_SEARCH...', $this->siteLangId);
                 $fld = $frm->addSelectBox($labelStr, 'merchantCatCode', [], '', ['class' => 'mcc--js', 'data-valfld' => 'mccValue-js' . $j, 'placeholder' => $placeholder], $placeholder);
+            } elseif (false !== strpos($field, 'phone')) {
+                $fld = $frm->addTextBox($labelStr, $name, '', ['class' => '']); /* phone-js */
             } elseif (false !== strpos($field, 'email')) {
                 $fld = $frm->addTextBox($labelStr, $name, $userEmail);
             } else {

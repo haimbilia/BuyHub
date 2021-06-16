@@ -47,11 +47,11 @@
                                 <i class="fa fa-unlink"></i>
                             </a>
                         </h5>
-                        <?php if (!empty($userAccountErrors)) { ?>
+                        <?php /* if (!empty($userAccountErrors)) { ?>
                             <ul class="errorlist erlist_merchantCatCode">
                                 <li><a href="javascript:void(0);"><?php echo $userAccountErrors; ?></a></li>
                             </ul>
-                        <?php } ?>
+                        <?php } */ ?>
                     </div>
                 <?php } ?>
                 <?php if (!empty($loginUrl)) { ?>
@@ -137,41 +137,4 @@
 </div>
 <script>
     var keyName = '<?php echo $keyName; ?>';
-    /* $(document).on('keyup', ".mcc--js", function() {
-        var currObj = $(this);
-        var valueFld = currObj.data('valfld');
-        if ('' != currObj.val()) {
-            currObj.siblings('ul.dropdown-menu').remove();
-            currObj.autocomplete({
-                'classes': {
-                    "ui-autocomplete": "custom-ui-autocomplete"
-                },
-                'source': function(request, response) {
-                    $.ajax({
-                        url: fcom.makeUrl(keyName, 'getMerchantCategory'),
-                        data: {
-                            fIsAjax: 1,
-                            keyword: currObj.val()
-                        },
-                        dataType: 'json',
-                        type: 'post',
-                        success: function(json) {
-                            response($.map(json, function(value, index) {
-                                return {
-                                    label: value,
-                                    value: value,
-                                    id: index
-                                };
-                            }));
-                        },
-                    });
-                },
-                select: function(event, ui) {
-                    $("." + valueFld).val(ui.item.id);
-                }
-            });
-        } else {
-            $("." + valueFld).val('');
-        }
-    }); */
 </script>

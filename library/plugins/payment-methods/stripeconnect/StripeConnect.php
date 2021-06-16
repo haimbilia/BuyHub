@@ -6,7 +6,6 @@ class StripeConnect extends PaymentMethodBase
     use StripeConnectFunctions;
 
     public const KEY_NAME = __CLASS__;
-    public const PAGE_SIZE = 10;
 
     private $stripe;
     private $stripeAccountId = '';
@@ -188,7 +187,7 @@ class StripeConnect extends PaymentMethodBase
                 'code' => $code
             ]);
             $this->stripeAccountId = $this->stripe->getResourceOwner($accessToken)->getId();
-            if ($this->updateUserMeta('stripe_account_id', $this->stripeAccountId)){
+            if ($this->updateUserMeta('stripe_account_id', $this->stripeAccountId)) {
                 $this->updateUserMeta('stripe_form_submitted', 1);
             }
             return true;
@@ -219,7 +218,7 @@ class StripeConnect extends PaymentMethodBase
         }
         return false;
     }
-    
+
     /**
      * checkUserAccountIsIncomplete
      *
@@ -243,7 +242,7 @@ class StripeConnect extends PaymentMethodBase
         }
         return true;
     }
-    
+
     /**
      * getCurrentlyDueFields
      *
@@ -262,7 +261,7 @@ class StripeConnect extends PaymentMethodBase
 
         return (array) $this->userInfoObj->requirements->currently_due;
     }
-    
+
     /**
      * userAccountIsValid
      *
@@ -798,7 +797,7 @@ class StripeConnect extends PaymentMethodBase
 
         return $this->requiredFields;
     }
-    
+
     /**
      * cleanRequest
      *
@@ -837,7 +836,7 @@ class StripeConnect extends PaymentMethodBase
             $requestParam['external_account']['country'] = strtoupper($this->userData['country_code']);
             $requestParam['external_account']['currency'] = Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code');
         }
-        
+
         $requestParam = $this->cleanRequest($requestParam);
 
         if (array_key_exists('relationship', $requestParam)) {
@@ -903,7 +902,7 @@ class StripeConnect extends PaymentMethodBase
             $relationship = $requestParam['relationship'];
             unset($requestParam['relationship']);
         }
-        
+
         if (!empty($personId) && array_key_exists($personId, $requestParam)) {
             $personData = $requestParam[$personId];
             unset($requestParam[$personId]);
@@ -1492,33 +1491,23 @@ class StripeConnect extends PaymentMethodBase
      * @param  bool $returnFullArray
      * @return array
      */
-    public function getMerchantCategory(string $keyword = '', bool $returnFullArray = false): array
-    {
-        $arr = [];
-        if ($fh = fopen(__DIR__ . '/MerchantCategoryCode.txt', 'r')) {
-            $rowIndex = 1;
-            while (!feof($fh)) {
-                $line = fgets($fh);
-                if ($returnFullArray || false !== stripos($line, $keyword)) {
-                    $lineContentArr = explode('-', $line, 2);
-                    if (!empty($lineContentArr) && 1 < count($lineContentArr)) {
-                        $id = trim($lineContentArr[0]);
-                        $arr[$id] = [
-                            'id' => $id,
-                            'name' => trim($lineContentArr[1]),
-                        ];
-                    }
-                    $rowIndex++;
-                }
-
-                if (false === $returnFullArray && $rowIndex == self::PAGE_SIZE) {
-                    break;
-                }
-            }
-            fclose($fh);
+    public function getMerchantCategory(string $keyword = ''): array
+    {        
+        $json = FatCache::get('merchantCategoryCode' . $this->langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$json) {
+            include(__DIR__ . '/MerchantCategoryCode.php');
+            FatCache::set('merchantCategoryCode' . $this->langId, FatUtility::convertToJson($arr), '.txt');
+        } else {
+            $arr = json_decode($json, true);
         }
-        ksort($arr);
-        return $arr;
+
+        if (empty($keyword)) {
+            return $arr;
+        }
+
+        return array_values(array_filter($arr, function ($var) use ($keyword) {
+            return false !== stripos($var['name'], $keyword);
+        }));
     }
 
     /**
