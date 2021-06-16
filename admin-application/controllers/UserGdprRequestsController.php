@@ -11,7 +11,7 @@ class UserGdprRequestsController extends AdminBaseController
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
     }
-    
+
     public function index()
     {
         $this->objPrivilege->canViewUserRequests();
@@ -23,7 +23,7 @@ class UserGdprRequestsController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->_template->render();
     }
-    
+
     public function userRequestsSearch()
     {
         $this->objPrivilege->canViewUserRequests();
@@ -32,7 +32,7 @@ class UserGdprRequestsController extends AdminBaseController
         if ($page < 2) {
             $page = 1;
         }
-        
+
         $srch = new UserGdprRequestSearch();
         $srch->joinUser();
         $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_username', 'ureq_id', 'ureq_status', 'ureq_type', 'ureq_date'));
@@ -56,7 +56,7 @@ class UserGdprRequestsController extends AdminBaseController
         if (!empty($user_request_from)) {
             $srch->addCondition('ureq_date', '>=', $user_request_from . ' 00:00:00');
         }
-        
+
         $user_request_to = FatApp::getPostedData('user_request_to', FatUtility::VAR_DATE, '');
         if (!empty($user_request_to)) {
             $srch->addCondition('ureq_date', '<=', $user_request_to . ' 23:59:59');
@@ -64,10 +64,10 @@ class UserGdprRequestsController extends AdminBaseController
         $srch->addOrder('ureq_date', 'DESC');
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        
+
         $userRequestTypeArr = UserGdprRequest::getUserRequestTypesArr($this->adminLangId);
         $userRequestStatusArr = UserGdprRequest::getUserRequestStatusesArr($this->adminLangId);
         $this->set("arrListing", $records);
@@ -79,7 +79,7 @@ class UserGdprRequestsController extends AdminBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->_template->render(false, false);
     }
-    
+
     private function getUsersRequestSearchForm()
     {
         $frm = new Form('frmUserRequestSearch');
@@ -87,10 +87,10 @@ class UserGdprRequestsController extends AdminBaseController
         /* $keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)'); */
         $requestType = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + UserGdprRequest::getUserRequestTypesArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->adminLangId), 'request_type', $requestType, -1, array(), '');
-        
+
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->adminLangId), 'user_request_from');
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'user_request_to');
-        
+
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', 0);
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
@@ -98,7 +98,7 @@ class UserGdprRequestsController extends AdminBaseController
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
-    
+
     public function updateRequestStatus()
     {
         $this->objPrivilege->canEditUserRequests();
@@ -107,17 +107,17 @@ class UserGdprRequestsController extends AdminBaseController
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
         }
-                
+
         $userReqId = FatUtility::int($post['reqId']);
         $status = FatUtility::int($post['status']);
-        
+
         if (1 > $userReqId) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $emailNotificationObj = new EmailHandler();
-        if (!$emailNotificationObj->gdprRequestStatusUpdate($post['reqId'], $this->adminLangId)) {
+        if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->adminLangId)) {
             Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -126,21 +126,21 @@ class UserGdprRequestsController extends AdminBaseController
             Message::addErrorMessage($userRequest->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function viewUserRequest($userReqId)
     {
         $this->objPrivilege->canViewUserRequests();
         $userReqId = FatUtility::int($userReqId);
-        
+
         if (1 > $userReqId) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
-        
+
         $srch = new UserGdprRequestSearch();
         $srch->joinUser();
         $srch->addMultipleFields(array('user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_username', 'ureq_date', 'ureq_purpose'));
@@ -152,11 +152,11 @@ class UserGdprRequestsController extends AdminBaseController
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieWithError(Message::getHtml());
         }
-        
+
         $this->set('userRequest', $userRequest);
         $this->_template->render(false, false);
     }
-    
+
     /* public function deleteUserRequest(){
     $this->objPrivilege->canEditUserRequests();
     $post = FatApp::getPostedData();
@@ -182,7 +182,7 @@ class UserGdprRequestsController extends AdminBaseController
     $this->set('msg', Labels::getLabel('LBL_Updated_Successfully',$this->adminLangId));
     $this->_template->render(false, false, 'json-success.php');
     } */
-    
+
     public function truncateUserData()
     {
         $this->objPrivilege->canEditUserRequests();
@@ -194,34 +194,33 @@ class UserGdprRequestsController extends AdminBaseController
 
         $userId = FatUtility::int($post['userId']);
         $userReqId = FatUtility::int($post['reqId']);
-        
+
         $userObj = new User($userId);
         if (!$userObj->truncateUserInfo()) {
             Message::addErrorMessage(Labels::getLabel("MSG_USER_INFO_COULD_NOT_BE_DELETED", $this->adminLangId) . $userObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $emailNotificationObj = new EmailHandler();
-        if (!$emailNotificationObj->gdprRequestStatusUpdate($post['reqId'], $this->adminLangId)) {
+        if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->adminLangId)) {
             Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         /* Update request status to complete [ */
         $assignValues = array(
-        'ureq_status' => UserGdprRequest::STATUS_COMPLETE,
-        'ureq_approved_date' => date('Y-m-d H:i:s'),
+            'ureq_status' => UserGdprRequest::STATUS_COMPLETE,
+            'ureq_approved_date' => date('Y-m-d H:i:s'),
         );
-        
+
         $userReqObj = new UserGdprRequest($userReqId);
         $userReqObj->assignValues($assignValues);
         if (!$userReqObj->save()) {
-            $db->rollbackTransaction();
             Message::addErrorMessage($userReqObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
         /* ] */
-        
+
         $this->set('userReqId', $userReqId);
         $this->set('msg', Labels::getLabel('LBL_Successfully_Deleted_User_data', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
