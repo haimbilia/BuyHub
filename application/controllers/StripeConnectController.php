@@ -360,6 +360,7 @@ class StripeConnectController extends PaymentMethodBaseController
                 $fld = $frm->addSelectBox($labelStr, 'merchantCatCode', [], '', ['class' => 'mcc--js', 'data-valfld' => 'mccValue-js' . $j, 'placeholder' => $placeholder], $placeholder);
             } elseif (false !== strpos($field, 'phone')) {
                 $fld = $frm->addTextBox($labelStr, $name, '', ['class' => '']); /* phone-js */
+                $htmlAfterField = Labels::getLabel('LBL_PHONE_NUMBER_WITHOUT_DIAL_CODE', $this->siteLangId);
             } elseif (false !== strpos($field, 'email')) {
                 $fld = $frm->addTextBox($labelStr, $name, $userEmail);
             } else {
