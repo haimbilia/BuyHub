@@ -791,7 +791,7 @@ $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $prod
                 "ratingValue": "<?php echo round(FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT), 1); ?>",
                 "reviewCount": "<?php echo FatUtility::int($reviews['totReviews']); ?>"
             },
-        <?php } ?> "description": "<?php echo CommonHelper::renderHtml($product['product_description']); ?>",
+        <?php } ?> "description": "<?php echo strip_tags(CommonHelper::renderHtml($product['product_description'])); ?>",
         "name": "<?php echo $product['selprod_title']; ?>",
         <?php if (isset($product['brand_name']) && $product['brand_name'] != '') { ?> "brand": "<?php echo $product['brand_name']; ?>",
         <?php } ?>
