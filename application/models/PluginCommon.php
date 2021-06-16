@@ -210,4 +210,5 @@ class PluginCommon extends MyAppModel
             self::TYPE_REGULAR_PAYMENT_METHOD
         ];
     }
+    
 }
