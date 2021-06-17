@@ -1067,7 +1067,7 @@ class ProductsController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
         
-        /* sendApprovalStatusUpdate to seller */ 
+        /* sendApprovalStatusUpdate to seller */
         $sendApprovalStatusUpdate = false;
         if (0 < $productId) {
             $oldProductData = Product::getAttributesById($productId, ['product_approved', 'product_seller_id']);
@@ -1181,7 +1181,7 @@ class ProductsController extends AdminBaseController
         $frm->addCheckBox(Labels::getLabel('LBL_Mark_This_Product_As_Featured?', $this->adminLangId), 'product_featured', 1, array(), false, 0);
          
         $productType = Product::getAttributesById($productId, 'product_type');
-        if($productType == Product::PRODUCT_TYPE_DIGITAL){            
+        if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
             $warrantyFld->requirements()->setRequired(false);
         }
 
@@ -1826,7 +1826,7 @@ class ProductsController extends AdminBaseController
         $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->adminLangId, false, true);
         $this->set('canDo', $canDo);
 
-        $attachments = DigitalDownloadSearch::getAttachments($productId, Product::CATALOG_TYPE_PRIMARY, $optionComb, $langId);
+        $attachments = DigitalDownloadSearch::getAttachments($productId, Product::CATALOG_TYPE_PRIMARY, $optionComb, $langId, true);
 
         $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
 

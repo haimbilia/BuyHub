@@ -295,7 +295,6 @@ class Orders extends MyAppModel
 
     private function addUpdateProductOrder($data = array(), $langId = 1)
     {
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $data], 1);
         $db = FatApp::getDb();
 
         $ordersLangData = [];
@@ -498,10 +497,26 @@ class Orders extends MyAppModel
                         'afile.afile_physical_path as mainfile_physical_path',
                     ];
 
-                    $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb, 0, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $attrs);
+                    $records = DigitalDownloadSearch::getAttachments(
+                        $recordId,
+                        $productType,
+                        $optionComb,
+                        $data['order_language_id'],
+                        true,
+                        AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD,
+                        $attrs
+                    );
 
                     if ('0' != $optionComb) {
-                        $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0', 0, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $attrs);
+                        $commonRecords = DigitalDownloadSearch::getAttachments(
+                            $recordId,
+                            $productType,
+                            '0',
+                            $data['order_language_id'],
+                            true,
+                            AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD,
+                            $attrs
+                        );
                         $records = array_replace($records, $commonRecords);
                     }
 

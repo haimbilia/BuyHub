@@ -500,7 +500,16 @@ class ProductsController extends MyAppController
                 'afile_id as prev_afile_id', 'pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_name as preview', 'afile_type', 'afile_id'
             ];
             
-            $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb, 0, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW, $attrs);
+            $records = DigitalDownloadSearch::getAttachments(
+                $recordId,
+                $productType,
+                $optionComb,
+                $this->siteLangId,
+                true,
+                AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
+                $attrs
+            );
+
             $product['preview_attachments'] = $records;
         }
 
@@ -829,7 +838,7 @@ class ProductsController extends MyAppController
                 }
             }
             if (!empty($productAction)) {
-                $et = new EcommerceTracking($analyticsId, NULL, UserAuthentication::getLoggedUserId(true));
+                $et = new EcommerceTracking($analyticsId, null, UserAuthentication::getLoggedUserId(true));
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CLICK);
                 $et->addProductActionList($productAction);
                 $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
@@ -861,7 +870,7 @@ class ProductsController extends MyAppController
     {
         $moreSellers = $this->getMoreSeller($selprodCode, $this->siteLangId, $sellerId);
         $productsArr = [];
-        foreach ($moreSellers as $sellerDetail) { 
+        foreach ($moreSellers as $sellerDetail) {
             $productsArr[$sellerDetail['selprod_id']] = $this->getProductDetail($sellerDetail['selprod_id']);
         }
         $this->set('productsArr', $productsArr);
@@ -2123,6 +2132,5 @@ class ProductsController extends MyAppController
         
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
-
     }
 }
