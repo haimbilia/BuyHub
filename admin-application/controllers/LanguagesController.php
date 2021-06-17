@@ -189,17 +189,22 @@ class LanguagesController extends AdminBaseController
         $languageId = FatApp::getPostedData('languageId', FatUtility::VAR_INT, 0);
         if (0 >= $languageId) {
             Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieJsonError(Message::getHtml());
         }
 
         $data = Language::getAttributesById($languageId, array('language_active'));
 
         if ($data == false) {
             Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+            FatUtility::dieJsonError(Message::getHtml());
+        }            
 
         $status = ($data['language_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+        
+        if($status == applicationConstants::INACTIVE && 1 >= count(Language::getAllNames()) ){
+           Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieJsonError(Message::getHtml()); 
+        } 
 
         $countryObj = new Language($languageId);
         if (!$countryObj->changeStatus($status)) {
@@ -222,7 +227,7 @@ class LanguagesController extends AdminBaseController
                 }
                 if (!$configuration->update($dataToUpdate)) {
                     Message::addErrorMessage($configuration->getError());
-                    FatUtility::dieWithError(Message::getHtml());
+                    FatUtility::dieJsonError(Message::getHtml());
                 }
             }
         }
