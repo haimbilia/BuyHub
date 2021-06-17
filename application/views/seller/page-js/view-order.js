@@ -168,8 +168,20 @@ $(document).ready(function () {
             return;
         }
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (res) {
-            console.log(res);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (t) {
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                $.mbsmessage(t.msg, false, 'alert--danger');
+                return;
+            }
+            $.mbsmessage(t.msg, false, 'alert--success');
+            window.location.reload();            
         });
-    }
+    };
+    cancelPickup = function (opId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) {
+            window.location.reload();
+        });
+    };
+    
 })();

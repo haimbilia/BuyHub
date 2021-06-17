@@ -193,6 +193,7 @@ trait ShippingServices
         $opSrch = new OrderProductSearch($this->langId, false, true, true);
         $opSrch->joinShippingCharges();
         $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', OrderProductShipment::DB_TBL_PREFIX . 'op_id = op.op_id', 'opship');
+        $opSrch->joinTable(OrderProduct::DB_TBL_SHIPMENT_PICKUP, 'LEFT JOIN', OrderProduct::DB_TBL_SHIPMENT_PICKUP_PREFIX . 'op_id = op.op_id', 'oppick');
         $opSrch->addCountsOfOrderedProducts();
         $opSrch->addOrderProductCharges();
         $opSrch->doNotCalculateRecords();
@@ -200,7 +201,7 @@ trait ShippingServices
         $opSrch->addCondition('op.op_id', '=', $opId);
 
         $opSrch->addMultipleFields(
-            array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code')
+            array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code','opsp_api_req_id','opsp_scheduled')
         );
 
         $opRs = $opSrch->getResultSet();
@@ -432,6 +433,7 @@ trait ShippingServices
      */
     public function createPickup()
     {
+         
         $frm = $this->getPickupForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['btn_submit']);
@@ -447,29 +449,45 @@ trait ShippingServices
         }
 
         $resp = $this->shippingService->getResponse();
-        $postedData = array_diff($post, array_keys($this->shippingService->getPickupFormElementsArr));
-        
-        print_r($postedData);
-        
-        die();
+        $apiRequestedData = FilterHelper::parseArrayByKeys($post, array_keys($this->shippingService->getPickupFormElementsArr()));
 
         $dataToSave = array(
             'opsp_op_id' => $post['op_id'],
             'opsp_api_req_id' => $resp['pickUpId'],
             'opsp_scheduled' => applicationConstants::ACTIVE,
-            'opsp_requested_data' => json_encode($postedData),
+            'opsp_requested_data' => json_encode($apiRequestedData),
             'opsp_response' => json_encode($resp),
         );
 
-        if (!FatApp::getDb()->insertFromArray(OrderProduct::DB_TBL_PICKUP_SCHEDULE, $dataToSave, false, array(), $dataToSave)) {
-            LibHelper::dieJsonError($db->getError());
+        if (!FatApp::getDb()->insertFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, $dataToSave, false, array(), $dataToSave)) {
+            LibHelper::dieJsonError(FatApp::getDb()->getError());
         }
 
-        $json = [
-            'msg' => Labels::getLabel('LBL_SUCCESS', $this->langId),
-        ];
+        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
+    }
+    
+    public function cancelPickup(int $opId)
+    {       
+        $data = $this->getOrderProductDetail($opId);        
+        if (empty($data)  || empty($data['opsp_scheduled']) || 1 > $data['opsp_scheduled'] ) {
+            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
+            LibHelper::dieJsonError($msg);
+        }
+        
+        if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->cancelPickup($data)) {
+            $msg = $this->shippingService->getError();
+            if (empty($msg)) {
+                $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->siteLangId);
+            }
+            LibHelper::dieJsonError($msg);
+        }       
 
-        LibHelper::dieJsonSuccess($json);
+        $resp = $this->shippingService->getResponse();  
+       
+        if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled'=> applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))){
+            LibHelper::dieJsonError(FatApp::getDb()->getError());
+        }
+        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
 
 }

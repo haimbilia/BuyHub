@@ -90,10 +90,19 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                     <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo $label; ?>"><i class="fas fa-shipping-fast"></i></a>
                                 <?php }
 
-                                if ($orderDetail['orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED && false !== $pluginObj && true === $pluginObj->canCreatePickup()) { ?>
-                                    <a href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('MSG_CREATE_PICKUP', $siteLangId); ?>">
-                                        <i class="fa fa-hand-rock"></i>
-                                    </a>
+                                if ($orderDetail['orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED && false !== $pluginObj && true === $pluginObj->canCreatePickup()) { ?>                                    
+                                    <?php
+                                    $pickUpDetails = OrderProduct::getPickUpShedule($opId);
+                                    if(!$pickUpDetails ||  1 > $pickUpDetails['opsp_scheduled']){
+                                    ?>
+                                        <a href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
+                                            <i class="fas fa-truck-pickup"></i>
+                                        </a>
+                                    <?php }else{ ?>     
+                                        <a href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
+                                            <i class="far fa-times-circle"></i>
+                                        </a>
+                                    <?php } ?>  
                             <?php }
                             } ?>
                         </div>

@@ -12,6 +12,7 @@ class Aramex extends ShippingServicesBase
     private const REQUEST_VALIDATE_ADDRESS = 3;
     private const REQUEST_TRACKING = 4;
     private const REQUEST_PICKUP = 5;
+    private const REQUEST_PICKUP_CANCEL = 6;
 
     private $resp;
     private $ratesReference = '';
@@ -108,6 +109,10 @@ class Aramex extends ShippingServicesBase
         switch ($service) {
             case self::REQUEST_SHIPPING:
             case self::REQUEST_PICKUP:
+                $wsdl .= '/shipping.wsdl';
+                break;
+            
+            case self::REQUEST_PICKUP_CANCEL:
                 $wsdl .= '/shipping.wsdl';
                 break;
 
@@ -643,6 +648,7 @@ class Aramex extends ShippingServicesBase
 
     public function createPickup(array $orderData)
     {
+        
         if ($orderData['ReadyTime'] > $orderData['LastPickupTime'] || $orderData['ReadyTime'] > $orderData['ClosingTime'] || $orderData['ClosingTime'] < $orderData['LastPickupTime'] || time() > strtotime($orderData['PickupDate'])) {
             $this->error = Labels::getLabel('LBL_INVALID_TIME', $this->langId);
             return false;
@@ -733,19 +739,43 @@ class Aramex extends ShippingServicesBase
         if (false === $this->doRequest($requestParam)) {
             return false;
         }
-        $pickup = $this->getResponse();
-        if($pickup['HasErrors'] == 1){
+        $pickupResponse = $this->getResponse();
+        if($pickupResponse['HasErrors'] == 1){
             $this->error = $pickup['Notifications']['Notification']['Message'] ?? Labels::getLabel('ERR_UNABLE_TO_CREATE_PICKUP', $this->langId);
             return false;
         }
 
-        $pickup = $this->getResponse();
-        if (0 < count($pickup)) {          
-            $pickup['orderNumber'] = $pickup['Transaction']['Reference1'];
-            $pickup['pickUpId'] = $pickup['ProcessedPickup']['Reference1'];
+        if (0 < count($pickupResponse)) {          
+            $pickupResponse['orderNumber'] = $pickupResponse['Transaction']['Reference1'];
+            $pickupResponse['pickUpId'] = $pickupResponse['ProcessedPickup']['GUID'];
         }
-        $this->resp = $pickup;
+        $this->resp = $pickupResponse;
         return true;        
+    }
+    
+    
+    public function cancelPickup(array $orderData)
+    {
+        $requestParam = array(
+            'ClientInfo' => $this->getClientInfo(),
+            'Transaction' => array(
+                'Reference1' => $orderData['op_invoice_number']
+            ),
+            'PickupGUID' => $orderData['opsp_api_req_id']
+        );
+
+        $this->setServiceRequest(self::REQUEST_PICKUP_CANCEL);
+
+        if (false === $this->doRequest($requestParam)) {
+            return false;
+        }
+        $cancelResponse = $this->getResponse();
+        if ($cancelResponse['HasErrors'] == 1) {
+            $this->error = $pickup['Notifications']['Notification']['Message'] ?? Labels::getLabel('ERR_UNABLE_TO_CANCEL_PICKUP', $this->langId);
+            return false;
+        }
+        $this->resp = $cancelResponse;
+        return true;
     }
 
     /**
@@ -785,6 +815,9 @@ class Aramex extends ShippingServicesBase
                     break;
                 case self::REQUEST_PICKUP:
                     $resp = $soapClient->CreatePickup($requestParam);
+                    break;
+                case self::REQUEST_PICKUP_CANCEL:
+                    $resp = $soapClient->CancelPickup($requestParam);
                     break;
 
                 default:

@@ -327,4 +327,15 @@ class FilterHelper extends FatUtility
         $pageSizeArr[48] = 48 . ' ' . $itemsTxt;
         return $pageSizeArr;
     }
+    
+    public static function parseArrayByKeys($arr, $allowedKeys)
+    {
+        return array_filter(
+            $arr,
+            function ($key) use ($allowedKeys) {
+                return in_array($key, $allowedKeys);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+    }
 }
