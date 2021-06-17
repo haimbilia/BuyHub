@@ -9,7 +9,7 @@ if (null != $btnFld) {
     $btnFld->addFieldTagAttribute('class', 'btn btn-brand btn-block');
     $btnFld->developerTags['col'] = 2;
     $btnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
-    $btnFld->developerTags['noCaptionTag'] = true;
+    // $btnFld->developerTags['noCaptionTag'] = true;
 }
 
 $btnFld = $frm->getField('btn_clear');
@@ -18,13 +18,12 @@ if (null != $btnFld) {
     $btnFld->addFieldTagAttribute('onClick', 'clearForm();');
     $btnFld->developerTags['col'] = 2;
     $btnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
-    $btnFld->developerTags['noCaptionTag'] = true;
+    // $btnFld->developerTags['noCaptionTag'] = true;
 }
 
 $termFld = $frm->getField('tos_acceptance');
 if (null != $termFld) {
     $termFld->addFieldTagAttribute('class', 'tosCheckbox-js');
-    /* $termFld->htmlAfterField = '<a href="' . $termAndConditionsUrl . '" target="_blank" class="tosLink-js">' . Labels::getLabel('LBL_TERMS_OF_SERVICE', $siteLangId) . '</a>'; */
     $link = '<a href="' . $termAndConditionsUrl . '" target="_blank" class="tosLink-js">' . Labels::getLabel('LBL_TERMS_OF_SERVICE', $siteLangId) . '</a>';
 
     $agree = Labels::getLabel('LBL_I_AGREE_TO_THE_{TERMS-OF-SERVICE}', $siteLangId);

@@ -22,6 +22,11 @@ class StripeConnect extends PaymentMethodBase
     private $customerInfo = [];
     public $userId = 0;
 
+    private $payoutScheduleInterval = 'daily';
+    private $payoutScheduleDelayDays = '';
+    private $payoutScheduleWeekly = '';
+    private $payoutScheduleMonthly = '';
+
     public $requiredKeys = [
         'env',
         'client_id',
@@ -115,7 +120,16 @@ class StripeConnect extends PaymentMethodBase
         // For Some functions this line is also required to initiate API secret key
         \Stripe\Stripe::setApiKey($this->settings[$this->liveMode . 'secret_key']);
 
+        $weekdays = TimeSlot::getDaysArr(1);
+
         $this->stripe = new \Stripe\StripeClient($this->settings[$this->liveMode . 'secret_key']);
+        $this->payoutScheduleInterval = $this->settings['payouts_schedule_interval'];
+        $this->payoutScheduleDelayDays = $this->settings['payouts_schedule_delay_days'];
+        
+        $scheduleWeekly = FatUtility::int($this->settings['payouts_schedule_weekly_anchor']);
+        $this->payoutScheduleWeekly = (0 < $scheduleWeekly && isset($weekdays[$scheduleWeekly])  ? $weekdays[$scheduleWeekly] : '');
+
+        $this->payoutScheduleMonthly = $this->settings['payouts_schedule_monthly_anchor'];
         return true;
     }
 
@@ -316,6 +330,36 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
+     * getPayoutSettingsArr
+     *
+     * @return array
+     */
+    public function getPayoutSettingsArr(): array
+    {
+        $settings = [
+            'payouts' => [
+                'schedule' => [
+                    'interval' => $this->payoutScheduleInterval
+                ]
+            ]
+        ];
+
+        if ('daily' == $this->payoutScheduleInterval) {
+            $settings['payouts']['schedule']['delay_days'] = empty($this->payoutScheduleDelayDays) ? 'minimum' : $this->payoutScheduleDelayDays;
+        }
+
+        if ('weekly' == $this->payoutScheduleInterval && !empty($this->payoutScheduleWeekly)) {
+            $settings['payouts']['schedule']['weekly_anchor'] = strtolower($this->payoutScheduleWeekly);
+        }
+
+        if ('monthly' == $this->payoutScheduleInterval && !empty($this->payoutScheduleMonthly)) {
+            $settings['payouts']['schedule']['monthly_anchor'] = $this->payoutScheduleMonthly;
+        }
+
+        return $settings;
+    }
+
+    /**
      * createAccount
      *
      * Can follow: https://stripe.com/docs/api OR https://medium.com/@Keithweaver_/creating-your-own-marketplace-with-stripe-connect-php-like-shopify-or-uber-6eadbb08993f for help.
@@ -331,7 +375,8 @@ class StripeConnect extends PaymentMethodBase
             'requested_capabilities' => [
                 'card_payments',
                 'transfers',
-            ]
+            ],
+            'settings' => $this->getPayoutSettingsArr()
         ];
 
         $data['default_currency'] = Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code');
@@ -592,11 +637,6 @@ class StripeConnect extends PaymentMethodBase
                 'individual.address.state' => [
                     'title' => Labels::getLabel("MSG_STATE", $this->langId),
                     'description' => Labels::getLabel('API_STATE_COUNTY_PROVINCE_OR_REGION', $this->langId),
-                    'required' => false
-                ],
-                'individual.verification.document' => [
-                    'title' => Labels::getLabel("MSG_DOCUMENT", $this->langId),
-                    'description' => '',
                     'required' => false
                 ],
             ],
@@ -968,12 +1008,12 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
-     * updateVericationDocument
+     * updatePersonVerificationDocument
      *
      * @param string $side - Front/Back of uploaded document
      * @return bool
      */
-    public function updateVericationDocument(string $side): bool
+    public function updatePersonVerificationDocument(string $side, string $name = 'document'): bool
     {
         if (empty($this->resp)) {
             $this->error = Labels::getLabel('LBL_INVALID_REQUEST', $this->langId);
@@ -982,13 +1022,24 @@ class StripeConnect extends PaymentMethodBase
 
         $requestParam = [
             'verification' => [
-                'document' => [
+                $name => [
                     $side => $this->resp
                 ]
             ]
         ];
-        $this->resp = $this->doRequest(self::REQUEST_UPDATE_PERSON, $requestParam);
-        return (false === $this->resp) ? false : true;
+
+        $personId = $this->getRelationshipPersonId();
+        if (empty($personId)) {
+            $this->resp = $this->doRequest(self::REQUEST_CREATE_PERSON, $requestParam);
+            if (false === $this->resp) {
+                return false;
+            }
+            $this->updateUserMeta('stripe_person_id', $this->resp->id);
+            return true;
+        } else {
+            $this->resp = $this->doRequest(self::REQUEST_UPDATE_PERSON, $requestParam);
+            return (false === $this->resp) ? false : true;
+        }
     }
 
     /**
@@ -1490,16 +1541,55 @@ class StripeConnect extends PaymentMethodBase
      * @return array
      */
     public function getMerchantCategory(): array
-    {        
+    {
         $json = FatCache::get('merchantCategoryCode' . $this->langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!empty($json)) {
             return json_decode($json, true);
-            
         }
 
         include(__DIR__ . '/MerchantCategoryCode.php');
         FatCache::set('merchantCategoryCode' . $this->langId, FatUtility::convertToJson($arr), '.txt');
         return $arr;
+    }
+
+    /**
+     * getPayoutInterval
+     *
+     * @return void
+     */
+    public function getPayoutInterval()
+    {
+        $json = FatCache::get('stripePayoutInterval' . $this->langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!empty($json)) {
+            return json_decode($json, true);
+        }
+
+        $interval = [
+            'daily' => Labels::getLabel('LBL_DAILY', $this->langId),
+            'manual' => Labels::getLabel('LBL_MANUAL', $this->langId),
+            'weekly' => Labels::getLabel('LBL_WEEKLY', $this->langId),
+            'monthly' => Labels::getLabel('LBL_MONTHLY', $this->langId),
+        ];
+        FatCache::set('stripePayoutInterval' . $this->langId, FatUtility::convertToJson($interval), '.txt');
+        return $interval;
+    }
+
+    /**
+     * getPayoutDays
+     *
+     * @return void
+     */
+    public function getPayoutDays()
+    {
+        $json = FatCache::get('stripePayoutDays' . $this->langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!empty($json)) {
+            return json_decode($json, true);
+        }
+
+        $days = range(0, 31);
+        unset($days[0]);
+        FatCache::set('stripePayoutDays' . $this->langId, FatUtility::convertToJson($days), '.txt');
+        return $days;
     }
 
     /**

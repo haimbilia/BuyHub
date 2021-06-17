@@ -21,7 +21,6 @@ class PluginsController extends AdminBaseController
 
     public function search($type)
     {
-        $post = FatApp::getPostedData();
         $srch = Plugin::getSearchObject($this->adminLangId, false);
         $srch->joinTable(Configurations::DB_TBL, 'LEFT JOIN', "conf_val = plugin_id AND conf_name = 'CONF_DEFAULT_PLUGIN_" . $type . "'");
         $srch->addCondition('plugin_type', '=', $type);

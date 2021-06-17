@@ -420,3 +420,13 @@ You have received a new cash on delivery order {order_id} at {SITE_NAME}
 
 {SITE_NAME} Team', '[{"title":"Seller", "variable":"{vendor_name}"},{"title":"Order Id", "variable":"{order_id}"}, {"title":"Website Name", "variable":"{SITE_NAME}"}]', 1);
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
+
+-- ---------Task 86672 Stripe Connect Changes ------ --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_INDIVIDUAL_ADDITIONAL_IDENTIFYING_DOCUMENT', 1, 'A document showing address, either a passport, local ID card, or utility bill from a well-known utility company.', ''),
+('LBL_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', 1, 'How frequently available funds are paid out. One of: daily, manual, weekly, or monthly. Default is daily.', ''),
+('LBL_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', 1, 'The number of days charge funds are held before being paid out. May also be set to minimum, representing the lowest available value for the account country. Default is minimum. The delay_days parameter does not apply when the interval is manual.', ''),
+('LBL_STRIPE_CONNECT_WEEK_DAY_DESC', 1, 'The day of the week when available funds are paid out, specified as monday, tuesday, etc. (required and applicable only if interval is weekly.)', ''),
+('LBL_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', '');
+
+-- ---------Task 86672 Stripe Connect Changes ------ -- 

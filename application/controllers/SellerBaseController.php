@@ -29,7 +29,6 @@ class SellerBaseController extends LoggedUserController
         /* Validate Seller If stripe connect correctly configured. */
         $isStripeConnectLogin = (get_called_class() == 'StripeConnectController' && in_array($action, ['login', 'callback']));
         $stripeConnectObj = PluginHelper::callPlugin('StripeConnect', [$this->siteLangId]);
-
         if (
             false !== $stripeConnectObj && 
             (
@@ -39,7 +38,7 @@ class SellerBaseController extends LoggedUserController
             !$isStripeConnectLogin &&
             !FatUtility::isAjaxCall() && 
             UserPrivilege::isUserHasValidSubsription($this->userParentId) && 
-            !in_array(strtolower($action), ['shopform', 'shop'])
+            !in_array(strtolower($action), ['shopform', 'shop', 'setuprequiredfields'])
         ) {
             if (true === MOBILE_APP_API_CALL) {
                 $msg = Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId);

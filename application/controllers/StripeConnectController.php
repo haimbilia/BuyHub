@@ -119,7 +119,7 @@ class StripeConnectController extends PaymentMethodBaseController
     }
 
     /* Not Required. 16-Jun-2021 */
-        /* public function login()
+    /* public function login()
         {
             FatApp::redirectUser($this->stripeConnect->getRedirectUri());
         }
@@ -209,11 +209,37 @@ class StripeConnectController extends PaymentMethodBaseController
             foreach ($_FILES['verification']['tmp_name']['document'] as $side => $filePath) {
                 $resp = $this->stripeConnect->uploadVerificationFile($filePath);
                 $this->validateResponse($resp);
-                $resp = $this->stripeConnect->updateVericationDocument($side);
+                $resp = $this->stripeConnect->updatePersonVerificationDocument($side);
 
                 $this->validateResponse($resp);
             }
         }
+
+        if (array_key_exists('individual', $_FILES) && array_key_exists('tmp_name', $_FILES['individual']) && is_array($_FILES['individual']['tmp_name']) && isset($_FILES['individual']['tmp_name']['verification'])) {
+            foreach ($_FILES['individual']['tmp_name']['verification'] as $fieldName => $fieldData) {
+                foreach ($fieldData as $side => $filePath) {
+                    if (empty($filePath)) {
+                        continue;
+                    }
+
+                    $resp = $this->stripeConnect->uploadVerificationFile($filePath);
+                    $this->validateResponse($resp);
+
+                    $requestParam = [
+                        'individual' => [
+                            'verification' => [
+                                $fieldName => [
+                                    $side => $this->stripeConnect->getResponse()
+                                ]
+                            ]
+                        ]
+                    ];
+                    $resp = $this->stripeConnect->updateRequiredFields($requestParam);
+                    $this->validateResponse($resp);
+                }
+            }
+        }
+
         if (false === $this->stripeConnect->updateRequiredFields($post)) {
             $msg = $this->stripeConnect->getError();
             if (true === $redirect) {
@@ -280,7 +306,6 @@ class StripeConnectController extends PaymentMethodBaseController
                 $label = str_replace($personId, "Person", $label);
             }
 
-            // $labelStr = ucwords(str_replace("_", " ", $label));
             if ('business_type' === $field) {
                 $options = [
                     'individual' => Labels::getLabel('LBL_INDIVIDUAL', $this->siteLangId),
@@ -288,7 +313,6 @@ class StripeConnectController extends PaymentMethodBaseController
                     'non_profit' => Labels::getLabel('LBL_NON_PROFIT', $this->siteLangId),
                     'government_entity' => Labels::getLabel('LBL_GOVERNMENT_ENTITY_(_US_ONLY_)', $this->siteLangId)
                 ];
-                // echo $businessType;
                 $fld = $frm->addSelectBox($labelStr, 'business_type', $options, $businessType, [], Labels::getLabel('LBL_Select', $this->siteLangId));
             } elseif (in_array(end($labelParts), $this->stripeConnect->boolParams)) {
                 $options = [
@@ -296,18 +320,22 @@ class StripeConnectController extends PaymentMethodBaseController
                     1 => Labels::getLabel('LBL_YES', $this->siteLangId)
                 ];
                 $fld = $frm->addSelectBox($labelStr, $name, $options, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-            } elseif (false !== strpos($field, 'verification.document')) {
-                if (empty($this->stripeConnect->getRelationshipPersonId())) {
+            } elseif (false !== strpos($field, 'verification.document') || false !== strpos($field, 'verification.additional_document')) {
+                /* if (empty($this->stripeConnect->getRelationshipPersonId())) {
                     continue;
+                } */
+                if (false !== strpos($field, 'verification.additional_document')) {
+                    $lbl = Labels::getLabel("LBL_INDIVIDUAL_ADDITIONAL_IDENTIFYING_DOCUMENT", $this->siteLangId);
+                } else {
+                    $lbl = Labels::getLabel("LBL_IDENTIFYING_DOCUMENT,_EITHER_A_PASSPORT_OR_LOCAL_ID_CARD", $this->siteLangId);
                 }
 
-                $lbl = Labels::getLabel("LBL_IDENTIFYING_DOCUMENT,_EITHER_A_PASSPORT_OR_LOCAL_ID_CARD", $this->siteLangId);
-                $lblFront = $lbl . ' ' . Labels::getLabel("LBL_FRONT", $this->siteLangId);
-                $lblBack = $lbl . ' ' . Labels::getLabel("LBL_BACK", $this->siteLangId);
+                $lblFront = $lbl . ' (' . Labels::getLabel("LBL_FRONT", $this->siteLangId) . ')';
+                $lblBack = $lbl . ' (' . Labels::getLabel("LBL_BACK", $this->siteLangId) . ')';
                 $htmlAfterField .= Labels::getLabel("LBL_THE_UPLOADED_FILE_NEEDS_TO_BE_A_COLOR_IMAGE_(SMALLER_THAN_8,000PX_BY_8,000px),_IN_JPG,_PNG,_OR_PDF_FORMAT,_AND_LESS_THAN_10_MB_IN_SIZE.", $this->siteLangId);
 
-                $fld = $frm->addFileUpload($lblFront, 'verification[document][front]');
-                $fld2 = $frm->addFileUpload($lblBack, 'verification[document][back]');
+                $fld = $frm->addFileUpload($lblFront, $name . '[front]');
+                $fld2 = $frm->addFileUpload($lblBack, $name . '[back]');
                 $fld2->requirement->setRequired(true);
                 $fld2->htmlAfterField = '<p class="note">' . $htmlAfterField . '</p>';
 
@@ -416,5 +444,4 @@ class StripeConnectController extends PaymentMethodBaseController
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_UNLINKED_SUCCESSFULLY', $this->siteLangId));
     }
-
 }
