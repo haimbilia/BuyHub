@@ -1487,27 +1487,19 @@ class StripeConnect extends PaymentMethodBase
     /**
      * getMerchantCategory
      *
-     * @param  string $keyword
-     * @param  bool $returnFullArray
      * @return array
      */
-    public function getMerchantCategory(string $keyword = ''): array
+    public function getMerchantCategory(): array
     {        
         $json = FatCache::get('merchantCategoryCode' . $this->langId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$json) {
-            include(__DIR__ . '/MerchantCategoryCode.php');
-            FatCache::set('merchantCategoryCode' . $this->langId, FatUtility::convertToJson($arr), '.txt');
-        } else {
-            $arr = json_decode($json, true);
+        if (!empty($json)) {
+            return json_decode($json, true);
+            
         }
 
-        if (empty($keyword)) {
-            return $arr;
-        }
-
-        return array_values(array_filter($arr, function ($var) use ($keyword) {
-            return false !== stripos($var['name'], $keyword);
-        }));
+        include(__DIR__ . '/MerchantCategoryCode.php');
+        FatCache::set('merchantCategoryCode' . $this->langId, FatUtility::convertToJson($arr), '.txt');
+        return $arr;
     }
 
     /**

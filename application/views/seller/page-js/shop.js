@@ -800,41 +800,21 @@ $(document).on("change", ".state", function () {
         var selector = $(".mcc--js");
         if (0 < selector.length) {
             var valueFld = selector.data('valfld');
-            selector.select2({
-                closeOnSelect: true,
-                dir: langLbl.layoutDirection,
-                allowClear: true,
-                placeholder: selector.attr('placeholder'),
-                ajax: {
-                    url: fcom.makeUrl(keyName, 'getMerchantCategory'),
-                    dataType: 'json',
-                    delay: 250,
-                    method: 'post',
-                    data: function (params) {
-                        return {
-                            fIsAjax: 1,
-                            keyword: params.term,
-                        };
-                    },
-                    processResults: function (data, params) {
-                        return {
-                            results: data,
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 0,
-                templateResult: function (result) {
-                    return result.name || result.text;
-                },
-                templateSelection: function (result) {
-                    return result.name || result.text;
-                }
-            }).on('select2:selecting', function (e) {
-                var item = e.params.args.data;
-                $("." + valueFld).val(item.id);
-            }).on('select2:unselecting', function (e) {
-                $("." + valueFld).val("");
+
+            fcom.ajax(fcom.makeUrl(keyName, 'getMerchantCategory'), '', function (res) {
+                selector.select2({
+                    closeOnSelect: true,
+                    dir: langLbl.layoutDirection,
+                    allowClear: true,
+                    placeholder: selector.attr('placeholder'),
+                    data: $.parseJSON(res),
+                    minimumInputLength: 0,
+                }).on('select2:selecting', function (e) {
+                    var item = e.params.args.data;
+                    $("." + valueFld).val(item.id);
+                }).on('select2:unselecting', function (e) {
+                    $("." + valueFld).val("");
+                });
             });
         }
     }
