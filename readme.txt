@@ -193,7 +193,12 @@ Fixes:
     => 054717 - on recently view product error coming on product detail page
     => 054731 - when review is placed with media then there is no need to add show more on 6th image
     => 054761 - despite having sku non mandatory it's not adding inventory from seller end
-
+    => 055069 - on product detail page undefined index: theprice notice coming
+    => 055077 - when cookies policy are turned off from admin then recently viewed items are not listing on detail page of product
+    => 055104 - seller dashboard> data migration tab is not highlighting on accessing
+    => 055093 - while changing seller approval request if admin declines request without message then on front end it's listing heading- reason for cancellation which is blank
+    => 055092 - when cookies are not allowed from admin still then user have option for the same in account
+    => 055090 - when truncate request is raised by user then in admin> it's listing- view purpose which is not there on user end
 
 New Features:
     => Admin shipped products listing page
@@ -212,6 +217,7 @@ New Features:
     => 054718 - Categories added are not listing in admin.
     => 054728 -	Aftership order status should be automatically marked delivered.
     => 054698 - on clicking of delete button in shipping profile there needs to be confirmation popup
+    => 055010 - SMTP handling - In case of Godaddy email hosting.
 
 Enhancements :
    => At shop level  pickup interval option given

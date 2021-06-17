@@ -330,42 +330,56 @@
                 ) { ?>
                   <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Reports', $adminLangId); ?></a>
                       <ul>
-                          <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Sales_Report', $adminLangId); ?></a>
-                              <ul>
-                                  <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>"><?php echo Labels::getLabel('LBL_Sales_Over_Time', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                                  <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>"><?php echo Labels::getLabel('LBL_Products', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                                  <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Product_Varients', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                                  <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>"><?php echo Labels::getLabel('LBL_Shops', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                                  <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>"><?php echo Labels::getLabel('LBL_Customers', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                              </ul>
-                          </li>
-
-                          <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Users_Report', $adminLangId); ?></a>
-                              <ul>
-                                  <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>"><?php echo Labels::getLabel('LBL_Buyers', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                                  <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>"><?php echo Labels::getLabel('LBL_Sellers', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                                  <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>"><?php echo Labels::getLabel('LBL_Affiliates', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                                  <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>"><?php echo Labels::getLabel('LBL_Advertisers', $adminLangId); ?></a></li>
-                                  <?php } ?>
-                              </ul>
-                          </li>
+                          <?php if (
+                                $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)
+                            ) { ?>
+                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Sales_Report', $adminLangId); ?></a>
+                                  <ul>
+                                      <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>"><?php echo Labels::getLabel('LBL_Sales_Over_Time', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                      <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>"><?php echo Labels::getLabel('LBL_Products', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                      <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Product_Varients', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                      <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>"><?php echo Labels::getLabel('LBL_Shops', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                      <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>"><?php echo Labels::getLabel('LBL_Customers', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                  </ul>
+                              </li>
+                          <?php } ?>
+                          <?php if (
+                                $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
+                            ) { ?>
+                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Users_Report', $adminLangId); ?></a>
+                                  <ul>
+                                      <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>"><?php echo Labels::getLabel('LBL_Buyers', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                      <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>"><?php echo Labels::getLabel('LBL_Sellers', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                      <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>"><?php echo Labels::getLabel('LBL_Affiliates', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                      <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                          <li><a href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>"><?php echo Labels::getLabel('LBL_Advertisers', $adminLangId); ?></a></li>
+                                      <?php } ?>
+                                  </ul>
+                              </li>
+                          <?php } ?>
                           <?php /* if ($objPrivilege->canViewOrdersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Orders_Report', $adminLangId); ?></a>
                                   <ul>
@@ -373,7 +387,7 @@
                                       <li><a href="<?php echo UrlHelper::generateUrl('OrderSubscriptionReport'); ?>"><?php echo Labels::getLabel('LBL_By_Subscription', $adminLangId); ?></a></li>
                                   </ul>
                               </li>
-                          <?php }   */?>
+                          <?php }   */ ?>
                           <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Financial_Report', $adminLangId); ?></a>
                                   <ul>

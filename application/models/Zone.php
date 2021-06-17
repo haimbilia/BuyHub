@@ -108,17 +108,17 @@ class Zone extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('zone_name', 'ASC');
-        
+        $srch->addOrder('country_name', 'ASC');
+        $srch->addOrder('state_name', 'ASC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        
+
         $zoneCountryStateArray = []; 
         if (!empty($records)) {
             foreach ($records as $record) {
                 $zone_id = $record['zone_id'];                
                 $zoneCountryStateArray[$zone_id]['zone_name'] = $record['zone_name'];
                 $zoneCountryStateArray[$zone_id]['zone_id'] = $record['zone_id'];
-                
                 $countryId = $record['country_id'];
                 $zoneCountryStateArray[$zone_id]['countries'][$countryId]['country_name'] = $record['country_name'];
                 $zoneCountryStateArray[$zone_id]['countries'][$countryId]['country_id'] = $record['country_id'];

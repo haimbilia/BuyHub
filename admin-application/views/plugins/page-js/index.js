@@ -19,10 +19,8 @@ $(document).ready(function () {
     };
 
     editPluginForm = function (pluginType, pluginId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Plugins', 'form', [pluginType, pluginId]), '', function (t) {
-                fcom.updateFaceboxContent(t);
-            });
+        fcom.ajax(fcom.makeUrl('Plugins', 'form', [pluginType, pluginId]), '', function (t) {
+            fcom.updateFaceboxContent(t);
         });
     };
 
@@ -98,7 +96,7 @@ $(document).ready(function () {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
-                setTimeout(function(){ reloadList(); }, 200);
+                setTimeout(function () { reloadList(); }, 200);
             } else {
                 fcom.displayErrorMessage(ans.msg);
             }
@@ -124,9 +122,9 @@ $(document).ready(function () {
             reloadList();
         });
     };
-    syncCategories = function(){        
+    syncCategories = function () {
         fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
-        },{},false);
+        }, {}, false);
     }
 })();
 

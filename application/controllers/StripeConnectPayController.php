@@ -322,11 +322,12 @@ class StripeConnectPayController extends PaymentController
 
         $savedCards = [];
         $defaultSource = "";
-        if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
-            $this->stripeConnect->loadCustomer();
+        if ((UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) && true === $this->stripeConnect->loadCustomer()) {
             $customerInfo = $this->stripeConnect->getResponse()->toArray();
-            $savedCards = $customerInfo['sources']['data'];
-            $defaultSource = $customerInfo['default_source'];
+            if (!empty($customerInfo)) {
+                $savedCards = array_key_exists('sources', $customerInfo) ? $customerInfo['sources']['data'] : [];
+                $defaultSource = array_key_exists('default_source', $customerInfo) ? $customerInfo['default_source'] : "";
+            }
         }
 
         $this->set('defaultSource', $defaultSource);

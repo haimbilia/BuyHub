@@ -11,9 +11,9 @@ class SellerPlugin extends PluginCommon
         $this->userId = $userId;
 
         $this->objMainTableRecord->setSensitiveFields(
-                array('plugin_code')
+            array('plugin_code')
         );
-    }    
+    }
 
     public static function getSearchObject(int $userId, int $langId = 0, bool $isActive = true, bool $innerJoinPluginUser = true, bool $joinSettings = false): object
     {
@@ -25,10 +25,10 @@ class SellerPlugin extends PluginCommon
 
         $joinCondition = (true == $innerJoinPluginUser) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
         $srch->joinTable(
-                Plugin::DB_TBL_PLUGIN_TO_USER,
-                $joinCondition,
-                'plgu.' . Plugin::DB_TBL_PLUGIN_TO_USER_PREFIX . Plugin::DB_TBL_PREFIX . 'id = plg.' . Plugin::DB_TBL_PREFIX . 'id and plgu.' . Plugin::DB_TBL_PLUGIN_TO_USER_PREFIX . 'user_id = ' . $userId,
-                'plgu'
+            Plugin::DB_TBL_PLUGIN_TO_USER,
+            $joinCondition,
+            'plgu.' . Plugin::DB_TBL_PLUGIN_TO_USER_PREFIX . Plugin::DB_TBL_PREFIX . 'id = plg.' . Plugin::DB_TBL_PREFIX . 'id and plgu.' . Plugin::DB_TBL_PLUGIN_TO_USER_PREFIX . 'user_id = ' . $userId,
+            'plgu'
         );
 
         if ($isActive == true) {
@@ -37,10 +37,10 @@ class SellerPlugin extends PluginCommon
 
         if (true === $joinSettings) {
             $srch->joinTable(
-                    PluginSetting::DB_TBL,
-                    'LEFT OUTER JOIN',
-                    'plgs.' . PluginSetting::DB_TBL_PREFIX . static::DB_TBL_PREFIX . 'id = plg.' . static::DB_TBL_PREFIX . 'id and ' . PluginSetting::DB_TBL_PREFIX . 'record_id =' . $userId,
-                    'plgs'
+                PluginSetting::DB_TBL,
+                'LEFT OUTER JOIN',
+                'plgs.' . PluginSetting::DB_TBL_PREFIX . static::DB_TBL_PREFIX . 'id = plg.' . static::DB_TBL_PREFIX . 'id and ' . PluginSetting::DB_TBL_PREFIX . 'record_id =' . $userId,
+                'plgs'
             );
         }
 
@@ -69,10 +69,10 @@ class SellerPlugin extends PluginCommon
 
         if (true == $assoc) {
             $srch->addMultipleFields(
-                    [
-                        'plg.' . static::DB_TBL_PREFIX . 'id',
-                        'COALESCE(plg_l.' . static::DB_TBL_PREFIX . 'name, plg.' . static::DB_TBL_PREFIX . 'identifier) as plugin_name'
-                    ]
+                [
+                    'plg.' . static::DB_TBL_PREFIX . 'id',
+                    'COALESCE(plg_l.' . static::DB_TBL_PREFIX . 'name, plg.' . static::DB_TBL_PREFIX . 'identifier) as plugin_name'
+                ]
             );
         }
         $srch->addOrder('plugin_display_order', 'ASC');
@@ -86,9 +86,9 @@ class SellerPlugin extends PluginCommon
         return $db->fetchAll($rs, static::DB_TBL_PREFIX . 'id');
     }
 
-    public static function getAttributesByCode(int $userId, string $code, $attr = '', int $langId = 0 ,bool $innerJoinPluginUser = true ) 
+    public static function getAttributesByCode(int $userId, string $code, $attr = '', int $langId = 0, bool $innerJoinPluginUser = true)
     {
-        $srch = self::getSearchObject($userId, $langId, false , $innerJoinPluginUser);
+        $srch = self::getSearchObject($userId, $langId, false, $innerJoinPluginUser);
         $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'code', '=', $code);
 
         if ('' != $attr) {
@@ -98,7 +98,7 @@ class SellerPlugin extends PluginCommon
                 $srch->addFld($attr);
             }
         }
-        
+
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row) || !is_array($row)) {
@@ -118,7 +118,7 @@ class SellerPlugin extends PluginCommon
 
     public function getDefaultPluginData(int $typeId, $attr = null, int $langId = 0)
     {
-        if (!in_array($typeId, self::HAVING_KINGPIN)) {
+        if (!in_array($typeId, self::getKingpinTypeArr())) {
             $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
             return false;
         }
@@ -152,10 +152,10 @@ class SellerPlugin extends PluginCommon
 
     public static function getDefaultPluginId(int $userId, int $type): int
     {
-        if (!in_array($type, Plugin::HAVING_KINGPIN) || 1 > $userId) {
+        if (!in_array($type, Plugin::getKingpinTypeArr()) || 1 > $userId) {
             return 0;
         }
-        $srch = static:: getSearchObject($userId);
+        $srch = static::getSearchObject($userId);
         $srch->addFld('pu_plugin_id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -238,12 +238,11 @@ class SellerPlugin extends PluginCommon
             }
         }
 
-        if ($status == applicationConstants::YES && in_array($typeId, self::HAVING_KINGPIN)) {
+        if ($status == applicationConstants::YES && in_array($typeId, self::getKingpinTypeArr())) {
             $deleteQuery = "delete pu FROM tbl_plugin_to_user as pu inner join tbl_plugins on pu_plugin_id = plugin_id and pu_user_id =" . $this->userId . " where plugin_type = " . $typeId . " and pu_plugin_id !=" . $this->mainTableRecordId;
             FatApp::getDb()->query($deleteQuery);
         }
 
         return true;
     }
-
 }
