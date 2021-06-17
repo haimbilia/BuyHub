@@ -557,7 +557,6 @@ class Report extends SearchBase
         return $this;
     }
 
-
     /**
      * salesReportObject
      *

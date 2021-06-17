@@ -20,13 +20,24 @@ class TransactionReportController extends AdminBaseController
     public function search($type = false)
     {
         $fields = $this->getFormColumns();
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'utxn_date');
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = 'utxn_date';
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = 'DESC';
+        }
+
+        $selectedFlds  = ['utxn_date', 'utxn_id'] +  $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
+
         $keyword = FatApp::getPostedData('keyword', null, '');
         $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
@@ -142,9 +153,10 @@ class TransactionReportController extends AdminBaseController
         $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            $frm->addHiddenField('', 'sortBy', 'utxn_date');
+            $frm->addHiddenField('', 'sortOrder', 'DESC');
+            // $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
+            // $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
         }
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
@@ -154,7 +166,7 @@ class TransactionReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    private function getFormColumns($selectedCols = [])
     {
         $transcationReportsCacheVar = FatCache::get('transcationReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$transcationReportsCacheVar) {
@@ -173,7 +185,11 @@ class TransactionReportController extends AdminBaseController
         } else {
             $arr =  unserialize($transcationReportsCacheVar);
         }
-
         return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return ['utxn_date', 'utxn_id', 'user_name', 'utxn_status', 'utxn_order_id', 'utxn_credit', 'utxn_debit', 'transactionAmount', 'utxn_comments'];
     }
 }

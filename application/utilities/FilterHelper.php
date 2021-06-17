@@ -179,7 +179,7 @@ class FilterHelper extends FatUtility
         $brandSrch->addCondition('brand_id', '!=', 'null');
         /* if needs to show product counts under brands[ */
         //$brandSrch->addFld('count(selprod_id) as totalProducts');
-        /* ] */       
+        /* ] */
         $brandRs = $brandSrch->getResultSet();
         $brands = FatApp::getDb()->fetchAll($brandRs);
 
@@ -326,5 +326,28 @@ class FilterHelper extends FatUtility
         $pageSizeArr[24] = 24 . ' ' . $itemsTxt;
         $pageSizeArr[48] = 48 . ' ' . $itemsTxt;
         return $pageSizeArr;
+    }
+
+
+    public static function parseArrayByKeys($arr, $allowedKeys, $inAllowedKeysSequence = false)
+    {
+        if (true == $inAllowedKeysSequence) {
+            $arrSort = [];
+            foreach ($allowedKeys as $key) {
+                if (!array_key_exists($key, $arr)) {
+                    continue;
+                }
+                $arrSort[$key] = $arr[$key];
+            }
+            return $arrSort;
+        }
+
+        return array_filter(
+            $arr,
+            function ($key) use ($allowedKeys) {
+                return in_array($key, $allowedKeys);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 }
