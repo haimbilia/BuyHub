@@ -359,8 +359,7 @@ class StripeConnectController extends PaymentMethodBaseController
                 $placeholder = Labels::getLabel('LBL_SEARCH...', $this->siteLangId);
                 $fld = $frm->addSelectBox($labelStr, 'merchantCatCode', [], '', ['class' => 'mcc--js', 'data-valfld' => 'mccValue-js' . $j, 'placeholder' => $placeholder], $placeholder);
             } elseif (false !== strpos($field, 'phone')) {
-                $fld = $frm->addTextBox($labelStr, $name, '', ['class' => '']); /* phone-js */
-                $htmlAfterField = Labels::getLabel('LBL_PHONE_NUMBER_WITHOUT_DIAL_CODE', $this->siteLangId);
+                $fld = $frm->addTextBox($labelStr, $name, '', ['class' => 'phone-js onlyFlag--js']);
             } elseif (false !== strpos($field, 'email')) {
                 $fld = $frm->addTextBox($labelStr, $name, $userEmail);
             } else {
@@ -401,8 +400,7 @@ class StripeConnectController extends PaymentMethodBaseController
      */
     public function getMerchantCategory()
     {
-        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $data = $this->stripeConnect->getMerchantCategory($keyword);
+        $data = $this->stripeConnect->getMerchantCategory();
         CommonHelper::jsonEncodeUnicode($data, true);
     }
 
