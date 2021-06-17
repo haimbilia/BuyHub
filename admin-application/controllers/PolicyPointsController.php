@@ -41,7 +41,7 @@ class PolicyPointsController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("policyPointTypeArr", PolicyPoint::getPolicyPointTypesArr($this->adminLangId));
         $this->set('recordCount', $srch->recordCount());
         $this->_template->render(false, false);

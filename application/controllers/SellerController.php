@@ -1121,7 +1121,9 @@ class SellerController extends SellerBaseController
         $this->set('canAddCustomProduct', User::canAddCustomProduct());
         $this->set('canAddCustomProductAvailableToAllSellers', User::canAddCustomProductAvailableToAllSellers());
         $this->set('type', $type);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/slick.min.js'));
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/slick.min.js', 'js/select2.js'));
+        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        
         $this->_template->render(true, true);
     }
 
@@ -1183,9 +1185,9 @@ class SellerController extends SellerBaseController
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
 
-        $arr_listing = $db->fetchAll($rs);
+        $arrListing = $db->fetchAll($rs);
 
-        $this->set("arr_listing", $arr_listing);
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -1515,6 +1517,7 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
         $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
+        
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         /* echo $page; die; */
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
@@ -1524,6 +1527,42 @@ class SellerController extends SellerBaseController
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
+
+
+        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $ribbonId = FatApp::getPostedData('ribbon_id', FatUtility::VAR_INT, 0);
+        
+        $badgeJoin = 'LEFT';
+        $condition = 'TRUE';
+        if (0 < $badgeId || 0 < $ribbonId) {
+            $badgeJoin = 'INNER';
+            $condition = '(';
+
+            if (0 < $badgeId && 0 < $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
+                $cnd = $srch->addCondition('badge_id', '=', $badgeId);
+                $cnd->attachCondition('badge_id', '=', $ribbonId, 'OR');
+            }else if (0 < $badgeId && 1 > $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
+                $srch->addCondition('badge_id', '=', $badgeId);
+            }else if (1 > $badgeId && 0 < $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_RIBBON;
+                $srch->addCondition('badge_id', '=', $ribbonId);
+            }
+
+            $condition .= ')';
+        }
+        $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $badgeJoin . ' JOIN', 'badgelink_record_id = product_id', 'bl');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_id = badgelink_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'LEFT JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
+
+        $srch->addDirectCondition('(CASE 
+                                        WHEN badge_id IS NOT NULL
+                                        THEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' 
+                                            AND ' . $condition . '
+                                        ELSE TRUE
+                                    END)');
 
         /* $cnd = $srch->addCondition( 'product_seller_id', '=',0);
           $cnd->attachCondition( 'product_added_by_admin_id', '=', applicationConstants::YES,'OR');
@@ -1572,23 +1611,27 @@ class SellerController extends SellerBaseController
             $srch->addCondition('product_type', '=', $product_type);
         }
 
-        $srch->addMultipleFields(
-            array(
-                'product_id',
-                'product_identifier',
-                'IFNULL(product_name, product_identifier) as product_name',
-                'product_added_on',
-                'product_model',
-                'product_attrgrp_id',
-                'attrgrp_name',
-                'psbs_user_id',
-                'product_seller_id ',
-                'product_added_by_admin_id',
-                'product_type',
-                'product_active',
-                'product_approved',
-            )
+        $attr = array(
+            'product_id',
+            'product_identifier',
+            'IFNULL(product_name, product_identifier) as product_name',
+            'product_added_on',
+            'product_model',
+            'product_attrgrp_id',
+            'attrgrp_name',
+            'psbs_user_id',
+            'product_seller_id ',
+            'product_added_by_admin_id',
+            'product_type',
+            'product_active',
+            'product_approved',
+            'COALESCE(badge_name, badge_identifier) as badge_name',
+            'blinkcond_badge_id',
+            'badge_shape_type',
+            'badge_color'
         );
+
+        $srch->addMultipleFields($attr);
         $srch->addOrder('product_active', 'DESC');
         $srch->addOrder('product_added_on', 'DESC');
         $srch->addGroupBy('product_id');
@@ -1596,9 +1639,9 @@ class SellerController extends SellerBaseController
         $srch->setPageSize($pagesize);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $arr_listing = $db->fetchAll($rs);
-
-        $this->set("arr_listing", $arr_listing);
+        $arrListing = $db->fetchAll($rs);
+        
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -1672,9 +1715,9 @@ class SellerController extends SellerBaseController
         $srch->setPageSize($pagesize);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $arr_listing = $db->fetchAll($rs);
+        $arrListing = $db->fetchAll($rs);
 
-        $this->set("arr_listing", $arr_listing);
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -1790,7 +1833,7 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
         $taxCatData = FatApp::getDb()->fetchAll($rs, 'taxcat_id');
         $this->set('canEdit', $this->userPrivilege->canEditTaxCategory(UserAuthentication::getLoggedUserId(), true));
-        $this->set("arr_listing", $taxCatData);
+        $this->set("arrListing", $taxCatData);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -1897,7 +1940,7 @@ class SellerController extends SellerBaseController
             $combinedData = TaxRule::groupDataByKey(FatApp::getDb()->fetchAll($combinedTaxSrch->getResultSet()), 'taxruledet_taxrule_id');
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("combinedData", $combinedData);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -2694,9 +2737,9 @@ class SellerController extends SellerBaseController
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
 
-        $arr_listing = $db->fetchAll($rs, 'prodcat_id');
+        $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
-        if (empty($arr_listing) || (!empty($arr_listing) && !array_key_exists($prodCatId, $arr_listing))) {
+        if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -2791,9 +2834,9 @@ class SellerController extends SellerBaseController
         $srch->doNotLimitRecords();
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $arr_listing = $db->fetchAll($rs, 'prodcat_id');
+        $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
-        if (empty($arr_listing) || (!empty($arr_listing) && !array_key_exists($prodCatId, $arr_listing))) {
+        if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -2869,9 +2912,9 @@ class SellerController extends SellerBaseController
 
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $arr_listing = $db->fetchAll($rs, 'prodcat_id');
+        $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
-        $this->set('arr_listing', $arr_listing);
+        $this->set('arrListing', $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -3317,7 +3360,7 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->_template->render(false, false, 'seller/social-platform-search.php');
     }
 
@@ -3845,6 +3888,8 @@ class SellerController extends SellerBaseController
     private function getCatalogProductSearchForm($type = '')
     {
         $frm = new Form('frmSearchCatalogProduct');
+        $frm->addHiddenField('', 'badge_id');
+        $frm->addHiddenField('', 'ribbon_id');
         $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword');
 
         /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
@@ -3855,6 +3900,10 @@ class SellerController extends SellerBaseController
 
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_All', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
         /* }  */
+
+        $frm->addSelectBox(Labels::getLabel('LBL_BADGE', $this->siteLangId), 'badge_name', [], '', array('class' => 'badge--js','placeholder' => Labels::getLabel('LBL_SEARCH_BADGE', $this->siteLangId)));
+        
+        $frm->addSelectBox(Labels::getLabel('LBL_RIBBON', $this->siteLangId), 'ribbon_name', [], '', array('class' => 'ribbon--js','placeholder' => Labels::getLabel('LBL_SEARCH_RIBBON', $this->siteLangId)));
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
 
@@ -5807,7 +5856,7 @@ class SellerController extends SellerBaseController
         $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
         
         $frm = DigitalDownload::getDownloadForm($this->siteLangId);
-        
+
         if (0 < $preqId) {
             $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
         } else {
@@ -5823,6 +5872,25 @@ class SellerController extends SellerBaseController
             $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
             $fld->options = $optionCombinations;
         }
+
+        $showFldAttachWithExistingOrders = false;
+
+        if (Product::CATALOG_TYPE_PRIMARY == $requstedProd) {
+            $showFldAttachWithExistingOrders = true;
+
+            $fld = $frm->getField('attach_with_existing_orders');
+
+            $product = Product::getAttributesById($recordId, ['product_attachements_with_inventory']);
+
+            if (false != $product) {
+                if (1 === $product['product_attachements_with_inventory']) {
+                    $frm->removeField($fld);
+                    $showFldAttachWithExistingOrders = false;
+                }
+            }
+        }
+
+        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
 
         $msg = '';
         $frmData = [
@@ -5866,7 +5934,7 @@ class SellerController extends SellerBaseController
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         
         if (1 > $prodId && 1 > $preqId && 1 > $selProdId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         
         $requstedProd = Product::CATALOG_TYPE_PRIMARY;
@@ -5913,7 +5981,6 @@ class SellerController extends SellerBaseController
 
         }
         
-        /* $post = FatApp::getPostedData(); */
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         
         $ddObj = new DigitalDownload();
@@ -5928,93 +5995,123 @@ class SellerController extends SellerBaseController
         }
         
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $this->setupDigitalLink($ddObj, $refId);
+            if (true == $this->setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)) {
+                FatUtility::dieJsonSuccess(Message::getHtml());
+            }
         } else {
-            $this->setupDigitalFile($ddObj, $refId);
+            if (true == $this->setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)) {
+                FatUtility::dieJsonSuccess(Message::getHtml());
+            }
         }
 
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        FatUtility::dieJsonError(Message::getHtml());
     }
 
-    private function setupDigitalFile($ddObj, $refId)
+    private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
     {
-        if (!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name'])) {
+        if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
+            && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
+        ) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            return false;
         }
 
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        $isPreview = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
+        $refFileId = FatApp::getPostedData('ref_file_id', FatUtility::VAR_INT, 0);
 
-        $mainFileId = $ddObj->saveAttachment(
+        $mainFileId = 0;
+        
+        if (1 == $isPreview) {
+            if (array_key_exists('downloadable_file', $_FILES)) {
+                unset($_FILES['downloadable_file']);
+            }
+            $mainFileId = $refFileId;
+        }
+
+        if (isset($_FILES['downloadable_file']['tmp_name'])
+            && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
+        ) {
+            $mainFileId = $this->setupDigitalMainFile($ddObj, $refId, $langId);
+
+            if (1 > $mainFileId) {
+                Message::addErrorMessage($ddObj->getError());
+                return false;
+            }
+
+            $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+        
+            Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->siteLangId));
+            if (1 === $attachWithExistingOrders && Product::CATALOG_TYPE_REQUEST != $requstedProd) {
+                $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+                $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId, $optionComb);
+            }
+        }
+
+        if (isset($_FILES['preview_file']['tmp_name'])
+            && is_uploaded_file($_FILES['preview_file']['tmp_name'])
+        ) {
+            if (1 > $this->setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId)) {
+                Message::addErrorMessage($ddObj->getError());
+                return false;
+            }
+            Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->siteLangId));
+        }
+
+        return true;
+    }
+
+    private function setupDigitalMainFile($ddObj, $refId, $langId)
+    {
+        $fileId = $ddObj->saveAttachment(
             $_FILES['downloadable_file']['tmp_name'],
             $_FILES['downloadable_file']['name'],
             $refId,
             0,
             $langId
         );
-        if (1 > $mainFileId) {
-            Message::addErrorMessage($ddObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (1 > $fileId) {
+            return 0;
         }
-
-        if (isset($_FILES['preview_file']['tmp_name']) && is_uploaded_file($_FILES['preview_file']['tmp_name'])) {
-            $ddObj->saveAttachment(
-                $_FILES['preview_file']['tmp_name'],
-                $_FILES['preview_file']['name'],
-                $refId,
-                $mainFileId,
-                $langId,
-                true
-            );
-        }
-
-        FatUtility::dieJsonSuccess('Uploaded Successfully!!!');
+        
+        return $fileId;
     }
 
-    public function setupDigitalPreviewFile()
+    private function setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId = 0)
     {
-        $this->userPrivilege->canEditProducts();
-
-        $recId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
-        $subRecId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
-        $requstedProd = FatApp::getPostedData('prod_ref_type', FatUtility::VAR_INT, 0);
-        
-        if (1 > $recId || 1 > $subRecId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        if (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $ddObj = new DigitalDownload();
-        if (!$ddObj->saveAttachment(
+        $fileId = $ddObj->saveAttachment(
             $_FILES['preview_file']['tmp_name'],
             $_FILES['preview_file']['name'],
-            $recId,
-            $subRecId,
+            $refId,
+            $mainFileId,
             $langId,
             true
-        )) {
-            Message::addErrorMessage($ddObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        );
+
+        if (1 > $fileId) {
+            return 0;
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
+
+        return $fileId;
     }
 
-    private function setupDigitalLink($ddObj, $refId)
+    private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
     {
         $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
         $previewLink = FatApp::getPostedData('product_preview_link', null, '');
+
+        if ('' == $downloadLink && '' == $previewLink) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->siteLangId));
+            return false;
+        }
+
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
         $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
         
         if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
-            FatUtility::dieJsonError($digitalDownload->getError());
+            Message::addMessage($ddObj->getError());
+            return false;
         }
 
         if (1 <= $ddLinkId) {
@@ -6025,15 +6122,18 @@ class SellerController extends SellerBaseController
                 $ddObj->deleteReference($ddRefId);
             }
         }
-        
-        if (1 <= $ddLinkId) {
-            $ret['msg'] = Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId);
-        } else {
-            $ret['msg'] = Labels::getLabel('LBL_Links_updated_successfully', $this->siteLangId);
-        }
-        $ret['btn_label'] = Labels::getLabel('LBL_Add', $this->siteLangId);
 
-        FatUtility::dieJsonSuccess($ret);
+        $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+
+        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId));
+        if (0 === $attachWithExistingOrders && '' == $downloadLink) {
+            return true;
+        }
+        
+        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+        $ddObj->attachLinkWithOrderedProducts($downloadLink, $recordId, $requstedProd, $langId, $optionComb);
+
+        return true;
     }
 
     public function getDigitalDownloadLinks()
@@ -6059,10 +6159,6 @@ class SellerController extends SellerBaseController
 
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        /* TODO
-            => need to check seller private custom product OR Catalog Product Requested but not approved
-        */
 
         DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
         
@@ -6116,7 +6212,8 @@ class SellerController extends SellerBaseController
         $langId = FatApp::getPostedData('langId', null, 0);
         
         $attachments = DigitalDownloadSearch::getAttachments($recordId, $prodRefType, $optionComb, $langId);
-        
+        $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
+
         $this->set('attachments', $attachments);
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
@@ -6149,13 +6246,31 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        $reference = DigitalDownload::getAttributesById($refId);
+        
+        if (false == $reference) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
         $link = DigitalDownloadSearch::getLinkDetail($linkId);
         if (1 > count($link)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
             FatUtility::dieJsonError(Message::getHtml());
         }
         
-        DigitalDownload::canDelete($link['pddr_record_id'], $link['pddr_type'], $this->userParentId, $this->siteLangId);
+        $validateAllowedWithInventory = false;
+
+        if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
+            $validateAllowedWithInventory = true;
+        }
+
+        $canDelete = DigitalDownload::canDelete($link['pddr_record_id'], $link['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true);
+
+        if (false == $canDelete) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+            FatUtility::dieJsonError(Message::getHtml());
+        }
 
         $ddObj = new DigitalDownload();
         
@@ -6179,24 +6294,37 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canEditProducts();
         $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
         $aFileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
-
+        
         if (1 > $refId || 1 > $aFileId) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $attachment = DigitalDownloadSearch::getAttachmentDetail($aFileId);
+        $isPreviewFile = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
+        $delFullRow = FatApp::getPostedData('frow', FatUtility::VAR_INT, 0);
+
+        $reference = DigitalDownload::getAttributesById($refId);
         
-        if (1 > count($attachment)) {
+        if (false == $reference) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
-        DigitalDownload::canDelete($attachment['pddr_record_id'], $attachment['pddr_type'], $this->userParentId, $this->siteLangId);
-        
+
+        $validateAllowedWithInventory = false;
+
+        if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
+            $validateAllowedWithInventory = true;
+        }
+        $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], $reference['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true);
+
+        if (false == $canDelete) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
         $digDownload = new DigitalDownload();
         
-        if (!$digDownload->deleteAttachment($aFileId, $refId)) {
+        if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
             FatUtility::dieJsonError($digDownload->getError());
         }
 

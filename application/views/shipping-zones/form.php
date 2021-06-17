@@ -96,7 +96,7 @@ if (!empty($excludeLocations)) {
                                             <?php if (!empty($countries)) { ?>
                                                 <ul class="child-checkbox-ul zone_<?php echo $zone['zone_id']; ?>">
                                                     <?php foreach ($countries as $country) {
-                                                        $statesCount = $country['state_count'];
+                                                        $statesCount = count($country['states']);
                                                         $countryId = $country['country_id'];
                                                         $disabled = '';
                                                         $checked = '';
@@ -117,7 +117,7 @@ if (!empty($excludeLocations)) {
                                                                         <div class="field_cover">
                                                                             <label>
                                                                                 <span class="checkbox country--js " data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
-                                                                                <input type="checkbox" name="shiploc_country_ids[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?>> <i class="input-helper"></i><?php echo $country['country_identifier']; ?></span>
+                                                                                <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?>> <i class="input-helper"></i><?php echo $country['country_name']; ?></span>
                                                                             </label>
                                                                         </div>
                                                                     </div>
@@ -125,7 +125,7 @@ if (!empty($excludeLocations)) {
 
                                                                 <div class="col-auto">
                                                                     <?php if ($statesCount > 0) { ?>
-                                                                        <a class="btn  btn-sm link_<?php echo $countryId; ?> containChild-js" data-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-zone="<?php echo $zone['zone_id']; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="0" onclick="getStates(<?php echo $countryId . ',' . $zone['zone_id'] . ',' . $profile_id; ?>);"><span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
+                                                                        <a class="btn  btn-sm link_<?php echo $countryId; ?> containChild-js" data-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-zone="<?php echo $zone['zone_id']; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1"><span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
                                                                             <?php echo Labels::getLabel("LBL_of", $siteLangId); ?>
                                                                             <span class="totalStates "><?php echo $statesCount; ?></span>
                                                                             <span class="fa fa-angle-down" aria-hidden="true"></span>
@@ -134,6 +134,32 @@ if (!empty($excludeLocations)) {
                                                                 </div>
                                                             </div>
                                                             <div class="collapse box--scroller" id="state_list_<?php echo $countryId; ?>">
+                                                                <?php if (!empty($country['states'])) { ?>
+                                                                    <ul class="child-checkbox-ul list-country-zone_states country_<?php echo $countryId; ?>">
+                                                                        <?php foreach ($country['states'] as  $state) {
+                                                                            $checked = '';
+                                                                            $disabled = '';
+                                                                            $countryStates = [];
+                                                                            $exCountryStates = [];
+
+                                                                            if (!empty($countryStatesArr) && isset($countryStatesArr[$countryId])) {
+                                                                                $countryStates = $countryStatesArr[$countryId];
+                                                                            }
+                                                                            if ((!empty($countryStates) && (in_array('-1', $countryStates) || in_array($state['state_id'], $countryStates)))) {
+                                                                                $checked = 'checked';
+
+                                                                            }
+                                                                        ?>
+                                                                            <li>
+                                                                                <div class="field-wraper">
+                                                                                    <div class="field_cover">
+                                                                                        <label><span class="checkbox" data-stateid="<?php echo $state['state_id']; ?>"><input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $checked; ?> <?php echo $disabled; ?>><i class="input-helper"></i><?php echo $state['state_name']; ?></span></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        <?php } ?>
+                                                                    </ul>
+                                                                <?php } ?>
                                                             </div>
                                                         </li>
                                                     <?php } ?>
@@ -157,21 +183,27 @@ if (!empty($excludeLocations)) {
 </div>
 <?php if (0 < $zone_id) { ?>
     <script>
-        $(".containChild-js").each(function(){
-            var dropStateElement = $(this);
-            dropStateElement.click();
-            var countryId = $(this).data("countryid");
-            var zoneId = $(this).data("zone");
-            $("#state_list_" + countryId).addClass('d-none');
-            setTimeout(function(){
-                if (0 < $("#state_list_" + countryId + " .state--js:checked").length) {
-                    $("#state_list_" + countryId).removeClass('d-none');
-                    $(".containCountries-js-" + zoneId).click();
-                } else {
-                    $("#state_list_" + countryId).removeClass('d-none show');
-                }
-            }, 500);
-        });
+        setTimeout(function(){                
+                $('.country--js input[type="checkbox"]').each(function(){
+                    var countryId = $(this).closest('.country--js').data('countryid');               
+                    var stateCount = $('.country_'+countryId+' .state--js:checked').length;                
+                    if(!$(this).prop("checked")){
+                        if(0 < stateCount){
+                            $('.link_'+countryId).click();
+                        }
+                    }                
+                    $('.selectedStateCount--js_'+countryId).text(stateCount);
+                    
+                });   
+                $('.zone--js').each(function(){
+                    var zoneId = $(this).data('zoneid');
+                    var stateCount  = $('.zone_'+zoneId+' .state--js:checked').length;
+                    if(0 < stateCount && !$(this).prop("checked")){
+                       $('.containCountries-js-'+zoneId).click();
+                    }
+                })                
+                
+            }, 150);
     </script>
 <?php } ?>
 <script>

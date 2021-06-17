@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <div class="content-header row justify-content-between mb-3">
             <?php //$this->includeTemplate('_partial/dashboardTop.php'); 
@@ -35,8 +35,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                                 $keywordFld = $frmSearchCatalogProduct->getField('keyword');
                                 $keywordFld->setFieldTagAttribute('id', 'tour-step-3');
-                                $keywordFld->setWrapperAttribute('class', 'col-lg-6');
-                                $keywordFld->developerTags['col'] = 6;
+                                $keywordFld->setWrapperAttribute('class', 'col-lg-4');
+                                $keywordFld->developerTags['col'] = 4;
 
                                 // if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
                                 // $dateFromFld = $frmSearchCatalogProduct->getField('type');
@@ -48,23 +48,30 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 $typeFld->setWrapperAttribute('class', 'col-lg-2');
                                 $typeFld->developerTags['col'] = 2;
 
+                                $fld = $frmSearchCatalogProduct->getField('badge_name');
+                                $fld->setWrapperAttribute('class', 'col-lg-3');
+                                $fld->developerTags['col'] = 3;
+
+                                $fld = $frmSearchCatalogProduct->getField('ribbon_name');
+                                $fld->setWrapperAttribute('class', 'col-lg-3');
+                                $fld->developerTags['col'] = 3;
+
                                 $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-                                $submitFld->setWrapperAttribute('class', 'col-lg-2');
                                 $submitFld->developerTags['col'] = 2;
+                                $submitFld->developerTags['noCaptionTag'] = true;
 
                                 $fldClear = $frmSearchCatalogProduct->getField('btn_clear');
                                 $fldClear->setFieldTagAttribute('onclick', 'clearSearch()');
                                 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-                                $fldClear->setWrapperAttribute('class', 'col-lg-2');
                                 $fldClear->developerTags['col'] = 2;
+                                $fldClear->developerTags['noCaptionTag'] = true;
                                 /* if( User::canAddCustomProductAvailableToAllSellers() ){
                                       $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                       $submitFld->setFieldTagAttribute('class','btn-block');
                                       $submitFld->developerTags['col'] = 4;
                                     } */
-                                echo $frmSearchCatalogProduct->getFormHtml();
-                                ?>
+                                echo $frmSearchCatalogProduct->getFormHtml(); ?>
                             </div>
                         </div>
                     </div>
@@ -84,14 +91,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 </main>
 <script>
     $(document).ready(function() {
-        <?php //if (!$displayDefaultListing) { 
-        ?>
         searchCatalogProducts(document.frmSearchCatalogProduct);
-        <?php //} 
-        ?>
     });
 
     $(".btn-inline-js").click(function() {
         $(".box-slide-js").slideToggle();
     });
+
+    var TYPE_BADGE = <?php echo Badge::TYPE_BADGE; ?>;
+	var TYPE_RIBBON = <?php echo Badge::TYPE_RIBBON; ?>;
+
+    var RECORD_TYPE_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_PRODUCT; ?>;
 </script>

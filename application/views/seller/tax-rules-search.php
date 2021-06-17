@@ -1,7 +1,7 @@
-<?php if (0 < count($arr_listing)) { ?>
+<?php if (0 < count($arrListing)) { ?>
     <div class="tax-rules">      
         <ul>
-            <?php foreach ($arr_listing as $sn => $row) {
+            <?php foreach ($arrListing as $sn => $row) {
                     $ruleSpecificCombinedData = $combinedData[$row['taxrule_id']] ?? [];
                 
                 ?>

@@ -15,7 +15,7 @@ foreach ($arr_flds as $val) {
 }
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array());
 
     foreach ($arr_flds as $key => $val) {
@@ -77,7 +77,7 @@ foreach ($arr_listing as $sn => $row) {
                         $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Change_Status_To_Complete', $adminLangId), "onclick" => "updateRequestStatus(" . $row['ureq_id'] . "," . UserGdprRequest::STATUS_COMPLETE . ")"), Labels::getLabel('LBL_Complete', $adminLangId), true);
 
                         $innerLi = $innerUl->appendElement('li');
-                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_View_Purpose', $adminLangId), "onclick" => "viewRequestPurpose(" . $row['ureq_id'] . ")"), Labels::getLabel('LBL_View_Purpose', $adminLangId), true);
+                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_View', $adminLangId), "onclick" => "viewRequestPurpose(" . $row['ureq_id'] . ")"), Labels::getLabel('LBL_View', $adminLangId), true);
                         //}
 
                         /* $innerLi=$innerUl->appendElement('li');
@@ -92,7 +92,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no--;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
 echo $tbl->getHtml();

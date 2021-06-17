@@ -15,10 +15,10 @@
 <div class="sectionbody space">
     <div class="accordion-categories">
         <?php
-        if (count($arr_listing) > 0) {
+        if (count($arrListing) > 0) {
         ?>
             <ul id="sorting-categories" class="sorting-categories">
-                <?php foreach ($arr_listing as $sn => $row) {  ?>
+                <?php foreach ($arrListing as $sn => $row) {  ?>
                     <li id="<?php echo $row['prodcat_id']; ?>" class="sortableListsClosed <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
                         <div>
                             <div class="sorting-bar">

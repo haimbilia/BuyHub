@@ -28,7 +28,7 @@ class SellerPackagesController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->_template->render(false, false);
     }
 
@@ -253,7 +253,7 @@ class SellerPackagesController extends AdminBaseController
         $records = SellerPackagePlans::getPlanByPackageId($spackageId);
 
         $this->set('spackageId', $spackageId);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("spackageData", $data);
         $this->_template->render(false, false);
     }

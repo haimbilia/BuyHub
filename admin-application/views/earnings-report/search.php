@@ -45,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
 			case 'listserial':
 				$span->appendElement('plaintext', array(), $sr_no);
 				break;
-			case 'amountPaid':
+			case 'subscriptionCharges':
 			case 'promotionCharged':
 			case 'adminSalesEarnings':
 			case 'totalEarning':

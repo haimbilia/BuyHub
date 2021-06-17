@@ -140,9 +140,9 @@ class SalesReportController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        $arr_listing = $db->fetchAll($rs);
+        $arrListing = $db->fetchAll($rs);
 
-        $this->set("arr_listing", $arr_listing);
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

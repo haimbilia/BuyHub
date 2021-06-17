@@ -9800,6 +9800,8 @@ input[type="text"].sp-input:focus {
 
 :root {
     --first-color: #3bc4e7;
+    --brand-color: #3bc4e7;
+    --brand-color-inverse: #fff;
 }
 
 .close-layer {
@@ -12662,7 +12664,6 @@ form[name="frmShippingProfile"] {
 .custom-drag-drop .list-drag-drop li:hover {
     /*background-color: var(--bg-gray);*/
     border-color: var(--border-color);
-
 }
 
 .custom-drag-drop .checkbox {
@@ -12737,4 +12738,141 @@ form[name="frmShippingProfile"] {
     to {
         margin-top: 0;
     }
+}
+
+
+/* Badges and Ribbons Css 27-05-2021 */
+
+.badge-wrap {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+}
+
+.badges {
+    position: absolute;
+    top: 0 !important;
+    right: auto !important;
+    z-index: 9;
+    font-size: 0.8rem;
+}
+
+.badges .svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    fill: var(--brand-color);
+    width: 100%;
+    height: 100%;
+}
+
+.badges .text {
+    position: absolute;
+    top: auto;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    color: var(--brand-color-inverse);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.badges-1 {
+    background: var(--brand-color);
+    color: var(--brand-color-inverse);
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+.badges-1 .text {
+    position: static;
+}
+
+.badges-2 {
+    top: 3px;
+    right: 3px;
+    width: 70px;
+    height: 70px;
+}
+
+.badges-2 .text {
+    font-weight: 600;
+    transform: rotate(45deg);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 8px;
+    line-height: 30px;
+    text-transform: uppercase;
+    width: 85px;
+}
+
+.badges-3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+
+.badges-4 {
+    width: 60px;
+    height: 60px;
+}
+
+.badges-4 .text {
+    transform: rotate(45deg);
+    left: 0;
+    right: 0;
+    line-height: 27px;
+    width: 90px;
+    top: 7px;
+    margin-left: -6px;
+}
+
+.badges-5 {
+    top: 1rem;
+    right: 1rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badges-5 .text {
+    line-height: 1;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Badges and Ribbons Css 27-05-2021 */
+
+.link--arrow {
+    position: relative;
+    padding-right: 20px;
+}
+
+.link--arrow:after {
+    content: "";
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 8px;
+    height: 8px;
+    border-left: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(-45deg);
+}
+
+.link--arrow[aria-expanded="true"]:after {
+    transform: rotate(135deg);
+    top: 6px;
 }

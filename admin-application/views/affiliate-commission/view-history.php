@@ -19,7 +19,7 @@
                 }
 
                 $sr_no = 0;
-                foreach ($arr_listing as $sn => $row) {
+                foreach ($arrListing as $sn => $row) {
                     $sr_no++;
                     $tr = $tbl->appendElement('tr');
 
@@ -47,7 +47,7 @@
                         }
                     }
                 }
-                if (count($arr_listing) == 0) {
+                if (count($arrListing) == 0) {
                     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Record_Found', $adminLangId));
                 }
                 echo $tbl->getHtml();

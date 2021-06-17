@@ -702,7 +702,6 @@ ALTER TABLE `tbl_product_digital_links`
 -- AUTO_INCREMENT for dumped tables
 --
 
---
 -- AUTO_INCREMENT for table `tbl_product_digital_links`
 --
 ALTER TABLE `tbl_product_digital_links`
@@ -782,3 +781,125 @@ You have received a new cash on delivery order {order_id} at {SITE_NAME}
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10)
 ON DUPLICATE KEY UPDATE conf_val = 10;
+
+
+-- --- Badges & Ribbons --- --
+--
+-- Table structure for table `tbl_badges`
+--
+
+CREATE TABLE `tbl_badges` (
+  `badge_id` bigint(20) NOT NULL,
+  `badge_type` int(11) NOT NULL,
+  `badge_display_inside` tinyint(4) NOT NULL,
+  `badge_shape_type` int(11) NOT NULL,
+  `badge_color` varchar(150) NOT NULL,
+  `badge_identifier` varchar(150) NOT NULL,
+  `badge_required_approval` tinyint(4) NOT NULL,
+  `badge_active` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_badges`
+--
+ALTER TABLE `tbl_badges`
+  ADD PRIMARY KEY (`badge_id`),
+  ADD UNIQUE KEY `badge_identifier` (`badge_identifier`,`badge_type`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_badges`
+--
+ALTER TABLE `tbl_badges`
+  MODIFY `badge_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- Table structure for table `tbl_badges_lang`
+--  
+
+CREATE TABLE `tbl_badges_lang` ( 
+  `badgelang_badge_id` BIGINT NOT NULL ,  
+  `badgelang_lang_id` INT NOT NULL ,  
+  `badge_name` VARCHAR(150) NOT NULL 
+) ENGINE = InnoDB;
+
+--
+-- Indexes for table `tbl_badges_lang`
+--
+ALTER TABLE `tbl_badges_lang`
+  ADD PRIMARY KEY (`badgelang_badge_id`,`badgelang_lang_id`);
+
+--
+-- Table structure for table `tbl_badge_link_conditions`
+--
+
+CREATE TABLE `tbl_badge_link_conditions` (
+  `blinkcond_id` bigint(20) NOT NULL,
+  `blinkcond_badge_id` bigint(20) NOT NULL,
+  `blinkcond_position` TINYINT(2) NOT NULL,
+  `blinkcond_record_type` int(11) NOT NULL,
+  `blinkcond_from_date` datetime DEFAULT NULL,
+  `blinkcond_to_date` datetime DEFAULT NULL,
+  `blinkcond_condition_type` int(11) NOT NULL,
+  `blinkcond_condition_from` varchar(150) NOT NULL,
+  `blinkcond_condition_to` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_badge_link_conditions`
+--
+ALTER TABLE `tbl_badge_link_conditions`
+  ADD PRIMARY KEY (`blinkcond_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_badge_link_conditions`
+--
+ALTER TABLE `tbl_badge_link_conditions`
+  MODIFY `blinkcond_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- Table structure for table `tbl_badge_links`
+--
+CREATE TABLE `tbl_badge_links` (
+  `badgelink_blinkcond_id` bigint(20) NOT NULL,
+  `badgelink_record_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('LBL_N/R', '1', 'N/R', '1') ON DUPLICATE KEY UPDATE label_caption = 'N/R';
+
+ALTER TABLE `tbl_badges_lang` CHANGE `badge_name` `badge_name` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+-- --- Badges & Ribbons --- --
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_N/A', 1, 'N/A', 1)
+ON DUPLICATE KEY UPDATE label_caption = 'N/A';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOPIFY_MULTIVENDOR_PLUGIN_INFO', '1', 'Please enable the Multi Vendor Marketplace by Webkul Software Pvt Ltd plugin on your Shopify Store to sync data', '1');
+INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`, `plugin_description`) VALUES ((SELECT plugin_id from tbl_plugins where plugin_code='Shopify'), '1', 'Shopify', '');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOPIFY_SINGLE_VENDOR_PLUGIN_INFO', '1', 'Please create a private app from you Shopify dashbaord for data sync', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SELLER_PLUGIN_SETTINGS', '1', 'Settings', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', '1', 'Default rating for Products. Cannot be switched off.', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOP_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop. Can be switched off.', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_DELIVERY_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop delivery. Can be switched off.', '1');
+
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_NA', 1, 'NA', 1) ON DUPLICATE KEY UPDATE label_caption = 'NA';
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_View_Purpose";

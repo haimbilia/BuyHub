@@ -51,7 +51,7 @@ class EarningsReportController extends AdminBaseController
         $opSrch->setGroupBy('DATE(o.order_date_added)');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $opSrch->setDateCondition($fromDate, $toDate);;
+        $opSrch->setDateCondition($fromDate, $toDate);
 
         /* Subscription earning */
         $sSrch = new OrderSubscriptionSearch($this->adminLangId, true, true);
@@ -67,10 +67,10 @@ class EarningsReportController extends AdminBaseController
 
         $query = $pSrch->getQuery() . ' UNION ALL ' . $opSrch->getQuery() . ' UNION ALL ' . $sSrch->getQuery();
         $srch = new SearchBase("(" . $query . ") as tmp");
-        $srch->addMultipleFields(['tmp.date', 'psrch.promotionCharged', 'opSrch.adminSalesEarnings', 'sSrch.amountPaid', 'ifnull(psrch.promotionCharged,0) + ifnull(opSrch.adminSalesEarnings,0) + ifnull(sSrch.amountPaid,0) as totalEarning']);
+        $srch->addMultipleFields(['tmp.date', 'psrch.promotionCharged', 'opSrch.adminSalesEarnings', 'sSrch.subscriptionCharges', 'ifnull(psrch.promotionCharged,0) + ifnull(opSrch.adminSalesEarnings,0) + ifnull(sSrch.subscriptionCharges,0) as totalEarning']);
         $pSrch->addMultipleFields(['SUM(pc.pcharge_charged_amount) as promotionCharged']);
         $opSrch->addMultipleFields(['sum((IFNULL(op_commission_charged,0) - IFNULL(op_refund_commission,0))) as adminSalesEarnings']);
-        $sSrch->addMultipleFields(['sum(ossubs_price + ifnull(op_other_charges,0)) as amountPaid']);      
+        $sSrch->addMultipleFields(['sum(ossubs_price + ifnull(op_other_charges,0)) as subscriptionCharges']);      
         $srch->joinTable('(' . $pSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = psrch.date', 'psrch');
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = opSrch.date', 'opSrch');
         $srch->joinTable('(' . $sSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = sSrch.date', 'sSrch');
@@ -110,7 +110,7 @@ class EarningsReportController extends AdminBaseController
                         case 'listserial':
                             $arr[] = $count;
                             break;
-                        case 'amountPaid':
+                        case 'subscriptionCharges':
                         case 'promotionCharged':
                         case 'adminSalesEarnings':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
@@ -177,7 +177,7 @@ class EarningsReportController extends AdminBaseController
         if (!$earningsReportsCacheVar) {
             $arr = [
                 'date' => Labels::getLabel('LBL_Date', $this->adminLangId),
-                'amountPaid' => Labels::getLabel('LBL_Subscription_Charges', $this->adminLangId),
+                'subscriptionCharges' => Labels::getLabel('LBL_Subscription_Charges', $this->adminLangId),
                 'promotionCharged' => Labels::getLabel('LBL_Advertisement_Charges', $this->adminLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId),
                 'totalEarning' => Labels::getLabel('LBL_Total_Earnings', $this->adminLangId),

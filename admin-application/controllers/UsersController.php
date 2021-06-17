@@ -124,7 +124,7 @@ class UsersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs, 'user_id');
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -320,7 +320,7 @@ class UsersController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -435,7 +435,7 @@ class UsersController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -906,7 +906,7 @@ class UsersController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -1229,7 +1229,7 @@ class UsersController extends AdminBaseController
         $obj = new User();
         $records = $obj->getSupplierFormFields($this->adminLangId);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("yesNoArr", applicationConstants::getYesNoArr($this->adminLangId));
         $this->set("fieldTypeArr", User::getFieldTypes($this->adminLangId));
         $this->set("canEdit", $this->objPrivilege->canEditSellerApprovalForm($this->admin_id, true));
@@ -1472,7 +1472,7 @@ class UsersController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

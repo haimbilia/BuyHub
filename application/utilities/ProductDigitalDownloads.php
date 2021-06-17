@@ -53,6 +53,19 @@ trait ProductDigitalDownloads
             $fld->options = $savedOptions;
         }
 
+        $showFldAttachWithExistingOrders = true;
+
+        $fld = $frm->getField('attach_with_existing_orders');
+
+        $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
+
+        if (1 !== $product['product_attachements_with_inventory']) {
+            $frm->removeField($fld);
+            $showFldAttachWithExistingOrders = false;
+        }
+        
+        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
+        
         $data = [
             'product_id' => $productId,
             'selprod_id' =>  $selProdId,
@@ -76,31 +89,11 @@ trait ProductDigitalDownloads
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        /* $prodRefType = Product::CATALOG_TYPE_INVENTORY; */
-        
-        /* $optionComb = FatApp::getPostedData('option_comb', FatUtility::VAR_INT, 0); */
-        
-        /* $selProdData = SellerProduct::getAttributesById($selProdId, array('selprod_code'));
-        
-        $selProdOption = explode('_', $selProdData['selprod_code']);
-        array_shift($selProdOption);
-        if (0 < count($selProdOption)) {
-            $optionComb = implode('_', $selProdOption);
-        } else {
-            $optionComb = '0';
-        }
-        
-        
-        if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $records = DigitalDownloadSearch::getLinks($selProdId, $prodRefType, $optionComb, $langId);
-        } else {
-            $records = DigitalDownloadSearch::getAttachments($selProdId, $prodRefType, $optionComb, $langId);
-        } */
-        
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
             $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
         } else {
             $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
+            $records = DigitalDownloadSearch::processAttachmentsWithPreview($records);
         }
 
         $canDelete = DigitalDownload::canDelete($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);

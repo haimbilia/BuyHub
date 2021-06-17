@@ -10,11 +10,16 @@
             if (0 < count($product['preview_links'])) { ?>
                 <div class="h6"><?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
                 <ul class="list-files">
-                    <?php foreach ($product['preview_links'] as $keys => $link) { ?>
+                    <?php
+                    foreach ($product['preview_links'] as $keys => $link) {
+                        if ('' == $link['pdl_preview_link']) {
+                            continue;
+                        }    
+                    ?>
                         <li>
                             <?php echo '<div class="clipboard"><input class="copy-input" value="'.$link['pdl_preview_link'].'" id="copypreview_'. $link['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $link['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copypreview_'. $link['pdl_id'] .'\')"><i class="far fa-copy"></i></button><br />'; ?>
                         </li>
-                        <?php } ?>
+                    <?php } ?>
                 </ul>
             <?php }
             if (0 < count($product['preview_attachments'])) { ?>
@@ -54,5 +59,4 @@
             echo Labels::getLabel('LBL_No_preview_available', $siteLangId);
         }
         ?>
-    </div>
 </div>

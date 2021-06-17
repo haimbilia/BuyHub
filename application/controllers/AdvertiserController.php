@@ -604,7 +604,7 @@ class AdvertiserController extends AdvertiserBaseController
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('canEdit', $this->userPrivilege->canEditPromotions(0, true));
         $this->set('promotionBudgetDurationArr', $promotionBudgetDurationArr);
-        $this->set('arr_listing', $records);
+        $this->set('arrListing', $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -772,7 +772,7 @@ class AdvertiserController extends AdvertiserBaseController
         $prmSrch->setPageSize($pagesize);
         $rs = $prmSrch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $prmSrch->pages());
         $this->set("recordCount", $prmSrch->recordCount());
         $typeArr = Promotion::getTypeArr($this->siteLangId);
@@ -1227,7 +1227,7 @@ class AdvertiserController extends AdvertiserBaseController
         $this->set('pageSize', $pageSize);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('arr_listing', $promotionDetails);
+        $this->set('arrListing', $promotionDetails);
         $this->set('promotion_id', $promotionId);
         $this->set('page', $page);
         $this->_template->render(false, false);
