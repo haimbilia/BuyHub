@@ -903,4 +903,21 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 -- --- Aramex Shipping API--- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Aramex', '8', 'Aramex', '0', '3');
 ALTER TABLE `tbl_shop_specifics` ADD `shop_use_manual_shipping_rates` TINYINT(2) NOT NULL AFTER `shop_pickup_interval`;
+CREATE TABLE `tbl_order_product_shipment_pickup` (
+  `opsp_op_id` int NOT NULL,
+  `opsp_api_req_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party',
+  `opsp_scheduled` tinyint NOT NULL COMMENT 'Scheduled/cancelled',
+  `opsp_requested_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For third party',
+  `opsp_response` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_order_product_shipment_pickup`
+--
+ALTER TABLE `tbl_order_product_shipment_pickup`
+  ADD UNIQUE KEY `opps_op_id` (`opsp_op_id`);
 -- --- Aramex Shipping API--- --

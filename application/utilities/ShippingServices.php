@@ -447,6 +447,29 @@ trait ShippingServices
         }
 
         $resp = $this->shippingService->getResponse();
-        echo 'lkl';
+        $postedData = array_diff($post, array_keys($this->shippingService->getPickupFormElementsArr));
+        
+        print_r($postedData);
+        
+        die();
+
+        $dataToSave = array(
+            'opsp_op_id' => $post['op_id'],
+            'opsp_api_req_id' => $resp['pickUpId'],
+            'opsp_scheduled' => applicationConstants::ACTIVE,
+            'opsp_requested_data' => json_encode($postedData),
+            'opsp_response' => json_encode($resp),
+        );
+
+        if (!FatApp::getDb()->insertFromArray(OrderProduct::DB_TBL_PICKUP_SCHEDULE, $dataToSave, false, array(), $dataToSave)) {
+            LibHelper::dieJsonError($db->getError());
+        }
+
+        $json = [
+            'msg' => Labels::getLabel('LBL_SUCCESS', $this->langId),
+        ];
+
+        LibHelper::dieJsonSuccess($json);
     }
+
 }

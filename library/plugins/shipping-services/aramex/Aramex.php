@@ -336,7 +336,7 @@ class Aramex extends ShippingServicesBase
             $msg = Labels::getLabel('LBL_({CURRENCY})_INVALID_CURRENCY._PLEASE_CONTACT_ADMIN_TO_PROCEED_FURTHER,', $this->langId);
             CommonHelper::dieWithError(CommonHelper::replaceStringData($msg, ['{CURRENCY}' => $convertCurrency]));
         }
-        return CommonHelper::convertExistingToOtherCurrency($fromCurrency, $val['Value'], $defaultCurrencyId);
+        return CommonHelper::convertExistingToOtherCurrency($fromCurrency, $val['Value'], $defaultCurrencyId, false);
     }
 
     /**
@@ -376,7 +376,7 @@ class Aramex extends ShippingServicesBase
                 'serviceCode' => self::KEY_NAME,
                 'shipmentId' => $rates['Transaction']['Reference1'],
                 'shipmentCost' => $this->convertToSiteCurrency($rates['TotalAmount']),
-                'otherCost' => '0',
+                'otherCost' => 0,
             ]
         ];
     }
@@ -728,15 +728,24 @@ class Aramex extends ShippingServicesBase
             ),
         );
 
-        $this->setServiceRequest(self::REQUEST_PICKUP);
-        $this->doRequest($requestParam);
-
-        /* Need to Discuss */
-        /* if (false === $this->doRequest($requestParam)) {
+        $this->setServiceRequest(self::REQUEST_PICKUP);       
+        
+        if (false === $this->doRequest($requestParam)) {
             return false;
-        } */
+        }
+        $pickup = $this->getResponse();
+        if($pickup['HasErrors'] == 1){
+            $this->error = $pickup['Notifications']['Notification']['Message'] ?? Labels::getLabel('ERR_UNABLE_TO_CREATE_PICKUP', $this->langId);
+            return false;
+        }
 
-        // $trackingDetail = $this->getResponse();
+        $pickup = $this->getResponse();
+        if (0 < count($pickup)) {          
+            $pickup['orderNumber'] = $pickup['Transaction']['Reference1'];
+            $pickup['pickUpId'] = $pickup['ProcessedPickup']['Reference1'];
+        }
+        $this->resp = $pickup;
+        return true;        
     }
 
     /**

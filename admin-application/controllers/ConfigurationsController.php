@@ -946,25 +946,27 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addHtml('', 'Checkout', '<h3>' . Labels::getLabel('LBL_Checkout_Process', $this->adminLangId) . '</h3>');
                 $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $this->adminLangId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
                 $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->adminLangId) . "</small>";
+                $obj = new Plugin();
+                if ($obj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active')) {
+                    $fld1 = $frm->addCheckBox(
+                        Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->adminLangId),
+                        'CONF_MANUAL_SHIPPING_RATES_ADMIN',
+                        1,
+                        array(),
+                        false,
+                        0
+                    );
+                    $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_ADMIN_SHIPPING.", $this->adminLangId) . "</small>";
 
-                $fld1 = $frm->addCheckBox(
-                    Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->adminLangId),
-                    'CONF_MANUAL_SHIPPING_RATES_ADMIN',
-                    1,
-                    array(),
-                    false,
-                    0
-                );
-                $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_ADMIN_SHIPPING.", $this->adminLangId) . "</small>";
-                
-                $fld1 = $frm->addCheckBox(
-                    Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILED_TO_FETCH_RATES.", $this->adminLangId),
-                    'CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS',
-                    1,
-                    array(),
-                    false,
-                    0
-                );
+                    $fld1 = $frm->addCheckBox(
+                        Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILED_TO_FETCH_RATES.", $this->adminLangId),
+                        'CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS',
+                        1,
+                        array(),
+                        false,
+                        0
+                    );
+                }    
                 
                 /* $frm->addHtml('','Checkout','<h3>'.Labels::getLabel("LBL_Checkout",$this->adminLangId) . '</h3>'); */
 

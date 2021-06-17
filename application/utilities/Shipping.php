@@ -255,7 +255,9 @@ class Shipping
         if (1 > $pluginId) {
             return false;
         }
-
+        
+        $useManualShippingIfFailed = FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS', FatUtility::VAR_INT, 0);
+        
         $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . $pluginId;
         $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
         if ($carriers) {
@@ -270,7 +272,7 @@ class Shipping
 
         if (empty($carriers)) {
             array_walk($this->selProdShipRates, function ($selProdData) {
-                if (!in_array($selProdData['selprod_id'], $this->ratesNotFetchedSelprodIds)) {
+                if (!in_array($selProdData['selprod_id'], $this->ratesNotFetchedSelprodIds) && 0 < $useManualShippingIfFailed) {
                     $this->ratesNotFetchedSelprodIds[] =  $selProdData['selprod_id'];
                 }
             });
@@ -288,7 +290,7 @@ class Shipping
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
 
         $processedSelProds = [];
-
+        
         foreach ($this->selProdShipRates as $rateId => $rates) {
             if (in_array($rates['selprod_id'], $processedSelProds)) {
                 continue;
@@ -302,7 +304,7 @@ class Shipping
             if (0 < $rates['shiippingBySeller']) {
                 $useManualShipping = ShopSpecifics::getAttributesById($product['shop_id'], 'shop_use_manual_shipping_rates');
             }
-
+            
             if (0 < $useManualShipping) {
                 $this->ratesNotFetchedSelprodIds[] = $rates['selprod_id'];
                 continue;
@@ -392,14 +394,13 @@ class Shipping
                     if (!empty($shippingRates)) {
                         FatCache::set($cacheKey, serialize($shippingRates), '.txt');
                     }
-                }
-
+                }               
                 unset($physicalSelProdIdArr[$rates['selprod_id']]);
-                if (false == $shippingRates || empty($shippingRates)) {
+                if ((false == $shippingRates || empty($shippingRates)) && 0 < $useManualShippingIfFailed) {
                     $this->ratesNotFetchedSelprodIds[] = $rates['selprod_id'];
                     continue;
                 }
-
+                
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
@@ -436,7 +437,11 @@ class Shipping
      */
     private function fetchShippingRatesFromSystem(array $productInfo, array &$physicalSelProdIdArr): bool
     {
-        foreach ($this->selProdShipRates as $rateId => $rates) {
+        foreach ($this->selProdShipRates as $rateId => $rates) {            
+            if (!empty($this->ratesNotFetchedSelprodIds) && !in_array($rates['selprod_id'], $this->ratesNotFetchedSelprodIds)) {
+                continue;
+            }
+
             $product = $productInfo[$rates['selprod_id']];
             $shippedBy = -1; /*Shipped by admin */
             $shippingLevel = self::LEVEL_PRODUCT;
@@ -514,8 +519,7 @@ class Shipping
             $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
         }
 
-        $useManualShippingIfFailed = FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS', FatUtility::VAR_INT, 0);
-        if (1 > $pluginId || 0 < $useManualShippingIfFailed) {
+        if (1 > $pluginId || count($this->ratesNotFetchedSelprodIds)) {
             $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr);
         }
 
