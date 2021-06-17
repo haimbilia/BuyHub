@@ -206,6 +206,26 @@ class LanguagesController extends AdminBaseController
             Message::addErrorMessage($countryObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+        if ($status == applicationConstants::INACTIVE && ($languageId == FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1) || $languageId ==  FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
+            $srch = Language::getSearchObject();
+            $srch->addFld('language_id');
+            $firstActivelangData = FatApp::getDb()->fetch($srch->getResultSet());
+            if (!empty($firstActivelangData)) {                
+                $configuration = new Configurations();
+                $dataToUpdate = [];
+                if(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)  == $languageId){
+                    $dataToUpdate['CONF_DEFAULT_SITE_LANG'] = $firstActivelangData['language_id']; 
+                }
+                if(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)  == $languageId){
+                    $dataToUpdate['CONF_ADMIN_DEFAULT_LANG'] = $firstActivelangData['language_id']; 
+                    $_COOKIE['defaultAdminSiteLang'] = $firstActivelangData['language_id'];
+                }
+                if (!$configuration->update($dataToUpdate)) {
+                    Message::addErrorMessage($configuration->getError());
+                    FatUtility::dieWithError(Message::getHtml());
+                }
+            }
+        }
 
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
