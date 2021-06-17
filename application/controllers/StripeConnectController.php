@@ -400,8 +400,7 @@ class StripeConnectController extends PaymentMethodBaseController
      */
     public function getMerchantCategory()
     {
-        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $data = $this->stripeConnect->getMerchantCategory($keyword);
+        $data = $this->stripeConnect->getMerchantCategory();
         CommonHelper::jsonEncodeUnicode($data, true);
     }
 
