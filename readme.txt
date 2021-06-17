@@ -137,6 +137,7 @@ Fixes:
     => 055010 - SMTP handling - In case of Godaddy email hosting.
     => 055106 - Product detail page - Google snippet Schema Code - strip tags from description.
     => 055126 - issue with language in email template
+    => 055156 - on payment app screen payment logo not coming correctly
 
 Enhancements :
    => Make provision to made seller
