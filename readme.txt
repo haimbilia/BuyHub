@@ -194,6 +194,7 @@ Fixes:
     => 054731 - when review is placed with media then there is no need to add show more on 6th image
     => 054761 - despite having sku non mandatory it's not adding inventory from seller end
     => 054814 - admin> catalog> rating type> search is not working
+    => 054813 - admin> catalog> rating types> rating types sr. no are not listing properly on changing page
 
 
 New Features:
