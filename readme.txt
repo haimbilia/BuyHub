@@ -138,6 +138,7 @@ Fixes:
     => 055106 - Product detail page - Google snippet Schema Code - strip tags from description.
     => 055126 - issue with language in email template
     => 055156 - on payment app screen payment logo not coming correctly
+    => 054832 - when new category is introduced in hierarchy then linking breaks and product gets unlisted in some of the categories
 
 Enhancements :
    => Make provision to made seller

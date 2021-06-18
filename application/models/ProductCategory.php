@@ -131,21 +131,29 @@ class ProductCategory extends MyAppModel
             return false;
         }
 
-        $srch = new SearchBase(self::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-        $srch->addMultipleFields([
-            "CONCAT(GROUP_CONCAT(LPAD(pcr_parent_id, 6, 0) ORDER BY `pcr_level` DESC SEPARATOR '_'), '_') as prodcat_code",
-            "CONCAT(0, GROUP_CONCAT(LPAD(prodcat_display_order, 5, 0) ORDER BY `pcr_level` DESC SEPARATOR '0')) as prodcat_ordercode"
-        ]);
-        $srch->joinTable('tbl_product_categories', 'INNER JOIN', 'c.prodcat_id = cr.pcr_parent_id', 'c');
-        $srch->addCondition('cr.pcr_prodcat_id', '=', $categoryId);
-        $rs = $srch->getResultSet();
-        $catCode = (array) FatApp::getDb()->fetch($rs);
-        if (!empty($catCode)) {
-            $record = new ProductCategory($categoryId);
-            $record->assignValues($catCode);
-            if (!$record->save()) {
-                $this->error = $record->getError();
-                return false;
+        $categoryArray = array($categoryId);
+        $parentCatData = ProductCategory::getAttributesById($categoryId, array('prodcat_parent'));
+        if (array_key_exists('prodcat_parent', $parentCatData) && $parentCatData['prodcat_parent'] > 0) {
+            array_push($categoryArray, $parentCatData['prodcat_parent']);
+        }
+
+        foreach ($categoryArray as $categoryId) {
+            $srch = ProductCategory::getSearchObject(false, 0, false, -1);
+            $srch->addOrder('m.prodcat_active', 'DESC');
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $srch->addMultipleFields(array('prodcat_id', 'GETCATCODE(`prodcat_id`) as prodcat_code', 'GETCATORDERCODE(`prodcat_id`) as prodcat_ordercode'));
+            $srch->addCondition('GETCATCODE(`prodcat_id`)', 'LIKE', '%' . str_pad($categoryId, 6, '0', STR_PAD_LEFT) . '%', 'AND', true);
+            $rs = $srch->getResultSet();
+            $catCode = FatApp::getDb()->fetchAll($rs);
+            foreach ($catCode as $row) {
+                $record = new ProductCategory($row['prodcat_id']);
+                $data = array('prodcat_code' => $row['prodcat_code'], 'prodcat_ordercode' => $row['prodcat_ordercode']);
+                $record->assignValues($data);
+                if (!$record->save()) {
+                    Message::addErrorMessage($record->getError());
+                    return false;
+                }
             }
         }
         return true;
