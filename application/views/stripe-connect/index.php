@@ -43,6 +43,9 @@
                                     <i class="fa fa-trash"></i>
                                 </a>
                             <?php } ?>
+                            <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
+                                <i class="fa fa-unlink"></i>
+                            </a>
                         </h5>
                         <?php /* if (!empty($userAccountErrors)) { ?>
                             <ul class="errorlist erlist_merchantCatCode">
