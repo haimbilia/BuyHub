@@ -71,7 +71,6 @@ class StripeConnectController extends PaymentMethodBaseController
     public function index()
     {
         $accountId = $this->stripeConnect->getAccountId();
-
         if (!empty($accountId)) {
             if (true === $this->stripeConnect->isUserAccountRejected()) {
                 $this->setError();
@@ -94,6 +93,8 @@ class StripeConnectController extends PaymentMethodBaseController
         $this->set('userAccountErrors', $this->stripeConnect->getError());
         $this->set('loginUrl', $this->stripeConnect->getLoginUrl());
         $this->set('accountId', $accountId);
+        $this->set('userAccountIsValid', $this->stripeConnect->userAccountIsValid());
+        $this->set('initialFormSubmitted', empty($this->stripeConnect->initialFormSubmitted()));
         $this->set('requiredFields', $requiredFields);
         $this->set('keyName', self::KEY_NAME);
         $this->set('pluginName', $this->getPluginData()['plugin_name']);
@@ -118,28 +119,49 @@ class StripeConnectController extends PaymentMethodBaseController
         FatUtility::dieJsonSuccess($msg);
     }
 
+    /**
+     * completeAccount()
+     *
+     * @return void
+     */
+    public function completeAccount()
+    {
+        if (false === $this->stripeConnect->requestAccountLinks()) {
+            $this->setError();
+        }
+        $resp = $this->stripeConnect->getResponse()->toArray();
+        $json = [
+            'msg' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
+            'link' => $resp['url']
+        ];
+        FatUtility::dieJsonSuccess($json);
+    }
+
     /* Not Required. 16-Jun-2021 */
     /* public function login()
         {
             FatApp::redirectUser($this->stripeConnect->getRedirectUri());
         }
-
-        public function callback()
-        {
-            $error = FatApp::getQueryStringData('error');
-            $errorDescription = FatApp::getQueryStringData('error_description');
-            if (!empty($error)) {
-                $msg = $error . ' : ' . $errorDescription;
-                Message::addErrorMessage($msg);
-            } else {
-                $code = FatApp::getQueryStringData('code');
-                if (false == $this->stripeConnect->accessAccountId($code)) {
-                    $this->setError();
-                }
-            }
-            FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
-        } */
+    */
     /* ----------------- */
+
+    public function callback()
+    {
+        CommonHelper::printArray($_POST);
+        die;
+        $error = FatApp::getQueryStringData('error');
+        $errorDescription = FatApp::getQueryStringData('error_description');
+        if (!empty($error)) {
+            $msg = $error . ' : ' . $errorDescription;
+            Message::addErrorMessage($msg);
+        } else {
+            $code = FatApp::getQueryStringData('code');
+            if (false == $this->stripeConnect->accessAccountId($code)) {
+                $this->setError();
+            }
+        }
+        FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
+    }
 
     /**
      * requiredFieldsForm

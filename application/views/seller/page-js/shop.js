@@ -832,7 +832,8 @@ $(document).on("change", ".state", function () {
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupRequiredFields'), data, function (t) {
-            requiredFieldsForm();
+            // requiredFieldsForm();
+            $('.' + keyName).click();
         });
     }
 
@@ -840,6 +841,15 @@ $(document).on("change", ".state", function () {
         var href = $(el).data('href');
         fcom.updateWithAjax(href, '', function (t) {
             $('.pluginPlatform-js').click();
+        });
+    }
+
+    completeAccount = function (el) {
+        var href = $(el).data('href');
+        fcom.updateWithAjax(href, '', function (t) {
+            if ('undefined' != typeof t.link) {
+                location.href = t.link;
+            }
         });
     }
 

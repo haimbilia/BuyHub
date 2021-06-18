@@ -24,7 +24,8 @@
                                 <p> <?php echo Labels::getLabel('API_MOBILE_FRIENDLY_AND_CONVERSION_OPTIMIZED_UI', $siteLangId); ?> </p>
                             </li>
                         </ul>
-                        <div class="text-center"> <a class="btn btn-outline-brand btn-sm mr-2" onClick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
+                        <div class="text-center"> 
+                            <a class="btn btn-outline-brand btn-sm mr-2" onClick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
                                 <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
                             </a>
                             <?php
@@ -36,17 +37,24 @@
                     </div>
                 <?php } else { ?>
                     <div class="text-center">
-                        <h5>
-                            <?php echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; ?>
-                            <?php if ('custom' == $stripeAccountType) { ?>
-                                <a class="btn btn-brand btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>" title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
-                                    <i class="fa fa-trash"></i>
+                        <h5><?php echo Labels::getLabel('LBL_ACCOUNT_ID', $siteLangId); ?> : <?php echo $accountId; ?></h5>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?php if ('custom' == $stripeAccountType) { ?>
+                                    <a class="btn btn-brand btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>" title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
+                                        <?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>
+                                    </a>
+                                <?php } ?>
+                                <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
+                                    <?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>
                                 </a>
-                            <?php } ?>
-                            <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
-                                <i class="fa fa-unlink"></i>
-                            </a>
-                        </h5>
+                                <?php if (!empty($accountId) && true === $initialFormSubmitted && false === $userAccountIsValid) { ?>
+                                    <a class="btn btn-secondary btn-sm mr-2" onClick="completeAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'completeAccount'); ?>">
+                                        <?php echo Labels::getLabel('LBL_COMPLETE_ACCOUNT', $siteLangId); ?>
+                                    </a>
+                                <?php } ?>
+                            </div>
+                        </div>
                         <?php /* if (!empty($userAccountErrors)) { ?>
                             <ul class="errorlist erlist_merchantCatCode">
                                 <li><a href="javascript:void(0);"><?php echo $userAccountErrors; ?></a></li>

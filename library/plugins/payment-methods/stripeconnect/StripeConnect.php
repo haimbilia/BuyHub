@@ -65,6 +65,7 @@ class StripeConnect extends PaymentMethodBase
     public const REQUEST_RETRIEVE_PAYMENT_INTENT = 26;
     public const REQUEST_CREATE_PAYMENT_METHOD = 27;
     public const REQUEST_CAPTURE_PAYMENT = 28;
+    public const REQUEST_CREATE_ACCOUNT_LINKS = 29;
 
     /**
      * __construct
@@ -123,10 +124,10 @@ class StripeConnect extends PaymentMethodBase
         $weekdays = TimeSlot::getDaysArr(1);
 
         $this->stripe = new \Stripe\StripeClient($this->settings[$this->liveMode . 'secret_key']);
-        
+
         $this->payoutScheduleInterval = isset($this->settings['payouts_schedule_interval']) ? $this->settings['payouts_schedule_interval'] : 'daily';
         $this->payoutScheduleDelayDays = isset($this->settings['payouts_schedule_delay_days']) ? $this->settings['payouts_schedule_delay_days'] : '';
-        
+
         $scheduleWeekly = isset($this->settings['payouts_schedule_delay_days']) ? FatUtility::int($this->settings['payouts_schedule_weekly_anchor']) : 0;
         $this->payoutScheduleWeekly = (0 < $scheduleWeekly && isset($weekdays[$scheduleWeekly])  ? $weekdays[$scheduleWeekly] : '');
 
@@ -184,6 +185,30 @@ class StripeConnect extends PaymentMethodBase
             if (false === $this->doRequest(self::REQUEST_CREATE_ACCOUNT)) {
                 return false;
             }
+        } 
+
+        return true;
+    }
+    
+    /**
+     * requestAccountLinks
+     *
+     * @return bool
+     */
+    public function requestAccountLinks(): bool
+    {
+        $stripeConnectForm = UrlHelper::generateFullUrl('Seller', 'shop', [self::KEY_NAME]);
+        $requestParam = [
+            'account' => $this->getAccountId(),
+            'refresh_url' => $stripeConnectForm,
+            'return_url' => $stripeConnectForm,
+            'type' => 'account_onboarding',
+            'collect' => 'eventually_due'
+        ];
+        
+        $this->resp = $this->doRequest(self::REQUEST_CREATE_ACCOUNT_LINKS, $requestParam);
+        if (false === $this->resp) {
+            return false;
         }
         return true;
     }
@@ -511,9 +536,14 @@ class StripeConnect extends PaymentMethodBase
         $businessType = 'individual' == $businessType ? $businessType : 'other';
 
         $commonPreFields = [
-            'business_type' => [
+            /* 'business_type' => [
                 'title' => Labels::getLabel("MSG_BUSINESS_TYPE", $this->langId),
                 'description' => '',
+                'required' => true
+            ], */
+            'business_profile.name' => [
+                'title' => Labels::getLabel("MSG_BUSINESS_PROFILE_NAME", $this->langId),
+                'description' => Labels::getLabel('API_THE_CUSTOMER_FACING_BUSINESS_NAME', $this->langId),
                 'required' => true
             ],
             'business_profile.url' => [
@@ -524,11 +554,6 @@ class StripeConnect extends PaymentMethodBase
             'business_profile.support_url' => [
                 'title' => Labels::getLabel("MSG_SUPPORT_URL", $this->langId),
                 'description' => Labels::getLabel('API_A_PUBLICLY_AVAILABLE_WEBSITE_FOR_HANDLING_SUPPORT_ISSUES', $this->langId),
-                'required' => true
-            ],
-            'business_profile.name' => [
-                'title' => Labels::getLabel("MSG_BUSINESS_PROFILE_NAME", $this->langId),
-                'description' => Labels::getLabel('API_THE_CUSTOMER_FACING_BUSINESS_NAME', $this->langId),
                 'required' => true
             ],
             'business_profile.support_phone' => [
@@ -575,7 +600,7 @@ class StripeConnect extends PaymentMethodBase
 
         $bussinessTypeFileds = [
             'individual' => [
-                'individual.id_number' => [
+                /* 'individual.id_number' => [
                     'title' => Labels::getLabel("MSG_ID_NUMBER", $this->langId),
                     'description' => Labels::getLabel('API_THE_GOVERNMENT_ISSUED_ID_NUMBER', $this->langId),
                     'required' => false
@@ -639,10 +664,10 @@ class StripeConnect extends PaymentMethodBase
                     'title' => Labels::getLabel("MSG_STATE", $this->langId),
                     'description' => Labels::getLabel('API_STATE_COUNTY_PROVINCE_OR_REGION', $this->langId),
                     'required' => false
-                ],
+                ], */
             ],
             'other' => [
-                'company.address.line1' => [
+                /* 'company.address.line1' => [
                     'title' => Labels::getLabel("MSG_ADDRESS_LINE1", $this->langId),
                     'description' => Labels::getLabel('API_ADDRESS_LINE_1', $this->langId),
                     'required' => true
@@ -766,16 +791,16 @@ class StripeConnect extends PaymentMethodBase
                     'title' => Labels::getLabel("MSG_EXECUTIVE", $this->langId),
                     'description' => Labels::getLabel("API_WHETHER_THE_PERSON_IS_AN_EXECUTIVE_OF_THE_LEGAL_ENTITY", $this->langId),
                     'required' => true
-                ],
+                ], */
             ]
         ];
 
         $commonPostFields = [
-            'business_profile.mcc' => [
+            /* 'business_profile.mcc' => [
                 'title' => Labels::getLabel("MSG_MERCHANT_CATEGORY_CODE", $this->langId),
                 'description' => Labels::getLabel('API_THE_MERCHANT_CATEGORY_CODE', $this->langId),
                 'required' => true
-            ],
+            ], */
             'external_account.account_holder_name' => [
                 'title' => Labels::getLabel("MSG_BANK_ACCOUNT_HOLDER_NAME", $this->langId),
                 'description' => Labels::getLabel('API_THE_NAME_OF_THE_PERSON_OR_BUSINESS_THAT_OWNS_THE_BANK_ACCOUNT', $this->langId),
@@ -791,14 +816,24 @@ class StripeConnect extends PaymentMethodBase
                 'description' => Labels::getLabel('API_THE_ROUTING_NUMBER', $this->langId),
                 'required' => false
             ],
-            'tos_acceptance' => [
+            /* 'tos_acceptance' => [
                 'title' => Labels::getLabel("LBL_I_AGREE_TO_THE_TERMS_OF_SERVICE", $this->langId),
                 'description' => '',
                 'required' => true
-            ],
+            ], */
         ];
 
         return array_merge($commonPreFields, $bussinessTypeFileds[$businessType], $commonPostFields);
+    }
+    
+    /**
+     * initialFormSubmitted
+     *
+     * @return bool
+     */
+    public function initialFormSubmitted(): bool
+    {
+        return (empty($this->getUserMeta('stripe_form_submitted')));
     }
 
     /**
@@ -815,7 +850,7 @@ class StripeConnect extends PaymentMethodBase
         $formSubmittedFlag = $this->getUserMeta('stripe_form_submitted');
 
         if (!empty($formSubmittedFlag)) {
-            $this->userInfoObj = $this->getResponse();
+            /* $this->userInfoObj = $this->getResponse();
             $currentlyDue = $this->userInfoObj->requirements->currently_due;
             $arr = [];
             array_walk($currentlyDue, function ($value, $key) use (&$arr) {
@@ -831,7 +866,7 @@ class StripeConnect extends PaymentMethodBase
 
                 $arr[$value] = ucwords($label);
             });
-            $this->requiredFields = $arr;
+            $this->requiredFields = $arr; */
         } else {
             $this->requiredFields = $this->getBusinessTypeFields($businessType);
         }
@@ -1686,6 +1721,9 @@ class StripeConnect extends PaymentMethodBase
                     break;
                 case self::REQUEST_CAPTURE_PAYMENT:
                     return $this->capturePayment($requestParam);
+                    break;
+                case self::REQUEST_CREATE_ACCOUNT_LINKS:
+                    return $this->createAccountLinks($requestParam);
                     break;
             }
         } catch (\Stripe\Exception\CardException $e) {
