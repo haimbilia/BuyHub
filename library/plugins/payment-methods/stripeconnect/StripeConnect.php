@@ -123,13 +123,14 @@ class StripeConnect extends PaymentMethodBase
         $weekdays = TimeSlot::getDaysArr(1);
 
         $this->stripe = new \Stripe\StripeClient($this->settings[$this->liveMode . 'secret_key']);
-        $this->payoutScheduleInterval = $this->settings['payouts_schedule_interval'];
-        $this->payoutScheduleDelayDays = $this->settings['payouts_schedule_delay_days'];
         
-        $scheduleWeekly = FatUtility::int($this->settings['payouts_schedule_weekly_anchor']);
+        $this->payoutScheduleInterval = isset($this->settings['payouts_schedule_interval']) ? $this->settings['payouts_schedule_interval'] : 'daily';
+        $this->payoutScheduleDelayDays = isset($this->settings['payouts_schedule_delay_days']) ? $this->settings['payouts_schedule_delay_days'] : '';
+        
+        $scheduleWeekly = isset($this->settings['payouts_schedule_delay_days']) ? FatUtility::int($this->settings['payouts_schedule_weekly_anchor']) : 0;
         $this->payoutScheduleWeekly = (0 < $scheduleWeekly && isset($weekdays[$scheduleWeekly])  ? $weekdays[$scheduleWeekly] : '');
 
-        $this->payoutScheduleMonthly = $this->settings['payouts_schedule_monthly_anchor'];
+        $this->payoutScheduleMonthly = isset($this->settings['payouts_schedule_monthly_anchor']) ? $this->settings['payouts_schedule_monthly_anchor'] : '';
         return true;
     }
 
