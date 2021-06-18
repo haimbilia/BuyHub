@@ -83,6 +83,7 @@ foreach ($vendorOrdersList as $sn => $row) {
                 if (!in_array($row["op_status_id"], $notAllowedStatues) && $canEdit) {
                     $td->appendElement('a', array('href' => UrlHelper::generateUrl('SellerOrders', 'CancelOrder', array($row['op_id'])), 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Cancel_Order', $adminLangId)), "<i class='fas fa-times'></i>", true);
                 }
+                /*
                 $shipBySeller = CommonHelper::canAvailShippingChargesBySeller($row['op_selprod_user_id'], $row['opshipping_by_seller_user_id']);
                 if ($row['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !$shipBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $row['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $row['order_payment_status']) && !empty($row['opshipping_carrier_code']) && !empty($row['opshipping_service_code'])) {
                     if (empty($row['opr_response']) && empty($row['opship_tracking_number']) && 'EasyPost' != $keyName) {
@@ -95,6 +96,8 @@ foreach ($vendorOrdersList as $sn => $row) {
                         }
                     }
                 }
+                 * 
+                 */
 
                 break;
             default:

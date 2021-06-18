@@ -20,7 +20,10 @@ $orderStatus = '';
 if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPartyorderInfo"]['orderStatus'])) {
     $orderStatus = $orderDetail["thirdPartyorderInfo"]['orderStatus'];
     $orderStatusLbl = strpos($orderStatus, "_") ? str_replace('_', ' ', $orderStatus) : $orderStatus;
-} ?>
+} 
+$pickUpDetails;
+
+?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <?php if (!$print) { ?>
@@ -73,7 +76,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                 if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && !$allowedForPlugin) {
                                     $orderId = $orderDetail['order_id']; ?>
                                     <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
-                                    <?php } elseif (!empty($orderDetail['opr_response']) && (!empty($orderDetail['opship_tracking_url']) || $allowedForPlugin)) {
+                                    <?php } elseif (!empty($orderDetail['opr_response'])) {
                                     if (OrderStatus::ORDER_REFUNDED == $orderDetail["op_status_id"]) { ?>
                                         <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
                                     <?php } else { ?>
@@ -109,7 +112,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                     <?php } ?>
                 </div>
                 <div class="card-body ">
-                    <div class="row">
+                    <div class="row">                        
                         <div class="col-lg-6 col-md-6 mb-4">
                             <div class="info--order">
                                 <p><strong><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>: </strong><?php echo $orderDetail['user_name']; ?></p>
@@ -193,8 +196,9 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                 <?php } ?>
                                 <span class="gap"></span>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
+                    
                     <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table">
                             <thead>
@@ -323,7 +327,13 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                     <div class="gap"></div>
                     <div class="gap"></div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 mb-4">
+                        <?php 
+                        $colClass = 'col-lg-6 col-md-6 mb-4';
+                        if(!empty($orderDetail['shippingAddress']) && !empty($pickUpDetails)  && 0 < $pickUpDetails['opsp_scheduled']){
+                            $colClass ='col-lg-4 col-md-4 mb-4';
+                        }                        
+                        ?>
+                        <div class="<?php echo $colClass;?>">
                             <h5><?php echo Labels::getLabel('LBL_Billing_Details', $siteLangId); ?></h5>
                             <?php $billingAddress = $orderDetail['billingAddress']['oua_name'] . '<br>';
                             if ($orderDetail['billingAddress']['oua_address1'] != '') {
@@ -359,7 +369,7 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                             </div>
                         </div>
                         <?php if (!empty($orderDetail['shippingAddress'])) { ?>
-                            <div class="col-lg-6 col-md-6 mb-4">
+                            <div class="<?php echo $colClass;?>">
                                 <h5><?php echo Labels::getLabel('LBL_Shipping_Details', $siteLangId); ?></h5>
                                 <?php $shippingAddress = $orderDetail['shippingAddress']['oua_name'] . '<br>';
                                 if ($orderDetail['shippingAddress']['oua_address1'] != '') {
@@ -394,6 +404,26 @@ if (!empty($orderDetail["thirdPartyorderInfo"]) && isset($orderDetail["thirdPart
                                 </div>
                             </div>
                         <?php } ?>
+                        <?php if(!empty($pickUpDetails) && 0 < $pickUpDetails['opsp_scheduled']){
+                           $pickUpPostedDetails = json_decode($pickUpDetails['opsp_requested_data'],true);                  
+                           $pickUpflds = $pluginObj->getPickupFormElementsArr();
+                            ?>
+                            <div class="<?php echo $colClass;?>">
+                                <h5><?php echo Labels::getLabel('LBL_PICKUP_TIMING', $siteLangId); ?></h5>
+                                <div class="info--order">
+                                    <?php foreach($pickUpflds as $fldName => $fldVal){
+                                        if(!isset($pickUpPostedDetails[$fldName])){
+                                            continue;
+                                        }
+                                        ?>
+                                    <p><strong><?php echo $fldVal['label']; ?> : </strong><?php echo $pickUpPostedDetails[$fldName]; ?></p>                                
+                                    <?php } ?>
+                                    <span class="gap"></span>
+                                </div>
+                            </div>                        
+                        <?php } ?>
+                        
+                        
                     </div>
 
                     <?php if ($canEdit && $displayForm && !$print) { ?>

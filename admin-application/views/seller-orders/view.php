@@ -23,6 +23,7 @@ if (!empty($order["thirdPartyorderInfo"]) && isset($order["thirdPartyorderInfo"]
 if (!empty($order['opship_tracking_url'])) {
     $orderStatusLbl = Labels::getLabel('LBL_SHIPPED', $adminLangId);
 }
+$pickUpDetails;
 
 ?>
 <div class="page">
@@ -76,11 +77,13 @@ if (!empty($order['opship_tracking_url'])) {
                                 'label' => '<i class="fas fa-print"></i>'
                             ];
 
-                            if (!$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
+                            if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && !$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
+                                
                                 $plugin = new Plugin();
                                 $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-
-                                if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && 'EasyPost' != $keyName) {
+                                $allowedForPlugin = in_array($keyName, ['EasyPost', 'Aramex']);                                
+                             
+                                if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && !$allowedForPlugin) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -89,7 +92,7 @@ if (!empty($order['opship_tracking_url'])) {
                                         ],
                                         'label' => '<i class="fas fa-file-download"></i>'
                                     ];
-                                } elseif (!empty($order['opr_response']) && (!empty($order['opship_tracking_url']) || 'EasyPost' != $keyName)) {
+                                } elseif (!empty($order['opr_response'])) {                                   
                                     $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
                                     $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
                                     $data['otherButtons'][] = [
@@ -101,8 +104,7 @@ if (!empty($order['opship_tracking_url'])) {
                                         'label' => '<i class="fas fa-file-export"></i>'
                                     ];
                                 }
-
-                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || 'EasyPost' == $keyName) && empty($order['opship_tracking_number']) && $order["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) {
+                                if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_tracking_number']) && $order["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) {
                                     if ('EasyPost' == $keyName) {
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
                                     } else {
@@ -117,6 +119,32 @@ if (!empty($order['opship_tracking_url'])) {
                                         'label' => '<i class="fas fa-shipping-fast"></i>'
                                     ];
                                 }
+                                
+                                $plugin = new Plugin();
+                                $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+                                $pluginObj = PluginHelper::callPlugin($keyName, [$adminLangId], $error, $adminLangId, false);                                
+                                if ($order['orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED && false !== $pluginObj && true === $pluginObj->canCreatePickup()) {
+                                    $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
+                                    if(!$pickUpDetails ||  1 > $pickUpDetails['opsp_scheduled']){
+                                       $data['otherButtons'][] = [
+                                        'attr' => [
+                                            'href' => 'javascript:void(0)',
+                                            'onclick' => 'getPickupForm(' . $order['op_id'] . ')',
+                                            'title' => Labels::getLabel('LBL_CREATE_PICKUP', $adminLangId)
+                                        ],
+                                        'label' => '<i class="fas fa-truck-pickup"></i>'
+                                    ]; 
+                                    }else{
+                                        $data['otherButtons'][] = [
+                                        'attr' => [
+                                            'href' => 'javascript:void(0)',
+                                            'onclick' => 'cancelPickup(' . $order['op_id'] . ')',
+                                            'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $adminLangId)
+                                        ],
+                                        'label' => '<i class="far fa-times-circle"></i>'
+                                    ];                                        
+                                    }                                    
+                                }                                
                             }
 
                             $this->includeTemplate('_partial/action-buttons.php', $data, false);
@@ -202,7 +230,13 @@ if (!empty($order['opship_tracking_url'])) {
                     </div>
                 </section>
                 <div class="row row--cols-group">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
+                    <?php 
+                        $colClass = 'col-lg-6 col-md-6 col-sm-6';
+                        if(!empty($pickUpDetails)  && 0 < $pickUpDetails['opsp_scheduled']){
+                            $colClass ='col-lg-4 col-md-4 col-sm-4';
+                        }                        
+                        ?>
+                    <div class="<?php echo $colClass?>">
                         <section class="section">
                             <div class="sectionhead">
                                 <h4><?php echo Labels::getLabel('LBL_Seller/_Customer_Details', $adminLangId); ?></h4>
@@ -223,7 +257,7 @@ if (!empty($order['opship_tracking_url'])) {
                             </div>
                         </section>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="<?php echo $colClass?>">
                         <section class="section">
                             <div class="sectionhead">
                                 <h4>
@@ -346,6 +380,30 @@ if (!empty($order['opship_tracking_url'])) {
                             </div>
                         </section>
                     </div>
+                    <?php if(!empty($pickUpDetails) && 0 < $pickUpDetails['opsp_scheduled']){
+                          $pickUpPostedDetails = json_decode($pickUpDetails['opsp_requested_data'],true);                  
+                          $pickUpflds = $pluginObj->getPickupFormElementsArr();
+                           ?>
+                            <div class="<?php echo $colClass?>">
+                                <section class="section">
+                                    <div class="sectionhead">
+                                        <h4><?php echo Labels::getLabel('LBL_PICKUP_TIMING', $adminLangId); ?></h4>
+                                    </div>
+                                    <div class="row space">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">                                            
+                                            <?php foreach($pickUpflds as $fldName => $fldVal){
+                                                if(!isset($pickUpPostedDetails[$fldName])){
+                                                    continue;
+                                                }
+                                                ?>
+                                                <p><strong><?php echo $fldVal['label']; ?> : </strong><?php echo $pickUpPostedDetails[$fldName]; ?></p>                                
+                                            <?php } ?>
+                                        </div>                                        
+                                    </div>
+                                </section>
+                            </div>                       
+                       <?php } ?>
+                    
                 </div>
                 <section class="section">
                     <div class="sectionhead">

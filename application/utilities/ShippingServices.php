@@ -77,7 +77,7 @@ trait ShippingServices
         $response = $this->shippingService->getResponse(false);
         $responseArr = json_decode($response, true);
         $recordCol = ['opship_op_id' => $opId];
-
+        
         $dataToSave = [
             'opship_orderid' => $shipmentApiOrderId,
             'opship_shipment_id' => $responseArr['shipmentId'],
@@ -383,7 +383,7 @@ trait ShippingServices
     private function getPickupForm(): object
     {
         if (false === $this->shippingService->canCreatePickup()) {
-            $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->siteLangId);
+            $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->langId);
             LibHelper::dieJsonError($msg);
         }
 
@@ -408,7 +408,7 @@ trait ShippingServices
             $fld->htmlAfterField = $htmlAfterField;
         }
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->langId));
         return $frm;
     }
     
@@ -443,7 +443,7 @@ trait ShippingServices
         if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->createPickup($data)) {
             $msg = $this->shippingService->getError();
             if (empty($msg)) {
-                $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->siteLangId);
+                $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->langId);
             }
             LibHelper::dieJsonError($msg);
         }
@@ -477,12 +477,12 @@ trait ShippingServices
         if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->cancelPickup($data)) {
             $msg = $this->shippingService->getError();
             if (empty($msg)) {
-                $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->siteLangId);
+                $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->langId);
             }
             LibHelper::dieJsonError($msg);
         }       
 
-        $resp = $this->shippingService->getResponse();  
+        $resp = $this->shippingService->getResponse(); 
        
         if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled'=> applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))){
             LibHelper::dieJsonError(FatApp::getDb()->getError());

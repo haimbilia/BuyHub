@@ -167,6 +167,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) {
             return;
         }
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (t) {
             t = $.parseJSON(t);
@@ -179,8 +180,8 @@ $(document).ready(function () {
         });
     };
     cancelPickup = function (opId) {
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) {
-            window.location.reload();
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) { 
+            setTimeout(function(){ window.location.href = fcom.makeUrl('Seller', 'viewOrder',[opId]) }, 300);
         });
     };
     

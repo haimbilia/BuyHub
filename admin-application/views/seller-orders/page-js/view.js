@@ -144,17 +144,53 @@ function pageRedirect(op_id) {
             }
         });
     }
+    getPickupForm = function (opId) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
+                $.facebox(res, 'medium-fb-width');
+                if (0 < $('.date--js').length) {
+                    $('.date--js').datepicker({
+                        minDate: new Date(),
+                        dateFormat:'yy-mm-dd'
+                    });
+                } 
+                
+                if (0 < $('.dateTime--js').length) {
+                    $('.dateTime--js').datetimepicker({
+                        minDate: new Date(),
+                        format:'Y-m-d H:i'
+                    });
+                } 
 
-    createPickup = function (opId) {
-        $.systemMessage(langLbl.processing, 'alert--process', false);
-        fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup', [opId]), '', function (t) {
-            $.systemMessage.close();
-            t = $.parseJSON(t);
-            $.systemMessage(t.msg, 'alert--success', false);
-            if (1 > t.status) {
-                $.systemMessage(t.msg, 'alert--danger', false);
-                return;
-            }
+                if (0 < $('.time--js').length) {
+                    $('.time--js').datetimepicker({
+                        datepicker: false,
+                        format:'H:i',
+                        step: 30
+                    });
+                }
+            });
         });
     }
+    createPickup = function (frm) {
+        if (!$(frm).validate()) {
+            return;
+        }        
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        var data = fcom.frmData(frm);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (t) {
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                $.mbsmessage(t.msg, false, 'alert--danger');
+                return;
+            }
+            $.mbsmessage(t.msg, false, 'alert--success');
+            window.location.reload();            
+        });
+    };
+    cancelPickup = function (opId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) {
+             setTimeout(function(){ window.location.href = fcom.makeUrl('sellerOrders', 'view',[opId]) }, 300);
+        });
+    };
 })();
