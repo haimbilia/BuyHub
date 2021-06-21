@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'badge_name':
                 $name = $row[$key];
-                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeRequest::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
+                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeRequest::DB_TBL_PREFIX . 'blinkcond_id'], 0, 0, false);
                 $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                 $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 break;

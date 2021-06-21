@@ -347,6 +347,11 @@ $(document).on('change', formClass + '.recCond--js', function () {
                 var badgeLinkRecordIds = $(formClass + "input[name='record_ids']").val();
                 if ('' != badgeLinkRecordIds) {
                     JSONObj = JSON.parse(badgeLinkRecordIds);
+                    if (JSONObj.includes(e.params.args.data.id)) {
+                        selector.val('').trigger('change');
+                        $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                        return false;
+                    }
                     JSONObj.push(e.params.args.data.id);
                 }
                 $(formClass + "input[name='record_ids']").val(JSON.stringify(JSONObj));

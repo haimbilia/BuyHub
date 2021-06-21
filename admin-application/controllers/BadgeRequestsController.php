@@ -74,7 +74,8 @@ class BadgeRequestsController extends AdminBaseController
     private function getRequestedBadgeObj()
     {
         $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
-        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = breq_badge_id', 'bdg');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
         $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->adminLangId, 'bdg_l');
         $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
         return $srch;
@@ -151,7 +152,7 @@ class BadgeRequestsController extends AdminBaseController
         $frm->addHiddenField('', 'breq_id');
 
         $approvalRequiredBadges = Badge::getApprovalRequestBadges($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->adminLangId), 'breq_badge_id', $approvalRequiredBadges);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->adminLangId), 'blinkcond_badge_id', $approvalRequiredBadges);
         $fld->requirements()->setRequired(true);
         $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->adminLangId), 'breq_message');
 

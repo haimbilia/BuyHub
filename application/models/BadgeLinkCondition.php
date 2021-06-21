@@ -222,6 +222,7 @@ class BadgeLinkCondition extends MyAppModel
             $recordFields
         );
         $srch->addMultipleFields($attr);
+        $srch->addCondition('badgelink_status', '=', applicationConstants::ACTIVE);
         $srch->joinBadge($langId);
         $srch->joinBadgeLinks();
         if (false === $linkRecords) {
@@ -255,5 +256,36 @@ class BadgeLinkCondition extends MyAppModel
         $srch->addCondition('badgelink_record_id', '=', $record_id);
         $result = (array) FatApp::getDb()->fetch($srch->getResultSet());
         return (empty($result)); */
+    }
+    
+    /**
+     * getApprovalRequestBadges
+     *
+     * @param  int $langId
+     * @param  bool $assoc
+     * @return array
+     */
+    public static function getApprovalRequestBadges(int $langId, bool $assoc = true): array
+    {
+        $srch = new BadgeSearch($langId);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blnk.blinkcond_badge_id =  bdg.badge_id', 'blnk');
+
+        $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition('badge_required_approval', '=', applicationConstants::YES);
+
+        if (true === $assoc) {
+            $srch->addMultipleFields([
+                    'blinkcond_id',
+                    'COALESCE(badge_name, badge_identifier) as badge_name'
+                ]
+            );
+            $srch->getResultSet();
+            return (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        }
+
+        $srch->addMultipleFields(array_merge(self::ATTR, ['COALESCE(badge_name, badge_identifier) as badge_name']));
+        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 }

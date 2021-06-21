@@ -890,7 +890,8 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 
 CREATE TABLE `tbl_badge_requests` (
     `breq_id` INT NOT NULL AUTO_INCREMENT,
-    `breq_badge_id` INT NOT NULL,
+    `breq_blinkcond_id` INT NOT NULL,
+    `breq_record_type` INT NOT NULL,
     `breq_user_id` BIGINT NOT NULL COMMENT 'Seller Id',
     `breq_message` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
     `breq_status` TINYINT(2) NOT NULL,

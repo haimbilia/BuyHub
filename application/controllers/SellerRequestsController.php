@@ -34,7 +34,8 @@ class SellerRequestsController extends SellerBaseController
 
         $this->set('canRequestBadge', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
         $this->set('noRecordFound', $noRecordFound);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
+        $this->_template->addCss(array('custom/page-css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -177,7 +178,8 @@ class SellerRequestsController extends SellerBaseController
     private function getRequestedBadgeObj()
     {
         $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
-        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = breq_badge_id', 'bdg');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
         $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
 
         $srch->addMultipleFields(array_merge(
@@ -185,6 +187,7 @@ class SellerRequestsController extends SellerBaseController
             ['COALESCE(badge_name, badge_identifier) as badge_name']
         ));
 
+        $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
         return $srch;
     }
@@ -758,12 +761,19 @@ class SellerRequestsController extends SellerBaseController
     {
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
+        $frm->addHiddenField('', 'record_ids');
 
-        $approvalRequiredBadges = Badge::getApprovalRequestBadges($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_badge_id', $approvalRequiredBadges);
+        $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_blinkcond_id', $approvalRequiredBadges);
         $fld->requirements()->setRequired(true);
-        $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
         $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
+
+        $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
+
+        $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
+        unset($recordTypesArr[BadgeLinkCondition::RECORD_TYPE_SHOP]);
+        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr, '', [], '');
+
         $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->siteLangId));
         return $frm;
@@ -779,17 +789,22 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
+        $recordIds = isset($post['record_ids']) ? json_decode($post['record_ids'], true) : [];
+        if (null === $recordIds || false === $recordIds || empty($recordIds)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId));
+        }
+
         $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
 
         $post['breq_requested_on'] = date('Y-m-d H:i:s');
         $post['breq_user_id'] = UserAuthentication::getLoggedUserId();
 
-        $status = BadgeRequest::getRequestStatus($post['breq_badge_id'], UserAuthentication::getLoggedUserId());
+        $status = BadgeRequest::getRequestStatus($post['breq_blinkcond_id'], UserAuthentication::getLoggedUserId());
         if (BadgeRequest::REQUEST_APPROVED == $status || BadgeRequest::REQUEST_PENDING == $status) {
             $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/PENDING', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
-
+        // CommonHelper::printArray($post, true);
         $record = new BadgeRequest($badgeReqId);
         $record->assignValues($post);
 

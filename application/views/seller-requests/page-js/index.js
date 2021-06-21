@@ -287,12 +287,18 @@
 
     /* Badge Request [ */
     addBadgeReqForm = function (badgeReqId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeReqForm', [badgeReqId]), '', function (t) {
-                $.facebox(t, 'content fbminwidth faceboxWidth medium-fb-width');
-            });
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeReqForm', [badgeReqId]), '', function (t) {
+            $('.pagebody--js').hide();
+            $('.editRecord--js').html(t);
+            bindRecordsSelect2();
         });
     };
+
+    backToListing = function () {
+        searchBadgeRequests();
+        $('.editRecord--js').html("");
+        $('.pagebody--js').fadeIn();
+    }
 
     setupBadgeReq = function (frm) {
         if (!$(frm).validate()) return;
@@ -310,7 +316,8 @@
                 $.mbsmessage(langLbl.processing, false, 'alert--process');
             },
             success: function (ans) {
-                $.mbsmessage(ans.msg, true, 'alert--success');
+                var className = (ans == 1 ? 'alert--success' : 'alert--danger');
+                $.mbsmessage(ans.msg, true, className);
                 $(document).trigger('close.facebox');
                 searchBadgeRequests();
             },
@@ -331,15 +338,25 @@
     }
 
     getRecordTypeURL = function () {
-        var searchSelector = $(formClass + "select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
+        var searchSelector = $("select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
-        var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+        var recordType = $('select[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            return fcom.makeUrl('Products', 'autoComplete');
+            return fcom.makeUrl('ShippingProfileProducts', 'autoCompleteProducts');
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
-            return fcom.makeUrl('SellerProducts', 'autoCompleteProducts');
-        } else if (RECORD_TYPE_SHOP == recordType) {
-            return fcom.makeUrl('Shops', 'autoComplete');
+            return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
+        } else {
+            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            return false;
+        }
+    }
+
+    getRecordData = function (data) {
+        var recordType = $('select[name="blinkcond_record_type"]').val();
+        if (RECORD_TYPE_PRODUCT == recordType) {
+            return data
+        } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
+            return data.suggestions;
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
             return false;
@@ -347,12 +364,12 @@
     }
 
     bindRecordsSelect2 = function () {
-        var selector = $(formClass + "select.recordIds--js");
+        var selector = $("select.recordIds--js");
         selector.select2({
             tags: true,
             closeOnSelect: true,
             allowClear: true,
-            dir: layoutDirection,
+            dir: langLbl.layoutDirection,
             placeholder: selector.attr('placeholder'),
             ajax: {
                 url: function () {
@@ -371,53 +388,82 @@
             },
             minimumInputLength: 0,
             templateResult: function (result) {
-                return result.name;
+                return result.name || result.value;
             },
             templateSelection: function (result) {
-                return result.name || result.text;
+                return result.name || result.value;
             }
         }).on('select2:selecting', function (e) {
-            var badgeType = $(formClass + 'input[name="badge_type"]').val();
-            var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+            var badgeType = $('input[name="badge_type"]').val();
+            var recordType = $('select[name="blinkcond_record_type"]').val();
             var position = 0;
-            if (0 < $(formClass + 'select[name="blinkcond_position"]').length) {
-                position = $(formClass + 'select[name="blinkcond_position"]').val();
+            if (0 < $('select[name="blinkcond_position"]').length) {
+                position = $('select[name="blinkcond_position"]').val();
             }
-            fcom.ajax(fcom.makeUrl(controller, 'isUnique', [badgeType, recordType, e.params.args.data.id, position]), '', function (t) {
-                var resp = JSON.parse(t);
+
+            // fcom.ajax(fcom.makeUrl(controller, 'isUnique', [badgeType, recordType, e.params.args.data.id, position]), '', function (t) {
+                /* var resp = JSON.parse(t);
                 if (1 > resp.status) {
                     selector.val('').trigger('change');
                     $.systemMessage(resp.msg, 'alert--danger');
                     return false;
-                }
+                } */
 
+                var recordIds = $("input[name='record_ids']");
                 var JSONObj = [e.params.args.data.id];
-                var badgeLinkRecordIds = $(formClass + "input[name='record_ids']").val();
+                var badgeLinkRecordIds = recordIds.val();
                 if ('' != badgeLinkRecordIds) {
                     JSONObj = JSON.parse(badgeLinkRecordIds);
+                    if (JSONObj.includes(e.params.args.data.id)) {
+                        selector.val('').trigger('change');
+                        $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                        return false;
+                    }
                     JSONObj.push(e.params.args.data.id);
                 }
-                $(formClass + "input[name='record_ids']").val(JSON.stringify(JSONObj));
+                recordIds.val(JSON.stringify(JSONObj));
                 setTimeout(function () {
                     selector.val('').trigger('change');
                 }, 200);
-                var badgeLinkCondId = $(formClass + "input[name='blinkcond_id']").val();
-                if ('' != badgeLinkCondId) {
-                    bindLink(badgeType, badgeLinkCondId, e.params.args.data.id, position);
-                } else {
-                    var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="icon ion-close"></i></a></id><td>' + e.params.args.data.name + '</td></tr>';
-                    var tbl = "";
-                    if (1 > $(formClass + 'table.recordListing--js').length) {
-                        var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
-                        $(formClass + '.recordsContainer--js').html(tbl);
-                    }
-                    $(formClass + '.recordListing--js').append(htm);
+                var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times-circle"></i></a></id><td>' +( e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+                var tbl = "";
+                if (1 > $('table.recordListing--js').length) {
+                    var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
+                    $('.recordsContainer--js').html(tbl);
                 }
-                $(formClass + "select[name='blinkcond_record_type']").attr('disabled', 'disabled');
-            });
+                $('.recordListing--js').append(htm);
+                $("select[name='blinkcond_record_type']").attr('disabled', 'disabled');
+            // });
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
         });
+    }
+
+
+    updateRecordIds = function (removeRecordId = 0) {
+        var selectedRecords = $("input[name='record_ids']").val();
+        if ('' != selectedRecords && 'undefined' != typeof selectedRecords) {
+            selectedRecords = $.parseJSON(selectedRecords);
+            if (removeRecordId) {
+                var index = selectedRecords.indexOf(removeRecordId);
+                if (index > -1) {
+                    selectedRecords.splice(index, 1);
+                }
+            }
+
+            $("input[name='record_ids']").val(JSON.stringify(selectedRecords));
+            var recordType = $("select[name='blinkcond_record_type']");
+            if (1 > selectedRecords.length) {
+                recordType.removeAttr('disabled');
+            } else {
+                recordType.attr('disabled', 'disabled');
+            }
+        }
+    }
+
+    removeRecordRow = function (element, removeRecordId) {
+        $(element).closest('tr').remove();
+        updateRecordIds(removeRecordId);
     }
 
 })();

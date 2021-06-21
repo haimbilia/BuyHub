@@ -11,7 +11,8 @@ class BadgeRequest extends MyAppModel
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
-        self::DB_TBL_PREFIX . 'badge_id', 
+        self::DB_TBL_PREFIX . 'blinkcond_id', 
+        self::DB_TBL_PREFIX . 'record_type', 
         self::DB_TBL_PREFIX . 'message',
         self::DB_TBL_PREFIX . 'status',
         self::DB_TBL_PREFIX . 'requested_on',
@@ -54,14 +55,14 @@ class BadgeRequest extends MyAppModel
     /**
      * getRequestStatus
      *
-     * @param  int $badgeId
+     * @param  int $blinkCondId
      * @param  int $sellerId
      * @return int
      */
-    public static function getRequestStatus(int $badgeId, int $sellerId): int
+    public static function getRequestStatus(int $blinkCondId, int $sellerId): int
     {
         $srch = new SearchBase(self::DB_TBL, 'breq');
-        $srch->addCondition(self::DB_TBL_PREFIX . 'badge_id', '=', $badgeId);
+        $srch->addCondition(self::DB_TBL_PREFIX . 'blinkcond_id', '=', $blinkCondId);
         $srch->addCondition(self::DB_TBL_PREFIX . 'user_id', '=', $sellerId);
         $srch->addCondition(self::DB_TBL_PREFIX . 'status', 'IN', [self::REQUEST_PENDING, self::REQUEST_APPROVED]);
         $srch->addFld(self::DB_TBL_PREFIX . 'status');

@@ -174,6 +174,7 @@ class AdminBaseController extends FatController
             'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
             'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
             'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
+            'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->adminLangId),
         );
 
         $languages = Language::getAllNames(false);
