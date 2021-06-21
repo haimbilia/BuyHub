@@ -957,15 +957,6 @@ class ConfigurationsController extends AdminBaseController
                         0
                     );
                     $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_ADMIN_SHIPPING.", $this->adminLangId) . "</small>";
-
-                    $fld1 = $frm->addCheckBox(
-                        Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILED_TO_FETCH_RATES.", $this->adminLangId),
-                        'CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS',
-                        1,
-                        array(),
-                        false,
-                        0
-                    );
                 }    
                 
                 /* $frm->addHtml('','Checkout','<h3>'.Labels::getLabel("LBL_Checkout",$this->adminLangId) . '</h3>'); */

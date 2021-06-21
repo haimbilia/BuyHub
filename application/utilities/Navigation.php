@@ -159,6 +159,7 @@ class Navigation
         $template->set('siteLangId', $siteLangId);
         $template->set('controller', $controller);
         $template->set('action', $action);
+        $template->set('params', FatApp::getParameters());
         $template->set('todayUnreadMessageCount', $todayUnreadMessageCount);
     }
 

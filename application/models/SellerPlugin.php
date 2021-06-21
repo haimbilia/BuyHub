@@ -14,6 +14,14 @@ class SellerPlugin extends PluginCommon
             array('plugin_code')
         );
     }
+    
+    public static function getAllowedTypeArr($langId)
+    {
+        return [         
+            self::TYPE_SHIPPING_SERVICES => Labels::getLabel('LBL_SHIPPING_SERVICES', $langId),
+            self::TYPE_DATA_MIGRATION => Labels::getLabel('LBL_DATA_MIGRATION', $langId),
+        ];
+    }
 
     public static function getSearchObject(int $userId, int $langId = 0, bool $isActive = true, bool $innerJoinPluginUser = true, bool $joinSettings = false): object
     {

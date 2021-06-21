@@ -21,7 +21,8 @@ class Shipping
     private $shippingApiObj;
     private $selProdShipRates = [];
     private $selectedShippingService = [];
-    private $ratesNotFetchedSelprodIds = [];
+    private $systemRatesToFetchSelprodIds = [];
+    private $selprodIdsUnableToFetchFromApi = [];
 
     public const FULFILMENT_ALL = -1;
     public const FULFILMENT_PICKUP = 1;
@@ -255,9 +256,7 @@ class Shipping
         if (1 > $pluginId) {
             return false;
         }
-        
-        $useManualShippingIfFailed = FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_IF_THIRD_PARTY_FAILS', FatUtility::VAR_INT, 0);
-        
+
         $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . $pluginId;
         $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
         if ($carriers) {
@@ -271,11 +270,7 @@ class Shipping
         }
 
         if (empty($carriers)) {
-            array_walk($this->selProdShipRates, function ($selProdData) {
-                if (!in_array($selProdData['selprod_id'], $this->ratesNotFetchedSelprodIds) && 0 < $useManualShippingIfFailed) {
-                    $this->ratesNotFetchedSelprodIds[] =  $selProdData['selprod_id'];
-                }
-            });
+            $this->selprodIdsUnableToFetchFromApi[] = $rates['selprod_id'];
             return false;
         }
 
@@ -290,7 +285,7 @@ class Shipping
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
 
         $processedSelProds = [];
-        
+
         foreach ($this->selProdShipRates as $rateId => $rates) {
             if (in_array($rates['selprod_id'], $processedSelProds)) {
                 continue;
@@ -304,9 +299,9 @@ class Shipping
             if (0 < $rates['shiippingBySeller']) {
                 $useManualShipping = ShopSpecifics::getAttributesById($product['shop_id'], 'shop_use_manual_shipping_rates');
             }
-            
+
             if (0 < $useManualShipping) {
-                $this->ratesNotFetchedSelprodIds[] = $rates['selprod_id'];
+                $this->systemRatesToFetchSelprodIds[] = $rates['selprod_id'];
                 continue;
             }
 
@@ -344,20 +339,19 @@ class Shipping
 
             $shippingLevel = self::LEVEL_PRODUCT;
 
-            $shippedBy = -1; /*admin shipping */
+            $shippedBy = -1; /* admin shipping */
             $fromZipCode = FatApp::getConfig('CONF_ZIP_CODE', FatUtility::VAR_STRING, '');
             if (0 < $rates['shiippingBySeller']) {
                 $shippedBy = $product['shop_id'];
                 $fromZipCode = $rates['shop_postalcode'];
             }
 
-            $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$rates['selprod_id']] = $product;
-
             if (empty($fromZipCode)) {
                 unset($physicalSelProdIdArr[$rates['selprod_id']]);
+                $this->selprodIdsUnableToFetchFromApi[] = $rates['selprod_id'];
                 /*  $user = self::BY_ADMIN == $shippedBy ? Labels::getLabel('MSG_ADMIN', $this->langId) : Labels::getLabel('MSG_SHOP', $this->langId);
-                 $error = Labels::getLabel('MSG_UNABLE_TO_LOCATE_{USER}_POSTAL_CODE', $this->langId);
-                 $this->error = CommonHelper::replaceStringData($error, ['{USER}' => $user]); */
+                  $error = Labels::getLabel('MSG_UNABLE_TO_LOCATE_{USER}_POSTAL_CODE', $this->langId);
+                  $this->error = CommonHelper::replaceStringData($error, ['{USER}' => $user]); */
                 $msg = Labels::getLabel('MSG_MISSING_FROM_ZIP_FOR_"{PRODUCT}"._PLEASE_FROM_ADDRESS.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
                 SystemLog::set($msg);
@@ -394,13 +388,13 @@ class Shipping
                     if (!empty($shippingRates)) {
                         FatCache::set($cacheKey, serialize($shippingRates), '.txt');
                     }
-                }               
-                unset($physicalSelProdIdArr[$rates['selprod_id']]);
-                if ((false == $shippingRates || empty($shippingRates)) && 0 < $useManualShippingIfFailed) {
-                    $this->ratesNotFetchedSelprodIds[] = $rates['selprod_id'];
+                }
+                if ((false == $shippingRates || empty($shippingRates))) {
+                    $this->selprodIdsUnableToFetchFromApi[] = $rates['selprod_id'];
                     continue;
                 }
-                
+                unset($physicalSelProdIdArr[$rates['selprod_id']]);
+
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
@@ -418,10 +412,13 @@ class Shipping
                     $shipmentId = array_key_exists('shipmentId', $value) ? $value['shipmentId'] : $carrierCode . '|' . $value['serviceName'];
                     $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']][$shipmentId] = $shippingCost;
                 }
-                /*If rates fetched from one shipment carriers then ignore for others */
+                /* If rates fetched from one shipment carriers then ignore for others */
                 if (!empty($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']])) {
                     continue 2;
                 }
+            }
+            if (!in_array($rates['selprod_id'], $this->selprodIdsUnableToFetchFromApi)) {
+                $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$rates['selprod_id']] = $product;
             }
         }
 
@@ -436,9 +433,14 @@ class Shipping
      * @return bool
      */
     private function fetchShippingRatesFromSystem(array $productInfo, array &$physicalSelProdIdArr): bool
-    {
+    {        
+                
         foreach ($this->selProdShipRates as $rateId => $rates) {            
-            if (!empty($this->ratesNotFetchedSelprodIds) && !in_array($rates['selprod_id'], $this->ratesNotFetchedSelprodIds)) {
+            if (!empty($this->systemRatesToFetchSelprodIds) && !in_array($rates['selprod_id'], $this->systemRatesToFetchSelprodIds)) {
+                continue;
+            } 
+            /* exclude products which failed in fetchShippingRatesFromApi */
+            if (in_array($rates['selprod_id'], $this->selprodIdsUnableToFetchFromApi)) {
                 continue;
             }
 
@@ -519,7 +521,7 @@ class Shipping
             $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
         }
 
-        if (1 > $pluginId || count($this->ratesNotFetchedSelprodIds)) {
+        if (1 > $pluginId || count($this->systemRatesToFetchSelprodIds)) {
             $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr);
         }
 
