@@ -1,96 +1,13 @@
-<!-- <div class="dropdown custom-drag-drop">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Customize columns
-    </button>
-    <div class="dropdown-menu  dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y" aria-labelledby="dropdownMenuButton">
-        <div class="">
-            <ul class="list-drag-drop">
-                <li class="">
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, dolor Lorem ipsum dolor  dolor Lorem ipsum dolor  
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-                <li class="disabled">
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, dolor vel, pariatur dolores facilis
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-                <li>
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, dolor
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-                <li>
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, dolor vel, pariatur dolores facilis
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-                <li>
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, 
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-                <li>
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, dolor vel, pariatur dolores facilis
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-                <li>
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, dolor
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-                <li>
-                    <label class="checkbox">
-                        <input class="" type="checkbox" name="" value=""><i class="input-helper"></i>
-                        Lorem ipsum, dolor
-                    </label>
-
-                    <i class="icn fas fa-grip-lines"></i>
-
-                </li>
-            </ul>
-
-        </div>
-    </div>
-</div>
-<script>
-    $('.dropdown-menu').on('click', function(e) {
-    e.stopPropagation();
-});
-</script> -->
 <?php
+
+
 defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$div = new HtmlElement("div", array("class" => "section__toolbar"));
+$div = new HtmlElement("div", array("class" => "section__toolbar d-flex"));
+if (isset($htmlContent) && $htmlContent != '') {
+    $div->appendElement('div', [], $htmlContent, true);
+}
+
 $msg = isset($msg) ? $msg : '';
 if ((!isset($statusButtons) || true === $statusButtons)) {
     $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn-clean btn-sm btn-icon btn-secondary toolbar-btn-js d-none', 'title' => Labels::getLabel('LBL_Publish', $adminLangId), "onclick" => "toggleBulkStatues(1, '" . $msg . "')"), '<i class="fas fa-eye"></i>', true);
@@ -111,3 +28,9 @@ if (isset($otherButtons) && is_array($otherButtons)) {
 }
 
 echo $div->getHtml();
+?>
+<script>
+    $('.dropdown-menu').on('click', function(e) {
+        e.stopPropagation();
+    });
+</script>

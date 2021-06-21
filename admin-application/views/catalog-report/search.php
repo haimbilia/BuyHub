@@ -68,6 +68,9 @@ foreach ($arrListing as $sn => $row) {
 				}
 				$span->appendElement('plaintext', array(), $name, true);
 				break;
+			case 'product_type':
+				$span->appendElement('plaintext', array(), $productTypeArr[$row[$key]], true);
+				break;
 			case 'grossSales':
 			case 'transactionAmount':
 			case 'inventoryValue':
