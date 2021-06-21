@@ -1715,9 +1715,9 @@ padding: 18px 38px;
 }
 
 .section .sectionhead .btn {
-    position: absolute;
+    /* position: absolute;
     right: 20px;
-    top: 24px;
+    top: 24px; */
 }
 
 
@@ -12638,6 +12638,10 @@ form[name="frmShippingProfile"] {
 
 
 /**/
+
+.no-after::after {
+    content: normal;
+}
 
 .custom-drag-drop .btn {
     position: static !important;
