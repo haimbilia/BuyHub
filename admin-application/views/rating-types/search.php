@@ -23,8 +23,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = 1;
+$sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
 foreach ($arrListing as $sn => $row) {
+    $sr_no++;
     $tr = $tbl->appendElement('tr');
 
     foreach ($arr_flds as $key => $val) {
@@ -97,7 +98,6 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no++;
 }
 if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');

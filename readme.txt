@@ -193,6 +193,8 @@ Fixes:
     => 054717 - on recently view product error coming on product detail page
     => 054731 - when review is placed with media then there is no need to add show more on 6th image
     => 054761 - despite having sku non mandatory it's not adding inventory from seller end
+    => 054814 - admin> catalog> rating type> search is not working
+    => 054813 - admin> catalog> rating types> rating types sr. no are not listing properly on changing page
     => 055069 - on product detail page undefined index: theprice notice coming
     => 055077 - when cookies policy are turned off from admin then recently viewed items are not listing on detail page of product
     => 055104 - seller dashboard> data migration tab is not highlighting on accessing
@@ -329,3 +331,4 @@ bugs:
     #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
     #054212	while adding inventory> when we add link and url is long then UI is not proper
+    #055154	digital items> files linked with specific language are listing all on front end in preview
