@@ -498,10 +498,10 @@ class Orders extends MyAppModel
                         'afile.afile_physical_path as mainfile_physical_path',
                     ];
 
-                    $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb, 0, $attrs);
+                    $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb, 0, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $attrs);
 
                     if ('0' != $optionComb) {
-                        $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0', 0, $attrs);
+                        $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0', 0, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $attrs);
                         $records = array_replace($records, $commonRecords);
                     }
 

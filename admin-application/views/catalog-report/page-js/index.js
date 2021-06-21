@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	searchCatalogReport(document.frmCatalogReportSearch);	
+	searchCatalogReport(document.frmCatalogReportSearch);
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
@@ -17,6 +17,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	searchCatalogReport(frm, false);
 });
 
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
 (function () {
 	var currentPage = 1;
 	var runningAjaxReq = false;
@@ -31,12 +39,13 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		searchCatalogReport(frm);
 	};
 
-	reloadList = function () {
+	reloadList = function (withloader) {
 		var frm = document.frmCatalogReportSearchPaging;
-		searchCatalogReport(frm);
+		searchCatalogReport(frm, withloader);
 	};
 
 	searchCatalogReport = function (form, withloader) {
+		setColumnsData(form);
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
@@ -49,16 +58,31 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		fcom.ajax(fcom.makeUrl('CatalogReport', 'search'), data, function (res) {
 			$(dv).html(res);
 		});
-		
+
 	};
 
-	exportReport = function (dateFormat) {
+	exportReport = function () {
+		setColumnsData(document.frmCatalogReportSearch);
 		document.frmCatalogReportSearch.action = fcom.makeUrl('CatalogReport', 'export');
 		document.frmCatalogReportSearch.submit();
 	}
 
 	clearSearch = function () {
 		document.frmCatalogReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
+		});
 		searchCatalogReport(document.frmCatalogReportSearch);
+	};
+
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
+		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
 	};
 })();

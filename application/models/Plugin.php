@@ -154,7 +154,7 @@ class Plugin extends PluginCommon
             return false;
         }
 
-        if (in_array($typeId, self::HAVING_KINGPIN) && empty((new self())->getDefaultPluginKeyName($typeId))) {
+        if (in_array($typeId, self::getKingpinTypeArr()) && empty((new self())->getDefaultPluginKeyName($typeId))) {
             return [];
         }
 
@@ -259,7 +259,7 @@ class Plugin extends PluginCommon
      */
     public function getDefaultPluginData(int $typeId, $attr = null, int $langId = 0)
     {
-        if (!in_array($typeId, self::HAVING_KINGPIN)) {
+        if (!in_array($typeId, self::getKingpinTypeArr())) {
             $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
             return false;
         }
@@ -357,7 +357,7 @@ class Plugin extends PluginCommon
             return false;
         }
 
-        $max = in_array($typeId, self::HAVING_KINGPIN) && applicationConstants::ACTIVE == $status ? 2 : 1;
+        $max = in_array($typeId, self::getKingpinTypeArr()) && applicationConstants::ACTIVE == $status ? 2 : 1;
 
         for ($i = 0; $i < $max; $i++) {
             $condition = ['smt' => self::DB_TBL_PREFIX . 'type = ?', 'vals' => [$typeId]];
@@ -371,7 +371,7 @@ class Plugin extends PluginCommon
             }
         }
 
-        if (in_array($typeId, self::HAVING_KINGPIN)) {
+        if (in_array($typeId, self::getKingpinTypeArr())) {
             $kingPin = (self::INACTIVE == $status) ? self::INACTIVE : $id;
             
             $assignValues = [

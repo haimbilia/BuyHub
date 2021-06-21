@@ -15,6 +15,15 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	}
 	searchReport(frm, false);
 });
+
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
 (function () {
 	var dv = '#listing';
 
@@ -27,15 +36,17 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		searchReport(frm);
 	};
 
-	reloadList = function () {
+	reloadList = function (withloader) {
 		var frm = document.frmReportSearchPaging;
-		searchReport(frm);
+		searchReport(frm, withloader);
 	};
 
-	searchReport = function (form, withloader) {
+	searchReport = function (frm, withloader) {
+		setColumnsData(frm);
+
 		var data = '';
-		if (form) {
-			data = fcom.frmData(form);
+		if (frm) {
+			data = fcom.frmData(frm);
 		}
 
 		if (typeof withloader == 'undefined' || withloader != false) {
@@ -47,13 +58,29 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		});
 	};
 
-	exportReport = function (dateFormat) {
+	exportReport = function () {
+		setColumnsData(document.frmReportSearch);
 		document.frmReportSearch.action = fcom.makeUrl('TransactionReport', 'export');
 		document.frmReportSearch.submit();
 	}
 
 	clearSearch = function () {
 		document.frmReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
+		});
 		searchReport(document.frmReportSearch);
 	};
+
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
+		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
+	};
+
 })();

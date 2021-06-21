@@ -1,12 +1,12 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main" role="main">
     <div class="content-wrapper content-space">
         <div class="content-header row">
             <div class="col">
                 <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Seller_Options', $siteLangId); ?></h2>
-            </div>           
+                <h2 class="content-header-title"><?php echo $plugins[$type]; ?></h2>
+            </div>
         </div>
         <div class="content-body">
             <div class="row">
@@ -22,8 +22,6 @@
     </div>
 </main>
 <script>
-    
-    var type = <?php echo $type;?>;
+    var type = <?php echo $type; ?>;
     searchPlugin(type);
-
 </script>

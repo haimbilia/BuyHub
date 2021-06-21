@@ -77,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
                         $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Change_Status_To_Complete', $adminLangId), "onclick" => "updateRequestStatus(" . $row['ureq_id'] . "," . UserGdprRequest::STATUS_COMPLETE . ")"), Labels::getLabel('LBL_Complete', $adminLangId), true);
 
                         $innerLi = $innerUl->appendElement('li');
-                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_View_Purpose', $adminLangId), "onclick" => "viewRequestPurpose(" . $row['ureq_id'] . ")"), Labels::getLabel('LBL_View_Purpose', $adminLangId), true);
+                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_View', $adminLangId), "onclick" => "viewRequestPurpose(" . $row['ureq_id'] . ")"), Labels::getLabel('LBL_View', $adminLangId), true);
                         //}
 
                         /* $innerLi=$innerUl->appendElement('li');

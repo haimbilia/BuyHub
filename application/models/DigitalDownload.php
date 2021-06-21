@@ -109,27 +109,27 @@ class DigitalDownload extends MyAppModel
         return true;
     }
 
-    public function deleteAttachment($aFileId, $refId)
+    public function deleteAttachment($aFileId, $refRecordId, $isPreview = 0, $delFullRow = 0)
     {
         $aFileObj = new AttachedFile();
         
-        if (false == $aFileObj->deleteFile(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, $refId, $aFileId)) {
+        $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD;
+        if (1 == $isPreview) {
+            $fileType = AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW;
+        }
+        
+        if (false == $aFileObj->deleteFile($fileType, $refRecordId, $aFileId)) {
             $this->error = $aFileObj->getError();
             return false;
         }
 
-        $this->deletePreviewAttachment($refId, $aFileId);
-
-        return true;
-    }
-
-    public function deletePreviewAttachment($recordId, $subRecordId)
-    {
-        $aFileObj = new AttachedFile();
-        
-        if (false == $aFileObj->deleteFile(AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW, $recordId, 0, $subRecordId)) {
-            $this->error = $aFileObj->getError();
-            return false;
+        if (1 == $delFullRow) {
+            $aFileObj->deleteFile(
+                AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
+                $refRecordId,
+                0,
+                $aFileId
+            );
         }
 
         return true;
@@ -184,9 +184,12 @@ class DigitalDownload extends MyAppModel
 
         $frm->addSelectBox(Labels::getLabel('LBL_Option', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();
         
-        $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+
+        $frm->addSelectBox(Labels::getLabel('LBL_Attach_with_existing_orders', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
+        
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Downloadable_Link', $langId), 'product_downloadable_link');
-        $fld->requirements()->setRequired();
+        /* $fld->requirements()->setRequired(); */
 
         $frm->addTextBox(Labels::getLabel('LBL_Preview_Link', $langId), 'product_preview_link');
         
@@ -196,15 +199,18 @@ class DigitalDownload extends MyAppModel
 
         $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
         
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $langId), 'preview_file', array('id' => 'preview_file'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload_Preview', $langId), 'preview_file', array('id' => 'preview_file'));
 
         $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('LBL_Upload', $langId));
-
+        $frm->addButton('', 'reset', Labels::getLabel('LBL_Reset', $langId));
+        
         $frm->addHiddenField('', 'product_id');
         $frm->addHiddenField('', 'selprod_id');
         $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'dd_link_id');
+        $frm->addHiddenField('', 'is_preview', 0);
         $frm->addHiddenField('', 'dd_link_ref_id');
+        $frm->addHiddenField('', 'ref_file_id', 0);
         return $frm;
     }
 
@@ -346,17 +352,6 @@ class DigitalDownload extends MyAppModel
             }
         }
         
-        /* if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
-            if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
-                return true;
-            }
-            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
-        } else {
-            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
-                return true;
-            }
-            return static::returnResponseOrDie($returnResult, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
-        } */
         if (true == $validateAllowedWithInventory) {
             if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
                 return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
@@ -371,18 +366,6 @@ class DigitalDownload extends MyAppModel
         } else {
             return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $langId));
         }
-
-        /* if (true === $checkWithCatalog) {
-            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
-                return static::returnResponseOrDie(true, true);
-            }
-            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
-        } else {
-            if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
-                return static::returnResponseOrDie(true, true);
-            }
-            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
-        } */
     }
 
     /**
@@ -463,21 +446,20 @@ class DigitalDownload extends MyAppModel
                 return static::returnResponseOrDie($returnResult);
             }
         }
-        /* if (true == $validateAllowedWithInventory) {
-            if (applicationConstants::NO == $product['product_attachements_with_inventory']) {
-                return static::returnResponseOrDie($returnResult);
-            }
-        }
-        return true; */
-
+        
         if (true == $validateAllowedWithInventory) {
             if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
-                return static::returnResponseOrDie(true, true);
+                return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
             } else {
-                return static::returnResponseOrDie(true, false);
+                return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
             }
         }
-        return static::returnResponseOrDie(true, true);
+
+        if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
+            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+        } else {
+            return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $langId));
+        }
     }
 
     public static function returnResponseOrDie($returnResult = false, $response = false, $message = '')
@@ -524,4 +506,113 @@ class DigitalDownload extends MyAppModel
         return false;
     }
 
+    public function attachFileWithOrderedProducts($uploadedFileId, $recordId, $requestType, $langId, $option)
+    {
+        if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])) {
+            return;
+        }
+        
+        $rows = $this->getOrderedProducts($recordId, $requestType, $option);
+
+        
+        if (1 > count($rows)) {
+            return true;
+        }
+        $mainFileRow = AttachedFile::getAttributesById($uploadedFileId);
+        if (false == $mainFileRow) {
+            return true;
+        }
+        
+        $afileObj = new AttachedFile();
+        $fileData = [
+            'afile_type' => AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD,
+            'afile_record_subid' => 0,
+            'afile_physical_path' => $mainFileRow['afile_physical_path'],
+            'afile_name' => $mainFileRow['afile_name'],
+            'afile_lang_id' => $langId
+        ];
+        foreach ($rows as $key => $op) {
+            /* don't attach new files only with not expired orders [*/
+
+            $dateAvailable = '';
+            if ($op['op_selprod_download_validity_in_days'] != '-1') {
+                $dateAvailable = date('Y-m-d', strtotime($op['order_date_added'] . ' + ' . $op['op_selprod_download_validity_in_days'] . ' days'));
+            }
+            
+            if ($dateAvailable != '' && $dateAvailable < date('Y-m-d')) {
+                continue;
+            }
+            /* ] */
+            $fileData['afile_record_id'] = $op['op_id'];
+            $afileObj->setMainTableRecordId(0);
+            $afileObj->assignValues($fileData);
+            $afileObj->save();
+        }
+        return true;
+    }
+
+    public function attachLinkWithOrderedProducts($downloadLink, $recordId, $requestType, $langId, $option)
+    {
+        if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])
+            || '' == $downloadLink
+        ) {
+            return;
+        }
+
+        $rows = $this->getOrderedProducts($recordId, $requestType, $option);
+
+        if (1 > count($rows)) {
+            return true;
+        }
+
+        $linkData['opddl_downloadable_link'] = $downloadLink;
+        foreach ($rows as $key => $op) {
+            /* don't attach new files only with not expired orders [*/
+
+            $dateAvailable = '';
+            if ($op['op_selprod_download_validity_in_days'] != '-1') {
+                $dateAvailable = date('Y-m-d', strtotime($op['order_date_added'] . ' + ' . $op['op_selprod_download_validity_in_days'] . ' days'));
+            }
+            
+            if ($dateAvailable != '' && $dateAvailable < date('Y-m-d')) {
+                continue;
+            }
+            /* ] */
+
+            $linkData['opddl_op_id'] = $op['op_id'];
+            FatApp::getDb()->insertFromArray(OrderProductDigitalLinks::DB_TBL, $linkData);
+        }
+        return true;
+    }
+
+    public function getOrderedProducts($recordId, $requestType, $option)
+    {
+        
+        if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])) {
+            return [];
+        }
+        $opSrchObj = new OrderProductSearch(0, true);
+        
+        if (Product::CATALOG_TYPE_INVENTORY == $requestType) {
+            $opSrchObj->addCondition('op.op_selprod_id', '=', $recordId);
+        } else {
+            $opSrchObj->joinSellerProducts();
+            $opSrchObj->addCondition('sp.selprod_product_id', '=', $recordId);
+
+            if (0 != $option) {
+                $opSrchObj->addCondition('sp.selprod_code', '=', $recordId . '_' .  $option);
+            }
+        }
+
+        $opSrchObj->addMultipleFields([
+            'op_id',
+            'op_order_id',
+            'order_date_added',
+            'op_selprod_download_validity_in_days'
+        ]);
+        $opSrchObj->addDigitalDownloadCondition();
+        $opSrchObj->doNotCalculateRecords();
+        
+        return FatApp::getDb()->fetchAll($opSrchObj->getResultSet());
+    }
 }

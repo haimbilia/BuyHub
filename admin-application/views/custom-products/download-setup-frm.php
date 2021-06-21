@@ -181,7 +181,11 @@ if (false == $canDo) {
                                                             <div class="caption-wraper"><label class="field_label"></label></div>
                                                             <div class="field-wraper">
                                                                 <div class="field_cover">
-                                                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn'); ?>
+                                                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn');
+                                                                    $restBtn = $downloadFrm->getField('reset');
+                                                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;');
+                                                                    echo $downloadFrm->getFieldHtml('reset');
+                                                                    ?>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -233,6 +237,9 @@ if (false == $canDo) {
                                                                 <div class="field_cover">
                                                                     <?php
                                                                     echo $downloadFrm->getFieldHtml('attachement_upload_btn');
+                                                                    $restBtn = $downloadFrm->getField('reset');
+                                                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;' );
+                                                                    echo $downloadFrm->getFieldHtml('reset');
                                                                     ?>
                                                                 </div>
                                                             </div>
@@ -244,6 +251,8 @@ if (false == $canDo) {
                                         <?php echo $downloadFrm->getFieldHtml('preq_id'); ?>
                                         <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
                                         <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
+                                        <?php echo $downloadFrm->getFieldHtml('is_preview'); ?>
+                                        <?php echo $downloadFrm->getFieldHtml('ref_file_id'); ?>
                                     </form>
                                     <?php echo $downloadFrm->getExternalJS(); ?>
                                 </div>

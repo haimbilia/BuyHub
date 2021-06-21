@@ -11,13 +11,13 @@ $arr_flds = [
 $allPlugins = $arrListing;
 $pluginType = (!empty($allPlugins)) ? (array_shift($allPlugins))['plugin_type'] : '';
 
-if (!in_array($pluginType, Plugin::HAVING_SEPARATE_ICON)) {
+if (!in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
     unset($arr_flds['plugin_icon']);
 }
 
-if (!$canEdit || 2 > count($arrListing) || in_array($pluginType, Plugin::HAVING_KINGPIN)) {
+if (!$canEdit || 2 > count($arrListing) || in_array($pluginType, Plugin::getKingpinTypeArr())) {
     unset($arr_flds['dragdrop']);
-    if (!$canEdit || in_array($pluginType, Plugin::HAVING_KINGPIN) || 1 > count($arrListing)) {
+    if (!$canEdit || in_array($pluginType, Plugin::getKingpinTypeArr()) || 1 > count($arrListing)) {
         unset($arr_flds['select_all']);
     }
 }
@@ -134,13 +134,13 @@ $frm->addHiddenField('', 'plugin_type', $pluginType); ?>
         <h4><?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGINNAME}_PLUGINS', $adminLangId), ['{PLUGINNAME}' =>  $pluginTypes[$type]]); ?> </h4>
         <?php
         $data = [];
-        if ($canEdit && !in_array($pluginType, Plugin::HAVING_KINGPIN)) {
+        if ($canEdit && !in_array($pluginType, Plugin::getKingpinTypeArr())) {
             $data = [
                 'adminLangId' => $adminLangId,
                 'deleteButton' => false,
                 'msg' => $msg
             ];
-        } else if (in_array($pluginType, Plugin::HAVING_KINGPIN) && $pluginType == Plugin::TYPE_TAX_SERVICES && true === $activeTaxPluginFound) {
+        } else if (in_array($pluginType, Plugin::getKingpinTypeArr()) && $pluginType == Plugin::TYPE_TAX_SERVICES && true === $activeTaxPluginFound) {
             $data = [
                 'adminLangId' => $adminLangId,
                 'otherButtons' => [

@@ -1,18 +1,17 @@
 var searchArr = [];
 var page = 1;
-$(document).ready(function() {
+$(document).ready(function () {
     var frm = document.frmProductSearch;
 
     var frmSiteSearch = document.frmSiteSearch;
     $(frmSiteSearch.keyword).val($(frm.keyword).val());
     setSelectedCatValue($(frm.category).val());
 
-    $.each(frm.elements, function(index, elem) {
+    $.each(frm.elements, function (index, elem) {
         if (elem.type != 'text' && elem.type != 'textarea' && elem.type != 'hidden' && elem.type != 'submit') {
             /* i.e for selectbox */
-            $(elem).change(function() {
+            $(elem).change(function () {
                 reloadProductListing(frm);
-                //searchProducts(frm,0,0,1);
             });
         }
     });
@@ -24,7 +23,7 @@ $(document).ready(function() {
         $("input[name=brands]").parent("label").addClass("disabled");
     }
 
-    $(document).on('change', 'input[name=brands]', function() {
+    $(document).on('change', 'input[name=brands]', function () {
         var id = $(this).attr('data-id');
         var val = $(this).val();
         var title = $(this).attr('data-title');
@@ -33,7 +32,7 @@ $(document).ready(function() {
                 $('ul.brandFilter-js').prepend('<li><label class="checkbox brand" id="brand_' + val + '"><input name="brands" data-id="brand_' + val + '" value="' + val + '" data-title="' + title + '" type="checkbox" checked="true"><i class="input-helper">' + title + '</i><label></li>');
             }
 
-            $("input:checkbox[name=brands]").each(function() {
+            $("input:checkbox[name=brands]").each(function () {
                 if ($(this).attr('data-id') == id) {
                     $(this).prop("checked", true);
                 }
@@ -41,7 +40,7 @@ $(document).ready(function() {
             addFilter(id, this);
             addToSearchQueryString(id, this);
         } else {
-            $("input:checkbox[name=brands]").each(function() {
+            $("input:checkbox[name=brands]").each(function () {
                 if ($(this).attr('data-id') == id) {
                     $(this).prop("checked", false);
                 }
@@ -50,10 +49,10 @@ $(document).ready(function() {
         }
         removePaginationFromLink();
         reloadProductListing(frm);
-        //searchProducts(frm,0,0,1,1);
+
     });
 
-    $(document).on('change', 'input[name=category]', function() {
+    $(document).on('change', 'input[name=category]', function () {
         var id = $(this).parent().parent().find('label').attr('id');
         if ($(this).is(":checked")) {
             addFilter(id, this);
@@ -63,10 +62,10 @@ $(document).ready(function() {
         }
         removePaginationFromLink();
         reloadProductListing(frm);
-        //searchProducts(frm,0,0,1,1);
+
     });
 
-    $(document).on('change', 'input[name=optionvalues]', function() {
+    $(document).on('change', 'input[name=optionvalues]', function () {
         var id = $(this).parent().parent().find('label').attr('id');
         if ($(this).is(":checked")) {
             addFilter(id, this);
@@ -76,10 +75,10 @@ $(document).ready(function() {
         }
         removePaginationFromLink();
         reloadProductListing(frm);
-        //searchProducts(frm,0,0,1,1);
+
     });
 
-    $(document).on('change', 'input[name=conditions]', function() {
+    $(document).on('change', 'input[name=conditions]', function () {
         var id = $(this).parent().parent().find('label').attr('id');
         if ($(this).is(":checked")) {
             addFilter(id, this);
@@ -89,26 +88,26 @@ $(document).ready(function() {
         }
         removePaginationFromLink();
         reloadProductListing(frm);
-        //searchProducts(frm,0,0,1,1);
+
     });
 
-    $(document).on('change', 'input[name=free_shipping]', function() {
+    $(document).on('change', 'input[name=free_shipping]', function () {
         alert("Pending...");
     });
 
-    $(document).on('change', 'select[name=pageSize]', function() {
+    $(document).on('change', 'select[name=pageSize]', function () {
         removePageSideFromLink();
         removePaginationFromLink();
         reloadProductListing();
     });
 
-    $(document).on('change', 'select[name=sortBy]', function() {
+    $(document).on('change', 'select[name=sortBy]', function () {
         removePageSideFromLink();
         removePaginationFromLink();
         reloadProductListing();
     });
 
-    $(document).on('change', 'input[name=out_of_stock]', function() {
+    $(document).on('change', 'input[name=out_of_stock]', function () {
         var id = $(this).parent().parent().find('label').attr('id');
         if ($(this).is(":checked")) {
             addFilter(id, this);
@@ -118,24 +117,24 @@ $(document).ready(function() {
         }
         removePaginationFromLink();
         reloadProductListing(frm);
-        //searchProducts(frm,0,0,1,1);
+
     });
 
-    $(document).on('blur', 'input[name=priceFilterMinValue]', function(e) {
+    $(document).on('blur', 'input[name=priceFilterMinValue]', function (e) {
         validatePriceFilter();
         e.preventDefault();
         removePaginationFromLink();
         addPricefilter(true);
     });
 
-    $(document).on('blur', 'input[name=priceFilterMaxValue]', function(e) {
+    $(document).on('blur', 'input[name=priceFilterMaxValue]', function (e) {
         validatePriceFilter();
         e.preventDefault();
         removePaginationFromLink();
         addPricefilter(true);
     });
 
-    $(document).on('keyup', 'input[name=priceFilterMinValue]', function(e) {
+    $(document).on('keyup', 'input[name=priceFilterMinValue]', function (e) {
         var code = e.which;
         if (code == 13) {
             e.preventDefault();
@@ -144,7 +143,7 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on('keyup', 'input[name=priceFilterMaxValue]', function(e) {
+    $(document).on('keyup', 'input[name=priceFilterMaxValue]', function (e) {
         var code = e.which;
         if (code == 13) {
             e.preventDefault();
@@ -155,15 +154,14 @@ $(document).ready(function() {
 
     /* ] */
 
-    $(window).on('load', function() {
+    $(window).on('load', function () {
         showSelectedFilters();
         initialize();
     })
 
     /* for toggling of grid/list view[ */
 
-    $(document).on('click', '.list-grid-toggle', function() {
-        //   var txt = $(".icon").hasClass('icon-grid') ? 'List' : 'Grid';
+    $(document).on('click', '.list-grid-toggle', function () {
         $('.icon').toggleClass('icon-grid');
         if ($(".icon").hasClass('icon-grid')) {
             $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
@@ -177,11 +175,11 @@ $(document).ready(function() {
 
     /******** function for left collapseable links  ****************/
     $(".block__body-js").show();
-    $(".block__head-js").click(function() {
+    $(".block__head-js").click(function () {
         $(this).toggleClass("is-active");
     });
 
-    $(".block__head-js").click(function() {
+    $(".block__head-js").click(function () {
         $(this).siblings(".block__body-js").slideToggle("slow");
     });
 
@@ -195,12 +193,12 @@ $(document).ready(function() {
 
 
 
-    $(document).on('mouseover', '.bfilter-js li', function() {
+    $(document).on('mouseover', '.bfilter-js li', function () {
         $('.brandList-js').addClass('filter-directory_disabled');
         $('.filter-directory_list_title').addClass('filter-directory_disabled');
         $('.b-' + $(this).attr('data-item').toLowerCase()).removeClass('filter-directory_disabled');
         lbl = $(this).attr('data-item');
-        $('.filter-directory_list_title').each(function() {
+        $('.filter-directory_list_title').each(function () {
             txt = $(this).attr('data-item').trim().toUpperCase();
             if (txt == lbl.toUpperCase()) {
                 $(this).removeClass('filter-directory_disabled');
@@ -208,12 +206,12 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('mouseout', '.bfilter-js li', function() {
+    $(document).on('mouseout', '.bfilter-js li', function () {
         $('.brandList-js').removeClass('filter-directory_disabled');
         $('.filter-directory_list_title').removeClass('filter-directory_disabled');
     });
 
-    $(document).on('click', '.bfilter-js li', function(e) {
+    $(document).on('click', '.bfilter-js li', function (e) {
         e.preventDefault();
         $(".filter-directory_list").animate({ scrollLeft: $("#" + $(this).attr('data-item').toLowerCase()).position().left }, 1000);
     });
@@ -232,17 +230,17 @@ $(document).ready(function() {
   var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
   var separator = uri.indexOf('?') !== -1 ? "&" : "?";
   if (uri.match(re)) {
-	return uri.replace(re, '$1' + key + "=" + value + '$2');
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
   }
   else {
-	return uri + separator + key + "=" + value;
+    return uri + separator + key + "=" + value;
   }
 } */
 
 function autoKeywordSearch(keyword) {
     keyword = keyword.toUpperCase();
     var myarray = [];
-    $('.filter-directory_list li').each(function() {
+    $('.filter-directory_list li').each(function () {
         txt = $(this).text().trim().toUpperCase();
         if (txt.indexOf(keyword) > -1) {
             caption = $(this).attr('data-caption');
@@ -255,7 +253,7 @@ function autoKeywordSearch(keyword) {
         }
     });
     myarray = $.unique(myarray);
-    $('.filter-directory_list_title').each(function() {
+    $('.filter-directory_list_title').each(function () {
         txt = $(this).attr('data-item').trim().toUpperCase();
         if ($.inArray(txt, myarray) >= 0) {
             $(this).show();
@@ -276,15 +274,15 @@ function brandFilters() {
     if (url.indexOf("products/brandFilters") == -1) {
         url = fcom.makeUrl('Products', 'brandFilters');
     }
-    //url = fcom.makeUrl('Products','filters');
+
     var data = fcom.frmData(frm);
     var brands = getSelectedBrands();
     if (brands.length) {
         data = data + "&brand=" + [brands];
     }
     $('body').removeClass('collection-sidebar--on');
-    $.facebox(function() {
-        fcom.ajax(url, data, function(ans) {
+    $.facebox(function () {
+        fcom.ajax(url, data, function (ans) {
             $.facebox(ans, 'faceboxWidth');
 
         });
@@ -312,7 +310,7 @@ function addFilter(id, obj) {
 function resetListingFilter() {
     searchArr = [];
     /* $("input:checkbox[name=brands]").each(function(){
-    	$(this).prop( "checked", false );	
+        $(this).prop( "checked", false );	
     }); */
     var shop_id = parseInt($("input[name=shop_id]").val());
     if (shop_id > 0) {
@@ -322,7 +320,7 @@ function resetListingFilter() {
     document.frmProductSearch.reset();
     document.frmProductSearchPaging.reset();
     var frm = document.frmProductSearch;
-    $('#filters a').each(function() {
+    $('#filters a').each(function () {
         id = $(this).attr('data-yk');
         clearFilters(id, this);
     });
@@ -330,7 +328,7 @@ function resetListingFilter() {
     updatePriceFilter();
     reloadProductListing(frm);
     showSelectedFilters();
-    //searchProducts(frm,0,0,1,1);
+
 }
 
 function addPaginationInlink(page) {
@@ -368,7 +366,7 @@ function showSelectedFilters() {
 function removeFilter(id, obj) {
     $('.' + id).parent().remove();
     $('#' + id).find('input[type=\'checkbox\']').prop('checked', false);
-    $("input:checkbox[name=brands]").each(function() {
+    $("input:checkbox[name=brands]").each(function () {
         if ($(this).attr('data-id') == id) {
             $(this).prop("checked", false);
         }
@@ -377,14 +375,14 @@ function removeFilter(id, obj) {
     /* form submit upon onchange of form elements select box[ */
     removeFromSearchQueryString(id);
     reloadProductListing(frm);
-    //searchProducts(frm,0,0,1,1);
+
     showSelectedFilters();
 }
 
 function clearFilters(id, obj) {
     $('.' + id).parent('span').remove();
     $('#' + id).find('input[type=\'checkbox\']').prop('checked', false);
-    $("input:checkbox[name=brands]").each(function() {
+    $("input:checkbox[name=brands]").each(function () {
         if ($(this).attr('data-id') == id) {
             $(this).prop("checked", false);
         }
@@ -395,7 +393,7 @@ function addToSearchQueryString(id, obj) {
     if (typeof id === 'undefined') {
         return;
     }
-    //$filter = $(obj).parent().text();
+
     var attrVal = $(obj).attr('data-title');
     if (typeof attrVal !== 'undefined' && attrVal !== false) {
         $filterVal = htmlEncode(removeSpecialCharacter(attrVal));
@@ -403,7 +401,7 @@ function addToSearchQueryString(id, obj) {
         $filterVal = htmlEncode(removeSpecialCharacter($(obj).parent().text()));
     }
     $filterVal = $filterVal.trim().toLowerCase();
-    //searchArr[id] = encodeURIComponent($filterVal.replace(/ /g,'-'));	
+    /* searchArr[id] = encodeURIComponent($filterVal.replace(/ /g,'-'));	 */
     searchArr[id] = $filterVal.replace(/ /g, '-');
 }
 
@@ -433,7 +431,7 @@ function getSearchQueryUrl(includeBaseUrl) {
     var keyword = $("input[id=keyword]").val();
     if (keyword != '') {
         delete searchArr['keyword'];
-        //keyword = encodeURIComponent(keyword);		
+        /* keyword = encodeURIComponent(keyword);		 */
         url = url + setQueryParamSeperator(url) + 'keyword' + valueSeperator + keyword.replace(/_/g, '-');
     }
 
@@ -449,8 +447,8 @@ function getSearchQueryUrl(includeBaseUrl) {
 
     /* var currency = parseInt($("input[name=currency_id]").val());
     if(currency > 0){
-    	delete searchArr['currency'];
-    	url = url +setQueryParamSeperator(url)+'currency'+valueSeperator+currency;
+        delete searchArr['currency'];
+        url = url +setQueryParamSeperator(url)+'currency'+valueSeperator+currency;
     } */
 
     var featured = parseInt($("input[name=featured]").val());
@@ -470,7 +468,7 @@ function getSearchQueryUrl(includeBaseUrl) {
 
     /* var page = parseInt($("input[name=page]").val());
     if(page > 1){
-    	url = url +setQueryParamSeperator(url)+'page-'+page;
+        url = url +setQueryParamSeperator(url)+'page-'+page;
     } */
 
     var e = document.getElementById("sortBy");
@@ -510,7 +508,7 @@ function addPricefilter(reloadPage) {
         reloadProductListing(frm);
     }
     showSelectedFilters();
-    //searchProducts(frm,0,0,1,1);
+
 }
 
 function removePriceFilter(reloadPage) {
@@ -525,7 +523,7 @@ function removePriceFilter(reloadPage) {
     if (reloadPage) {
         reloadProductListing(frm);
     }
-    //searchProducts(frm,0,0,1,1);
+
     $('.price').parent().remove();
     showSelectedFilters();
 }
@@ -549,8 +547,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     rangeSlider.noUiSlider.set([minPrice, maxPrice]);
 }
 
-(function() {
-    updateRange = function(from, to) {
+(function () {
+    updateRange = function (from, to) {
         if (typeof range !== 'undefined') {
             range.update({
                 from: from,
@@ -559,18 +557,18 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         }
     };
 
-    bannerAdds = function(url) {
-        fcom.ajax(url, '', function(res) {
+    bannerAdds = function (url) {
+        fcom.ajax(url, '', function (res) {
             $("#searchPageBanners").html(res);
         });
     };
 
-    reloadProductListing = function(frm) {
+    reloadProductListing = function (frm) {
         $('#productsList').html(fcom.getLoader());
         getSetSelectedOptionsUrl(frm);
         var data = fcom.frmData(frm);
         var currUrl = getSearchQueryUrl(true);
-        fcom.ajax(currUrl, data, function(res) {
+        fcom.ajax(currUrl, data, function (res) {
             $('#productsList').replaceWith(res);
             var frm = document.frmProductSearchPaging;
             var recordCount = parseInt($(frm.recordDisplayCount).val());
@@ -582,10 +580,10 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             }
         });
         window.history.pushState('', '', currUrl);
-        //window.location.href = getSearchQueryUrl(true);
+        /* window.location.href = getSearchQueryUrl(true); */
     };
 
-    searchProducts = function(frm) {
+    searchProducts = function (frm) {
         var keyword = $.trim($(frm.keyword).val());
         if (3 > keyword.length || '' === keyword) {
             $.mbsmessage(langLbl.searchString, true, 'alert--danger');
@@ -596,7 +594,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         $('#resetAll').css('display', 'block');
     };
 
-    loadProductListingfilters = function(frm) {
+    loadProductListingfilters = function (frm) {
         $('.productFilters-js').html(fcom.getLoader());
         var url = window.location.href;
         if ($currentPageUrl == removeLastSpace(url) + '/index') {
@@ -608,21 +606,21 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         if (url.indexOf("products/filters") == -1) {
             url = fcom.makeUrl('Products', 'filters');
         }
-        //url = fcom.makeUrl('Products','filters');
+
         var data = fcom.frmData(frm);
-        fcom.ajax(url, data, function(res) {
+        fcom.ajax(url, data, function (res) {
             $('.productFilters-js').html(res);
             getSetSelectedOptionsUrl(frm);
         });
     };
 
-    removeLastSpace = function(str) {
+    removeLastSpace = function (str) {
         return str.replace(/\/*$/, "");
     }
 
-    getSelectedBrands = function() {
+    getSelectedBrands = function () {
         var brands = [];
-        $("input:checkbox[name=brands]:checked").each(function() {
+        $("input:checkbox[name=brands]:checked").each(function () {
             var id = $(this).attr('data-id');
             addToSearchQueryString(id, this);
             addFilter(id, this);
@@ -631,12 +629,12 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         return brands;
     }
 
-    getSetSelectedOptionsUrl = function(frm) {
+    getSetSelectedOptionsUrl = function (frm) {
         var data = fcom.frmData(frm);
 
         /* Category filter value pickup[ */
         var category = [];
-        $("input:checkbox[name=category]:checked").each(function() {
+        $("input:checkbox[name=category]:checked").each(function () {
             var id = $(this).parent().parent().find('label').attr('id');
             addToSearchQueryString(id, this);
             addFilter(id, this);
@@ -656,7 +654,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
 
         /* Option filter value pickup[ */
         var optionvalues = [];
-        $("input:checkbox[name=optionvalues]:checked").each(function() {
+        $("input:checkbox[name=optionvalues]:checked").each(function () {
             var id = $(this).parent().parent().find('label').attr('id');
             addToSearchQueryString(id, this);
             addFilter(id, this);
@@ -669,7 +667,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
 
         /* condition filters value pickup[ */
         var conditions = [];
-        $("input:checkbox[name=conditions]:checked").each(function() {
+        $("input:checkbox[name=conditions]:checked").each(function () {
             var id = $(this).parent().parent().find('label').attr('id');
             addToSearchQueryString(id, this);
             addFilter(id, this);
@@ -685,7 +683,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         /* ] */
 
         /* Out Of Stock Filter value pickup[ */
-        $("input:checkbox[name=out_of_stock]:checked").each(function() {
+        $("input:checkbox[name=out_of_stock]:checked").each(function () {
             var id = $(this).parent().parent().find('label').attr('id');
             addToSearchQueryString(id, this);
             addFilter(id, this);
@@ -713,7 +711,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         return data;
     };
 
-    goToProductListingSearchPage = function(page) {
+    goToProductListingSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -725,17 +723,17 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         getSetSelectedOptionsUrl(frm);
         var url = getSearchQueryUrl(true);
         window.location.href = url + setQueryParamSeperator(url) + 'page-' + page;
-        //searchProducts(frm,0,0,1,1);
+
         /* $('html, body').animate({ scrollTop: 0 }, 'slow'); */
     };
 
-    saveProductSearch = function() {
+    saveProductSearch = function () {
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
         }
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form'), '', function(ans) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form'), '', function (ans) {
                 $.facebox(ans, 'faceboxWidth small-fb-width collection-ui-popup');
                 if (ans.status) {
                     $(document).trigger('close.facebox');
@@ -745,22 +743,22 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         return false;
     };
 
-    setupSaveProductSearch = function(frm) {
+    setupSaveProductSearch = function (frm) {
         if (!$(frm).validate()) return false;
         var data = fcom.frmData(frm);
         data = data + "&pssearch_type=" + $productSearchPageType;
         data = data + "&pssearch_record_id=" + $recordId;
         data = data + "&curr_page=" + $currentPageUrl;
-        fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup'), data, function(ans) {
+        fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup'), data, function (ans) {
             if (ans.status) {
                 $(document).trigger('close.facebox');
             }
         });
     };
 
-    resendOtp = function(userId, getOtpOnly = 0) {
+    resendOtp = function (userId, getOtpOnly = 0) {
         $.mbsmessage(langLbl.processing, false, 'alert--process');
-        fcom.ajax(fcom.makeUrl('GuestUser', 'resendOtp', [userId, getOtpOnly]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('GuestUser', 'resendOtp', [userId, getOtpOnly]), '', function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
                 $.mbsmessage(t.msg, false, 'alert--danger');
@@ -772,10 +770,10 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         return false;
     };
 
-    validateOtp = function(frm) {
+    validateOtp = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function(t) {
+        fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function (t) {
             t = $.parseJSON(t);
             if (1 == t.status) {
                 window.location.href = t.redirectUrl;
