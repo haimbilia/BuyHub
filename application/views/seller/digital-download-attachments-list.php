@@ -8,7 +8,6 @@ $arr_flds = array(
     'action' => Labels::getLabel('LBL_Action', $siteLangId),
 );
 
-// CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $attachments], 1);
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $val) {

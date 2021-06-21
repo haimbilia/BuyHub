@@ -60,17 +60,6 @@ foreach ($links as $sn => $row) {
                     "a",
                     array(
                         'class' => 'btn btn-clean btn-sm btn-icon',
-                        'title' => Labels::getLabel('LBL_Edit', $siteLangId),
-                        'onclick' => 'downloadsForm(' . $row['pddr_record_id'] . ', ' . $row['pdl_id'] . ')', 'href' => 'javascript:void(0);'
-                    ),
-                    '<i class="fa fa-edit  icon"></i>',
-                    true
-                );
-
-                $td->appendElement(
-                    "a",
-                    array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
                         'title' => Labels::getLabel('LBL_Delete', $siteLangId),
                         'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')', 'href' => 'javascript:void(0);'
                     ),

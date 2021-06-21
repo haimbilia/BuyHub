@@ -1469,8 +1469,9 @@ class CustomProductsController extends AdminBaseController
         if (1 > $preqId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
-        
-        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $ddObj = new DigitalDownload();
+
+        $canDo = $ddObj->canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
 
         $frm = DigitalDownload::getDownloadForm($this->adminLangId);
 
@@ -1527,16 +1528,15 @@ class CustomProductsController extends AdminBaseController
         if (1 > $preqId) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
-        
-        if (false == DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_Product', $this->adminLangId));
+        $ddObj = new DigitalDownload();
+
+        if (false == $ddObj->canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true)) {
+            FatUtility::dieJsonError($ddObj->getError());
         }
         
         $post = FatApp::getPostedData();
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-
-        $ddObj = new DigitalDownload();
         
         $refId = $ddObj->getReferenceId($preqId, $optionComb, Product::CATALOG_TYPE_REQUEST);
         if (1 > $refId) {
@@ -1692,8 +1692,10 @@ class CustomProductsController extends AdminBaseController
         $rows = DigitalDownloadSearch::getLinks($preqId, Product::CATALOG_TYPE_REQUEST, $optionCombi, $langId);
 
         $this->set('links', $rows);
-
-        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        
+        $ddObj = new DigitalDownload();
+        
+        $canDo = $ddObj->canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
         $this->set('canDo', $canDo);
 
         $languages = Language::getAllNames();
@@ -1731,7 +1733,9 @@ class CustomProductsController extends AdminBaseController
         $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
         $this->set('attachments', $attachments);
         
-        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $ddObj = new DigitalDownload();
+
+        $canDo = $ddObj->canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
         $this->set('canDo', $canDo);
         
         $languages = Language::getAllNames();

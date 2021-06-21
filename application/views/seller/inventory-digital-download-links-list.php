@@ -1,11 +1,20 @@
 <?php
-$arr_flds = array(
+/* $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     'pdl_download_link' => Labels::getLabel('LBL_Download_Link', $siteLangId),
     'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
     // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
     'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId),
-);
+); */
+
+$arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
+
+if (true === $canDoDigDownload) {
+    $arr_flds['pdl_download_link'] = Labels::getLabel('LBL_Download_Link', $siteLangId);
+}
+
+$arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_Preview_Link', $siteLangId);
+$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_Link_language', $siteLangId);
 
 if (true === $canDoDigDownload) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);

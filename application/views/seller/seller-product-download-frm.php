@@ -18,6 +18,10 @@ $fld->addFieldTagAttribute('id', 'attachment_link_btn');
 $fld->addFieldTagAttribute('class', 'btn btn-brand');
 $fld->addFieldTagAttribute('onclick', 'saveDownloadLinks(); return false;');
 
+$restBtn = $downloadFrm->getField('reset');
+$restBtn->addFieldTagAttribute('onclick', 'resetForm(); return false;');
+$restBtn->addFieldTagAttribute('class', 'btn btn-outline-brand');
+
 if (false == $canDo) {
     $fld = $downloadFrm->getField('product_downloadable_link');
     $downloadFrm->removeField($fld);
@@ -153,7 +157,8 @@ if (false == $canDo) {
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn'); ?>
+                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn');
+                                    echo $downloadFrm->getFieldHtml('reset'); ?>
                                 </div>
                             </div>
                         </div>
@@ -199,13 +204,13 @@ if (false == $canDo) {
                                 <div class="field_cover">
                                     <?php
                                     echo $downloadFrm->getFieldHtml('attachement_upload_btn');
-                                    ?>
+                                    echo $downloadFrm->getFieldHtml('reset'); ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <?php } else { ?>
-                    <div class="col-md-12 attach-files-js">
+                    <div class="col-md-12 attach-files-js alert-danger">
                         <div class="dd-not-allowed note">
                             <i class="fa fa-info-circle"></i>
                             <p class=""><?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $siteLangId); ?></p>
@@ -219,10 +224,13 @@ if (false == $canDo) {
                     </div>
                 <?php } ?>
             </div>
-            <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('selprod_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
+            <?php echo $downloadFrm->getFieldHtml('product_id');
+            echo $downloadFrm->getFieldHtml('selprod_id');
+            echo $downloadFrm->getFieldHtml('dd_link_id');
+            echo $downloadFrm->getFieldHtml('dd_link_ref_id');
+            echo $downloadFrm->getFieldHtml('is_preview');
+            echo $downloadFrm->getFieldHtml('ref_file_id');
+            ?>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
     </div>

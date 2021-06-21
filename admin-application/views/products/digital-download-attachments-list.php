@@ -28,7 +28,7 @@ foreach ($attachments as $sn => $row) {
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
-                if (0 < $row['afile_id']) {
+                if (0 < $row['afile_id'] && 0 == $product['product_seller_id']) {
                     $dvElem->appendElement(
                         "a",
                         array(
@@ -69,17 +69,19 @@ foreach ($attachments as $sn => $row) {
                         '<i class="fa fa-download  icon"></i>',
                         true
                     );
-                    $dvElem->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn btn-light btn-sm',
-                            'title' => Labels::getLabel('LBL_Delete', $adminLangId),
-                            'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)',
-                            'href' => 'javascript:void(0);'
-                        ),
-                        '<i class="fa fa-trash  icon"></i>',
-                        true
-                    );
+                    if (0 == $product['product_seller_id']) {
+                        $dvElem->appendElement(
+                            "a",
+                            array(
+                                'class' => 'btn btn-light btn-sm',
+                                'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                                'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)',
+                                'href' => 'javascript:void(0);'
+                            ),
+                            '<i class="fa fa-trash  icon"></i>',
+                            true
+                        );
+                    }
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
                     $dvElem->appendElement(
@@ -112,7 +114,7 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $lang_name, true);
                 break;
             case 'action':
-                if (1 < $row['afile_id'] || 1 < $row['prev_afile_id']) {
+                if ((1 < $row['afile_id'] || 1 < $row['prev_afile_id']) && 0 == $product['product_seller_id']) {
                     $fileId = $row['afile_id'];
                     $isPreview = 0;
                     if (1 > $row['afile_id']) {

@@ -1,8 +1,6 @@
 <?php
 $arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
-if (true === $canDoDigDownload) {
-    $arr_flds['mainfile'] = Labels::getLabel('LBL_File', $siteLangId);
-}
+$arr_flds['mainfile'] = Labels::getLabel('LBL_File', $siteLangId);
 
 $arr_flds['preview'] = Labels::getLabel('LBL_Preview_Link', $siteLangId);
 /* $arr_flds['pddr_options_code'] = Labels::getLabel('LBL_Link_Option', $siteLangId); */
@@ -33,18 +31,19 @@ foreach ($records as $sn => $row) {
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                 if (0 < $row['afile_id']) {
-                    $dvElem->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn',
-                            'title' => Labels::getLabel('LBL_download', $siteLangId),
-                            'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
-                            'target' => '_blank'
-                        ),
-                        '<i class="fa fa-download  icon"></i>',
-                        true
-                    );
-                    if (true) {
+                    if (true === $canDoDigDownload) {
+                        $dvElem->appendElement(
+                            "a",
+                            array(
+                                'class' => 'btn',
+                                'title' => Labels::getLabel('LBL_download', $siteLangId),
+                                'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
+                                'target' => '_blank'
+                            ),
+                            '<i class="fa fa-download  icon"></i>',
+                            true
+                        );
+                        
                         $dvElem->appendElement(
                             "a",
                             array(
@@ -75,7 +74,7 @@ foreach ($records as $sn => $row) {
                         '<i class="fa fa-download  icon"></i>',
                         true
                     );
-                    if (true) {
+                    if (true === $canDoDigDownload) {
                         $dvElem->appendElement(
                             "a",
                             array(
@@ -133,7 +132,7 @@ foreach ($records as $sn => $row) {
                     }
 
                     /* if (true === $canDelete) { */
-                    if (true) {
+                    if (true === $canDoDigDownload) {
                         $td->appendElement(
                             "a",
                             array(

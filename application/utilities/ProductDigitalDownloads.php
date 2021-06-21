@@ -13,12 +13,14 @@ trait ProductDigitalDownloads
         $productId = FatUtility::int($productId);
         $selProdId = FatUtility::int($selProdId);
         
+        $ddObj = new DigitalDownload();
+
         if (0 < $selProdId) {
-            $canDo = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, $this->userParentId, $this->siteLangId, true, true);
+            $canDo = $ddObj->canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, $this->userParentId, $this->siteLangId, true, true);
             $sellerProductRow = SellerProduct::getAttributesById($selProdId);
             $productId = $sellerProductRow['selprod_product_id'];
         } else {
-            $canDo = DigitalDownload::canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, true, true);
+            $canDo = $ddObj->canDo($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, true, true);
         }
         
 
@@ -57,11 +59,14 @@ trait ProductDigitalDownloads
 
         $fld = $frm->getField('attach_with_existing_orders');
 
-        $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
+        // $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
+        $product = $ddObj->getProduct($productId);
 
-        if (1 !== $product['product_attachements_with_inventory']) {
-            $frm->removeField($fld);
+        if (!is_array($product) && 1 > count($product)) {
             $showFldAttachWithExistingOrders = false;
+            if (1 !== $product['product_attachements_with_inventory']) {
+                $frm->removeField($fld);
+            }
         }
         
         $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
@@ -97,7 +102,10 @@ trait ProductDigitalDownloads
         }
 
         $canDelete = DigitalDownload::canDelete($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);
-        $canDoDigDownload = DigitalDownload::canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, $this->userParentId, $this->siteLangId, true, true);
+        
+        $ddObj = new DigitalDownload();
+
+        $canDoDigDownload = $ddObj->canDo($selProdId, Product::CATALOG_TYPE_INVENTORY, $this->userParentId, $this->siteLangId, true, true);
 
         $this->set('records', $records);
         $this->set('canDelete', $canDelete);
@@ -129,7 +137,7 @@ trait ProductDigitalDownloads
         if (1 > $aFileId || 1 > $recordId) {
             FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
         }
-        switch($requestType) {
+        switch ($requestType) {
             case Product::CATALOG_TYPE_PRIMARY:
                 $product = Product::getAttributesById($recordId, array('product_seller_id'));
                 if (false == $product) {

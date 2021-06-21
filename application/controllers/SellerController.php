@@ -5853,8 +5853,10 @@ class SellerController extends SellerBaseController
             $requstedProd = Product::CATALOG_TYPE_REQUEST;
         }
 
-        $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
-        
+        $ddObj = new DigitalDownload();
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $recordId, $requstedProd], 1);
+        $canDo = $ddObj->canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
+        // var_dump($canDo); exit;
         $frm = DigitalDownload::getDownloadForm($this->siteLangId);
 
         if (0 < $preqId) {
@@ -5880,9 +5882,9 @@ class SellerController extends SellerBaseController
 
             $fld = $frm->getField('attach_with_existing_orders');
 
-            $product = Product::getAttributesById($recordId, ['product_attachements_with_inventory']);
+            $product = $ddObj->getProduct($recordId);
 
-            if (false != $product) {
+            if (!is_array($product) && 1 > count($product)) {
                 if (1 === $product['product_attachements_with_inventory']) {
                     $frm->removeField($fld);
                     $showFldAttachWithExistingOrders = false;
@@ -5951,16 +5953,22 @@ class SellerController extends SellerBaseController
                 $requstedProd = Product::CATALOG_TYPE_REQUEST;
             }
         }
-        
+
+        $ddObj = new DigitalDownload();
+
         if (Product::CATALOG_TYPE_INVENTORY == $requstedProd) {
-            $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true, true);
+            $canDo = $ddObj->canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true, true);
 
             if (false === $canDo) {
-                Message::addErrorMessage(Labels::getLabel("LBL_Attachments_or_links_Not_allowed_with_inventory", $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($ddObj->getError());
             }
             $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code'));
-            if ($selProdData == false || ($selProdData && $selProdData['selprod_user_id'] !== $this->userParentId)) {
+            if (!is_array($selProdData) && 1 > count($selProdData)) {
+                Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+                FatUtility::dieJsonError(Message::getHtml());
+            }
+
+            if ($selProdData['selprod_user_id'] !== $this->userParentId) {
                 Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
@@ -5972,18 +5980,16 @@ class SellerController extends SellerBaseController
                 $optionComb = '0';
             }
         } else {
-            $canDo = DigitalDownload::canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
+            $canDo = $ddObj->canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
 
             if (false === $canDo) {
-                Message::addErrorMessage(Labels::getLabel("LBL_Attachments_or_links_allowed_with_inventory", $this->siteLangId));
+                Message::addErrorMessage($ddObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
 
         }
         
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
-        
-        $ddObj = new DigitalDownload();
         
         $refId = $ddObj->getReferenceId($recordId, $optionComb, $requstedProd);
         

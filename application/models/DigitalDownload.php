@@ -8,6 +8,10 @@ class DigitalDownload extends MyAppModel
     public const DB_TBL_LINKS = 'tbl_product_digital_links';
     public const DB_TBL_LINKS_PREFIX = 'pdl_';
 
+    private $product = [];
+    private $productRequest = [];
+    private $sellerProduct = [];
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX, $id);
@@ -287,7 +291,7 @@ class DigitalDownload extends MyAppModel
      */
 
     // public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $returnResult = false)
-    public static function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $validateAllowedWithInventory = true, $returnResult = false)
+    public function canDo($recordId, $recordType = 0, $sellerUserId = 0, $langId = 0, $validateAllowedWithInventory = true, $returnResult = false)
     {
         $recordId = FatUtility::int($recordId);
         $sellerUserId = FatUtility::int($sellerUserId);
@@ -299,72 +303,85 @@ class DigitalDownload extends MyAppModel
         
         if (Product::CATALOG_TYPE_REQUEST == $recordType) {
             /* Marketplace requested Product - by seller*/
-            $productReqRow = ProductRequest::getAttributesById($recordId);
+            // $productReqRow = ProductRequest::getAttributesById($recordId);
+            $this->getProductRequest($recordId);
             
-            if (false === $productReqRow) {
-                return static::returnResponseOrDie($returnResult);
+            if (!is_array($this->productRequest) || 1 > count($this->productRequest)) {
+                $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+                return false;
             }
             
-            if ($productReqRow['preq_status'] == ProductRequest::STATUS_APPROVED || $productReqRow['preq_deleted'] == applicationConstants::YES) {
-                return static::returnResponseOrDie($returnResult, false);
+            if ($this->productRequest['preq_status'] == ProductRequest::STATUS_APPROVED || $this->productRequest['preq_deleted'] == applicationConstants::YES) {
+                $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+                return false;
             }
 
-            $product = json_decode($productReqRow['preq_content'], true);
-
-            if (!$product) {
-                return static::returnResponseOrDie($returnResult);
+            $this->product = json_decode($this->productRequest['preq_content'], true);
+            
+            if (!is_array($this->product) || 1 > count($this->product)) {
+                $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+                return false;
             }
-            if (!array_key_exists('product_attachements_with_inventory', $product)) {
-                $product['product_attachements_with_inventory'] = applicationConstants::YES;
+            if (!array_key_exists('product_attachements_with_inventory', $this->product)) {
+                $this->product['product_attachements_with_inventory'] = applicationConstants::YES;
             }
         } else {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventroy*/
-                $sellerProduct = SellerProduct::getAttributesById($recordId, ['selprod_user_id', 'selprod_product_id'], false);
-                if (false == $sellerProduct) {
-                    return static::returnResponseOrDie($returnResult);
+                // $sellerProduct = SellerProduct::getAttributesById($recordId, ['selprod_user_id', 'selprod_product_id'], false);
+                $this->getSellerProduct($recordId, false);
+
+                if (!is_array($this->sellerProduct) || 1 > count($this->sellerProduct)) {
+                    $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+                    return false;
                 }
+
                 /* $inventoryId = $recordId; Can be used id required further. As of now no need*/
-                $recordId = $sellerProduct['selprod_product_id'];
+                $recordId = $this->sellerProduct['selprod_product_id'];
             }
 
-            $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_attachements_with_inventory']);
-        
-            if (false == $product) {
-                return static::returnResponseOrDie($returnResult);
+            // $product = Product::getAttributesById($recordId, ['product_seller_id', 'product_type', 'product_attachements_with_inventory']);
+            $this->getProduct($recordId);
+            if (!is_array($this->product) || 1 > count($this->product)) {
+                $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+                return false;
             }
         }
-
-        if (Product::PRODUCT_TYPE_DIGITAL != $product['product_type']) {
-            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId));
+        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $this->product], 1);
+        if (Product::PRODUCT_TYPE_DIGITAL != $this->product['product_type']) {
+            $this->error = Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId);
+            return false;
         }
 
         /* To check whether product belogs to logged seller? */
         if (0 < $sellerUserId) {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventory */
-                $recordOwnerId = $sellerProduct['selprod_user_id'];
+                $recordOwnerId = $this->sellerProduct['selprod_user_id'];
             } else { /* Catalog product */
-                $recordOwnerId = $product['product_seller_id'];
+                $recordOwnerId = $this->product['product_seller_id'];
             }
             if ($recordOwnerId != $sellerUserId) {
-                return static::returnResponseOrDie($returnResult);
+                $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+                return false;
             }
         }
-        
         if (true == $validateAllowedWithInventory) {
-            if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
-                return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+            if (applicationConstants::YES == $this->product['product_attachements_with_inventory']) {
+                $this->error = Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId);
+                return true;
             } else {
-                return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId));
+                $this->error = Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_inventory', $langId);
+                return false;
             }
         }
         
-        
-        if (applicationConstants::YES == $product['product_attachements_with_inventory']) {
-            return static::returnResponseOrDie($returnResult, false, Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId));
+        if (applicationConstants::YES == $this->product['product_attachements_with_inventory']) {
+            $this->error = Labels::getLabel('LBL_Attachments_or_links_allowed_with_inventory', $langId);
+            return false;
         } else {
-            return static::returnResponseOrDie($returnResult, true, Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $langId));
+            $this->error = Labels::getLabel('LBL_Attachments_or_links_allowed_with_Product', $langId);
+            return true;
         }
     }
 
@@ -474,16 +491,17 @@ class DigitalDownload extends MyAppModel
         FatUtility::dieJsonError($message);
     }
 
-    public static function allowedWithInventory($productId)
+    public function allowedWithInventory($productId)
     {
         $productId = FatUtility::int($productId);
-        $product = Product::getAttributesById($productId);
-        
-        if (false == $product) {
-            static::returnResponseOrDie();
+
+        $this->getProduct($productId);
+
+        if (!is_array($this->product) || 1 > count($this->product)) {
+            return false;
         }
 
-        if (1 == $product['product_attachements_with_inventory']) {
+        if (applicationConstants::YES == $this->product['product_attachements_with_inventory']) {
             return true;
         }
         
@@ -613,5 +631,165 @@ class DigitalDownload extends MyAppModel
         $opSrchObj->doNotCalculateRecords();
         
         return FatApp::getDb()->fetchAll($opSrchObj->getResultSet());
+    }
+
+    public function canAdminAccessMainAttachment($recordId, $recordType)
+    {
+        if (1 > $recordId) {
+            return false;
+        }
+
+        switch ($recordType) {
+            case Product::CATALOG_TYPE_PRIMARY:
+                $this->getProduct($recordId);
+                if (!is_array($this->product) || 1 > count($this->product)) {
+                    return false;
+                }
+                
+                if (0 < $this->product['product_seller_id']) {
+                    $this->error = Labels::getLabel('ERR_You_can_not_delete_seller_main_file_attachments', CommonHelper::getLangId());
+                    return false;
+                }
+                return true;
+                break;
+            case Product::CATALOG_TYPE_REQUEST:
+                return true;
+                break;
+            case Product::CATALOG_TYPE_INVENTORY:
+                $this->getSellerProduct($recordId);
+
+                if (!is_array($this->sellerProduct) || 1 > count($this->sellerProduct)) {
+                    $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+                    return false;
+                }
+                
+                if (applicationConstants::NO == $this->sellerProduct['product_attachements_with_inventory']
+                    && 0 == $this->sellerProduct['product_seller_id']
+                ) {
+                    return true;
+                }
+                $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+                return false;
+                break;
+            default:
+                $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+                return false;
+                break;
+        }
+    }
+
+    public function getProduct($productId)
+    {
+        if (1 > $productId) {
+            return [];
+        }
+        
+        if (null != $this->product) {
+            return $this->product;
+        }
+
+        $attrs = [
+            'product_id',
+            'product_type',
+            'product_added_by_admin_id',
+            'product_seller_id',
+            'product_attachements_with_inventory',
+            'product_active',
+            'product_approved',
+            'product_deleted',
+        ];
+
+        $this->product = Product::getAttributesById($productId);
+
+        if (false === $this->product) {
+            $this->product = null;
+            return [];
+        }
+
+        return $this->product;
+    }
+
+    public function getSellerProduct($sellerProdId, $includeProductDetail = true, $active = false, $deleted = false)
+    {
+        if (1 > $sellerProdId) {
+            return [];
+        }
+        
+        if (null != $this->sellerProduct) {
+            return $this->sellerProduct;
+        }
+
+        $attrs = [
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_product_id',
+            'selprod_code',
+            'selprod_active',
+            'selprod_deleted'
+        ];
+
+        if (true === $includeProductDetail) {
+            $attrs = $attrs + ['product_id',
+                'product_type',
+                'product_added_by_admin_id',
+                'product_seller_id',
+                'product_attachements_with_inventory',
+                'product_active',
+                'product_approved',
+                'product_deleted'
+            ];
+        }
+
+        $srch = SellerProduct::getSearchObject();
+
+        $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_PREFIX . 'product_id');
+
+        $srch->addCondition('sp.selprod_id', '=', $sellerProdId);
+        if (true === $active) {
+            $srch->addCondition('sp.selprod_active', '=', applicationConstants::ACTIVE);
+        }
+        if (true === $deleted) {
+            $srch->addCondition('sp.selprod_deleted', '=', applicationConstants::NO);
+        }
+
+        $srch->addMultipleFields($attrs);
+        
+        $rs = $srch->getResultSet();
+        $this->sellerProduct = FatApp::getDb()->fetch($rs);
+
+        if (false === $this->sellerProduct) {
+            $this->sellerProduct = [];
+        }
+
+        return $this->sellerProduct;
+    }
+
+    public function getProductRequest($customProdId)
+    {
+        if (1 > $customProdId) {
+            return [];
+        }
+        
+        if (null != $this->productRequest) {
+            return $this->productRequest;
+        }
+
+        $attrs = [
+            'preq_id',
+            'preq_user_id',
+            'preq_content',
+            'preq_content',
+            'preq_deleted',
+            'preq_status',
+        ];
+
+        $this->productRequest = ProductRequest::getAttributesById($customProdId, $attrs);
+
+        if (false === $this->productRequest) {
+            $this->productRequest = null;
+            return [];
+        }
+
+        return $this->productRequest;
     }
 }

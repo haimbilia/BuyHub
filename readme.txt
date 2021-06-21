@@ -330,3 +330,4 @@ bugs:
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
     #054212	while adding inventory> when we add link and url is long then UI is not proper
     #055154	digital items> files linked with specific language are listing all on front end in preview
+    #055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
