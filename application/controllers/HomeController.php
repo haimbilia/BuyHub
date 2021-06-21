@@ -1299,7 +1299,8 @@ class HomeController extends MyAppController
         $langCode = Language::getAttributesById($this->siteLangId, 'language_code', false);
 
         $data = [
-            'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)
+            'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0),
+            'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.')
         ];
 
         $data['languageLabels'] = [
