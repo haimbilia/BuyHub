@@ -23,7 +23,7 @@ var Dashboard = function () {
             var visibility = 0;
         }
         $.ajax({ url: fcom.makeUrl('Custom', 'setupSidebarVisibility', [visibility]) });
-        // $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
+        /* $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded"); */
         $(".hamburger-toggle").toggleClass("is-opened");
         setTimeout(function () {
             unlinkSlick();
@@ -98,12 +98,12 @@ $(document).ready(function () {
         setSlider();
     });
 
-    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0 && CONF_MAINTENANCE == 0 &&  ( getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController' )) {
+    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0 && CONF_MAINTENANCE == 0 && (getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController')) {
         accessLocation();
     }
 });
 
-$(document).on('afterClose.facebox',$('.location-permission').closest("#facebox"), function(){
+$(document).on('afterClose.facebox', $('.location-permission').closest("#facebox"), function () {
     setCookie('_ykGeoDisabled', 1, 0.5);
 });
 
@@ -130,7 +130,7 @@ $("document").ready(function () {
 
 // Wait for window load
 $(window).on('load', function () {
-    // Animate loader off screen
+    /* Animate loader off screen */
     $(".pageloader").remove();
     setSelectedCatValue();
 });
@@ -177,27 +177,27 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-	/* $('.main-search').on('click','.form--search-popup',function(e){
+    /* $('.main-search').on('click','.form--search-popup',function(e){
 
-		if(!$(e.target).hasClass('close-layer')){
-			e.stopPropagation();
-		}else{
-			if($('html').hasClass('is--form-visible')){
-				$('html').removeClass('is--form-visible');
-				$('.toggle--search-js').toggleClass("is--active");
-			}
-		}
-	}); */
+        if(!$(e.target).hasClass('close-layer')){
+            e.stopPropagation();
+        }else{
+            if($('html').hasClass('is--form-visible')){
+                $('html').removeClass('is--form-visible');
+                $('.toggle--search-js').toggleClass("is--active");
+            }
+        }
+    }); */
 
     /* for fixed header */
-	/*$(window).scroll(function(){
-		body_height = $("#body").position();
-		scroll_position = $(window).scrollTop();
-		if( typeof body_height !== typeof undefined && body_height.top < scroll_position)
-			$("body").addClass("fixed");
-		else
-			$("body").removeClass("fixed");
-	});*/
+    /*$(window).scroll(function(){
+        body_height = $("#body").position();
+        scroll_position = $(window).scrollTop();
+        if( typeof body_height !== typeof undefined && body_height.top < scroll_position)
+            $("body").addClass("fixed");
+        else
+            $("body").removeClass("fixed");
+    });*/
 
     /* for footer */
     if ($(window).width() < 576) {
@@ -230,10 +230,10 @@ $(document).ready(function () {
                     .slideDown(300);
             }
         });
-		/* $(document).delegate('.cart > a','click',function(){
-		$('html').toggleClass("cart-is-active");
-		$(this).toggleClass("cart-is-active");
-		}); */
+        /* $(document).delegate('.cart > a','click',function(){
+        $('html').toggleClass("cart-is-active");
+        $(this).toggleClass("cart-is-active");
+        }); */
     });
 
 
@@ -243,15 +243,15 @@ $(document).ready(function () {
             $('.dropdown__trigger-js').parent('.dropdown').removeClass("is-active");
             $("html").removeClass("toggled-user");
         }
-		/* $('html').toggleClass("cart-is-active");
-		$(this).toggleClass("cart-is-active"); */
+        /* $('html').toggleClass("cart-is-active");
+        $(this).toggleClass("cart-is-active"); */
         /* return false;  */
     });
     $('html').click(function () {
-		/* if($('html').hasClass('cart-is-active')){
-			$('html').removeClass('cart-is-active');
-			$('.cart').toggleClass("cart-is-active");
-		} */
+        /* if($('html').hasClass('cart-is-active')){
+            $('html').removeClass('cart-is-active');
+            $('.cart').toggleClass("cart-is-active");
+        } */
         if ($('.collection__container').hasClass('open-menu')) {
             $('.open-menu').parent().toggleClass('is-active');
             $('.open-menu').toggleClass('open-menu');
@@ -289,10 +289,10 @@ $(function () {
 
 /*back-top*/
 $(document).ready(function () {
-    // hide #back-top first
+    /* hide #back-top first */
     $(".back-to-top").hide();
 
-    // fade in #back-top
+    /* fade in #back-top */
     $(function () {
         $(window).scroll(function () {
             if ($(this).scrollTop() > 100) {
@@ -301,7 +301,7 @@ $(document).ready(function () {
                 $('.back-to-top').fadeOut();
             }
         });
-        // scroll body to 0px on click
+        /* scroll body to 0px on click */
         $('.back-to-top a').click(function () {
             $('body,html').animate({
                 scrollTop: 0
@@ -449,14 +449,14 @@ function animation(obj) {
 (function () {
     Slugify = function (str, str_val_id, is_slugify, caption) {
         var str = str.toString().toLowerCase()
-            .replace(/\s+/g, '-')           // Replace spaces with -
-            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-            .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-            .replace(/^-+/, '')             // Trim - from start of text
+            .replace(/\s+/g, '-')           /* Replace spaces with - */
+            .replace(/[^\w\-]+/g, '')       /* Remove all non-word chars */
+            .replace(/\-\-+/g, '-')         /* Replace multiple - with single - */
+            .replace(/^-+/, '')             /* Trim - from start of text */
             .replace(/-+$/, '');
         if ($("#" + is_slugify).val() == 0) {
-            $("#"+str_val_id).val(str).keyup();
-            //$("#" + str_val_id).val(str);
+            $("#" + str_val_id).val(str).keyup();
+            /* $("#" + str_val_id).val(str); */
             $("#" + caption).html(siteConstants.webroot + str);
         }
     };
@@ -466,10 +466,10 @@ function animation(obj) {
             pos = 'pre';
         }
         var str = str.toString().toLowerCase()
-            .replace(/\s+/g, '-')           // Replace spaces with -
-            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-            .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-            .replace(/^-+/, '')             // Trim - from start of text
+            .replace(/\s+/g, '-')           /* Replace spaces with - */
+            .replace(/[^\w\-]+/g, '')       /* Remove all non-word chars */
+            .replace(/\-\-+/g, '-')         /* Replace multiple - with single - */
+            .replace(/^-+/, '')             /* Trim - from start of text */
             .replace(/-+$/, '');
         if (extra && pos == 'pre') {
             str = extra + '-' + str;
@@ -493,8 +493,6 @@ $(document).on('click', '.tabs--scroll ul li', function () {
 function moveToTargetDiv(target, outer, layout) {
     var out = $(outer);
     var tar = $(target);
-    //var x = out.width();
-    //var y = tar.outerWidth(true);
     var z = tar.index();
     var q = 0;
     var m = out.find('li');
@@ -532,11 +530,11 @@ function moveToTargetDivssss(target, outer, layout) {
         }
         q = ulWidth - q;
 
-		/* var q = out.last().outerWidth(true);
-		var q = ulWidth;
-		for(var i = z; i > 0; i--){
-			q-= $(m[i]).outerWidth(true);
-		}   */
+        /* var q = out.last().outerWidth(true);
+        var q = ulWidth;
+        for(var i = z; i > 0; i--){
+            q-= $(m[i]).outerWidth(true);
+        }   */
     }
     out.animate({
         scrollLeft: Math.max(0, q)
@@ -578,7 +576,7 @@ function googleCaptcha() {
             clearInterval(checkToken);
             return;
         }
-        
+
         if (0 < inputObj.length && 'undefined' !== typeof grecaptcha) {
             grecaptcha.ready(function () {
                 try {
@@ -684,7 +682,7 @@ function setGeoAddress(data) {
     return address;
 }
 
-function getGeoAddress(data) {    
+function getGeoAddress(data) {
     address = setGeoAddress(data);
     $(document).trigger('close.facebox');
     displayGeoAddress(address);
@@ -788,7 +786,7 @@ var map;
 var marker;
 var geocoder;
 var infowindow;
-// Initialize the map.
+/* Initialize the map. */
 function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     var lat = parseFloat(lat);
     var lng = parseFloat(lng);
@@ -804,23 +802,23 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
 
-	geocodeAddress(geocoder, map, infowindow, { 'location': latlng });
-	
-	/* var sel = document.getElementById('shop_country_code');
-	var country = sel.options[sel.selectedIndex].text;
+    geocodeAddress(geocoder, map, infowindow, { 'location': latlng });
+
+    /* var sel = document.getElementById('shop_country_code');
+    var country = sel.options[sel.selectedIndex].text;
     
-	address = document.getElementById('postal_code').value;
-	address = country + ' ' + address;
+    address = document.getElementById('postal_code').value;
+    address = country + ' ' + address;
 	
     geocodeAddress(geocoder, map, infowindow, { 'address': address }); */
 
     document.getElementById('postal_code').addEventListener('blur', function () {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
-        
+
         var sel = document.getElementById('shop_state');
         var state = sel.options[sel.selectedIndex].text;
-        
+
         address = document.getElementById('postal_code').value;
         address = country + ' ' + state + ' ' + address;
         geocodeAddress(geocoder, map, infowindow, { 'address': address });
@@ -844,12 +842,12 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         geocodeAddress(geocoder, map, infowindow, { 'address': country });
     });
 
-	/* for (i = 0; i < document.getElementsByClassName('addressSelection-js').length; i++) {
-	    document.getElementsByClassName('addressSelection-js')[i].addEventListener("change", function(e) {
-			address = e.target.options[e.target.selectedIndex].text;
-			geocodeAddress(geocoder, map, infowindow, {'address': address});
-	  	});
-	} */
+    /* for (i = 0; i < document.getElementsByClassName('addressSelection-js').length; i++) {
+        document.getElementsByClassName('addressSelection-js')[i].addEventListener("change", function(e) {
+            address = e.target.options[e.target.selectedIndex].text;
+            geocodeAddress(geocoder, map, infowindow, {'address': address});
+            });
+    } */
 }
 
 function geocodeAddress(geocoder, resultsMap, infowindow, address) {
@@ -864,13 +862,13 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 position: results[0].geometry.location,
                 draggable: true
             });
-			geocodeSetData(results);
+            geocodeSetData(results);
             google.maps.event.addListener(marker, 'dragend', function () {
-				geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
-					if (status == google.maps.GeocoderStatus.OK) {
-						geocodeSetData(results);
-					}
-				});
+                geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        geocodeSetData(results);
+                    }
+                });
             });
         } else {
             console.log('Geocode was not successful for the following reason: ' + status);
@@ -879,49 +877,49 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
 }
 
 function geocodeSetData(results) {
-	document.getElementById('lat').value = marker.getPosition().lat();
-	document.getElementById('lng').value = marker.getPosition().lng();
-	if (results[0]) {
-		infowindow.setContent(results[0].formatted_address);
-		infowindow.open(map, marker);
-		var address_components = results[0].address_components;
-		var data = {};
-		/* data['lat'] = pos.lat();
-		data['lng'] = pos.lng(); */
-		data['formatted_address'] = results[0].formatted_address;
-		if (0 < address_components.length) {
-			var addressComponents = address_components;
-			for (var i = 0; i < addressComponents.length; i++) {
-				var key = address_components[i].types[0];
-				var value = address_components[i].long_name;
-				data[key] = value;
-				if ('country' == key) {
-					data['country_code'] = address_components[i].short_name;
-					data['country'] = value;
-				} else if ('administrative_area_level_1' == key) {
-					data['state_code'] = address_components[i].short_name;
-					data['state'] = value;
-				} else if ('administrative_area_level_2' == key) {
-					data['city'] = value;
-				}
-			}
-		}
+    document.getElementById('lat').value = marker.getPosition().lat();
+    document.getElementById('lng').value = marker.getPosition().lng();
+    if (results[0]) {
+        infowindow.setContent(results[0].formatted_address);
+        infowindow.open(map, marker);
+        var address_components = results[0].address_components;
+        var data = {};
+        /* data['lat'] = pos.lat();
+        data['lng'] = pos.lng(); */
+        data['formatted_address'] = results[0].formatted_address;
+        if (0 < address_components.length) {
+            var addressComponents = address_components;
+            for (var i = 0; i < addressComponents.length; i++) {
+                var key = address_components[i].types[0];
+                var value = address_components[i].long_name;
+                data[key] = value;
+                if ('country' == key) {
+                    data['country_code'] = address_components[i].short_name;
+                    data['country'] = value;
+                } else if ('administrative_area_level_1' == key) {
+                    data['state_code'] = address_components[i].short_name;
+                    data['state'] = value;
+                } else if ('administrative_area_level_2' == key) {
+                    data['city'] = value;
+                }
+            }
+        }
         $('#postal_code').val(data.postal_code);
-		
-		$('#shop_country_code option').each(function () {
-			if (this.text == data.country) {
-				$('#shop_country_code').val(this.value);
-				var state = 0;
-				$('#shop_state option').each(function () {
-					if (this.value == data.state_code || this.text == data.state || this.text == data.locality) {
-						return state = this.value;
-					}
-				});
+
+        $('#shop_country_code option').each(function () {
+            if (this.text == data.country) {
+                $('#shop_country_code').val(this.value);
+                var state = 0;
+                $('#shop_state option').each(function () {
+                    if (this.value == data.state_code || this.text == data.state || this.text == data.locality) {
+                        return state = this.value;
+                    }
+                });
                 getStatesByCountryCode(this.value, state, '#shop_state', 'state_code');
-				return false;
-			}
-		});
-	}
+                return false;
+            }
+        });
+    }
 }
 
 function loadScript(src, callback = '', params = []) {
@@ -933,7 +931,7 @@ function loadScript(src, callback = '', params = []) {
     let script = document.createElement('script');
     script.src = src;
     if ('' != callback) {
-        script.onload = function() {
+        script.onload = function () {
             callback.apply(this, params);
         };
     }

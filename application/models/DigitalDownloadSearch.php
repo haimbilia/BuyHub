@@ -97,6 +97,7 @@ class DigitalDownloadSearch extends SearchBase
         $recordType,
         $optionCombi = null,
         $langId = 0,
+        $displayUniversalFiles = false,
         $fileType = null,
         $attr = []
     ) {
@@ -116,11 +117,17 @@ class DigitalDownloadSearch extends SearchBase
         
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
         $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
-
+        
+        
         if (0 < $langId) {
-            $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $langCond = $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            if (true === $displayUniversalFiles) {
+                /* adding a language id 0 if added previews for all language  */
+                $langCond->attachCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', 0);
+            }
         }
-        if (is_array($attr) ) {
+
+        if (is_array($attr)) {
             $srch->addMultipleFields($attr);
         } else {
             $srch->addMultipleFields(['pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_name', 'afile_lang_id', 'afile_id', 'afile_type']);
@@ -143,7 +150,6 @@ class DigitalDownloadSearch extends SearchBase
         
         $srch->doNotCalculateRecords();
         $srch->addOrder('afile.afile_updated_at', 'DESC');
-
         $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs, 'afile_id');
 
@@ -324,7 +330,7 @@ class DigitalDownloadSearch extends SearchBase
         if ('0' != $optionComb) {
             $commonRecords = static::getAttachments($recordId, $productType, '0', $langId);
         }
-        
+
         $records = array_replace($records, $commonRecords); */
         
         return $records;
@@ -383,5 +389,4 @@ class DigitalDownloadSearch extends SearchBase
         // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $rows], 1);
         return $rows;
     }
-
 }

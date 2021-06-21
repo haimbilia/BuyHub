@@ -173,10 +173,10 @@ class EmailHandler extends FatModel
 
         $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId, FatUtility::VAR_STRING, '') . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
 
-        if(is_array($extra_headers) && isset($extra_headers['ReplyTo'])){
-             $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'];
-        }else{
-           $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL"); 
+        if (is_array($extra_headers) && isset($extra_headers['ReplyTo'])) {
+            $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'];
+        } else {
+            $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");
             if ($extra_headers != '') {
                 $headers .= $extra_headers;
             }
@@ -210,13 +210,13 @@ class EmailHandler extends FatModel
         try {
             $mail->CharSet = 'UTF-8';
             $mail->IsSMTP();
-            $mail->SMTPAuth = (strtolower($host) == 'localhost')? false : true;
+            $mail->SMTPAuth = (strtolower($host) == 'localhost') ? false : true;
             $mail->IsHTML(true);
             $mail->Host = $host;
             $mail->Port = $port;
             $mail->Username = $username;
             $mail->Password = $password;
-            $mail->SMTPSecure = (strtolower($host) == 'localhost')? 'none' : $secure;
+            $mail->SMTPSecure = (strtolower($host) == 'localhost') ? 'none' : $secure;
             $mail->SMTPDebug = false;
             $mail->SetFrom(FatApp::getConfig('CONF_FROM_EMAIL'));
             $mail->FromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId);
@@ -253,10 +253,10 @@ class EmailHandler extends FatModel
         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 
         $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId) . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
-        if(is_array($extra_headers) && isset($extra_headers['ReplyTo'])){
+        if (is_array($extra_headers) && isset($extra_headers['ReplyTo'])) {
             $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'];
-        }else{
-            $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL"); 
+        } else {
+            $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");
             if ($extra_headers != '') {
                 $headers .= $extra_headers;
             }
@@ -468,7 +468,7 @@ class EmailHandler extends FatModel
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
         return true;
     }
-    
+
     public function sendAdminNewUserCreationEmail($langId, $d)
     {
         $tpl = 'admin_new_user_creation_email';
@@ -484,7 +484,7 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
             return false;
         }
-       
+
         return true;
     }
 
@@ -1171,7 +1171,7 @@ class EmailHandler extends FatModel
 
         $orderObj = new Orders();
         $orderComment = $orderObj->getOrderComments($langId, array("id" => $commentId, "buyer_id" => $buyerId), 1); /*1 no of records*/
-        
+
         if ($orderComment && $orderComment["oshistory_customer_notified"]) {
             $msgComments = '';
 

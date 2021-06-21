@@ -17,9 +17,15 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	searchSalesReport(frm, false);
 });
 
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
 (function () {
-	var currentPage = 1;
-	var runningAjaxReq = false;
 	var dv = '#listing';
 
 	goToSearchPage = function (page) {
@@ -33,15 +39,16 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	redirectBack = function (redirecrt) {
 		window.location = redirecrt;
 	}
-	reloadList = function () {
+	reloadList = function (withloader) {
 		var frm = document.frmSalesReportSearchPaging;
-		searchSalesReport(frm);
+		searchSalesReport(frm, withloader);
 	};
 
-	searchSalesReport = function (form, withloader) {
+	searchSalesReport = function (frm, withloader) {
+		setColumnsData(frm);
 		var data = '';
-		if (form) {
-			data = fcom.frmData(form);
+		if (frm) {
+			data = fcom.frmData(frm);
 		}
 
 		if (typeof withloader == 'undefined' || withloader != false) {
@@ -53,15 +60,29 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		});
 	};
 
-	exportReport = function (dateFormat) {
+	exportReport = function () {
+		setColumnsData(document.frmSalesReportSearch);
 		document.frmSalesReportSearch.action = fcom.makeUrl('SalesReport', 'search', ['export']);
 		document.frmSalesReportSearch.submit();
 	}
 
 	clearSearch = function () {
 		document.frmSalesReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
+		});
 		searchSalesReport(document.frmSalesReportSearch);
 	};
 
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
+		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
+	};
 
 })();

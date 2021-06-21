@@ -135,10 +135,10 @@ class CustomProductsController extends AdminBaseController
             $productOptions = !empty($row_data['product_option']) ? $row_data['product_option'] : array();
             $productTags = !(empty($row_data['product_tags'])) ? $row_data['product_tags'] : array();
 
-            /* $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && 
+            /* $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] &&
             applicationConstants::NO == $productData['product_attachements_with_inventory']); */
 
-            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && 
+            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] &&
             applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
             
             /*   */
@@ -315,7 +315,7 @@ class CustomProductsController extends AdminBaseController
             // CommonHelper::printArray($productRow);
             $productOptions = !empty($productReqData['product_option']) ? $productReqData['product_option'] : [];
 
-            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
+            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] &&
             applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productReqData) ? $productReqData['product_attachements_with_inventory'] : applicationConstants::NO));
         }
         $productSpecData = !empty($productRow['preq_specifications']) ? json_decode($productRow['preq_specifications'], true) : [];
@@ -1052,13 +1052,12 @@ class CustomProductsController extends AdminBaseController
             $prodcat_id = $productReqRow['preq_prodcat_id'];
             $upcCodeData = json_decode($productReqRow['preq_ean_upc_code'], true);
 
-            $productReqData = json_decode($productReqRow['preq_content'],true);
+            $productReqData = json_decode($productReqRow['preq_content'], true);
 
-            /* $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
+            /* $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] &&
             applicationConstants::NO == $productReqData['product_attachements_with_inventory']); */
-            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] && 
+            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] &&
             applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productReqData) ? $productReqData['product_attachements_with_inventory'] : applicationConstants::NO));
-
         }
         /* ] */
         
@@ -1525,7 +1524,7 @@ class CustomProductsController extends AdminBaseController
 
         $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
         
-        if (1 > $preqId ) {
+        if (1 > $preqId) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
         
@@ -1724,10 +1723,10 @@ class CustomProductsController extends AdminBaseController
         }
 
         $optionComb = FatApp::getPostedData('option_comb', null, '0');
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, -1);
         $prodRefType = Product::CATALOG_TYPE_REQUEST;
 
-        $attachments = DigitalDownloadSearch::getAttachments($preqId, Product::CATALOG_TYPE_REQUEST, $optionComb, $langId);
+        $attachments = DigitalDownloadSearch::getAttachments($preqId, Product::CATALOG_TYPE_REQUEST, $optionComb, $langId, true);
 
         $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
         $this->set('attachments', $attachments);
