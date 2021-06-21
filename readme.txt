@@ -329,3 +329,4 @@ bugs:
     #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
     #054212	while adding inventory> when we add link and url is long then UI is not proper
+    #055154	digital items> files linked with specific language are listing all on front end in preview
