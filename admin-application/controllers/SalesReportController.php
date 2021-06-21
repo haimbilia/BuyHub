@@ -2,9 +2,6 @@
 
 class SalesReportController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -20,6 +17,7 @@ class SalesReportController extends AdminBaseController
         $this->set('orderDate', $orderDate);
         $this->set('defaultColumns', $this->getDefaultColumns($orderDate));
         $this->set('fields', $fields);
+        $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 
@@ -160,7 +158,7 @@ class SalesReportController extends AdminBaseController
 
     private function getSearchForm($fields = [], $orderDate = '')
     {
-        $frm = new Form('frmSalesReportSearch');
+        $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
 

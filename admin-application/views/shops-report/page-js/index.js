@@ -74,9 +74,15 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	searchShopsReport(frm, false);
 });
 
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
 (function () {
-	var currentPage = 1;
-	var runningAjaxReq = false;
 	var dv = '#listing';
 
 	goToSearchPage = function (page) {
@@ -88,15 +94,16 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		searchShopsReport(frm);
 	};
 
-	reloadList = function () {
+	reloadList = function (withloader) {
 		var frm = document.frmShopsReportSearchPaging;
-		searchShopsReport(frm);
+		searchShopsReport(frm, withloader);
 	};
 
-	searchShopsReport = function (form, withloader) {
+	searchShopsReport = function (frm, withloader) {
+		setColumnsData(frm);
 		var data = '';
-		if (form) {
-			data = fcom.frmData(form);
+		if (frm) {
+			data = fcom.frmData(frm);
 		}
 
 		if (typeof withloader == 'undefined' || withloader != false) {
@@ -108,16 +115,31 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		});
 	};
 
-	exportReport = function (dateFormat) {
-		// document.frmShopsReportSearch.action = fcom.makeUrl('ShopsReport','export');
-		// document.frmShopsReportSearch.submit();
-		location.href = fcom.makeUrl('ShopsReport', 'export');
+	exportReport = function () {
+		setColumnsData(document.frmShopsReportSearch);
+		document.frmShopsReportSearch.action = fcom.makeUrl('ShopsReport', 'export');
+		document.frmShopsReportSearch.submit();
+		// location.href = fcom.makeUrl('ShopsReport', 'export');
 	}
 
 	clearSearch = function () {
 		document.frmShopsReportSearch.shop_id.value = '0';
 		document.frmShopsReportSearch.shop_user_id.value = '0';
 		document.frmShopsReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
+		});
 		searchShopsReport(document.frmShopsReportSearch);
+	};
+
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
+		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
 	};
 })();

@@ -13,9 +13,10 @@ class ProductProfitReportController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $this->set('fields', $fields);
-        $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('fields', $fields);
+        $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 

@@ -15,6 +15,7 @@ class TransactionReportController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('fields', $fields);
+        $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 
