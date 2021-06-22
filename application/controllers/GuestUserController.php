@@ -1,5 +1,7 @@
 <?php
 
+use PhpParser\Node\Stmt\Label;
+
 class GuestUserController extends MyAppController
 {
     public function loginForm($isRegisterForm = 0)
@@ -368,6 +370,21 @@ class GuestUserController extends MyAppController
         $this->set('pageData', $pageData);
         $this->set('data', $data);
         $this->_template->render(true, true, 'guest-user/registration-form.php');
+    }
+
+    public function checkEmailExists()
+    {
+        $emailAddress = FatApp::getPostedData('email', FatUtility::VAR_STRING, '');
+        if (empty($emailAddress)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $uObj = new User();
+        $data = (array) $uObj->checkUserByEmailOrUserName('', $emailAddress);
+        if (empty($data)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_RESULT_NOT_FOUND', $this->siteLangId));
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId));
     }
 
     public function register()
