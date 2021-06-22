@@ -8,9 +8,9 @@ $arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_Preview_Link', $adminLangI
 $arr_flds['pddr_options_code'] = Labels::getLabel('LBL_Link_Option', $adminLangId);
 $arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_Link_language', $adminLangId);
 
-// if (0 == $product['product_seller_id']) {
+if (0 == $product['product_seller_id']) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);
-// }
+}
 
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
@@ -62,7 +62,7 @@ foreach ($links as $sn => $row) {
                 }
                 break;
             case 'action':
-                // if (0 == $product['product_seller_id']) {
+                if (0 == $product['product_seller_id']) {
                     $td->appendElement(
                         "a",
                         array(
@@ -73,7 +73,7 @@ foreach ($links as $sn => $row) {
                         '<i class="fa fa-trash  icon"></i>',
                         true
                     );
-                // }
+                }
 
                 break;
             default:

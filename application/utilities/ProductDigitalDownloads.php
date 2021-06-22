@@ -28,7 +28,7 @@ trait ProductDigitalDownloads
             $productId = $sellerProductRow['selprod_product_id'];
         } else {
             $canDo = $ddpObj->canEdit(
-                $selProdId,
+                $productId,
                 Product::CATALOG_TYPE_PRIMARY,
                 0,
                 $this->siteLangId,

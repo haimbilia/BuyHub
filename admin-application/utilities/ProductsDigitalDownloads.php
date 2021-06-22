@@ -160,16 +160,6 @@ trait ProductsDigitalDownloads
             $refId = $ddObj->getMainTableRecordId();
         }
         
-        /* if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            if (true == $this->setupDigitalLink($ddObj, $refId, $inventoryId)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
-        } else {
-            if (true == $this->setupDigitalFile($ddObj, $refId, $inventoryId)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
-        } */
-
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
             if (true == $this->setupDigitalLink($ddObj, $refId, $inventoryId, Product::CATALOG_TYPE_INVENTORY)) {
                 FatUtility::dieJsonSuccess(Message::getHtml());
@@ -270,39 +260,6 @@ trait ProductsDigitalDownloads
 
         return $fileId;
     }
-
-    /* public function setupDigitalPreviewFile()
-    {
-        $this->objPrivilege->canEditSellerProducts();
-
-        $recId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
-        $subRecId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
-        
-        if (1 > $recId || 1 > $subRecId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        if (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $ddObj = new DigitalDownload();
-        if (!$ddObj->saveAttachment(
-            $_FILES['preview_file']['tmp_name'],
-            $_FILES['preview_file']['name'],
-            $recId,
-            $subRecId,
-            $langId,
-            true
-        )) {
-            Message::addErrorMessage($ddObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Uploaded_Successfully', $this->adminLangId));
-    } */
 
     private function setupDigitalLink($ddObj, $refId, $recordId)
     {
@@ -471,10 +428,25 @@ trait ProductsDigitalDownloads
 
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->adminLangId, $isPreview, true);
+        $ddpObj->getSellerProduct($recordId);
 
-        if (false == $canDo) {
+        $selProdData = $ddpObj->getSellerProduct($recordId);
+        
+        if (1 > count($selProdData)) {
             FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->adminLangId));
+        }
+        
+        $ddpObj->getProduct($selProdData['selprod_product_id']);
+
+        if (false == $ddpObj->allowedWithInventory($selProdData['selprod_product_id'])) {
+            $recordId = $selProdData['selprod_product_id'];
+            $requestType = Product::CATALOG_TYPE_PRIMARY;
+        }
+
+        $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->adminLangId, $isPreview, true);
+        
+        if (false == $canDo) {
+            FatUtility::dieJsonError($ddpObj->getError());
         }
         
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);

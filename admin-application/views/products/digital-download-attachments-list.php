@@ -5,8 +5,11 @@ $arr_flds = array(
     'preview' => Labels::getLabel('LBL_Preview_Link', $adminLangId),
     'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $adminLangId),
     'afile_lang_id' => Labels::getLabel('LBL_Language', $adminLangId),
-    'action' => Labels::getLabel('LBL_Action', $adminLangId),
 );
+
+if (0 == $product['product_seller_id']) {
+    $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);
+}
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
