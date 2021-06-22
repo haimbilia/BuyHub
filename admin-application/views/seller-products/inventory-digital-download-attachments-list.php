@@ -3,12 +3,11 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'mainfile' => Labels::getLabel('LBL_File', $adminLangId),
     'preview' => Labels::getLabel('LBL_Preview_Link', $adminLangId),
-    // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $adminLangId),
     'afile_lang_id' => Labels::getLabel('LBL_Language', $adminLangId),
 );
 
 if ($canDelete) {
-    $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);
+    // $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);
 }
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
@@ -32,7 +31,7 @@ foreach ($records as $sn => $row) {
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                 if (0 < $row['afile_id']) {
-                    $dvElem->appendElement(
+                    /* $dvElem->appendElement(
                         "a",
                         array(
                             'class' => 'btn btn-sm',
@@ -42,8 +41,8 @@ foreach ($records as $sn => $row) {
                         ),
                         '<i class="fa fa-download  icon"></i>',
                         true
-                    );
-                    if ($canDelete) {
+                    ); */
+                    /* if ($canDelete) {
                         $dvElem->appendElement(
                             "a",
                             array(
@@ -54,7 +53,7 @@ foreach ($records as $sn => $row) {
                             '<i class="fa fa-trash  icon"></i>',
                             true
                         );
-                    }
+                    } */
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
                 }
@@ -74,7 +73,7 @@ foreach ($records as $sn => $row) {
                         '<i class="fa fa-download  icon"></i>',
                         true
                     );
-                    if ($canDelete) {
+                    /* if ($canDelete) {
                         $dvElem->appendElement(
                             "a",
                             array(
@@ -86,10 +85,10 @@ foreach ($records as $sn => $row) {
                             '<i class="fa fa-trash  icon"></i>',
                             true
                         );
-                    }
+                    } */
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
-                    if ($canDoDigDownload) {
+                    /* if ($canDoDigDownload) {
                         $dvElem->appendElement(
                             "a",
                             array(
@@ -103,7 +102,7 @@ foreach ($records as $sn => $row) {
                             '<i class="fa fa-plus  icon"></i>',
                             true
                         );
-                    }
+                    } */
                 }
                 break;
             case 'pddr_options_code':
@@ -122,7 +121,7 @@ foreach ($records as $sn => $row) {
                 $td->appendElement('plaintext', array(), $lang_name, true);
                 break;
             case 'action':
-                if (true === $canDelete) {
+                /* if (true === $canDelete) {
                     $td->appendElement(
                         "a",
                         array(
@@ -133,7 +132,7 @@ foreach ($records as $sn => $row) {
                         '<i class="fa fa-trash  icon"></i>',
                         true
                     );
-                }
+                } */
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

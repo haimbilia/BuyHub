@@ -28,28 +28,30 @@ foreach ($attachments as $sn => $row) {
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
-                if (0 < $row['afile_id'] && 0 == $product['product_seller_id']) {
-                    $dvElem->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn btn-light btn-sm',
-                            'title' => Labels::getLabel('LBL_download', $adminLangId),
-                            'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
-                            'target' => '_blank'
-                        ),
-                        '<i class="fa fa-download  icon"></i>',
-                        true
-                    );
-                    $dvElem->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn btn-light btn-sm',
-                            'title' => Labels::getLabel('LBL_Delete', $adminLangId),
-                            'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
-                        ),
-                        '<i class="fa fa-trash  icon"></i>',
-                        true
-                    );
+                if (0 < $row['afile_id']) {
+                    if (0 == $product['product_seller_id']) {
+                        $dvElem->appendElement(
+                            "a",
+                            array(
+                                'class' => 'btn btn-light btn-sm',
+                                'title' => Labels::getLabel('LBL_download', $adminLangId),
+                                'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
+                                'target' => '_blank'
+                            ),
+                            '<i class="fa fa-download  icon"></i>',
+                            true
+                        );
+                        $dvElem->appendElement(
+                            "a",
+                            array(
+                                'class' => 'btn btn-light btn-sm',
+                                'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                                'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                            ),
+                            '<i class="fa fa-trash  icon"></i>',
+                            true
+                        );
+                    }
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
                 }

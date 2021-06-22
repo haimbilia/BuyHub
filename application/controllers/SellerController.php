@@ -379,13 +379,13 @@ class SellerController extends SellerBaseController
 
         $userId = $this->userParentId;
 
-       /*  $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
-        $ocSrch->doNotCalculateRecords();
-        $ocSrch->doNotLimitRecords();
-        $ocSrch->addCondition('opcharge_order_type', '=', Orders::ORDER_SUBSCRIPTION);
-        $ocSrch->addMultipleFields(array('opcharge_op_id', 'sum(opcharge_amount) as op_other_charges'));
-        $ocSrch->addGroupBy('opc.opcharge_op_id');
-        $qryOtherCharges = $ocSrch->getQuery(); */
+        /*  $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
+         $ocSrch->doNotCalculateRecords();
+         $ocSrch->doNotLimitRecords();
+         $ocSrch->addCondition('opcharge_order_type', '=', Orders::ORDER_SUBSCRIPTION);
+         $ocSrch->addMultipleFields(array('opcharge_op_id', 'sum(opcharge_amount) as op_other_charges'));
+         $ocSrch->addGroupBy('opc.opcharge_op_id');
+         $qryOtherCharges = $ocSrch->getQuery(); */
 
         $srch = new OrderSubscriptionSearch($this->siteLangId, true, true);
         $srch->joinSubscription();
@@ -1542,10 +1542,10 @@ class SellerController extends SellerBaseController
                 $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
                 $cnd = $srch->addCondition('badge_id', '=', $badgeId);
                 $cnd->attachCondition('badge_id', '=', $ribbonId, 'OR');
-            }else if (0 < $badgeId && 1 > $ribbonId) {
+            } elseif (0 < $badgeId && 1 > $ribbonId) {
                 $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
                 $srch->addCondition('badge_id', '=', $badgeId);
-            }else if (1 > $badgeId && 0 < $ribbonId) {
+            } elseif (1 > $badgeId && 0 < $ribbonId) {
                 $condition .= 'badge_type = ' . Badge::TYPE_RIBBON;
                 $srch->addCondition('badge_id', '=', $ribbonId);
             }
@@ -4404,7 +4404,8 @@ class SellerController extends SellerBaseController
 
             /* weight unit[ */
             $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
-            $pWeightUnitsFld = $frm->addSelectBox(Labels::getLabel('LBL_Weight_Unit', $langId), 'product_weight_unit', $weightUnitsArr, '', array(), Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired();;
+            $pWeightUnitsFld = $frm->addSelectBox(Labels::getLabel('LBL_Weight_Unit', $langId), 'product_weight_unit', $weightUnitsArr, '', array(), Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired();
+            ;
 
             $pWeightUnitUnReqObj = new FormFieldRequirement('product_weight_unit', Labels::getLabel('LBL_Weight_Unit', $langId));
             $pWeightUnitUnReqObj->setRequired(false);
@@ -4975,9 +4976,12 @@ class SellerController extends SellerBaseController
 
         $frm = new Form('frmReturnAddressLang');
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $formLangId, array(), '');
-        $frm->addTextBox(Labels::getLabel('LBL_Name', $formLangId), 'ura_name')->requirement->setRequired(true);;
-        $frm->addTextBox(Labels::getLabel('LBL_City', $formLangId), 'ura_city')->requirement->setRequired(true);;
-        $frm->addTextarea(Labels::getLabel('LBL_Address1', $formLangId), 'ura_address_line_1')->requirement->setRequired(true);;
+        $frm->addTextBox(Labels::getLabel('LBL_Name', $formLangId), 'ura_name')->requirement->setRequired(true);
+        ;
+        $frm->addTextBox(Labels::getLabel('LBL_City', $formLangId), 'ura_city')->requirement->setRequired(true);
+        ;
+        $frm->addTextarea(Labels::getLabel('LBL_Address1', $formLangId), 'ura_address_line_1')->requirement->setRequired(true);
+        ;
         $frm->addTextarea(Labels::getLabel('LBL_Address2', $formLangId), 'ura_address_line_2');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -5449,7 +5453,7 @@ class SellerController extends SellerBaseController
             $productType = Product::getAttributesById($productId, 'product_type');
         }
       
-        if($productType == Product::PRODUCT_TYPE_DIGITAL){            
+        if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
             $warrantyFld->requirements()->setRequired(false);
         }
         
@@ -5715,7 +5719,7 @@ class SellerController extends SellerBaseController
             $frm->addCheckBox($daysArr[$i], 'tslot_day[' . $i . ']', $i, array(), false);
             $frm->addSelectBox(Labels::getLabel('LBL_From', $this->siteLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
             $frm->addSelectBox(Labels::getLabel('LBL_To', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-            //$frm->addButton('', 'btn_add_row['.$i.']', '+');                      
+            //$frm->addButton('', 'btn_add_row['.$i.']', '+');
         }
 
         $frm->addSelectBox(Labels::getLabel('LBL_From', $this->siteLangId), 'tslot_from_all', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
@@ -5764,7 +5768,8 @@ class SellerController extends SellerBaseController
         $data['addr_state_id'] = $addrStateId;
         $data['addr_record_id'] = $shopId;
         $data['addr_lang_id'] = $this->siteLangId;
-        $data['addr_type'] =  Address::TYPE_SHOP_PICKUP;;
+        $data['addr_type'] =  Address::TYPE_SHOP_PICKUP;
+        ;
         $address->assignValues($data);
         if (!$address->save()) {
             if (true === MOBILE_APP_API_CALL) {
@@ -5853,10 +5858,9 @@ class SellerController extends SellerBaseController
             $requstedProd = Product::CATALOG_TYPE_REQUEST;
         }
 
-        $ddObj = new DigitalDownload();
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $recordId, $requstedProd], 1);
-        $canDo = $ddObj->canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
-        // var_dump($canDo); exit;
+        $ddpObj = new DigitalDownloadPrivilages();
+        $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
+        
         $frm = DigitalDownload::getDownloadForm($this->siteLangId);
 
         if (0 < $preqId) {
@@ -5882,7 +5886,7 @@ class SellerController extends SellerBaseController
 
             $fld = $frm->getField('attach_with_existing_orders');
 
-            $product = $ddObj->getProduct($recordId);
+            $product = $ddpObj->getProduct($recordId);
 
             if (!is_array($product) && 1 > count($product)) {
                 if (1 === $product['product_attachements_with_inventory']) {
@@ -5954,13 +5958,13 @@ class SellerController extends SellerBaseController
             }
         }
 
-        $ddObj = new DigitalDownload();
+        $ddpObj = new DigitalDownloadPrivilages();
 
         if (Product::CATALOG_TYPE_INVENTORY == $requstedProd) {
-            $canDo = $ddObj->canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true, true);
+            $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true);
 
             if (false === $canDo) {
-                FatUtility::dieJsonError($ddObj->getError());
+                FatUtility::dieJsonError($ddpObj->getError());
             }
             $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code'));
             if (!is_array($selProdData) && 1 > count($selProdData)) {
@@ -5980,15 +5984,16 @@ class SellerController extends SellerBaseController
                 $optionComb = '0';
             }
         } else {
-            $canDo = $ddObj->canDo($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false, true);
+            $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
 
             if (false === $canDo) {
-                Message::addErrorMessage($ddObj->getError());
+                Message::addErrorMessage($ddpObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
-
         }
         
+        $ddObj = new DigitalDownload();
+
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         
         $refId = $ddObj->getReferenceId($recordId, $optionComb, $requstedProd);
@@ -6151,14 +6156,14 @@ class SellerController extends SellerBaseController
         $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
 
-        if(1 > $prodId && 1 > $preqId) {
+        if (1 > $prodId && 1 > $preqId) {
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
         }
 
         $recordId  = $prodId;
         $prodRefType = 0;
 
-        if(0 < $preqId) {
+        if (0 < $preqId) {
             $recordId  = $preqId;
             $prodRefType = 1;
         }
@@ -6166,7 +6171,11 @@ class SellerController extends SellerBaseController
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
+        /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
+
+        $ddpObj = new DigitalDownloadPrivilages();
+        $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId, true);
+        $this->set('canDo', $canDo);
         
         $rows = DigitalDownloadSearch::getLinks($recordId, $prodRefType, $optionCombi, $langId);
         
@@ -6212,7 +6221,11 @@ class SellerController extends SellerBaseController
             $prodRefType = Product::CATALOG_TYPE_REQUEST;
         }
 
-        DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
+        /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
+
+        $ddpObj = new DigitalDownloadPrivilages();
+        $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
+        $this->set('canDo', $canDo);
 
         $optionComb = FatApp::getPostedData('option_comb', null, 0);
         $langId = FatApp::getPostedData('langId', null, 0);
@@ -6255,13 +6268,13 @@ class SellerController extends SellerBaseController
         $reference = DigitalDownload::getAttributesById($refId);
         
         if (false == $reference) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $link = DigitalDownloadSearch::getLinkDetail($linkId);
         if (1 > count($link)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         
@@ -6271,13 +6284,22 @@ class SellerController extends SellerBaseController
             $validateAllowedWithInventory = true;
         }
 
-        $canDelete = DigitalDownload::canDelete($link['pddr_record_id'], $link['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true);
-
-        if (false == $canDelete) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
-            FatUtility::dieJsonError(Message::getHtml());
+        $ddpObj = new DigitalDownloadPrivilages();
+        $canDo = $ddpObj->canEdit(
+            $link['pddr_record_id'],
+            $link['pddr_type'],
+            $this->userParentId,
+            $this->siteLangId,
+            $validateAllowedWithInventory
+        );
+        
+        
+        /* $canDelete = DigitalDownload::canDelete($link['pddr_record_id'], $link['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true); */
+        
+        if (false == $canDo) {
+            FatUtility::dieJsonError($ddpObj->getError());
         }
-
+        
         $ddObj = new DigitalDownload();
         
         if (!$ddObj->deleteLink($linkId, $refId)) {
@@ -6321,11 +6343,20 @@ class SellerController extends SellerBaseController
         if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
             $validateAllowedWithInventory = true;
         }
-        $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], $reference['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true);
 
-        if (false == $canDelete) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        $ddpObj = new DigitalDownloadPrivilages();
+        $canDo = $ddpObj->canEdit(
+            $reference['pddr_record_id'],
+            $reference['pddr_type'],
+            $this->userParentId,
+            $this->siteLangId,
+            $validateAllowedWithInventory
+        );
+
+        /* $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], $reference['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true); */
+
+        if (false == $canDo) {
+            FatUtility::dieJsonError($ddpObj->getError());
         }
 
         $digDownload = new DigitalDownload();

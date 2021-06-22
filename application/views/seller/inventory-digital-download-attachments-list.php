@@ -131,7 +131,6 @@ foreach ($records as $sn => $row) {
                         $isPreview = 1;
                     }
 
-                    /* if (true === $canDelete) { */
                     if (true === $canDoDigDownload) {
                         $td->appendElement(
                             "a",
