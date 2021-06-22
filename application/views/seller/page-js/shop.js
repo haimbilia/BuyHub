@@ -832,7 +832,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupRequiredFields'), data, function (t) {
-            // requiredFieldsForm();
+            /* requiredFieldsForm(); */
             $('.' + keyName).click();
         });
     }
