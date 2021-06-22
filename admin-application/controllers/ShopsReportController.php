@@ -2,26 +2,19 @@
 
 class ShopsReportController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewShopsReport($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditShopsReport($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewShopsReport();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewShopsReport();
-        $flds = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($flds);
-        $frmSearch->fill(['sortBy' => 'shop_name', 'sortOrder' => 'ASC']);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
         $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('fields', $fields);
         $this->_template->render();
     }
 
@@ -31,6 +24,18 @@ class ShopsReportController extends AdminBaseController
         $db = FatApp::getDb();
 
         $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current(array_keys($fields));
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_DESC;
+        }
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -38,8 +43,6 @@ class ShopsReportController extends AdminBaseController
             $page = 1;
         }
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
         /* $fields = ['totOrders', 'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount', 'refundedTaxToSeller', 'refundedShippingToSeller']; */
         $opSrch = new Report(0, array_keys($fields), true);
@@ -58,7 +61,7 @@ class ShopsReportController extends AdminBaseController
         $opSrch->setGroupBy('shop_id');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $opSrch->removeFld(['shop_name', 'shop_owner','owner_name','totProducts','totalFavorites','totReviews', 'totRating']);
+        $opSrch->removeFld(['shop_name', 'shop_owner', 'owner_name', 'totProducts', 'totalFavorites', 'totReviews', 'totRating']);
 
         $srch = new ShopSearch($this->adminLangId, false, false);
         $srch->joinShopOwner(false);
@@ -203,9 +206,11 @@ class ShopsReportController extends AdminBaseController
         $fld = $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly'));
         $fld->htmlAfterField = Labels::getLabel('LBL_Shop_Created_Date_To', $this->adminLangId);
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            $frm->addHiddenField('', 'sortBy', 'shop_name');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
+            $frm->addHiddenField('', 'reportColumns', '');
+            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
         }
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearSearch();'));
@@ -229,23 +234,23 @@ class ShopsReportController extends AdminBaseController
                 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
                 'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->adminLangId),
 
-               // 'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
-               'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
-               // 'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->adminLangId),
+                // 'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
+                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
+                // 'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->adminLangId),
 
-               // 'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
-               'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
-               // 'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->adminLangId),
+                // 'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
+                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
+                // 'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->adminLangId),
 
-               // 'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
-               'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
-               // 'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
+                // 'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
+                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
+                // 'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
 
-               'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
-               // 'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
-               'refundedShippingFromSeller' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
-               // 'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
-               'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
+                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
+                // 'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
+                'refundedShippingFromSeller' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
+                // 'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
+                'refundedTaxFromSeller' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
 
                 'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->adminLangId),
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->adminLangId),
@@ -260,5 +265,10 @@ class ShopsReportController extends AdminBaseController
         }
 
         return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return ['shop_name', 'owner_name', 'netSoldQty', 'grossSales', 'refundedAmount', 'sellerTaxTotal', 'sellerShippingTotal', 'volumeDiscount', 'adminSalesEarnings'];
     }
 }

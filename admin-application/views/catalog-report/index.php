@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchCatalogReport(this); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this); return(false);');
 $frmSearch->setFormTagAttribute('class', 'web_form');
 $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
 $frmSearch->developerTags['fld_default_col'] = 6;

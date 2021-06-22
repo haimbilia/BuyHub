@@ -2,9 +2,6 @@
 
 class CatalogReportController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -18,6 +15,7 @@ class CatalogReportController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('fields', $fields);
+        $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 
@@ -60,13 +58,13 @@ class CatalogReportController extends AdminBaseController
         $opSrch->setGroupBy('product_id');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $opSrch->removeFld(['product_name', 'product_type']);
+        $opSrch->removeFld(['product_name', 'product_type', 'prodcat_name']);
         /* ] */
 
-        $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'p.product_type', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'opq.*'];
+        $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'p.product_type', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'IFNULL(c_l.prodcat_name,c.prodcat_identifier) as prodcat_name', 'opq.*'];
         $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
         $srch->joinBrands($this->adminLangId, false, true);
-        $srch->joinProductToCategory();
+        $srch->joinProductToCategory($this->adminLangId);
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields($selectedFlds);
         $srch->addGroupBy('p.product_id');
@@ -94,7 +92,7 @@ class CatalogReportController extends AdminBaseController
             $rs = $srch->getResultSet();
             $sheetData = array();
             array_push($sheetData, array_values($fields));
-            
+
             while ($row = $db->fetch($rs)) {
                 $arr = [];
                 foreach ($fields as $key => $val) {
@@ -143,7 +141,8 @@ class CatalogReportController extends AdminBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();       
+        $rs = $srch->getResultSet();
+
         $arrListing = $db->fetchAll($rs);
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
@@ -165,16 +164,13 @@ class CatalogReportController extends AdminBaseController
 
     private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmCatalogReportSearch');
+        $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
 
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'product_name');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
-
-            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
         }
 
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
@@ -191,6 +187,7 @@ class CatalogReportController extends AdminBaseController
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product', $this->adminLangId),
                 'product_type'    =>    Labels::getLabel('LBL_Product_Type', $this->adminLangId),
+                'prodcat_name'    =>    Labels::getLabel('LBL_Category', $this->adminLangId),
                 'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->adminLangId),
                 'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
                 'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
@@ -231,6 +228,6 @@ class CatalogReportController extends AdminBaseController
 
     private function getDefaultColumns(): array
     {
-        return ['product_name', 'product_type', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
+        return ['product_name', 'product_type', 'prodcat_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }
 }
