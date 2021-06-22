@@ -1001,7 +1001,7 @@ class ShopsController extends MyAppController
 
         $srch->addCondition('shop_id', '=', $shop_id);
         $shopRs = $srch->getResultSet();
-        return $shop = $db->fetch($shopRs);
+        return (array) $db->fetch($shopRs);
     }
 
     private function getReportSpamForm($langId)
@@ -1010,7 +1010,7 @@ class ShopsController extends MyAppController
         $frm->addHiddenField('', 'shop_id');
         $frm->addSelectBox(Labels::getLabel('LBL_Select_Reason', $langId), 'sreport_reportreason_id', ShopReportReason::getReportReasonArr($langId), '', array(), Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired();
         $frm->addTextArea(Labels::getLabel('LBL_Message', $langId), 'sreport_message')->requirements()->setRequired();
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit_Report', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit_Report', $langId));
         return $frm;
     }
 

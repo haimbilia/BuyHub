@@ -878,7 +878,7 @@ ALTER TABLE `tbl_badge_link_conditions`
 CREATE TABLE `tbl_badge_links` (
   `badgelink_blinkcond_id` bigint(20) NOT NULL,
   `badgelink_record_id` bigint(20) NOT NULL,
-  `badgelink_status` TINYINT(2) NOT NULL
+  `badgelink_breq_id` INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 

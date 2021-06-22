@@ -12,7 +12,6 @@ class BadgeRequest extends MyAppModel
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'blinkcond_id', 
-        self::DB_TBL_PREFIX . 'record_type', 
         self::DB_TBL_PREFIX . 'message',
         self::DB_TBL_PREFIX . 'status',
         self::DB_TBL_PREFIX . 'requested_on',
@@ -68,5 +67,13 @@ class BadgeRequest extends MyAppModel
         $srch->addFld(self::DB_TBL_PREFIX . 'status');
         $row = (array) FatApp::getDb()->fetch($srch->getResultSet());
         return (int) (empty($row) ? -1 : $row[self::DB_TBL_PREFIX . 'status']);
+    }
+
+    public function getRecords(): array
+    {
+        if (1 > $this->mainTableRecordId) {
+            return [];
+        }
+
     }
 }

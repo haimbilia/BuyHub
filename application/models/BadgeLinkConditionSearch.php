@@ -80,7 +80,7 @@ class BadgeLinkConditionSearch extends SearchBase
             $this->joinTable(Option::DB_TBL_LANG, 'LEFT JOIN', 'option_id = optionlang_option_id AND optionlang_lang_id = ' . $langId, 'opt_l');
             $this->joinTable(OptionValue::DB_TBL_LANG, 'LEFT JOIN', 'optionvaluelang_optionvalue_id = optionvalue_id AND optionvaluelang_lang_id = ' . $langId, 'optv_l');
         }
-
+        $this->addGroupBy('badgelink_record_id');
     }
 
     /**

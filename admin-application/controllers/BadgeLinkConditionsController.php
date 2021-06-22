@@ -51,6 +51,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $srch->addCondition('blinkcond_id', '=', $badgeLinkCondId);
+        $srch->getResultSet();
         $result = FatApp::getDb()->fetchAll($srch->getResultSet());
         $records = [];
         foreach ($result as $badgeLink) {
@@ -60,8 +61,8 @@ class BadgeLinkConditionsController extends AdminBaseController
 
             $recordId = $badgeLink['badgelink_record_id'];
             $recordName = $badgeLink['record_name'];
-            $optionName = $badgeLink['option_name'];
-            $optionValueName = $badgeLink['option_value_name'];
+            $optionName = explode('|', $badgeLink['option_name']);
+            $optionValueName = explode('|', $badgeLink['option_value_name']);
             $seller = $badgeLink['seller'];
             unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
 
@@ -71,7 +72,10 @@ class BadgeLinkConditionsController extends AdminBaseController
                     $name = $records[$recordId]['record_name'];
                 }
 
-                $option = !empty($optionName) ? ' | ' .  $optionName . ' : ' . $optionValueName : '';
+                $option = '';
+                foreach ($optionName as $index => $optname) {
+                    $option .= !empty($optname) ? ' | ' .  $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';   
+                }
                 $recordName = $name . $option . ' | ' . $seller;
             }
 
@@ -85,7 +89,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->set('records', $records);
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
-        $this->set('recordCount', count($records));
+        $this->set('recordCount', $srch->recordCount());
         $this->set('pageCount', $srch->pages());
         $this->set('postedData', FatApp::getPostedData());
         $this->_template->render(false, false);
@@ -322,10 +326,10 @@ class BadgeLinkConditionsController extends AdminBaseController
         $msg = '';
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition && !empty($records)) {
             $db = FatApp::getDb();
-            $db->deleteRecords(BadgeLinkCondition::DB_TBL_BADGE_LINKS, array(
+            /* $db->deleteRecords(BadgeLinkCondition::DB_TBL_BADGE_LINKS, array(
                 'smt' => 'badgelink_blinkcond_id = ?',
                 'vals' => [$badgeLinkCondId]
-            ));
+            )); */
             foreach ($records as $recordId) {
                 if (false === BadgeLinkCondition::isUnique($badgeType, $recordType, $recordId, $position)) {
                     if (empty($msg)) {
@@ -336,8 +340,7 @@ class BadgeLinkConditionsController extends AdminBaseController
 
                 $linkData = array(
                     'badgelink_blinkcond_id' => $badgeLinkCondId,
-                    'badgelink_record_id' => $recordId,
-                    'badgelink_status' => applicationConstants::ACTIVE
+                    'badgelink_record_id' => $recordId
                 );
                 $db->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData);
             }
@@ -552,8 +555,7 @@ class BadgeLinkConditionsController extends AdminBaseController
 
         $linkData = array(
             'badgelink_blinkcond_id' => $blinkcond_id,
-            'badgelink_record_id' => $record_id,
-            'badgelink_status' => applicationConstants::ACTIVE
+            'badgelink_record_id' => $record_id
         );
         $db = FatApp::getDb();
         if (!$db->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData)) {

@@ -189,12 +189,12 @@ class BadgeLinkCondition extends MyAppModel
                 END) as record_name',
                 '(CASE 
                     WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '  
-                        THEN option_name
+                        THEN GROUP_CONCAT(option_name SEPARATOR "|")
                     ELSE ""
                 END) as option_name',
                 '(CASE 
                         WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '  
-                            THEN optionvalue_name
+                            THEN GROUP_CONCAT(optionvalue_name SEPARATOR "|")
                         ELSE ""
                 END) as option_value_name',
                 '(CASE 
@@ -222,7 +222,6 @@ class BadgeLinkCondition extends MyAppModel
             $recordFields
         );
         $srch->addMultipleFields($attr);
-        $srch->addCondition('badgelink_status', '=', applicationConstants::ACTIVE);
         $srch->joinBadge($langId);
         $srch->joinBadgeLinks();
         if (false === $linkRecords) {
@@ -270,7 +269,8 @@ class BadgeLinkCondition extends MyAppModel
         $srch = new BadgeSearch($langId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blnk.blinkcond_badge_id =  bdg.badge_id', 'blnk');
+        $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'blc.blinkcond_badge_id =  bdg.badge_id', 'blc');
+        $srch->joinTable(self::DB_TBL_BADGE_LINKS, 'INNER JOIN', 'blnks.badgelink_blinkcond_id = blc.blinkcond_id', 'blnks');
 
         $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
         $srch->addCondition('badge_required_approval', '=', applicationConstants::YES);

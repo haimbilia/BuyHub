@@ -116,6 +116,7 @@ Fixes:
     => 054447 - when product having multiple options then on detail page> options are not listing properly
     => 054613 - Error display on invoice pdf page
     => 054742 - wrong message is populating on button on tooltip
+    => 054711 - when multiple products are linked with same shipping profile then pagination count is not proper
 
 
 Develop

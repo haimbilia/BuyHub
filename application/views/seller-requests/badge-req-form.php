@@ -8,26 +8,26 @@ $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitFld->developerTags['noCaptionTag'] = true;
 
-$fld = $frm->getField('blinkcond_record_type');
-if (null != $fld) {
-    $fld->developerTags['col'] = 3;
-}
-
 $fld = $frm->getField('badgelink_record_id');
 if (null != $fld) {
-    $fld->developerTags['col'] = 9;
+    $fld->developerTags['col'] = 8;
 	$fld->htmlAfterField = '<div class="recordsContainer--js p-0 box--scroller"></div>';
 }
 
 $fld = $frm->getField('breq_message');
 if (null != $fld) {
-    $fld->developerTags['col'] = 12;
+    $fld->developerTags['col'] = 4;
 }
 
 $fld = $frm->getField('breq_file');
 if (null != $fld) {
 	$fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm fileUpload--js');
 	$fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_BADGE_REQUEST_REFERENCE_FILE', $siteLangId) . '</small>';
+}
+
+$fld = $frm->getField('breq_blinkcond_id');
+if (null != $fld) {
+	$fld->addFieldTagAttribute('onchange', 'getRecordType(this)');
 }
 
 ?>
@@ -51,4 +51,5 @@ if (null != $fld) {
 <script>
 	var RECORD_TYPE_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_PRODUCT; ?>;
 	var RECORD_TYPE_SELLER_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT; ?>;
+	var RECORD_TYPE_SHOP = <?php echo BadgeLinkCondition::RECORD_TYPE_SHOP; ?>;
 </script>

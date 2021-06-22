@@ -750,6 +750,9 @@ class SellerRequestsController extends SellerBaseController
             if ($requestedBadge === false) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
+
+            
+
             $frm->fill($requestedBadge);
         }
         $this->set('frm', $frm);
@@ -762,17 +765,14 @@ class SellerRequestsController extends SellerBaseController
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
         $frm->addHiddenField('', 'record_ids');
+        $frm->addHiddenField('', 'breq_record_type');
 
         $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_blinkcond_id', $approvalRequiredBadges);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_blinkcond_id', $approvalRequiredBadges, '', [], '');
         $fld->requirements()->setRequired(true);
         $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
 
         $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
-
-        $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
-        unset($recordTypesArr[BadgeLinkCondition::RECORD_TYPE_SHOP]);
-        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr, '', [], '');
 
         $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->siteLangId));
@@ -787,6 +787,11 @@ class SellerRequestsController extends SellerBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $badgeLinkCondId = FatApp::getPostedData('breq_blinkcond_id', FatUtility::VAR_INT, 0);
+        if (1 > $badgeLinkCondId) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId));
         }
 
         $recordIds = isset($post['record_ids']) ? json_decode($post['record_ids'], true) : [];
@@ -804,7 +809,7 @@ class SellerRequestsController extends SellerBaseController
             $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/PENDING', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
-        // CommonHelper::printArray($post, true);
+        
         $record = new BadgeRequest($badgeReqId);
         $record->assignValues($post);
 
@@ -815,6 +820,15 @@ class SellerRequestsController extends SellerBaseController
 
         $badgeReqId = $record->getMainTableRecordId();
         $this->setupBadgeRequestImage($badgeReqId);
+
+        foreach ($recordIds as $recordId) {
+            $linkData = array(
+                'badgelink_blinkcond_id' => $badgeLinkCondId,
+                'badgelink_record_id' => $recordId,
+                'badgelink_breq_id' => $badgeReqId
+            );
+            FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData);
+        }
         
         $this->set('msg', Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId));
         $this->set('badgeReqId', $badgeReqId);

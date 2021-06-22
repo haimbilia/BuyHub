@@ -6252,4 +6252,14 @@ class SellerController extends SellerBaseController
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
     }
     /* Digital downloads*/
+
+    public function getShopDetail(int $autoComplteRequest = 0)
+    {
+        $attr = (1 > $autoComplteRequest ? null : [
+            'shop_id as id',
+            'COALESCE(shop_name, shop_identifier) as name'
+        ]);
+        $shopData = (array)Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), $attr, true, $this->siteLangId);
+        FatUtility::dieJsonSuccess(['shopData' => $shopData]);
+    }
 }

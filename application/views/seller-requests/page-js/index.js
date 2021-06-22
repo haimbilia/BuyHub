@@ -291,6 +291,8 @@
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
             bindRecordsSelect2();
+            updateRecordIds();
+            $("select[name='breq_blinkcond_id']").trigger('change');
         });
     };
 
@@ -316,10 +318,12 @@
                 $.mbsmessage(langLbl.processing, false, 'alert--process');
             },
             success: function (ans) {
-                var className = (ans == 1 ? 'alert--success' : 'alert--danger');
+                var className = (ans.status == 1 ? 'alert--success' : 'alert--danger');
                 $.mbsmessage(ans.msg, true, className);
-                $(document).trigger('close.facebox');
-                searchBadgeRequests();
+                if (1 > ans.status) {
+                    return false;
+                }
+                backToListing();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -340,11 +344,13 @@
     getRecordTypeURL = function () {
         var searchSelector = $("select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
-        var recordType = $('select[name="blinkcond_record_type"]').val();
+        var recordType = $('input[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             return fcom.makeUrl('ShippingProfileProducts', 'autoCompleteProducts');
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
+        }else if (RECORD_TYPE_SHOP == recordType) {
+            return fcom.makeUrl('Seller', 'getShopDetail', [1]);
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
             return false;
@@ -352,11 +358,13 @@
     }
 
     getRecordData = function (data) {
-        var recordType = $('select[name="blinkcond_record_type"]').val();
+        var recordType = $('input[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             return data
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return data.suggestions;
+        } else if (RECORD_TYPE_SHOP == recordType) {
+            return [data.shopData];
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
             return false;
@@ -395,7 +403,7 @@
             }
         }).on('select2:selecting', function (e) {
             var badgeType = $('input[name="badge_type"]').val();
-            var recordType = $('select[name="blinkcond_record_type"]').val();
+            var recordType = $('input[name="breq_record_type"]').val();
             var position = 0;
             if (0 < $('select[name="blinkcond_position"]').length) {
                 position = $('select[name="blinkcond_position"]').val();
@@ -432,7 +440,7 @@
                     $('.recordsContainer--js').html(tbl);
                 }
                 $('.recordListing--js').append(htm);
-                $("select[name='blinkcond_record_type']").attr('disabled', 'disabled');
+                $("input[name='breq_record_type']").attr('disabled', 'disabled');
             // });
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
@@ -452,7 +460,7 @@
             }
 
             $("input[name='record_ids']").val(JSON.stringify(selectedRecords));
-            var recordType = $("select[name='blinkcond_record_type']");
+            var recordType = $("input[name='breq_record_type']");
             if (1 > selectedRecords.length) {
                 recordType.removeAttr('disabled');
             } else {
@@ -466,4 +474,17 @@
         updateRecordIds(removeRecordId);
     }
 
+    getRecordType = function (element) {
+        var recordType = $('input[name="breq_record_type"]');
+        if ("" == element.value) {
+            recordType.val("");
+            return false;
+        }
+
+        fcom.ajax(fcom.makeUrl('BadgeLinkConditions', 'getRecordType', [element.value]), '', function (t) {
+            var res = $.parseJSON(t);
+            console.log(recordType);
+            recordType.val(res.recordType);
+        });
+    }
 })();
