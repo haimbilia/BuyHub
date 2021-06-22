@@ -440,7 +440,7 @@
                     $('.recordsContainer--js').html(tbl);
                 }
                 $('.recordListing--js').append(htm);
-                $("input[name='breq_record_type']").attr('disabled', 'disabled');
+                $("select[name='breq_blinkcond_id']").attr('disabled', 'disabled');
             // });
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
@@ -460,11 +460,11 @@
             }
 
             $("input[name='record_ids']").val(JSON.stringify(selectedRecords));
-            var recordType = $("input[name='breq_record_type']");
+            var badgeCondFld = $("select[name='breq_blinkcond_id']");
             if (1 > selectedRecords.length) {
-                recordType.removeAttr('disabled');
+                badgeCondFld.removeAttr('disabled');
             } else {
-                recordType.attr('disabled', 'disabled');
+                badgeCondFld.attr('disabled', 'disabled');
             }
         }
     }
