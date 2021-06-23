@@ -419,7 +419,10 @@ class HomeController extends MyAppController
             }
             $fileName = $langCode . '.json';
             $filePath = Labels::JSON_FILE_DIR_NAME . '/' . Labels::TYPE_APP . '/AP/' . $fileName;
-
+            
+            if (false === file_exists(CONF_UPLOADS_PATH . $filePath)) {
+                FatUtility::dieJsonError(Labels::getLabel('MSG_FILE_NOT_FOUND._PLEASE_SYNC_FILE_FROM_ADMIN.', $langId));
+            }
             AttachedFile::downloadAttachment($filePath, $fileName);
             exit;
         }
