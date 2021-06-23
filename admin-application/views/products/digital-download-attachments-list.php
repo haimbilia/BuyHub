@@ -1,10 +1,10 @@
 <?php
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    'mainfile' => Labels::getLabel('LBL_File', $adminLangId),
-    'preview' => Labels::getLabel('LBL_Preview_Link', $adminLangId),
-    'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $adminLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_Language', $adminLangId),
+    'mainfile' => Labels::getLabel('LBL_DD_File', $adminLangId),
+    'preview' => Labels::getLabel('LBL_DD_Preview', $adminLangId),
+    'pddr_options_code' => Labels::getLabel('LBL_DD_Option', $adminLangId),
+    'afile_lang_id' => Labels::getLabel('LBL_DD_Language', $adminLangId),
 );
 
 if (0 == $product['product_seller_id']) {

@@ -338,7 +338,6 @@ class DigitalDownloadSearch extends SearchBase
     
     public static function processAttachmentsWithPreview($attachments)
     {
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $attachments], 1);
         if (0 > count($attachments)) {
             return [];
         }
@@ -362,9 +361,9 @@ class DigitalDownloadSearch extends SearchBase
                 $rows[$key]['pddr_options_code'] = $attachment['pddr_options_code'];
                 $rows[$key]['preview'] = $attachment['afile_name'];
                 $rows[$key]['prev_afile_id'] = $attachment['afile_id'];
+                $rows[$key]['afile_lang_id'] = $attachment['afile_lang_id'];
                 $rows[$key]['afile_record_id'] = $attachment['afile_record_id'];
                 $rows[$key]['mainfile'] = '';
-                $rows[$key]['afile_lang_id'] = '';
                 $rows[$key]['afile_id'] = 0;
                 continue;
             }
@@ -386,7 +385,7 @@ class DigitalDownloadSearch extends SearchBase
             $rows[$attachment['afile_record_subid']]['preview'] = $attachment['afile_name'];
             $rows[$attachment['afile_record_subid']]['prev_afile_id'] = $attachment['afile_id'];
         }
-        // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $rows], 1);
+        
         return $rows;
     }
 }

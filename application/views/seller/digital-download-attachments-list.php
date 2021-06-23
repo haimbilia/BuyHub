@@ -1,10 +1,10 @@
 <?php
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'mainfile' => Labels::getLabel('LBL_File', $siteLangId),
-    'preview' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
-    'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_Language', $siteLangId),
+    'mainfile' => Labels::getLabel('LBL_DD_File', $siteLangId),
+    'preview' => Labels::getLabel('LBL_DD_Preview', $siteLangId),
+    'pddr_options_code' => Labels::getLabel('LBL_DD_Option', $siteLangId),
+    'afile_lang_id' => Labels::getLabel('LBL_DD_Language', $siteLangId),
     'action' => Labels::getLabel('LBL_Action', $siteLangId),
 );
 
@@ -61,7 +61,6 @@ foreach ($attachments as $sn => $row) {
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                 if (0 < $row['prev_afile_id']) {
-                    
                     $dvElem->appendElement(
                         "a",
                         array(

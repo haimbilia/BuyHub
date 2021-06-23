@@ -331,3 +331,4 @@ bugs:
     #054212	while adding inventory> when we add link and url is long then UI is not proper
     #055154	digital items> files linked with specific language are listing all on front end in preview
     #055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
+    #055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing

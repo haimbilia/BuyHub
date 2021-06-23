@@ -2,9 +2,9 @@
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     'pdl_download_link' => Labels::getLabel('LBL_Download_Link', $siteLangId),
+    'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
     'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $siteLangId),
     'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId),
-    'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
     'action' => Labels::getLabel('LBL_Action', $siteLangId),
 );
 

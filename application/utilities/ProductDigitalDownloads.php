@@ -109,6 +109,7 @@ trait ProductDigitalDownloads
             $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
         } else {
             $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
+            // CommonHelper::printArray([['file' => __FILE__, 'line' => __LINE__], $records], 1);
             $records = DigitalDownloadSearch::processAttachmentsWithPreview($records);
         }
 

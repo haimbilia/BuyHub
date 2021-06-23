@@ -1,9 +1,9 @@
 <?php
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    'mainfile' => Labels::getLabel('LBL_File', $adminLangId),
-    'preview' => Labels::getLabel('LBL_Preview_Link', $adminLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_Language', $adminLangId),
+    'mainfile' => Labels::getLabel('LBL_DD_File', $adminLangId),
+    'preview' => Labels::getLabel('LBL_DD_Preview', $adminLangId),
+    'afile_lang_id' => Labels::getLabel('LBL_DDLanguage', $adminLangId),
 );
 
 if ($canDelete) {
@@ -73,19 +73,19 @@ foreach ($records as $sn => $row) {
                         '<i class="fa fa-download  icon"></i>',
                         true
                     );
-                    /* if ($canDelete) {
-                        $dvElem->appendElement(
-                            "a",
-                            array(
-                                'class' => 'btn btn-light btn-sm',
-                                'title' => Labels::getLabel('LBL_Delete', $adminLangId),
-                                'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)',
-                                'href' => 'javascript:void(0);'
-                            ),
-                            '<i class="fa fa-trash  icon"></i>',
-                            true
-                        );
-                    } */
+                /* if ($canDelete) {
+                    $dvElem->appendElement(
+                        "a",
+                        array(
+                            'class' => 'btn btn-light btn-sm',
+                            'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                            'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)',
+                            'href' => 'javascript:void(0);'
+                        ),
+                        '<i class="fa fa-trash  icon"></i>',
+                        true
+                    );
+                } */
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
                     /* if ($canDoDigDownload) {

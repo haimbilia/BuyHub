@@ -1,10 +1,8 @@
 <?php
 $arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
-$arr_flds['mainfile'] = Labels::getLabel('LBL_File', $siteLangId);
-
-$arr_flds['preview'] = Labels::getLabel('LBL_Preview_Link', $siteLangId);
-/* $arr_flds['pddr_options_code'] = Labels::getLabel('LBL_Link_Option', $siteLangId); */
-$arr_flds['afile_lang_id'] = Labels::getLabel('LBL_Language', $siteLangId);
+$arr_flds['mainfile'] = Labels::getLabel('LBL_DD_File', $siteLangId);
+$arr_flds['preview'] = Labels::getLabel('LBL_DD_Preview', $siteLangId);
+$arr_flds['afile_lang_id'] = Labels::getLabel('LBL_DD_Language', $siteLangId);
 
 if (true === $canDoDigDownload) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);
@@ -123,7 +121,6 @@ foreach ($records as $sn => $row) {
                 break;
             case 'action':
                 if (1 < $row['afile_id'] || 1 < $row['prev_afile_id']) {
-
                     $fileId = $row['afile_id'];
                     $isPreview = 0;
                     if (1 > $row['afile_id']) {
