@@ -1,6 +1,7 @@
 <?php
 class SellerRequestsController extends SellerBaseController
 {
+    private $recordData = [];
     public function __construct($action)
     {
         parent::__construct($action);
@@ -184,7 +185,10 @@ class SellerRequestsController extends SellerBaseController
 
         $srch->addMultipleFields(array_merge(
             BadgeRequest::ATTR,
-            ['COALESCE(badge_name, badge_identifier) as badge_name']
+            [
+                'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
+                Badge::DB_TBL_PREFIX . 'id'
+            ]
         ));
 
         $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
@@ -739,10 +743,83 @@ class SellerRequestsController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
+    public function records(int $badgeReqId, bool $returnAllRecordIds = false)
+    {
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->siteLangId, true);
+        /* Bind Records */
+        $srch->joinProduct($this->siteLangId);
+        $srch->joinSellerProduct($this->siteLangId);
+        $srch->joinShop($this->siteLangId);
+        /* Bind Records */
+        $srch->joinTable(BadgeRequest::DB_TBL, 'INNER JOIN', 'blc.badgelink_breq_id = breq.breq_id', 'breq');
+
+        if (false === $returnAllRecordIds) {
+            $srch->setPageNumber($page);
+            $srch->setPageSize($pagesize);
+        } else {
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+        }
+
+        $srch->addCondition('breq_id', '=', $badgeReqId);
+        $srch->getResultSet();
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet(), 'badgelink_record_id');
+        
+        if (true === $returnAllRecordIds) {
+            return array_keys($result);
+        }
+
+        $records = [];
+        foreach ($result as $badgeLink) {
+            if (array_key_exists('badgelink_record_id', $badgeLink) && empty($badgeLink['badgelink_record_id'])) {
+                break;
+            }
+
+            $recordId = $badgeLink['badgelink_record_id'];
+            $recordName = $badgeLink['record_name'];
+            $optionName = explode('|', $badgeLink['option_name']);
+            $optionValueName = explode('|', $badgeLink['option_value_name']);
+            $seller = $badgeLink['seller'];
+            unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
+
+            if (BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT == $badgeLink['blinkcond_record_type']) {
+                $name = $recordName;
+                if (isset($records[$recordId]['record_name'])) {
+                    $name = $records[$recordId]['record_name'];
+                }
+
+                $option = '';
+                foreach ($optionName as $index => $optname) {
+                    $option .= !empty($optname) ? ' | ' .  $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';   
+                }
+                $recordName = $name . $option . ' | ' . $seller;
+            }
+
+            $records[$recordId] = [
+                'badgelink_record_id' => $recordId,
+                'record_name' => $recordName
+            ];
+        }
+
+        $this->set('badgeReqId', $badgeReqId);
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('pageCount', $srch->pages());
+        $this->set('records', $records);
+        $this->set('postedData', FatApp::getPostedData());
+        $this->_template->render(false, false);
+    }
+
     public function badgeReqForm($badgeReqId = 0)
     {
         $this->userPrivilege->canEditBadges();
         $frm = $this->getBadgeForm();
+        $blinkCondId = 0;
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
             $srch->addCondition('breq_id', '=', $badgeReqId);
@@ -750,11 +827,11 @@ class SellerRequestsController extends SellerBaseController
             if ($requestedBadge === false) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
-
-            
-
+            $requestedBadge['record_ids'] = json_encode($this->records($badgeReqId, true));
+            $blinkCondId = $requestedBadge['breq_blinkcond_id'];
             $frm->fill($requestedBadge);
         }
+        $this->set('blinkCondId', $blinkCondId);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false);
@@ -805,7 +882,7 @@ class SellerRequestsController extends SellerBaseController
         $post['breq_user_id'] = UserAuthentication::getLoggedUserId();
 
         $status = BadgeRequest::getRequestStatus($post['breq_blinkcond_id'], UserAuthentication::getLoggedUserId());
-        if (BadgeRequest::REQUEST_APPROVED == $status || BadgeRequest::REQUEST_PENDING == $status) {
+        if (BadgeRequest::REQUEST_APPROVED == $status) {
             $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/PENDING', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
@@ -830,7 +907,11 @@ class SellerRequestsController extends SellerBaseController
             FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData);
         }
         
-        $this->set('msg', Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId));
+        $msg = Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId);
+        if (0 < $badgeReqId) {
+            $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId);
+        }
+        $this->set('msg', $msg);
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -857,5 +938,55 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError($fileHandlerObj->getError());
         }
         return true;
+    }
+
+    public function unlinkRecord(int $badgeReqId, int $record_id)
+    {
+        if (1 > $record_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD', $this->siteLangId));
+        }
+        $this->removeLinkRecord($badgeReqId, $record_id);
+    }
+
+    private function removeLinkRecord(int $badgeReqId, int $record_id = 0)
+    {
+        if (1 > $badgeReqId) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+        $smt = 'badgelink_breq_id = ?';
+        $vals = [$badgeReqId];
+        if (0 < $record_id) {
+            $smt .= ' AND badgelink_record_id = ?';
+            $vals[] = $record_id;
+        }
+
+        $db = FatApp::getDb();
+        if (!$db->deleteRecords(
+            BadgeLinkCondition::DB_TBL_BADGE_LINKS,
+            [
+                'smt' => $smt,
+                'vals' => $vals
+            ]
+        )) {
+            FatUtility::dieJsonError($db->getError());
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
+    }
+
+    public function downloadFile(int $recordId)
+    {
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $recordId);
+        if ($res == false) {
+            Message::addErrorMessage(Labels::getLabel("MSG_Not_available_to_download", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
+        }
+
+        if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
+            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
+        }
+
+        $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'];
+        AttachedFile::downloadAttachment($filePath, $res['afile_name']);
     }
 }

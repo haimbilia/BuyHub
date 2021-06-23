@@ -43,12 +43,16 @@ $(document).ready(function () {
     };
 
     form = function (badgeReqId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl(controller, 'form', [badgeReqId]), '', function (t) {
-                $.facebox(t, 'medium-fb-width catalog-bg');
-            });
+        fcom.ajax(fcom.makeUrl(controller, 'form', [badgeReqId]), '', function (t) {
+            $('.pagebody--js').hide();
+            $('.editRecord--js').html(t);
         });
     };
+
+    backToListing = function () {
+        $('.editRecord--js').html("");
+        $('.pagebody--js').fadeIn();
+    }
 
     setup = function (frm) {
         if (!$(frm).validate()) return;

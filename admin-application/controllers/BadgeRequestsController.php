@@ -39,9 +39,10 @@ class BadgeRequestsController extends AdminBaseController
         $srch->addMultipleFields(array_merge(
             BadgeRequest::ATTR,
             [
-                'COALESCE(badge_name, badge_identifier) as badge_name',
+                'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
                 'shop_name',
-                'user_name'
+                'user_name',
+                Badge::DB_TBL_PREFIX . 'id'
             ]
         ));
 
@@ -151,7 +152,7 @@ class BadgeRequestsController extends AdminBaseController
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
 
-        $approvalRequiredBadges = Badge::getApprovalRequestBadges($this->adminLangId);
+        $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->adminLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->adminLangId), 'blinkcond_badge_id', $approvalRequiredBadges);
         $fld->requirements()->setRequired(true);
         $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->adminLangId), 'breq_message');
@@ -167,12 +168,12 @@ class BadgeRequestsController extends AdminBaseController
     {
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $recordId);
         if ($res == false) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Not_available_to_download", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("MSG_Not_available_to_download", $this->adminLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->adminLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
 

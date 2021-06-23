@@ -163,8 +163,8 @@ class BadgeLinkConditionsController extends SellerBaseController
 
                 $recordId = $badgeLink['badgelink_record_id'];
                 $recordName = $badgeLink['record_name'];
-                $optionName = $badgeLink['option_name'];
-                $optionValueName = $badgeLink['option_value_name'];
+                $optionName = explode('|', $badgeLink['option_name']);
+                $optionValueName = explode('|', $badgeLink['option_value_name']);
                 $seller = $badgeLink['seller'];
                 unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
 
@@ -178,7 +178,10 @@ class BadgeLinkConditionsController extends SellerBaseController
                         $name = $dataToFill['records'][$recordId]['record_name'];
                     }
 
-                    $option = !empty($optionName) ? ' | ' .  $optionName . ' : ' . $optionValueName : '';
+                    $option = '';
+                    foreach ($optionName as $index => $optname) {
+                        $option .= !empty($optname) ? ' | ' .  $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';   
+                    }
                     $recordName = $name . $option . ' | ' . $seller;
                 }
 
@@ -370,11 +373,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $badgeId = '';
         if (is_array($this->recordData) && 0 < count($this->recordData)) {
             if (isset($this->recordData['records'])) {
-                foreach ($this->recordData['records'] as $record) {
-                    if (!in_array($record['badgelink_record_id'], $recordIds)) {
-                        $recordIds[] = $record['badgelink_record_id'];
-                    }
-                }
+                $recordIds = array_unique(array_keys($this->recordData['records']));
             }
             $selectedBadge[$this->recordData['blinkcond_badge_id']] = $this->recordData['badge_name'];
             $badgeId = $this->recordData['blinkcond_badge_id'];

@@ -293,6 +293,9 @@
             bindRecordsSelect2();
             updateRecordIds();
             $("select[name='breq_blinkcond_id']").trigger('change');
+            if (0 < badgeReqId) {
+                reloadRecordsList(badgeReqId, 1);
+            }
         });
     };
 
@@ -433,14 +436,13 @@
                 setTimeout(function () {
                     selector.val('').trigger('change');
                 }, 200);
-                var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times-circle"></i></a></id><td>' +( e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+                var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' +( e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
                 var tbl = "";
                 if (1 > $('table.recordListing--js').length) {
                     var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
                     $('.recordsContainer--js').html(tbl);
                 }
                 $('.recordListing--js').append(htm);
-                $("select[name='breq_blinkcond_id']").attr('disabled', 'disabled');
             // });
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
@@ -457,14 +459,7 @@
                 if (index > -1) {
                     selectedRecords.splice(index, 1);
                 }
-            }
-
-            $("input[name='record_ids']").val(JSON.stringify(selectedRecords));
-            var badgeCondFld = $("select[name='breq_blinkcond_id']");
-            if (1 > selectedRecords.length) {
-                badgeCondFld.removeAttr('disabled');
-            } else {
-                badgeCondFld.attr('disabled', 'disabled');
+                $("input[name='record_ids']").val(JSON.stringify(selectedRecords));
             }
         }
     }
@@ -472,10 +467,21 @@
     removeRecordRow = function (element, removeRecordId) {
         $(element).closest('tr').remove();
         updateRecordIds(removeRecordId);
+        var badgeReqId = $('input[name="breq_id"]').val();
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'unlinkRecord', [badgeReqId, removeRecordId]), '', function (t) {
+            reloadRecordsList(badgeReqId);
+        });
     }
 
     getRecordType = function (element) {
         var recordType = $('input[name="breq_record_type"]');
+        var oldValue = $(element).data('oldvalue');
+        if (oldValue != element.value) {
+            $('select.recordIds--js, input[name="record_ids"]').val("").trigger('change');
+            $('.recordsContainer--js').html("");
+            $(element).data('oldvalue', element.value);
+        }
+
         if ("" == element.value) {
             recordType.val("");
             return false;
@@ -483,8 +489,15 @@
 
         fcom.ajax(fcom.makeUrl('BadgeLinkConditions', 'getRecordType', [element.value]), '', function (t) {
             var res = $.parseJSON(t);
-            console.log(recordType);
             recordType.val(res.recordType);
         });
     }
+
+    reloadRecordsList = function (badgeReqId, page) {
+        $(".recordsContainer--js").html(fcom.getLoader());
+        var data = 'page=' + page;
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'records', [badgeReqId]), data, function (t) {
+            $(".recordsContainer--js").html(t);
+        });
+    };
 })();
