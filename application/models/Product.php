@@ -625,7 +625,7 @@ class Product extends MyAppModel
         }
         return $data;
     }
-    
+
     public static function getSeparateImageOptions($product_id, $lang_id)
     {
         $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $lang_id));
@@ -1558,7 +1558,7 @@ END,   special_price_found ) as special_price_found'
                     $srch->addOrder('theprice', $sortOrder);
                     break;
                 case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)&& FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('selprod_sold_count', $sortOrder);
@@ -1579,7 +1579,7 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
-        $srch->addGroupBy('product_id');        
+        $srch->addGroupBy('product_id');
         if (!empty($keyword)) {
             $srch->addGroupBy('keywordmatched');
             $srch->addOrder('keywordmatched', 'desc');
@@ -1648,6 +1648,7 @@ END,   special_price_found ) as special_price_found'
         );
 
         $srch = new ProductSearch();
+        $srch->addMultipleFields(array('DISTINCT(product_id)', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
         $srch->setDefinedCriteria(1, 0, $criteria, true, false);
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription(0, false, true);
@@ -1655,9 +1656,9 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_active', '=', applicationConstants::YES);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_available_from', '<=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
-        $srch->addMultipleFields(array('DISTINCT(product_id)', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
+
         // $srch->addGroupBy('product_id');
 
         if (0 < $productId) {
