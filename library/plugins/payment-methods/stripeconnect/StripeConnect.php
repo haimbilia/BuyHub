@@ -540,7 +540,7 @@ class StripeConnect extends PaymentMethodBase
                 'title' => Labels::getLabel("MSG_BUSINESS_TYPE", $this->langId),
                 'description' => '',
                 'required' => true
-            ], */
+            ],
             'business_profile.name' => [
                 'title' => Labels::getLabel("MSG_BUSINESS_PROFILE_NAME", $this->langId),
                 'description' => Labels::getLabel('API_THE_CUSTOMER_FACING_BUSINESS_NAME', $this->langId),
@@ -595,7 +595,7 @@ class StripeConnect extends PaymentMethodBase
                 'title' => Labels::getLabel("MSG_SUPPORT_ADDRESS_STATE", $this->langId),
                 'description' => Labels::getLabel('API_STATE_COUNTY_PROVINCE_OR_REGION', $this->langId),
                 'required' => true
-            ],
+            ], */
         ];
 
         $bussinessTypeFileds = [
@@ -1534,7 +1534,7 @@ class StripeConnect extends PaymentMethodBase
             return false;
         }
         $customerInfo = $this->getResponse()->toArray();
-        $this->resp = $customerInfo['sources']['data'];
+        $this->resp = (array) $customerInfo['sources']['data'];
         return true;
     }
 

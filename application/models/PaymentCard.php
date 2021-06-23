@@ -117,11 +117,17 @@ class PaymentCard
      */
     public function fetchAll(): bool
     {
+        if (empty($this->getCustomerId())) {
+            if (false === $this->bindCustomer()) {
+                return false;
+            }
+        }
+
         if (false === $this->paymentPlugin->fetchCards()) {
             $this->error = $this->paymentPlugin->getError();
             return false;
         }
-        $this->response = $this->paymentPlugin->getResponse();
+        $this->response = json_decode(json_encode($this->paymentPlugin->getResponse()), true);
         return true;
     }
 
