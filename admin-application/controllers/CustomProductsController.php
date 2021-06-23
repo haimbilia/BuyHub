@@ -1469,8 +1469,9 @@ class CustomProductsController extends AdminBaseController
         if (1 > $preqId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
-        
-        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $ddpObj = new DigitalDownloadPrivilages();
+
+        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
 
         $frm = DigitalDownload::getDownloadForm($this->adminLangId);
 
@@ -1527,17 +1528,18 @@ class CustomProductsController extends AdminBaseController
         if (1 > $preqId) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
-        
-        if (false == DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Attachments_or_links_Not_allowed_with_Product', $this->adminLangId));
+        $ddpObj = new DigitalDownloadPrivilages();
+
+        if (false == $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true)) {
+            FatUtility::dieJsonError($ddObj->getError());
         }
         
         $post = FatApp::getPostedData();
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
         $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-
-        $ddObj = new DigitalDownload();
         
+        $ddObj = new DigitalDownload();
+
         $refId = $ddObj->getReferenceId($preqId, $optionComb, Product::CATALOG_TYPE_REQUEST);
         if (1 > $refId) {
             if (!$ddObj->saveReference($preqId, $optionComb, Product::CATALOG_TYPE_REQUEST)) {
@@ -1692,8 +1694,10 @@ class CustomProductsController extends AdminBaseController
         $rows = DigitalDownloadSearch::getLinks($preqId, Product::CATALOG_TYPE_REQUEST, $optionCombi, $langId);
 
         $this->set('links', $rows);
-
-        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        
+        $ddpObj = new DigitalDownloadPrivilages();
+        
+        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
         $this->set('canDo', $canDo);
 
         $languages = Language::getAllNames();
@@ -1731,7 +1735,9 @@ class CustomProductsController extends AdminBaseController
         $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
         $this->set('attachments', $attachments);
         
-        $canDo = DigitalDownload::canDo($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $ddpObj = new DigitalDownloadPrivilages();
+
+        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
         $this->set('canDo', $canDo);
         
         $languages = Language::getAllNames();
@@ -1761,10 +1767,35 @@ class CustomProductsController extends AdminBaseController
         $linkId = FatUtility::int($linkId);
 
         if (1 > $refId || 1 > $linkId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
         }
         
+        $reference = DigitalDownload::getAttributesById($refId);
+        
+        if (false == $reference) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        }
+
+        $link = DigitalDownloadSearch::getLinkDetail($linkId);
+        if (1 > count($link)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        }
+
+        $ddpObj = new DigitalDownloadPrivilages();
+        
+        $canDo = $ddpObj->canEdit(
+            $link['pddr_record_id'],
+            $link['pddr_type'],
+            0,
+            $this->adminLangId,
+            false,
+            true
+        );
+        
+        if (false == $canDo) {
+            FatUtility::dieJsonError($ddpObj->getError());
+        }
+
         $ddObj = new DigitalDownload();
         
         if (!$ddObj->deleteLink($linkId, $refId)) {
@@ -1794,6 +1825,28 @@ class CustomProductsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        $reference = DigitalDownload::getAttributesById($refId);
+        
+        if (false == $reference) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $ddpObj = new DigitalDownloadPrivilages();
+        
+        $canDo = $ddpObj->canEdit(
+            $reference['pddr_record_id'],
+            $reference['pddr_type'],
+            0,
+            $this->adminLangId,
+            false,
+            true
+        );
+        
+        if (false == $canDo) {
+            FatUtility::dieJsonError($ddpObj->getError());
+        }
+
         $digDownload = new DigitalDownload();
 
         if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
@@ -1815,9 +1868,17 @@ class CustomProductsController extends AdminBaseController
         if (1 > $aFileId || 1 > $recordId) {
             FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
         }
-        $reqData = ProductRequest::getAttributesById($recordId, array('preq_user_id', 'preq_status', 'preq_deleted'));
+        /* $reqData = ProductRequest::getAttributesById($recordId, array('preq_user_id', 'preq_status', 'preq_deleted'));
         if (false == $reqData) {
             FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
+        } */
+
+        $ddpObj = new DigitalDownloadPrivilages();
+
+        $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->adminLangId, $isPreview, true);
+        
+        if (false == $canDo) {
+            FatUtility::dieJsonError($ddpObj->getError());
         }
 
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);

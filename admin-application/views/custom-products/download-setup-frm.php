@@ -103,14 +103,13 @@ if (false == $canDo) {
                                             </div>
                                             <?php $fld = $downloadFrm->getField('option_comb_id');
                                             if ($fld) {
-                                            ?>
+                                                ?>
                                                 <div class="col-md-4">
                                                     <div class="field-set">
                                                         <div class="caption-wraper">
                                                             <label class="field_label">
                                                                 <?php $fld = $downloadFrm->getField('option_comb_id');
-                                                                echo $fld->getCaption();
-                                                                ?>
+                                                echo $fld->getCaption(); ?>
                                                             </label>
                                                             <span class="spn_must_field">*</span>
                                                         </div>
@@ -121,7 +120,8 @@ if (false == $canDo) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php } ?>
+                                            <?php
+                                            } ?>
                                             <div class="col-md-4">
                                                 <div class="field-set">
                                                     <div class="caption-wraper">
@@ -140,13 +140,13 @@ if (false == $canDo) {
                                             </div>
                                         </div>
                                         <div class="attach-links-js">
-                                            <?php if(true == $canDo) { ?>
+                                            <?php if (true == $canDo) { ?>
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="field-set">
                                                             <div class="caption-wraper">
                                                                 <label class="field_label">
-                                                                    <?php 
+                                                                    <?php
                                                                     $fld = $downloadFrm->getField('product_downloadable_link');
                                                                     echo $fld->getCaption();
                                                                     ?>
@@ -163,7 +163,7 @@ if (false == $canDo) {
                                                         <div class="field-set">
                                                             <div class="caption-wraper">
                                                                 <label class="field_label">
-                                                                    <?php 
+                                                                    <?php
                                                                     $fld = $downloadFrm->getField('product_preview_link');
                                                                     echo $fld->getCaption();
                                                                     ?>
@@ -194,7 +194,7 @@ if (false == $canDo) {
                                             <?php } ?>
                                         </div>
                                         <div class="attach-files-js">
-                                            <?php if(true == $canDo) { ?>
+                                            <?php if (true == $canDo) { ?>
                                                 <div class="row">
                                                     <div class="col-md-4 downloadable_file_input">
                                                         <div class="field-set">
@@ -238,7 +238,7 @@ if (false == $canDo) {
                                                                     <?php
                                                                     echo $downloadFrm->getFieldHtml('attachement_upload_btn');
                                                                     $restBtn = $downloadFrm->getField('reset');
-                                                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;' );
+                                                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;');
                                                                     echo $downloadFrm->getFieldHtml('reset');
                                                                     ?>
                                                                 </div>
