@@ -253,7 +253,7 @@ class ProductsController extends MyAppController
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
         } else {
-            $conditionsArr = unserialize($conditions);
+            $conditionsArr = array_filter(unserialize($conditions));
         }
         /* ] */
 
