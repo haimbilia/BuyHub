@@ -212,8 +212,8 @@ $(document).ready(function () {
     }
 
     clearCache = function () {
-        $.systemMessage(langLbl.processing, 'alert--process');
-        fcom.ajax(fcom.makeUrl('Home', 'clear'), '', function (t) {
+        // $.systemMessage(langLbl.processing, 'alert--process');
+        fcom.updateWithAjax(fcom.makeUrl('Home', 'clear'), '', function (t) {
             window.location.reload();
         });
     }

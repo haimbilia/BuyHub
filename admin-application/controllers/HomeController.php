@@ -371,7 +371,7 @@ class HomeController extends AdminBaseController
     {
         CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");
         FatCache::clearAll();
-        Message::addMessage(Labels::getLabel('LBL_Cache_has_been_cleared', $this->adminLangId));
+        // Message::addMessage(Labels::getLabel('LBL_Cache_has_been_cleared', $this->adminLangId));
         if (Labels::isAPCUcacheAvailable()) {
             apcu_clear_cache();
         }
@@ -384,6 +384,7 @@ class HomeController extends AdminBaseController
             }
         }
         Product::updateMinPrices();
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Cache_has_been_cleared', $this->adminLangId));
         //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }
     public function setLanguage($langId = 0)
