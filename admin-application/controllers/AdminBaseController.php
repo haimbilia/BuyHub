@@ -81,106 +81,113 @@ class AdminBaseController extends FatController
         $this->str_setup_successful = Labels::getLabel('LBL_Setup_Successful', $this->adminLangId);
         $this->str_export_successfull = Labels::getLabel('LBL_Export_Successful', $this->adminLangId);
         $this->str_add_update_record = $this->str_update_record;
-        
+
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
-        $jsVariables = array(
-            'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->adminLangId),
-            'confirmRemoveOption' => Labels::getLabel('LBL_Do_you_want_to_remove_this_option', $this->adminLangId),
-            'confirmRemoveShop' => Labels::getLabel('LBL_Do_you_want_to_remove_this_shop', $this->adminLangId),
-            'confirmRemoveBrand' => Labels::getLabel('LBL_Do_you_want_to_remove_this_brand', $this->adminLangId),
-            'confirmRemoveProduct' => Labels::getLabel('LBL_Do_you_want_to_remove_this_product', $this->adminLangId),
-            'confirmRemoveCategory' => Labels::getLabel('LBL_Do_you_want_to_remove_this_category', $this->adminLangId),
-            'confirmReset' => Labels::getLabel('LBL_Do_you_want_to_reset_settings', $this->adminLangId),
-            'confirmActivate' => Labels::getLabel('LBL_Do_you_want_to_activate_status', $this->adminLangId),
-            'confirmUpdate' => Labels::getLabel('LBL_Do_you_want_to_update', $this->adminLangId),
-            'confirmUpdateStatus' => Labels::getLabel('LBL_Do_you_want_to_update', $this->adminLangId),
-            'confirmDelete' => Labels::getLabel('LBL_Do_you_want_to_delete', $this->adminLangId),
-            'confirmDeleteImage' => Labels::getLabel('LBL_Do_you_want_to_delete_image', $this->adminLangId),
-            'confirmDeleteBackgroundImage' => Labels::getLabel('LBL_Do_you_want_to_delete_background_image', $this->adminLangId),
-            'confirmDeleteLogo' => Labels::getLabel('LBL_Do_you_want_to_delete_logo', $this->adminLangId),
-            'confirmDeleteBanner' => Labels::getLabel('LBL_Do_you_want_to_delete_banner', $this->adminLangId),
-            'confirmDeleteIcon' => Labels::getLabel('LBL_Do_you_want_to_delete_icon', $this->adminLangId),
-            'confirmDefault' => Labels::getLabel('LBL_Do_you_want_to_set_default', $this->adminLangId),
-            'setMainProduct' => Labels::getLabel('LBL_Set_as_main_product', $this->adminLangId),
-            'layoutDirection' => CommonHelper::getLayoutDirection(),
-            'selectPlan' => Labels::getLabel('LBL_Please_Select_any_Plan', $this->adminLangId),
-            'alreadyHaveThisPlan' => Labels::getLabel('LBL_You_have_already_Bought_this_plan,_Please_choose_some_other_Plan', $this->adminLangId),
-            'invalidRequest' => Labels::getLabel('LBL_Invalid_Request!', $this->adminLangId),
-            'pleaseWait' => Labels::getLabel('LBL_Please_Wait...', $this->adminLangId),
-            'DoYouWantTo' => Labels::getLabel('LBL_Do_you_really_want_to', $this->adminLangId),
-            'theRequest' => Labels::getLabel('LBL_the_request', $this->adminLangId),
-            'confirmCancelOrder' => Labels::getLabel('LBL_Are_you_sure_to_cancel_this_order', $this->adminLangId),
-            'confirmReplaceCurrentToDefault' => Labels::getLabel('LBL_Do_you_want_to_replace_current_content_to_default_content', $this->adminLangId),
-            'processing' => Labels::getLabel('LBL_Processing...', $this->adminLangId),
-            'preferredDimensions' => Labels::getLabel('LBL_Preferred_Dimensions_%s', $this->adminLangId),
-            'confirmRestore' => Labels::getLabel('LBL_Do_you_want_to_restore', $this->adminLangId),
-            'thanksForSharing' => Labels::getLabel('LBL_Msg_Thanks_for_sharing', $this->adminLangId),
-            'isMandatory' => Labels::getLabel('VLBL_is_mandatory', $this->adminLangId),
-            'pleaseEnterValidEmailId' => Labels::getLabel('VLBL_Please_enter_valid_email_ID_for', $this->adminLangId),
-            'charactersSupportedFor' => Labels::getLabel('VLBL_Only_characters_are_supported_for', $this->adminLangId),
-            'pleaseEnterIntegerValue' => Labels::getLabel('VLBL_Please_enter_integer_value_for', $this->adminLangId),
-            'pleaseEnterNumericValue' => Labels::getLabel('VLBL_Please_enter_numeric_value_for', $this->adminLangId),
-            'startWithLetterOnlyAlphanumeric' => Labels::getLabel('VLBL_must_start_with_a_letter_and_can_contain_only_alphanumeric_characters._Length_must_be_between_4_to_20_characters', $this->adminLangId),
-            'mustBeBetweenCharacters' => Labels::getLabel('VLBL_Length_Must_be_between_6_to_20_characters', $this->adminLangId),
-            'invalidValues' => Labels::getLabel('VLBL_Length_Invalid_value_for', $this->adminLangId),
-            'shouldNotBeSameAs' => Labels::getLabel('VLBL_should_not_be_same_as', $this->adminLangId),
-            'mustBeSameAs' => Labels::getLabel('VLBL_must_be_same_as', $this->adminLangId),
-            'mustBeGreaterOrEqual' => Labels::getLabel('VLBL_must_be_greater_than_or_equal_to', $this->adminLangId),
-            'mustBeGreaterThan' => Labels::getLabel('VLBL_must_be_greater_than', $this->adminLangId),
-            'mustBeLessOrEqual' => Labels::getLabel('VLBL_must_be_less_than_or_equal_to', $this->adminLangId),
-            'mustBeLessThan' => Labels::getLabel('VLBL_must_be_less_than', $this->adminLangId),
-            'lengthOf' => Labels::getLabel('VLBL_Length_of', $this->adminLangId),
-            'valueOf' => Labels::getLabel('VLBL_Value_of', $this->adminLangId),
-            'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->adminLangId),
-            'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->adminLangId),
-            'and' => Labels::getLabel('VLBL_and', $this->adminLangId),
-            'pleaseSelect' => Labels::getLabel('VLBL_Please_select', $this->adminLangId),
-            'to' => Labels::getLabel('VLBL_to', $this->adminLangId),
-            'options' => Labels::getLabel('VLBL_options', $this->adminLangId),
-            'isNotAvailable' => Labels::getLabel('VLBL_is_not_available', $this->adminLangId),
-            'confirmRestoreBackup' => Labels::getLabel('LBL_Do_you_want_to_restore_database_to_this_record', $this->adminLangId),
-            'confirmChangeRequestStatus' => Labels::getLabel('LBL_Do_you_want_to_change_request_status', $this->adminLangId),
-            'confirmTruncateUserData' => Labels::getLabel('LBL_Do_you_want_to_truncate_User_Data', $this->adminLangId),
-            'atleastOneRecord' => Labels::getLabel('LBL_Please_select_atleast_one_record.', $this->adminLangId),
-            'primaryLanguageField' => Labels::getLabel('LBL_PRIMARY_LANGUAGE_DATA_NEEDS_TO_BE_FILLED_FOR_SYSTEM_TO_TRANSLATE_TO_OTHER_LANGUAGES.', $this->adminLangId),
-            'updateCurrencyRates' => Labels::getLabel('LBL_WANT_TO_UPDATE_CURRENCY_RATES?.', $this->adminLangId),
-            'cloneNotification' => Labels::getLabel('LBL_DO_YOU_REALLY_WANT_TO_CLONE?', $this->adminLangId),
-            'clonedNotification' => Labels::getLabel('LBL_NOTIFICATION_CLONED_SUCCESSFULLY', $this->adminLangId),
-            'confirmRemoveBlog' => Labels::getLabel('LBL_Do_you_want_to_remove_this_blog', $this->adminLangId),
-            'actionButtonsClass' => Labels::getLabel('LBL_PLEASE_ADD_"actionButtons-js"_CLASS_TO_FORM_TO_PERFORM_ACTION', $this->adminLangId),
-            'allowedFileSize' => LibHelper::getMaximumFileUploadSize(),
-            'fileSizeExceeded' => Labels::getLabel("MSG_FILE_SIZE_SHOULD_BE_LESSER_THAN_{SIZE-LIMIT}", $this->adminLangId),
-            'currentPrice' => Labels::getLabel('LBL_Current_Price', $this->adminLangId),
-            'currentStock' => Labels::getLabel('LBL_Current_Stock', $this->adminLangId),
-            'discountPercentage' => Labels::getLabel('LBL_Discount_Percentage', $this->adminLangId),
-            'shippingUser' => Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId),
-            'saveProfileFirst' => Labels::getLabel('LBL_Save_Profile_First', $this->adminLangId),
-            'minimumOneLocationRequired' => Labels::getLabel('LBL_Minimum_one_location_is_required', $this->adminLangId),
-            'confirmTransfer' => Labels::getLabel('LBL_CONFIRM_TRANSFER_?', $this->adminLangId),
-            'invalidFromTime' => Labels::getLabel('LBL_PLEASE_SELECT_VALID_FROM_TIME', $this->adminLangId),
-            'selectTimeslotDay' => Labels::getLabel('LBL_ATLEAST_ONE_DAY_AND_TIMESLOT_NEEDS_TO_BE_CONFIGURED', $this->adminLangId),
-            'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->adminLangId),
-            'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
-            'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
-            'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->adminLangId),
-            'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
-            'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
-            'defaultCountryCode' => $defaultCountryCode,
-            'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
-            'copied' => Labels::getLabel('LBL_Copied', $this->adminLangId),
-            'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
-            'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
-            'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
-            'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
-        );
+        $jsAdminVariablesCache = FatCache::get('jsAdminVariablesCache' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$jsAdminVariablesCache) {
 
-        $languages = Language::getAllNames(false);
-        foreach ($languages as $val) {
-            $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
+            $jsVariables = array(
+                'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->adminLangId),
+                'confirmRemoveOption' => Labels::getLabel('LBL_Do_you_want_to_remove_this_option', $this->adminLangId),
+                'confirmRemoveShop' => Labels::getLabel('LBL_Do_you_want_to_remove_this_shop', $this->adminLangId),
+                'confirmRemoveBrand' => Labels::getLabel('LBL_Do_you_want_to_remove_this_brand', $this->adminLangId),
+                'confirmRemoveProduct' => Labels::getLabel('LBL_Do_you_want_to_remove_this_product', $this->adminLangId),
+                'confirmRemoveCategory' => Labels::getLabel('LBL_Do_you_want_to_remove_this_category', $this->adminLangId),
+                'confirmReset' => Labels::getLabel('LBL_Do_you_want_to_reset_settings', $this->adminLangId),
+                'confirmActivate' => Labels::getLabel('LBL_Do_you_want_to_activate_status', $this->adminLangId),
+                'confirmUpdate' => Labels::getLabel('LBL_Do_you_want_to_update', $this->adminLangId),
+                'confirmUpdateStatus' => Labels::getLabel('LBL_Do_you_want_to_update', $this->adminLangId),
+                'confirmDelete' => Labels::getLabel('LBL_Do_you_want_to_delete', $this->adminLangId),
+                'confirmDeleteImage' => Labels::getLabel('LBL_Do_you_want_to_delete_image', $this->adminLangId),
+                'confirmDeleteBackgroundImage' => Labels::getLabel('LBL_Do_you_want_to_delete_background_image', $this->adminLangId),
+                'confirmDeleteLogo' => Labels::getLabel('LBL_Do_you_want_to_delete_logo', $this->adminLangId),
+                'confirmDeleteBanner' => Labels::getLabel('LBL_Do_you_want_to_delete_banner', $this->adminLangId),
+                'confirmDeleteIcon' => Labels::getLabel('LBL_Do_you_want_to_delete_icon', $this->adminLangId),
+                'confirmDefault' => Labels::getLabel('LBL_Do_you_want_to_set_default', $this->adminLangId),
+                'setMainProduct' => Labels::getLabel('LBL_Set_as_main_product', $this->adminLangId),
+                'layoutDirection' => CommonHelper::getLayoutDirection(),
+                'selectPlan' => Labels::getLabel('LBL_Please_Select_any_Plan', $this->adminLangId),
+                'alreadyHaveThisPlan' => Labels::getLabel('LBL_You_have_already_Bought_this_plan,_Please_choose_some_other_Plan', $this->adminLangId),
+                'invalidRequest' => Labels::getLabel('LBL_Invalid_Request!', $this->adminLangId),
+                'pleaseWait' => Labels::getLabel('LBL_Please_Wait...', $this->adminLangId),
+                'DoYouWantTo' => Labels::getLabel('LBL_Do_you_really_want_to', $this->adminLangId),
+                'theRequest' => Labels::getLabel('LBL_the_request', $this->adminLangId),
+                'confirmCancelOrder' => Labels::getLabel('LBL_Are_you_sure_to_cancel_this_order', $this->adminLangId),
+                'confirmReplaceCurrentToDefault' => Labels::getLabel('LBL_Do_you_want_to_replace_current_content_to_default_content', $this->adminLangId),
+                'processing' => Labels::getLabel('LBL_Processing...', $this->adminLangId),
+                'preferredDimensions' => Labels::getLabel('LBL_Preferred_Dimensions_%s', $this->adminLangId),
+                'confirmRestore' => Labels::getLabel('LBL_Do_you_want_to_restore', $this->adminLangId),
+                'thanksForSharing' => Labels::getLabel('LBL_Msg_Thanks_for_sharing', $this->adminLangId),
+                'isMandatory' => Labels::getLabel('VLBL_is_mandatory', $this->adminLangId),
+                'pleaseEnterValidEmailId' => Labels::getLabel('VLBL_Please_enter_valid_email_ID_for', $this->adminLangId),
+                'charactersSupportedFor' => Labels::getLabel('VLBL_Only_characters_are_supported_for', $this->adminLangId),
+                'pleaseEnterIntegerValue' => Labels::getLabel('VLBL_Please_enter_integer_value_for', $this->adminLangId),
+                'pleaseEnterNumericValue' => Labels::getLabel('VLBL_Please_enter_numeric_value_for', $this->adminLangId),
+                'startWithLetterOnlyAlphanumeric' => Labels::getLabel('VLBL_must_start_with_a_letter_and_can_contain_only_alphanumeric_characters._Length_must_be_between_4_to_20_characters', $this->adminLangId),
+                'mustBeBetweenCharacters' => Labels::getLabel('VLBL_Length_Must_be_between_6_to_20_characters', $this->adminLangId),
+                'invalidValues' => Labels::getLabel('VLBL_Length_Invalid_value_for', $this->adminLangId),
+                'shouldNotBeSameAs' => Labels::getLabel('VLBL_should_not_be_same_as', $this->adminLangId),
+                'mustBeSameAs' => Labels::getLabel('VLBL_must_be_same_as', $this->adminLangId),
+                'mustBeGreaterOrEqual' => Labels::getLabel('VLBL_must_be_greater_than_or_equal_to', $this->adminLangId),
+                'mustBeGreaterThan' => Labels::getLabel('VLBL_must_be_greater_than', $this->adminLangId),
+                'mustBeLessOrEqual' => Labels::getLabel('VLBL_must_be_less_than_or_equal_to', $this->adminLangId),
+                'mustBeLessThan' => Labels::getLabel('VLBL_must_be_less_than', $this->adminLangId),
+                'lengthOf' => Labels::getLabel('VLBL_Length_of', $this->adminLangId),
+                'valueOf' => Labels::getLabel('VLBL_Value_of', $this->adminLangId),
+                'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->adminLangId),
+                'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->adminLangId),
+                'and' => Labels::getLabel('VLBL_and', $this->adminLangId),
+                'pleaseSelect' => Labels::getLabel('VLBL_Please_select', $this->adminLangId),
+                'to' => Labels::getLabel('VLBL_to', $this->adminLangId),
+                'options' => Labels::getLabel('VLBL_options', $this->adminLangId),
+                'isNotAvailable' => Labels::getLabel('VLBL_is_not_available', $this->adminLangId),
+                'confirmRestoreBackup' => Labels::getLabel('LBL_Do_you_want_to_restore_database_to_this_record', $this->adminLangId),
+                'confirmChangeRequestStatus' => Labels::getLabel('LBL_Do_you_want_to_change_request_status', $this->adminLangId),
+                'confirmTruncateUserData' => Labels::getLabel('LBL_Do_you_want_to_truncate_User_Data', $this->adminLangId),
+                'atleastOneRecord' => Labels::getLabel('LBL_Please_select_atleast_one_record.', $this->adminLangId),
+                'primaryLanguageField' => Labels::getLabel('LBL_PRIMARY_LANGUAGE_DATA_NEEDS_TO_BE_FILLED_FOR_SYSTEM_TO_TRANSLATE_TO_OTHER_LANGUAGES.', $this->adminLangId),
+                'updateCurrencyRates' => Labels::getLabel('LBL_WANT_TO_UPDATE_CURRENCY_RATES?.', $this->adminLangId),
+                'cloneNotification' => Labels::getLabel('LBL_DO_YOU_REALLY_WANT_TO_CLONE?', $this->adminLangId),
+                'clonedNotification' => Labels::getLabel('LBL_NOTIFICATION_CLONED_SUCCESSFULLY', $this->adminLangId),
+                'confirmRemoveBlog' => Labels::getLabel('LBL_Do_you_want_to_remove_this_blog', $this->adminLangId),
+                'actionButtonsClass' => Labels::getLabel('LBL_PLEASE_ADD_"actionButtons-js"_CLASS_TO_FORM_TO_PERFORM_ACTION', $this->adminLangId),
+                'allowedFileSize' => LibHelper::getMaximumFileUploadSize(),
+                'fileSizeExceeded' => Labels::getLabel("MSG_FILE_SIZE_SHOULD_BE_LESSER_THAN_{SIZE-LIMIT}", $this->adminLangId),
+                'currentPrice' => Labels::getLabel('LBL_Current_Price', $this->adminLangId),
+                'currentStock' => Labels::getLabel('LBL_Current_Stock', $this->adminLangId),
+                'discountPercentage' => Labels::getLabel('LBL_Discount_Percentage', $this->adminLangId),
+                'shippingUser' => Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId),
+                'saveProfileFirst' => Labels::getLabel('LBL_Save_Profile_First', $this->adminLangId),
+                'minimumOneLocationRequired' => Labels::getLabel('LBL_Minimum_one_location_is_required', $this->adminLangId),
+                'confirmTransfer' => Labels::getLabel('LBL_CONFIRM_TRANSFER_?', $this->adminLangId),
+                'invalidFromTime' => Labels::getLabel('LBL_PLEASE_SELECT_VALID_FROM_TIME', $this->adminLangId),
+                'selectTimeslotDay' => Labels::getLabel('LBL_ATLEAST_ONE_DAY_AND_TIMESLOT_NEEDS_TO_BE_CONFIGURED', $this->adminLangId),
+                'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->adminLangId),
+                'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
+                'disableChildCategories' => Labels::getLabel('LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
+                'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->adminLangId),
+                'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
+                'enableParentCategories' => Labels::getLabel('LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', $this->adminLangId),
+                'defaultCountryCode' => $defaultCountryCode,
+                'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
+                'copied' => Labels::getLabel('LBL_Copied', $this->adminLangId),
+                'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
+                'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
+                'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
+                'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
+            );
+            $languages = Language::getAllNames(false);
+            foreach ($languages as $val) {
+                $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
+            }
+            $jsVariables['languages'] = $languages;
+            FatCache::set('jsAdminVariablesCache' . $this->adminLangId, serialize($jsVariables), '.txt');
+        } else {
+            $jsVariables =  unserialize($jsAdminVariablesCache);
         }
-        $jsVariables['languages'] = $languages;
+
         //get notifications count
         $db = FatApp::getDb();
         $notifyObject = Notification::getSearchObject();
@@ -194,8 +201,8 @@ class AdminBaseController extends FatController
         $notifyCountResult = $db->fetch($notifyObject->getResultset());
         $notifyCount = FatUtility::int($notifyCountResult['countOfRec']);
 
-        $this->siteDefaultCurrencyCode = CommonHelper::getCurrencyCode();       
-        
+        $this->siteDefaultCurrencyCode = CommonHelper::getCurrencyCode();
+
         $this->set('adminLangId', $this->adminLangId);
         $this->set('siteDefaultCurrencyCode', $this->siteDefaultCurrencyCode);
         $this->set('jsVariables', $jsVariables);
@@ -203,9 +210,9 @@ class AdminBaseController extends FatController
         $this->set('languages', Language::getAllNames(false));
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
         $this->set('layoutDirection', $this->layoutDirection);
-        
+
         $this->includeDatePickerLangJs();
-        
+
         if ($this->layoutDirection == 'rtl') {
             $this->_template->addCss('css/style--arabic.css');
         }
@@ -243,12 +250,12 @@ class AdminBaseController extends FatController
         }
         return $this->nodes;
     }
-    
+
     public function includeDatePickerLangJs()
     {
         $langCode = strtolower($this->siteLangCode);
         $langCountryCode = strtoupper($this->siteLangCountryCode);
-        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');        
+        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {
                 return;
@@ -257,7 +264,7 @@ class AdminBaseController extends FatController
             return;
         } elseif ($jsPath == 'notfound') {
             return;
-        }        
+        }
         $jsPath = 'js/jqueryui-i18n/datepicker-' . $langCode . '-' . $langCountryCode . '.js';
         $filePath = CONF_APPLICATION_PATH . '/views/' . $jsPath;
 
@@ -451,7 +458,7 @@ class AdminBaseController extends FatController
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
         if (Product::PRODUCT_TYPE_DIGITAL == $productType) {
             $fld->requirements()->setRequired(false);
-        }    
+        }
         $taxCategories = Tax::getSaleTaxCatArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
 

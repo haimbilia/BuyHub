@@ -2,7 +2,7 @@
 $htmlContent = '';
 if (!empty($fields)) {
     $htmlContent = '<div class="dropdown custom-drag-drop">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-secondary btn-sm dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fas fa-columns"></i>
     </button>
     <div class="dropdown-menu  dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y" aria-labelledby="dropdownMenuButton">
@@ -90,3 +90,6 @@ if (!empty($fields)) {
         </div>
     </div>
 </div>
+<script>
+    var controllerName = '<?php echo str_replace('Controller', '', FatApp::getController()); ?>';
+</script>
