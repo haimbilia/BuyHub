@@ -56,7 +56,7 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function getCarriers(): array
     {
-        if (Plugin::INACTIVE == $this->settings['plugin_active'] || false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
+        if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
             return [];
         }
         return $this->getResponse();
@@ -72,7 +72,7 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function getRates(string $carrierCode, string $shipFromPostalCode): array
     {
-        if (Plugin::INACTIVE == $this->settings['plugin_active'] || empty($this->address)) {
+        if (empty($this->address)) {
             return [];
         }
 

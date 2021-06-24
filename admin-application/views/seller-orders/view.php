@@ -105,7 +105,7 @@ $pickUpDetails;
                                     ];
                                 }
                                 if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_tracking_number']) && $order["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) {
-                                    if ('EasyPost' == $keyName) {
+                                    if ($allowedForPlugin) {
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
                                     } else {
                                         $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId);
@@ -122,7 +122,7 @@ $pickUpDetails;
                                 
                                 $plugin = new Plugin();
                                 $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-                                $pluginObj = PluginHelper::callPlugin($keyName, [$adminLangId], $error, $adminLangId, false);                                
+                                $pluginObj = PluginHelper::callPlugin($keyName, [$adminLangId], $error, $adminLangId, false); 
                                 if ($order['orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED && false !== $pluginObj && true === $pluginObj->canCreatePickup()) {
                                     $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                     if(!$pickUpDetails ||  1 > $pickUpDetails['opsp_scheduled']){
