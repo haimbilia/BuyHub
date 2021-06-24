@@ -531,276 +531,9 @@ class StripeConnect extends PaymentMethodBase
      * @param  string $businessType
      * @return array
      */
-    public function getBusinessTypeFields(string $businessType): array
+    public function getBusinessTypeFields(): array
     {
-        $businessType = 'individual' == $businessType ? $businessType : 'other';
-
-        $commonPreFields = [
-            /* 'business_type' => [
-                'title' => Labels::getLabel("MSG_BUSINESS_TYPE", $this->langId),
-                'description' => '',
-                'required' => true
-            ],
-            'business_profile.name' => [
-                'title' => Labels::getLabel("MSG_BUSINESS_PROFILE_NAME", $this->langId),
-                'description' => Labels::getLabel('API_THE_CUSTOMER_FACING_BUSINESS_NAME', $this->langId),
-                'required' => true
-            ],
-            'business_profile.url' => [
-                'title' => Labels::getLabel("MSG_URL", $this->langId),
-                'description' => Labels::getLabel('API_THE_BUSINESS_PUBLICLY_AVAILABLE_WEBSITE', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_url' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_URL", $this->langId),
-                'description' => Labels::getLabel('API_A_PUBLICLY_AVAILABLE_WEBSITE_FOR_HANDLING_SUPPORT_ISSUES', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_phone' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_PHONE", $this->langId),
-                'description' => Labels::getLabel('API_A_PUBLICLY_AVAILABLE_PHONE_NUMBER_TO_CALL_WITH_SUPPORT_ISSUES', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_email' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_EMAIL", $this->langId),
-                'description' => Labels::getLabel('API_A_PUBLICLY_AVAILABLE_EMAIL_ADDRESS_FOR_SENDING_SUPPORT_ISSUES_TO', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_address.line1' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_ADDRESS_LINE_1", $this->langId),
-                'description' => Labels::getLabel('API_ADDRESS_LINE_1', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_address.line2' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_ADDRESS_LINE_2", $this->langId),
-                'description' => Labels::getLabel('API_ADDRESS_LINE_2', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_address.postal_code' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_ADDRESS_POSTAL_CODE", $this->langId),
-                'description' => Labels::getLabel('API_ZIP_OR_POSTAL_CODE', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_address.city' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_ADDRESS_CITY", $this->langId),
-                'description' => Labels::getLabel('API_CITY_DISTRICT_SUBURB_TOWN_OR_VILLAGE', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_address.country' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_ADDRESS_COUNTRY", $this->langId),
-                'description' => Labels::getLabel('API_TWO_LETTER_COUNTRY_CODE', $this->langId),
-                'required' => true
-            ],
-            'business_profile.support_address.state' => [
-                'title' => Labels::getLabel("MSG_SUPPORT_ADDRESS_STATE", $this->langId),
-                'description' => Labels::getLabel('API_STATE_COUNTY_PROVINCE_OR_REGION', $this->langId),
-                'required' => true
-            ], */
-        ];
-
-        $bussinessTypeFileds = [
-            'individual' => [
-                /* 'individual.id_number' => [
-                    'title' => Labels::getLabel("MSG_ID_NUMBER", $this->langId),
-                    'description' => Labels::getLabel('API_THE_GOVERNMENT_ISSUED_ID_NUMBER', $this->langId),
-                    'required' => false
-                ],
-                'individual.first_name' => [
-                    'title' => Labels::getLabel("MSG_FIRST_NAME", $this->langId),
-                    'description' => Labels::getLabel('API_THE_INDIVIDUAL_FIRST_NAME', $this->langId),
-                    'required' => true
-                ],
-                'individual.last_name' => [
-                    'title' => Labels::getLabel("MSG_LAST_NAME", $this->langId),
-                    'description' => Labels::getLabel('API_THE_INDIVIDUAL_LAST_NAME', $this->langId),
-                    'required' => true
-                ],
-                'individual.email' => [
-                    'title' => Labels::getLabel("MSG_EMAIL", $this->langId),
-                    'description' => Labels::getLabel('API_THE_INDIVIDUAL_EMAIL_ADDRESS', $this->langId),
-                    'required' => false
-                ],
-                'individual.phone' => [
-                    'title' => Labels::getLabel("MSG_PHONE", $this->langId),
-                    'description' => Labels::getLabel('API_THE_INDIVIDUAL_PHONE_NUMBER', $this->langId),
-                    'required' => true
-                ],
-                'individual.dob.month' => [
-                    'title' => Labels::getLabel("MSG_BIRTH_MONTH", $this->langId),
-                    'description' => Labels::getLabel('API_THE_MONTH_OF_BIRTH_BETWEEN_1_AND_12', $this->langId),
-                    'required' => true
-                ],
-                'individual.dob.day' => [
-                    'title' => Labels::getLabel("MSG_BIRTH_DAY", $this->langId),
-                    'description' => Labels::getLabel('API_THE_DAY_OF_BIRTH_BETWEEN_1_AND_31', $this->langId),
-                    'required' => true
-                ],
-                'individual.dob.year' => [
-                    'title' => Labels::getLabel("MSG_BIRTH_YEAR", $this->langId),
-                    'description' => Labels::getLabel('API_THE_FOUR_DIGIT_YEAR_OF_BIRTH', $this->langId),
-                    'required' => true
-                ],
-                'individual.address.line1' => [
-                    'title' => Labels::getLabel("MSG_ADDRESS_LINE1", $this->langId),
-                    'description' => Labels::getLabel('API_ADDRESS_LINE_1', $this->langId),
-                    'required' => true
-                ],
-                'individual.address.city' => [
-                    'title' => Labels::getLabel("MSG_CITY", $this->langId),
-                    'description' => Labels::getLabel('API_CITY_DISTRICT_SUBURB_TOWN_OR_VILLAGE', $this->langId),
-                    'required' => true
-                ],
-                'individual.address.postal_code' => [
-                    'title' => Labels::getLabel("MSG_POSTAL_CODE", $this->langId),
-                    'description' => Labels::getLabel('API_ZIP_OR_POSTAL_CODE', $this->langId),
-                    'required' => true
-                ],
-                'individual.address.country' => [
-                    'title' => Labels::getLabel("MSG_COUNTRY", $this->langId),
-                    'description' => Labels::getLabel('API_TWO_LETTER_COUNTRY_CODE', $this->langId),
-                    'required' => false
-                ],
-                'individual.address.state' => [
-                    'title' => Labels::getLabel("MSG_STATE", $this->langId),
-                    'description' => Labels::getLabel('API_STATE_COUNTY_PROVINCE_OR_REGION', $this->langId),
-                    'required' => false
-                ], */
-            ],
-            'other' => [
-                /* 'company.address.line1' => [
-                    'title' => Labels::getLabel("MSG_ADDRESS_LINE1", $this->langId),
-                    'description' => Labels::getLabel('API_ADDRESS_LINE_1', $this->langId),
-                    'required' => true
-                ],
-                'company.address.city' => [
-                    'title' => Labels::getLabel("MSG_CITY", $this->langId),
-                    'description' => Labels::getLabel('API_CITY_DISTRICT_SUBURB_TOWN_OR_VILLAGE', $this->langId),
-                    'required' => true
-                ],
-                'company.address.postal_code' => [
-                    'title' => Labels::getLabel("MSG_POSTAL_CODE", $this->langId),
-                    'description' => Labels::getLabel('API_ZIP_OR_POSTAL_CODE', $this->langId),
-                    'required' => true
-                ],
-                'company.address.country' => [
-                    'title' => Labels::getLabel("MSG_COUNTRY", $this->langId),
-                    'description' => Labels::getLabel('API_TWO_LETTER_COUNTRY_CODE', $this->langId),
-                    'required' => true
-                ],
-                'company.address.state' => [
-                    'title' => Labels::getLabel("MSG_STATE", $this->langId),
-                    'description' => Labels::getLabel('API_STATE_COUNTY_PROVINCE_OR_REGION', $this->langId),
-                    'required' => true
-                ],
-                'company.name' => [
-                    'title' => Labels::getLabel("MSG_NAME", $this->langId),
-                    'description' => Labels::getLabel('API_THE_COMPANY_LEGAL_NAME', $this->langId),
-                    'required' => true
-                ],
-                'company.phone' => [
-                    'title' => Labels::getLabel("MSG_PHONE", $this->langId),
-                    'description' => Labels::getLabel('API_THE_COMPANY_PHONE_NUMBER', $this->langId),
-                    'required' => true
-                ],
-                'company.tax_id' => [
-                    'title' => Labels::getLabel("MSG_TAX_ID", $this->langId),
-                    'description' => Labels::getLabel('API_THE_BUSINESS_ID_NUMBER', $this->langId),
-                    'required' => true
-                ],
-                'relationship_person.address.line1' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_ADDRESS_LINE1", $this->langId),
-                    'description' => Labels::getLabel('API_ADDRESS_LINE_1', $this->langId),
-                    'required' => false
-                ],
-                'relationship_person.address.city' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_CITY", $this->langId),
-                    'description' => Labels::getLabel('API_CITY_DISTRICT_SUBURB_TOWN_OR_VILLAGE', $this->langId),
-                    'required' => false
-                ],
-                'relationship_person.address.postal_code' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_POSTAL_CODE", $this->langId),
-                    'description' => Labels::getLabel('API_ZIP_OR_POSTAL_CODE', $this->langId),
-                    'required' => false
-                ],
-                'relationship_person.address.country' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_COUNTRY", $this->langId),
-                    'description' => Labels::getLabel('API_TWO_LETTER_COUNTRY_CODE', $this->langId),
-                    'required' => false
-                ],
-                'relationship_person.address.state' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_STATE", $this->langId),
-                    'description' => Labels::getLabel('API_STATE_COUNTY_PROVINCE_OR_REGION', $this->langId),
-                    'required' => false
-                ],
-                'relationship_person.dob.month' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_BIRTH_MONTH", $this->langId),
-                    'description' => Labels::getLabel('API_THE_MONTH_OF_BIRTH_BETWEEN_1_AND_12', $this->langId),
-                    'required' => true
-                ],
-                'relationship_person.dob.day' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_BIRTH_DAY", $this->langId),
-                    'description' => Labels::getLabel('API_THE_DAY_OF_BIRTH_BETWEEN_1_AND_31', $this->langId),
-                    'required' => true
-                ],
-                'relationship_person.dob.year' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_BIRTH_YEAR", $this->langId),
-                    'description' => Labels::getLabel('API_THE_FOUR_DIGIT_YEAR_OF_BIRTH', $this->langId),
-                    'required' => true
-                ],
-                'relationship_person.email' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_EMAIL", $this->langId),
-                    'description' => Labels::getLabel('API_THE_RELATIONSHIP_PERSON_EMAIL_ADDRESS', $this->langId),
-                    'required' => false
-                ],
-                'relationship_person.first_name' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_FIRST_NAME", $this->langId),
-                    'description' => Labels::getLabel('API_THE_RELATIONSHIP_PERSON_FIRST_NAME', $this->langId),
-                    'required' => true
-                ],
-                'relationship_person.last_name' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_LAST_NAME", $this->langId),
-                    'description' => Labels::getLabel('API_THE_RELATIONSHIP_PERSON_LAST_NAME', $this->langId),
-                    'required' => true
-                ],
-                'relationship_person.phone' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_PHONE", $this->langId),
-                    'description' => Labels::getLabel('API_THE_RELATIONSHIP_PERSON_PHONE_NUMBER', $this->langId),
-                    'required' => true
-                ],
-                'relationship_person.ssn_last_4' => [
-                    'title' => Labels::getLabel("MSG_RELATIONSHIP_PERSON_SSN_LAST_4", $this->langId),
-                    'description' => Labels::getLabel('API_THE_RELATIONSHIP_PERSON_SOCIAL_SECURITY_NUMBER', $this->langId),
-                    'required' => false
-                ],
-                'relationship.title' => [
-                    'title' => Labels::getLabel("MSG_TITLE", $this->langId),
-                    'description' => Labels::getLabel('API_THE_PERSON_TITLE', $this->langId),
-                    'required' => true
-                ],
-                'relationship.owner' => [
-                    'title' => Labels::getLabel("MSG_OWNER", $this->langId),
-                    'description' => Labels::getLabel('API_WHETHER_THE_PERSON_IS_AN_OWNER_OF_THE_ACCOUNT_LEGAL_ENTITY', $this->langId),
-                    'required' => true
-                ],
-                'relationship.director' => [
-                    'title' => Labels::getLabel("MSG_DIRECTOR", $this->langId),
-                    'description' => Labels::getLabel("API_WHETHER_THE_PERSON_IS_A_DIRECTOR_OF_THE_LEGAL_ENTITY", $this->langId),
-                    'required' => true
-                ],
-                'relationship.executive' => [
-                    'title' => Labels::getLabel("MSG_EXECUTIVE", $this->langId),
-                    'description' => Labels::getLabel("API_WHETHER_THE_PERSON_IS_AN_EXECUTIVE_OF_THE_LEGAL_ENTITY", $this->langId),
-                    'required' => true
-                ], */
-            ]
-        ];
-
-        $commonPostFields = [
-            /* 'business_profile.mcc' => [
-                'title' => Labels::getLabel("MSG_MERCHANT_CATEGORY_CODE", $this->langId),
-                'description' => Labels::getLabel('API_THE_MERCHANT_CATEGORY_CODE', $this->langId),
-                'required' => true
-            ], */
+        return [
             'external_account.account_holder_name' => [
                 'title' => Labels::getLabel("MSG_BANK_ACCOUNT_HOLDER_NAME", $this->langId),
                 'description' => Labels::getLabel('API_THE_NAME_OF_THE_PERSON_OR_BUSINESS_THAT_OWNS_THE_BANK_ACCOUNT', $this->langId),
@@ -816,14 +549,7 @@ class StripeConnect extends PaymentMethodBase
                 'description' => Labels::getLabel('API_THE_ROUTING_NUMBER', $this->langId),
                 'required' => false
             ],
-            /* 'tos_acceptance' => [
-                'title' => Labels::getLabel("LBL_I_AGREE_TO_THE_TERMS_OF_SERVICE", $this->langId),
-                'description' => '',
-                'required' => true
-            ], */
         ];
-
-        return array_merge($commonPreFields, $bussinessTypeFileds[$businessType], $commonPostFields);
     }
     
     /**
@@ -839,36 +565,17 @@ class StripeConnect extends PaymentMethodBase
     /**
      * getRequiredFields
      *
-     * @param  string $businessType
      * @return array
      */
-    public function getRequiredFields(string $businessType = 'individual'): array
+    public function getRequiredFields(): array
     {
         if (empty($this->getAccountId()) || false === $this->loadRemoteUserInfo()) {
             return [];
         }
         $formSubmittedFlag = $this->getUserMeta('stripe_form_submitted');
 
-        if (!empty($formSubmittedFlag)) {
-            /* $this->userInfoObj = $this->getResponse();
-            $currentlyDue = $this->userInfoObj->requirements->currently_due;
-            $arr = [];
-            array_walk($currentlyDue, function ($value, $key) use (&$arr) {
-                $label = $value;
-                if (false !== strpos($value, ".")) {
-                    $label = str_replace(".", " ", $value);
-                }
-
-                if (false !== strpos($label, 'person_')) {
-                    $personId = (string) $this->getUserMeta('stripe_person_id');
-                    $label = str_replace($personId, "Person", $label);
-                }
-
-                $arr[$value] = ucwords($label);
-            });
-            $this->requiredFields = $arr; */
-        } else {
-            $this->requiredFields = $this->getBusinessTypeFields($businessType);
+        if (empty($formSubmittedFlag)) {
+            $this->requiredFields = $this->getBusinessTypeFields();
         }
 
         return $this->requiredFields;

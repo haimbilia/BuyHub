@@ -138,33 +138,6 @@ class StripeConnectController extends PaymentMethodBaseController
         FatUtility::dieJsonSuccess($json);
     }
 
-    /* Not Required. 16-Jun-2021 */
-    /* 
-        public function login()
-        {
-            FatApp::redirectUser($this->stripeConnect->getRedirectUri());
-        }
-
-        public function callback()
-        {
-            CommonHelper::printArray($_POST);
-            die;
-            $error = FatApp::getQueryStringData('error');
-            $errorDescription = FatApp::getQueryStringData('error_description');
-            if (!empty($error)) {
-                $msg = $error . ' : ' . $errorDescription;
-                Message::addErrorMessage($msg);
-            } else {
-                $code = FatApp::getQueryStringData('code');
-                if (false == $this->stripeConnect->accessAccountId($code)) {
-                    $this->setError();
-                }
-            }
-            FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
-        }
-    */
-    /* ----------------- */
-
     /**
      * requiredFieldsForm
      *
@@ -288,7 +261,7 @@ class StripeConnectController extends PaymentMethodBaseController
      */
     private function getRequiredFieldsForm(string $businessType = 'individual')
     {
-        $fieldsData = $this->stripeConnect->getRequiredFields($businessType);
+        $fieldsData = $this->stripeConnect->getRequiredFields();
         if (empty($fieldsData)) {
             $this->msg = Labels::getLabel('MSG_SUCCESSFULLY_SUBMITTED_TO_REVIEW', $this->siteLangId);
             return false;
