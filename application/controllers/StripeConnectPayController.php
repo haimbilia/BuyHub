@@ -9,6 +9,7 @@ class StripeConnectPayController extends PaymentController
     private $sourceId = '';
     private $orderInfo = [];
     private $userId = 0;
+    private $customerId = '';
 
     /**
      * __construct
@@ -229,89 +230,7 @@ class StripeConnectPayController extends PaymentController
             }
         }
 
-        $confirmationRequired = false;
-        $frm = $this->getSavedCardPaymentForm();
-        $post = FatApp::getPostedData();
-        if (isset($post['fIsAjax'])) {
-            unset($post['fIsAjax'], $post['fOutMode']);
-        }
-
-        if (!empty($post)) {
-            $saveCard = applicationConstants::NO;
-            $cardId = FatApp::getPostedData('card_id', FatUtility::VAR_STRING, '');
-            if (!empty($cardId)) {
-                $this->sourceId = $cardId;
-            } else {
-                $cardFrm = $this->getCardForm();
-                $cardData = $cardFrm->getFormDataFromArray($post);
-                if (false === $cardData) {
-                    $this->setErrorAndRedirect(current($cardFrm->getValidationErrors()));
-                }
-                $saveCard = FatApp::getPostedData('cc_save_card', FatUtility::VAR_INT, 0);
-                unset($cardData['btn_submit'], $cardData['cc_save_card']);
-
-                /* It will generate card temp token. */
-                if (false === $this->stripeConnect->generateCardToken($cardData)) {
-                    $this->setErrorAndRedirect($this->stripeConnect->getError());
-                }
-                $cardTokenResponse = $this->stripeConnect->getResponse();
-
-                if (0 < $saveCard) {
-                    /* Bind Card with customer. */
-                    if (false === $this->stripeConnect->addCard(['source' => $cardTokenResponse->id])) {
-                        $this->setErrorAndRedirect($this->stripeConnect->getError());
-                    }
-                    $cardTokenResponse = $this->stripeConnect->getResponse();
-                } else {
-                    $card = [
-                        'token' => $cardTokenResponse->id
-                    ];
-                    /* Create method with temp card token if customer don't want to save card. */
-                    if (false === $this->stripeConnect->addPaymentMethod($card)) {
-                        $this->setErrorAndRedirect($this->stripeConnect->getError());
-                    }
-                    $cardTokenResponse = $this->stripeConnect->getResponse();
-                }
-                $this->sourceId = $cardTokenResponse->id;
-            }
-
-            if ((UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) && 0 < $saveCard && false === $this->stripeConnect->updateCustomerInfo(['default_source' => $this->sourceId])) {
-                $this->setErrorAndRedirect($this->stripeConnect->getError());
-            }
-
-            $this->createPaymentIntent();
-            $response = $this->stripeConnect->getResponse();
-            $paymentIntendId = $response->id;
-            $clientSecret = $response->client_secret;
-            switch ($response->status) {
-                case 'succeeded':
-                    $successUrl = CommonHelper::generateFullUrl('custom', 'paymentSuccess', [$this->orderId]);
-                    $successMsg = Labels::getLabel('LBL_PAYMENT_SUCCEEDED._WAITING_FOR_CONFIRMATION', $this->siteLangId);
-                    if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
-                        $json['status'] = Plugin::RETURN_TRUE;
-                        $json['msg'] = $successMsg;
-                        $json['redirectUrl'] = $successUrl;
-                        FatUtility::dieJsonSuccess($json);
-                    }
-                    Message::addMessage($successMsg);
-                    FatApp::redirectUser($successUrl);
-                    break;
-                case 'requires_confirmation':
-                    $this->set('paymentIntendId', $paymentIntendId);
-                    $this->set('clientSecret', $clientSecret);
-                    $confirmationRequired = true;
-                    break;
-                case 'requires_payment_method':
-                case 'requires_action':
-                case 'processing':
-                case 'requires_capture':
-                case 'canceled':
-                    $msg = Labels::getLabel('MSG_UNABLE_TO_CHARGE_:_{STATUS}', $this->siteLangId);
-                    $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $response->status]);
-                    $this->setErrorAndRedirect($msg);
-                    break;
-            }
-        } elseif (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
+        if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
             $requestParam = $this->stripeConnect->formatCustomerDataFromOrder($this->orderInfo);
             if (false === $this->stripeConnect->bindCustomer($requestParam)) {
                 $this->setErrorAndRedirect($this->stripeConnect->getError());
@@ -320,41 +239,132 @@ class StripeConnectPayController extends PaymentController
             $this->set('customerId', $this->customerId);
         }
 
-        $savedCards = [];
-        $defaultSource = "";
-        if ((UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) && true === $this->stripeConnect->loadCustomer()) {
-            $customerInfo = $this->stripeConnect->getResponse()->toArray();
-            if (!empty($customerInfo)) {
-                $savedCards = array_key_exists('sources', $customerInfo) ? $customerInfo['sources']['data'] : [];
-                $defaultSource = array_key_exists('default_source', $customerInfo) ? $customerInfo['default_source'] : "";
-            }
-        }
-
-        $this->set('defaultSource', $defaultSource);
-        $this->set('savedCards', $savedCards);
+        $orderObj = new Orders();
+        $orderProducts = $orderObj->getChildOrders(array('order_id' => $this->orderInfo['id']), $this->orderInfo['order_type'], $this->orderInfo['order_language_id']);
 
         $cancelBtnUrl = CommonHelper::getPaymentCancelPageUrl();
         if ($this->orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
             $cancelBtnUrl = CommonHelper::getPaymentFailurePageUrl();
         }
+        $successUrl = CommonHelper::generateFullUrl('custom', 'paymentSuccess', [$this->orderId]);
 
-        $this->set('paymentAmount', $this->paymentAmount);
-        $this->set('orderInfo', $this->orderInfo);
-        $this->set('sourceId', $this->sourceId);
+        $data = array();
+        if ($this->orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
+            $orderFormattedData = $this->stripeConnect->formatCustomerDataFromOrder($this->orderInfo);
+            $data = [
+                'mode' => 'payment',
+                'payment_method_types' => ['card'],
+                'success_url' => $successUrl,
+                'cancel_url' => $cancelBtnUrl,
+                'line_items' => [],
+                'customer' => $this->customerId,
+                'payment_intent_data' => [
+                    'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
+                    'shipping' => $orderFormattedData['shipping'],
+                    'setup_future_usage' => 'on_session'
+                ],
+                'metadata' => [
+                    'orderId' => $orderId
+                ]
+            ];
+            
+            foreach ($orderProducts as $op) {
+                $netAmount = CommonHelper::orderProductAmount($op, 'NETAMOUNT');
+                $amountToBePaidToSeller = CommonHelper::orderProductAmount($op, 'NETAMOUNT', false, User::USER_TYPE_SELLER);
+                $amountToBePaidToSeller = ($amountToBePaidToSeller - $op['op_commission_charged']);
+
+                $singleItemPrice = $netAmount / $op['op_qty'];
+                $priceData = [
+                    'unit_amount' => $this->convertInPaisa($singleItemPrice),
+                    'currency' => $this->orderInfo['order_currency_code'],
+                    'product_data' => [
+                        'name' => $op['op_selprod_title'],
+                        'metadata' => [
+                            'id' => $op['op_id']
+                        ]
+                    ],
+                    'nickname' => Labels::getLabel('LBL_SHIPPING_COST_AND_TAX_CHARGES_INCLUDED', $this->siteLangId)
+                ];
+
+                if (false === $this->stripeConnect->createPriceObject($priceData)) {
+                    $this->setErrorAndRedirect($this->stripeConnect->getError());
+                }
+
+                $data['line_items'][] = [
+                    'price' => $this->stripeConnect->getPriceId(),
+                    'quantity' => $op['op_qty']
+                ];
+
+                $data['payment_intent_data']['statement_descriptor'] = $op['op_invoice_number'];
+            }
+        }
+
+        if ($this->orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
+            $stipePlanInfo = SellerPackagePlans::getAttributesById($orderProducts[key($orderProducts)]['ossubs_plan_id']);
+            $stipePlanId = $stipePlanInfo['spplan_stripe_id'];
+            $trial_day = 0;
+            if ($stipePlanInfo['spplan_trial_interval'] > 0) {
+                switch ($stipePlanInfo['spplan_trial_frequency']) {
+                    case 'Y':
+                        $trial_day = 365 * $stipePlanInfo['spplan_trial_interval'];
+                        break;
+                    case 'M':
+                        $trial_day = 30 * $stipePlanInfo['spplan_trial_interval'];
+                        break;
+                    case 'W':
+                        $trial_day = 7 * $stipePlanInfo['spplan_trial_interval'];
+                        break;
+                    default:
+                        $trial_day = $stipePlanInfo['spplan_trial_interval'];
+                        break;
+                }
+            }
+
+            $msg = Labels::getLabel('LBL_AMOUNT_CHARGED_BY_{WEBSITE-NAME}_FOR_{ORDER-ID}', $this->siteLangId);
+            $statementDescriptor = CommonHelper::replaceStringData($msg, ['{WEBSITE-NAME}' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId), '{ORDER-ID}' => $orderId]);
+
+            $data = [
+                'mode' => 'subscription',
+                'payment_method_types' => ['card'],
+                'success_url' => $successUrl,
+                'cancel_url' => $cancelBtnUrl,
+                'line_items' => [
+                    [
+                        'price' => $stipePlanId,
+                        'quantity' => 1,
+                        'description' => 'Subscription Type Payment'
+                    ],
+                ],
+                'customer' => $this->customerId,
+                'metadata' => [
+                    'orderId' => $orderId
+                ],
+                'subscription_data' => [
+                    'metadata' => [
+                        'orderId' => $orderId,
+                        'statement_descriptor' => $statementDescriptor
+                    ]
+                ],
+                'client_reference_id' => $orderId
+            ];
+            if ($trial_day > 0) {
+                $data['subscription_data']['trial_period_days'] = $trial_day;
+            }
+        }
+
+        if (false === $this->stripeConnect->initiateSession($data)) {
+            $this->setErrorAndRedirect($this->stripeConnect->getError());
+        }
 
         if (true === MOBILE_APP_API_CALL) {
-            $this->set('confirmationRequired', $confirmationRequired);
             $this->_template->render();
         }
 
-        $this->set('liveMode', $this->liveMode);
-        $this->set('settings', $this->settings);
-        $this->set('orderId', $orderId);
-        $this->set('frm', $frm);
-        $this->set('cancelBtnUrl', $cancelBtnUrl);
         $this->set('exculdeMainHeaderDiv', true);
+        $this->set('sessionId', $this->stripeConnect->getSessionId());
+        $this->set('publishableKey', $this->settings[$this->liveMode . 'publishable_key']);
 
-        if (true === $confirmationRequired || FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall()) {
             $json['html'] = $this->_template->render(false, false, 'stripe-connect-pay/charge-ajax.php', true, false);
             FatUtility::dieJsonSuccess($json);
         }
@@ -378,20 +388,34 @@ class StripeConnectPayController extends PaymentController
     }
 
     /**
-     * createPaymentIntent
+     * createPaymentSession
      *
      * @return void
      */
-    private function createPaymentIntent()
+    private function createPaymentSession()
     {
-        if (empty($this->sourceId)) {
-            $msg = Labels::getLabel('MSG_NO_SOURCE_PROVIDED', $this->siteLangId);
-            $this->setErrorAndRedirect($msg);
-        }
-
         $customerId = $this->stripeConnect->getCustomerId();
         $desc = Labels::getLabel('LBL_ORDER_#{order-id}_PLACED._SHIPPING_AND_TAX_CHARGES_INCLUDED', $this->siteLangId);
         $desc = CommonHelper::replaceStringData($desc, ['{order-id}' => $this->orderId]);
+
+        /*  $priceData = 
+        if (false === $this->stripeConnect->createPriceObject($requestParam)) {
+            
+        } */
+
+        $chargeData = [
+            'success_url' => CommonHelper::generateFullUrl('custom', 'paymentSuccess', [$this->orderId]),
+            'cancel_url' => CommonHelper::getPaymentCancelPageUrl(),
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price' => 'price_H5ggYwtDq4fbrJ',
+                    'quantity' => 2,
+                ],
+            ],
+            'mode' => 'payment',
+        ];
+
         $chargeData = [
             'amount' => $this->convertInPaisa($this->paymentAmount),
             'currency' => $this->systemCurrencyCode,
@@ -409,7 +433,7 @@ class StripeConnectPayController extends PaymentController
             $chargeData['customer'] = $customerId;
         }
 
-        if (false === $this->stripeConnect->createPaymentIntent($chargeData)) {
+        if (false === $this->stripeConnect->initiateSession($chargeData)) {
             $this->setErrorAndRedirect($this->stripeConnect->getError());
         }
         return true;
@@ -441,14 +465,14 @@ class StripeConnectPayController extends PaymentController
             TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), json_encode($error));
             CommonHelper::printArray($error, true);
         }
-        
+
         $orderId = isset($payload['data']['object']['metadata']['order_id']) ? $payload['data']['object']['metadata']['order_id'] : '';
         $status = isset($payload['data']['object']['status']) ? $payload['data']['object']['status'] : Labels::getLabel("MSG_FAILURE", $this->siteLangId);
         if ($payload['type'] != "payment_intent.succeeded") {
             $msg = Labels::getLabel('MSG_UNABLE_TO_CHARGE_:_{STATUS}', $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
             $recordId = empty($orderId) ? time() : $orderId;
-            
+
             $error = [
                 'msg' => $msg,
                 'response' => $payload,
@@ -535,7 +559,7 @@ class StripeConnectPayController extends PaymentController
             $comments = Labels::getLabel($msg, $this->siteLangId);
             $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
             Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $netSellerAmount, $this->siteLangId, $comments, $op['op_id']);
-            
+
             $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
             $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
             Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
