@@ -44,7 +44,7 @@
                                     <?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>
                                 </a>
                                 <?php if (!empty($accountId) && true === $initialFormSubmitted && false === $userAccountIsValid) { 
-                                    $msg = Labels::getLabel('MSG_STRIPE_CONNECT_ACCOUNT_COMPLETE', $siteLangId);
+                                    $msg = Labels::getLabel('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', $siteLangId);
                                     $htm = '<a href="javascript:void(0);" onClick="completeAccount(this)" data-href="' . UrlHelper::generateUrl($keyName, 'completeAccount') . '">' . Labels::getLabel('LBL_CLICK_HERE', $siteLangId) . '</a>';
                                     $msg = CommonHelper::replaceStringData($msg, ['{CLICK-HERE}' => $htm]);
                                     ?>
