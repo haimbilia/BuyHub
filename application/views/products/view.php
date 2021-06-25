@@ -785,7 +785,7 @@ $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $prod
 <script type="application/ld+json">
     {
         "@context": "http://schema.org",
-        "@type": "Product",
+        "@type": "Product",        
         <?php if (isset($reviews['prod_rating']) && 0 < $reviews['prod_rating']) { ?> "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "<?php echo round(FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT), 1); ?>",
@@ -801,6 +801,7 @@ $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $prod
             "@type": "Offer",
             "availability": "http://schema.org/InStock",
             "price": "<?php echo $product['theprice']; ?>",
+            "url": "<?php echo UrlHelper::generateFullUrl('Products', 'view', [$product['selprod_id']]); ?>",
             "priceCurrency": "<?php echo CommonHelper::getCurrencyCode(); ?>"
         }
     }
