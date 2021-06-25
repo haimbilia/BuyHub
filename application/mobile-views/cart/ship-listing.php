@@ -22,6 +22,7 @@ if (0 < $productsCount) {
         } else {
             $type = 'available';
         }
+        $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
         $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
         $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
         $productsArr[$type][] = $product;
@@ -29,6 +30,7 @@ if (0 < $productsCount) {
 }
 
 foreach ($saveForLaterProducts as &$slProduct) {
+    $slProduct['discount'] = ($slProduct['special_price_found'] && $slProduct['selprod_price'] > $slProduct['theprice']) ? CommonHelper::showProductDiscountedText($slProduct, $siteLangId) : '';
     $slProduct['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($slProduct['selprod_id']));
     $slProduct['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($slProduct['product_id'], "THUMB", $slProduct['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
     $productsArr['saveForLater'][] = $slProduct;
