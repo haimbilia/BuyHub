@@ -141,6 +141,7 @@ Fixes:
     => 054832 - when new category is introduced in hierarchy then linking breaks and product gets unlisted in some of the categories
     => 055153 - when faq category is deleted from admin still then it's listing in collection on home page
     => 055237 - When Geo location is enabled, No data found is showing while clicking on view more button.
+    => 055013 - when user registers through social or phone number then there is no email of the same and admin can't send email to user
 
 Enhancements :
    => Make provision to made seller

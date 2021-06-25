@@ -1826,7 +1826,7 @@ class UsersController extends AdminBaseController
         $user_id = FatUtility::int($post['user_id']);
         $userObj = new User($user_id);
         $user = $userObj->getUserInfo(null, false, false);
-        if (!$user) {
+        if (!$user || empty($user['credential_email'])) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
         }
