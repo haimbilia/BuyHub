@@ -140,6 +140,7 @@ Fixes:
     => 055156 - on payment app screen payment logo not coming correctly
     => 054832 - when new category is introduced in hierarchy then linking breaks and product gets unlisted in some of the categories
     => 055153 - when faq category is deleted from admin still then it's listing in collection on home page
+    => 055237 - When Geo location is enabled, No data found is showing while clicking on view more button.
 
 Enhancements :
    => Make provision to made seller
