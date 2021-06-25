@@ -139,6 +139,7 @@ Fixes:
     => 055126 - issue with language in email template
     => 055156 - on payment app screen payment logo not coming correctly
     => 054832 - when new category is introduced in hierarchy then linking breaks and product gets unlisted in some of the categories
+    => 055153 - when faq category is deleted from admin still then it's listing in collection on home page
 
 Enhancements :
    => Make provision to made seller
