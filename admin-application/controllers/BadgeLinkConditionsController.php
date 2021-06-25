@@ -563,4 +563,13 @@ class BadgeLinkConditionsController extends AdminBaseController
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->adminLangId));
     }
+    
+    public function getRecordType(int $blinkcond_id)
+    {
+        $json = [
+            'recordType' => (int) BadgeLinkCondition::getAttributesById($blinkcond_id, 'blinkcond_record_type')
+        ];
+
+        FatUtility::dieJsonSuccess($json);
+    }
 }

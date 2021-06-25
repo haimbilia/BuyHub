@@ -39,6 +39,19 @@ class BadgeLinkConditionSearch extends SearchBase
         $this->badgeLinksJoin = true;
         $this->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, 'LEFT JOIN', 'badgelink_blinkcond_id = blinkcond_id', 'blc');
     }
+
+    /**
+     * joinBadgeRequest
+     *
+     * @return void
+     */
+    public function joinBadgeRequest()
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', CommonHelper::getLangId()), E_USER_ERROR);
+        }
+        $this->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_id = badgelink_breq_id', 'breq');
+    }
     
     /**
      * joinProduct

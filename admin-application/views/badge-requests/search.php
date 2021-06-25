@@ -44,8 +44,12 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key]) : Labels::getLabel('LBL_NA', $adminLangId), true);
                 break;
             case 'download':
-                $fileName = '<a href="'.UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($row['breq_id'])).'">
-                <i class="fas fa-download"></i></a>';
+                $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $row[BadgeRequest::DB_TBL_PREFIX . 'id']);
+                $fileName = Labels::getLabel('LBL_N/A', $adminLangId);
+                if ($res !== false && 0 < $res['afile_id']) {
+                    $fileName = '<a href="'.UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($row['breq_id'])).'">
+                    <i class="fas fa-download"></i></a>';
+                }
 
                 $td->appendElement('div', ['class' => "text-break"], $fileName, true);
                 break;

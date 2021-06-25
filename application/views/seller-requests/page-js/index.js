@@ -487,7 +487,7 @@
             return false;
         }
 
-        fcom.ajax(fcom.makeUrl('BadgeLinkConditions', 'getRecordType', [element.value]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'getRecordType', [element.value]), '', function (t) {
             var res = $.parseJSON(t);
             recordType.val(res.recordType);
         });
@@ -498,6 +498,17 @@
         var data = 'page=' + page;
         fcom.ajax(fcom.makeUrl('SellerRequests', 'records', [badgeReqId]), data, function (t) {
             $(".recordsContainer--js").html(t);
+        });
+    };
+
+    removeBadgeRequestRefFile = function (badgeReqId) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'removeBadgeRequestRefFile', [badgeReqId]), '', function (t) {
+            var res = $.parseJSON(t);
+            if (1 > res.status) {
+                $.systemMessage(res.msg, 'alert--danger');
+                return false;
+            }
+            $('.refFile--js').remove();
         });
     };
 })();

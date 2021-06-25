@@ -214,7 +214,8 @@ class Badge extends MyAppModel
             'badge_display_inside',
             'blinkcond_position',
             'badge_type',
-            'COALESCE(badge_name, badge_identifier) as badge_name'
+            'COALESCE(badge_name, badge_identifier) as badge_name',
+            'breq_id'
         ];
 
         $srch = new BadgeLinkConditionSearch();
@@ -229,6 +230,7 @@ class Badge extends MyAppModel
         }
 
         $srch->joinBadgeLinks();
+        $srch->joinBadgeRequest();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
 
@@ -287,6 +289,15 @@ class Badge extends MyAppModel
                 ELSE TRUE 
             END)'
         );
+
+        $srch->addDirectCondition(
+            '(CASE 
+                WHEN breq_id IS NOT NULL
+                THEN breq_status = ' . BadgeRequest::REQUEST_APPROVED . ' 
+                ELSE TRUE 
+            END)'
+        );
+
         $srch->addCondition('badge_type', '=', $type);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
         $srch->addOrder('blinkcond_id', 'DESC');

@@ -927,6 +927,7 @@ class AttachedFile extends MyAppModel
             AttachedFile::FILETYPE_APP_MAIN_SCREEN_IMAGE,
             AttachedFile::FILETYPE_APP_LOGO,
             AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE,
+            AttachedFile::FILETYPE_BADGE_REQUEST,
         ];
         //if (!in_array($fileType, $allowedFileTypes) && (!$fileType || !$recordId)) {
         // Remove condition of $recordId for handle all data of add/edit product category in single form

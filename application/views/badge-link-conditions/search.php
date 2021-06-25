@@ -1,18 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $siteLangId),
     Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $siteLangId),
     'record_condition' => Labels::getLabel('LBL_TRIGGER', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
-    'action' => '',
 );
-
-if (!$canEdit) {
-    unset($arr_flds['select_all'], $arr_flds['action']);
-}
 
 $typeArr = Badge::getTypeArr($siteLangId);
 
@@ -20,11 +14,7 @@ $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
-    if ('select_all' == $key) {
-        $th->appendElement('th')->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
-    } else {
-        $th->appendElement('th', [], $val);
-    }
+    $th->appendElement('th', [], $val);
 }
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
@@ -34,9 +24,6 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'select_all':
-                $td->appendElement('plaintext', [], '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="badgeLinkIds[]" value=' . $row['blinkcond_id'] . '><i class="input-helper"></i></label>', true);
-                break;
             case 'listserial':
                 $td->appendElement('plaintext', [], $sr_no, true);
                 break;
@@ -45,7 +32,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
-                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $siteLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $siteLangId);
+                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $siteLangId);
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
             case 'record_condition':
@@ -58,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $siteLangId) : Labels::getLabel('LBL_N/R', $siteLangId));
+                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $siteLangId) : Labels::getLabel('LBL_N/A', $siteLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
@@ -72,26 +59,6 @@ foreach ($arrListing as $sn => $row) {
                     include CONF_THEME_PATH . '/_partial/get-ribbon.php';
                     $html = '<div class="badge-wrap">' . $ribbon . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
-                }
-                break;
-            case 'action':
-                if ($canEdit) {
-                    $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
-                    $li = $ul->appendElement("li");
-
-                    $funcName = (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) ? 'badgeForm' : 'ribbonForm';
-                    $function = $funcName . "(" . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")";
-                    $li->appendElement(
-                        'a',
-                        array(
-                            'href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_BIND', $siteLangId),
-                            "onclick" => $function
-                        ),
-                        '<i class="fa fa-link"></i>',
-                        true
-                    );
-                } else {
-                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
                 }
                 break;
             default : 

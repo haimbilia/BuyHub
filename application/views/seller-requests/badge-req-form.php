@@ -28,9 +28,12 @@ $fld = $frm->getField('breq_file');
 if (null != $fld) {
 	$fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm fileUpload--js');
 	$fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_BADGE_REQUEST_REFERENCE_FILE', $siteLangId) . '</small>';
-    if (0 < $badgeReqId) {
-        $fld->htmlAfterField .= '<a href="'.UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)).'">
+    if (0 < $badgeReqId && true === $fileFound) {
+        $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId). '" href="'.UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)).'">
                                     <i class="fas fa-download"></i>
+                                </a>';
+        $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DELETE_FILE', $siteLangId). '" href="javascript:void(0);" onclick="removeBadgeRequestRefFile(' . $badgeReqId . ')">
+                                    <i class="fas fa-times"></i>
                                 </a>';
     }
 }

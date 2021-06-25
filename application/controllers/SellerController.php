@@ -3596,7 +3596,8 @@ class SellerController extends SellerBaseController
         $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_price'));
         //$srch->setPageSize( $pageSize );
         if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
+            // $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $srch->addCondition('selprod_title', 'LIKE', '%'. $post['keyword'] . '%');
             //$cnd->attachCondition('option_identifier', 'LIKE', '%'. $post['keyword'] . '%', 'OR');
         }
 
@@ -3607,8 +3608,7 @@ class SellerController extends SellerBaseController
             foreach ($products as $selprod_id => $product) {
                 $options = SellerProduct::getSellerProductOptions($product['selprod_id'], true, $this->siteLangId);
 
-                $variantStr = $product['product_name'];
-                //$variantStr .= ( $product['selprod_title'] != '') ? $product['selprod_title'] : $product['product_name'];
+                $variantStr = $product['selprod_title'];
 
                 if (is_array($options) && count($options)) {
                     $variantStr .= ' (';

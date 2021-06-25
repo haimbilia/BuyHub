@@ -45,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
-                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/R", $adminLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId);
+                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $adminLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $adminLangId);
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
             case 'record_condition':
@@ -58,7 +58,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId) : Labels::getLabel('LBL_N/R', $adminLangId));
+                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $adminLangId) : Labels::getLabel('LBL_N/A', $adminLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
