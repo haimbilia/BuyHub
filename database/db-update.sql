@@ -430,3 +430,5 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', '');
 
 -- ---------Task 86672 Stripe Connect Changes ------ -- 
+
+ALTER TABLE `tbl_orders_status_history` ADD `oshistory_tracking_url` VARCHAR(255) NOT NULL AFTER `oshistory_tracking_number`;
