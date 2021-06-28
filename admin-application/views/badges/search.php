@@ -14,7 +14,6 @@ if (!$canEdit) {
     unset($arr_flds['select_all'], $arr_flds['action']);
 }
 
-$approvalStatusArr = Badge::getApprovalStatusArr($adminLangId);
 $typeArr = Badge::getTypeArr($adminLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));

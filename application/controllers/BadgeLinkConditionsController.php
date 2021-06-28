@@ -70,6 +70,9 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
+        
+        $this->set("approvalStatusArr", $approvalStatusArr);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());

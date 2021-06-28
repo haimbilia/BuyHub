@@ -71,7 +71,9 @@ class BadgesController extends AdminBaseController
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
+        $approvalStatusArr = Badge::getApprovalStatusArr($this->adminLangId);
+        
+        $this->set("approvalStatusArr", $approvalStatusArr);
         $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());

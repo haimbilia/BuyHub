@@ -85,22 +85,6 @@ class BadgeLinkCondition extends MyAppModel
 
         return json_decode($arr, true);
     }
-    
-    /**
-     * getRecordTypeName
-     *
-     * @param  int $type
-     * @param  int $langId
-     * @return string
-     */
-    public static function getRecordTypeName(int $type, int $langId): string
-    {
-        $arr = self::getRecordTypeArr($langId);
-        if (!array_key_exists($type, $arr)) {
-            return '';
-        }
-        return (string) $arr[$type];
-    }
 
     /**
      * getConditionTypesArr
@@ -125,22 +109,6 @@ class BadgeLinkCondition extends MyAppModel
         }
 
         return json_decode($arr, true);
-    }
-
-    /**
-     * getConditionTypeName
-     *
-     * @param  int $type
-     * @param  int $langId
-     * @return string
-     */
-    public static function getConditionTypeName(int $type, int $langId): string
-    {
-        $arr = self::getConditionTypesArr($langId);
-        if (!array_key_exists($type, $arr)) {
-            return '';
-        }
-        return (string) $arr[$type];
     }
 
     /**
@@ -217,6 +185,7 @@ class BadgeLinkCondition extends MyAppModel
                 Badge::DB_TBL_PREFIX . 'display_inside',
                 Badge::DB_TBL_PREFIX . 'shape_type',
                 Badge::DB_TBL_PREFIX . 'color',
+                Badge::DB_TBL_PREFIX . 'required_approval',
                 $recordIdsCol
             ],
             $recordFields

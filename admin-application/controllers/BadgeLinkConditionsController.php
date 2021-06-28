@@ -142,6 +142,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         }
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
@@ -287,7 +288,8 @@ class BadgeLinkConditionsController extends AdminBaseController
                         $type = (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS == $conditionType) ? FatUtility::VAR_INT : FatUtility::VAR_FLOAT;
                         $fromCond = FatApp::getPostedData('blinkcond_from_value', $type, 0);
                         $toCond = FatApp::getPostedData('blinkcond_to_value', $type, 0);
-                        if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond) {
+                        $rateCondition = (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS != $conditionType && 100 < $toCond);
+                        if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond || $rateCondition) {
                             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->adminLangId));
                         }
                         break;

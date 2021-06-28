@@ -5,10 +5,18 @@ $arr_flds = array(
     Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $siteLangId),
     'record_condition' => Labels::getLabel('LBL_TRIGGER', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
 );
 
 $typeArr = Badge::getTypeArr($siteLangId);
+$conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($siteLangId);
+$recordTypeArr = BadgeLinkCondition::getRecordTypeArr($siteLangId);
+$recordConditionArr = BadgeLinkCondition::getRecordConditionArr($siteLangId);
+$nonPercElements =  [
+    BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE,
+    BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED
+];
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 
@@ -32,21 +40,34 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
-                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : BadgeLinkCondition::getRecordTypeName($row[$key], $siteLangId);
+                $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : $recordTypeArr[$row[$key]];
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
             case 'record_condition':
                 $condition = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
-                $recordCondition = BadgeLinkCondition::getRecordConditionArr($siteLangId)[$condition];
-                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordCondition . '</span>';;
+                $htm = ' <span class="label label-inline label-success rounded-pill">' . $recordConditionArr[$condition] . '</span>';;
                 if (BadgeLinkCondition::REC_COND_MANUAL == $condition) {
-                    $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordCondition . '</span>';
+                    $htm = ' <span class="label label-inline label-info rounded-pill">' . $recordConditionArr[$condition] . '</span>';
                 }
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $conditionType = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::getConditionTypeName($row[$key], $siteLangId) : Labels::getLabel('LBL_N/A', $siteLangId));
+                $conditionType = (empty($row['badgelink_record_ids']) ? $conditionTypeArr[$row[$key]] : Labels::getLabel('LBL_N/A', $siteLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
+
+                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type'] && empty($row['badgelink_record_ids'])) {
+                    $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'from_value'];
+                    $toValue = "";
+                    if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'to_value'])) {
+                        $toValue = ' - ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'to_value'];
+                    }
+                    
+                    $perc = in_array($row[$key], $nonPercElements) ? '' : '%';
+
+                    $htm = $fromValue . $toValue . $perc;
+                    $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-toggle='tooltip' data-placement='top' title='" . $htm . "'></i>", true);
+                }
+
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
@@ -60,6 +81,15 @@ foreach ($arrListing as $sn => $row) {
                     $html = '<div class="badge-wrap">' . $ribbon . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                 }
+                break;
+            
+            case Badge::DB_TBL_PREFIX . 'required_approval':
+                $class = applicationConstants::YES == $row[$key] ? 'label-danger' : 'label-success'; 
+                $htm = ' <span class="label label-inline label-success">' . Labels::getLabel('LBL_NOT_REQUIRED', $siteLangId) . '</span>';;
+                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
+                    $htm = ' <span class="label label-inline ' . $class . '">' . $approvalStatusArr[$row[$key]] . '</span>';
+                }
+                $td->appendElement('plaintext', [], $htm, true);
                 break;
             default : 
                 $td->appendElement('plaintext', [], $row[$key], true);
