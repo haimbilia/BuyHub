@@ -143,6 +143,7 @@ Fixes:
     => 055237 - When Geo location is enabled, No data found is showing while clicking on view more button.
     => 055013 - when user registers through social or phone number then there is no email of the same and admin can't send email to user
     => 054816 - getting uneven behavior in related and buy together products on clicking which are already added
+    => 055441 - delete order from admin option should comes exactly after 2 days 
 
 Enhancements :
    => Make provision to made seller
