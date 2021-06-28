@@ -300,6 +300,7 @@ class Badge extends MyAppModel
 
         $srch->addCondition('badge_type', '=', $type);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
+        $srch->addGroupBy('blinkcond_badge_id');
         $srch->addOrder('blinkcond_id', 'DESC');
 
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());

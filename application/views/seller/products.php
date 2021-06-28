@@ -3,25 +3,20 @@ $frmSearch->setFormTagAttribute('onSubmit', 'sellerProducts(0,1); return(false);
 
 $frmSearch->setFormTagAttribute('class', 'form');
 $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-$frmSearch->developerTags['fld_default_col'] = 12;
+$frmSearch->developerTags['fld_default_col'] = 4;
 
 $keyFld = $frmSearch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
-$keyFld->developerTags['col'] = 4;
-
-$fld = $frmSearch->getField('badge_name');
-$fld->developerTags['col'] = 2;
-
-$fld = $frmSearch->getField('ribbon_name');
-$fld->developerTags['col'] = 2;
 
 $submitBtnFld = $frmSearch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 $submitBtnFld->developerTags['col'] = 2;
+$submitBtnFld->developerTags['noCaptionTag'] = true;
 
 $cancelBtnFld = $frmSearch->getField('btn_clear');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
+$cancelBtnFld->developerTags['noCaptionTag'] = true;
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
