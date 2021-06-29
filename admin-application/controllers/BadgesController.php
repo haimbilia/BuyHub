@@ -32,7 +32,7 @@ class BadgesController extends AdminBaseController
 
     public function list(int $badgeType)
     {
-        $frmSearch = $this->getSearchForm();
+        $frmSearch = $this->getSearchForm($badgeType);
         $frmSearch->fill(['badge_type' => $badgeType]);
 
         $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
@@ -47,7 +47,8 @@ class BadgesController extends AdminBaseController
     public function search()
     {
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
+        $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
+        $searchForm = $this->getSearchForm($badgeType);
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         $page = ($page <= 0) ? 1 : $page;
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
@@ -71,8 +72,8 @@ class BadgesController extends AdminBaseController
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
-        $approval = $post['badge_required_approval'];
-        if ('' != $approval) {
+        $approval = FatApp::getPostedData('badge_required_approval');
+        if ('' !== $approval) {
             $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
@@ -224,14 +225,16 @@ class BadgesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSearchForm()
+    private function getSearchForm(int $badgeType)
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_type');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
 
-        $approvalArr = Badge::getApprovalStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);
+        if (Badge::TYPE_BADGE == $badgeType) {
+            $approvalArr = Badge::getApprovalStatusArr($this->adminLangId);
+            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);
+        }
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
