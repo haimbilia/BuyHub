@@ -16,21 +16,24 @@ class BadgeLinkConditionsController extends AdminBaseController
         parent::getBreadcrumbNodes($action);
 
         switch ($action) {
-            case 'index':
+            case 'list':
             case 'form':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_BIND_CONDITIONS', $this->adminLangId)]
                 ];
         }
         return $this->nodes;
     }
 
-    public function index()
+    public function list(int $badgeId)
     {
         $frmSearch = $this->getSearchForm();
+        $frmSearch->fill(['blinkcond_badge_id' => $badgeId]);
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-
+        $this->set("badgeId", $badgeId);
+        $this->set("badgeType", Badge::getAttributesById($badgeId, 'badge_type'));
+        
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->includeDateTimeFiles();
@@ -112,6 +115,9 @@ class BadgeLinkConditionsController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
+        $badgeId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, 0);
+        $srch->addCondition('blinkcond_badge_id', '=', $badgeId);
+
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $srch->addHaving('badge_name', 'LIKE', '%' . $keyword . '%');
@@ -153,7 +159,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function form(int $badgeType, int $badgeLinkCondId = 0)
+    public function form(int $badgeType, int $badgeId, int $badgeLinkCondId = 0)
     {
         $this->objPrivilege->canEditBadgeLinks();
 
@@ -169,7 +175,6 @@ class BadgeLinkConditionsController extends AdminBaseController
             $srch->joinShop($this->adminLangId);
             /* Bind Records */
             $result = FatApp::getDb()->fetchAll($srch->getResultSet());
-
             foreach ($result as $badgeLink) {
                 if (array_key_exists('badgelink_record_id', $badgeLink) && empty($badgeLink['badgelink_record_id'])) {
                     $dataToFill = $badgeLink;
@@ -232,6 +237,8 @@ class BadgeLinkConditionsController extends AdminBaseController
         } else if (Badge::TYPE_RIBBON == $badgeType) {
             $frm = $this->getRibbonForm($recordCondition);
         }
+
+        $dataToFill['blinkcond_badge_id'] = $badgeId;
         $frm->fill($dataToFill);
 
         $this->set('frm', $frm);
@@ -363,6 +370,7 @@ class BadgeLinkConditionsController extends AdminBaseController
     private function getSearchForm()
     {
         $frm = new Form('frmSearch');
+        $frm->addHiddenField('', 'blinkcond_badge_id');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
 
         $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'badge_type', Badge::getTypeArr($this->adminLangId));
@@ -386,18 +394,13 @@ class BadgeLinkConditionsController extends AdminBaseController
         $frm->addHiddenField('', 'blinkcond_badge_id');
 
         $selectedBadge = $recordIds = [];
-        $badgeId = '';
         if (is_array($this->recordData) && 0 < count($this->recordData)) {
             if (isset($this->recordData['records'])) {
                 $recordIds = array_unique(array_keys($this->recordData['records']));
             }
             $selectedBadge[$this->recordData['blinkcond_badge_id']] = $this->recordData['badge_name'];
-            $badgeId = $this->recordData['blinkcond_badge_id'];
         }
         $frm->addHiddenField('', 'record_ids', json_encode($recordIds));
-
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_NAME', $this->adminLangId), 'badge_name', $selectedBadge, $badgeId, ['placeholder' => Labels::getLabel('LBL_SEARCH...', $this->adminLangId)], '');
-        $fld->requirement->setRequired(true);
 
         $frm->addTextBox(Labels::getLabel('LBL_FROM_DATE', $this->adminLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
         $frm->addTextBox(Labels::getLabel('LBL_TO_DATE', $this->adminLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);

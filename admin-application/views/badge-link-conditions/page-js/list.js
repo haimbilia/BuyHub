@@ -86,6 +86,14 @@ $(document).on('change', formClass + '.recCond--js', function () {
     }
 });
 
+$(document).on('click', '.selectAll-js, .selectItem--js', function () {
+    if (0 < $('.selectItem--js:checked').length) {
+        $('.deleteSelectedConds--js').removeClass('d-none');
+    } else {
+        $('.deleteSelectedConds--js').addClass('d-none');
+    }
+});
+
 (function () {
     var dv = '#listing';
     var controller = 'BadgeLinkConditions';
@@ -115,8 +123,8 @@ $(document).on('change', formClass + '.recCond--js', function () {
         });
     };
 
-    badgeForm = function (blinkcond_id) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, blinkcond_id]), '', function (t) {
+    badgeForm = function (blinkcond_id, badgeId) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, badgeId, blinkcond_id]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
 
@@ -151,8 +159,8 @@ $(document).on('change', formClass + '.recCond--js', function () {
         });
     };
 
-    ribbonForm = function (blinkcond_id) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_RIBBON, blinkcond_id]), '', function (t) {
+    ribbonForm = function (blinkcond_id, badgeId) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_RIBBON, badgeId, blinkcond_id]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
 

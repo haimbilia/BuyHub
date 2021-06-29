@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$headingLabel = Labels::getLabel('LBL_MANAGE_BADGES_&_RIBBONS_LINKS', $adminLangId);
-$listingLabel = Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS_LIST', $adminLangId);
+$headingLabel = Labels::getLabel('LBL_BIND_CONDITIONS', $adminLangId);
+$listingLabel = Labels::getLabel('LBL_CONDITIONS_LIST', $adminLangId);
 $data = [
     'adminLangId' => $adminLangId,
     'deleteButton' => false,
@@ -10,29 +10,34 @@ $data = [
         [
             'attr' => [
                 'href' => 'javascript:void(0)',
-                'onclick' => 'badgeForm(0)',
-                'title' => Labels::getLabel('LBL_BIND_BADGE', $adminLangId)
-            ],
-            'label' => '<i class="fa fa-award"></i>'
-        ],
-        [
-            'attr' => [
-                'href' => 'javascript:void(0)',
-                'onclick' => 'ribbonForm(0)',
-                'title' => Labels::getLabel('LBL_BIND_RIBBON', $adminLangId)
-            ],
-            'label' => '<i class="fas fa-shapes"></i>'
-        ],
-        [
-            'attr' => [
-                'href' => 'javascript:void(0)',
                 'onclick' => 'bulkBadgesUnlink(this)',
+                'class' => 'deleteSelectedConds--js d-none',
                 'title' => Labels::getLabel('LBL_DELETE_SELECTED', $adminLangId)
             ],
             'label' => '<i class="fas fa-trash"></i>'
         ],
     ]
 ];
+
+if (Badge::TYPE_BADGE == $badgeType) {
+    $data['otherButtons'][] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'badgeForm(0, ' . $badgeId . ')',
+            'title' => Labels::getLabel('LBL_BIND_CONDITION', $adminLangId)
+        ],
+        'label' => '<i class="fa fa-award"></i>'
+    ];
+} else {
+    $data['otherButtons'][] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'ribbonForm(0, ' . $badgeId . ')',
+            'title' => Labels::getLabel('LBL_BIND_CONDITION', $adminLangId)
+        ],
+        'label' => '<i class="fas fa-shapes"></i>'
+    ];
+}
 
 require_once (CONF_THEME_PATH . '_partial/index-page-common.php');
 ?>

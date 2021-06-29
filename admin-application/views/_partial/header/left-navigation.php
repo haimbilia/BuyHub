@@ -215,7 +215,8 @@
                               History</a></li> <?php */ ?>
                           <?php } ?>
                           <?php if ($objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Badges'); ?>"><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $adminLangId); ?></a></li>
+                              <li><a href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_BADGE]); ?>"><?php echo Labels::getLabel('LBL_BADGES', $adminLangId); ?></a></li>
+                              <li><a href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_RIBBON]); ?>"><?php echo Labels::getLabel('LBL_RIBBONS', $adminLangId); ?></a></li>
                           <?php } ?>
                           <?php if ($objPrivilege->canViewBadgeLinks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('BadgeLinkConditions'); ?>"><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $adminLangId); ?></a></li>

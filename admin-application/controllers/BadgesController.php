@@ -15,20 +15,29 @@ class BadgesController extends AdminBaseController
         parent::getBreadcrumbNodes($action);
 
         switch ($action) {
-            case 'index':
+            case 'list':
             case 'form':
-                $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_BADGES_&_RIBBONS', $this->adminLangId)]
-                ];
+                if ('badges/list/2' == current($_GET)) {
+                    $this->nodes = [
+                        ['title' => Labels::getLabel('LBL_RIBBONS', $this->adminLangId)]
+                    ];
+                } else {
+                    $this->nodes = [
+                        ['title' => Labels::getLabel('LBL_BADGE', $this->adminLangId)]
+                    ];
+                }
         }
         return $this->nodes;
     }
 
-    public function index()
+    public function list(int $badgeType)
     {
         $frmSearch = $this->getSearchForm();
+        $frmSearch->fill(['badge_type' => $badgeType]);
+
         $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
+        $this->set("badgeType", $badgeType);
 
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jscolor.js'));
         $this->_template->addCss(['css/cropper.css']);
@@ -73,6 +82,7 @@ class BadgesController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
         $approvalStatusArr = Badge::getApprovalStatusArr($this->adminLangId);
         
+        $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
         $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
         $this->set("arrListing", $records);
@@ -217,10 +227,8 @@ class BadgesController extends AdminBaseController
     private function getSearchForm()
     {
         $frm = new Form('frmSearch');
+        $frm->addHiddenField('', 'badge_type');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
-
-        $badgeTypes = Badge::getTypeArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'badge_type', $badgeTypes);
 
         $approvalArr = Badge::getApprovalStatusArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);

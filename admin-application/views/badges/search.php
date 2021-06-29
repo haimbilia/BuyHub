@@ -14,6 +14,10 @@ if (!$canEdit) {
     unset($arr_flds['select_all'], $arr_flds['action']);
 }
 
+if (Badge::TYPE_RIBBON == $badgeType) {
+    unset($arr_flds[Badge::DB_TBL_PREFIX . 'required_approval']);
+}
+
 $typeArr = Badge::getTypeArr($adminLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
@@ -84,9 +88,11 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
+                    $btnClass = 'btn btn-clean btn-sm btn-icon';
                     $function = "form(" . $row[Badge::DB_TBL_PREFIX . 'type'] . ", " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")";
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "deleteRecord(event, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $btnClass, 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $btnClass, 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "deleteRecord(event, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $adminLangId)), "<i class='fas fa-link icon'></i>", true);
                 } else {
                     $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $adminLangId), true);
                 }

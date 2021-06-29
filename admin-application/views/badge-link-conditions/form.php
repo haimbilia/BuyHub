@@ -69,25 +69,8 @@ if (null != $fld) {
 					}
 				?>
 				<div class="row">
-					<div class="col-md-6">
-						<div class="field-set">
-							<div class="caption-wraper">
-								<label class="field_label">
-									<?php
-									$fld = $frm->getField('badge_name');
-									echo $fld->getCaption();
-									?>
-									<span class="spn_must_field">*</span></label>
-							</div>
-							<div class="field-wraper">
-								<div class="field_cover">
-									<?php echo $frm->getFieldHtml('badge_name'); ?>
-								</div>
-							</div>
-						</div>
-					</div>
 					<?php if (Badge::TYPE_BADGE == $badgeType) { ?>
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<div class="field-set">
 									<div class="caption-wraper">
 										<label class="field_label">
@@ -105,7 +88,7 @@ if (null != $fld) {
 							</div>
 						</div>
 					<?php } else if (Badge::TYPE_RIBBON == $badgeType) { ?>
-						<div class="col-md-6 position--js">
+						<div class="col-md-4 position--js">
 							<div class="field-set">
 								<div class="caption-wraper">
 									<label class="field_label">
@@ -123,9 +106,7 @@ if (null != $fld) {
 							</div>
 						</div>
 					<?php } ?>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="field-set">
 							<div class="caption-wraper">
 								<label class="field_label">
@@ -142,7 +123,7 @@ if (null != $fld) {
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="field-set">
 							<div class="caption-wraper">
 								<label class="field_label">
