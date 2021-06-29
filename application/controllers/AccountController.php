@@ -3990,6 +3990,7 @@ class AccountController extends LoggedUserController
         $srch->joinShopState();
         $srch->addOrderProductCharges();
         $srch->joinOrderProductSpecifics();
+        $srch->joinShippingCharges();
         $srch->addCondition('order_id', '=', $orderId);
         if (0 < $opId) {
             $srch->addCondition('op_id', '=', $opId);
@@ -4026,7 +4027,7 @@ class AccountController extends LoggedUserController
             $taxOptions = $opChargesLog->getData($this->siteLangId);
             $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
         }
-
+        
         $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
         $orderDetail['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE])) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : array();

@@ -33725,6 +33725,46 @@ input.sp-input,
     margin: 1rem 0;
     font-size: 0.8rem; }
 
+.no-after::after {
+  content: normal; }
+
+.custom-drag-drop .btn {
+  position: static !important; }
+
+.custom-drag-drop .scroll {
+  max-height: 300px; }
+
+.custom-drag-drop .list-drag-drop {
+  display: flex;
+  flex-direction: column; }
+
+.custom-drag-drop .list-drag-drop li {
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  border: solid 1px transparent;
+  margin: 5px 10px;
+  border-radius: 4px; }
+
+.custom-drag-drop .list-drag-drop li:hover {
+  /*background-color: var(--bg-gray);*/
+  border-color: #dee2e6; }
+
+.custom-drag-drop .checkbox {
+  font-size: 0.75rem;
+  color: #888;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  flex: 1;
+  max-width: 256px;
+  overflow: hidden; }
+
+.custom-drag-drop .icn {
+  cursor: -webkit-grab;
+  cursor: grab;
+  margin-left: 10px; }
+
 .detail-page {
   position: relative; }
   .detail-page:after {

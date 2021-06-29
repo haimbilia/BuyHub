@@ -1,8 +1,7 @@
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
 $htmlContent = '';
 if (!empty($fields)) {
-    $htmlContent = '<div class="col-auto"> <div class="d-flex">
-    <div class="dropdown custom-drag-drop mr-2">
+    $htmlContent = '   
     <button class="btn btn-brand btn-sm dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fas fa-columns"></i>
     </button>
@@ -27,8 +26,7 @@ if (!empty($fields)) {
 
     $htmlContent .= '</ul>
         </div>
-    </div></div>
-</div></div>';
+    </div>';
 }
 ?>
 ?>
@@ -39,25 +37,29 @@ if (!empty($fields)) {
                 <h2 class="content-header-title"><?php echo $pageTitle; ?></h2>
             </div>
             <div class="col-auto">
-                <?php
-                $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
-                $actionButtons = [
-                    'siteLangId' => $siteLangId,
-                    'htmlContent' => $htmlContent,
-                    'otherButtons' => [
-                        [
-                            'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'onclick' => 'exportReport()',
-                                'class' => '',
-                                'title' => Labels::getLabel('LBL_Export', $siteLangId)
+                <div class="col-auto">
+
+                    <?php
+                    $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
+                    $actionButtons = [
+                        'siteLangId' => $siteLangId,
+                        'htmlContent' => $htmlContent,
+                        'otherButtons' => [
+                            [
+                                'attr' => [
+                                    'href' => 'javascript:void(0)',
+                                    'onclick' => 'exportReport()',
+                                    'class' => '',
+                                    'title' => Labels::getLabel('LBL_Export', $siteLangId)
+                                ],
+                                'label' => Labels::getLabel('LBL_Export', $siteLangId)
                             ],
-                            'label' => Labels::getLabel('LBL_Export', $siteLangId)
-                        ],
-                    ]
-                ] + $actionButtons;
-                $actionButtons['otherButtons'] = array_merge($actionButtons['otherButtons'],  $otherButton);
-                $this->includeTemplate('_partial/action-buttons.php', $actionButtons, false); ?>
+                        ]
+                    ] + $actionButtons;
+                    $actionButtons['otherButtons'] = array_merge($actionButtons['otherButtons'],  $otherButton);
+                    $this->includeTemplate('_partial/action-buttons.php', $actionButtons, false); ?>
+
+                </div>
             </div>
         </div>
         <div class="content-body">
@@ -88,3 +90,6 @@ if (!empty($fields)) {
         </div>
     </div>
 </main>
+<script>
+    var controllerName = '<?php echo str_replace('Controller', '', FatApp::getController()); ?>';
+</script>

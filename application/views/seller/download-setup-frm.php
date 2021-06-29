@@ -42,7 +42,7 @@ if (false == $canDo) {
 <div class="row justify-content-center">
     <div class="col-md-12" id="digital_download_formss">
         <div class="err-msg" style="color:red;">
-            <?php 
+            <?php
             if (0 < strlen($msg)) {
                 echo $msg;
             }
@@ -69,14 +69,13 @@ if (false == $canDo) {
                 </div>
                 <?php $fld = $downloadFrm->getField('option_comb_id');
                 if ($fld) {
-                ?>
+                    ?>
                     <div class="col-md-4">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
                                     <?php $fld = $downloadFrm->getField('option_comb_id');
-                                    echo $fld->getCaption();
-                                    ?>
+                    echo $fld->getCaption(); ?>
                                 </label>
                                 <span class="spn_must_field">*</span>
                             </div>
@@ -87,7 +86,8 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                <?php } ?>
+                <?php
+                } ?>
                 <div class="col-md-4">
                     <div class="field-set">
                         <div class="caption-wraper">
@@ -127,7 +127,7 @@ if (false == $canDo) {
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
-                                    <?php 
+                                    <?php
                                     $fld = $downloadFrm->getField('product_downloadable_link');
                                     echo $fld->getCaption();
                                     ?>
@@ -144,7 +144,7 @@ if (false == $canDo) {
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
-                                    <?php 
+                                    <?php
                                     $fld = $downloadFrm->getField('product_preview_link');
                                     echo $fld->getCaption();
                                     ?>
@@ -216,16 +216,17 @@ if (false == $canDo) {
                     </div>
                 <?php } ?>
             </div>
-            <?php echo $downloadFrm->getFieldHtml('product_id');
+            <?php
+            echo $downloadFrm->getFieldHtml('product_id');
             echo $downloadFrm->getFieldHtml('preq_id');
             echo $downloadFrm->getFieldHtml('dd_link_id');
             echo $downloadFrm->getFieldHtml('dd_link_ref_id');
             echo $downloadFrm->getFieldHtml('is_preview');
-            echo $downloadFrm->getFieldHtml('ref_file_id'); ?>
+            echo $downloadFrm->getFieldHtml('ref_file_id');
+            ?>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
     </div>
-    <!-- <div class="col-md-12" id="digital_download_list" class="dd-list"></div> -->
 </div>
 <script>
     var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;

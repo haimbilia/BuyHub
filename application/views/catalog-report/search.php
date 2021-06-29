@@ -85,13 +85,12 @@ foreach ($arrListing as $sn => $row) {
 }
 echo $tbl->getHtml();
 if (count($arrListing) == 0) {
-
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
 } ?>
 </div>
 <?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSrchPaging', 'method' => 'post'));
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSearchPaging', 'method' => 'post'));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSalesReportSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 <script>

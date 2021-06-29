@@ -1271,10 +1271,10 @@ saveDownloadLinks = function ()
     var data = fcom.frmData(document.frmDownload);
 
     if (optionCombi == '') {
-        data.append('option_comb_id', 0);
+        data += '&option_comb_id=0';
     }
 
-    data.append('prod_ref_type', 1);
+    data += '&prod_ref_type=1';
     
     fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
 

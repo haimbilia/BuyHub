@@ -25,6 +25,8 @@ $reportsData = [
     'pageTitle' => Labels::getLabel('LBL_Transaction_Report', $siteLangId),
     'siteLangId' => $siteLangId,
     'frmSearch' => $frmSearch,
-    'actionButtons' => []
+    'actionButtons' => [],
+    'fields' => $fields,
+    'defaultColumns' => $defaultColumns,
 ];
 $this->includeTemplate('_partial/report-index.php', $reportsData, false);

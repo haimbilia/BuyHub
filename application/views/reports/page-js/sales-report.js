@@ -17,6 +17,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	searchReport(frm, false);
 });
 
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
 (function () {
 	var dv = '#listingDiv';
 
@@ -46,7 +54,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	};
 
 	clearSearch = function () {
-		document.frmReportSearch.reset();
+		document.frmReportSrch.reset();
 		$("input:checkbox[name=reportColumns]:checked").each(function () {
 			if ($(this).attr('disabled') != 'disabled') {
 				$(this).prop('checked', false);
@@ -55,10 +63,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		searchReport(document.frmReportSrch);
 	};
 
-	exportSalesReport = function () {
-		setColumnsData(document.frmReportSearch);
-		document.frmReportPaging.action = fcom.makeUrl('Reports', 'exportSalesReport');
-		document.frmReportPaging.submit();
+	exportReport = function () {
+		setColumnsData(document.frmReportSrch);
+		document.frmReportSrch.action = fcom.makeUrl('Reports', 'exportSalesReport');
+		document.frmReportSrch.submit();
 	};
 
 	/* redirectBack = function (redirecrt) {
@@ -71,7 +79,6 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		$("input:checkbox[name=reportColumns]:checked").each(function () {
 			reportColumns.push($(this).val());
 		});
-
 		$(frm.reportColumns).val(JSON.stringify(reportColumns));
 	};
 

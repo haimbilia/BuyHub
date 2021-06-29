@@ -223,9 +223,10 @@ trait SellerProducts
 
         $canAttachDigitalDownload = 0;
 
-        if (
-            $productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL
-            && (true == DigitalDownload::canDo($product_id, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, false, true))
+        $ddpObj = new DigitalDownloadPrivilages();
+
+        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL
+            && (true == $ddpObj->canEdit($product_id, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, true))
         ) {
             $canAttachDigitalDownload = 1;
         }

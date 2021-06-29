@@ -59,14 +59,13 @@ if (false == $canDo) {
                 </div>
                 <?php $fld = $downloadFrm->getField('option_comb_id');
                 if ($fld) {
-                ?>
+                    ?>
                     <div class="col-md-4">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
                                     <?php $fld = $downloadFrm->getField('option_comb_id');
-                                    echo $fld->getCaption();
-                                    ?>
+                    echo $fld->getCaption(); ?>
                                 </label>
                                 <span class="spn_must_field">*</span>
                             </div>
@@ -77,7 +76,8 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                <?php } ?>
+                <?php
+                } ?>
                 <div class="col-md-4">
                     <div class="field-set">
                         <div class="caption-wraper">
@@ -119,7 +119,7 @@ if (false == $canDo) {
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
-                                    <?php 
+                                    <?php
                                     $fld = $downloadFrm->getField('product_downloadable_link');
                                     echo $fld->getCaption();
                                     ?>
@@ -136,7 +136,7 @@ if (false == $canDo) {
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
-                                    <?php 
+                                    <?php
                                     $fld = $downloadFrm->getField('product_preview_link');
                                     echo $fld->getCaption();
                                     ?>
@@ -205,7 +205,7 @@ if (false == $canDo) {
                                     <?php
                                     echo $downloadFrm->getFieldHtml('attachement_upload_btn');
                                     $restBtn = $downloadFrm->getField('reset');
-                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;' );
+                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;');
                                     echo $downloadFrm->getFieldHtml('reset');
                                     ?>
                                 </div>
@@ -213,7 +213,7 @@ if (false == $canDo) {
                         </div>
                     </div>
                 <?php } else { ?>
-                    <div class="col-md-12 attach-files-js">
+                    <div class="col-md-12 attach-files-js alert-danger">
                         <div class="dd-not-allowed note">
                             <i class="fa fa-info-circle"></i>
                             <p class=""><?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?></p>
@@ -238,7 +238,6 @@ if (false == $canDo) {
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
     </div>
-    <!-- <div class="col-md-12" id="digital_download_list" class="dd-list"></div> -->
 </div>
 <script>
     var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;

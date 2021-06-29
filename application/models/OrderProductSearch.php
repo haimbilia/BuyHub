@@ -1,7 +1,5 @@
 <?php
 
-use Stripe\Order;
-
 class OrderProductSearch extends SearchBase
 {
     private $langId;

@@ -99,6 +99,7 @@ class ProductProfitReportController extends AdminBaseController
                             break;
                         case 'transactionAmount':
                         case 'adminSalesEarnings':
+                        case 'orderNetAmount':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:

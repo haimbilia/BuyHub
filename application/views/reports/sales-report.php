@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onSubmit', 'searchSalesReport(this); return false;');
+$frmSearch->setFormTagAttribute('onSubmit', 'searchReport(this); return false;');
 $frmSearch->setFormTagAttribute('class', 'form');
 $frmSearch->setCustomRendererClass('FormRendererBS');
 $frmSearch->developerTags['colWidthClassesDefault'] = ['col-lg-', 'col-md-', null, null];
