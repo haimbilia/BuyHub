@@ -246,15 +246,16 @@ class ProductsController extends MyAppController
                 //$conditionSrch->addFld('count(selprod_condition) as totalProducts');
                 /* ] */
                 $conditionRs = $conditionSrch->getResultSet();
-                $conditionArr = $db->fetch($conditionRs);
-                if (!empty($conditionArr)) {
-                    $conditionsArr[] = $db->fetch($conditionRs);
+                $row = $db->fetch($conditionRs);
+                if (!empty($row)) {
+                    $conditionsArr[] = $row;
                 }
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
         } else {
-            $conditionsArr = array_filter(unserialize($conditions));
+            $conditionsArr = unserialize($conditions);
         }
+        $conditionsArr = array_filter($conditionsArr);
         /* ] */
 
         /* Price Filters[ */
