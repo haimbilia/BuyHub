@@ -278,7 +278,7 @@
                                                                 <td style="padding:10px;text-align: center;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></td>
                                                                 <td style="padding:10px;text-align: center;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'cart_total'), true, false, true, false, true); ?></td>
                                                             </tr>
-                                                            <?php if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL) {  ?>
+                                                            <?php if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && $childOrder['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {  ?>
                                                                 <tr>
                                                                     <td style="padding:10px;text-align: center;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId) ?></td>
                                                                     <td style="padding:10px;text-align: center;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?></td>
