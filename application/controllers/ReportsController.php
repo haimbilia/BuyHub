@@ -531,11 +531,14 @@ class ReportsController extends SellerBaseController
         if (!User::canAccessSupplierDashboard()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
         }
-        $flds = $this->getFormColumns($orderDate);
-        $frmSrch = $this->getSalesReportSearchForm($flds, $orderDate);
-        $frmSrch->fill(['sortBy' => 'orderDate', 'sortOrder' => 'DESC']);
-        $this->set('frmSrch', $frmSrch);
+
+        $fields = $this->getFormColumns($orderDate);
+        $frmSearch = $this->getSalesReportSearchForm($fields, $orderDate);
+        $frmSearch->fill(['sortBy' => 'orderDate', 'sortOrder' => 'DESC']);
+        $this->set('frmSearch', $frmSearch);
         $this->set('orderDate', $orderDate);
+        $this->set('defaultColumns', $this->getDefaultColumns($orderDate));
+        $this->set('fields', $fields);
         $this->_template->render(true, true);
     }
 
@@ -548,6 +551,20 @@ class ReportsController extends SellerBaseController
 
         $orderDate = FatApp::getPostedData('orderDate', FatUtility::VAR_STRING, '');
         $fields = $this->getFormColumns($orderDate);
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns($orderDate) : $this->getDefaultColumns($orderDate);
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current(array_keys($fields));
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
+            $sortOrder = applicationConstants::SORT_DESC;
+        }
+
         $srchFrm = $this->getSalesReportSearchForm($fields, $orderDate);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -557,8 +574,6 @@ class ReportsController extends SellerBaseController
             $page = 1;
         }
         $userId = UserAuthentication::getLoggedUserId();
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderDate');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
         $srch = new Report(0, array_keys($fields), true);
         $srch->joinOrders();
@@ -717,7 +732,7 @@ class ReportsController extends SellerBaseController
 
     private function getSalesReportSearchForm($fields = [], $orderDate = '')
     {
-        $frm = new Form('frmSalesReportSrch');
+        $frm = new Form('frmReportSrch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
         if (empty($orderDate)) {
@@ -728,8 +743,9 @@ class ReportsController extends SellerBaseController
         }
 
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
+            $frm->addHiddenField('', 'sortBy', 'orderDate');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
+            $frm->addHiddenField('', 'reportColumns', '');
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
@@ -775,6 +791,19 @@ class ReportsController extends SellerBaseController
             ] + $arr;
         }
 
+        return $arr;
+    }
+
+    private function getDefaultColumns($orderDate = ''): array
+    {
+        $arr = ['orderDate', 'totQtys', 'grossSales', 'couponDiscount', 'refundedAmount', 'shippingTotal', 'taxTotal', 'orderNetAmount'];
+        if (!empty($orderDate)) {
+            unset($arr['orderDate']);
+            $arr = [
+                'op_invoice_number',
+                'order_date_added'
+            ] + $arr;
+        }
         return $arr;
     }
 }

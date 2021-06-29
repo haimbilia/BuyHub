@@ -1,83 +1,62 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSrch->setFormTagAttribute('onSubmit', 'searchSalesReport(this); return false;');
-$frmSrch->setFormTagAttribute('class', 'form');
+$frmSearch->setFormTagAttribute('onSubmit', 'searchSalesReport(this); return false;');
+$frmSearch->setFormTagAttribute('class', 'form');
+$frmSearch->setCustomRendererClass('FormRendererBS');
+$frmSearch->developerTags['colWidthClassesDefault'] = ['col-lg-', 'col-md-', null, null];
 if (empty($orderDate)) {
-    $frmSrch->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';
-    $frmSrch->developerTags['fld_default_col'] = 4;
+    $frmSearch->developerTags['colWidthValuesDefault'] = [4, 4, null, null];
 } else {
-    $frmSrch->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';
-    $frmSrch->developerTags['fld_default_col'] = 4;
+    $frmSearch->developerTags['colWidthValuesDefault'] = [4, 4, null, null];
 }
 
-?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
-    <div class="content-wrapper content-space">
-        <div class="content-header row justify-content-between mb-3">
-            <div class="col-md-auto">
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Sales_Report', $siteLangId); ?></h2>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <?php echo '<a href="javascript:void(0)" onClick="exportSalesReport()" class="btn btn-outline-brand btn-sm">' . Labels::getLabel('LBL_Export', $siteLangId) . '</a>';
-                    if (!empty($orderDate)) {
-                        echo '<a href="' . UrlHelper::generateUrl('Reports', 'SalesReport') . '" class="btn btn-outline-brand btn-sm">' . Labels::getLabel('LBL_Back', $siteLangId) . '</a>';
-                    } ?>
-                </div>
-            </div>
-        </div>
-        <div class="content-body">
+$dateFrm = $frmSearch->getField('date_from');
+$dateTo = $frmSearch->getField('date_to');
 
-            <div class="row mb-3">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="replaced">
-                                <?php
-                                $dateFrm = $frmSrch->getField('date_from');                               
+$sortBy = $frmSearch->getField('sortBy');
+$sortBy->setFieldTagAttribute('id', 'sortBy');
 
-                                $dateTo = $frmSrch->getField('date_to');
+$sortOrder = $frmSearch->getField('sortOrder');
+$sortOrder->setFieldTagAttribute('id', 'sortOrder');
 
-                                $sortBy = $frmSrch->getField('sortBy');
-                                $sortBy->setFieldTagAttribute('id', 'sortBy');
+$submitFld = $frmSearch->getField('btn_submit');
+$submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
+$submitFld->developerTags['colWidthClasses'] = ['col-lg-', 'col-md-', null, null];
+$submitFld->developerTags['colWidthValues'] = [2, 2, null, null];
 
-                                $sortOrder = $frmSrch->getField('sortOrder');
-                                $sortOrder->setFieldTagAttribute('id', 'sortOrder');
+$fldClear = $frmSearch->getField('btn_clear');
+$fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+$fldClear->developerTags['colWidthClasses'] = ['col-lg-', 'col-md-', null, null];
+$fldClear->developerTags['colWidthValues'] = [2, 2, null, null];
+if (!empty($orderDate)) {
+    $keyword = $frmSearch->getField('keyword');
+    $keyword->setFieldTagAttribute('placeholder', Labels::getLabel("LBL_Keyword", $siteLangId));
 
-                                $submitFld = $frmSrch->getField('btn_submit');
-                                $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-                                // $submitFld->developerTags['col'] = 4;
+    $sortOrder->developerTags['noCaptionTag'] = true;
+    $keyword->developerTags['noCaptionTag'] = true;
+    $sortBy->developerTags['noCaptionTag'] = true;
+    $submitFld->developerTags['noCaptionTag'] = true;
+    $fldClear->developerTags['noCaptionTag'] = true;
+}
 
-                                $fldClear = $frmSrch->getField('btn_clear');
-                                $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+$actionButtons = [];
+if (!empty($orderDate)) {
+    $url = UrlHelper::generateFullUrl('Reports', 'SalesReport');
+    $actionButtons['otherButtons'][] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => "redirectUrl('" . $url . "')",
+            'title' => Labels::getLabel('LBL_Back', $siteLangId)
+        ],
+        'label' => Labels::getLabel('LBL_Back', $siteLangId)
+    ];
+}
 
-                                if (!empty($orderDate)) {
-                                    $keyword = $frmSrch->getField('keyword');
-                                    $keyword->setFieldTagAttribute('placeholder', Labels::getLabel("LBL_Keyword", $siteLangId));
-
-                                    $sortOrder->developerTags['noCaptionTag'] = true;
-                                    $keyword->developerTags['noCaptionTag'] = true;
-                                    $sortBy->developerTags['noCaptionTag'] = true;
-                                    $submitFld->developerTags['noCaptionTag'] = true;
-                                    $fldClear->developerTags['noCaptionTag'] = true;
-                                }
-                                echo $frmSrch->getFormHtml();
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body p-0">
-                            <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
+$reportsData = [
+    'pageTitle' => Labels::getLabel('LBL_Sales_Report', $siteLangId),
+    'siteLangId' => $siteLangId,
+    'frmSearch' => $frmSearch,
+    'actionButtons' =>  $actionButtons,
+    'fields' => $fields,
+    'defaultColumns' => $defaultColumns,
+];
+$this->includeTemplate('_partial/report-index.php', $reportsData, false);

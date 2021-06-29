@@ -1,12 +1,10 @@
 $(document).ready(function () {
-	searchSalesReport(document.frmSalesReportSrch);
-	var x = $(".datatable").parent().width();
-	console.log(x);
+	searchReport(document.frmReportSrch);
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
 	var fld = $(this).attr('data-field');
-	var frm = document.frmSalesReportSrchPaging;
+	var frm = document.frmReportPaging;
 	document.getElementById("sortBy").value = fld;
 	$(frm.sortBy).val(fld);
 	if (document.getElementById("sortOrder").value == 'ASC') {
@@ -16,14 +14,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		$(frm.sortOrder).val('ASC');
 		document.getElementById("sortOrder").value = 'ASC';
 	}
-	searchSalesReport(frm, false);
+	searchReport(frm, false);
 });
 
 (function () {
-	var runningAjaxReq = false;
 	var dv = '#listingDiv';
 
-	searchSalesReport = function (frm, withloader) {
+	searchReport = function (frm, withloader) {
+		setColumnsData(frm);
 		if (typeof withloader == 'undefined' || withloader != false) {
 			$(dv).html(fcom.getLoader());
 		}
@@ -37,24 +35,44 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
-		var frm = document.frmSalesReportSrchPaging;
+		var frm = document.frmReportPaging;
 		$(frm.page).val(page);
-		searchSalesReport(frm);
+		searchReport(frm);
 	}
 
+	reloadList = function (withloader) {
+		var frm = document.frmReportSrch;
+		searchReport(frm, withloader);
+	};
+
 	clearSearch = function () {
-		document.frmSalesReportSrch.reset();
-		searchSalesReport(document.frmSalesReportSrch);
+		document.frmReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
+		});
+		searchReport(document.frmReportSrch);
 	};
 
 	exportSalesReport = function () {
-		document.frmSalesReportSrchPaging.action = fcom.makeUrl('Reports', 'exportSalesReport');
-		document.frmSalesReportSrchPaging.submit();
+		setColumnsData(document.frmReportSearch);
+		document.frmReportPaging.action = fcom.makeUrl('Reports', 'exportSalesReport');
+		document.frmReportPaging.submit();
 	};
 
-	/* redirectBack=function(redirecrt){
-	var url=	SITE_ROOT_URL +''+redirecrt;
-	window.location=url;
+	/* redirectBack = function (redirecrt) {
+		var url = SITE_ROOT_URL + '' + redirecrt;
+		window.location = url;
 	} */
+
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
+		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
+	};
 
 })();

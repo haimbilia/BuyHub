@@ -1760,6 +1760,10 @@ function loadMoreImages(obj) {
     $(obj).nextAll().removeClass('d-none');
 }
 
+function redirectUrl(url) {
+    window.location.href = url;
+}
+
 $.extend(fcom, {
     copyToClipboard: function (targetId) {
         var targetId = targetId || "_copytext_";
