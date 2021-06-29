@@ -1658,6 +1658,7 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_available_from', '<=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
+        $srch->removeFld('1 as availableInLocation');
 
         // $srch->addGroupBy('product_id');
 
