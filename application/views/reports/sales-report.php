@@ -19,6 +19,7 @@ if (empty($orderDate)) {
             </div>
             <div class="col-auto">
                 <div class="btn-group">
+
                     <?php echo '<a href="javascript:void(0)" onClick="exportSalesReport()" class="btn btn-outline-brand btn-sm">' . Labels::getLabel('LBL_Export', $siteLangId) . '</a>';
                     if (!empty($orderDate)) {
                         echo '<a href="' . UrlHelper::generateUrl('Reports', 'SalesReport') . '" class="btn btn-outline-brand btn-sm">' . Labels::getLabel('LBL_Back', $siteLangId) . '</a>';
@@ -73,7 +74,8 @@ if (empty($orderDate)) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body p-0">
-                            <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
+                            <div class="listing-tbl" id="listingDiv">
+                                <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                         </div>
                     </div>
                 </div>
