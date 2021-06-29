@@ -91,6 +91,7 @@ class CollectionsController extends MyAppController
         /* ] */
 
         $productSrchObj = new ProductSearch($this->siteLangId);
+        $productSrchObj->setLocationBasedInnerJoin(false);
         $productSrchObj->setGeoAddress();
         $productSrchObj->setDefinedCriteria();
         $productSrchObj->joinProductToCategory($this->siteLangId);

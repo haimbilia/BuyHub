@@ -281,15 +281,14 @@ $(document).on('blur', ".js--volDiscountCol", function(){
 
 $(document).on('click', ".js-product-edit", function(){
     var selProdId = $(this).attr('row-id');
-    var prodHtml = $(this).children('.js-prod-name').html(); 
-    var prodName = prodHtml.split('<br>');
-    var sellerName = $(this).children('.js-seller-name').html(); 
-    var selectName = prodName[0]+" | "+sellerName;
-    
+    var prodHtml = $(this).children('.js-prod-name').html();
+    var prodName = prodHtml.replace(/<br>/g, " | ");;  
     fcom.ajax(fcom.makeUrl('SellerProducts', 'getRelatedProductsList', [selProdId]), '', function(t) {
         var ans = $.parseJSON(t);
+        var newOption = new Option(prodName, selProdId, true, true);
+        $("select[name='product_name']").append(newOption).trigger('change');
         $("input[name='selprod_id']").val(selProdId); 
-        $("input[name='product_name']").val(selectName); 
+        /*$("input[name='product_name']").val(selectName);*/
         $('#related-products').empty();
         for (var key in ans.relatedProducts) {
             $('#related-products').append(

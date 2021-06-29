@@ -867,9 +867,10 @@ class SellerController extends SellerBaseController
                         "opship_tracking_number" => $post['tracking_number'],
                         //"opship_tracking_url" => $post['opship_tracking_url'],
                     ];
-
+                    $opship_tracking_url = '';    
                     if (array_key_exists('opship_tracking_url', $post)) {
-                        $updateData['opship_tracking_url'] =  $post['opship_tracking_url'];
+                        $opship_tracking_url = $post['opship_tracking_url'];
+                        $updateData['opship_tracking_url'] =  $opship_tracking_url;                        
                     }
                     if (array_key_exists('oshistory_courier', $post)) {
                         $trackingCourierCode = $post['oshistory_courier'];
@@ -885,7 +886,7 @@ class SellerController extends SellerBaseController
                 }
             }
             $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
-            if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode)) {
+            if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode, $opship_tracking_url)) {
                 Message::addErrorMessage($orderObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }

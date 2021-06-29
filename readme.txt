@@ -139,6 +139,12 @@ Fixes:
     => 055126 - issue with language in email template
     => 055156 - on payment app screen payment logo not coming correctly
     => 054832 - when new category is introduced in hierarchy then linking breaks and product gets unlisted in some of the categories
+    => 055153 - when faq category is deleted from admin still then it's listing in collection on home page
+    => 055237 - When Geo location is enabled, No data found is showing while clicking on view more button.
+    => 055013 - when user registers through social or phone number then there is no email of the same and admin can't send email to user
+    => 054816 - getting uneven behavior in related and buy together products on clicking which are already added
+    => 055441 - delete order from admin option should comes exactly after 2 days 
+    => 055444 - On order status update email tracking url not coming 
 
 Enhancements :
    => Make provision to made seller
