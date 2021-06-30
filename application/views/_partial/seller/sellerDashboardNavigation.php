@@ -265,14 +265,6 @@ $action = strtolower($action);
                         </li>
                     <?php } ?>
                     <?php if ($userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)) { ?>
-                        <li class="menu__item <?php echo ($controller == 'BadgeLinkConditions') ? 'is-active' : ''; ?>">
-                            <div class="menu__item__inner">
-                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKING', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('BadgeLinkConditions'); ?>">
-                                    <i class="fas fa-shapes icn"></i>
-                                    <span class="menu-item__title"><?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKING', $siteLangId); ?></span>
-                                </a>
-                            </div>
-                        </li>
                         <li class="menu__item <?php echo ($controller == 'badges' && current($_GET) == 'badges/list/1') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_BADGES_LINKING', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_BADGE]); ?>">
