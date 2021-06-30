@@ -152,6 +152,9 @@ class SellerPlugin extends PluginCommon
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $result = FatApp::getDb()->fetch($rs);
+        if (empty($result)) {
+            return false;
+        }
         if (is_string($attr)) {
             return $result[$attr];
         }

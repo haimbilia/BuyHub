@@ -887,6 +887,7 @@ class SellerController extends SellerBaseController
 
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
+            $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING,'plugin_id') ?? 0;            
             if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && $pluginValidation) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
                     $updateData = [
@@ -899,15 +900,22 @@ class SellerController extends SellerBaseController
                     }
                     if (array_key_exists('oshistory_courier', $post)) {
                         $trackingCourierCode = $post['oshistory_courier'];
+                        $updateData['opship_tracking_courier_code'] = $trackingCourierCode;
+                        $updateData['opship_tracking_plugin_id'] = $activatedTrackPluginId;
                     }
-
-                    if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
-                        LibHelper::dieJsonError(FatApp::getDb()->getError());
-                    }
+                    
                 } else {
                     $trackingRelation = new TrackingCourierCodeRelation();
                     $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
                     $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
+                    $updateData = [
+                        'opship_op_id' => $post['op_id'],
+                        "opship_tracking_courier_code" => $trackingCourierCode,
+                        "opship_tracking_plugin_id" => $activatedTrackPluginId,    
+                    ];                    
+                }                
+                if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                    LibHelper::dieJsonError(FatApp::getDb()->getError());
                 }
             }
             $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
@@ -2121,7 +2129,7 @@ class SellerController extends SellerBaseController
             $shopLayoutTemplateId = 10001;
         }
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
-        $shopFrm = $this->getShopInfoForm($shop_id);
+        $shopFrm = $this->getShopInfoForm($userId, $shop_id);
 
         $stateObj = new States();
         $statesArr = $stateObj->getStatesByCountryId($countryId, $this->siteLangId, true, 'state_code');
@@ -2384,7 +2392,7 @@ class SellerController extends SellerBaseController
         }
 
         $stateCode = $post['shop_state'];
-        $frm = $this->getShopInfoForm();
+        $frm = $this->getShopInfoForm($userId);
         $post = $frm->getFormDataFromArray($post, [], true);
         if (false == $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
@@ -3725,7 +3733,7 @@ class SellerController extends SellerBaseController
         //return Shop::isShopActive($userId, $shopId, $returnResult);
     }
 
-    private function getShopInfoForm($shop_id = 0)
+    private function getShopInfoForm($shopUserId ,$shop_id = 0)
     {
         $frm = new Form('frmShop');
         $frm->addHiddenField('', 'shop_id', $shop_id);
@@ -3798,8 +3806,9 @@ class SellerController extends SellerBaseController
         $numericFld = $frm->addIntegerField(Labels::getLabel('LBL_Invoice_number_starts_from', $this->siteLangId), 'shop_invoice_suffix', '', array('placeholder' => Labels::getLabel('LBL_Integer_value', $this->siteLangId)));
         $numericFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_numeric_value_is_allowed.', $this->siteLangId));
         $alphanumericFld->attachField($numericFld); */
-        $obj = new Plugin();
-        if ($obj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active')) {
+        $pluginObj = new Plugin();    
+        $sellerPluginObj = new SellerPlugin(0, $shopUserId);
+        if ($pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active') || $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'pu_active')) {
             $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
                     'shop_use_manual_shipping_rates',

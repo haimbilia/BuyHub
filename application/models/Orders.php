@@ -2775,23 +2775,32 @@ class Orders extends MyAppModel
     public static function afterShipOrderStatusDelivered()
     {
         $srch = new OrderProductSearch(0, true);
-        $srch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'op_id = oshistory_op_id', 'tosh');
-        $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED, OrderStatus::ORDER_DELIVERED));
-        $srch->addDirectCondition("oshistory_tracking_number != ''");
-        $srch->addDirectCondition("oshistory_courier != ''");
-        $srch->addMultipleFields(array('order_language_id', 'op_id', 'oshistory_tracking_number', 'oshistory_courier'));
+        /*$srch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'op_id = oshistory_op_id', 'tosh'); */       
+        $srch->joinOrderProductShipment();  
+        $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');  
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = plugin.plugin_id', 'plugin');
+        $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED, OrderStatus::ORDER_DELIVERED));  
+        $srch->addCondition('opship_tracking_number', '!=',''); 
+        $srch->addCondition('opshipping_plugin_id', '>', 0);
+        $srch->addMultipleFields(array('order_language_id', 'op_id', 'opship_tracking_number', 'opship_tracking_courier_code','opshipping_plugin_id','plugin_code'));
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(40);
         $srch->addOrder('op_id', 'DESC');
-        $rs = $srch->getResultSet();
-        $ordersDetail = FatApp::getDb()->fetchAll($rs);
-        if (!empty($ordersDetail)) {
-            $shipmentTracking = new ShipmentTracking();
-            if (false === $shipmentTracking->init(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
-                $message = $shipmentTracking->getError();
-                Message::addErrorMessage($message);
-                FatUtility::dieWithError(Message::getHtml());
-            }
+        $ordersDetail = FatApp::getDb()->fetchAll($srch->getResultSet());    
+      
+        if (!empty($ordersDetail)) { 
+            $shipmentTrackingObj = new ShipmentTracking();
+            $shipmentTrackingLoaded = $shipmentTracking->init(CommonHelper::getLangId());
+            
+            $shippingObj = new Plugin();
+            $shippingData = $pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);  
+            
+            
+           
+            die();
+            
+            
+            
             $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
             foreach ($ordersDetail as $data) {
                 $response = $shipmentTracking->getTrackingInfo($data["oshistory_tracking_number"], $data["oshistory_courier"], FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));

@@ -726,6 +726,7 @@ class CheckoutController extends MyAppController
                 'mshipapi_label' => $shipInfo['title'],
                 'mshipapi_carrier' => $shipInfo['carrier_code'],
                 'mshipapi_type' => $shipInfo['shipping_type'],
+                'mshipapi_is_seller_plugin' => $shipInfo['is_seller_plugin'],
                 'mshipapi_cost' => $shipProducts[$cartval['selprod_id']]['cost'],
                 'shipped_by_seller' => Product::isShippedBySeller($cartval['selprod_user_id'], $product['product_seller_id'], $product['shippedBySellerId']),
                 'mshipapi_level' => $shipInfo['shipping_level']
@@ -1209,6 +1210,8 @@ class CheckoutController extends MyAppController
                     } else {
                         $productShippingData['opshipping_service_code'] = $shippingDurationRow['mshipapi_id'];
                         $productShippingData['opshipping_carrier_code'] = $shippingDurationRow['mshipapi_carrier'];
+                        $productShippingData['opshipping_plugin_id'] = $shippingDurationRow['mshipapi_type'];
+                        $productShippingData['opshipping_is_seller_plugin'] = $shippingDurationRow['mshipapi_is_seller_plugin'];
                     }
                 }
 

@@ -920,7 +920,15 @@ CREATE TABLE `tbl_order_product_shipment_pickup` (
 --
 ALTER TABLE `tbl_order_product_shipment_pickup`
   ADD UNIQUE KEY `opps_op_id` (`opsp_op_id`);
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_plugin_id` INT NOT NULL AFTER `opshipping_fulfillment_type`;
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_courier_code` VARCHAR(255) NOT NULL AFTER `opship_tracking_url`;
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_plugin_id` INT NOT NULL AFTER `opship_tracking_courier_code`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_plugin_id` `opshipping_plugin_id` INT NOT NULL COMMENT 'plugin use to fetch rates';
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_is_seller_plugin` TINYINT NOT NULL AFTER `opshipping_plugin_id`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_is_seller_plugin` `opshipping_is_seller_plugin` TINYINT NOT NULL COMMENT 'is seller plugin use to fetch rates ';
 -- --- Aramex Shipping API--- --
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_NA', 1, 'NA', 1) ON DUPLICATE KEY UPDATE label_caption = 'NA';
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_View_Purpose";
+
+

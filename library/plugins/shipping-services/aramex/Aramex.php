@@ -598,7 +598,7 @@ class Aramex extends ShippingServicesBase
     {
         return true;
     }
-
+    
     /**
      * getPickupFormElementsArr
      *
@@ -861,4 +861,5 @@ class Aramex extends ShippingServicesBase
         }
         return false;
     }
+    
 }

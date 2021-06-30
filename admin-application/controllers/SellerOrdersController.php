@@ -711,6 +711,7 @@ class SellerOrdersController extends AdminBaseController
             $trackingCourierCode = '';
 
             if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && $pluginValidation) {
+                $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING,'plugin_id') ?? 0;                
                 if (0 < $manualShipping) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
@@ -720,20 +721,27 @@ class SellerOrdersController extends AdminBaseController
                     $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
                     if (!empty($opship_tracking_url)) {
                         $updateData['opship_tracking_url'] =  $opship_tracking_url;
-                    }
-
+                    }                    
                     $oshistory_courier = FatApp::getPostedData('oshistory_courier', FatUtility::VAR_STRING, '');
                     if (!empty($oshistory_courier)) {
                         $trackingCourierCode = $oshistory_courier;
+                        $updateData['opship_tracking_courier_code'] = $oshistory_courier;
+                        $updateData['opship_tracking_plugin_id'] = $activatedTrackPluginId;                        
                     }
-
-                    if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
-                        LibHelper::dieJsonError(FatApp::getDb()->getError());
-                    }
+                    
                 } else {
                     $trackingRelation = new TrackingCourierCodeRelation();
                     $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
                     $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
+                    $updateData = [
+                        'opship_op_id' => $post['op_id'],
+                        "opship_tracking_courier_code" => $trackingCourierCode,
+                        "opship_tracking_plugin_id" => $activatedTrackPluginId,
+                    ];
+                }
+                
+                if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                    LibHelper::dieJsonError(FatApp::getDb()->getError());
                 }
             }
             $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');

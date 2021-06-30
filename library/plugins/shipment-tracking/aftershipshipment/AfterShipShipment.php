@@ -143,4 +143,8 @@ class AfterShipShipment extends ShipmentTrackingBase
     {
         return $this->response;
     }
+    
+    public function getTrackablePluginKeys(){
+        return ['ShipStationShipping'];
+    }
 }
