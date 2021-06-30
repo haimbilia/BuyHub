@@ -859,6 +859,7 @@ class SellerController extends SellerBaseController
 
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
+            $opship_tracking_url = '';
             if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED) {
                 //if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping'] && array_key_exists('opship_tracking_url', $post)) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
@@ -866,8 +867,7 @@ class SellerController extends SellerBaseController
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $post['tracking_number'],
                         //"opship_tracking_url" => $post['opship_tracking_url'],
-                    ];
-                    $opship_tracking_url = '';    
+                    ];                        
                     if (array_key_exists('opship_tracking_url', $post)) {
                         $opship_tracking_url = $post['opship_tracking_url'];
                         $updateData['opship_tracking_url'] =  $opship_tracking_url;                        
