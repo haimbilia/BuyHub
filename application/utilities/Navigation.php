@@ -38,13 +38,13 @@ class Navigation
             $template->set('userName', ucfirst(CommonHelper::getUserFirstName(UserAuthentication::getLoggedUserAttribute('user_name'))));
         }
 
-        $headerTopNavigation = FatCache::get('headerTopNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $headerTopNavigation = FatCache::get('headerTopNavigations_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
 
         if ($headerTopNavigation) {
             $headerTopNavigation = unserialize($headerTopNavigation);
         } else {
             $headerTopNavigation = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
-            FatCache::set('headerTopNavigation_' . $siteLangId, serialize($headerTopNavigation), '.txt');
+            FatCache::set('headerTopNavigations_' . $siteLangId, serialize($headerTopNavigation), '.txt');
         }
         $headerCategories = [];
         if ($layout == Navigations::LAYOUT_MEGA_MENU) {
@@ -241,37 +241,10 @@ class Navigation
             /* Category have products[ */
             $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
 
-            /* $catSrch = new SearchBase(ProductCategory::DB_TBL, 'c');
-            $catSrch->addCondition('prodcat_status', '=', ProductCategory::REQUEST_APPROVED);
-            $catSrch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
-            $catSrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
-
-            $prodSrchObj = new ProductSearch();
-            $prodSrchObj->addMultipleFields(array('DISTINCT(c.prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
-            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
-            $prodSrchObj->joinSellerSubscription(0, true);
-            $prodSrchObj->addSubscriptionValidCondition();
-            $prodSrchObj->doNotCalculateRecords();
-            $prodSrchObj->doNotLimitRecords();
-            $prodSrchObj->joinProductToCategory();
-            $prodSrchObj->joinCategoryRelationWithChild();
-            $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO); */
-
             $categoriesMainRootArr = FatCache::get('navigationCatCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
             if ($categoriesMainRootArr) {
                 $categoriesMainRootArr = unserialize($categoriesMainRootArr);
             } else {
-                /*  $parentCatSrch = clone $catSrch;
-                $parentCatSrch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = c.prodcat_id', 'qryProducts');
-                $parentCatSrch->addCondition('c.prodcat_parent', '=', 0);
-                $parentCatSrch->addMultipleFields(array('c.prodcat_id'));
-                $parentCatSrch->addCondition('prodcat_parent', '=', 0);
-                $parentCatSrch->addGroupBy('c.prodcat_id');
-                $parentCatSrch->doNotCalculateRecords();
-                $parentCatSrch->doNotLimitRecords();
-
-                $rs = $parentCatSrch->getResultSet();
-                $categoriesMainRootArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id'); */
                 $categoriesMainRootArr = array_keys($rootCatArr);
                 FatCache::set('navigationCatCache' . $siteLangId, serialize($categoriesMainRootArr), '.txt');
             }
@@ -363,7 +336,6 @@ class Navigation
 
     public static function footerNavigation($template)
     {
-        $db = FatApp::getDb();
         $siteLangId = CommonHelper::getLangId();
         $footerNavigation = FatCache::get('footerNavigationCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if ($footerNavigation) {
@@ -377,16 +349,12 @@ class Navigation
 
     public static function sellerNavigationLeft($template)
     {
-        $db = FatApp::getDb();
-        $siteLangId = CommonHelper::getLangId();
         $seller_navigation_left = self::getNavigation(Navigations::NAVTYPE_SELLER_LEFT);
         $template->set('seller_navigation_left', $seller_navigation_left);
     }
 
     public static function sellerNavigationRight($template)
     {
-        $db = FatApp::getDb();
-        $siteLangId = CommonHelper::getLangId();
         $seller_navigation_right = self::getNavigation(Navigations::NAVTYPE_SELLER_RIGHT);
         $template->set('seller_navigation_right', $seller_navigation_right);
     }
