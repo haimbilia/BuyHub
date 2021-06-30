@@ -2,9 +2,8 @@
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $adminLangId),
     Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $adminLangId),
-    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_VIEW', $adminLangId),
     Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $adminLangId),
     Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_PUBLISH', $adminLangId),
     'action' => '',
@@ -49,9 +48,6 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case Badge::DB_TBL_PREFIX . 'name':
                 $td->appendElement('plaintext', [], $name, true);
-                break;
-            case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {

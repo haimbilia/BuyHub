@@ -165,13 +165,24 @@ class BadgeLinkCondition extends MyAppModel
                             THEN GROUP_CONCAT(optionvalue_name SEPARATOR "|")
                         ELSE ""
                 END) as option_value_name',
-                '(CASE 
+                '(CASE
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' 
+                        THEN pu.credential_username
                     WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '
                         THEN spu.credential_username
                     WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . '
                         THEN shpu.credential_username
                     ELSE ""
-                END) as seller'
+                END) as seller',
+                '(CASE
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' 
+                        THEN pu.credential_user_id
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . '
+                        THEN spu.credential_user_id
+                    WHEN ' . BadgeLinkCondition::DB_TBL_PREFIX . 'record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . '
+                        THEN shpu.credential_user_id
+                    ELSE ""
+                END) as seller_id'
             ];
         }
 

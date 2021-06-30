@@ -337,4 +337,31 @@ class Badge extends MyAppModel
         }
         return $urls;
     }
+    
+    /**
+     * canAccess
+     *
+     * @param  mixed $badgeId
+     * @param  mixed $userId
+     * @return int
+     */
+    public static function canAccess(int $badgeId, int $userId): int
+    {
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinBadge();
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
+        $srch->addMultipleFields([
+            self::DB_TBL_PREFIX . 'id',
+            '(CASE
+                WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_RIBBON . '
+                    THEN 1
+                WHEN ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND breq_status =  ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . '
+                    THEN 1
+                ELSE 0
+            END) as canAccess'
+        ]);
+        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id', '=', $badgeId);
+        $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        return current($record);
+    }
 }

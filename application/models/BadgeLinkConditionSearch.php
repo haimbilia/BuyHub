@@ -66,6 +66,7 @@ class BadgeLinkConditionSearch extends SearchBase
         }
 
         $this->joinTable(Product::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = product_id', 'p');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'pu.credential_user_id = p.product_seller_id', 'pu');
         if (0 < $langId) {
             $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'product_id = productlang_product_id AND productlang_lang_id = ' . $langId, 'p_l');
         }

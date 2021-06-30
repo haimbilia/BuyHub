@@ -12,4 +12,6 @@
 
     $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId, 'callBackJsFunc' => 'reloadRecordsList', 'arguments' => $badgeReqId);
     $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+} else {
+    echo Labels::getLabel('MSG_NO_RECORD_FOUND', $adminLangId);
 }

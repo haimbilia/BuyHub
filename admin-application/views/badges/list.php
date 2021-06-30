@@ -8,26 +8,25 @@ $data = [
     'adminLangId' => $adminLangId,
     'deleteButton' => true,
     'statusButtons' => true,
+    'otherButtons' => [
+        [
+            'attr' => [
+                'href' => 'javascript:void(0)',
+                'onclick' => 'bulkBadgesUnlink(this)',
+                'class' => 'deleteSelectedConds--js d-none',
+                'title' => Labels::getLabel('LBL_DELETE_SELECTED', $adminLangId)
+            ],
+            'label' => '<i class="fas fa-trash"></i>'
+        ],
+        [
+            'attr' => [
+                'href' => 'javascript:void(0)',
+                'onclick' => 'form(' . $badgeType . ')',
+                'title' => Labels::getLabel('LBL_ADD', $adminLangId)
+            ],
+            'label' => '<i class="fa fa-plus"></i>'
+        ]
+    ]
 ];
-
-if ($badgeLbl) {
-    $data['otherButtons'][] = [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'form(' . Badge::TYPE_BADGE . ')',
-            'title' => Labels::getLabel('LBL_ADD_BADGE', $adminLangId)
-        ],
-        'label' => '<i class="fa fa-award"></i>'
-    ];
-} else {
-    $data['otherButtons'][] = [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'form(' . Badge::TYPE_RIBBON . ')',
-            'title' => Labels::getLabel('LBL_ADD_RIBBON', $adminLangId)
-        ],
-        'label' => '<i class="fas fa-shapes"></i>'
-    ];
-}
 
 require_once (CONF_THEME_PATH . '_partial/index-page-common.php');

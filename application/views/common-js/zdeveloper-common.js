@@ -1,13 +1,16 @@
-$(document).ready(function() {
+$(window).on('load', function() {
     setTimeout(function() {
         $('body').addClass('loaded');
         if (0 < $('#scrollElement-js').length) {
-            let scrollElement = document.getElementById('scrollElement-js').SimpleBar.getScrollElement();
+            var el = new SimpleBar(document.getElementById('scrollElement-js'));
+            let scrollElement = el.getScrollElement();
             scrollElement.scrollTop = ($('.menu__item.is-active').position().top - (($(window).height() / 2) - 100));
         }
         stylePhoneNumberFld('.phone-js');
     }, 1000);
+});
 
+$(document).ready(function() {
     $(document).on("click", ".selectItem--js", function() {
         if ($(this).prop("checked") == false) {
             $(".selectAll-js").prop("checked", false);

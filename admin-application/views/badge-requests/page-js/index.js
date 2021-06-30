@@ -88,11 +88,11 @@ $(document).ready(function () {
         $("#" + searchSelector).html("");
         var recordType = $('input[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            return fcom.makeUrl('ShippingProfileProducts', 'autoCompleteProducts');
+            return fcom.makeUrl('Products', 'autoComplete');
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
-            return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
+            return fcom.makeUrl('SellerProducts', 'autoCompleteProducts');
         }else if (RECORD_TYPE_SHOP == recordType) {
-            return fcom.makeUrl('Seller', 'getShopDetail', [1]);
+            return fcom.makeUrl('Shops', 'autoComplete');
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
             return false;

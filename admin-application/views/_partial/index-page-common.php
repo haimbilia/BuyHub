@@ -16,24 +16,30 @@ $actionButtons = isset($actionButtons) ? $actionButtons : true;
                     </div>
                 </div>
                 <span class="pagebody--js">
-                    <section class="section searchform_filter">
-                        <div class="sectionhead searchHead--js">
-                            <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?></h4>
-                        </div>
-                        <div class="sectionbody space togglewrap" style="display:none;">
-                            <?php
-                            $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
-                            $frmSearch->setFormTagAttribute('class', 'web_form formSearch--js');
-                            $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-                            $frmSearch->developerTags['fld_default_col'] = 6;
-
-                            $btn = $frmSearch->getField('btn_clear');
-                            $btn->setFieldTagAttribute('onClick', 'clearSearch()');
-                            echo  $frmSearch->getFormHtml();
-                            ?>
-                        </div>
-                    </section>
-                    <section class="section">
+                    <div id="otherTopForm--js"></div>
+                    <?php if (!empty($frmSearch)) { ?>
+                        <section class="section searchform_filter">
+                            <div class="sectionhead searchHead--js">
+                                <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?></h4>
+                            </div>
+                            <div class="sectionbody space togglewrap" style="display:none;">
+                                <?php
+                                $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
+                                $frmSearch->setFormTagAttribute('class', 'web_form formSearch--js');
+                                $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
+                                $frmSearch->developerTags['fld_default_col'] = 6;
+                                
+                                $btn = $frmSearch->getField('btn_clear');
+                                if (null != $btn) {
+                                    $btn->setFieldTagAttribute('onClick', 'clearSearch()');
+                                }
+                                echo  $frmSearch->getFormHtml();
+                                ?>
+                            </div>
+                        </section>
+                    <?php } ?>
+                    <div id="otherMidForm--js"></div>
+                    <section class="section listingSection--js">
                         <div class="sectionhead">
                             <h4><?php echo $listingLabel; ?></h4>
                             <?php
