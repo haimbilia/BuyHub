@@ -5,7 +5,7 @@ $(document).ready(function () {
 $(document).on("click", ".headerColumnJs", function (e) {
     var fld = $(this).attr('data-field');
     var frm = document.frmReportSearchPaging;
-    document.getElementById("sortBy").value = fld;    
+    document.getElementById("sortBy").value = fld;
     $(frm.sortBy).val(fld);
     if (document.getElementById("sortOrder").value == 'ASC') {
         $(frm.sortOrder).val('DESC');

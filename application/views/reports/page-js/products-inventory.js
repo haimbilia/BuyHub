@@ -1,53 +1,85 @@
-$(document).ready(function(){
-	searchProductsInventory(document.frmProductInventorySrch);
+$(document).ready(function () {
+    searchReport(document.frmReportSearch);
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
-	var fld = $(this).attr('data-field');	
-	var frm = document.frmProductInventorySrchPaging;
-	document.getElementById("sortBy").value = fld;
-	$(frm.sortBy).val(fld);
-	if (document.getElementById("sortOrder").value == 'ASC') {
-		$(frm.sortOrder).val('DESC');
-		document.getElementById("sortOrder").value = 'DESC';
-	} else {
-		$(frm.sortOrder).val('ASC');
-		document.getElementById("sortOrder").value = 'ASC';
-	}
-	searchProductsInventory(frm, false);
+    var fld = $(this).attr('data-field');
+    var frm = document.frmReportSearchPaging;
+    document.getElementById("sortBy").value = fld;
+    $(frm.sortBy).val(fld);
+    if (document.getElementById("sortOrder").value == 'ASC') {
+        $(frm.sortOrder).val('DESC');
+        document.getElementById("sortOrder").value = 'DESC';
+    } else {
+        $(frm.sortOrder).val('ASC');
+        document.getElementById("sortOrder").value = 'ASC';
+    }
+    searchReport(frm, false);
 });
 
-(function() {
-	var runningAjaxReq = false;
-	var dv = '#listingDiv';
-	
-	searchProductsInventory = function(frm, withloader){
-		if (typeof withloader == 'undefined' || withloader != false) {
-			$(dv).html(fcom.getLoader());
-		}
+$(function () {
+    $("#sortable").sortable({
+        stop: function () {
+            reloadList(false);
+        }
+    }).disableSelection();
+});
 
-		var data = fcom.frmData(frm);
-		fcom.ajax(fcom.makeUrl('Reports', 'searchProductsInventory'), data, function(t) {			
-			$(dv).html(t);
-		});
-	};
-	
-	goToProductsInventorySearchPage = function(page) {
-		if(typeof page==undefined || page == null){
-			page = 1;
-		}		
-		var frm = document.frmProductInventorySrchPaging;		
-		$( frm.page ).val( page );
-		searchProductsInventory( frm );
-	}
-	
-	clearSearch = function(){
-		document.frmProductInventorySrch.reset();
-		searchProductsInventory(document.frmProductInventorySrch);
-	};
-	
-	exportProductsInventoryReport = function(){
-		document.frmProductInventorySrchPaging.action = fcom.makeUrl('Reports','exportProductsInventoryReport');
-		document.frmProductInventorySrchPaging.submit();
-	};
+(function () {
+    var dv = '#listingDiv';
+
+    reloadList = function (withloader) {
+        var frm = document.frmReportSearchPaging;
+        searchReport(frm, withloader);
+    };
+
+    searchReport = function (frm, withloader) {
+        setColumnsData(frm);
+        var data = '';
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+
+        if (typeof withloader == 'undefined' || withloader != false) {
+            $(dv).html(fcom.getLoader());
+        }
+
+        fcom.ajax(fcom.makeUrl('Reports', 'searchProductsInventory'), data, function (t) {
+            $(dv).html(t);
+        });
+    };
+
+    goToSearchPage = function (page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
+        }
+        var frm = document.frmReportSearchPaging;
+        $(frm.page).val(page);
+        searchReport(frm);
+    }
+
+    clearSearch = function () {
+        document.frmReportSearch.reset();
+        $("input:checkbox[name=reportColumns]:checked").each(function () {
+            if ($(this).attr('disabled') != 'disabled') {
+                $(this).prop('checked', false);
+            }
+        });
+        searchReport(document.frmReportSearch);
+    };
+
+    exportReport = function () {
+        setColumnsData(document.frmReportSearch);
+        document.frmReportSearch.action = fcom.makeUrl('Reports', 'exportProductsInventoryReport');
+        document.frmReportSearch.submit();
+    };
+
+    setColumnsData = function (frm) {
+        reportColumns = [];
+        $("input:checkbox[name=reportColumns]:checked").each(function () {
+            reportColumns.push($(this).val());
+        });
+
+        $(frm.reportColumns).val(JSON.stringify(reportColumns));
+    };
 })();

@@ -103,8 +103,8 @@ if (count($arrListing) == 0) {
 } ?>
 </div>
 <?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductInventorySrchPaging'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToProductsInventorySearchPage');
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSearchPaging'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 <script>
     var x = $(".card-body").width();
