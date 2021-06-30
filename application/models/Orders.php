@@ -1520,7 +1520,7 @@ class Orders extends MyAppModel
         }
     }
 
-    public function addChildProductOrderHistory($op_id, $langId, $opStatusId, $comment = '', $notify = false, $trackingNumber = '', $releasePayments = 0, $moveRefundToWallet = true, $trackingCourier = '')
+    public function addChildProductOrderHistory($op_id, $langId, $opStatusId, $comment = '', $notify = false, $trackingNumber = '', $releasePayments = 0, $moveRefundToWallet = true, $trackingCourier = '', $trackingUrl = '')
     {
         $op_id = FatUtility::int($op_id);
         $langId = FatUtility::int($langId);
@@ -1549,7 +1549,7 @@ class Orders extends MyAppModel
             return false;
         }
 
-        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $op_id, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => $comment, 'oshistory_tracking_number' => $trackingNumber, 'oshistory_courier' => $trackingCourier), true)) {
+        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $op_id, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => $comment, 'oshistory_tracking_number' => $trackingNumber, 'oshistory_courier' => $trackingCourier, 'oshistory_tracking_url' => $trackingUrl), true)) {
             $this->error = $db->getError();
             return false;
         }

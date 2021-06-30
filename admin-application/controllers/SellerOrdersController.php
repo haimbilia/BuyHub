@@ -736,7 +736,7 @@ class SellerOrdersController extends AdminBaseController
                 }
             }
             $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
-            if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode)) {
+            if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode, $opship_tracking_url)) {
                 Message::addErrorMessage($this->str_invalid_request);
                 FatUtility::dieJsonError(Message::getHtml());
             }

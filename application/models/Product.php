@@ -1631,7 +1631,7 @@ END,   special_price_found ) as special_price_found'
                     $srch->addOrder('theprice', $sortOrder);
                     break;
                 case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)&& FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('selprod_sold_count', $sortOrder);
@@ -1721,6 +1721,7 @@ END,   special_price_found ) as special_price_found'
         );
 
         $srch = new ProductSearch();
+        $srch->addMultipleFields(array('DISTINCT(product_id)', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
         $srch->setDefinedCriteria(1, 0, $criteria, true, false);
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription(0, false, true);
@@ -1728,9 +1729,10 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition('selprod_active', '=', applicationConstants::YES);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_available_from', '<=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
-        $srch->addMultipleFields(array('DISTINCT(product_id)', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
+        $srch->removeFld('1 as availableInLocation');
+
         // $srch->addGroupBy('product_id');
 
         if (0 < $productId) {

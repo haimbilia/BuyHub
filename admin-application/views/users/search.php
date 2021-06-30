@@ -89,7 +89,7 @@ foreach ($arrListing as $sn => $row) {
                 }
                 if ($row['user_is_affiliate']) {
                     $str .= $arr[User::USER_TYPE_AFFILIATE] . '<br/>';
-                }                
+                }
                 if ($row['user_is_supplier'] && !$row['user_is_buyer']) {
                     $str .= '<a href="javascript:void(0)" onclick="markSellerAsBuyer(' . $row['user_id'] . ')">' . Labels::getLabel('LBL_MARK_AS_BUYER', $adminLangId) . '</a>';
                 }
@@ -100,7 +100,7 @@ foreach ($arrListing as $sn => $row) {
 
                 if (0 < $row['user_parent']) {
                     $str = Labels::getLabel('LBL_Sub_User', $adminLangId);
-                }              
+                }
 
                 $td->appendElement('plaintext', array(), $str, true);
 
@@ -134,16 +134,19 @@ foreach ($arrListing as $sn => $row) {
                     $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Change_Password', $adminLangId), "onclick" => "changePasswordForm(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Change_Password', $adminLangId), true);
 
-                        $innerLi = $innerUl->appendElement('li');
+                    $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => UrlHelper::generateUrl('Users', 'login', array($row['user_id'])), 'target' => '_blank', 'class' => 'button small green redirect--js', 'title' => Labels::getLabel('LBL_Login_to_user_profile', $adminLangId)), Labels::getLabel('LBL_Login_to_user_profile', $adminLangId), true);
 
-                    $innerLi = $innerUl->appendElement('li');
-                    $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Email_User', $adminLangId), "onclick" => "sendMailForm(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Email_User', $adminLangId), true);
-                    if(empty($row['credential_password'])){
+                    if (!empty($row['credential_email'])) {
+                        $innerLi = $innerUl->appendElement('li');
+                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Email_User', $adminLangId), "onclick" => "sendMailForm(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Email_User', $adminLangId), true);
+                    }
+                    
+                    if (empty($row['credential_password'])) {
                         $innerLi = $innerUl->appendElement('li');
                         $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $adminLangId), "onclick" => "sendSetPasswordEmail(" . $row['user_id'] . ")"), Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $adminLangId), true);
-                    }    
-                    
+                    }
+
                     $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete_User', $adminLangId), "onclick" => "deleteUser(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Delete_User', $adminLangId), true);
                 }
