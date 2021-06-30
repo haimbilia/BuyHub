@@ -732,7 +732,7 @@ class CheckoutController extends MyAppController
                 'mshipapi_level' => $shipInfo['shipping_level']
             );
         }
-
+        
         if (!$json) {
             $this->cartObj->setProductShippingMethod($productToShippingMethods);
             if (!$this->cartObj->isProductShippingMethodSet()) {

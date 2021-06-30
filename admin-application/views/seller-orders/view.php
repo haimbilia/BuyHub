@@ -92,7 +92,7 @@ $pickUpDetails;
                                         ],
                                         'label' => '<i class="fas fa-file-download"></i>'
                                     ];
-                                } elseif (!empty($order['opr_response'])) {                                   
+                                } elseif (!empty($order['opr_response'])) {                                  
                                     $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
                                     $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
                                     $data['otherButtons'][] = [
