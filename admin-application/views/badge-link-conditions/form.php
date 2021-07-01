@@ -37,7 +37,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 	</div>
 	<div class="sectionbody space">
 		<div class="row justify-content-center">
-			<div class="col-md-2 text-center badgeImageSection--js"><?php echo $imageHtml; ?></div>
+			<div class="col-md-2 badgeImageSection--js"><?php echo $imageHtml; ?></div>
 			<div class="col-md-8">
 				<?php echo $frm->getFormTag(); 
 					echo $frm->getFieldHtml('blinkcond_id');

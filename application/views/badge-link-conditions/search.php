@@ -1,10 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    Badge::DB_TBL_PREFIX . 'type' => Labels::getLabel('LBL_TYPE', $siteLangId),
-    Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $siteLangId),
-    'record_condition' => Labels::getLabel('LBL_TRIGGER', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
+    'record_condition' => Labels::getLabel('LBL_TRIGGER', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
     'action' => '',
@@ -15,12 +13,11 @@ if (!$canEdit || 1 > count($arrListing)) {
 }
 
 if (Badge::TYPE_RIBBON == $badgeType) {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' ]);
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $arr_flds['record_condition']);
 } else {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position' ]);
 }
 
-$typeArr = Badge::getTypeArr($siteLangId);
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($siteLangId);
 $recordTypeArr = BadgeLinkCondition::getRecordTypeArr($siteLangId);
 $recordConditionArr = BadgeLinkCondition::getRecordConditionArr($siteLangId);
@@ -46,10 +43,6 @@ foreach ($arrListing as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', [], $sr_no, true);
                 break;
-            
-            case Badge::DB_TBL_PREFIX . 'type':
-                $td->appendElement('plaintext', [], $typeArr[$row[$key]], true);
-                break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : $recordTypeArr[$row[$key]];
                 $td->appendElement('plaintext', [], $txt, true);
@@ -73,20 +66,6 @@ foreach ($arrListing as $sn => $row) {
 
                     $htm = $fromValue . $toValue . $perc;
                     $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-toggle='tooltip' data-placement='top' title='" . $htm . "'></i>", true);
-                }
-                break;
-            case Badge::DB_TBL_PREFIX . 'shape_type':
-                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
-                    $name = $row[Badge::DB_TBL_PREFIX . 'name'];
-                    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
-                    $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-                    $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
-                } else {
-                    $ribbRow = $row;
-                    $position = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'position'];
-                    include CONF_THEME_PATH . '/_partial/get-ribbon.php';
-                    $html = '<div class="badge-wrap">' . $ribbon . '</div>';
-                    $td->appendElement('plaintext', [], $html, true);
                 }
                 break;
             case 'record_condition':

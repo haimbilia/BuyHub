@@ -23,18 +23,7 @@ $actionButtons = isset($actionButtons) ? $actionButtons : true;
                                 <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?></h4>
                             </div>
                             <div class="sectionbody space togglewrap" style="display:none;">
-                                <?php
-                                $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
-                                $frmSearch->setFormTagAttribute('class', 'web_form formSearch--js');
-                                $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-                                $frmSearch->developerTags['fld_default_col'] = 6;
-                                
-                                $btn = $frmSearch->getField('btn_clear');
-                                if (null != $btn) {
-                                    $btn->setFieldTagAttribute('onClick', 'clearSearch()');
-                                }
-                                echo  $frmSearch->getFormHtml();
-                                ?>
+                                <?php echo  $frmSearch->getFormHtml(); ?>
                             </div>
                         </section>
                     <?php } ?>

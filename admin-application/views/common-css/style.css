@@ -12763,9 +12763,9 @@ form[name="frmShippingProfile"] {
 /* Badges and Ribbons Css 27-05-2021 */
 .badge-wrap {
     position: relative;
-    width: 60px;
-    height: 60px;
-    display: inline-block;
+    /* width: 60px;
+    height: 60px; */
+    display: block;
 }
 .badges {
     position: absolute;
@@ -12803,6 +12803,10 @@ form[name="frmShippingProfile"] {
       right: 3px;
       width: 70px;
       height: 70px; }
+
+      .badges-2.badges-left {
+        transform: rotate(-90deg); }
+
       .badges-2 .text {
         font-weight: 600;
         transform: rotate(45deg);
@@ -12845,6 +12849,32 @@ form[name="frmShippingProfile"] {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis; }
+
+
+  .badges-left {
+    left: 10px;
+    top: 10px; }
+  .badges-right {
+    right: 10px;
+    top: 10px; }
+
+
+  
+
+
+[direction="rtl"] .badges-4 .text {
+  left: -22px;
+  top: 10px; }
+
+[direction="rtl"] .badges-4.badges-left {
+  transform: none; }
+
+[direction="rtl"] .badges-2 .text {
+  left: -14px;
+  top: 10px; }
+
+[direction="rtl"] .badges-2.badges-right {
+  transform: rotate(-90deg); }
 
 /* Badges and Ribbons Css 27-05-2021 */
 

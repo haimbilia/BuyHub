@@ -179,7 +179,6 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
-            reloadList();
             backToListing();
         });
     };

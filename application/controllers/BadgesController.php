@@ -7,7 +7,7 @@ class BadgesController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        
+
         $this->userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId());
     }
 
@@ -61,21 +61,21 @@ class BadgesController extends SellerBaseController
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
 
-        $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $attr = array_merge(Badge::ATTR, Badge::LANG_ATTR, [
             '(CASE
                 WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_RIBBON . ' OR ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_OPEN . '
-                    THEN 1
-                WHEN ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND breq_status =  ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . UserAuthentication::getLoggedUserId() . '
-                    THEN 1
+                THEN 1
+                WHEN SUM(IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'status = ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . UserAuthentication::getLoggedUserId() . ', 1, 0)) > 0
+                THEN 1
                 ELSE 0
             END) as canAccess'
         ]);
         $srch->addMultipleFields($attr);
         $srch->addGroupBy(Badge::DB_TBL_PREFIX . 'id');
+        $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
-        
+
         $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
