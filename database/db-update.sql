@@ -850,7 +850,7 @@ CREATE TABLE `tbl_badge_link_conditions` (
   `blinkcond_condition_type` int(11) NOT NULL,
   `blinkcond_condition_from` varchar(150) NOT NULL,
   `blinkcond_condition_to` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -933,3 +933,9 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 -- ---------Task 86672 Stripe Connect Changes ------ -- 
 
 ALTER TABLE `tbl_orders_status_history` ADD `oshistory_tracking_url` VARCHAR(255) NOT NULL AFTER `oshistory_tracking_number`;
+
+
+-- ----- Task 84994 : Badges & Ribbons ---- --
+ALTER TABLE `tbl_badge_link_conditions`  ADD `blinkcond_user_id` INT NOT NULL COMMENT 'Seller Id'  AFTER `blinkcond_badge_id`;
+ALTER TABLE `tbl_badges` ADD `badge_condition_type` TINYINT(2) NOT NULL DEFAULT '1' AFTER `badge_type`;
+-- ----- Badges & Ribbons ---- --

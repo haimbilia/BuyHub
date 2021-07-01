@@ -137,6 +137,26 @@ if (null != $iconFld) {
 					<?php } ?>
 				</div>
 				<div class="row">
+					<?php if (Badge::TYPE_BADGE == $type) { ?>
+						<div class="col-md-6">
+							<div class="field-set">
+								<div class="caption-wraper">
+									<label class="field_label">
+										<?php
+										$fld = $frm->getField('badge_condition_type');
+										echo $fld->getCaption();
+										?>
+										<span class="spn_must_field">*</span>
+									</label>
+								</div>
+								<div class="field-wraper">
+									<div class="field_cover">
+										<?php echo $frm->getFieldHtml('badge_condition_type'); ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
 					<div class="col-md-6">
 						<div class="field-set">
 							<div class="caption-wraper">
@@ -155,6 +175,8 @@ if (null != $iconFld) {
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="row">
 					<?php $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 					if (!empty($translatorSubscriptionKey) && count($otherLangData) > 0) { ?>
 						<div class="col-md-6">

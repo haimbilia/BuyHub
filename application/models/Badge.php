@@ -21,6 +21,7 @@ class Badge extends MyAppModel
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'type',
+        self::DB_TBL_PREFIX . 'condition_type',
         self::DB_TBL_PREFIX . 'shape_type',
         self::DB_TBL_PREFIX . 'display_inside',
         self::DB_TBL_PREFIX . 'color',
@@ -54,6 +55,9 @@ class Badge extends MyAppModel
     public const APPROVAL_REQUIRED = 1;
     public const APPROVAL_OPEN = 0;
 
+    public const COND_MANUAL = 1;
+    public const COND_AUTO = 2;
+
     /**
      * __construct
      *
@@ -81,6 +85,27 @@ class Badge extends MyAppModel
                 self::TYPE_RIBBON => Labels::getLabel('LBL_RIBBON', $langId)
             ];
             FatCache::set('getBadgeTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+
+        return json_decode($arr, true);
+    }
+
+    /**
+     * getConditionTypeArr
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public static function getConditionTypeArr(int $langId): array
+    {
+        $arr = FatCache::get('getBadgeConditionTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::COND_MANUAL => Labels::getLabel('LBL_MANUAL', $langId),
+                self::COND_AUTO => Labels::getLabel('LBL_AUTOMATIC', $langId)
+            ];
+            FatCache::set('getBadgeConditionTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
         }
 

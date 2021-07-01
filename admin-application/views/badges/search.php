@@ -4,6 +4,7 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $adminLangId),
     Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $adminLangId),
+    Badge::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
     Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $adminLangId),
     Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_PUBLISH', $adminLangId),
     'action' => '',
@@ -14,10 +15,10 @@ if (!$canEdit) {
 }
 
 if (Badge::TYPE_RIBBON == $badgeType) {
-    unset($arr_flds[Badge::DB_TBL_PREFIX . 'required_approval']);
+    unset($arr_flds[Badge::DB_TBL_PREFIX . 'required_approval'], $arr_flds[Badge::DB_TBL_PREFIX . 'condition_type']);
 }
 
-$typeArr = Badge::getTypeArr($adminLangId);
+$conditionTypeArr = Badge::getConditionTypeArr($adminLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 
@@ -48,6 +49,11 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case Badge::DB_TBL_PREFIX . 'name':
                 $td->appendElement('plaintext', [], $name, true);
+                break;
+            case Badge::DB_TBL_PREFIX . 'condition_type':
+                $class = Badge::COND_AUTO == $row[$key] ? 'badge--unified-success' : 'badge--unified-brand';
+                $html = '<span class="badge ' . $class . ' badge--inline badge--pill">' . $conditionTypeArr[$row[$key]] . '</span>';
+                $td->appendElement('plaintext', [], $html, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {

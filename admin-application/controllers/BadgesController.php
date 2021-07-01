@@ -254,6 +254,8 @@ class BadgesController extends AdminBaseController
             $fld->requirement->setRequired(true);
             $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
             $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
+        } else {
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', Badge::getConditionTypeArr($this->adminLangId), '', [], '');
         }
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
