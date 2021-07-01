@@ -41,7 +41,6 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             // $('.pagebody--js').hide();
             $('#otherTopForm--js').html(t);
 
-            bindBadgeNameSelect2();
             bindRecordsSelect2();
 
             if ($(formClass + '.recCond--js').val() == REC_COND_AUTO) {
@@ -78,7 +77,6 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             // $('.pagebody--js').hide();
             $('#otherTopForm--js').html(t);
 
-            bindBadgeNameSelect2();
             bindRecordsSelect2();
 
             if ($(formClass + '.recCond--js').val() == REC_COND_MANUAL) {
@@ -304,43 +302,6 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         if (1 > $('.recordListing--js .recordRow--js').length) {
             $('.listingSection--js').hide();
         }
-    }
-
-    bindBadgeNameSelect2 = function () {
-        var selector = $("select[name='badge_name']");
-        selector.select2({
-            closeOnSelect: true,
-            dir: langLbl.layoutDirection,
-            allowClear: true,
-            placeholder: selector.attr('placeholder'),
-            ajax: {
-                url: function () {
-                    return fcom.makeUrl('Badges', 'autoComplete', [$(formClass + 'input[name="badge_type"]').val()]);
-                },
-                dataType: 'json',
-                delay: 250,
-                method: 'post',
-                data: function (params) {
-                    return { keyword: params.term };
-                },
-                processResults: function (data, params) {
-                    return { results: data.badges };
-                },
-                cache: true
-            },
-            minimumInputLength: 0,
-            templateResult: function (result) {
-                return result.name;
-            },
-            templateSelection: function (result) {
-                return result.name || result.text;
-            }
-        }).on('select2:selecting', function (e) {
-            $(formClass + "input[name='blinkcond_badge_id']").val(e.params.args.data.id);
-
-        }).on('select2:unselecting', function (e) {
-            $(formClass + "input[name='blinkcond_badge_id']").val("");
-        });
     }
 })()
 

@@ -15,8 +15,6 @@ if (Badge::TYPE_RIBBON == $badgeType) {
     unset($arr_flds[Badge::DB_TBL_PREFIX . 'required_approval']);
 }
 
-$typeArr = Badge::getTypeArr($siteLangId);
-
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -53,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
-                $class = applicationConstants::YES == $row[$key] ? 'label-danger' : 'label-info'; 
+                $class = applicationConstants::YES == $row[$key] ? 'label-danger' : 'label-info';
                 $htm = ' <span class="label label-inline label-success rounded-pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $siteLangId) . '</span>';;
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
                     $htm = ' <span class="label label-inline ' . $class . ' rounded-pill">' . $approvalStatusArr[$row[$key]] . '</span>';
@@ -61,10 +59,19 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
             case 'action':
-                if ($canEdit && 0 < (int) $row['canAccess']) {
-                    $btnClass = 'btn btn-clean btn-sm btn-icon';
-                    $function = "form(" . $row[Badge::DB_TBL_PREFIX . 'type'] . ", " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")";
-                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)), "<i class='fas fa-link icon'></i>", true);
+                if ($canEdit) {
+                    $btnClass = 'btn btn-outline-brand btn-sm ';
+                    if (0 < (int) $row['canAccess']) {
+                        $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)), "<i class='fas fa-link icon'></i>", true);
+                    } else {
+                        $icon = '<i class="icn shop">
+                                    <svg class="svg">
+                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#requests" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#requests"></use>
+                                    </svg>
+                                </i>';
+                        $function = "addBadgeReqForm(0, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")";
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $function, 'class' => $btnClass, 'title' => Labels::getLabel('LBL_REQUEST', $siteLangId)), $icon, true);
+                    }
                 } else {
                     $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
                 }

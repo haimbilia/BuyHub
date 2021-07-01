@@ -251,21 +251,47 @@ class BadgeLinkCondition extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'blc.blinkcond_badge_id =  bdg.badge_id', 'blc');
         $srch->joinTable(self::DB_TBL_BADGE_LINKS, 'INNER JOIN', 'blnks.badgelink_blinkcond_id = blc.blinkcond_id', 'blnks');
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
 
         $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
         $srch->addCondition('badge_required_approval', '=', applicationConstants::YES);
 
+        $srch->addDirectCondition("(
+            CASE 
+                WHEN breq_id IS NOT NULL
+                THEN breq_status = " . BadgeRequest::REQUEST_APPROVED . "
+                ELSE TRUE
+            END
+        )");
+        
+        $badgeNameField = "CONCAT(
+                                COALESCE(badge_name, badge_identifier), ' | ', 
+                                (CASE 
+                                    WHEN blinkcond_record_type = " . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . " THEN '" . Labels::getLabel('LBL_SELLER_PRODUCT', $langId) . "'
+                                    WHEN blinkcond_record_type = " . BadgeLinkCondition::RECORD_TYPE_PRODUCT . " THEN '" . Labels::getLabel('LBL_PRODUCT', $langId) . "'
+                                    WHEN blinkcond_record_type = " . BadgeLinkCondition::RECORD_TYPE_SHOP . " THEN '" . Labels::getLabel('LBL_SHOP', $langId) . "'
+                                    ELSE ''
+                                END),  
+                                (CASE 
+                                    WHEN blinkcond_from_date != 0 AND blinkcond_to_date != 0
+                                    THEN CONCAT(' | (', blinkcond_from_date, ' - ', blinkcond_to_date, ')')
+                                    WHEN blinkcond_from_date != 0
+                                    THEN CONCAT(' | (" . Labels::getLabel('LBL_FROM', $langId) . " : ', blinkcond_from_date, ')')
+                                    ELSE ''
+                                END)
+                            ) AS badge_name";
+
         if (true === $assoc) {
             $srch->addMultipleFields([
                     'blinkcond_id',
-                    'COALESCE(badge_name, badge_identifier) as badge_name'
+                    $badgeNameField
                 ]
             );
             $srch->getResultSet();
             return (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         }
 
-        $srch->addMultipleFields(array_merge(self::ATTR, ['COALESCE(badge_name, badge_identifier) as badge_name']));
+        $srch->addMultipleFields(array_merge(self::ATTR, [$badgeNameField]));
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 }

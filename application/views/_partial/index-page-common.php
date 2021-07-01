@@ -75,6 +75,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 </div>
             </div>
         </div>
-        <span class="editRecord--js"></span>
+        <span class="card editRecord--js"></span>
     </div>
 </main>

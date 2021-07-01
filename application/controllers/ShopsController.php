@@ -2,8 +2,6 @@
 
 class ShopsController extends MyAppController
 {
-    //use CommonServices;
-
     public function __construct($action)
     {
         parent::__construct($action);

@@ -10,8 +10,7 @@ $data = [
     'otherButtons' => [
         [
             'attr' => [
-                'href' => 'javascript:void(0)',
-                'onclick' => 'window.history.back();',
+                'href' => UrlHelper::generateUrl('Badges', 'list', [$badgeType]),
                 'title' => Labels::getLabel('LBL_BACK', $siteLangId)
             ],
             'label' => '<i class="fas fa-arrow-left"></i>'
@@ -26,4 +25,4 @@ $data = [
     ]
 ];
 
-require_once (CONF_THEME_PATH . '_partial/index-page-common.php');
+require_once(CONF_THEME_PATH . '_partial/index-page-common.php');

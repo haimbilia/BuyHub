@@ -133,7 +133,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                             <?php } ?>
                         </div>
-                        <span class="card-body editRecord--js"></span>
+                        <span class="editRecord--js"></span>
                     </div>
                 </div>
             </div>

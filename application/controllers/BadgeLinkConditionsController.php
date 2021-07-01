@@ -106,6 +106,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->siteLangId);
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -141,6 +142,15 @@ class BadgeLinkConditionsController extends SellerBaseController
         if (!empty($conditionType)) {
             $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type', '=',  $conditionType);
         }
+
+        $srch->addDirectCondition("(
+            CASE 
+                WHEN breq_id IS NOT NULL
+                THEN breq_status = " . BadgeRequest::REQUEST_APPROVED . "
+                ELSE TRUE
+            END
+        )");
+
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
@@ -505,61 +515,6 @@ class BadgeLinkConditionsController extends SellerBaseController
             $frm->addSelectBox(Labels::getLabel('LBL_POSITION', $this->siteLangId), 'blinkcond_position', $positionArr, '', [], '');
         }
         return $frm;
-    }
-
-    public function badgeUnlink()
-    {
-        $this->userPrivilege->canEditBadgeLinks();
-        $blinkcond_id = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $blinkcond_id) {
-            FatUtility::dieJsonError($this->str_invalid_request);
-        }
-
-        if (!BadgeLinkCondition::getAttributesById($blinkcond_id, ['blinkcond_id'])) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
-        }
-
-        $this->unlink($blinkcond_id);
-        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function bulkBadgesUnlink()
-    {
-        $this->userPrivilege->canEditBadgeLinks();
-
-        $badgeLinkCondIdsArr = FatUtility::int(FatApp::getPostedData('badgeLinkIds'));
-        if (empty($badgeLinkCondIdsArr)) {
-            FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($badgeLinkCondIdsArr as $blinkcond_id) {
-            if (1 > $blinkcond_id) {
-                continue;
-            }
-
-            $this->unlink($blinkcond_id);
-        }
-        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function unlink(int $blinkcond_id)
-    {
-        if (1 > $blinkcond_id) {
-            FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        $obj = new BadgeLinkCondition($blinkcond_id);
-        if (!$obj->deleteRecord(false)) {
-            FatUtility::dieJsonError($obj->getError());
-        }
-        $this->removeLinkRecord($blinkcond_id);
     }
 
     public function unlinkRecord(int $blinkcond_id, int $record_id)
