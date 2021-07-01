@@ -1408,4 +1408,31 @@ class ImageController extends FatController
             break;
         }
     }
+
+    public function badgeRequestImage(int $bReqId, int $langId = 0, $sizeType = '')
+    {
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $bReqId, 0, $langId);
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+
+        $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH;
+        switch (strtoupper($sizeType)) {
+            case 'THUMB':
+                $w = 60;
+                $h = 60;
+                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+            break;
+            case 'MINI':
+                $w = 35;
+                $h = 35;
+                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+            break;
+            default:
+                if (is_numeric($sizeType)) {
+                    AttachedFile::displayImage($image_name, $sizeType, $sizeType, '', $filePath);
+                } else {
+                    AttachedFile::displayOriginalImage($image_name, '', $filePath);
+                }
+            break;
+        }
+    }
 }

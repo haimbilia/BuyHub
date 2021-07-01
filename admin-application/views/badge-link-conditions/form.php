@@ -1,8 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'web_form addUpdateForm--js');
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 6;
 
 $fld = $frm->getField('auto_update_other_langs_data');
 if (null != $fld) {
@@ -10,46 +8,27 @@ if (null != $fld) {
 	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
 
-$fld = $frm->getField('blinkcond_condition_from');
-if (null != $fld) {
-	$fld->developerTags['colClassPrefix'] = 'col-md-';
-	$fld->developerTags['col'] = 3;
-}
-
-$fld = $frm->getField('blinkcond_condition_to');
-if (null != $fld) {
-	$fld->developerTags['colClassPrefix'] = 'col-md-';
-	$fld->developerTags['col'] = 3;
-}
-
-$fld = $frm->getField('blinkcond_position');
-if (null != $fld) {
-	$fld->developerTags['colClassPrefix'] = 'col-md-';
-	$fld->developerTags['col'] = 3;
-}
-
-$fld = $frm->getField('badgelink_record_id');
-if (null != $fld) {
-	$fld->developerTags['colClassPrefix'] = 'col-md-';
-	$fld->developerTags['col'] = 9;
-	$fld->htmlAfterField = '<div class="recordsContainer--js p-0 box--scroller"></div>';
-}
-
-
 $fld = $frm->getField('record_condition');
 if (null != $fld) {
 	$fld->addFieldTagAttribute('class', 'recCond--js');
 }
+$badgeName = $badgeData['badge_name'];
+if (Badge::TYPE_BADGE == $badgeType) {
+	$icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, 0, false);
+	$uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+	$imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
+} else {
+	$ribbRow = $badgeData;
+	include CONF_THEME_PATH . '/_partial/get-ribbon.php';
+	$imageHtml = '<div class="badge-wrap">' . $ribbon . '</div>';
+}
+
 ?>
 <section class="section">
 	<div class="sectionhead">
 		<h4>
 			<?php 
-			if (Badge::TYPE_BADGE == $badgeType) {
-				echo Labels::getLabel('LBL_BADGES_LINKS_SETUP', $adminLangId); 
-			} else if (Badge::TYPE_RIBBON == $badgeType) {
-				echo Labels::getLabel('LBL_RIBBONS_LINKS_SETUP', $adminLangId); 
-			}
+			echo $badgeName . ' ' . Labels::getLabel('LBL_CONDITION_SETUP_FORM', $adminLangId);
 			?>
 		</h4>
 		<div class="section__toolbar">
@@ -58,6 +37,7 @@ if (null != $fld) {
 	</div>
 	<div class="sectionbody space">
 		<div class="row justify-content-center">
+			<div class="col-md-2 badgeImageSection--js"><?php echo $imageHtml; ?></div>
 			<div class="col-md-8">
 				<?php echo $frm->getFormTag(); 
 					echo $frm->getFieldHtml('blinkcond_id');
@@ -69,25 +49,8 @@ if (null != $fld) {
 					}
 				?>
 				<div class="row">
-					<div class="col-md-6">
-						<div class="field-set">
-							<div class="caption-wraper">
-								<label class="field_label">
-									<?php
-									$fld = $frm->getField('badge_name');
-									echo $fld->getCaption();
-									?>
-									<span class="spn_must_field">*</span></label>
-							</div>
-							<div class="field-wraper">
-								<div class="field_cover">
-									<?php echo $frm->getFieldHtml('badge_name'); ?>
-								</div>
-							</div>
-						</div>
-					</div>
 					<?php if (Badge::TYPE_BADGE == $badgeType) { ?>
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<div class="field-set">
 									<div class="caption-wraper">
 										<label class="field_label">
@@ -105,7 +68,7 @@ if (null != $fld) {
 							</div>
 						</div>
 					<?php } else if (Badge::TYPE_RIBBON == $badgeType) { ?>
-						<div class="col-md-6 position--js">
+						<div class="col-md-4 position--js">
 							<div class="field-set">
 								<div class="caption-wraper">
 									<label class="field_label">
@@ -123,9 +86,7 @@ if (null != $fld) {
 							</div>
 						</div>
 					<?php } ?>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="field-set">
 							<div class="caption-wraper">
 								<label class="field_label">
@@ -142,7 +103,7 @@ if (null != $fld) {
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="field-set">
 							<div class="caption-wraper">
 								<label class="field_label">
@@ -220,13 +181,13 @@ if (null != $fld) {
 								<div class="caption-wraper">
 									<label class="field_label">
 										<?php
-										$fld = $frm->getField('blinkcond_condition_from');
+										$fld = $frm->getField('blinkcond_from_value');
 										echo $fld->getCaption();
 										?>
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('blinkcond_condition_from'); ?>
+										<?php echo $frm->getFieldHtml('blinkcond_from_value'); ?>
 									</div>
 								</div>
 							</div>
@@ -236,13 +197,13 @@ if (null != $fld) {
 								<div class="caption-wraper">
 									<label class="field_label">
 										<?php
-										$fld = $frm->getField('blinkcond_condition_to');
+										$fld = $frm->getField('blinkcond_to_value');
 										echo $fld->getCaption();
 										?>
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('blinkcond_condition_to'); ?>
+										<?php echo $frm->getFieldHtml('blinkcond_to_value'); ?>
 									</div>
 								</div>
 							</div>

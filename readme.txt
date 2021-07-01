@@ -117,6 +117,8 @@ Fixes:
     => 054613 - Error display on invoice pdf page
     => 054742 - wrong message is populating on button on tooltip
     => 054591 - Getting delivery field in tax invoice on pickup order
+    => 054711 - when multiple products are linked with same shipping profile then pagination count is not proper
+
 
 Develop
 

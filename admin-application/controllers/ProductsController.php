@@ -273,24 +273,20 @@ class ProductsController extends AdminBaseController
     public function autoComplete()
     {
         $srch = Product::getSearchObject($this->adminLangId);
-        $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
-            $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
+            $cnd->attachCondition('product_identifier', 'LIKE', '%'. $keyword . '%', 'OR');
         }
+
         $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $srch->addMultipleFields(array('product_id', 'product_name', 'product_identifier'));
+        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
-        $products = $db->fetchAll($rs, 'product_id');
-        $json = array();
-        foreach ($products as $key => $product) {
-            $product['product_name'] = empty($product['product_name']) ? $product['product_identifier'] : $product['product_name'];
-            $json[] = array(
-                'id' => $key,
-                'name' => strip_tags(html_entity_decode($product['product_name'], ENT_QUOTES, 'UTF-8'))
-            );
-        }
-        die(json_encode($json));
+        $products = $db->fetchAll($rs);
+        die(json_encode($products));
     }
 
     private function getSeparateImageOptions($product_id, $lang_id)

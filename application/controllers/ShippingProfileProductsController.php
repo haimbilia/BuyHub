@@ -109,7 +109,7 @@ class ShippingProfileProductsController extends SellerBaseController
         return $frm;
     }
 
-    public function autoCompleteProducts()
+    public function autoCompleteProducts(int $excludeAdmin = 0)
     {
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $post = FatApp::getPostedData();
@@ -125,7 +125,9 @@ class ShippingProfileProductsController extends SellerBaseController
             $srch->addDirectCondition('((product_seller_id = 0 and psbs.psbs_user_id = ' . $this->userParentId . ') OR product_seller_id = ' . $this->userParentId . ')');
         } else {
             $cnd = $srch->addCondition('psbs.psbs_user_id', '=', $this->userParentId);
-            $cnd->attachCondition('product_seller_id', '=', 0, 'AND');
+            if (1 > $excludeAdmin) {
+                $cnd->attachCondition('product_seller_id', '=', 0, 'AND');
+            }
         }
         
         $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '=', Product::PRODUCT_TYPE_PHYSICAL);

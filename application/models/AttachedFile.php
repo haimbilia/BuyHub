@@ -72,6 +72,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_META_IMAGE = 59;
     public const FILETYPE_ORDER_FEEDBACK = 60;
     public const FILETYPE_BADGE = 61;
+    public const FILETYPE_BADGE_REQUEST = 62;
 
     public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 60;
 
@@ -86,6 +87,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_BLOG_POST_IMAGE_PATH = 'blog-post/';
     public const FILETYPE_BULK_IMAGES_PATH = 'bulk-images/';
     public const FILETYPE_BADGE_IMAGE_PATH = 'badge-images/';
+    public const FILETYPE_BADGE_REQUEST_IMAGE_PATH = 'badge-request-images/';
 
     public function __construct($fileId = 0)
     {
@@ -454,6 +456,9 @@ class AttachedFile extends MyAppModel
                 break;
             case self::FILETYPE_BADGE:
                 $path .= self::FILETYPE_BADGE_IMAGE_PATH;
+                break;
+            case self::FILETYPE_BADGE_REQUEST:
+                $path .= self::FILETYPE_BADGE_REQUEST_IMAGE_PATH;
                 break;
         }
         /* ] */
@@ -922,6 +927,7 @@ class AttachedFile extends MyAppModel
             AttachedFile::FILETYPE_APP_MAIN_SCREEN_IMAGE,
             AttachedFile::FILETYPE_APP_LOGO,
             AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE,
+            AttachedFile::FILETYPE_BADGE_REQUEST,
         ];
         //if (!in_array($fileType, $allowedFileTypes) && (!$fileType || !$recordId)) {
         // Remove condition of $recordId for handle all data of add/edit product category in single form

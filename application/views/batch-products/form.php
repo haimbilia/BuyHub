@@ -5,8 +5,8 @@ $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
  ?>
 <div class="popup__body">
-	<h2>Manage Batch Products</h2>
-	<ul class="tabs tabs--small    -js clearfix setactive-js">
+	<h2><?php echo Labels::getLabel('LBL_MANAGE_BATCH_PRODUCT', $siteLangId); ?></h2>
+	<ul class="tabs tabs--small-js clearfix setactive-js">
 		<li class="is-active"><a href="javascript:void(0)" onclick="batchForm()"><?php echo Labels::getLabel( 'LBL_General', $siteLangId ); ?></a></li>
         <li class="<?php echo (0 == $prodgroup_id) ? 'fat-inactive' : ''; ?>">
             <a href="javascript:void(0);" <?php echo (0 < $prodgroup_id) ? "onclick='batchLangForm(" . $prodgroup_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>

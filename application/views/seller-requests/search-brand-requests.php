@@ -1,6 +1,3 @@
-<?php
-$variables = array('siteLangId' => $siteLangId, 'action' => $action);
-$this->includeTemplate('seller-requests/_partial/requests-navigation.php', $variables, false); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
     $arr_flds = array(
@@ -24,7 +21,6 @@ $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $vari
 
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
     foreach ($arrListing as $sn => $row) {
-        $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
         foreach ($arr_flds as $key => $val) {

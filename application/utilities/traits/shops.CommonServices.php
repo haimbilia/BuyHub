@@ -1,5 +1,0 @@
-<?php
-
-trait CommonServices
-{
-}

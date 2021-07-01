@@ -194,7 +194,6 @@ $action = strtolower($action);
                     $userPrivilege->canViewBuyTogetherProducts(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewRelatedProducts(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true) ||
-                    $userPrivilege->canViewBadges(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)
                 ) { ?>
                     <li class="menu__item">
@@ -240,7 +239,8 @@ $action = strtolower($action);
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Related_Products', $siteLangId); ?></span></a></div>
                         </li>
                     <?php } ?>
-                    <?php $obj = new Plugin();
+                    <?php 
+                    $obj = new Plugin();
                     $pluginData = $obj->getDefaultPluginData(Plugin::TYPE_ADVERTISEMENT_FEED, null, $siteLangId);
                     if ($userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true) && false !== $pluginData && !empty($pluginData) && 0 < $pluginData['plugin_active'] && $userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == strtolower($pluginData['plugin_code'])) ? 'is-active' : ''; ?>">
@@ -256,32 +256,24 @@ $action = strtolower($action);
                             </div>
                         </li>
                     <?php } ?>
-
-                    <?php /* if ($userPrivilege->canViewBadges(UserAuthentication::getLoggedUserId(), true)) { ?>
-                        <li class="menu__item <?php echo ($controller == 'Badges' && $action == 'index') ? 'is-active' : ''; ?>">
+                    <?php if ($userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <li class="menu__item <?php echo ($controller == 'badges' && current($_GET) == 'badges/list/1') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
-                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Badges', 'index'); ?>">
-                                    <i class="icn fas fa-award"></i>
-                                    <span class="menu-item__title">
-                                        <?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS', $siteLangId); ?>
-                                    </span>
+                                <a title="<?php echo Labels::getLabel('LBL_BADGES_LINKING', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_BADGE]); ?>">
+                                    <i class="fa fa-award icn"></i>
+                                    <span class="menu-item__title"><?php echo Labels::getLabel('LBL_BADGES', $siteLangId); ?></span>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="menu__item <?php echo ($controller == 'badges' && current($_GET) == 'badges/list/2') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo Labels::getLabel('LBL_RIBBONS_LINKING', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_RIBBON]); ?>">
+                                    <i class="fas fa-shapes icn"></i>
+                                    <span class="menu-item__title"><?php echo Labels::getLabel('LBL_RIBBONS', $siteLangId); ?></span>
                                 </a>
                             </div>
                         </li>
                     <?php } ?>
-                    <?php if ($userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)) { ?>
-                        <li class="menu__item <?php echo ($controller == 'BadgeLinkConditions' && $action == 'index') ? 'is-active' : ''; ?>">
-                            <div class="menu__item__inner">
-                                <a title="<?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('BadgeLinkConditions', 'index'); ?>">
-                                    <i class="icn fas fa-award"></i>
-                                    <span class="menu-item__title">
-                                        <?php echo Labels::getLabel('LBL_BADGES_&_RIBBONS_LINKS', $siteLangId); ?>
-                                    </span>
-                                </a>
-                            </div>
-                        </li>
-                    <?php } */ ?>
-
                     <li class="divider"></li>
                 <?php } ?>
                 <?php if (

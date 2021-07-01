@@ -214,7 +214,8 @@ class Badge extends MyAppModel
             'badge_display_inside',
             'blinkcond_position',
             'badge_type',
-            'COALESCE(badge_name, badge_identifier) as badge_name'
+            'COALESCE(badge_name, badge_identifier) as badge_name',
+            'breq_id'
         ];
 
         $srch = new BadgeLinkConditionSearch();
@@ -229,6 +230,7 @@ class Badge extends MyAppModel
         }
 
         $srch->joinBadgeLinks();
+        $srch->joinBadgeRequest();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
 
@@ -251,17 +253,17 @@ class Badge extends MyAppModel
                     THEN 
                         (CASE 
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD . ' 
-                                THEN ' . $avgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                                THEN ' . $avgRating . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP . ' 
-                                THEN ' . $shopAvgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                                THEN ' . $shopAvgRating . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . ' 
-                                THEN ' . $completionRate . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                                THEN ' . $completionRate . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . ' 
-                                THEN ' . $completedOrders . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                                THEN ' . $completedOrders . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . ' 
-                                THEN ' . $returnAcceptanceRate . ' = blinkcond_condition_from
+                                THEN ' . $returnAcceptanceRate . ' = blinkcond_from_value
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . ' 
-                                THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
+                                THEN ' . $orderCancellationRate . ' = blinkcond_from_value
                             ELSE FALSE
                         END)
                     ELSE ' . $recordCondition . ' END)'
@@ -287,8 +289,18 @@ class Badge extends MyAppModel
                 ELSE TRUE 
             END)'
         );
+
+        $srch->addDirectCondition(
+            '(CASE 
+                WHEN breq_id IS NOT NULL
+                THEN breq_status = ' . BadgeRequest::REQUEST_APPROVED . ' 
+                ELSE TRUE 
+            END)'
+        );
+
         $srch->addCondition('badge_type', '=', $type);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
+        $srch->addGroupBy('blinkcond_badge_id');
         $srch->addOrder('blinkcond_id', 'DESC');
 
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -324,5 +336,32 @@ class Badge extends MyAppModel
             ];
         }
         return $urls;
+    }
+    
+    /**
+     * canAccess
+     *
+     * @param  mixed $badgeId
+     * @param  mixed $userId
+     * @return int
+     */
+    public static function canAccess(int $badgeId, int $userId): int
+    {
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinBadge();
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
+        $srch->addMultipleFields([
+            self::DB_TBL_PREFIX . 'id',
+            '(CASE
+                WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_RIBBON . ' OR ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_OPEN . '
+                    THEN 1
+                WHEN ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND breq_status =  ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . '
+                    THEN 1
+                ELSE 0
+            END) as canAccess'
+        ]);
+        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id', '=', $badgeId);
+        $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        return current($record);
     }
 }

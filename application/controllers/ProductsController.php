@@ -2135,4 +2135,25 @@ class ProductsController extends MyAppController
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
     }
+
+    public function autoComplete()
+    {
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $srch = new ProductSearch($this->siteLangId);        
+        $srch->addOrder('product_name');
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
+            $cnd->attachCondition('product_identifier', 'LIKE', '%'. $keyword . '%', 'OR');
+        }
+
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'seller_id', '=', UserAuthentication::getLoggedUserId());
+        
+        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
+              
+        $db = FatApp::getDb();
+        $products = $db->fetchAll($srch->getResultSet());
+        die(json_encode($products));
+    }
 }

@@ -109,11 +109,19 @@ class Navigation
         $gdprSrch->addCondition('ureq_deleted', '=', applicationConstants::NO);
         $gdprSrch->getResultSet();
         $gdprReqCount = $gdprSrch->recordCount();
-        
+
+        /* Badge requests */
+        $badgeRequest = new SearchBase(BadgeRequest::DB_TBL, 'breq');
+        $badgeRequest->addMultipleFields([BadgeRequest::DB_TBL_PREFIX . 'id']);
+        $badgeRequest->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', BadgeRequest::REQUEST_PENDING);
+        $badgeRequest->getResultSet();
+        $badgeRequestCount = $badgeRequest->recordCount();
+
         /* set counter variables [ */
         $template->set('brandReqCount', $brandReqCount);
         $template->set('categoryReqCount', $categoryReqCount);
         $template->set('custProdReqCount', $custProdReqCount);
+        $template->set('badgeRequestCount', $badgeRequestCount);
         $template->set('supReqCount', $supReqCount);
         $template->set('catReqCount', $catReqCount);
         $template->set('drReqCount', $drReqCount);

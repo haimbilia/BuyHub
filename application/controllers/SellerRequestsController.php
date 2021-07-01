@@ -1,6 +1,8 @@
 <?php
 class SellerRequestsController extends SellerBaseController
 {
+    use BadgeRequestSetup;
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -9,34 +11,38 @@ class SellerRequestsController extends SellerBaseController
 
     public function index()
     {
-        $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(0, true));
+        $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
 
         $srch = $this->getRequestedbrandObj();
-        $rs = $srch->getResultSet();
-        $reqBrands = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize(1);
+        $reqBrands = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $srch = $this->getRequestedCatObj();
-        $rs = $srch->getResultSet();
-        $reqCategories = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize(1);
+        $reqCategories = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $srch = $this->getRequestedProdObj();
-        $rs = $srch->getResultSet();
-        $reqProducts = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize(1);
+        $reqProducts = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $srch = $this->getRequestedBadgeObj();
+        $srch->setPageSize(1);
+        $reqBadges = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $noRecordFound = false;
-        if (empty($reqBrands) && empty($reqCategories) && empty($reqProducts)) {
+        if (empty($reqBrands) && empty($reqCategories) && empty($reqProducts) && empty($reqBadges)) {
             $noRecordFound = true;
         }
 
+        $this->set('canRequestBadge', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
         $this->set('noRecordFound', $noRecordFound);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
+        $this->_template->addCss(array('custom/page-css/select2.min.css'));
         $this->_template->render();
     }
 
     public function searchBrandRequests()
     {
-        $userId = UserAuthentication::getLoggedUserId();
-
         $post = FatApp::getPostedData();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
@@ -171,6 +177,26 @@ class SellerRequestsController extends SellerBaseController
         return $srch;
     }
 
+    private function getRequestedBadgeObj()
+    {
+        $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
+
+        $srch->addMultipleFields(array_merge(
+            BadgeRequest::ATTR,
+            [
+                'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
+                Badge::DB_TBL_PREFIX . 'id'
+            ]
+        ));
+
+        $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
+        $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
+        return $srch;
+    }
+
     /* ------Product Category Request [------*/
 
     public function categoryReqForm($categoryReqId = 0)
@@ -181,7 +207,7 @@ class SellerRequestsController extends SellerBaseController
         if (0 < $categoryReqId) {
             $data = ProductCategory::getAttributesById($categoryReqId, array('prodcat_id', 'prodcat_identifier', 'prodcat_parent'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
             $langData = ProductCategory::getLangDataArr($categoryReqId, array(ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id', ProductCategory::DB_TBL_PREFIX . 'name'));
             $catnameArr = array();
@@ -320,7 +346,7 @@ class SellerRequestsController extends SellerBaseController
         if (0 < $brandReqId) {
             $data = Brand::getAttributesById($brandReqId, array('brand_id', 'brand_identifier'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
             $frm->fill($data);
         }
@@ -478,7 +504,7 @@ class SellerRequestsController extends SellerBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($brandReqId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brandReqId)) {
@@ -691,5 +717,73 @@ class SellerRequestsController extends SellerBaseController
 
         $this->set('product', $productInfo);
         $this->_template->render(false, false);
+    }
+
+
+    /* ------Badge Request ------*/
+    public function searchBadgeRequests()
+    {
+        $post = FatApp::getPostedData();
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+
+        $srch = $this->getRequestedBadgeObj();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $requestedBadges = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $this->set('canEdit', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
+        $this->set("arrListing", $requestedBadges);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', $post);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('statusArr', BadgeRequest::getStatusArr($this->siteLangId));
+        $this->_template->render(false, false);
+    }
+
+    public function downloadFile(int $badgeReqId)
+    {
+        $reqUserId = BadgeRequest::getAttributesById($badgeReqId, 'breq_user_id');
+        if ($reqUserId != UserAuthentication::getLoggedUserId(0)) {
+            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_FILE", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
+        }
+
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
+        if ($res == false || 1 > $res['afile_id']) {
+            Message::addErrorMessage(Labels::getLabel("MSG_NOT_AVAILABLE_TO_DOWNLOAD", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
+        }
+
+        if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
+            Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
+        }
+
+        $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'];
+        AttachedFile::downloadAttachment($filePath, $res['afile_name']);
+    }
+
+    public function removeBadgeRequestRefFile(int $badgeReqId)
+    {
+        $reqUserId = BadgeRequest::getAttributesById($badgeReqId, 'breq_user_id');
+        if ($reqUserId != UserAuthentication::getLoggedUserId(0)) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_FILE", $this->siteLangId));
+        }
+
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
+        $aFileObj = new AttachedFile();
+        if (false == $aFileObj->deleteFile(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId)) {
+            FatUtility::dieJsonError($aFileObj->getError());
+        }
+
+        if ($res !== false && !empty($res['afile_physical_path'])) {
+            unlink(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path']);
+        }
+
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_REMOVED', $this->siteLangId));
     }
 }
