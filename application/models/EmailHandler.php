@@ -1180,9 +1180,13 @@ class EmailHandler extends FatModel
             }
             $shipmentInformation = '';
             if ($orderComment['oshistory_tracking_number'] != "") {
-                $shipmentInformation = Labels::getLabel('MSG_Shipment_Information', $langId) . ": " . Labels::getLabel('MSG_Tracking_Number', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_Via', $langId) . " " . $orderComment["op_shipping_duration_name"] . "<br/>";
+                $shipmentInformation = Labels::getLabel('MSG_Shipment_Information', $langId) . ": " . Labels::getLabel('MSG_Tracking_Number', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_Via', $langId) . " " . $orderComment["op_shipping_duration_name"];
+                if(!empty($orderComment['oshistory_tracking_url'])){
+                    $shipmentInformation.=' <a href="'.$orderComment['oshistory_tracking_url'].'" target="_blank">'.$orderComment['oshistory_tracking_url'].'</a>';
+                }                
+                $shipmentInformation.="<br>";                
             }
-
+            
             $charges = $orderObj->getOrderProductChargesArr($orderComment['op_id']);
             $orderComment['charges'] = $charges;
 

@@ -697,7 +697,7 @@ class Tax extends MyAppModel
 
         $taxApi = new $pluginKey($langId, $fromAddress, $toAddress);
         if (false === $taxApi->init()) {
-            $this->error = $$taxApi->getError();
+            $this->error = $taxApi->getError();
             return false;
         }
 

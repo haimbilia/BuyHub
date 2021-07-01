@@ -1412,45 +1412,84 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
             }
             $(input).addClass('hasFlag-js');
 
+            var hasOnlyFlag = $(element).hasClass('onlyFlag--js');
+
             var elementName = ($(input).attr('name') + '_dcode');
             var dialCodeElement = $('input[name="' + elementName + '"]');
-            if (0 < dialCodeElement.length && '' != dialCodeElement.val() && 'undefined' != typeof dialCodeElement.val()) {
-                var elementVal = dialCodeElement.val();
-                var countryCodePos = elementVal.indexOf('-');
-                if (0 < countryCodePos) {
-                    country = elementVal.substring((countryCodePos + 1), elementVal.length);
-                } else {
-                    country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+            if (false === hasOnlyFlag) {
+                if (0 < dialCodeElement.length && '' != dialCodeElement.val() && 'undefined' != typeof dialCodeElement.val()) {
+                    var elementVal = dialCodeElement.val();
+                    var countryCodePos = elementVal.indexOf('-');
+                    if (0 < countryCodePos) {
+                        country = elementVal.substring((countryCodePos + 1), elementVal.length);
+                    } else {
+                        country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+                    }
                 }
             }
 
             var iti = window.intlTelInput(input, {
-                separateDialCode: true,
+                separateDialCode: !hasOnlyFlag,
                 initialCountry: country,
             });
 
-            var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
-            if (0 < dialCodeElement.length) {
+            var dialCode = "+" + iti.getSelectedCountryData().dialCode;
+            var dialCodeWithPhone = dialCode + '-' + iti.getSelectedCountryData().iso2;
+
+            $(input).attr('data-before', dialCode);
+
+            if (0 < dialCodeElement.length && false === hasOnlyFlag) {
                 dialCodeElement.insertAfter(input);
                 if ('' == dialCodeElement.val()) {
-                    dialCodeElement.val(dCode);
+                    dialCodeElement.val(dialCodeWithPhone);
                 }
-            } else {
+            } else if (false === hasOnlyFlag) {
                 $('<input>').attr({
                     type: 'hidden',
                     name: elementName,
-                    value: dCode
+                    value: dialCodeWithPhone
                 }).insertAfter(input);
+            } else if (true === hasOnlyFlag) {
+                var phoneNumber = $(input).val();
+                if ('undefined' == typeof phoneNumber || '' == phoneNumber) {
+                    phoneNumber = dialCode;
+                } else if (-1 == phoneNumber.indexOf('+')) {
+                    phoneNumber = dialCode + phoneNumber;
+                }
+
+                $(input).val(phoneNumber);
             }
 
             input.addEventListener('countrychange', function (e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== 'undefined') {
-                    var dCode = "+" + iti.getSelectedCountryData().dialCode + '-' + iti.getSelectedCountryData().iso2;
-                    if ($('input[name="' + elementName + '"]').length < 1) {
-                        $.systemMessage($(input).attr('name') + " " + langLbl.dialCodeFieldNotFound, 'alert-danger');
-                        return;
+                    var dialCode = "+" + iti.getSelectedCountryData().dialCode;
+                    var dialCodeWithPhone = dialCode + '-' + iti.getSelectedCountryData().iso2;
+
+                    if (false === hasOnlyFlag) {
+                        if ($('input[name="' + elementName + '"]').length < 1) {
+                            $.systemMessage($(input).attr('name') + " " + langLbl.dialCodeFieldNotFound, 'alert-danger');
+                            return;
+                        }
+                        $('input[name="' + elementName + '"]').val(dialCodeWithPhone);
+                    } else {
+                        var phoneNumber = $(input).val();
+                        if ('undefined' == typeof phoneNumber || '' == phoneNumber) {
+                            phoneNumber = dialCode;
+                        } else if (-1 == phoneNumber.indexOf('+')) {
+                            phoneNumber = dialCode + phoneNumber;
+                        } else if ($(input).data('before') != dialCode) {
+                            phoneNumber = phoneNumber.replace($(input).data('before'), dialCode);
+                        }
+                        $(input).val(phoneNumber);
                     }
-                    $('input[name="' + elementName + '"]').val(dCode);
+
+                    $(input).attr('data-before', dialCode);
+                }
+            });
+
+            input.addEventListener('keyup', function (e) {
+                if (true === hasOnlyFlag && '+' != (input.value).charAt(0)) {
+                    input.value = '+' + input.value;
                 }
             });
         }
@@ -1462,7 +1501,6 @@ function getCountryIso2CodeFromDialCode(dialCode) {
     var countryData = countriesData.filter(function (country) { return country.dialCode == dialCode });
     return countryData[0].iso2;
 }
-
 
 /* read more functionality [ */
 $(document).on('click', '.readMore', function () {
@@ -1761,6 +1799,10 @@ function loadMoreImages(obj) {
     $('a', obj).removeAttr('data-count').attr('onclick', 'previewImage(this)');
     $(obj).removeClass('more-media').removeAttr('onclick');
     $(obj).nextAll().removeClass('d-none');
+}
+
+function redirectUrl(url) {
+    window.location.href = url;
 }
 
 $.extend(fcom, {

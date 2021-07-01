@@ -28,6 +28,17 @@ $(function () {
 (function () {
     var dv = '#listingDiv';
 
+    goToSearchPage = function (page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
+        }
+        var frm = document.frmReportSearchPaging;
+        $(frm.page).val(page);
+        searchReport(frm);
+    };
+    redirectBack = function (redirecrt) {
+        window.location = redirecrt;
+    }
     reloadList = function (withloader) {
         var frm = document.frmReportSearchPaging;
         searchReport(frm, withloader);
@@ -44,18 +55,15 @@ $(function () {
             $(dv).html(fcom.getLoader());
         }
 
-        fcom.ajax(fcom.makeUrl('Reports', 'searchProductsInventory'), data, function (t) {
-            $(dv).html(t);
+        fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+            $(dv).html(res);
         });
     };
 
-    goToSearchPage = function (page) {
-        if (typeof page == undefined || page == null) {
-            page = 1;
-        }
-        var frm = document.frmReportSearchPaging;
-        $(frm.page).val(page);
-        searchReport(frm);
+    exportReport = function () {
+        setColumnsData(document.frmReportSearch);
+        document.frmReportSearch.action = fcom.makeUrl(controllerName, 'search', ['export']);
+        document.frmReportSearch.submit();
     }
 
     clearSearch = function () {
@@ -66,12 +74,6 @@ $(function () {
             }
         });
         searchReport(document.frmReportSearch);
-    };
-
-    exportReport = function () {
-        setColumnsData(document.frmReportSearch);
-        document.frmReportSearch.action = fcom.makeUrl('Reports', 'exportProductsInventoryReport');
-        document.frmReportSearch.submit();
     };
 
     setColumnsData = function (frm) {

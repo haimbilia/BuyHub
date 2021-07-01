@@ -1,10 +1,28 @@
+
 <?php
 
 class StripeConnectSettingsController extends PaymentMethodSettingsController
 {
+
     public static function form(int $langId)
     {
         $frm = new Form('frmStripeConnect');
+
+        $keyName = 'StripeConnect';
+
+        $obj = PluginHelper::callPlugin($keyName, [$langId], $error, $langId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_PAYOUT_INTERVAL', $langId), 'payouts_schedule_interval', $obj->getPayoutInterval(), '', ['class' => $keyName . 'PayoutInterval--js'], '');
+        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', $langId) . '</small>';
+
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_PAYOUT_DELAY_DAYS', $langId), 'payouts_schedule_delay_days', '', ['class' => $keyName . 'PayoutDelayDays--js', 'disabled' => 'disabled']);
+        $fld->requirements()->setPositive();
+        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', $langId) . '</small>';
+
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_PAYOUT_ON_DAY_OF_THE_WEEK', $langId), 'payouts_schedule_weekly_anchor', TimeSlot::getDaysArr($langId), '', ['class' => $keyName . 'PayoutWeekly--js', 'disabled' => 'disabled']);
+        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_STRIPE_CONNECT_WEEK_DAY_DESC', $langId) . '</small>';
+
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_PAYOUT_ON_DAY_OF_THE_MONTH', $langId), 'payouts_schedule_monthly_anchor', $obj->getPayoutDays(), '', ['class' => $keyName . 'PayoutMonthDays--js', 'disabled' => 'disabled']);
+        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_STRIPE_CONNECT_MONTH_DAY_DESC', $langId) . '</small>';
 
         $envoirment = Plugin::getEnvArr($langId);
         $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');

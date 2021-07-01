@@ -1,25 +1,25 @@
-$(document).ready(function() {
+$(document).ready(function () {
     searchCollection(document.frmSearch);
-    $(document).on("click", ".language-js", function(){
+    $(document).on("click", ".language-js", function () {
         $(".CollectionImages-js li").addClass('d-none');
-        $('#Image-'+$(this).val()).removeClass('d-none');
+        $('#Image-' + $(this).val()).removeClass('d-none');
     });
-    $(document).on("click", ".bgLanguage-js", function(){
+    $(document).on("click", ".bgLanguage-js", function () {
         $(".bgCollectionImages-js li").addClass('d-none');
-        $('#bgImage-'+$(this).val()).removeClass('d-none');
+        $('#bgImage-' + $(this).val()).removeClass('d-none');
     });
 });
 
-(function() {
+(function () {
     var runningAjaxReq = false;
     var dv = '#listing';
 
-    reloadList = function() {
+    reloadList = function () {
         var frm = document.frmSearch;
         searchCollection(frm);
     };
 
-    goToSearchPage = function(page) {
+    goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -27,17 +27,17 @@ $(document).ready(function() {
         $(frm.page).val(page);
         searchCollection(frm);
     };
-    getCollectionTypeLayout = function(frm, collectionType, searchForm) {
+    getCollectionTypeLayout = function (frm, collectionType, searchForm) {
 
 
         callCollectionTypePopulate(collectionType);
 
 
-        fcom.ajax(fcom.makeUrl('Collections', 'getCollectionTypeLayout', [collectionType, searchForm]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Collections', 'getCollectionTypeLayout', [collectionType, searchForm]), '', function (t) {
             $("#" + frm + " [name=collection_layout_type]").html(t);
         });
     }
-    searchCollection = function(form) {
+    searchCollection = function (form) {
         /*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
         var data = '';
         if (form) {
@@ -46,61 +46,60 @@ $(document).ready(function() {
         /*]*/
         $(dv).html(fcom.getLoader());
 
-        fcom.ajax(fcom.makeUrl('Collections', 'search'), data, function(res) {
+        fcom.ajax(fcom.makeUrl('Collections', 'search'), data, function (res) {
             $(dv).html(res);
         });
     };
 
-    collectionForm = function(type, layoutType, id) {
+    collectionForm = function (type, layoutType, id) {
         fcom.displayProcessing();
         fcom.resetEditorInstance();
-        fcom.ajax(fcom.makeUrl('Collections', 'form', [type, layoutType, id]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Collections', 'form', [type, layoutType, id]), '', function (t) {
             fcom.updateFaceboxContent(t);
         });
     };
 
-    collectionLayouts = function() {
-        fcom.ajax(fcom.makeUrl('Collections', 'layouts'), '', function(t) {
+    collectionLayouts = function () {
+        fcom.ajax(fcom.makeUrl('Collections', 'layouts'), '', function (t) {
             fcom.updateFaceboxContent(t, 'content fbminwidth faceboxWidth');
         });
     };
 
-    setupCollection = function() {
-        // if (!$(frm).validate()) return;
+    setupCollection = function () {
         var getFrm = $('#tabs_form form')[0];
-        var validator = $(getFrm).validation({errordisplay: 3});
+        var validator = $(getFrm).validation({ errordisplay: 3 });
         validator.validate();
         if (!validator.isValid()) return;
         var data = fcom.frmData(getFrm);
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'setup'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'setup'), data, function (t) {
             reloadList();
-			if(t.openBannersForm) {
-            	banners(t.collectionId);
-            	return;
+            if (t.openBannersForm) {
+                banners(t.collectionId);
+                return;
             }
-            if(t.openRecordForm) {
-            	recordForm(t.collectionId, t.collectionType);
-            	return;
+            if (t.openRecordForm) {
+                recordForm(t.collectionId, t.collectionType);
+                return;
             }
-            if(t.openMediaForm) {
-            	collectionMediaForm(t.collectionId);
-            	return;
+            if (t.openMediaForm) {
+                collectionMediaForm(t.collectionId);
+                return;
             }
             $(document).trigger('close.facebox');
         });
     }
 
-    deleteRecord = function(id) {
+    deleteRecord = function (id) {
         if (!confirm(langLbl.confirmDelete)) {
             return;
         }
         data = 'collectionId=' + id;
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'deleteRecord'), data, function(res) {
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'deleteRecord'), data, function (res) {
             reloadList();
         });
     };
 
-    toggleStatus = function(e, obj, canEdit) {
+    toggleStatus = function (e, obj, canEdit) {
         if (canEdit == 0) {
             e.preventDefault();
             return;
@@ -115,7 +114,7 @@ $(document).ready(function() {
             return false;
         }
         data = 'collectionId=' + collectionId;
-        fcom.ajax(fcom.makeUrl('Collections', 'changeStatus'), data, function(res) {
+        fcom.ajax(fcom.makeUrl('Collections', 'changeStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
@@ -124,106 +123,106 @@ $(document).ready(function() {
             }
         });
     };
-	
-    recordForm = function(id, type) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function(t) {
+
+    recordForm = function (id, type) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
                 $.facebox(t, 'faceboxWidth');
                 reloadRecordsList(id, type);
             });
         });
     };
-	
-	updateRecord = function(collection_id, record_id) {
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'updateCollectionRecords'), 'collection_id=' + collection_id + '&record_id=' + record_id, function(t) {
+
+    updateRecord = function (collection_id, record_id) {
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'updateCollectionRecords'), 'collection_id=' + collection_id + '&record_id=' + record_id, function (t) {
             reloadRecordsList(t.collection_id, t.collection_type);
         });
     };
 
-    removeCollectionRecord = function(collection_id, record_id) {
+    removeCollectionRecord = function (collection_id, record_id) {
         var agree = confirm(langLbl.confirmRemoveProduct);
         if (!agree) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeCollectionRecord'), 'collection_id=' + collection_id + '&record_id=' + record_id, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeCollectionRecord'), 'collection_id=' + collection_id + '&record_id=' + record_id, function (t) {
             reloadRecordsList(collection_id, t.collection_type);
         });
     };
-    
-    banners = function(collection_id) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('Collections', 'banners', [collection_id]), '', function(t) {
+
+    banners = function (collection_id) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('Collections', 'banners', [collection_id]), '', function (t) {
                 $.facebox(t, 'faceboxWidth');
                 reloadBannersList(collection_id);
             });
         });
     };
-	
-	removeBanner = function(fileId, bannerId, langId, screen){
-		if( !confirm(langLbl.confirmDeleteImage) ){ return; }
-		fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeBanner',[fileId, bannerId, langId, screen]), '', function(t) {
-			$("#banner-image-listing").html('');
-            $("[name='banner_image_id["+langId+"_"+screen+"]']").val('');
-		});
+
+    removeBanner = function (fileId, bannerId, langId, screen) {
+        if (!confirm(langLbl.confirmDeleteImage)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeBanner', [fileId, bannerId, langId, screen]), '', function (t) {
+            $("#banner-image-listing").html('');
+            $("[name='banner_image_id[" + langId + "_" + screen + "]']").val('');
+        });
     };
-    
-    reloadBannersList = function(collection_id) {
+
+    reloadBannersList = function (collection_id) {
         $("#banners_list-js").html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Collections', 'searchBanners', [collection_id]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Collections', 'searchBanners', [collection_id]), '', function (t) {
             $("#banners_list-js").html(t);
         });
     };
-    
-    toggleBannerStatus = function( e,obj,canEdit ){
-		if(canEdit == 0){
-			e.preventDefault();
-			return;
-		}
-		if(!confirm(langLbl.confirmUpdateStatus)){
-			e.preventDefault();
-			return;
-		}
-		var bannerId = parseInt(obj.value);
-		if( bannerId < 1 ){
-			$.mbsmessage(langLbl.invalidRequest,true,'alert--danger');
-			return false;
-		}
-		data = 'bannerId='+bannerId;
-		fcom.ajax(fcom.makeUrl('Banners','changeStatus'),data,function(res){
-			var ans =$.parseJSON(res);
-			if(ans.status == 1){
-				$.mbsmessage(ans.msg,true,'alert--success');
-				$(obj).toggleClass("active");
-			}else{
-				$.mbsmessage(ans.msg,true,'alert--danger');
-			}
-		});
-	};
-	
-	bannerForm = function(collection_id, banner_id) {
-        fcom.ajax(fcom.makeUrl('Collections', 'bannerForm', [collection_id, banner_id]), '', function(t) {
-            $("#banners_list-js").html(t);
-			bannerImages(collection_id,banner_id,0,1);
+
+    toggleBannerStatus = function (e, obj, canEdit) {
+        if (canEdit == 0) {
+            e.preventDefault();
+            return;
+        }
+        if (!confirm(langLbl.confirmUpdateStatus)) {
+            e.preventDefault();
+            return;
+        }
+        var bannerId = parseInt(obj.value);
+        if (bannerId < 1) {
+            $.mbsmessage(langLbl.invalidRequest, true, 'alert--danger');
+            return false;
+        }
+        data = 'bannerId=' + bannerId;
+        fcom.ajax(fcom.makeUrl('Banners', 'changeStatus'), data, function (res) {
+            var ans = $.parseJSON(res);
+            if (ans.status == 1) {
+                $.mbsmessage(ans.msg, true, 'alert--success');
+                $(obj).toggleClass("active");
+            } else {
+                $.mbsmessage(ans.msg, true, 'alert--danger');
+            }
         });
     };
-	
-	setupBanners = function(frm) {
+
+    bannerForm = function (collection_id, banner_id) {
+        fcom.ajax(fcom.makeUrl('Collections', 'bannerForm', [collection_id, banner_id]), '', function (t) {
+            $("#banners_list-js").html(t);
+            bannerImages(collection_id, banner_id, 0, 1);
+        });
+    };
+
+    setupBanners = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'setupBanner'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'setupBanner'), data, function (t) {
             reloadBannersList(t.collection_id);
         });
     }
-	
-    reloadRecordsList = function(collection_id, collection_type) {
+
+    reloadRecordsList = function (collection_id, collection_type) {
         $("#records_list").html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Collections', 'collectionRecords', [collection_id, collection_type]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Collections', 'collectionRecords', [collection_id, collection_type]), '', function (t) {
             $("#records_list").html(t);
         });
     };
-	
-    collectionMediaForm = function(collectionId) {
-        fcom.ajax(fcom.makeUrl('Collections', 'mediaForm', [collectionId]), '', function(t) {
+
+    collectionMediaForm = function (collectionId) {
+        fcom.ajax(fcom.makeUrl('Collections', 'mediaForm', [collectionId]), '', function (t) {
             $.facebox(t);
             var parentSiblings = $(".displayMediaOnly--js").closest("div.row").siblings('div.row:not(:first)');
             if (0 < $(".displayMediaOnly--js:checked").val()) {
@@ -234,33 +233,33 @@ $(document).ready(function() {
         });
     };
 
-    removeCollectionImage = function(collectionId, langId) {
+    removeCollectionImage = function (collectionId, langId) {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeImage', [collectionId, langId]), '', function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeImage', [collectionId, langId]), '', function (t) {
             collectionMediaForm(collectionId);
         });
     };
 
-    removeCollectionBGImage = function(collectionId, langId) {
+    removeCollectionBGImage = function (collectionId, langId) {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeBgImage', [collectionId, langId]), '', function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeBgImage', [collectionId, langId]), '', function (t) {
             collectionMediaForm(collectionId);
         });
     };
 
-    clearSearch = function() {
+    clearSearch = function () {
         document.frmSearch.reset();
         searchCollection(document.frmSearch);
         var collectionType = 0;
-        fcom.ajax(fcom.makeUrl('Collections', 'getCollectionTypeLayout', [collectionType, 1]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Collections', 'getCollectionTypeLayout', [collectionType, 1]), '', function (t) {
             $("[name=collection_layout_type]").html(t);
         });
     };
-    callCollectionTypePopulate = function(val) {
+    callCollectionTypePopulate = function (val) {
         if (val == 1) {
             $("#collection_criteria_div").show();
         } else {
@@ -268,37 +267,37 @@ $(document).ready(function() {
         }
     };
 
-    deleteSelected = function(){
-        if(!confirm(langLbl.confirmDelete)){
+    deleteSelected = function () {
+        if (!confirm(langLbl.confirmDelete)) {
             return false;
         }
-        $("#frmCollectionListing").attr("action",fcom.makeUrl('Collections','deleteSelected')).submit();
+        $("#frmCollectionListing").attr("action", fcom.makeUrl('Collections', 'deleteSelected')).submit();
     };
 
-    displayMediaOnly = function(collectionId, obj) {
+    displayMediaOnly = function (collectionId, obj) {
         var parentSiblings = $(obj).closest("div.row").siblings('div.row:not(:first)');
         var value = (obj.checked) ? 1 : 0;
-        fcom.ajax(fcom.makeUrl('Collections', 'displayMediaOnly', [collectionId, value]), '', function(t) {
-			var ans = $.parseJSON(t);
-            if(0 == ans.status){
-                $.systemMessage(ans.msg,'alert--danger');
+        fcom.ajax(fcom.makeUrl('Collections', 'displayMediaOnly', [collectionId, value]), '', function (t) {
+            var ans = $.parseJSON(t);
+            if (0 == ans.status) {
+                $.systemMessage(ans.msg, 'alert--danger');
                 $(obj).prop('checked', false);
                 return false
-            } else{
+            } else {
                 (0 < value) ? parentSiblings.show() : parentSiblings.hide();
             }
-		});
+        });
     };
 
-    popupImage = function(inputBtn){
+    popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('Collections', 'imgCropper'), '', function(t) {
-    			$('#cropperBox-js').html(t);
-    			$("#mediaForm-js").css("display", "none");
+            fcom.ajax(fcom.makeUrl('Collections', 'imgCropper'), '', function (t) {
+                $('#cropperBox-js').html(t);
+                $("#mediaForm-js").css("display", "none");
                 var file = inputBtn.files[0];
                 var minWidth = document.frmCollectionMedia.min_width.value;
                 var minHeight = document.frmCollectionMedia.min_height.value;
-        		var options = {
+                var options = {
                     aspectRatio: aspectRatio,
                     data: {
                         width: minWidth,
@@ -308,15 +307,15 @@ $(document).ready(function() {
                     minCropBoxHeight: minHeight,
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: 'high',
-					imageSmoothingEnabled: true,
-    	        };
+                    imageSmoothingEnabled: true,
+                };
                 $(inputBtn).val('');
                 return cropImage(file, options, 'uploadImages', inputBtn);
-        	});
+            });
         }
-	};
+    };
 
-	uploadImages = function(formData){
+    uploadImages = function (formData) {
         var collection_id = document.frmCollectionMedia.collection_id.value;
         var langId = document.frmCollectionMedia.image_lang_id.value;
         var fileType = document.frmCollectionMedia.file_type.value;
@@ -332,50 +331,49 @@ $(document).ready(function() {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function() {
-                 $('#loader-js').html(fcom.getLoader());
+            beforeSend: function () {
+                $('#loader-js').html(fcom.getLoader());
             },
-            complete: function() {
-                 $('#loader-js').html(fcom.getLoader());
+            complete: function () {
+                $('#loader-js').html(fcom.getLoader());
             },
-            success: function(ans) {
-                if(0 == ans.status){
+            success: function (ans) {
+                if (0 == ans.status) {
                     $.mbsmessage.close();
-                    $.systemMessage(ans.msg,'alert--danger');
+                    $.systemMessage(ans.msg, 'alert--danger');
                 } else {
                     collectionMediaForm(ans.collection_id);
                 }
             },
-            error: function(xhr, ajaxOptions, thrownError) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
-	}
-    
-    translateData = function(item){
+    }
+
+    translateData = function (item) {
         var autoTranslate = $("input[name='auto_update_other_langs_data']:checked").length;
         var defaultLang = $(item).attr('defaultLang');
-        var collectionName = $("input[name='collection_name["+defaultLang+"]']").val();
+        var collectionName = $("input[name='collection_name[" + defaultLang + "]']").val();
         var toLangId = $(item).attr('language');
-        var alreadyOpen = $('#collapse_'+toLangId).hasClass('active');
+        var alreadyOpen = $('#collapse_' + toLangId).hasClass('active');
 
-        if(autoTranslate == 0 || collectionName == "" || alreadyOpen == true){
+        if (autoTranslate == 0 || collectionName == "" || alreadyOpen == true) {
             return false;
         }
-        
-        if ($("textarea[name='epage_content_"+defaultLang+"']").length > 0) {
-            // var epageContent = $("textarea[name='epage_content_"+defaultLang+"']").val();
+
+        if ($("textarea[name='epage_content_" + defaultLang + "']").length > 0) {
             var oEdit = eval(oUtil.arrEditor[0]);
             var epageContent = oEdit.getTextBody();
-            var data = "collectionName="+collectionName+"&epageContent="+epageContent+"&toLangId="+toLangId ;
+            var data = "collectionName=" + collectionName + "&epageContent=" + epageContent + "&toLangId=" + toLangId;
         } else {
-            var data = "collectionName="+collectionName+"&toLangId="+toLangId;
+            var data = "collectionName=" + collectionName + "&toLangId=" + toLangId;
         }
-        
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'translatedData'), data, function(t) {
-            if(t.status == 1){
-                $("input[name='collection_name["+toLangId+"]']").val(t.collectionName);
-                if ($("textarea[name='epage_content_"+toLangId+"']").length > 0) {
+
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'translatedData'), data, function (t) {
+            if (t.status == 1) {
+                $("input[name='collection_name[" + toLangId + "]']").val(t.collectionName);
+                if ($("textarea[name='epage_content_" + toLangId + "']").length > 0) {
                     var oEdit1 = eval(oUtil.arrEditor[toLangId - 1]);
                     oEdit1.putHTML(t.epageContent);
                     var layout = langLbl['language' + toLangId];
@@ -385,72 +383,72 @@ $(document).ready(function() {
             }
         });
     }
-    
-    translateBannerData = function(item){
+
+    translateBannerData = function (item) {
         var autoTranslate = $("input[name='auto_update_other_langs_data']:checked").length;
         var defaultLang = $(item).attr('defaultLang');
-        var title = $("input[name='banner_title["+defaultLang+"]']").val();
+        var title = $("input[name='banner_title[" + defaultLang + "]']").val();
         var toLangId = $(item).attr('language');
-        var alreadyOpen = $('#collapse_'+toLangId).hasClass('active');
-        if(autoTranslate == 0 || title == "" || alreadyOpen == true){
+        var alreadyOpen = $('#collapse_' + toLangId).hasClass('active');
+        if (autoTranslate == 0 || title == "" || alreadyOpen == true) {
             return false;
         }
-        var data = "collectionName="+title+"&toLangId="+toLangId ;
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'translatedData'), data, function(t) {
-            if(t.status == 1){
-                $("input[name='banner_title["+toLangId+"]']").val(t.collectionName);
+        var data = "collectionName=" + title + "&toLangId=" + toLangId;
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'translatedData'), data, function (t) {
+            if (t.status == 1) {
+                $("input[name='banner_title[" + toLangId + "]']").val(t.collectionName);
             }
         });
     }
 
-    bannerImages = function(collectionId,bannerId=0,langId=0,screen=0){
-		fcom.ajax(fcom.makeUrl('Collections', 'bannerImages', [collectionId,bannerId,langId,screen]), '', function(t) {
-			$('#banner-image-listing').html(t);
+    bannerImages = function (collectionId, bannerId = 0, langId = 0, screen = 0) {
+        fcom.ajax(fcom.makeUrl('Collections', 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
+            $('#banner-image-listing').html(t);
             var bannerImageId = $("#banner-image-listing li").attr('id');
             var selectedLangId = $(".banner-language-js").val();
             var screen = $(".prefDimensions-js").val();
-			$("[name='banner_image_id["+selectedLangId+"_"+screen+"]']").val(bannerImageId);
-			fcom.resetFaceboxHeight();
-		});
-	};
+            $("[name='banner_image_id[" + selectedLangId + "_" + screen + "]']").val(bannerImageId);
+            fcom.resetFaceboxHeight();
+        });
+    };
 
-    bannerPopupImage = function(inputBtn){
-		if (inputBtn.files && inputBtn.files[0]) {
-	        fcom.ajax(fcom.makeUrl('Collections', 'imgCropper'), '', function(t) {
-				$('#cropperBox-js').html(t);
-    			$("#mediaForm-js").css("display", "none");
+    bannerPopupImage = function (inputBtn) {
+        if (inputBtn.files && inputBtn.files[0]) {
+            fcom.ajax(fcom.makeUrl('Collections', 'imgCropper'), '', function (t) {
+                $('#cropperBox-js').html(t);
+                $("#mediaForm-js").css("display", "none");
                 var file = inputBtn.files[0];
-				var minWidth = document.frmBanner.banner_min_width.value;
-	            var minHeight = document.frmBanner.banner_min_height.value;
-	    		var options = {
-	                aspectRatio: aspectRatio,
-	                data: {
-	                    width: minWidth,
-	                    height: minHeight,
-	                },
-	                minCropBoxWidth: minWidth,
-	                minCropBoxHeight: minHeight,
+                var minWidth = document.frmBanner.banner_min_width.value;
+                var minHeight = document.frmBanner.banner_min_height.value;
+                var options = {
+                    aspectRatio: aspectRatio,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: 'high',
-					imageSmoothingEnabled: true,
-		        };
-				$(inputBtn).val('');
-		    	return cropImage(file, options, 'uploadBannerImages', inputBtn);
-	    	});
-		}
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val('');
+                return cropImage(file, options, 'uploadBannerImages', inputBtn);
+            });
+        }
     };
-    
-    uploadBannerImages = function(formData){
+
+    uploadBannerImages = function (formData) {
         var frmName = formData.get("frmName");
-		
-		var collectionId = $("[name='collection_id']").val();
-		var bannerId = $("[name='banner_id']").val();
-		var blocationId = $("[name='blocation_id']").val();
+
+        var collectionId = $("[name='collection_id']").val();
+        var bannerId = $("[name='banner_id']").val();
+        var blocationId = $("[name='blocation_id']").val();
         var langId = $("[name='banner_lang_id']").val();
         var bannerScreen = $("[name='banner_screen']").val();
         var afileId = $("#banner-image-listing li").attr('id');
-		formData.append('banner_id', bannerId);
-		formData.append('blocation_id', blocationId);
+        formData.append('banner_id', bannerId);
+        formData.append('blocation_id', blocationId);
         formData.append('banner_screen', bannerScreen);
         formData.append('lang_id', langId);
         formData.append('afile_id', afileId);
@@ -462,47 +460,46 @@ $(document).ready(function() {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-            complete: function() {
+            complete: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-			success: function(ans) {
-				if(ans.status==1)
-				{
-					$('#cropperBox-js').html('');
-					$("#mediaForm-js").css("display", "block");
-					fcom.displaySuccessMessage(ans.msg);
-					bannerImages(collectionId, bannerId, langId, bannerScreen);
-				} else {
-					fcom.displayErrorMessage(ans.msg);
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
+            success: function (ans) {
+                if (ans.status == 1) {
+                    $('#cropperBox-js').html('');
+                    $("#mediaForm-js").css("display", "block");
+                    fcom.displaySuccessMessage(ans.msg);
+                    bannerImages(collectionId, bannerId, langId, bannerScreen);
+                } else {
+                    fcom.displayErrorMessage(ans.msg);
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
         });
-	}
-	
-	deleteImage = function(fileId, prodcatId, imageType, langId, slide_screen){
-		if( !confirm(langLbl.confirmDeleteImage) ){ return; }
-		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage',[fileId,prodcatId,imageType,langId,slide_screen]), '', function(t) {
-			$("#banner-image-listing").html('');
-            $("[name='banner_image_id["+langId+"_"+slide_screen+"]']").val('');
-		});
+    }
+
+    deleteImage = function (fileId, prodcatId, imageType, langId, slide_screen) {
+        if (!confirm(langLbl.confirmDeleteImage)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage', [fileId, prodcatId, imageType, langId, slide_screen]), '', function (t) {
+            $("#banner-image-listing").html('');
+            $("[name='banner_image_id[" + langId + "_" + slide_screen + "]']").val('');
+        });
     };
 
 })();
 
-$(document).on('change','.prefDimensions-js',function(){
-	var banner_screen = $(this).val();
-	var banner_id = $("input[name='banner_id']").val();
-	var collection_id = $("input[name='collection_id']").val();
-	var lang_id = $(".banner-language-js").val();
-    var imageId = $("[name='banner_image_id["+lang_id+"_"+banner_screen+"]']").val();
-    if(banner_id == 0){
-        if(imageId > 0 ){
+$(document).on('change', '.prefDimensions-js', function () {
+    var banner_screen = $(this).val();
+    var banner_id = $("input[name='banner_id']").val();
+    var collection_id = $("input[name='collection_id']").val();
+    var lang_id = $(".banner-language-js").val();
+    var imageId = $("[name='banner_image_id[" + lang_id + "_" + banner_screen + "]']").val();
+    if (banner_id == 0) {
+        if (imageId > 0) {
             bannerImages(collection_id, banner_id, lang_id, banner_screen);
         } else {
             $("#banner-image-listing").html('');
@@ -512,14 +509,14 @@ $(document).on('change','.prefDimensions-js',function(){
     }
 });
 
-$(document).on('change','.banner-language-js',function(){
-	var lang_id = $(this).val();
-	var banner_id = $("input[name='banner_id']").val();
-	var collection_id = $("input[name='collection_id']").val();
-	var banner_screen = $("input[name='banner_screen']").val();
-    var imageId = $("[name='banner_image_id["+lang_id+"_"+banner_screen+"]']").val();
-    if(banner_id == 0){
-        if(imageId > 0){
+$(document).on('change', '.banner-language-js', function () {
+    var lang_id = $(this).val();
+    var banner_id = $("input[name='banner_id']").val();
+    var collection_id = $("input[name='collection_id']").val();
+    var banner_screen = $("input[name='banner_screen']").val();
+    var imageId = $("[name='banner_image_id[" + lang_id + "_" + banner_screen + "]']").val();
+    if (banner_id == 0) {
+        if (imageId > 0) {
             bannerImages(collection_id, banner_id, lang_id, banner_screen);
         } else {
             $("#banner-image-listing").html('');
@@ -530,14 +527,14 @@ $(document).on('change','.banner-language-js',function(){
 });
 
 /* $(document).on('change','.banner-language-js',function(){
-	var langId = $(this).val();
-	var bannerId = $("input[name='banner_id']").val();
-	var blocationId = $("input[name='blocation_id']").val();
-	var screen = $(".display-js").val();
-	images(blocationId,bannerId,langId,screen);
+    var langId = $(this).val();
+    var bannerId = $("input[name='banner_id']").val();
+    var blocationId = $("input[name='blocation_id']").val();
+    var screen = $(".display-js").val();
+    images(blocationId,bannerId,langId,screen);
 }); */
 
-$(document).on('click', '.File-Js', function() {
+$(document).on('click', '.File-Js', function () {
     var node = this;
     $('#form-upload').remove();
     var fileType = $(node).attr('data-file_type');
@@ -560,7 +557,7 @@ $(document).on('click', '.File-Js', function() {
     if (typeof timer != 'undefined') {
         clearInterval(timer);
     }
-    timer = setInterval(function() {
+    timer = setInterval(function () {
         if ($('#form-upload input[name=\'file\']').val() != '') {
             clearInterval(timer);
             $val = $(node).val();
@@ -572,21 +569,21 @@ $(document).on('click', '.File-Js', function() {
                 cache: false,
                 contentType: false,
                 processData: false,
-                beforeSend: function() {
+                beforeSend: function () {
                     $(node).val('Loading');
                 },
-                complete: function() {
+                complete: function () {
                     $(node).val($val);
                 },
-                success: function(ans) {
-                    if(0 == ans.status){
-            			$.mbsmessage.close();
-            			$.systemMessage(ans.msg,'alert--danger');
-            		} else {
+                success: function (ans) {
+                    if (0 == ans.status) {
+                        $.mbsmessage.close();
+                        $.systemMessage(ans.msg, 'alert--danger');
+                    } else {
                         collectionMediaForm(ans.collection_id);
                     }
                 },
-                error: function(xhr, ajaxOptions, thrownError) {
+                error: function (xhr, ajaxOptions, thrownError) {
                     alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
                 }
             });
@@ -594,8 +591,8 @@ $(document).on('click', '.File-Js', function() {
     }, 500);
 });
 
-(function() {
-    displayImageInFacebox = function(str) {
+(function () {
+    displayImageInFacebox = function (str) {
         $.facebox('<img class="mx-auto d-block" width="800px;" src="' + str + '">');
     }
 })();

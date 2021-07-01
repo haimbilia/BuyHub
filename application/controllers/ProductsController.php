@@ -223,12 +223,14 @@ class ProductsController extends MyAppController
 
             $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
             $catProdSrchObj->doNotCalculateRecords();
+            $catProdSrchObj->removeFld('1 as availableInLocation');
             $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
         }
         /* ] */
 
         $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
         $prodSrchObj->doNotCalculateRecords();
+        $prodSrchObj->removeFld('1 as availableInLocation');
 
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
@@ -254,16 +256,21 @@ class ProductsController extends MyAppController
                 $conditionSrch->setPageSize(1);
                 $conditionSrch->addMultipleFields(array('selprod_condition'));
                 $conditionSrch->addCondition('selprod_condition', '=', $key);
+                /* if needs to show product counts under any condition[ */
+                //$conditionSrch->addFld('count(selprod_condition) as totalProducts');
+                /* ] */
+                // echo $conditionSrch->getQuery().'<br>';
                 $conditionRs = $conditionSrch->getResultSet();
-                $conditionArr = $db->fetch($conditionRs);
-                if (!empty($conditionArr)) {
-                    $conditionsArr[] = $conditionArr;
+                $row = $db->fetch($conditionRs);
+                if (!empty($row)) {
+                    $conditionsArr[] = $row;
                 }
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
         } else {
             $conditionsArr = unserialize($conditions);
         }
+        $conditionsArr = array_filter($conditionsArr);
         /* ] */
 
         /* Price Filters[ */
@@ -439,7 +446,7 @@ class ProductsController extends MyAppController
         $prodSrch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
+                'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
                 'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
                 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
                 'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
@@ -1201,7 +1208,7 @@ class ProductsController extends MyAppController
                 array(
                     'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'COALESCE(selprod_title,product_name, product_identifier) as selprod_title',
                     'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price'
+                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty'
                 )
             );
 

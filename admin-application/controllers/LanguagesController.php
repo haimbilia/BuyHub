@@ -189,22 +189,47 @@ class LanguagesController extends AdminBaseController
         $languageId = FatApp::getPostedData('languageId', FatUtility::VAR_INT, 0);
         if (0 >= $languageId) {
             Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieJsonError(Message::getHtml());
         }
 
         $data = Language::getAttributesById($languageId, array('language_active'));
 
         if ($data == false) {
             Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+            FatUtility::dieJsonError(Message::getHtml());
+        }            
 
         $status = ($data['language_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+        
+        if($status == applicationConstants::INACTIVE && 1 >= count(Language::getAllNames()) ){
+           Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieJsonError(Message::getHtml()); 
+        } 
 
         $countryObj = new Language($languageId);
         if (!$countryObj->changeStatus($status)) {
             Message::addErrorMessage($countryObj->getError());
             FatUtility::dieWithError(Message::getHtml());
+        }
+        if ($status == applicationConstants::INACTIVE && ($languageId == FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1) || $languageId ==  FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
+            $srch = Language::getSearchObject();
+            $srch->addFld('language_id');
+            $firstActivelangData = FatApp::getDb()->fetch($srch->getResultSet());
+            if (!empty($firstActivelangData)) {                
+                $configuration = new Configurations();
+                $dataToUpdate = [];
+                if(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)  == $languageId){
+                    $dataToUpdate['CONF_DEFAULT_SITE_LANG'] = $firstActivelangData['language_id']; 
+                }
+                if(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)  == $languageId){
+                    $dataToUpdate['CONF_ADMIN_DEFAULT_LANG'] = $firstActivelangData['language_id']; 
+                    $_COOKIE['defaultAdminSiteLang'] = $firstActivelangData['language_id'];
+                }
+                if (!$configuration->update($dataToUpdate)) {
+                    Message::addErrorMessage($configuration->getError());
+                    FatUtility::dieJsonError(Message::getHtml());
+                }
+            }
         }
 
         FatUtility::dieJsonSuccess($this->str_update_record);
