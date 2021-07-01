@@ -56,10 +56,10 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $conditionType, true);
 
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type'] && empty($row['badgelink_record_ids'])) {
-                    $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'from_value'];
+                    $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'];
                     $toValue = "";
-                    if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'to_value'])) {
-                        $toValue = ' - ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'to_value'];
+                    if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'])) {
+                        $toValue = ' - ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'];
                     }
                     
                     $perc = in_array($row[$key], $nonPercElements) ? '' : '%';
@@ -79,7 +79,7 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 if ($canEdit && empty($conditionTypeArr[$row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']])) {
                     $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
-                    $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)), "<i class='far fa-edit icon'></i>", true);
                 } else {
                     $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
                 }

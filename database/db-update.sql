@@ -848,8 +848,8 @@ CREATE TABLE `tbl_badge_link_conditions` (
   `blinkcond_from_date` datetime DEFAULT NULL,
   `blinkcond_to_date` datetime DEFAULT NULL,
   `blinkcond_condition_type` int(11) NOT NULL,
-  `blinkcond_from_value` varchar(150) NOT NULL,
-  `blinkcond_to_value` varchar(150) NOT NULL
+  `blinkcond_condition_from` varchar(150) NOT NULL,
+  `blinkcond_condition_to` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

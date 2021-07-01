@@ -253,17 +253,17 @@ class Badge extends MyAppModel
                     THEN 
                         (CASE 
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD . ' 
-                                THEN ' . $avgRating . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
+                                THEN ' . $avgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP . ' 
-                                THEN ' . $shopAvgRating . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
+                                THEN ' . $shopAvgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . ' 
-                                THEN ' . $completionRate . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
+                                THEN ' . $completionRate . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . ' 
-                                THEN ' . $completedOrders . ' BETWEEN blinkcond_from_value AND blinkcond_to_value
+                                THEN ' . $completedOrders . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . ' 
-                                THEN ' . $returnAcceptanceRate . ' = blinkcond_from_value
+                                THEN ' . $returnAcceptanceRate . ' = blinkcond_condition_from
                             WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . ' 
-                                THEN ' . $orderCancellationRate . ' = blinkcond_from_value
+                                THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
                             ELSE FALSE
                         END)
                     ELSE ' . $recordCondition . ' END)'
@@ -355,7 +355,7 @@ class Badge extends MyAppModel
             '(CASE
                 WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_RIBBON . ' OR ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_OPEN . '
                     THEN 1
-                WHEN ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND breq_status =  ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . '
+                    WHEN SUM(IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'status = ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)) > 0
                     THEN 1
                 ELSE 0
             END) as canAccess'

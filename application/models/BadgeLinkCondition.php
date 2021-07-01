@@ -31,8 +31,8 @@ class BadgeLinkCondition extends MyAppModel
         self::DB_TBL_PREFIX . 'from_date',
         self::DB_TBL_PREFIX . 'to_date',
         self::DB_TBL_PREFIX . 'condition_type',
-        self::DB_TBL_PREFIX . 'from_value',
-        self::DB_TBL_PREFIX . 'to_value'
+        self::DB_TBL_PREFIX . 'condition_from',
+        self::DB_TBL_PREFIX . 'condition_to'
     ];
 
     /* Require Range Element(From, To) for the these condition types. */

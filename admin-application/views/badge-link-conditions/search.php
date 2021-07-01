@@ -64,10 +64,10 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $conditionType, true);
 
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type'] && empty($row['badgelink_record_ids'])) {
-                    $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'from_value'];
+                    $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'];
                     $toValue = "";
-                    if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'to_value'])) {
-                        $toValue = ' - ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'to_value'];
+                    if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'])) {
+                        $toValue = ' - ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'];
                     }
                     
                     $perc = in_array($row[$key], $nonPercElements) ? '' : '%';

@@ -181,13 +181,13 @@ if (Badge::TYPE_BADGE == $badgeType) {
 								<div class="caption-wraper">
 									<label class="field_label">
 										<?php
-										$fld = $frm->getField('blinkcond_from_value');
+										$fld = $frm->getField('blinkcond_condition_from');
 										echo $fld->getCaption();
 										?>
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('blinkcond_from_value'); ?>
+										<?php echo $frm->getFieldHtml('blinkcond_condition_from'); ?>
 									</div>
 								</div>
 							</div>
@@ -197,13 +197,13 @@ if (Badge::TYPE_BADGE == $badgeType) {
 								<div class="caption-wraper">
 									<label class="field_label">
 										<?php
-										$fld = $frm->getField('blinkcond_to_value');
+										$fld = $frm->getField('blinkcond_condition_to');
 										echo $fld->getCaption();
 										?>
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('blinkcond_to_value'); ?>
+										<?php echo $frm->getFieldHtml('blinkcond_condition_to'); ?>
 									</div>
 								</div>
 							</div>
