@@ -48,31 +48,6 @@ $(document).on('change', formClass + 'select[name="blinkcond_record_type"]', fun
     $(formClass + "select.recordIds--js").val('').trigger('change');
 });
 
-$(document).on('change', formClass + '.recCond--js', function () {
-    var recordCondition = $(this).val();
-    var recordNameSelector = $(formClass + 'select.recordIds--js');
-    var parent = recordNameSelector.closest('.field-set').parent();
-
-    var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
-    if (REC_COND_AUTO == recordCondition) {
-        parent.hide();
-        recordNameSelector.val("").trigger('change');
-        $(formClass + '.conditionType--js').fadeIn();
-        $(formClass + '.linkType--js, ' + formClass + '.position--js').hide();
-        $(formClass + 'select[name="blinkcond_record_type"]').val("");
-        $(formClass + 'select[name="blinkcond_condition_type"]').val(COND_TYPE_AVG_RATING_SELPROD).trigger('change');
-        conditionSelectors.attr('data-fatreq', JSON.stringify({ required: true }));
-    } else {
-        parent.fadeIn();
-        conditionSelectors.val("").trigger('change');
-        $(formClass + '.conditionType--js').hide();
-        $(formClass + '.linkType--js, ' + formClass + '.position--js').fadeIn();
-        $(formClass + 'select[name="blinkcond_condition_type"]').val("");
-        $(formClass + 'select[name="blinkcond_record_type"]').val(RECORD_TYPE_SELLER_PRODUCT);
-        conditionSelectors.attr('data-fatreq', JSON.stringify({ required: false }));
-    }
-});
-
 $(document).on('change', formClass + 'select[name="blinkcond_position"]', function () {
     var badgeSection = $('.badgeImageSection--js .badges');
     if (RIGHT == $(this).val()) {
@@ -94,10 +69,18 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
     hideSearchFormFilter = function (blinkcond_id) {
         $(".listingSection--js, .searchform_filter").show();
-        if (1 > blinkcond_id)  {
+        if (1 > blinkcond_id) {
             $(".listingSection--js, .searchform_filter").hide();
         }
     }
+
+    clearForm = function () {
+        $(formClass + "input[name='blinkcond_from_date'], " + formClass + "input[name='blinkcond_to_date'], " + formClass + "input[name='blinkcond_condition_from'], " + formClass + "input[name='blinkcond_condition_to']").val("");
+        var sellerSelctor = $(formClass + "select[name='seller'], " + formClass + "input[name='blinkcond_user_id']");
+        if (0 < sellerSelctor.length) {
+            sellerSelctor.val("").trigger('change');
+        }
+    };
 
     badgeForm = function (blinkcond_id, badgeId) {
         fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, badgeId, blinkcond_id]), '', function (t) {
@@ -106,6 +89,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
             bindBadgeNameSelect2();
             bindRecordsSelect2();
+            bindSellerSelect2();
 
             if ($(formClass + '.recCond--js').val() == REC_COND_AUTO) {
                 $(formClass + 'select[name="blinkcond_condition_type"]').change();
@@ -120,7 +104,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
                 var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
                 conditionSelectors.attr('data-fatreq', JSON.stringify({ required: false }));
-                
+
                 hideSearchFormFilter(blinkcond_id);
             }
 
@@ -146,6 +130,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
             bindBadgeNameSelect2();
             bindRecordsSelect2();
+            bindSellerSelect2();
 
             if ($(formClass + '.recCond--js').val() == REC_COND_MANUAL) {
                 $(formClass + 'select[name="blinkcond_record_type"]').trigger('change');
@@ -183,7 +168,53 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         });
     };
 
+    bindSellerSelect2 = function () {
+        var selector = $(formClass + "select[name='seller']");
+        selector.select2({
+            tags: true,
+            closeOnSelect: true,
+            allowClear: true,
+            dir: layoutDirection,
+            placeholder: selector.attr('placeholder'),
+            ajax: {
+                url: fcom.makeUrl('Users', 'autoCompleteJson'),
+                dataType: 'json',
+                delay: 250,
+                method: 'post',
+                data: function (params) {
+                    return {
+                        keyword: params.term,
+                        user_is_supplier: 1,
+                        credential_active: 1,
+                        credential_verified: 1,
+                    };
+                },
+                processResults: function (data, params) {
+                    return { results: data };
+                },
+                cache: true
+            },
+            minimumInputLength: 0,
+            templateResult: function (result) {
+                return result.name;
+            },
+            templateSelection: function (result) {
+                return result.name || selector.attr('placeholder');
+            }
+        }).on('select2:selecting', function (e) {
+            $(formClass + 'input[name="blinkcond_user_id"]').val(e.params.args.data.id);
+        }).on('select2:unselect', function (e) {
+            $(formClass + 'input[name="blinkcond_user_id"]').val("");
+        });
+    }
+
     getRecordTypeURL = function () {
+        var sellerId = $(formClass + 'input[name="blinkcond_user_id"]').val();
+        if ("" == sellerId || 1 > sellerId) {
+            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            return false;
+        }
+        
         var searchSelector = $(formClass + "select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
         var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
@@ -211,6 +242,27 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         }
     }
 
+    getRequestData = function (params) {
+        var sellerId = $(formClass + 'input[name="blinkcond_user_id"]').val();
+        if ("" == sellerId || 1 > sellerId) {
+            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            return false;
+        }
+        var arr = {keyword: params.term};        
+        var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+        if (RECORD_TYPE_PRODUCT == recordType) {
+            arr['selprod_user_id'] = sellerId;
+        } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
+            arr['selprod_user_id'] = sellerId;
+        } else if (RECORD_TYPE_SHOP == recordType) {
+            arr['selprod_user_id'] = sellerId;
+        } else {
+            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            return false;
+        }
+        return arr;
+    }
+
     bindRecordsSelect2 = function () {
         var selector = $(formClass + "select.recordIds--js");
         selector.select2({
@@ -221,13 +273,13 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             placeholder: selector.attr('placeholder'),
             ajax: {
                 url: function () {
-                    return getRecordTypeURL()
+                    return getRecordTypeURL();
                 },
                 dataType: 'json',
                 delay: 250,
                 method: 'post',
                 data: function (params) {
-                    return { keyword: params.term };
+                    return getRequestData(params);
                 },
                 processResults: function (data, params) {
                     return { results: getRecordData(data) };
@@ -248,7 +300,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             if (0 < $(formClass + 'select[name="blinkcond_position"]').length) {
                 position = $(formClass + 'select[name="blinkcond_position"]').val();
             }
-            
+
             $(".listingSection--js, .searchform_filter").show();
             fcom.ajax(fcom.makeUrl(controller, 'isUnique', [badgeType, recordType, e.params.args.data.id, position]), '', function (t) {
                 var resp = JSON.parse(t);
@@ -285,7 +337,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
                     }
                     $('.recordListing--js').append(htm);
                 }
-                $(formClass + "select[name='blinkcond_record_type']").attr('disabled', 'disabled');
+                $(formClass + "select[name='blinkcond_record_type'], " + formClass + "select[name='seller']").attr('disabled', 'disabled');
             });
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
@@ -349,7 +401,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             }
 
             $(formClass + "input[name='record_ids']").val(JSON.stringify(selectedRecords));
-            var recordType = $(formClass + "select[name='blinkcond_record_type']");
+            var recordType = $(formClass + "select[name='blinkcond_record_type'], " + formClass + "select[name='seller']");
             if (1 > selectedRecords.length) {
                 recordType.removeAttr('disabled');
             } else {

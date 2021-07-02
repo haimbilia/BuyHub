@@ -2,10 +2,11 @@
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'cond_seller_name' => Labels::getLabel('LBL_SELLER', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
-    'record_condition' => Labels::getLabel('LBL_TRIGGER', $adminLangId),
+    'record_condition' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $adminLangId),
-    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $adminLangId),
     'action' => '',
 );
 
@@ -17,6 +18,12 @@ if (Badge::TYPE_RIBBON == $badgeType) {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $arr_flds['record_condition']);
 } else {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position' ]);
+}
+
+if (BadgeLinkCondition::REC_COND_AUTO == $recordCondition) {
+    unset($arr_flds['cond_seller_name'], $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
+} else {
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
 }
 
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($adminLangId);
@@ -51,6 +58,9 @@ foreach ($arrListing as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', [], $sr_no, true);
                 break;
+            case 'cond_seller_name':
+                $td->appendElement('plaintext', [], $row[$key], true);
+                break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $adminLangId) : $recordTypeArr[$row[$key]];
                 $td->appendElement('plaintext', [], $txt, true);
@@ -60,10 +70,11 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $conditionType = (empty($row['badgelink_record_ids']) ? $conditionTypeArr[$row[$key]] : Labels::getLabel('LBL_N/A', $adminLangId));
+                $conditionAuto = (BadgeLinkCondition::REC_COND_AUTO == $recordCondition);
+                $conditionType = ($conditionAuto ? $conditionTypeArr[$row[$key]] : Labels::getLabel('LBL_N/A', $adminLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
 
-                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type'] && empty($row['badgelink_record_ids'])) {
+                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type'] && $conditionAuto) {
                     $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'];
                     $toValue = "";
                     if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'])) {
@@ -77,10 +88,9 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'record_condition':
-                $condition = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
-                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordConditionArr[$condition] . '</span>';;
-                if (BadgeLinkCondition::REC_COND_MANUAL == $condition) {
-                    $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordConditionArr[$condition] . '</span>';
+                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordConditionArr[$recordCondition] . '</span>';;
+                if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition) {
+                    $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordConditionArr[$recordCondition] . '</span>';
                 }
                 $td->appendElement('plaintext', [], $htm, true);
                 break;

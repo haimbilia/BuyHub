@@ -2,11 +2,15 @@
 $frm->setFormTagAttribute('class', 'web_form addUpdateForm--js');
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 
+$fld = $frm->getField('btn_clear');
+$fld->addFieldTagAttribute('onclick', 'clearForm();');
+
 $fld = $frm->getField('auto_update_other_langs_data');
 if (null != $fld) {
 	$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
+
 
 $fld = $frm->getField('record_condition');
 if (null != $fld) {
@@ -44,30 +48,33 @@ if (Badge::TYPE_BADGE == $badgeType) {
 					echo $frm->getFieldHtml('blinkcond_badge_id');
 					echo $frm->getFieldHtml('record_ids');
 					echo $frm->getFieldHtml('badge_type');
-					if (Badge::TYPE_RIBBON == $badgeType) {
-						echo $frm->getFieldHtml('record_condition');
-					}
+					echo $frm->getFieldHtml('record_condition');
+					
+					$sellerFld = $frm->getField('seller');
 				?>
 				<div class="row">
-					<?php if (Badge::TYPE_BADGE == $badgeType) { ?>
+					<?php if (null != $sellerFld) { 
+						echo $frm->getFieldHtml('blinkcond_user_id');
+						?>
 						<div class="col-md-4">
 							<div class="field-set">
 									<div class="caption-wraper">
 										<label class="field_label">
 											<?php
-											$fld = $frm->getField('record_condition');
+											$fld = $frm->getField('seller');
 											echo $fld->getCaption();
 											?>
 											<span class="spn_must_field">*</span></label>
 									</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('record_condition'); ?>
+										<?php echo $frm->getFieldHtml('seller'); ?>
 									</div>
 								</div>
 							</div>
 						</div>
-					<?php } else if (Badge::TYPE_RIBBON == $badgeType) { ?>
+					<?php } ?>
+					<?php if (Badge::TYPE_RIBBON == $badgeType) { ?>
 						<div class="col-md-4 position--js">
 							<div class="field-set">
 								<div class="caption-wraper">

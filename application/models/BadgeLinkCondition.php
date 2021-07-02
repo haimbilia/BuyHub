@@ -20,12 +20,13 @@ class BadgeLinkCondition extends MyAppModel
     public const COND_TYPE_RETURN_ACCEPTANCE = 6; // Refund/Return Acceptance
     public const COND_TYPE_ORDER_CANCELLED = 7; // Cancelled By Seller
     
-    public const REC_COND_AUTO = 1;
-    public const REC_COND_MANUAL = 2;
+    public const REC_COND_MANUAL = 1;
+    public const REC_COND_AUTO = 2;
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'badge_id',
+        self::DB_TBL_PREFIX . 'user_id',
         self::DB_TBL_PREFIX . 'position',
         self::DB_TBL_PREFIX . 'record_type',
         self::DB_TBL_PREFIX . 'from_date',
@@ -122,8 +123,8 @@ class BadgeLinkCondition extends MyAppModel
         $arr = FatCache::get('getBadgeLinkRecordConditionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
-                self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUALLY', $langId),
-                self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATICALLY', $langId),
+                self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUAL', $langId),
+                self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATIC', $langId),
             ];
             FatCache::set('getBadgeLinkRecordConditionArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
@@ -192,6 +193,7 @@ class BadgeLinkCondition extends MyAppModel
             self::ATTR,
             [
                 'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
+                'blnku.user_name as cond_seller_name',
                 Badge::DB_TBL_PREFIX . 'type',
                 Badge::DB_TBL_PREFIX . 'display_inside',
                 Badge::DB_TBL_PREFIX . 'shape_type',
@@ -202,6 +204,7 @@ class BadgeLinkCondition extends MyAppModel
             $recordFields
         );
         $srch->addMultipleFields($attr);
+        $srch->joinUser();
         $srch->joinBadge($langId);
         $srch->joinBadgeLinks();
         if (false === $linkRecords) {

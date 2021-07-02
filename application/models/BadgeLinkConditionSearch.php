@@ -115,4 +115,14 @@ class BadgeLinkConditionSearch extends SearchBase
             $this->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shop_id = shoplang_shop_id AND shoplang_lang_id = ' . $langId, 'shp_l');
         }
     }
+
+    /**
+     * joinUser
+     *
+     * @return void
+     */
+    public function joinUser()
+    {
+        $this->joinTable(User::DB_TBL, 'LEFT JOIN', 'blnku.user_id = blnk.blinkcond_user_id', 'blnku');
+    }
 }

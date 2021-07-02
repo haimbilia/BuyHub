@@ -94,7 +94,7 @@ foreach ($arrListing as $sn => $row) {
                     $function = "form(" . $row[Badge::DB_TBL_PREFIX . 'type'] . ", " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")";
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $btnClass, 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $function), "<i class='far fa-edit icon'></i>", true);
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $btnClass, 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => "deleteRecord(event, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
-                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $adminLangId)), "<i class='fas fa-link icon'></i>", true);
+                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $adminLangId)), "<i class='fas fa-link icon'></i>", true);
                 } else {
                     $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $adminLangId), true);
                 }

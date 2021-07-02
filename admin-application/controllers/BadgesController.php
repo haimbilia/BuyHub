@@ -17,15 +17,13 @@ class BadgesController extends AdminBaseController
         switch ($action) {
             case 'list':
             case 'form':
+                $title = Labels::getLabel('LBL_BADGES', $this->adminLangId);
                 if ('badges/list/2' == current($_GET)) {
-                    $this->nodes = [
-                        ['title' => Labels::getLabel('LBL_RIBBONS', $this->adminLangId)]
-                    ];
-                } else {
-                    $this->nodes = [
-                        ['title' => Labels::getLabel('LBL_BADGE', $this->adminLangId)]
-                    ];
+                    $title = Labels::getLabel('LBL_RIBBONS', $this->adminLangId);
                 }
+                $this->nodes = [
+                    ['title' => $title]
+                ];
         }
         return $this->nodes;
     }

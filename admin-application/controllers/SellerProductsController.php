@@ -955,6 +955,10 @@ class SellerProductsController extends AdminBaseController
             $srch->addCondition('selprod_id', '!=', $post['selProdId']);
         }
 
+        if (array_key_exists('selprod_user_id', $post) && 0 < $post['selprod_user_id']) {
+            $srch->addCondition('selprod_user_id', '=', $post['selprod_user_id']);
+        }
+
         $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
