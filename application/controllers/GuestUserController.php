@@ -1,7 +1,4 @@
 <?php
-
-use PhpParser\Node\Stmt\Label;
-
 class GuestUserController extends MyAppController
 {
     private $authToken = '';
