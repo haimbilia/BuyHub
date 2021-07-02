@@ -28,7 +28,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                                     <i class='fa fa-info-circle spn_must_field align-middle' data-toggle='tooltip' data-placement='top' title='<?php echo Labels::getLabel('MSG_YOU_CAN_TURN_OFF_AUTO_SYNC_FEATURE_TO_RESTRICT_SYNCING_PRODUCTS_AND_ORDERS_TO_EASYECOM.', $siteLangId); ?>'></i>
                                 </p>
                             </div>
-                            <a class="btn btn-primary btn-lg" href="javascript:void(0)" onClick="login('<?php echo $userTempToken; ?>')" style="background-color: #27ae60; border-color: #27ae60;">
+                            <a class="btn btn-primary btn-lg" href="javascript:void(0)" onClick="goToDashboard()" style="background-color: #27ae60; border-color: #27ae60;">
                                 <?php echo Labels::getLabel('LBL_GO_TO_DASHBOARD', $siteLangId); ?>
                             </a>
                             <iframe id="easyEcomLogin" class='d-none' frameborder="5" width="500" height="300"></iframe>

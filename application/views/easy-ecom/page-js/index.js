@@ -25,11 +25,7 @@ $(document).ready(function () {
             landingPage();
         });
     }
-
-    login = function (userTempToken) {
-        setCookie('_ykEasyLogin', userTempToken, true, 365, goToDashboard);
-    }
-
+    
     goToDashboard = function () {
         window.open('https://api.marketplace.4qcteam.com/', '_blank');
     }

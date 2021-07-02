@@ -1360,7 +1360,7 @@ class GuestUserController extends MyAppController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row)) {
-            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId);
+            $msg = Labels::getLabel("MSG_INVALID_REQUEST_TOKEN_OR_EXPIRED", $this->siteLangId);
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
             FatUtility::dieJsonError($resp);
         }

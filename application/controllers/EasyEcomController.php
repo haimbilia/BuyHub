@@ -65,8 +65,11 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (!$uObj->createUserTempToken($userTempToken)) {
             FatUtility::dieJsonError($uObj->getError());
         }
+
+        /* Set Cookie expiry for 365 days. But Token expired after 10 mins. */
+        CommonHelper::setCookie('_ykEasyLogin', $userTempToken, time() + 3600 * 24 * 365, '/');
+
         $this->set('userId', $this->userId);
-        $this->set('userTempToken', $userTempToken);
         $this->set('pluginDescription', $this->settings['plugin_description']);
         $this->set('easyEcomSellerToken', $easyEcomSellerToken);
         $this->_template->render(false, false);
