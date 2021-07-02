@@ -6,6 +6,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 {
     public const KEY_NAME = 'EasyEcom';
     public const PRODUCTION_URL = 'https://app.easyecom.io/';
+    public const LOGIN_URL = 'https://api.marketplace.4qcteam.com/';
     
     /**
      * __construct
@@ -65,10 +66,11 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (!$uObj->createUserTempToken($userTempToken)) {
             FatUtility::dieJsonError($uObj->getError());
         }
-        
+
         /* Set Cookie expiry for 365 days. But Token expired after 10 mins. */
         CommonHelper::setCookie('_ykEasyLogin', $userTempToken, time() + 3600 * 24 * 365, '/', '.' . $_SERVER['HTTP_HOST']);
 
+        $this->set('loginUrl', self::LOGIN_URL);
         $this->set('userId', $this->userId);
         $this->set('pluginDescription', $this->settings['plugin_description']);
         $this->set('easyEcomSellerToken', $easyEcomSellerToken);

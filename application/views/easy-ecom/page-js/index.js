@@ -25,10 +25,6 @@ $(document).ready(function () {
             landingPage();
         });
     }
-    
-    goToDashboard = function () {
-        window.open('https://api.marketplace.4qcteam.com/', '_blank');
-    }
 
     syncStatusToggle = function (e, obj) {
         e.preventDefault();
