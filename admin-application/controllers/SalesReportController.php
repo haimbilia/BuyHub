@@ -2,49 +2,51 @@
 
 class SalesReportController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewSalesReport($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditSalesReport($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewSalesReport();
     }
 
     public function index($orderDate = '')
     {
-        $this->objPrivilege->canViewSalesReport();
-        $flds = $this->getFormColumns($orderDate);
 
-        $frmSearch = $this->getSearchForm($flds, $orderDate);
-        //$frmSearch->fill(array('orderDate'=>$orderDate));
-
+        $fields = $this->getFormColumns($orderDate);
+        $frmSearch = $this->getSearchForm($fields, $orderDate);
         $this->set('frmSearch', $frmSearch);
         $this->set('orderDate', $orderDate);
+        $this->set('defaultColumns', $this->getDefaultColumns($orderDate));
+        $this->set('fields', $fields);
+        $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 
     public function search($type = false)
     {
-        $this->objPrivilege->canViewSalesReport();
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
 
         $orderDate = FatApp::getPostedData('orderDate');
 
         $fields = $this->getFormColumns($orderDate);
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns($orderDate) : $this->getDefaultColumns($orderDate);
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current(array_keys($fields));
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_DESC;
+        }
         $srchFrm = $this->getSearchForm($fields, $orderDate);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderDate');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'ASC');
 
         $srch = new Report(0, array_keys($fields));
         $srch->joinOrders();
@@ -140,9 +142,9 @@ class SalesReportController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        $arr_listing = $db->fetchAll($rs);
+        $arrListing = $db->fetchAll($rs);
 
-        $this->set("arr_listing", $arr_listing);
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -156,7 +158,7 @@ class SalesReportController extends AdminBaseController
 
     private function getSearchForm($fields = [], $orderDate = '')
     {
-        $frm = new Form('frmSalesReportSearch');
+        $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
 
@@ -168,9 +170,11 @@ class SalesReportController extends AdminBaseController
         }
 
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            $frm->addHiddenField('', 'sortBy', 'orderDate');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
+            $frm->addHiddenField('', 'reportColumns', '');
+            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
         }
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
@@ -227,6 +231,19 @@ class SalesReportController extends AdminBaseController
             ] + $arr;
         }
 
+        return $arr;
+    }
+
+    private function getDefaultColumns($orderDate = ''): array
+    {
+        $arr = ['orderDate', 'totQtys', 'grossSales', 'couponDiscount', 'refundedAmount', 'shippingTotal', 'taxTotal', 'orderNetAmount'];
+        if (!empty($orderDate)) {
+            unset($arr['orderDate']);
+            $arr = [
+                'op_invoice_number',
+                'order_date_added'
+            ] + $arr;
+        }
         return $arr;
     }
 }

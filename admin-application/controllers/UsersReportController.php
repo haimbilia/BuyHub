@@ -16,6 +16,7 @@ class UsersReportController extends AdminBaseController
         // $frmSearch->fill(array('sortBy' => 'totOrders', 'sortOrder' => 'DESC'));
         $this->set('frmSearch', $frmSearch);
         $this->set('usertype', $usertype);
+        $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 

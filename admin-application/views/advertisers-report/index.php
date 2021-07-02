@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchAdvertisersReport(this); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this); return(false);');
 $frmSearch->setFormTagAttribute('class', 'web_form');
 $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
 $frmSearch->developerTags['fld_default_col'] = 6;
@@ -14,6 +14,8 @@ $reportsData = [
     'pageTitle' => Labels::getLabel('LBL_Advertisers_Report', $adminLangId),
     'adminLangId' => $adminLangId,
     'frmSearch' => $frmSearch,
-    'actionButtons' => []
+    'actionButtons' => [],
+    'fields' => $fields,
+    'defaultColumns' => $defaultColumns,
 ];
 $this->includeTemplate('_partial/report-index.php', $reportsData, false);

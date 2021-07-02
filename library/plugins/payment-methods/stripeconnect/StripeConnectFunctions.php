@@ -18,17 +18,6 @@ trait StripeConnectFunctions
     ];
 
     /**
-     * readonlyParams - Used to get bool type request params
-     *
-     * @var array
-     */
-    public $readonlyParams = [
-        "business_profile.name",
-        "business_profile.support_phone",
-        "business_profile.support_email",
-    ];
-
-    /**
      * convertToBool
      *
      * @param  array $requestParam
@@ -448,5 +437,21 @@ trait StripeConnectFunctions
         $paymentIntentId = $requestParam['paymentIntentId'];
         unset($requestParam['paymentIntentId']);
         return $this->retrievePaymentIntent([$paymentIntentId])->capture($requestParam);
+    }
+
+    /**
+     * createAccountLinks : https://stripe.com/docs/api/account_links/create
+     *
+     * @param array $requestParam : [
+     *       'account' => 'acct_1GYR2ECvMMMb9OAZ',
+     *       'refresh_url' => 'https://example.com/reauth',
+     *       'return_url' => 'https://example.com/return',
+     *       'type' => 'account_onboarding',
+     *   ]
+     * @return object
+     */
+    private function createAccountLinks(array $requestParam): object
+    {
+        return $this->stripe->accountLinks->create($requestParam);
     }
 }

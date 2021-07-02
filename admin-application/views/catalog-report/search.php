@@ -29,7 +29,7 @@ foreach ($fields as $key => $val) {
 
 $tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
 $sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
 	$cls = (($sr_no % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
 	$tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $sr_no]);
 
@@ -68,6 +68,9 @@ foreach ($arr_listing as $sn => $row) {
 				}
 				$span->appendElement('plaintext', array(), $name, true);
 				break;
+			case 'product_type':
+				$span->appendElement('plaintext', array(), $productTypeArr[$row[$key]], true);
+				break;
 			case 'grossSales':
 			case 'transactionAmount':
 			case 'inventoryValue':
@@ -98,7 +101,7 @@ foreach ($arr_listing as $sn => $row) {
 	}
 	$sr_no++;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
 	$tbl->appendElement('tr')->appendElement(
 		'td',
 		array(
@@ -111,7 +114,7 @@ echo $tbl->getHtml();
 echo '</div>';
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
-	'name' => 'frmCatalogReportSearchPaging'
+	'name' => 'frmReportSearchPaging'
 ));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>

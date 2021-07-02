@@ -76,7 +76,7 @@ class TaxController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -526,7 +526,7 @@ class TaxController extends AdminBaseController
         $srch->setPageSize($pagesize);
         $srch->addOrder('taxrule_name', 'ASC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

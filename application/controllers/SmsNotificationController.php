@@ -11,10 +11,12 @@ class SmsNotificationController extends PluginBaseController
     {
         $error = '';
         if (false === PluginHelper::includePlugin($keyName, 'sms-notification', $error, $this->siteLangId)) {
-            $this->error = $error;
-            return false;
+            FatUtility::dieJsonError($error);
         }
         $smsNotification = new $keyName($this->siteLangId);
-        $smsNotification->callback();
+        if (false === $smsNotification->callback()) {
+            FatUtility::dieJsonError($smsNotification->getError());
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }
 }

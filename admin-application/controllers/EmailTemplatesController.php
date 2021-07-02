@@ -51,7 +51,7 @@ class EmailTemplatesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = EmailTemplates::getSearchObject($this->adminLangId);
+        $srch = EmailTemplates::getSearchObject();
         $srch->addOrder(EmailTemplates::DB_TBL_PREFIX . 'lang_id', 'ASC');
         $srch->addGroupBy(EmailTemplates::DB_TBL_PREFIX . 'code');
         $srch->setPageNumber($page);
@@ -68,7 +68,7 @@ class EmailTemplatesController extends AdminBaseController
         if ($rs) {
             $records = FatApp::getDb()->fetchAll($rs);
         }
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

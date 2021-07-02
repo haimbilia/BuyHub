@@ -46,7 +46,7 @@ class OptionValuesController extends AdminBaseController
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->_template->render(false, false);
     }
 

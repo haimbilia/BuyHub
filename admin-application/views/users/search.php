@@ -25,7 +25,7 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-foreach ($arr_listing as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array());
 
     foreach ($arr_flds as $key => $val) {
@@ -89,7 +89,7 @@ foreach ($arr_listing as $sn => $row) {
                 }
                 if ($row['user_is_affiliate']) {
                     $str .= $arr[User::USER_TYPE_AFFILIATE] . '<br/>';
-                }                
+                }
                 if ($row['user_is_supplier'] && !$row['user_is_buyer']) {
                     $str .= '<a href="javascript:void(0)" onclick="markSellerAsBuyer(' . $row['user_id'] . ')">' . Labels::getLabel('LBL_MARK_AS_BUYER', $adminLangId) . '</a>';
                 }
@@ -100,7 +100,7 @@ foreach ($arr_listing as $sn => $row) {
 
                 if (0 < $row['user_parent']) {
                     $str = Labels::getLabel('LBL_Sub_User', $adminLangId);
-                }              
+                }
 
                 $td->appendElement('plaintext', array(), $str, true);
 
@@ -134,16 +134,19 @@ foreach ($arr_listing as $sn => $row) {
                     $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Change_Password', $adminLangId), "onclick" => "changePasswordForm(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Change_Password', $adminLangId), true);
 
-                        $innerLi = $innerUl->appendElement('li');
+                    $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => UrlHelper::generateUrl('Users', 'login', array($row['user_id'])), 'target' => '_blank', 'class' => 'button small green redirect--js', 'title' => Labels::getLabel('LBL_Login_to_user_profile', $adminLangId)), Labels::getLabel('LBL_Login_to_user_profile', $adminLangId), true);
 
-                    $innerLi = $innerUl->appendElement('li');
-                    $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Email_User', $adminLangId), "onclick" => "sendMailForm(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Email_User', $adminLangId), true);
-                    if(empty($row['credential_password'])){
+                    if (!empty($row['credential_email'])) {
+                        $innerLi = $innerUl->appendElement('li');
+                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Email_User', $adminLangId), "onclick" => "sendMailForm(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Email_User', $adminLangId), true);
+                    }
+                    
+                    if (empty($row['credential_password'])) {
                         $innerLi = $innerUl->appendElement('li');
                         $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $adminLangId), "onclick" => "sendSetPasswordEmail(" . $row['user_id'] . ")"), Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $adminLangId), true);
-                    }    
-                    
+                    }
+
                     $innerLi = $innerUl->appendElement('li');
                     $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete_User', $adminLangId), "onclick" => "deleteUser(" . $row['user_id'] . ")"), Labels::getLabel('LBL_Delete_User', $adminLangId), true);
                 }
@@ -155,7 +158,7 @@ foreach ($arr_listing as $sn => $row) {
     }
     $sr_no--;
 }
-if (count($arr_listing) == 0) {
+if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }
 $frm = new Form('frmUsersListing', array('id' => 'frmUsersListing'));

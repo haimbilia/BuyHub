@@ -59,14 +59,13 @@ if (false == $canDo) {
                 </div>
                 <?php $fld = $downloadFrm->getField('option_comb_id');
                 if ($fld) {
-                ?>
+                    ?>
                     <div class="col-md-4">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
                                     <?php $fld = $downloadFrm->getField('option_comb_id');
-                                    echo $fld->getCaption();
-                                    ?>
+                    echo $fld->getCaption(); ?>
                                 </label>
                                 <span class="spn_must_field">*</span>
                             </div>
@@ -77,7 +76,8 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                <?php } ?>
+                <?php
+                } ?>
                 <div class="col-md-4">
                     <div class="field-set">
                         <div class="caption-wraper">
@@ -95,14 +95,31 @@ if (false == $canDo) {
                     </div>
                 </div>
             </div>
-            <div class="attach-links-js">
-            <?php if (true == $canDo) { ?>
-                <div class="row">
-                    <div class="col-md-4">
+            <div class="row">
+                <?php if (true == $canDo) { ?>
+                    <?php if (true === $showFldAttachWithExistingOrders) { ?>
+                        <div class="col-md-4 attach_with_existing_orders-js">
+                            <div class="field-set">
+                                <div class="caption-wraper">
+                                    <label class="field_label">
+                                        <?php $fld = $downloadFrm->getField('attach_with_existing_orders');
+                                        echo $fld->getCaption();
+                                        ?>
+                                    </label>
+                                </div>
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                    <?php echo $downloadFrm->getFieldHtml('attach_with_existing_orders'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <div class="col-md-4 attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
-                                    <?php 
+                                    <?php
                                     $fld = $downloadFrm->getField('product_downloadable_link');
                                     echo $fld->getCaption();
                                     ?>
@@ -115,11 +132,11 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
-                                    <?php 
+                                    <?php
                                     $fld = $downloadFrm->getField('product_preview_link');
                                     echo $fld->getCaption();
                                     ?>
@@ -132,27 +149,21 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-left">
+                    <div class="col-md-4 text-left attach-links-js">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn'); ?>
+                                    <?php echo $downloadFrm->getFieldHtml('attachment_link_btn');
+                                    $restBtn = $downloadFrm->getField('reset');
+                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;');
+                                    echo $downloadFrm->getFieldHtml('reset');
+                                    ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <?php } else { ?>
-                    <div class="row dd-not-allowed">
-                        <?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $adminLangId); ?>
-                    </div>
-             <?php } ?>
-            </div>
-            <div class="attach-files-js">
-            <?php if (true == $canDo) { ?>
-                <div class="row">
-                    <div class="col-md-4 downloadable_file_input">
+                    <div class="col-md-4 downloadable_file_input attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -169,7 +180,7 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper">
                                 <label class="field_label">
@@ -186,33 +197,47 @@ if (false == $canDo) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-left">
+                    <div class="col-md-4 text-left attach-files-js">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
                                     <?php
                                     echo $downloadFrm->getFieldHtml('attachement_upload_btn');
+                                    $restBtn = $downloadFrm->getField('reset');
+                                    $restBtn->setFieldTagAttribute('onclick', 'resetForm(); return false;');
+                                    echo $downloadFrm->getFieldHtml('reset');
                                     ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php } else { ?>
-                <div class="row dd-not-allowed">
-                    <?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?>
-                </div>
-            <?php } ?>
+                <?php } else { ?>
+                    <div class="col-md-12 attach-files-js alert-danger">
+                        <div class="dd-not-allowed note">
+                            <i class="fa fa-info-circle"></i>
+                            <p class=""><?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $adminLangId); ?></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 attach-links-js alert-danger">
+                        <div class="dd-not-allowed note">
+                            <i class="fa fa-info-circle"></i>
+                            <p class="note-text"><?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $adminLangId); ?></p>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
-            <?php echo $downloadFrm->getFieldHtml('product_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('selprod_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_id'); ?>
-            <?php echo $downloadFrm->getFieldHtml('dd_link_ref_id'); ?>
+            <?php
+            echo $downloadFrm->getFieldHtml('product_id');
+            echo $downloadFrm->getFieldHtml('selprod_id');
+            echo $downloadFrm->getFieldHtml('dd_link_id');
+            echo $downloadFrm->getFieldHtml('dd_link_ref_id');
+            echo $downloadFrm->getFieldHtml('is_preview');
+            echo $downloadFrm->getFieldHtml('ref_file_id');
+            ?>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
     </div>
-    <!-- <div class="col-md-12" id="digital_download_list" class="dd-list"></div> -->
 </div>
 <script>
     var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;

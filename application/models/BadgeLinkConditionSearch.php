@@ -14,73 +14,6 @@ class BadgeLinkConditionSearch extends SearchBase
     {
         parent::__construct(BadgeLinkCondition::DB_TBL, 'blnk');
     }
-
-    
-    /**
-     * descOrder
-     *
-     * @param  array $descOrder
-     * @return void
-     */
-    public function descOrder()
-    {
-        $this->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
-    }
-    
-    /**
-     * addBadgeTypeCondition
-     *
-     * @param  array $typesArr
-     * @return void
-     */
-    public function addBadgeTypeCondition(array $typesArr)
-    {
-        $this->addHaving(Badge::DB_TBL_PREFIX . 'type', 'IN',  $typesArr);
-    }
-
-    /**
-     * addRecordTypesCondition
-     *
-     * @param  array $recordTypesArr
-     * @return void
-     */
-    public function addRecordTypesCondition(array $recordTypesArr)
-    {
-        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', 'IN',  $recordTypesArr);
-    }
-
-    /**
-     * addConditionTypesCondition
-     *
-     * @param  array $conditionTypesArr
-     * @return void
-     */
-    public function addConditionTypesCondition(array $conditionTypesArr)
-    {
-        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type', 'IN',  $conditionTypesArr);
-    }
-
-    /**
-     * addFromCondition
-     *
-     * @param  string $from
-     * @return void
-     */
-    public function addFromCondition(string $from, string $operator = '<=')
-    {
-        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from', $operator,  $from);
-    }
-
-    /**
-     * addToCondition
-     *
-     * @param  string $to
-     * @return void
-     */
-    public function addToCondition(string $to, string $operator = '>=')
-    {
-        $this->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to', $operator,  $to);
-    }
     
     /**
      * joinBadge
@@ -106,6 +39,19 @@ class BadgeLinkConditionSearch extends SearchBase
         $this->badgeLinksJoin = true;
         $this->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, 'LEFT JOIN', 'badgelink_blinkcond_id = blinkcond_id', 'blc');
     }
+
+    /**
+     * joinBadgeRequest
+     *
+     * @return void
+     */
+    public function joinBadgeRequest()
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', CommonHelper::getLangId()), E_USER_ERROR);
+        }
+        $this->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_id = badgelink_breq_id', 'breq');
+    }
     
     /**
      * joinProduct
@@ -120,6 +66,7 @@ class BadgeLinkConditionSearch extends SearchBase
         }
 
         $this->joinTable(Product::DB_TBL, 'LEFT JOIN', 'badgelink_record_id = product_id', 'p');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'pu.credential_user_id = p.product_seller_id', 'pu');
         if (0 < $langId) {
             $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'product_id = productlang_product_id AND productlang_lang_id = ' . $langId, 'p_l');
         }
@@ -147,7 +94,7 @@ class BadgeLinkConditionSearch extends SearchBase
             $this->joinTable(Option::DB_TBL_LANG, 'LEFT JOIN', 'option_id = optionlang_option_id AND optionlang_lang_id = ' . $langId, 'opt_l');
             $this->joinTable(OptionValue::DB_TBL_LANG, 'LEFT JOIN', 'optionvaluelang_optionvalue_id = optionvalue_id AND optionvaluelang_lang_id = ' . $langId, 'optv_l');
         }
-
+        $this->addGroupBy('badgelink_record_id');
     }
 
     /**
@@ -167,5 +114,15 @@ class BadgeLinkConditionSearch extends SearchBase
         if (0 < $langId) {
             $this->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shop_id = shoplang_shop_id AND shoplang_lang_id = ' . $langId, 'shp_l');
         }
+    }
+
+    /**
+     * joinUser
+     *
+     * @return void
+     */
+    public function joinUser()
+    {
+        $this->joinTable(User::DB_TBL, 'LEFT JOIN', 'blnku.user_id = blnk.blinkcond_user_id', 'blnku');
     }
 }

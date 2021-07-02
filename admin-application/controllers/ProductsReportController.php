@@ -8,38 +8,43 @@ class ProductsReportController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewProductsReport($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditProductsReport($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewProductsReport();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewProductsReport();
-        $flds = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($flds);
-        $frmSearch->fill(['sortBy' => 'totOrders', 'sortOrder' => 'DESC']);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('frmSearch', $frmSearch);
+        $this->set('fields', $fields);
         $this->_template->render();
     }
 
     public function search($type = false)
     {
-        $this->objPrivilege->canViewProductsReport();
         $db = FatApp::getDb();
 
         $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current(array_keys($fields));
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_DESC;
+        }
+
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
         /* get Seller Order Products[ */
-        /* $fields = ['totOrders',  'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount']; */
         $opSrch = new Report(0, array_keys($fields));
         $opSrch->joinOrders();
         $opSrch->joinPaymentMethod();
@@ -92,11 +97,7 @@ class ProductsReportController extends AdminBaseController
         $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = selprod.selprod_id', 'tquwl');
         $srch->joinProductToCategory();
         $srch->addCondition('selprod.selprod_id', '!=', 'NULL');
-        /* $srch->addOrder('netSoldQty', 'desc');
-        $srch->addOrder('tp_l.product_name');
-        $srch->addOrder('selprod_title');
-        $srch->addOrder('selprod_id'); */
-        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'opq.*'));
+        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', /* 'IFNULL(totOrders, 0) as totOrders', */ 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'opq.*'));
 
         /* groupby added, because if same product is linked with multiple categories, then showing in repeat for each category[ */
         $srch->addGroupBy('selprod_id');
@@ -219,8 +220,8 @@ class ProductsReportController extends AdminBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            $arr_listing = $db->fetchAll($rs);
-            $this->set("arr_listing", $arr_listing);
+            $arrListing = $db->fetchAll($rs);
+            $this->set("arrListing", $arrListing);
             $this->set('pageCount', $srch->pages());
             $this->set('recordCount', $srch->recordCount());
             $this->set('page', $page);
@@ -256,9 +257,11 @@ class ProductsReportController extends AdminBaseController
         $frm->addTextBox(Labels::getLabel('LBL_Price_To', $this->adminLangId), 'price_to');
 
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            $frm->addHiddenField('', 'sortBy', 'product_name');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
+            $frm->addHiddenField('', 'reportColumns', '');
+            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
         }
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
@@ -314,5 +317,10 @@ class ProductsReportController extends AdminBaseController
         }
 
         return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return ['product_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }
 }

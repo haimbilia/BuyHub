@@ -3099,7 +3099,10 @@ class User extends MyAppModel
     }
     
     public static function checkStatisticalCookiesEnabled()
-    {
+    {   
+        if(!FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)){
+            return true;
+        }        
         $userId = UserAuthentication::getLoggedUserId(true);        
         if($userId > 0){
             $user = new User($userId);
@@ -3112,6 +3115,9 @@ class User extends MyAppModel
     
     public static function checkPersonalizedCookiesEnabled()
     {
+        if(!FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)){
+            return true;
+        }        
         $userId = UserAuthentication::getLoggedUserId(true);        
         if($userId > 0){
             $user = new User($userId);

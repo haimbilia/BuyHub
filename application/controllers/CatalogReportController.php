@@ -10,16 +10,31 @@ class CatalogReportController extends SellerBaseController
 
     public function index()
     {
-        $flds = $this->getFormColumns($this->siteLangId);
-        $frmSrch = $this->getSearchForm($flds);
-        $this->set('frmSrch', $frmSrch);
-        $this->_template->render(true, true);
+        $fields = $this->getFormColumns($this->siteLangId);
+        $frmSearch = $this->getSearchForm($fields);
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('fields', $fields);
+        $this->_template->addJs('js/report.js');
+        $this->_template->render();
     }
 
     public function search($type = false)
     {
         $db = FatApp::getDb();
         $fields = $this->getFormColumns($this->siteLangId);
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current(array_keys($fields));
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
+            $sortOrder = applicationConstants::SORT_DESC;
+        }
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -28,9 +43,7 @@ class CatalogReportController extends SellerBaseController
         }
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
-      
+
         /* get Seller Order Products[ */
         $opSrch = new Report(0, array_keys($fields), true);
         $opSrch->joinOrders();
@@ -48,20 +61,20 @@ class CatalogReportController extends SellerBaseController
         $opSrch->setGroupBy('product_id');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $opSrch->removeFld('product_name');
+        $opSrch->removeFld(['product_name', 'product_type', 'prodcat_name']);
         $opSrch->addCondition('op.op_selprod_user_id', '=', $this->userParentId);
 
         // echo  $opSrch->getQuery(); exit;
         /* ] */
 
-        $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'opq.*'];
+        $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'p.product_type', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'IFNULL(c_l.prodcat_name,c.prodcat_identifier) as prodcat_name', 'opq.*'];
         $srch = new ProductSearch($this->siteLangId, '', '', false, false, false);
         $srch->joinBrands($this->siteLangId, false, true);
         $srch->joinProductToCategory();
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields($selectedFlds);
         $srch->addGroupBy('p.product_id');
-       
+
         if (!empty($keyword)) {
             $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
         }
@@ -75,7 +88,8 @@ class CatalogReportController extends SellerBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-       
+
+        $productTypeArr = Product::getProductTypes($this->siteLangId);
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -89,6 +103,9 @@ class CatalogReportController extends SellerBaseController
                         case 'product_name':
                             $name = $row['product_name'] . '(' . $row['brand_name'] . ')';
                             $arr[] = $name;
+                            break;
+                        case 'product_type':
+                            $arr[] = $productTypeArr[$row[$key]];
                             break;
                         case 'grossSales':
                         case 'transactionAmount':
@@ -147,13 +164,13 @@ class CatalogReportController extends SellerBaseController
 
     private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmReportSrch');
+        $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $frm->addTextBox('', 'keyword');
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
-
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
+            $frm->addHiddenField('', 'sortBy', 'product_name');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
+            $frm->addHiddenField('', 'reportColumns', '');
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
@@ -190,5 +207,10 @@ class CatalogReportController extends SellerBaseController
         }
 
         return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return ['product_name', 'product_type', 'prodcat_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }
 }

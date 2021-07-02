@@ -210,13 +210,16 @@ $(document).on('mouseout', "ul.list-tags li span i", function(){
 
 $(document).on('click', ".js-product-edit", function(){
     var selProdId = $(this).attr('row-id');
-    var prodHtml = $(this).children('.js-prod-name').html(); 
-    var prodName = prodHtml.split('<br>');
+    var prodHtml = $(this).children('.js-prod-name').html();        
+    var prodName = prodHtml.replace(/<br>/g, " | ");
     
-    fcom.ajax(fcom.makeUrl('Seller', 'getRelatedProductsList', [selProdId]), '', function(t) {
+    fcom.ajax(fcom.makeUrl('Seller', 'getRelatedProductsList', [selProdId]), '', function(t) {       
+        
         var ans = $.parseJSON(t);
         $("input[name='selprod_id']").val(selProdId); 
-        $("input[name='product_name']").val(prodName[0]); 
+        /*$("input[name='product_name']").val(prodName[0]); */
+        var newOption = new Option(prodName, selProdId, true, true);
+        $("select[name='product_name']").append(newOption).trigger('change');
         $('#related-products').empty();
         for (var key in ans.relatedProducts) {
             $('#related-products').append(

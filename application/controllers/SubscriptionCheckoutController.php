@@ -620,8 +620,11 @@ class SubscriptionCheckoutController extends LoggedUserController
         if ($plugin_id) {
             $_SESSION['order_type'] = Orders::ORDER_SUBSCRIPTION;
             $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
+           /*
             $this->scartObj->clear();
             $this->scartObj->updateUserSubscriptionCart();
+            * 
+            */
         }
 
         /* if ( !$orderObj->addOrderHistory( $order_id, 1, Labels::getLabel("LBL_-NA-",$this->siteLangId), true, $this->siteLangId ) ){

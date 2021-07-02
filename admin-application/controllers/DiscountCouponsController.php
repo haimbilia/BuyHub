@@ -68,7 +68,7 @@ class DiscountCouponsController extends AdminBaseController
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -967,7 +967,7 @@ class DiscountCouponsController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);

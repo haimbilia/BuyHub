@@ -850,7 +850,7 @@ CREATE TABLE `tbl_badge_link_conditions` (
   `blinkcond_condition_type` int(11) NOT NULL,
   `blinkcond_condition_from` varchar(150) NOT NULL,
   `blinkcond_condition_to` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -877,14 +877,69 @@ ALTER TABLE `tbl_badge_link_conditions`
 --
 CREATE TABLE `tbl_badge_links` (
   `badgelink_blinkcond_id` bigint(20) NOT NULL,
-  `badgelink_record_id` bigint(20) NOT NULL
+  `badgelink_record_id` bigint(20) NOT NULL,
+  `badgelink_breq_id` INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ('LBL_N/R', '1', 'N/R', '1') ON DUPLICATE KEY UPDATE label_caption = 'N/R';
 
 ALTER TABLE `tbl_badges_lang` CHANGE `badge_name` `badge_name` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_Generate_requests_using_buttons_below', '1', 'Categories, brands, products and badge have to be requested from the site admin. Please generate requests using buttons below.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Categories, brands, products and badge have to be requested from the site admin. Please generate requests using buttons below.';
+
+CREATE TABLE `tbl_badge_requests` (
+    `breq_id` INT NOT NULL AUTO_INCREMENT,
+    `breq_blinkcond_id` INT NOT NULL,
+    `breq_record_type` INT NOT NULL,
+    `breq_user_id` BIGINT NOT NULL COMMENT 'Seller Id',
+    `breq_message` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    `breq_status` TINYINT(2) NOT NULL,
+    `breq_requested_on` datetime NOT NULL,
+    `breq_status_updated_on` datetime NOT NULL,
+    PRIMARY KEY (`breq_id`)
+) ENGINE = InnoDB CHARSET = utf8mb4 COLLATE utf8mb4_general_ci;
+
 -- --- Badges & Ribbons --- --
+
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_N/A', 1, 'N/A', 1)
+ON DUPLICATE KEY UPDATE label_caption = 'N/A';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOPIFY_MULTIVENDOR_PLUGIN_INFO', '1', 'Please enable the Multi Vendor Marketplace by Webkul Software Pvt Ltd plugin on your Shopify Store to sync data', '1');
+INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`, `plugin_description`) VALUES ((SELECT plugin_id from tbl_plugins where plugin_code='Shopify'), '1', 'Shopify', '');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOPIFY_SINGLE_VENDOR_PLUGIN_INFO', '1', 'Please create a private app from you Shopify dashbaord for data sync', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SELLER_PLUGIN_SETTINGS', '1', 'Settings', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', '1', 'Default rating for Products. Cannot be switched off.', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_SHOP_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop. Can be switched off.', '1');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_DELIVERY_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop delivery. Can be switched off.', '1');
+
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_NA', 1, 'NA', 1) ON DUPLICATE KEY UPDATE label_caption = 'NA';
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_View_Purpose";
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
+
+-- ---------Task 86672 Stripe Connect Changes ------ --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_INDIVIDUAL_ADDITIONAL_IDENTIFYING_DOCUMENT', 1, 'A document showing address, either a passport, local ID card, or utility bill from a well-known utility company.', ''),
+('LBL_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', 1, 'How frequently available funds are paid out. One of: daily, manual, weekly, or monthly. Default is daily.', ''),
+('LBL_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', 1, 'The number of days charge funds are held before being paid out. May also be set to minimum, representing the lowest available value for the account country. Default is minimum. The delay_days parameter does not apply when the interval is manual.', ''),
+('LBL_STRIPE_CONNECT_WEEK_DAY_DESC', 1, 'The day of the week when available funds are paid out, specified as monday, tuesday, etc. (required and applicable only if interval is weekly.)', ''),
+('LBL_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', '');
+
+-- ---------Task 86672 Stripe Connect Changes ------ -- 
+
+ALTER TABLE `tbl_orders_status_history` ADD `oshistory_tracking_url` VARCHAR(255) NOT NULL AFTER `oshistory_tracking_number`;
+
+
+-- ----- Task 84994 : Badges & Ribbons ---- --
+ALTER TABLE `tbl_badge_link_conditions`  ADD `blinkcond_user_id` INT NOT NULL COMMENT 'Seller Id'  AFTER `blinkcond_badge_id`;
+ALTER TABLE `tbl_badges` ADD `badge_condition_type` TINYINT(2) NOT NULL DEFAULT '1' AFTER `badge_type`;
+-- ----- Badges & Ribbons ---- --
+
 
 -- --------EasyECom---------- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'EasyEcom', '12', 'EasyEcom', '0', '1');

@@ -29,7 +29,7 @@ class TwilioSms extends SmsNotificationBase
                 'msg' => $this->error
             ];
         }
-        
+
         if (empty($to) || empty($body)) {
             return [
                 'status' => false,
@@ -44,7 +44,7 @@ class TwilioSms extends SmsNotificationBase
                 [
                     "body" => $body,
                     "from" => $this->settings['sender_id'],
-                    "statusCallback" => UrlHelper::generateFullUrl('SmsNotification', 'callback', [static::KEY_NAME], '', false)
+                    "statusCallback" => UrlHelper::generateFullUrl('SmsNotification', 'callback', [static::KEY_NAME])
                 ]
             );
         } catch ( RestException $e ) {
@@ -70,7 +70,6 @@ class TwilioSms extends SmsNotificationBase
     public function callback()
     {
         $data = FatApp::getPostedData();
-        
         if (empty($data) || !array_key_exists('MessageSid', $data)) {
             $this->error = Labels::getLabel('LBL_INVALID_REQUEST', $this->langId);
             return false;

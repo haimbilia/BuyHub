@@ -17573,6 +17573,8 @@ html.quick-view--open {
       line-height: 30px;
       text-transform: uppercase;
       width: 85px; }
+    .badges-2.badges-left {
+      transform: rotate(-90deg); }
   .badges-3 {
     display: flex;
     align-items: center;
@@ -17590,6 +17592,8 @@ html.quick-view--open {
       width: 90px;
       top: 7px;
       margin-left: -6px; }
+    .badges-4.badges-left {
+      transform: rotate(-90deg); }
   .badges-5 {
     top: 1rem;
     right: 1rem;
@@ -17611,6 +17615,20 @@ html.quick-view--open {
   .badges-right {
     right: 10px;
     top: 10px; }
+
+[direction="rtl"] .badges-4 .text {
+  left: -22px;
+  top: 10px; }
+
+[direction="rtl"] .badges-4.badges-left {
+  transform: none; }
+
+[direction="rtl"] .badges-2 .text {
+  left: -14px;
+  top: 10px; }
+
+[direction="rtl"] .badges-2.badges-right {
+  transform: rotate(-90deg); }
 
 .scroll {
   overflow: auto;
@@ -33690,6 +33708,9 @@ input.sp-input,
 .feedback-block .rating-listing .rating {
   --size: 1.5rem;
   --space: 0.4rem; }
+  .feedback-block .rating-listing .rating__text {
+    margin-bottom: 0;
+    margin-right: 1rem; }
 
 .shop-card {
   display: flex;
@@ -33697,11 +33718,52 @@ input.sp-input,
   .shop-card__img {
     border: solid 1px #dee2e6;
     border-radius: 4px;
-    padding: 2rem;
-    background: #fff; }
+    padding: .25rem;
+    background: #fff;
+    max-width: 150px; }
   .shop-card__detail {
     margin: 1rem 0;
     font-size: 0.8rem; }
+
+.no-after::after {
+  content: normal; }
+
+.custom-drag-drop .btn {
+  position: static !important; }
+
+.custom-drag-drop .scroll {
+  max-height: 300px; }
+
+.custom-drag-drop .list-drag-drop {
+  display: flex;
+  flex-direction: column; }
+
+.custom-drag-drop .list-drag-drop li {
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  border: solid 1px transparent;
+  margin: 5px 10px;
+  border-radius: 4px; }
+
+.custom-drag-drop .list-drag-drop li:hover {
+  /*background-color: var(--bg-gray);*/
+  border-color: #dee2e6; }
+
+.custom-drag-drop .checkbox {
+  font-size: 0.75rem;
+  color: #888;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  flex: 1;
+  max-width: 256px;
+  overflow: hidden; }
+
+.custom-drag-drop .icn {
+  cursor: -webkit-grab;
+  cursor: grab;
+  margin-left: 10px; }
 
 .detail-page {
   position: relative; }

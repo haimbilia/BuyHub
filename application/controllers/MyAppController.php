@@ -125,7 +125,6 @@ class MyAppController extends FatController
                 'AddProductToFavourite' => Labels::getLabel('LBL_Add_Product_To_favourite_list', $this->siteLangId),
                 'MovedSuccessfully' => Labels::getLabel('LBL_Moved_Successfully', $this->siteLangId),
                 'RemovedSuccessfully' => Labels::getLabel('LBL_Removed_Successfully', $this->siteLangId),
-                'controllerName' => $controllerName,
                 'confirmDeletePersonalInformation' => Labels::getLabel('LBL_Do_you_really_want_to_remove_all_your_personal_information', $this->siteLangId),
                 'preferredDimensions' => Labels::getLabel('LBL_Preferred_Dimensions_%s', $this->siteLangId),
                 'invalidCredentials' => Labels::getLabel('LBL_Invalid_Credentials', $this->siteLangId),
@@ -134,7 +133,6 @@ class MyAppController extends FatController
                 'primaryLanguageField' => Labels::getLabel('LBL_PRIMARY_LANGUAGE_DATA_NEEDS_TO_BE_FILLED_FOR_SYSTEM_TO_TRANSLATE_TO_OTHER_LANGUAGES.', $this->siteLangId),
                 'unknownPrimaryLanguageField' => Labels::getLabel('LBL_PRIMARY_LANGUAGE_FIELD_IS_NOT_SET.', $this->siteLangId),
                 'invalidRequest' => Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId),
-                'defaultCountryCode' => $defaultCountryCode,
                 'scrollable' => Labels::getLabel('LBL_SCROLLABLE', $this->siteLangId),
                 'quantityAdjusted' => Labels::getLabel('MSG_MAX_QUANTITY_THAT_CAN_BE_PURCHASED_IS_{QTY}._SO,_YOUR_REQUESTED_QUANTITY_IS_ADJUSTED_TO_{QTY}.', $this->siteLangId),
                 'withUsernameOrEmail' => Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $this->siteLangId),
@@ -184,6 +182,8 @@ class MyAppController extends FatController
             $jsVariables =  unserialize($jsVariablesCache);
         }
 
+        $jsVariables['controllerName'] = $controllerName;
+        $jsVariables['defaultCountryCode'] = $defaultCountryCode;
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
 
         $themeId = FatApp::getConfig('CONF_FRONT_THEME', FatUtility::VAR_INT, 1);
@@ -452,7 +452,7 @@ class MyAppController extends FatController
             $fld->requirements()->setRequired();
             $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
-    
+
             $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId)));
             $fld1->requirements()->setRequired();
             $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
@@ -694,7 +694,7 @@ class MyAppController extends FatController
         $this->_template->addJs('js/ion.rangeSlider.js');
         $this->_template->addJs('js/listing-functions.js');
     }
-    
+
     public function includeDatePickerLangJs()
     {
         $langCode = strtolower($this->siteLangCode);

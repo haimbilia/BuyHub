@@ -1,13 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); ?>
+$youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]); 
+?>
 
 <!-- Don't remove scrollUpTo-js span -->
 <span id="scrollUpTo-js"></span>
 <div class="nav-detail nav-detail-js">
     <ul>
-        <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
+        <?php
+        if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && ( 0 < count($product['preview_links']) || 0 < count($product['preview_attachments']) )) { ?>
             <li>
-                <a class="nav-scroll-js is-active" href="#specifications">
+                <a class="nav-scroll-js is-active" href="#prev-files">
                     <?php echo Labels::getLabel('LBL_FILES', $siteLangId); ?>
                 </a>
             </li>
@@ -44,7 +46,7 @@ $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video
 <section class="section">
     <div class="row justify-content-center">
         <div class="col-xl-7">
-            <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) { ?>
+            <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['preview_attachments']) || 0 < count($product['preview_links']))) { ?>
                 <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
             <?php } ?>
             <?php if (count($productSpecifications) > 0) { ?>

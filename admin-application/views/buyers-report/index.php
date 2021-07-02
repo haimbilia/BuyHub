@@ -15,6 +15,8 @@ $reportsData = [
     'pageTitle' => Labels::getLabel('LBL_Buyers_Sales_Report', $adminLangId),
     'adminLangId' => $adminLangId,
     'frmSearch' => $frmSearch,
-    'actionButtons' => []
+    'actionButtons' => [],
+    'fields' => $fields,
+    'defaultColumns' => $defaultColumns,
 ];
 $this->includeTemplate('_partial/report-index.php', $reportsData, false);

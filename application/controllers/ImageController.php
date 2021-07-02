@@ -672,19 +672,20 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
         switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 168;
-                $h = 37;
+            case 'THUMB':                
+                $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 120);
+                $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 68);
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
             default:
-                $w = 268;
-                $h = 82;
+                $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 120);
+                $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 68);
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                // AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
         }
+        
     }
 
     public function watermarkImage($lang_id = 0, $sizeType = '')
@@ -1388,6 +1389,33 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
 
         $filePath = AttachedFile::FILETYPE_BADGE_IMAGE_PATH;
+        switch (strtoupper($sizeType)) {
+            case 'THUMB':
+                $w = 60;
+                $h = 60;
+                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+            break;
+            case 'MINI':
+                $w = 35;
+                $h = 35;
+                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+            break;
+            default:
+                if (is_numeric($sizeType)) {
+                    AttachedFile::displayImage($image_name, $sizeType, $sizeType, '', $filePath);
+                } else {
+                    AttachedFile::displayOriginalImage($image_name, '', $filePath);
+                }
+            break;
+        }
+    }
+
+    public function badgeRequestImage(int $bReqId, int $langId = 0, $sizeType = '')
+    {
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $bReqId, 0, $langId);
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+
+        $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH;
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 60;

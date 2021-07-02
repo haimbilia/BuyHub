@@ -19,10 +19,8 @@ $(document).ready(function () {
     };
 
     editPluginForm = function (pluginType, pluginId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Plugins', 'form', [pluginType, pluginId]), '', function (t) {
-                fcom.updateFaceboxContent(t);
-            });
+        fcom.ajax(fcom.makeUrl('Plugins', 'form', [pluginType, pluginId]), '', function (t) {
+            fcom.updateFaceboxContent(t);
         });
     };
 
@@ -98,7 +96,7 @@ $(document).ready(function () {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
-                setTimeout(function(){ reloadList(); }, 200);
+                setTimeout(function () { reloadList(); }, 200);
             } else {
                 fcom.displayErrorMessage(ans.msg);
             }
@@ -124,9 +122,9 @@ $(document).ready(function () {
             reloadList();
         });
     };
-    syncCategories = function(){        
+    syncCategories = function () {
         fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
-        },{},false);
+        }, {}, false);
     }
 })();
 
@@ -178,3 +176,29 @@ $(document).on('click', '.uploadFile-Js', function () {
         }
     }, 500);
 });
+
+$(document).ajaxComplete(function () {
+    /* StripeConnect */
+        $('.StripeConnectPayoutInterval--js').trigger('change');
+    /* StripeConnect */    
+});
+
+/* StripeConnect */
+    $(document).on('change', '.StripeConnectPayoutInterval--js', function(){
+        var payoutMonthlyEle = '.StripeConnectPayoutMonthDays--js';
+        var payoutWeeklyEle = '.StripeConnectPayoutWeekly--js';
+        var payoutDaysEle = '.StripeConnectPayoutDelayDays--js';
+        if ('manual' == $(this).val() || '' == $(this).val()) {
+            $(payoutMonthlyEle + ', ' + payoutWeeklyEle + ', ' + payoutDaysEle).val("").attr('disabled', 'disabled');
+        } else if ('daily' == $(this).val()) {
+            $(payoutDaysEle).removeAttr('disabled');
+            $(payoutWeeklyEle + ", " + payoutMonthlyEle).val("").attr('disabled', 'disabled');
+        } else if ('monthly' == $(this).val()) {
+            $(payoutMonthlyEle).removeAttr('disabled');
+            $(payoutDaysEle + ", " + payoutWeeklyEle).val("").attr('disabled', 'disabled');
+        } else if ('weekly' == $(this).val()) {
+            $(payoutWeeklyEle).removeAttr('disabled');
+            $(payoutDaysEle + ", " + payoutMonthlyEle).val("").attr('disabled', 'disabled');
+        }
+    });
+/* StripeConnect */

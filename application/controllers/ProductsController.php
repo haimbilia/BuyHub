@@ -223,12 +223,14 @@ class ProductsController extends MyAppController
 
             $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
             $catProdSrchObj->doNotCalculateRecords();
+            $catProdSrchObj->removeFld('1 as availableInLocation');
             $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
         }
         /* ] */
 
         $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
         $prodSrchObj->doNotCalculateRecords();
+        $prodSrchObj->removeFld('1 as availableInLocation');
 
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
@@ -254,16 +256,21 @@ class ProductsController extends MyAppController
                 $conditionSrch->setPageSize(1);
                 $conditionSrch->addMultipleFields(array('selprod_condition'));
                 $conditionSrch->addCondition('selprod_condition', '=', $key);
+                /* if needs to show product counts under any condition[ */
+                //$conditionSrch->addFld('count(selprod_condition) as totalProducts');
+                /* ] */
+                // echo $conditionSrch->getQuery().'<br>';
                 $conditionRs = $conditionSrch->getResultSet();
-                $conditionArr = $db->fetch($conditionRs);
-                if (!empty($conditionArr)) {
-                    $conditionsArr[] = $conditionArr;
+                $row = $db->fetch($conditionRs);
+                if (!empty($row)) {
+                    $conditionsArr[] = $row;
                 }
             }
             FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
         } else {
             $conditionsArr = unserialize($conditions);
         }
+        $conditionsArr = array_filter($conditionsArr);
         /* ] */
 
         /* Price Filters[ */
@@ -439,11 +446,12 @@ class ProductsController extends MyAppController
         $prodSrch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
+                'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
                 'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
                 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
                 'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age', 'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id'
+                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
+                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id','COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -478,10 +486,11 @@ class ProductsController extends MyAppController
             array_shift($selProdOption);
             if (0 < count($selProdOption)) {
                 $optionComb = implode('_', $selProdOption);
+                $optionComb = ['0', $optionComb];
             } else {
                 $optionComb = '0';
             }
-
+            
             $recordId = $selprod_id;
             $productType = Product::CATALOG_TYPE_INVENTORY;
             if (0 == $product['product_attachements_with_inventory']) {
@@ -489,23 +498,25 @@ class ProductsController extends MyAppController
                 $productType = Product::CATALOG_TYPE_PRIMARY;
             }
 
-            $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb);
-
-            if ('0' != $optionComb) {
-                $commonRecords = DigitalDownloadSearch::getLinks($recordId, $productType, '0');
-                $records = array_replace($records, $commonRecords);
-            }
+            $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb, 0, null, true);
 
             $product['preview_links'] = $records;
 
             $records = [];
 
-            $records = DigitalDownloadSearch::getAttachments($recordId, $productType, $optionComb);
-
-            if ('0' != $optionComb) {
-                $commonRecords = DigitalDownloadSearch::getAttachments($recordId, $productType, '0');
-                $records = array_replace($records, $commonRecords);
-            }
+            $attrs = [
+                'afile_id as prev_afile_id', 'pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_name as preview', 'afile_type', 'afile_id'
+            ];
+            
+            $records = DigitalDownloadSearch::getAttachments(
+                $recordId,
+                $productType,
+                $optionComb,
+                $this->siteLangId,
+                true,
+                AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
+                $attrs
+            );
 
             $product['preview_attachments'] = $records;
         }
@@ -758,8 +769,8 @@ class ProductsController extends MyAppController
         $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
 
-        $currSellerArr = $this->getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);
-        $this->set('sellers', $currSellerArr);
+        //$currSellerArr = $this->getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);      
+        $this->set('sellers', [$product]);        
         
         $this->set('currSelprodId', $selprod_id);
         $this->set('canSubmitFeedback', $canSubmitFeedback);
@@ -835,7 +846,7 @@ class ProductsController extends MyAppController
                 }
             }
             if (!empty($productAction)) {
-                $et = new EcommerceTracking($analyticsId, NULL, UserAuthentication::getLoggedUserId(true));
+                $et = new EcommerceTracking($analyticsId, null, UserAuthentication::getLoggedUserId(true));
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CLICK);
                 $et->addProductActionList($productAction);
                 $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
@@ -867,7 +878,7 @@ class ProductsController extends MyAppController
     {
         $moreSellers = $this->getMoreSeller($selprodCode, $this->siteLangId, $sellerId);
         $productsArr = [];
-        foreach ($moreSellers as $sellerDetail) { 
+        foreach ($moreSellers as $sellerDetail) {
             $productsArr[$sellerDetail['selprod_id']] = $this->getProductDetail($sellerDetail['selprod_id']);
         }
         $this->set('productsArr', $productsArr);
@@ -1121,7 +1132,7 @@ class ProductsController extends MyAppController
             array(
                 'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
                 'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price'
+                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price','shop_id'
             )
         );
         // echo $prodSrch->getQuery(); die;
@@ -1197,7 +1208,7 @@ class ProductsController extends MyAppController
                 array(
                     'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'COALESCE(selprod_title,product_name, product_identifier) as selprod_title',
                     'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price'
+                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty'
                 )
             );
 
@@ -1301,6 +1312,7 @@ class ProductsController extends MyAppController
             $catSrch->joinProductToCategory();
             $catSrch->joinCategoryRelationWithChild();
             $catSrch->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
+            $catSrch->removeFld('1 as availableInLocation');
             $catSrch->validateAndJoinDeliveryLocation(false, false);
             $catSrch->doNotCalculateRecords();
             $catSrch->doNotLimitRecords();
@@ -2163,5 +2175,26 @@ class ProductsController extends MyAppController
         
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
+    }
+
+    public function autoComplete()
+    {
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $srch = new ProductSearch($this->siteLangId);        
+        $srch->addOrder('product_name');
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
+            $cnd->attachCondition('product_identifier', 'LIKE', '%'. $keyword . '%', 'OR');
+        }
+
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'seller_id', '=', UserAuthentication::getLoggedUserId());
+        
+        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
+              
+        $db = FatApp::getDb();
+        $products = $db->fetchAll($srch->getResultSet());
+        die(json_encode($products));
     }
 }

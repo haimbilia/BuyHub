@@ -277,7 +277,7 @@ class HomeController extends MyAppController
         }
 
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'shop_id'));
+        $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'shop_id', 'selprod_min_order_qty'));
         return $productSrchObj;
     }
 
@@ -419,7 +419,10 @@ class HomeController extends MyAppController
             }
             $fileName = $langCode . '.json';
             $filePath = Labels::JSON_FILE_DIR_NAME . '/' . Labels::TYPE_APP . '/AP/' . $fileName;
-
+            
+            if (false === file_exists(CONF_UPLOADS_PATH . $filePath)) {
+                FatUtility::dieJsonError(Labels::getLabel('MSG_FILE_NOT_FOUND._PLEASE_SYNC_FILE_FROM_ADMIN.', $langId));
+            }
             AttachedFile::downloadAttachment($filePath, $fileName);
             exit;
         }
@@ -1299,7 +1302,8 @@ class HomeController extends MyAppController
         $langCode = Language::getAttributesById($this->siteLangId, 'language_code', false);
 
         $data = [
-            'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)
+            'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0),
+            'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.')
         ];
 
         $data['languageLabels'] = [

@@ -74,9 +74,15 @@ $(document).on("click", ".headerColumnJs", function (e) {
 	searchProductsReport(frm, false);
 });
 
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
 (function () {
-	var currentPage = 1;
-	var runningAjaxReq = false;
 	var dv = '#listing';
 
 	goToSearchPage = function (page) {
@@ -88,15 +94,17 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		searchProductsReport(frm);
 	};
 
-	reloadList = function () {
+	reloadList = function (withloader) {
 		var frm = document.frmProductsReportSearchPaging;
-		searchProductsReport(frm);
+		searchProductsReport(frm, withloader);
 	};
 
-	searchProductsReport = function (form, withloader) {
+	searchProductsReport = function (frm, withloader) {
+		setColumnsData(frm);
+
 		var data = '';
-		if (form) {
-			data = fcom.frmData(form);
+		if (frm) {
+			data = fcom.frmData(frm);
 		}
 
 		if (typeof withloader == 'undefined' || withloader != false) {
@@ -107,7 +115,8 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		});
 	};
 
-	exportReport = function (dateFormat) {
+	exportReport = function () {
+		setColumnsData(document.frmProductsReportSearch);
 		document.frmProductsReportSearch.action = fcom.makeUrl('ProductsReport', 'export');
 		document.frmProductsReportSearch.submit();
 	}
@@ -116,6 +125,20 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		document.frmProductsReportSearch.shop_id.value = '0';
 		document.frmProductsReportSearch.brand_id.value = '0';
 		document.frmProductsReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
+		});
 		searchProductsReport(document.frmProductsReportSearch);
+	};
+
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
+		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
 	};
 })();

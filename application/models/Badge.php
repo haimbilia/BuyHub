@@ -21,6 +21,7 @@ class Badge extends MyAppModel
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'type',
+        self::DB_TBL_PREFIX . 'condition_type',
         self::DB_TBL_PREFIX . 'shape_type',
         self::DB_TBL_PREFIX . 'display_inside',
         self::DB_TBL_PREFIX . 'color',
@@ -37,13 +38,13 @@ class Badge extends MyAppModel
     public const ICON_MIN_WIDTH = 26;
     public const ICON_MIN_HEIGHT = 26;
 
-     /* For Ribbon */
+    /* For Ribbon */
     public const RIBB_TEXT_MIN_LEN = 2;
     public const RIBB_TEXT_MAX_LEN = 10;
 
     public const RIBB_POS_TRIGHT = 1;
     public const RIBB_POS_TLEFT = 2;
-     /* For Ribbon */
+    /* For Ribbon */
 
     public const REMOVED_OLD_IMAGE_TIME = 4;
 
@@ -51,8 +52,11 @@ class Badge extends MyAppModel
     private $prodId = 0;  //Priority 2
     private $shopId = 0;  //Priority 3
 
-    public const APPROVAL_STATUS_REQUESTED = 1; 
-    public const APPROVAL_STATUS_OPEN = 0; 
+    public const APPROVAL_REQUIRED = 1;
+    public const APPROVAL_OPEN = 0;
+
+    public const COND_MANUAL = 1;
+    public const COND_AUTO = 2;
 
     /**
      * __construct
@@ -74,26 +78,38 @@ class Badge extends MyAppModel
      */
     public static function getTypeArr(int $langId): array
     {
-        return [
-            self::TYPE_BADGE => Labels::getLabel('LBL_BADGE', $langId),
-            self::TYPE_RIBBON => Labels::getLabel('LBL_RIBBON', $langId)
-        ];
-    }
-    
-    /**
-     * getTypeName
-     *
-     * @param  int $type
-     * @param  int $langId
-     * @return string
-     */
-    public static function getTypeName(int $type, int $langId): string
-    {
-        $arr = self::getTypeArr($langId);
-        if (!array_key_exists($type, $arr)) {
-            return '';
+        $arr = FatCache::get('getBadgeTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::TYPE_BADGE => Labels::getLabel('LBL_BADGE', $langId),
+                self::TYPE_RIBBON => Labels::getLabel('LBL_RIBBON', $langId)
+            ];
+            FatCache::set('getBadgeTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
         }
-        return (string) $arr[$type];
+
+        return json_decode($arr, true);
+    }
+
+    /**
+     * getConditionTypeArr
+     *
+     * @param  int $langId
+     * @return array
+     */
+    public static function getConditionTypeArr(int $langId): array
+    {
+        $arr = FatCache::get('getBadgeConditionTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::COND_MANUAL => Labels::getLabel('LBL_MANUAL', $langId),
+                self::COND_AUTO => Labels::getLabel('LBL_AUTOMATIC', $langId)
+            ];
+            FatCache::set('getBadgeConditionTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+
+        return json_decode($arr, true);
     }
 
     /**
@@ -104,15 +120,22 @@ class Badge extends MyAppModel
      */
     public static function getShapeTypesArr(int $langId): array
     {
-        return [
-            self::SHAPE_RECTANGLE => Labels::getLabel('LBL_RECTANGLE', $langId),
-            self::SHAPE_STRIP => Labels::getLabel('LBL_STRIP', $langId),
-            self::SHAPE_STAR => Labels::getLabel('LBL_STAR', $langId),
-            self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
-            self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
-        ];
+        $arr = FatCache::get('getBadgeShapeTypesArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::SHAPE_RECTANGLE => Labels::getLabel('LBL_RECTANGLE', $langId),
+                self::SHAPE_STRIP => Labels::getLabel('LBL_STRIP', $langId),
+                self::SHAPE_STAR => Labels::getLabel('LBL_STAR', $langId),
+                self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
+                self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
+            ];
+            FatCache::set('getBadgeShapeTypesArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+        
+        return json_decode($arr, true);
     }
-    
+
     /**
      * getRibbonPostionArr
      *
@@ -121,208 +144,51 @@ class Badge extends MyAppModel
      */
     public static function getRibbonPostionArr(int $langId): array
     {
-        return [
-            self::RIBB_POS_TRIGHT => Labels::getLabel("LBL_TOP_RIGHT", $langId),
-            self::RIBB_POS_TLEFT => Labels::getLabel("LBL_TOP_LEFT", $langId),
-        ];
+        $arr = FatCache::get('getRibbonPostionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::RIBB_POS_TRIGHT => Labels::getLabel("LBL_TOP_RIGHT", $langId),
+                self::RIBB_POS_TLEFT => Labels::getLabel("LBL_TOP_LEFT", $langId),
+            ];
+            FatCache::set('getRibbonPostionArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
+        }
+    
+        return json_decode($arr, true);
     }
 
     /**
-     * getShapeTypeName
-     *
-     * @param  int $type
-     * @param  int $langId
-     * @return string
-     */
-    public static function getShapeTypeName(int $type, int $langId): string
-    {
-        $arr = self::getShapeTypesArr($langId);
-        if (!array_key_exists($type, $arr)) {
-            return '';
-        }
-        return (string) $arr[$type];
-    }
-    
-    /**
-     * getData
+     * getApprovalStatusArr
      *
      * @param  int $langId
      * @return array
      */
-    public function getData(int $langId): array
+    public static function getApprovalStatusArr(int $langId): array
     {
-        if (1 > $this->getMainTableRecordId()) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
-            return [];
-        }
-
-        $srch = new BadgeSearch($langId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addCondition(self::DB_TBL_PREFIX . 'id', '=', $this->getMainTableRecordId());
-        $srch->addMultipleFields(array_merge(self::ATTR, self::LANG_ATTR));
-        $srch->descOrder();
-        $rs = $srch->getResultSet();
-        
-        return (array) FatApp::getDb()->fetch($rs);
-    }
-
-    /**
-     * getAllLangData
-     *
-     * @return array
-     */
-    public function getAllLangData(): array
-    {
-        if (1 > $this->getMainTableRecordId()) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
-            return [];
-        }
-
-        $srch = new BadgeSearch();
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->joinTable(
-            Badge::DB_TBL_LANG,
-            'LEFT OUTER JOIN',
-            'bdg_l.badgelang_badge_id = bdg.badge_id',
-            'bdg_l'
-        );
-        $srch->addCondition(self::DB_TBL_PREFIX . 'id', '=', $this->getMainTableRecordId());
-        $srch->addMultipleFields(array_merge(self::ATTR, self::LANG_ATTR));
-        $srch->descOrder();
-        $rs = $srch->getResultSet();
-        
-        return (array) FatApp::getDb()->fetchAll($rs, self::DB_TBL_LANG_PREFIX . 'lang_id');
-    }
-    
-    /**
-     * getRequiredApprovalName
-     *
-     * @param  int $status
-     * @param  int $langId
-     * @return string
-     */
-    public static function getRequiredApprovalName(int $status, int $langId): string
-    {
-        return (self::APPROVAL_STATUS_REQUESTED == $status ? Labels::getLabel('LBL_REQUESTED', $langId) : Labels::getLabel('LBL_OPEN', $langId));
-    }
-    
-    /**
-     * add
-     *
-     * @param  array $post
-     * @return bool
-     */
-    public function add(array $post): bool
-    {
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $recordData = [];
-        foreach (Badge::ATTR as $column) {
-            switch ($column) {
-                case Badge::DB_TBL_PREFIX . 'id':
-                    continue 2;
-                    break;
-                
-                case Badge::DB_TBL_PREFIX . 'identifier':
-                        $recordData[$column] = "";
-                        if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name']) && array_key_exists($siteDefaultLangId, $post[Badge::DB_TBL_PREFIX . 'name'])) {
-                            $recordData[$column] = $post[Badge::DB_TBL_PREFIX . 'name'][$siteDefaultLangId];
-                        } else {
-                            $recordData[$column] = $post[Badge::DB_TBL_PREFIX . 'name'];
-                        }
-
-                        if (self::TYPE_RIBBON == $post[self::DB_TBL_PREFIX . 'type']) {
-                            if (self::RIBB_TEXT_MIN_LEN > strlen($recordData[$column])) {
-                                $this->error = Labels::getLabel('LBL_INVALID_MIN_LENGTH', $siteDefaultLangId);
-                                return false; 
-                            }
-
-                            if (self::RIBB_TEXT_MAX_LEN < strlen($recordData[$column])) {
-                                $recordData[$column] = substr($recordData[$column], 0, (self::RIBB_TEXT_MAX_LEN - 1));
-                            }
-                        }
-
-                    break;
-                    
-                case Badge::DB_TBL_PREFIX . 'active':
-                    $recordData[$column] = (0 > $post[Badge::DB_TBL_PREFIX . 'active'] ? applicationConstants::NO : $post[Badge::DB_TBL_PREFIX . 'active']);
-                    break;
-                        
-                default:
-                    $recordData[$column] = array_key_exists($column, $post) ? $post[$column] : '';
-                    break;
-                
-            }
+        $arr = FatCache::get('getBadgeApprovalStatusArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = [
+                self::APPROVAL_OPEN => Labels::getLabel('LBL_OPEN', $langId),
+                self::APPROVAL_REQUIRED => Labels::getLabel('LBL_REQUIRED', $langId),
+            ];
+            FatCache::set('getBadgeApprovalStatusArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            return $arr;
         }
         
-        $this->assignValues($recordData);
-        if (!$this->save()) {
-            return false;
-        }
-
-        $badgeId = $this->getMainTableRecordId();
-
-        if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name'])) {
-            $langNames = Language::getAllNames();
-            foreach ($post[Badge::DB_TBL_PREFIX . 'name'] as $langId => $name) {
-                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                $tranlateToOtherLang = array_key_exists('auto_update_other_langs_data', $post) ? $post['auto_update_other_langs_data'] : 0;
-                if (empty($name) && !empty($translatorSubscriptionKey) && 0 < $tranlateToOtherLang) {
-                    $updateLangDataobj = new TranslateLangData(self::DB_TBL_LANG);
-                    $translatedText = $updateLangDataobj->directTranslate([Badge::DB_TBL_PREFIX . 'name' => $recordData[Badge::DB_TBL_PREFIX . 'identifier']]);
-                    if (false === $translatedText) {
-                        continue;
-                    }
-                    $name = current($translatedText)[Badge::DB_TBL_PREFIX . 'name'];
-                }
-
-                if (empty($name)) {
-                    continue;
-                }
-
-                if (self::TYPE_RIBBON == $post[self::DB_TBL_PREFIX . 'type']) {
-                    if (self::RIBB_TEXT_MIN_LEN > strlen($name)) {
-                        $this->error = Labels::getLabel('LBL_INVALID_LENGTH_OF_{LANG}_NAME', $langId);
-                        $this->error = CommonHelper::replaceStringData($this->error, ['{LANG}' => $langNames[$langId]]);
-                        return false; 
-                    }
-
-                    if (self::RIBB_TEXT_MAX_LEN < strlen($name)) {
-                        $name = substr($name, 0, (self::RIBB_TEXT_MAX_LEN - 1));
-                    }
-                }
-
-                $recordLangData = [
-                    Badge::DB_TBL_LANG_PREFIX . 'badge_id' => $badgeId,
-                    Badge::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
-                    Badge::DB_TBL_PREFIX . 'name' => $name
-                ];
-                
-                if (!$this->updateLangData($langId, $recordLangData)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return json_decode($arr, true);
     }
-    
+
     /**
      * deleteImagesWithOutBadgeId
      *
-     * @param  int $fileType
      * @return bool
      */
-    public static function deleteImagesWithOutBadgeId(int $fileType): bool
+    public static function deleteImagesWithOutBadgeId(): bool
     {
-        if (empty($fileType) || $fileType != AttachedFile::FILETYPE_BADGE) {
-            return false;
-        }
-
         $currentDate = date('Y-m-d  H:i:s');
         $prevDate = strtotime('-' . static::REMOVED_OLD_IMAGE_TIME . ' hour', strtotime($currentDate));
         $prevDate = date('Y-m-d  H:i:s', $prevDate);
-        $where = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_updated_at <= ?', 'vals' => array($fileType, 0, $prevDate));
+        $where = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_updated_at <= ?', 'vals' => array(AttachedFile::FILETYPE_BADGE, 0, $prevDate));
         if (!FatApp::getDb()->deleteRecords(AttachedFile::DB_TBL, $where)) {
             return false;
         }
@@ -330,41 +196,21 @@ class Badge extends MyAppModel
     }
     
     /**
-     * setSellerProdudtId
+     * setRecordId
      *
      * @param  int $selProdId
-     * @return object
+     * @param  int $prodId
+     * @param  int $shopId
+     * @return void
      */
-    public function setSellerProdudtId(int $selProdId): object
+    public function setRecordId(int $selProdId = 0, int $prodId = 0, int $shopId = 0): object
     {
         $this->selProdId = $selProdId;
-        return $this;
-    }
-
-    /**
-     * setProductId
-     *
-     * @param  int $prodId
-     * @return object
-     */
-    public function setProductId(int $prodId): object
-    {
         $this->prodId = $prodId;
-        return $this;
-    }
-
-    /**
-     * setShopId
-     *
-     * @param  int $shopId
-     * @return object
-     */
-    public function setShopId(int $shopId): object
-    {
         $this->shopId = $shopId;
         return $this;
     }
-    
+
     /**
      * getBadges
      *
@@ -379,7 +225,7 @@ class Badge extends MyAppModel
         }
 
         $sellerId = Shop::getAttributesById($this->shopId, 'shop_user_id');
-        
+
         $avgRating = SellerProduct::getRating($this->selProdId);
         $shopAvgRating = SellerProduct::getShopRating($sellerId);
         $completionRate = OrderProduct::getCompletionRate($sellerId);
@@ -393,14 +239,15 @@ class Badge extends MyAppModel
             'badge_display_inside',
             'blinkcond_position',
             'badge_type',
-            'COALESCE(badge_name, badge_identifier) as badge_name'
+            'COALESCE(badge_name, badge_identifier) as badge_name',
+            'breq_id'
         ];
 
         $srch = new BadgeLinkConditionSearch();
         $srch->doNotCalculateRecords();
 
         if ($type == Badge::TYPE_BADGE) {
-            $srch->doNotLimitRecords();    
+            $srch->doNotLimitRecords();
         }
 
         if ($type == Badge::TYPE_RIBBON) {
@@ -408,6 +255,7 @@ class Badge extends MyAppModel
         }
 
         $srch->joinBadgeLinks();
+        $srch->joinBadgeRequest();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
 
@@ -445,8 +293,8 @@ class Badge extends MyAppModel
                         END)
                     ELSE ' . $recordCondition . ' END)'
             );
-        } 
-        
+        }
+
         if ($type == Badge::TYPE_RIBBON) {
             $srch->addFld([
                 'badge_shape_type',
@@ -466,15 +314,23 @@ class Badge extends MyAppModel
                 ELSE TRUE 
             END)'
         );
+
+        $srch->addDirectCondition(
+            '(CASE 
+                WHEN breq_id IS NOT NULL
+                THEN breq_status = ' . BadgeRequest::REQUEST_APPROVED . ' 
+                ELSE TRUE 
+            END)'
+        );
+
         $srch->addCondition('badge_type', '=', $type);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('badge_required_approval', '=', applicationConstants::NO);
-        // $srch->addOrder('blinkcond_record_type', 'ASC');
+        $srch->addGroupBy('blinkcond_badge_id');
         $srch->addOrder('blinkcond_id', 'DESC');
-        
+
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
-        
+
     /**
      * getBadgeUrl
      *
@@ -496,18 +352,41 @@ class Badge extends MyAppModel
         $urls = [];
 
         foreach ($badgeDetail as $row) {
-            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $langId, 0, false);
-            if (!is_array($icon) || empty($icon['afile_physical_path'])) {
-                /* Fetching Universal Image Else */
-                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, 0, false);
-            }
+            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $langId, true);
             $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
             $urls[] = [
-                    'url' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $langId, $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                    'name' => $row['badge_name'],
-                    'conditionType' => $row['blinkcond_condition_type'],
-                ];
+                'url' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $langId, $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                'name' => $row['badge_name'],
+                'conditionType' => $row['blinkcond_condition_type'],
+            ];
         }
         return $urls;
+    }
+    
+    /**
+     * canAccess
+     *
+     * @param  mixed $badgeId
+     * @param  mixed $userId
+     * @return int
+     */
+    public static function canAccess(int $badgeId, int $userId): int
+    {
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinBadge();
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
+        $srch->addMultipleFields([
+            self::DB_TBL_PREFIX . 'id',
+            '(CASE
+                WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_RIBBON . ' OR ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_OPEN . '
+                    THEN 1
+                    WHEN SUM(IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'status = ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)) > 0
+                    THEN 1
+                ELSE 0
+            END) as canAccess'
+        ]);
+        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id', '=', $badgeId);
+        $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        return current($record);
     }
 }

@@ -18,7 +18,7 @@ class PickupAddressesController extends AdminBaseController
     {
         $address = new Address(0, $this->adminLangId);
         $addresses = $address->getData(Address::TYPE_ADMIN_PICKUP, 0);
-        $this->set('arr_listing', $addresses);
+        $this->set('arrListing', $addresses);
         $this->set('canEdit', $this->objPrivilege->canEditPickupAddresses($this->admin_id, true));
         $this->_template->render(false, false);
     }

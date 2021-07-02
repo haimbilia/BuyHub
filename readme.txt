@@ -115,6 +115,9 @@ Fixes:
     => 053744 - when cancellation is approved and amount is not refunded then the amount is not coming under stats
     => 054447 - when product having multiple options then on detail page> options are not listing properly
     => 054613 - Error display on invoice pdf page
+    => 054742 - wrong message is populating on button on tooltip
+    => 054591 - Getting delivery field in tax invoice on pickup order
+    => 054711 - when multiple products are linked with same shipping profile then pagination count is not proper
 
 
 Develop
@@ -188,7 +191,18 @@ Fixes:
     => 054597 - generate label is coming on seller end on pickup order 
     => 054611 - while adding hipping profile> on deselection of region/country> linked states and countries are listing as selected
     => 054612 - login with otp is working with default otp 0000
-
+    => 054616 - after submitting review> getting error on review page- front end
+    => 054717 - on recently view product error coming on product detail page
+    => 054731 - when review is placed with media then there is no need to add show more on 6th image
+    => 054761 - despite having sku non mandatory it's not adding inventory from seller end
+    => 054814 - admin> catalog> rating type> search is not working
+    => 054813 - admin> catalog> rating types> rating types sr. no are not listing properly on changing page
+    => 055069 - on product detail page undefined index: theprice notice coming
+    => 055077 - when cookies policy are turned off from admin then recently viewed items are not listing on detail page of product
+    => 055104 - seller dashboard> data migration tab is not highlighting on accessing
+    => 055093 - while changing seller approval request if admin declines request without message then on front end it's listing heading- reason for cancellation which is blank
+    => 055092 - when cookies are not allowed from admin still then user have option for the same in account
+    => 055090 - when truncate request is raised by user then in admin> it's listing- view purpose which is not there on user end
 
 New Features:
     => Admin shipped products listing page
@@ -198,9 +212,28 @@ New Features:
     => 053612 - when tax is collected by admin and commission incl tax then invoice is having some issues
     => 053908 - when admin creates category collection (category layout 1) more than once with same category then in second collection> products are not populating
     => 053978 - Forget password label language issue in admin
+    => 054137 - Issue in product refund stats
+    => 054183 - on admin order cancellation page roundoff error coming
+    => 054242 - paystack gateway not supporting ZAR currency    
+    => 054279 - warranty needs to be optional when product is digital         
+    => 054644 - Admin > Shipping Company User > Wrong validation message is showing.   
+    => 054689 - 404 error page - issue with few produc urls when subscription in enabled
+    => 054718 - Categories added are not listing in admin.
+    => 054728 -	Aftership order status should be automatically marked delivered.
+    => 054698 - on clicking of delete button in shipping profile there needs to be confirmation popup
+    => 055010 - SMTP handling - In case of Godaddy email hosting.
+    => 055106 - Product detail page - Google snippet Schema Code - strip tags from description.
+    => 055126 - issue with language in email template
+    => 055156 - on payment app screen payment logo not coming correctly
+    => 054832 - when new category is introduced in hierarchy then linking breaks and product gets unlisted in some of the categories
+    => 055153 - when faq category is deleted from admin still then it's listing in collection on home page
+    => 055237 - When Geo location is enabled, No data found is showing while clicking on view more button.
+    => 055013 - when user registers through social or phone number then there is no email of the same and admin can't send email to user
+    => 054816 - getting uneven behavior in related and buy together products on clicking which are already added
+    => 055441 - delete order from admin option should comes exactly after 2 days 
+    => 055444 - On order status update email tracking url not coming 
 
 Enhancements :
-   => Make provision to made seller
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 
    => W3c validator.
@@ -310,3 +343,6 @@ bugs:
     #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
     #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
     #054212	while adding inventory> when we add link and url is long then UI is not proper
+    #055154	digital items> files linked with specific language are listing all on front end in preview
+    #055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
+    #055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing

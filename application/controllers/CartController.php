@@ -84,7 +84,7 @@ class CartController extends MyAppController
         $srch->addGroupBy('selprod_id');
         /* ] */
 
-        $srch->addMultipleFields(array('uwlp_uwlist_id', 'selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'IFNULL(splprice_price, selprod_price) AS theprice', 'IFNULL(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields(array('uwlp_uwlist_id', 'selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'IFNULL(splprice_price, selprod_price) AS theprice', 'selprod_price', 'IFNULL(shop_name, shop_identifier) as shop_name', 'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found'));
         $srch->addOrder('uwlp_added_on', 'DESC');
         $rs = $srch->getResultSet();
         $saveForLaterProducts = FatApp::getDb()->fetchAll($rs);

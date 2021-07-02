@@ -227,8 +227,8 @@ $(document).ready(function () {
     }
 
     clearCache = function () {
-        $.systemMessage(langLbl.processing, 'alert--process');
-        fcom.ajax(fcom.makeUrl('Home', 'clear'), '', function (t) {
+        // $.systemMessage(langLbl.processing, 'alert--process');
+        fcom.updateWithAjax(fcom.makeUrl('Home', 'clear'), '', function (t) {
             window.location.reload();
         });
     }
@@ -253,10 +253,10 @@ $(document).ready(function () {
         if (pos == undefined)
             pos = 'pre';
         var str = str.toString().toLowerCase()
-            .replace(/\s+/g, '-') // Replace spaces with -
-            .replace(/[^\w\-\/]+/g, '') // Remove all non-word chars
-            .replace(/\-\-+/g, '-') // Replace multiple - with single -
-            .replace(/^-+/, '') // Trim - from start of text
+            .replace(/\s+/g, '-') /* Replace spaces with - */
+            .replace(/[^\w\-\/]+/g, '') /* Remove all non-word chars */
+            .replace(/\-\-+/g, '-') /* Replace multiple - with single - */
+            .replace(/^-+/, '') /* Trim - from start of text */
             .replace(/-+$/, '');
         if (extra && pos == 'pre') {
             str = extra + '/' + str;
@@ -416,10 +416,10 @@ function getSlickSliderSettings(slidesToShow, slidesToScroll, layoutDirection) {
 
     Slugify = function (str, str_val_id, is_slugify) {
         var str = str.toString().toLowerCase()
-            .replace(/\s+/g, '-') // Replace spaces with -
-            .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-            .replace(/\-\-+/g, '-') // Replace multiple - with single -
-            .replace(/^-+/, '') // Trim - from start of text
+            .replace(/\s+/g, '-') /* Replace spaces with - */
+            .replace(/[^\w\-]+/g, '') /* Remove all non-word chars */
+            .replace(/\-\-+/g, '-') /* Replace multiple - with single - */
+            .replace(/^-+/, '') /* Trim - from start of text */
             .replace(/-+$/, '');
         if ($("#" + is_slugify).val() == 0)
             $("#" + str_val_id).val(str);
@@ -550,7 +550,7 @@ var map;
 var marker;
 var geocoder;
 var infowindow;
-// Initialize the map.
+/* Initialize the map. */
 function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     var lat = parseFloat(lat);
     var lng = parseFloat(lng);
@@ -641,7 +641,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     } */
 }
 
-function geocodeAddress(geocoder, resultsMap, infowindow, address) {
+function geocodeAddress(geocoder, resultsMap, infowindow, address) {   
     geocoder.geocode(address, function (results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
             resultsMap.setCenter(results[0].geometry.location);
@@ -697,9 +697,13 @@ function geocodeSetData(results) {
                 }
             }
         }
-     
         $('#geo_postal_code').val(data.postal_code);
-        $('#geo_city').val(data.city);
+        if (data.hasOwnProperty("city")) {
+            $('#geo_city').val(data.city);
+        }else{
+            $('#geo_city').val(data.state);
+        }
+        
         $('#geo_country_code option').each(function () {
             if (this.text == data.country) {
                 $('#geo_country_code').val(this.value);
@@ -750,7 +754,7 @@ function queryStringToJSON(qs) {
 function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = false) {
     var inputList = document.querySelectorAll(element);
     var country = ('' == langLbl.defaultCountryCode || 'undefined' == typeof langLbl.defaultCountryCode ? 'in' : langLbl.defaultCountryCode);
-    inputList.forEach(function(input) {
+    inputList.forEach(function (input) {
         if (true == destroy) {
             $(input).removeAttr('style');
             var clone = input.cloneNode(true);

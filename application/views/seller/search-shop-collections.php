@@ -7,7 +7,7 @@
                 <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(1)" class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Activate', $siteLangId);?></a>
                 <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(0)" class="btn btn-outline-brand btn-sm  formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Deactivate', $siteLangId);?></a>
                 <a href="javascript:void(0)" onClick="deleteSelectedCollection()" class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"><?php echo Labels::getLabel('LBL_Delete', $siteLangId);?></a>
-                <?php if (count($arr_listing) > 0) { ?>
+                <?php if (count($arrListing) > 0) { ?>
                 <a href="javascript:void(0)" onClick="getShopCollectionGeneralForm(0)" class="btn btn-outline-brand btn-sm  btn-sm"><?php echo Labels::getLabel('LBL_Add_Collection', $siteLangId);?></a>
                 <?php }?>
             <?php }?>
@@ -23,14 +23,14 @@
                     'scollection_active'=>Labels::getLabel('LBL_Status', $siteLangId),
                     'action' => '',
                 );
-                if (count($arr_listing) > 0) {
+                if (count($arrListing) > 0) {
                     $arr_flds = array_merge(
                         array('select_all'=>''),
                         $arr_flds
                     );
                 }
 				$tableClass = '';
-				if (0 < count($arr_listing) && $canEdit) {
+				if (0 < count($arrListing) && $canEdit) {
 					$tableClass = "table-justified";
 				}
                 $tbl = new HtmlElement(
@@ -47,7 +47,7 @@
                     }
                 }
                 $sr_no = 0;
-                foreach ($arr_listing as $sn => $row) {
+                foreach ($arrListing as $sn => $row) {
                     $sr_no ++;
                     $tr = $tbl->appendElement('tr');
                     $tr->setAttribute("id", $row['scollection_id']);
@@ -118,7 +118,7 @@
                 echo $frm->getFormTag();
                 echo $frm->getFieldHtml('collection_status');
                 echo $tbl->getHtml();
-                if (count($arr_listing) == 0) {
+                if (count($arrListing) == 0) {
                     $message = Labels::getLabel('LBL_No_Collection_found', $siteLangId);
                     $linkArr = array(
                         0=>array(

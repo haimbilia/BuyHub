@@ -11,6 +11,7 @@ class SellerPluginsController extends SellerPluginBaseController
 
     public function index($type = Plugin::TYPE_DATA_MIGRATION)
     {
+        $this->set("plugins", Plugin::getTypeArr($this->siteLangId));
         $this->set("type", $type);
         $this->_template->render();
     }
@@ -27,7 +28,7 @@ class SellerPluginsController extends SellerPluginBaseController
         $srch->addOrder(Plugin::DB_TBL_PREFIX . 'display_order', 'ASC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set("defaultPluginId", SellerPlugin::getDefaultPluginId($type, $userId));
         $this->set('canEdit', $this->userPrivilege->canEditSellerPLugins($userId, true));
         $this->_template->render(false, false);
@@ -48,5 +49,4 @@ class SellerPluginsController extends SellerPluginBaseController
         $this->set('msg', Labels::getLabel('MSG_Status_changed_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-
 }

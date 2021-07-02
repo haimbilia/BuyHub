@@ -4,7 +4,7 @@
         <ul class="listing--progress">
             <?php foreach ($ratingAspects as $rating) {
                     $ratingValue = CommonHelper::numberFormat($rating['prod_rating'], false, true, 1);
-                    $width = round(FatUtility::convertToType($ratingValue / 5 * 100, FatUtility::VAR_FLOAT), 2);
+                    $width = round(FatUtility::convertToType($rating['prod_rating'] / 5 * 100, FatUtility::VAR_FLOAT), 2);
                     $label = Labels::getLabel('LBL_{RATING}_RATING_OUT_OF_5_FOR_{NAME}', $siteLangId);
                     $label = CommonHelper::replaceStringData($label, [
                         '{RATING}' => $ratingValue,

@@ -44,12 +44,13 @@ class RatingTypesController extends AdminBaseController
 
         $this->set('restrictTypes', $restrictTypes);
         $this->set("canEdit", $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
+        $this->set('types', RatingType::getTypeArr($this->adminLangId));
         $this->_template->render(false, false);
     }
 
@@ -195,7 +196,7 @@ class RatingTypesController extends AdminBaseController
 
     private function getSearchForm()
     {
-        $frm = new Form('frmWordSearch');
+        $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));

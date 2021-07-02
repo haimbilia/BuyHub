@@ -35,8 +35,9 @@ class UserPrivilege
     public const SECTION_SELLER_PLUGIN = 32;
     public const SECTION_CATALOG_REPORT = 33;
     public const SECTION_FINANCIAL_REPORT = 34;
-    public const SECTION_MARKETPLACE_CHANNEL = 34;
-
+    public const SECTION_BADGES = 35;
+    public const SECTION_BADGE_LINKS = 36;
+    public const SECTION_MARKETPLACE_CHANNEL = 37;
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -136,6 +137,8 @@ class UserPrivilege
             static::SECTION_SELLER_PLUGIN => Labels::getLabel('LBL_SELLER_PLUGIN', $langId),
             static::SECTION_CATALOG_REPORT => Labels::getLabel('MSG_Catalog_Report', $langId),
             static::SECTION_FINANCIAL_REPORT => Labels::getLabel('LBL_Financial_Report', $langId),
+            static::SECTION_BADGES => Labels::getLabel('LBL_BADGES', $langId),
+            static::SECTION_BADGE_LINKS => Labels::getLabel('LBL_BADGE_LINKS', $langId),
         );
         return $arr;
     }
@@ -158,7 +161,10 @@ class UserPrivilege
                 static::SECTION_SPECIAL_PRICE => Labels::getLabel('LBL_Special_Price', $langId),
                 static::SECTION_VOLUME_DISCOUNT => Labels::getLabel('LBL_Volume_Discount', $langId),
                 static::SECTION_BUY_TOGETHER_PRODUCTS => Labels::getLabel('LBL_Buy_Together_Products', $langId),
-                static::SECTION_RELATED_PRODUCTS => Labels::getLabel('LBL_Related_Products', $langId)
+                static::SECTION_RELATED_PRODUCTS => Labels::getLabel('LBL_Related_Products', $langId),
+                static::SECTION_ADVERTISEMENT_FEED => Labels::getLabel('LBL_ADVERTISEMENT_FEED', $langId),
+                static::SECTION_BADGES => Labels::getLabel('LBL_BADGES', $langId),
+                static::SECTION_BADGE_LINKS => Labels::getLabel('LBL_BADGE_LINKS', $langId),
             ),
             static::MODULE_ORDERS =>
             array(
@@ -918,6 +924,26 @@ class UserPrivilege
         return $this->checkPermission($sellerId, static::SECTION_SELLER_PLUGIN, static::PRIVILEGE_WRITE, $returnResult);
     }
 
+    public function canViewBadges($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_BADGES, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditBadges($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_BADGES, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewBadgeLinks($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_READ, $returnResult);
+    }
+    
+    public function canEditBadgeLinks($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_WRITE, $returnResult);
+    }
+    
     public function canViewMarketplaceChannel($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_READ, $returnResult);

@@ -91,6 +91,7 @@ class CollectionsController extends MyAppController
         /* ] */
 
         $productSrchObj = new ProductSearch($this->siteLangId);
+        $productSrchObj->setLocationBasedInnerJoin(false);
         $productSrchObj->setGeoAddress();
         $productSrchObj->setDefinedCriteria();
         $productSrchObj->joinProductToCategory($this->siteLangId);
@@ -113,7 +114,7 @@ class CollectionsController extends MyAppController
         $productSrchObj->addMultipleFields(
             array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
             'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-            'theprice', 'selprod_price','selprod_stock', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_condition','prodcat_id','IFNULL(prodcat_name, prodcat_identifier) as prodcat_name','selprod_sold_count', 'product_updated_on', 'shop_id')
+            'theprice', 'selprod_price','selprod_stock', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_condition','prodcat_id','IFNULL(prodcat_name, prodcat_identifier) as prodcat_name','selprod_sold_count', 'product_updated_on', 'shop_id', 'selprod_min_order_qty')
         );
 
 
@@ -156,6 +157,7 @@ class CollectionsController extends MyAppController
                 /* ] */
                 if (true === MOBILE_APP_API_CALL) {
                     foreach ($collections as &$product) {
+                        $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                         $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
                         $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
                         $product['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId));

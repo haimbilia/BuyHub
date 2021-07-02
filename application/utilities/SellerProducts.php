@@ -7,7 +7,12 @@ trait SellerProducts
     protected function getSellerProductSearchForm($product_id = 0)
     {
         $frm = new Form('frmSearch');
-        $frm->addTextBox('', 'keyword', '', array('id' => 'keyword'));
+        $frm->addHiddenField('', 'badge_id');
+        $frm->addHiddenField('', 'ribbon_id');
+        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword', '', array('id' => 'keyword'));
+        $frm->addSelectBox(Labels::getLabel('LBL_BADGE', $this->siteLangId), 'badge_name', [], '', array('class' => 'badge--js', 'placeholder' => Labels::getLabel('LBL_SEARCH_BADGE', $this->siteLangId)));
+
+        $frm->addSelectBox(Labels::getLabel('LBL_RIBBON', $this->siteLangId), 'ribbon_name', [], '', array('class' => 'ribbon--js', 'placeholder' => Labels::getLabel('LBL_SEARCH_RIBBON', $this->siteLangId)));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'product_id', $product_id);
@@ -45,6 +50,8 @@ trait SellerProducts
         $rs = $srch->getResultSet();
         $adminCatalogs = $srch->recordCount();
         $this->set('adminCatalogs', $adminCatalogs);
+        $this->_template->addJs(['js/select2.js']);
+        $this->_template->addCss(['custom/page-css/select2.min.css']);
         $this->_template->render(true, true);
     }
 
@@ -64,7 +71,21 @@ trait SellerProducts
         $srch = SellerProduct::searchSellerProducts($this->siteLangId, $userId, $keyword);
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_track_inventory', 'selprod_threshold_stock_level', 'selprod_product_id', 'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title'
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_price',
+                'selprod_stock',
+                'selprod_track_inventory',
+                'selprod_threshold_stock_level',
+                'selprod_product_id',
+                'selprod_active',
+                'selprod_available_from',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'COALESCE(badge_name, badge_identifier) as badge_name',
+                'blinkcond_badge_id',
+                'badge_shape_type',
+                'badge_color'
             )
         );
         if ($product_id) {
@@ -81,7 +102,44 @@ trait SellerProducts
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
         }
+
+        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $ribbonId = FatApp::getPostedData('ribbon_id', FatUtility::VAR_INT, 0);
+
+        $badgeJoin = 'LEFT';
+        $condition = 'TRUE';
+        if (0 < $badgeId || 0 < $ribbonId) {
+            $badgeJoin = 'INNER';
+            $condition = '(';
+
+            if (0 < $badgeId && 0 < $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
+                $cnd = $srch->addCondition('badge_id', '=', $badgeId);
+                $cnd->attachCondition('badge_id', '=', $ribbonId, 'OR');
+            } else if (0 < $badgeId && 1 > $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
+                $srch->addCondition('badge_id', '=', $badgeId);
+            } else if (1 > $badgeId && 0 < $ribbonId) {
+                $condition .= 'badge_type = ' . Badge::TYPE_RIBBON;
+                $srch->addCondition('badge_id', '=', $ribbonId);
+            }
+
+            $condition .= ')';
+        }
+        $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $badgeJoin . ' JOIN', 'badgelink_record_id = selprod_id', 'bl');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_id = badgelink_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'LEFT JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
+
+        $srch->addDirectCondition('(CASE 
+                                        WHEN badge_id IS NOT NULL
+                                        THEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' 
+                                            AND ' . $condition . '
+                                        ELSE TRUE
+                                    END)');
+
         $srch->addOrder('selprod_id', 'DESC');
+        $srch->addGroupBy('selprod_id');
         $db = FatApp::getDb();
 
         $rs = $srch->getResultSet();
@@ -165,8 +223,11 @@ trait SellerProducts
 
         $canAttachDigitalDownload = 0;
 
+        $ddpObj = new DigitalDownloadPrivilages();
+
         if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL
-        && (true == DigitalDownload::canDo($product_id, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, false, true))) {
+            && (true == $ddpObj->canEdit($product_id, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, true))
+        ) {
             $canAttachDigitalDownload = 1;
         }
 
@@ -737,7 +798,7 @@ trait SellerProducts
                 $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
                 $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionKey];
                 $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
-                $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey];
+                $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
                 $this->addOption($selprod_id, $data_to_be_save, $optionKey);
                 $productCount++;
             }
@@ -2096,7 +2157,7 @@ trait SellerProducts
         $srch->addOrder('selProdId', 'desc');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'ppoint_id');
         $this->set("selprod_id", $selprod_id);
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -3163,7 +3224,7 @@ trait SellerProducts
                 $srch->addCondition('shop_user_id', '=', $this->userParentId);
                 $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, 'INNER JOIN', 'badgelink_record_id = shop_id', 'bl');
                 break;
-            
+
             default:
                 return '';
                 break;
@@ -3176,16 +3237,16 @@ trait SellerProducts
         $srch->addCondition('badge_type', '=', $badgeType);
 
         if (!empty($keyword)) {
-            $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');    
+            $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
         }
-        
+
         $srch->setPageSize($pagesize);
 
         $srch->addMultipleFields([
             Badge::DB_TBL_PREFIX . 'id as id',
             'COALESCE(badge_name, badge_identifier) as name',
         ]);
-        
+
         $srch->addGroupBy('badge_id');
         $badges = FatApp::getDb()->fetchAll($srch->getResultSet());
         die(json_encode(['badges' => $badges]));

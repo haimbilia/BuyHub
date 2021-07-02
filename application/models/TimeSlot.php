@@ -11,7 +11,7 @@ class TimeSlot extends MyAppModel
     public const DAY_MONDAY = 1;
     public const DAY_TUESDAY = 2;
     public const DAY_WEDNESDAY = 3;
-    public const DAY_THRUSDAY = 4;
+    public const DAY_THURSDAY = 4;
     public const DAY_FRIDAY = 5;
     public const DAY_SATURDAY = 6;
     public const DAY_SUNDAY = 0;
@@ -40,13 +40,13 @@ class TimeSlot extends MyAppModel
     public static function getDaysArr(int $langId): array
     {
         return [
-            self::DAY_MONDAY => Labels::getLabel('LBL_Monday', $langId),
-            self::DAY_TUESDAY => Labels::getLabel('LBL_Tuesday', $langId),
-            self::DAY_WEDNESDAY => Labels::getLabel('LBL_Wednesday', $langId),
-            self::DAY_THRUSDAY => Labels::getLabel('LBL_Thrusday', $langId),
-            self::DAY_FRIDAY => Labels::getLabel('LBL_Friday', $langId),
-            self::DAY_SATURDAY => Labels::getLabel('LBL_Saturday', $langId),
-            self::DAY_SUNDAY => Labels::getLabel('LBL_Sunday', $langId),
+            self::DAY_MONDAY => Labels::getLabel('LBL_MONDAY', $langId),
+            self::DAY_TUESDAY => Labels::getLabel('LBL_TUESDAY', $langId),
+            self::DAY_WEDNESDAY => Labels::getLabel('LBL_WEDNESDAY', $langId),
+            self::DAY_THURSDAY => Labels::getLabel('LBL_THURSDAY', $langId),
+            self::DAY_FRIDAY => Labels::getLabel('LBL_FRIDAY', $langId),
+            self::DAY_SATURDAY => Labels::getLabel('LBL_SATURDAY', $langId),
+            self::DAY_SUNDAY => Labels::getLabel('LBL_SUNDAY', $langId),
         ];
     }
 

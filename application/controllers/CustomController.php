@@ -207,6 +207,7 @@ class CustomController extends MyAppController
         $srch->joinTable('tbl_faqs_lang', 'LEFT OUTER JOIN', 'faqlang_faq_id = faq_id');
         $srch->addCondition('faqlang_lang_id', '=', $this->siteLangId);
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('faqcat_deleted', '=', applicationConstants::NO);
         $srch->addCondition('faqcat_type', '=', $faqPage);
         if ($faqCatId) {
             $srch->addCondition('faqcat_id', 'IN', $faqCatId);
@@ -538,10 +539,16 @@ class CustomController extends MyAppController
                 FatUtility::exitWithErrorCode(404);
             }
             $user = FatApp::getDb()->fetch($rs);
-
-            $cartObj = new Cart($orderInfo['order_user_id'], $this->siteLangId, $this->app_user['temp_user_id']);
-            $cartObj->clear();
-            $cartObj->updateUserCart();
+            if($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION){
+                $cartObj = new SubscriptionCart($orderInfo['order_user_id'], $this->siteLangId);
+                $cartObj->clear();
+                $cartObj->updateUserSubscriptionCart();                
+            }else{
+                $cartObj = new Cart($orderInfo['order_user_id'], $this->siteLangId, $this->app_user['temp_user_id']); 
+                $cartObj->clear();
+                $cartObj->updateUserCart();
+            }
+            
         }
 
         $orderFulFillmentTypeArr = [];

@@ -1,0 +1,323 @@
+<?php
+
+trait BadgeRequestSetup
+{    
+    /**
+     * getBadgeForm
+     *
+     * @param  mixed $badgeId
+     * @return object
+     */
+    private function getBadgeForm(int $badgeId = 0): object
+    {
+        $frm = new Form('frmBadgeReq');
+        $frm->addHiddenField('', 'breq_id');
+        $frm->addHiddenField('', 'record_ids');
+        if (0 < $badgeId) {
+            $frm->addHiddenField('', 'breq_blinkcond_id', 0);
+            $frm->addHiddenField('', 'badge_id', $badgeId);
+
+            $frm->addDateTimeField(Labels::getLabel('LBL_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
+            $frm->addDateTimeField(Labels::getLabel('LBL_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
+            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
+        } else {
+            $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_blinkcond_id', $approvalRequiredBadges, '', [], '');
+            $fld->requirements()->setRequired(true);
+            $frm->addHiddenField('', 'breq_record_type');
+        }
+
+        $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
+
+        $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
+
+        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->siteLangId));
+        return $frm;
+    }
+        
+    /**
+     * setupBadgeRequestImage
+     *
+     * @param  int $badgeReqId
+     * @return bool
+     */
+    private function setupBadgeRequestImage(int $badgeReqId): bool
+    {
+        if (!array_key_exists('breq_file', $_FILES) || empty($_FILES['breq_file']['name'])) {
+            return true;
+        }
+        
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->saveImage(
+            $_FILES['breq_file']['tmp_name'],
+            AttachedFile::FILETYPE_BADGE_REQUEST,
+            $badgeReqId,
+            0,
+            $_FILES['breq_file']['name'],
+            -1,
+            false,
+            0,
+            $_FILES['breq_file']['type'],
+            0
+        )) {
+            FatUtility::dieJsonError($fileHandlerObj->getError());
+        }
+        return true;
+    }
+    
+    /**
+     * setupBadgeReq
+     *
+     * @return void
+     */
+    public function setupBadgeReq()
+    {
+        $this->userPrivilege->canEditBadges();
+        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $frm = $this->getBadgeForm($badgeId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $badgeLinkCondId = FatApp::getPostedData('breq_blinkcond_id', FatUtility::VAR_INT, 0);
+        if (1 > $badgeLinkCondId && 1 > $badgeId) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId));
+        }
+
+        $recordIds = isset($post['record_ids']) ? json_decode($post['record_ids'], true) : [];
+        if (null === $recordIds || false === $recordIds || empty($recordIds)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId));
+        }
+
+        /* Badge Condition Setup if added. */
+        if (1 > $badgeLinkCondId) {
+            $recordType = FatApp::getPostedData('breq_record_type', FatUtility::VAR_INT, 0);
+            if (1 > $recordType) {
+                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD_TYPE', $this->siteLangId));
+            }
+
+            $fromDate = FatApp::getPostedData('blinkcond_from_date', FatUtility::VAR_STRING, '');
+            $toDate = FatApp::getPostedData('blinkcond_to_date', FatUtility::VAR_STRING, '');
+
+            if (!empty($fromDate) && !empty($toDate) && $fromDate > $toDate) {
+                FatUtility::dieJsonError(Labels::getLabel('MSG_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
+            }
+
+            $data = [
+                'blinkcond_badge_id' => $badgeId,
+                'blinkcond_record_type' => $recordType,
+                'blinkcond_from_date' => $fromDate,
+                'blinkcond_to_date' => $toDate,
+
+            ];
+            $record = new BadgeLinkCondition($badgeLinkCondId);
+            $record->assignValues($data);
+            if (!$record->save()) {
+                FatUtility::dieJsonError($record->getError());
+            }
+
+            $badgeLinkCondId = $record->getMainTableRecordId();
+            $post['breq_blinkcond_id'] = $badgeLinkCondId;
+        }
+        /* Badge Condition Setup if added. */
+
+
+        $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
+
+        $post['breq_requested_on'] = date('Y-m-d H:i:s');
+        $post['breq_user_id'] = UserAuthentication::getLoggedUserId();
+
+        $status = BadgeRequest::getRequestStatus($post['breq_blinkcond_id'], UserAuthentication::getLoggedUserId());
+        if (BadgeRequest::REQUEST_APPROVED == $status || BadgeRequest::REQUEST_REJECTED == $status) {
+            $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/REJECTED', $this->siteLangId);
+            FatUtility::dieJsonError($msg);
+        }
+        
+        $record = new BadgeRequest($badgeReqId);
+        $record->assignValues($post);
+
+        if (!$record->save()) {
+            Message::addErrorMessage($record->getError());
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $badgeReqId = $record->getMainTableRecordId();
+        $this->setupBadgeRequestImage($badgeReqId);
+
+        foreach ($recordIds as $recordId) {
+            $linkData = array(
+                'badgelink_blinkcond_id' => $badgeLinkCondId,
+                'badgelink_record_id' => $recordId,
+                'badgelink_breq_id' => $badgeReqId
+            );
+            FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData);
+        }
+        
+        $msg = Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId);
+        if (0 < $badgeReqId) {
+            $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId);
+        }
+        $this->set('msg', $msg);
+        $this->set('badgeReqId', $badgeReqId);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+    
+    /**
+     * badgeReqForm
+     *
+     * @param  int $badgeReqId
+     * @param  int $badgeId
+     * @return void
+     */
+    public function badgeReqForm($badgeReqId = 0, $badgeId = 0)
+    {
+        $this->userPrivilege->canEditBadges();
+        $frm = $this->getBadgeForm($badgeId);
+        $blinkCondId = 0;
+        if (0 < $badgeReqId) {
+            $srch = $this->getRequestedBadgeObj();
+            $srch->addCondition('breq_id', '=', $badgeReqId);
+            $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
+            if ($requestedBadge === false) {
+                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            }
+            $requestedBadge['record_ids'] = json_encode($this->records($badgeReqId, true));
+            $blinkCondId = $requestedBadge['breq_blinkcond_id'];
+            $frm->fill($requestedBadge);
+
+            $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
+            $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
+        }
+        $this->set('blinkCondId', $blinkCondId);
+        $this->set('frm', $frm);
+        $this->set('badgeReqId', $badgeReqId);
+        $this->_template->render(false, false, 'badges/badge-req-form.php');
+    }
+    
+    /**
+     * getRecordType
+     *
+     * @param  int $blinkcond_id
+     * @return void
+     */
+    public function getRecordType(int $blinkcond_id)
+    {
+        $json = [
+            'recordType' => (int) BadgeLinkCondition::getAttributesById($blinkcond_id, 'blinkcond_record_type')
+        ];
+
+        FatUtility::dieJsonSuccess($json);
+    }
+    
+    /**
+     * records
+     *
+     * @param  int $badgeReqId
+     * @param  int $returnAllRecordIds
+     * @return void
+     */
+    public function records(int $badgeReqId, bool $returnAllRecordIds = false)
+    {
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->siteLangId, true);
+        /* Bind Records */
+        $srch->joinProduct($this->siteLangId);
+        $srch->joinSellerProduct($this->siteLangId);
+        $srch->joinShop($this->siteLangId);
+        /* Bind Records */
+        $srch->joinTable(BadgeRequest::DB_TBL, 'INNER JOIN', 'blc.badgelink_breq_id = breq.breq_id', 'breq');
+
+        if (false === $returnAllRecordIds) {
+            $srch->setPageNumber($page);
+            $srch->setPageSize($pagesize);
+        } else {
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+        }
+
+        $srch->addCondition('breq_id', '=', $badgeReqId);
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet(), 'badgelink_record_id');
+        
+        if (true === $returnAllRecordIds) {
+            return array_keys($result);
+        }
+
+        $records = [];
+        foreach ($result as $badgeLink) {
+            if (array_key_exists('badgelink_record_id', $badgeLink) && empty($badgeLink['badgelink_record_id'])) {
+                break;
+            }
+
+            $recordId = $badgeLink['badgelink_record_id'];
+            $recordName = $badgeLink['record_name'];
+            $optionName = explode('|', $badgeLink['option_name']);
+            $optionValueName = explode('|', $badgeLink['option_value_name']);
+            $seller = $badgeLink['seller'];
+            unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
+
+            if (BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT == $badgeLink['blinkcond_record_type']) {
+                $name = $recordName;
+                if (isset($records[$recordId]['record_name'])) {
+                    $name = $records[$recordId]['record_name'];
+                }
+
+                $option = '';
+                foreach ($optionName as $index => $optname) {
+                    $option .= !empty($optname) ? ' | ' .  $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';   
+                }
+                $recordName = $name . $option . ' | ' . $seller;
+            }
+
+            $records[$recordId] = [
+                'badgelink_record_id' => $recordId,
+                'record_name' => $recordName
+            ];
+        }
+
+        $this->set('badgeReqId', $badgeReqId);
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('pageCount', $srch->pages());
+        $this->set('records', $records);
+        $this->set('postedData', FatApp::getPostedData());
+        $this->_template->render(false, false, 'badges/records.php');
+    }
+    
+    /**
+     * unlinkRecord
+     *
+     * @param  int $badgeReqId
+     * @param  int $record_id
+     * @return void
+     */
+    public function unlinkRecord(int $badgeReqId, int $record_id = 0)
+    {
+        if (1 > $badgeReqId || 1 > $record_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+        $smt = 'badgelink_breq_id = ?';
+        $vals = [$badgeReqId];
+        if (0 < $record_id) {
+            $smt .= ' AND badgelink_record_id = ?';
+            $vals[] = $record_id;
+        }
+
+        $db = FatApp::getDb();
+        if (!$db->deleteRecords(
+            BadgeLinkCondition::DB_TBL_BADGE_LINKS,
+            [
+                'smt' => $smt,
+                'vals' => $vals
+            ]
+        )) {
+            FatUtility::dieJsonError($db->getError());
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
+    }
+}

@@ -55,9 +55,12 @@ class EmailTemplates extends MyAppModel
     public static function getSearchObject($langId = 0)
     {
         $langId = FatUtility::int($langId);
+        /*
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
+         * 
+         */
         $srch = new SearchBase(static::DB_TBL);
         $srch->addOrder(static::DB_TBL_PREFIX . 'name', 'ASC');
         $srch->addMultipleFields(

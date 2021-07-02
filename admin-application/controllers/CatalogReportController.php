@@ -2,43 +2,46 @@
 
 class CatalogReportController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewCatalogReport($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditCatalogReport($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewCatalogReport();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewCatalogReport();
-        $flds = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($flds);
-        $frmSearch->fill(['sortBy' => 'totOrders', 'sortOrder' => 'DESC']);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
         $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('fields', $fields);
+        $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 
     public function search($type = false)
     {
-        $this->objPrivilege->canViewProductsReport();
         $db = FatApp::getDb();
         $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current(array_keys($fields));
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_DESC;
+        }
+
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'totOrders');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
 
         /* get Seller Order Products[ */
-        /* $fields = ['totOrders',  'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount']; */
         $opSrch = new Report(0, array_keys($fields));
         $opSrch->joinOrders();
         $opSrch->joinPaymentMethod();
@@ -55,14 +58,13 @@ class CatalogReportController extends AdminBaseController
         $opSrch->setGroupBy('product_id');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $opSrch->removeFld('product_name');
-        // echo  $opSrch->getQuery(); exit;
+        $opSrch->removeFld(['product_name', 'product_type', 'prodcat_name']);
         /* ] */
 
-        $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'opq.*'];
+        $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'p.product_type', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'IFNULL(c_l.prodcat_name,c.prodcat_identifier) as prodcat_name', 'opq.*'];
         $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
         $srch->joinBrands($this->adminLangId, false, true);
-        $srch->joinProductToCategory();
+        $srch->joinProductToCategory($this->adminLangId);
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields($selectedFlds);
         $srch->addGroupBy('p.product_id');
@@ -72,7 +74,7 @@ class CatalogReportController extends AdminBaseController
             $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
         }
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -82,12 +84,15 @@ class CatalogReportController extends AdminBaseController
                 break;
         }
 
+        $productTypeArr = Product::getProductTypes($this->adminLangId);
+
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
             array_push($sheetData, array_values($fields));
+
             while ($row = $db->fetch($rs)) {
                 $arr = [];
                 foreach ($fields as $key => $val) {
@@ -95,6 +100,9 @@ class CatalogReportController extends AdminBaseController
                         case 'product_name':
                             $name = $row['product_name'] . '(' . $row['brand_name'] . ')';
                             $arr[] = $name;
+                            break;
+                        case 'product_type':
+                            $arr[] = $productTypeArr[$row[$key]];
                             break;
                         case 'grossSales':
                         case 'transactionAmount':
@@ -129,22 +137,24 @@ class CatalogReportController extends AdminBaseController
 
             CommonHelper::convertToCsv($sheetData, 'Catalog_Report_' . date("d-M-Y") . '.csv', ',');
             exit;
-        } else {
-            $srch->setPageNumber($page);
-            $srch->setPageSize($pageSize);
-            $rs = $srch->getResultSet();
-            $arr_listing = $db->fetchAll($rs);
-            $this->set("arr_listing", $arr_listing);
-            $this->set('pageCount', $srch->pages());
-            $this->set('recordCount', $srch->recordCount());
-            $this->set('page', $page);
-            $this->set('pageSize', $pageSize);
-            $this->set('postedData', $post);
-            $this->set('sortBy', $sortBy);
-            $this->set('sortOrder', $sortOrder);
-            $this->set('fields', $fields);
-            $this->_template->render(false, false);
         }
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $rs = $srch->getResultSet();
+
+        $arrListing = $db->fetchAll($rs);
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('productTypeArr', $productTypeArr);
+        $this->_template->render(false, false);
     }
 
     public function export()
@@ -154,13 +164,13 @@ class CatalogReportController extends AdminBaseController
 
     private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmCatalogReportSearch');
+        $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
 
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            $frm->addHiddenField('', 'sortBy', 'product_name');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
+            $frm->addHiddenField('', 'reportColumns', '');
         }
 
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
@@ -176,6 +186,8 @@ class CatalogReportController extends AdminBaseController
         if (!$catalogReportCacheVar) {
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product', $this->adminLangId),
+                'product_type'    =>    Labels::getLabel('LBL_Product_Type', $this->adminLangId),
+                'prodcat_name'    =>    Labels::getLabel('LBL_Category', $this->adminLangId),
                 'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->adminLangId),
                 'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
                 'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
@@ -212,5 +224,10 @@ class CatalogReportController extends AdminBaseController
         }
 
         return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return ['product_name', 'product_type', 'prodcat_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }
 }

@@ -35,7 +35,7 @@ class ShippingMethodsController extends AdminBaseController
         }
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arr_listing", $records);
+        $this->set("arrListing", $records);
         $this->_template->render(false, false);
     }
 

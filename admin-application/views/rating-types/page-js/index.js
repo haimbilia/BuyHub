@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    searchRatingTypes(document.frmRatingTypesSearch);
+    searchRecords(document.frmSearch);
 });
 
 (function() {
@@ -11,15 +11,15 @@ $(document).ready(function() {
         }
         var frm = document.frmRatingTypesSrchPaging;
         $(frm.page).val(page);
-        searchRatingTypes(frm);
+        searchRecords(frm);
     };
 
     reloadList = function() {
         var frm = document.frmRatingTypesSrchPaging;
-        searchRatingTypes(frm);
+        searchRecords(frm);
     };
 
-    searchRatingTypes = function(form) {
+    searchRecords = function(form) {
         $(dv).html(fcom.getLoader());
         var data = '';
         if (form) {
@@ -71,8 +71,8 @@ $(document).ready(function() {
     };
 
     clearSearch = function() {
-        document.frmRatingTypesSearch.reset();
-        searchRatingTypes(document.frmRatingTypesSearch);
+        document.frmSearch.reset();
+        searchRecords(document.frmSearch);
     };
 
     toggleStatus = function (e, obj, status) {

@@ -1,4 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php
+
+use PhpParser\Node\Stmt\Label;
+
+defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php 
     $arr_flds = array(
@@ -16,7 +20,7 @@
         $arr_flds['product_shipped_by'] = Labels::getLabel('LBL_Shipped_by_me', $siteLangId);
     }
     $tableClass = '';
-    if (0 < count($arr_listing)) {
+    if (0 < count($arrListing)) {
         $tableClass = "table-justified";
     }
     $arr_flds['action'] = '';
@@ -28,7 +32,7 @@
 
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 
-    foreach ($arr_listing as $sn => $row) {
+    foreach ($arrListing as $sn => $row) {
         $tr = $tbl->appendElement('tr', array('class' => ''));
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
@@ -51,6 +55,7 @@
                     $frontReturn = true;
 
                     include (CONF_THEME_PATH . '_partial/get-badge.php');
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $td->appendElement('plaintext', [], $html, true);
                     break;
                 case 'ribbon':
@@ -58,7 +63,7 @@
                     $frontReturn = true;
                     
                     include (CONF_THEME_PATH . '_partial/get-ribbon.php');
-
+                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $html = '<div class="badge-wrap">' . $html . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                     break;
@@ -146,7 +151,7 @@
         $sr_no--;
     }
     echo $tbl->getHtml();
-    if (count($arr_listing) == 0) {
+    if (count($arrListing) == 0) {
         $message = Labels::getLabel('LBL_Searched_product_is_not_found_in_catalog', $siteLangId);
         $linkArr = array();
         if (User::canAddCustomProductAvailableToAllSellers()) {

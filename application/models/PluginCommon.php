@@ -7,7 +7,7 @@ class PluginCommon extends MyAppModel
 
     public const DB_TBL_LANG = 'tbl_plugins_lang';
     public const DB_TBL_LANG_PREFIX = 'pluginlang_';
-    
+
     public const DB_TBL_PLUGIN_TO_USER = 'tbl_plugin_to_user';
     public const DB_TBL_PLUGIN_TO_USER_PREFIX = 'pu_';
 
@@ -19,7 +19,7 @@ class PluginCommon extends MyAppModel
 
     public const ACTIVE  = 1;
     public const INACTIVE  = 0;
-    
+
     public const TYPE_CURRENCY_CONVERTER = 1;
     public const TYPE_SOCIAL_LOGIN = 2;
     public const TYPE_PUSH_NOTIFICATION = 3;
@@ -43,29 +43,10 @@ class PluginCommon extends MyAppModel
         ],
     ];
 
-    /* Define here :  if system can not activate multiple plugins for a same feature.*/
-    public const HAVING_KINGPIN = [
-        self::TYPE_CURRENCY_CONVERTER,
-        self::TYPE_PUSH_NOTIFICATION,
-        self::TYPE_ADVERTISEMENT_FEED,
-        self::TYPE_SMS_NOTIFICATION,
-        self::TYPE_TAX_SERVICES,
-        // self::TYPE_FULL_TEXT_SEARCH, /* NOT IN USE */
-        self::TYPE_SPLIT_PAYMENT_METHOD,
-        self::TYPE_SHIPPING_SERVICES,
-        self::TYPE_SHIPMENT_TRACKING,
-        self::TYPE_DATA_MIGRATION
-    ];
-
     /* Payment Gateways Applicable For Pay Later. */
     public const PAY_LATER = [
         'CashOnDelivery',
         'PayAtStore'
-    ];
-    
-    public const HAVING_SEPARATE_ICON = [
-        self::TYPE_SPLIT_PAYMENT_METHOD,
-        self::TYPE_REGULAR_PAYMENT_METHOD
     ];
 
     public const HAVING_DESCRIPTION = [
@@ -80,7 +61,7 @@ class PluginCommon extends MyAppModel
         'COALESCE(plg_l.' . self::DB_TBL_PREFIX . 'name, plg.' . self::DB_TBL_PREFIX . 'identifier) as plugin_name',
         self::DB_TBL_PREFIX . 'active',
     ];
-    
+
 
     /* Response Codes */
     public const RC_OK = 200;
@@ -203,7 +184,40 @@ class PluginCommon extends MyAppModel
             self::ENV_PRODUCTION => Labels::getLabel('LBL_PRODUCTION', $langId),
         ];
     }
-    
-    
+
+    /**
+     * getKingpinTypeArr
+     *
+     * @return void
+     */
+    public static function getKingpinTypeArr(): array
+    {
+        /* Define here :  if system can not activate multiple plugins for a same feature.*/
+        return [
+            self::TYPE_CURRENCY_CONVERTER,
+            self::TYPE_PUSH_NOTIFICATION,
+            self::TYPE_ADVERTISEMENT_FEED,
+            self::TYPE_SMS_NOTIFICATION,
+            self::TYPE_TAX_SERVICES,
+            // self::TYPE_FULL_TEXT_SEARCH, /* NOT IN USE */
+            self::TYPE_SPLIT_PAYMENT_METHOD,
+            self::TYPE_SHIPPING_SERVICES,
+            self::TYPE_SHIPMENT_TRACKING,
+            self::TYPE_DATA_MIGRATION
+        ];
+    }
+
+    /**
+     * getSeparateIconTypeArr
+     *
+     * @return void
+     */
+    public static function getSeparateIconTypeArr(): array
+    {
+        return [
+            self::TYPE_SPLIT_PAYMENT_METHOD,
+            self::TYPE_REGULAR_PAYMENT_METHOD
+        ];
+    }
     
 }

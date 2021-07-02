@@ -14,6 +14,8 @@ $reportsData = [
     'pageTitle' => Labels::getLabel('LBL_Preferred_Payment_Method', $adminLangId),
     'adminLangId' => $adminLangId,
     'frmSearch' => $frmSearch,
-    'actionButtons' => []
+    'actionButtons' => [],
+    'fields' => $fields,
+    'defaultColumns' => $defaultColumns,
 ];
 $this->includeTemplate('_partial/report-index.php', $reportsData, false);

@@ -563,8 +563,8 @@
                     outline-width: 0;
                 }
             }
-            .dashboard-menu { 
-                color: $txt-body; 
+            .dashboard-menu {
+                color: $txt-body;
                 fill: currentColor;
                 .menu__item {
                     overflow: hidden;
@@ -2175,6 +2175,10 @@
             .rating {
                 --size: 1.5rem;
                 --space: 0.4rem;
+                &__text {
+                    margin-bottom: 0;
+                    margin-#{$end-direction}: 1rem;
+                }
             }
         }
     }
@@ -2185,11 +2189,60 @@
         &__img {
             border: $border;
             border-radius: $radius4;
-            padding: 2rem;
+            padding: .25rem;
             background: $bg-white;
+            max-width: 150px;
         }
         &__detail {
             margin: 1rem 0;
             font-size: 0.8rem;
         }
+    }
+    
+    //
+    .no-after::after {
+        content: normal;
+    }
+    
+    .custom-drag-drop .btn {
+        position: static !important;
+    }
+    
+    .custom-drag-drop .scroll {
+        max-height: 300px;
+    }
+    
+    .custom-drag-drop .list-drag-drop {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .custom-drag-drop .list-drag-drop li {
+        padding: 0.7rem 1rem;
+        display: flex;
+        align-items: center;
+        border: solid 1px transparent;
+        margin: 5px 10px;
+        border-radius: 4px;
+    }
+    
+    .custom-drag-drop .list-drag-drop li:hover {
+        /*background-color: var(--bg-gray);*/
+        border-color: $border-color;
+    }
+    
+    .custom-drag-drop .checkbox {
+        font-size: 0.75rem;
+        color: $txt-gray;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+        flex: 1;
+        max-width: 256px;
+        overflow: hidden;
+    }
+    
+    .custom-drag-drop .icn {
+        cursor: grab;
+        margin-#{$start-direction}: 10px;
     }
