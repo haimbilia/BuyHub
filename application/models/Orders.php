@@ -403,17 +403,14 @@ class Orders extends MyAppModel
         $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS, array('smt' => 'op_order_id = ?', 'vals' => array($this->getOrderId())));
         $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS_LANG, array('smt' => 'oplang_order_id = ?', 'vals' => array($this->getOrderId())));
 
-        if (!empty($products)) {
-            $opRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS);
-            $opLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_LANG);
-            $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
-            $opShippingLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG);
+        if (!empty($products)) {                       
 
             $counter = 1;
             foreach ($products as $selprodId => $product) {
                 $op_invoice_number = $this->getOrderId() . '-S' . str_pad($counter, 4, '0', STR_PAD_LEFT);
                 $product['op_order_id'] = $this->getOrderId();
                 $product['op_invoice_number'] = $op_invoice_number;
+                $opRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS);
                 $opRecordObj->assignValues($product);
                 if (!$opRecordObj->addNew()) {
                     $db->rollbackTransaction();
@@ -437,6 +434,7 @@ class Orders extends MyAppModel
                     foreach ($productsLangData as $productLangData) {
                         $productLangData['oplang_op_id'] = $op_id;
                         $productLangData['oplang_order_id'] = $this->getOrderId();
+                        $opLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_LANG);
                         $opLangRecordObj->assignValues($productLangData);
                         if (!$opLangRecordObj->addNew()) {
                             $db->rollbackTransaction();
@@ -571,7 +569,7 @@ class Orders extends MyAppModel
                 $productsShippingData = $product['productShippingData'];
                 if (!empty($productsShippingData)) {
                     $productsShippingData['opshipping_op_id'] = $op_id;
-
+                    $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
                     $opShippingRecordObj->assignValues($productsShippingData);
                     if (!$opShippingRecordObj->addNew()) {
                         $db->rollbackTransaction();
@@ -586,6 +584,7 @@ class Orders extends MyAppModel
                 if (!empty($productPickUpData)) {
                     $productPickUpData['opshipping_op_id'] = $op_id;
                     $productPickUpData['opshipping_by_seller_user_id'] = !empty($productPickUpData['opshipping_by_seller_user_id']) ? $productPickUpData['opshipping_by_seller_user_id'] : 0;
+                    $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
                     $opShippingRecordObj->assignValues($productPickUpData);
                     if (!$opShippingRecordObj->addNew()) {
                         $db->rollbackTransaction();
@@ -616,6 +615,7 @@ class Orders extends MyAppModel
                 if (!empty($productsShippingLangData)) {
                     foreach ($productsShippingLangData as $productShippingLangData) {
                         $productShippingLangData['opshippinglang_op_id'] = $op_id;
+                        $opShippingLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG);
                         $opShippingLangRecordObj->assignValues($productShippingLangData);
                         if (!$opShippingLangRecordObj->addNew()) {
                             $db->rollbackTransaction();

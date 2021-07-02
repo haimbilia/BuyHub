@@ -10,8 +10,8 @@ class Shipping
     public const LEVEL_PRODUCT = 3;
 
     public const TYPE_MANUAL = -1;
-    private const RATE_CACHE_KEY_NAME = "shipRateCache_";
-    private const CARRIER_CACHE_KEY_NAME = "shipCarrierCache_";
+    public const RATE_CACHE_KEY_NAME = "shipRateCache_";
+    public const CARRIER_CACHE_KEY_NAME = "shipCarrierCache_";
 
     private $langId;
     private $pluginKey = '';
@@ -270,7 +270,7 @@ class Shipping
                 continue;
             }
             
-            $shippingApiObj = $this->getShippingApiObj((1 > $rates['shiippingBySeller']) , $rates['selprod_user_id']);   
+            $shippingApiObj = $this->getShippingApiObj(0 < $rates['shiippingBySeller'] ? $rates['selprod_user_id'] : 0 );
             if(false === $shippingApiObj){
                 /* if api not enabled or any error in loading them fetch manual rates*/
                 $this->systemRatesToFetchSelprodIds[] = $rates['selprod_id'];
@@ -282,7 +282,7 @@ class Shipping
             if ($carriers) {
                 $carriers = unserialize($carriers);
             } else {
-                $limit = ('ShipStationShipping' == $shippingApiObj::KEY_NAME ? 0 : 1);
+                $limit = ('ShipStationShipping' == get_class($shippingApiObj)::KEY_NAME ? 0 : 1);
                 $carriers = $shippingApiObj->getCarriers($limit);
                 if (!empty($carriers)) {
                     FatCache::set($cacheKey, serialize($carriers), '.txt');
@@ -335,16 +335,6 @@ class Shipping
                 $fromZipCode = $rates['shop_postalcode'];
             }
 
-            if (empty($fromZipCode)) {
-                //unset($physicalSelProdIdArr[$rates['selprod_id']]);          
-                /*  $user = self::BY_ADMIN == $shippedBy ? Labels::getLabel('MSG_ADMIN', $this->langId) : Labels::getLabel('MSG_SHOP', $this->langId);
-                  $error = Labels::getLabel('MSG_UNABLE_TO_LOCATE_{USER}_POSTAL_CODE', $this->langId);
-                  $this->error = CommonHelper::replaceStringData($error, ['{USER}' => $user]); */
-                $msg = Labels::getLabel('MSG_MISSING_FROM_ZIP_FOR_"{PRODUCT}"._PLEASE_FROM_ADDRESS.', $this->langId);
-                $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
-                SystemLog::set($msg);
-                continue;
-            }
             
             $prodWeight = $product['product_weight'] * $product['quantity'];
             $productWeightClass = isset($weightUnitsArr[$product['product_weight_unit']]) ? $weightUnitsArr[$product['product_weight_unit']] : '';
@@ -361,9 +351,11 @@ class Shipping
                 $product['shippack_length'],
                 $product['shippack_width'],
                 $product['shippack_height'],
-                $dimensionUnits[$product['shippack_units']]
+                $dimensionUnits[$product['shippack_units']],
+                $shopAddress,
+                $shippingAddressDetail                
             ];
-
+            
             foreach ($carriers as $carrier) {
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $fromZipCode, $this->langId]);
@@ -891,19 +883,12 @@ class Shipping
      * 
      * @param type $adminApi
      * @param type $sellerId 
+     * 
+     * $sellerId = 0 - Admin plugin else seller plugin
      */
     
-    private function getShippingApiObj($isAdminPlugin = true, int $sellerId = 0)
+    public function getShippingApiObj(int $sellerId = 0)
     {
-        if (true == $isAdminPlugin) {
-            /* 0 for admin */
-            $sellerId = 0;
-        } else {
-            if (1 > $sellerId) {
-                trigger_error('userid not specified', E_USER_ERROR);
-            }
-        }
-
         if (isset($this->shippingServicesArr[$sellerId])) {
             return $this->shippingServicesArr[$sellerId];
         }

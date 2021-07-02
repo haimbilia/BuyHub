@@ -53,7 +53,13 @@ trait ShippingServices
      * @return void
      */
     public function generateLabel(int $opId)
-    {
+    {        
+        $orderData = $this->getOrderProductDetail($opId);
+        if (empty($orderData) || 1 > $orderData['opshipping_plugin_id']) {     
+            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId));
+            return false;
+        }        
+        
         if (false === $this->shippingService->addOrder($opId)) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
@@ -201,7 +207,10 @@ trait ShippingServices
         $opSrch->addCondition('op.op_id', '=', $opId);
 
         $opSrch->addMultipleFields(
-            array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code','opsp_api_req_id','opsp_scheduled')
+                array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
+                    'opsp_api_req_id', 'opsp_scheduled', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_selprod_id', 'op_qty', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit',
+                    'op_product_weight', 'op_product_weight_unit','opshipping_rate_id'
+                )
         );
 
         $opRs = $opSrch->getResultSet();
@@ -218,7 +227,7 @@ trait ShippingServices
     {
         $db = FatApp::getDb();
         $data = $this->getOrderProductDetail($opId);
-        if (empty($data)) {
+        if (empty($data) || 1 > $data['opshipping_plugin_id']) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
@@ -470,8 +479,7 @@ trait ShippingServices
     {       
         $data = $this->getOrderProductDetail($opId);        
         if (empty($data)  || empty($data['opsp_scheduled']) || 1 > $data['opsp_scheduled'] ) {
-            $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
-            LibHelper::dieJsonError($msg);
+            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
         }
         
         if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->cancelPickup($data)) {
@@ -485,6 +493,194 @@ trait ShippingServices
         $resp = $this->shippingService->getResponse(); 
        
         if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled'=> applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))){
+            LibHelper::dieJsonError(FatApp::getDb()->getError());
+        }
+        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
+    }
+    
+    public function shippingRatesForm(int $opId)
+    {
+        $frm = $this->getShippingRatesForm($opId);
+        $frm->fill(['op_id' => $opId]);
+        $this->set('frm', $frm);
+        $this->_template->render(false, false);
+    }
+
+    private function getShippingRatesForm($opId): object
+    {
+        $rates = $this->getShippingRatesFromApi($opId);
+        $rateOptions = self::formatShippingRates($this->getShippingRatesFromApi($opId), $this->langId);
+
+        $frm = new Form('frmRates');
+        $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
+        $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->langId));
+        return $frm;
+    }
+
+    private function formatShippingRates(array $rates, int $langId): array
+    {
+        $rateOptions = [];
+        if (!empty($rates)) {
+            foreach ($rates as $key => $rate) {
+                $label = $rate['title'] . "( " . CommonHelper::displayMoneyFormat($rate['cost']) . " )";
+                $rateOptions[$key] = $label;
+            }
+        }
+        return $rateOptions;
+    }
+
+    private function getShippingRatesFromApi($opId)
+    {
+        $orderData = $this->getOrderProductDetail($opId);
+        if (empty($orderData)) {
+            $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            return false;
+        }
+
+        $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
+        $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
+
+        $cacheKey = Shipping::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($this->shippingService);
+        $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+        if ($carriers) {
+            $carriers = unserialize($carriers);
+        } else {
+            $limit = ('ShipStationShipping' == (get_class($this->shippingService))::KEY_NAME ? 0 : 1);
+            $carriers = $this->shippingService->getCarriers($limit);
+            if (!empty($carriers)) {
+                FatCache::set($cacheKey, serialize($carriers), '.txt');
+            }
+        }
+        if (empty($carriers)) {
+            $this->error = Labels::getLabel("MSG_UNABLE_TO_FETCH_CARRIERS", $this->langId);
+            return false;
+        }
+
+        $orderObj = new Orders($orderData['op_order_id']);
+        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_order_id']);
+
+        $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
+
+        $this->shippingService->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone']);
+
+        $shippingHandledBySeller = CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']);
+        $shopAddress = $this->shippingService->getShopAddress(($shippingHandledBySeller ? $orderData['op_selprod_user_id'] : 0));
+        if (method_exists($this->shippingService, 'setAddressReference')) {
+            $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
+            $this->shippingService->setAddressReference($referenceId);
+        }
+
+        if (method_exists($this->shippingService, 'setFromAddress')) {
+            $this->shippingService->setFromAddress($shopAddress['shop_name'], $shopAddress['line1'], $shopAddress['line2'], $shopAddress['city'], $shopAddress['state'], $shopAddress['postalCode'], $shopAddress['countryCode'], $shopAddress['phone']);
+        }
+
+        if (method_exists($this->shippingService, 'setReference')) {
+            $this->shippingService->setReference('selProd-' . $orderData['op_selprod_id'] . $orderData['op_qty']);
+        }
+
+        if (method_exists($this->shippingService, 'setQuantity')) {
+            $this->shippingService->setQuantity($orderData['op_qty']);
+        }
+
+        /* Retrieve Selected Shipping Service Detail. */
+        if (method_exists($this->shippingService, 'setSelectedShipping') && is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
+            $this->shippingService->setSelectedShipping($this->selectedShippingService[$orderData['op_selprod_id']]);
+        }
+
+
+        $prodWeight = $orderData['op_product_weight'] * $orderData['op_qty'];
+        $productWeightClass = isset($weightUnitsArr[$orderData['op_product_weight_unit']]) ? $weightUnitsArr[$orderData['op_product_weight_unit']] : '';
+        $productDimensionClass = isset($dimensionUnits[$orderData['op_product_dimension_unit']]) ? $dimensionUnits[$orderData['op_product_dimension_unit']] : '';
+        $productWeightInOunce = Shipping::convertWeightInOunce($prodWeight, $productWeightClass);
+
+        $this->shippingService->setWeight($productWeightInOunce);        
+
+        if (method_exists($this->shippingService, 'setDimensions')) {
+            $this->shippingService->setDimensions($orderData['op_product_length'], $orderData['op_product_width'], $orderData['op_product_height'], $productDimensionClass);
+        }
+
+        $cacheKeyArr = [            
+            $orderData['op_product_length'],
+            $orderData['op_product_width'],
+            $orderData['op_product_height'],
+            $productWeightInOunce,
+            $productDimensionClass,
+            $shopAddress,
+            $shippingAddress,
+        ];
+
+        $shippingCost = [];
+        foreach ($carriers as $carrier) {
+            $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
+            $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $this->langId]);
+            $cacheKey = Shipping::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
+            $shippingRates = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+            if ($shippingRates) {
+                $shippingRates = unserialize($shippingRates);
+            } else {
+                $shippingRates = $this->shippingService->getRates($carrierCode, $shopAddress['postalCode']);
+                if (!empty($shippingRates)) {
+                    FatCache::set($cacheKey, serialize($shippingRates), '.txt');
+                }
+            }
+            if (empty($shippingRates)) {
+                SystemLog::set($this->shippingService->getError());
+                continue;
+            }
+
+            $keyCounter = 1;
+            foreach ($shippingRates as $key => $value) {
+                $shippingCost[$keyCounter] = [
+                    'title' => $value['serviceName'],
+                    'cost' => $value['shipmentCost'] + $value['otherCost'],
+                    'service_code' => $value['serviceCode'],
+                    'carrier_code' => $carrierCode,
+                    'plugin_id' => 1,
+                    'is_seller_plugin' => (0 < $this->shippingService->getRecordId() ? 1 : 0),
+                    
+                ];
+                $keyCounter++;
+            }
+            /* If rates fetched from one shipment carriers then ignore for others */
+            if (0 < count($shippingCost)) {
+                break;
+            }
+        }
+
+        return $shippingCost;
+    }
+
+    public function setUpShippingRate()
+    {
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        $frm = $this->getShippingRatesForm($opId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (!false === $post) {
+            LibHelper::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $opId = $post['op_id'];
+        $orderData = $this->getOrderProductDetail($opId);
+        if (empty($orderData)) {
+            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+        }
+
+        $rates = $this->getShippingRatesFromApi($opId);
+        
+        if (1 > count($rates) || !isset($rates[$post['shipping_rates']]) || 1 > $orderData['opshipping_rate_id']) {
+            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+        }
+
+        $dataToUpdate = array(
+            'opshipping_plugin_charges' => $rates[$post['shipping_rates']]['cost'],
+            'opshipping_carrier_code' => $rates[$post['shipping_rates']]['carrier_code'],
+            'opshipping_service_code' => $rates[$post['shipping_rates']]['service_code'],
+            'opshipping_plugin_id' => $rates[$post['shipping_rates']]['plugin_id'],
+            'opshipping_is_seller_plugin' => $rates[$post['shipping_rates']]['is_seller_plugin'],
+        );
+
+        if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, $dataToUpdate, array('smt' => 'opshipping_op_id = ?', 'vals' => array($opId)))) {
             LibHelper::dieJsonError(FatApp::getDb()->getError());
         }
         LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));

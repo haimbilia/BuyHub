@@ -193,4 +193,29 @@ function pageRedirect(op_id) {
              setTimeout(function(){ window.location.href = fcom.makeUrl('sellerOrders', 'view',[opId]) }, 300);
         });
     };
+    
+    shippingRatesForm = function (opId) {
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
+                $.facebox(res, 'small-fb-width');               
+            });
+        });
+    }   
+    
+    setUpShippingRate = function (frm) {
+        if (!$(frm).validate()) {
+            return;
+        }        
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        var data = fcom.frmData(frm);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'setUpShippingRate'), data, function (t) {
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                $.mbsmessage(t.msg, false, 'alert--danger');
+                return;
+            }
+            $.mbsmessage(t.msg, false, 'alert--success');
+            window.location.reload();            
+        });
+    };
 })();

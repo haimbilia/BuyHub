@@ -1208,13 +1208,15 @@ class CheckoutController extends MyAppController
                     if ($shippingDurationRow['mshipapi_type'] == Shipping::TYPE_MANUAL) {
                         $productShippingData['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
                     } else {
+                        $productShippingData['opshipping_rate_id'] = 0;
                         $productShippingData['opshipping_service_code'] = $shippingDurationRow['mshipapi_id'];
                         $productShippingData['opshipping_carrier_code'] = $shippingDurationRow['mshipapi_carrier'];
                         $productShippingData['opshipping_plugin_id'] = $shippingDurationRow['mshipapi_type'];
                         $productShippingData['opshipping_is_seller_plugin'] = $shippingDurationRow['mshipapi_is_seller_plugin'];
+                        $productShippingData['opshipping_plugin_charges'] = $shippingDurationRow['mshipapi_cost'];                       
                     }
                 }
-
+                
                 $productPickUpData = array();
                 $productPickupAddress = array();
                 if ($productInfo['product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !empty($productSelectedPickUpAddresses) && isset($productSelectedPickUpAddresses[$productInfo['selprod_id']])) {
@@ -1355,7 +1357,7 @@ class CheckoutController extends MyAppController
                 if(FatApp::getConfig('CONF_TAX_COLLECTED_BY_SELLER',FatUtility::VAR_INT,0)){
                 $taxCollectedBySeller = applicationConstants::YES;
                 } */
-                
+                 
                 $orderData['products'][CART::CART_KEY_PREFIX_PRODUCT . $productInfo['selprod_id']] = array(
                     'op_selprod_id' => $productInfo['selprod_id'],
                     'op_is_batch' => 0,

@@ -926,6 +926,8 @@ ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_plugin_id` INT NOT
 ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_plugin_id` `opshipping_plugin_id` INT NOT NULL COMMENT 'plugin use to fetch rates';
 ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_is_seller_plugin` TINYINT NOT NULL AFTER `opshipping_plugin_id`;
 ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_is_seller_plugin` `opshipping_is_seller_plugin` TINYINT NOT NULL COMMENT 'is seller plugin use to fetch rates ';
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_plugin_charges` DECIMAL(10,2) NOT NULL AFTER `opshipping_is_seller_plugin`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_plugin_charges` `opshipping_plugin_charges` DECIMAL(10,2) NOT NULL COMMENT 'shipping rate fetch from plugin';
 -- --- Aramex Shipping API--- --
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_NA', 1, 'NA', 1) ON DUPLICATE KEY UPDATE label_caption = 'NA';
