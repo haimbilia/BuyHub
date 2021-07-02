@@ -68,7 +68,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         }
 
         /* Set Cookie expiry for 365 days. But Token expired after 10 mins. */
-        CommonHelper::setCookie('_ykEasyLogin', $userTempToken, time() + 3600 * 24 * 365, '/', '.' . $_SERVER['HTTP_HOST']);
+        CommonHelper::setCookie('_ykEasyLogin', $userTempToken, time() + 3600 * 24 * 365, '/', '.' . $_SERVER['HTTP_HOST'], false, false);
 
         $this->set('loginUrl', self::LOGIN_URL);
         $this->set('userId', $this->userId);
