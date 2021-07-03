@@ -4,7 +4,6 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'cond_seller_name' => Labels::getLabel('LBL_SELLER', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
-    // 'record_condition' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $adminLangId),
     'action' => '',
