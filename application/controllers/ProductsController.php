@@ -2109,6 +2109,40 @@ class ProductsController extends MyAppController
         }
         die(json_encode($json));
     }
+    
+    /**
+     * getOrderProductLabel
+     *
+     * @param  string $excryptedOpId
+     * @return void
+     */
+    public function getOrderProductLabel(string $excryptedOpId)
+    {
+        $opId = LibHelper::decrypt($excryptedOpId);
+        $plugin = new Plugin();
+        $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+
+        $error = '';
+        $shippingService = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId);
+        if (false === $shippingService) {
+            FatUtility::dieJsonError($error);
+        }
+
+        if (false === $shippingService->init()) {
+            FatUtility::dieJsonError($shippingService->getError());
+        }
+
+        $orderProductShipmentDetail = OrderProductShipment::getAttributesById($opId);
+        if (empty($orderProductShipmentDetail) || empty($orderProductShipmentDetail['opship_response'])) {
+            FatUtility::dieJsonError(Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->siteLangId));
+        }
+
+        $shipmentResponse = json_decode($orderProductShipmentDetail['opship_response'], true);
+        $trackingNumber = $orderProductShipmentDetail['opship_tracking_number'];
+        $filename = "label-" . $trackingNumber;
+        $labelData = $shipmentResponse['labelData'];
+        $shippingService->downloadLabel($labelData, $filename);
+    }
 
     public function downloadPreview($aFileId, $recordId)
     {

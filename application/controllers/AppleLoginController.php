@@ -2,7 +2,6 @@
 
 class AppleLoginController extends SocialMediaAuthController
 {
-    private const PRODUCTION_URL = 'https://appleid.apple.com/auth/';
     public const KEY_NAME = 'AppleLogin';
 
     public $requiredKeys = ['client_id'];

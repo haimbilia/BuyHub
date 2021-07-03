@@ -285,7 +285,7 @@ class User extends MyAppModel
             return false;
         }
 
-        if (empty($key) || empty($value)) {
+        if (empty($key) || '' == $value) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_PARAMETERS', $this->commonLangId);
             return false;
         }
@@ -2221,7 +2221,7 @@ class User extends MyAppModel
         return false;
     }
 
-    public function setMobileAppToken()
+    public function setMobileAppToken(int $expirationAge = 7)
     {
         if (($this->mainTableRecordId < 1)) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
@@ -2230,7 +2230,7 @@ class User extends MyAppModel
 
         $generatedToken = substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
 
-        $expiry = strtotime("+7 DAYS");
+        $expiry = strtotime("+" . $expirationAge . " DAYS");
         $values = array(
             'uauth_user_id' => $this->mainTableRecordId,
             'uauth_token' => $generatedToken,
@@ -3025,6 +3025,15 @@ class User extends MyAppModel
         $record = FatApp::getDb()->fetchAllAssoc($rs);
         return array_keys($record);
     }
+
+    public static function deleteUserMeta(string $keyValue, &$error = '')
+    {
+        if (!FatApp::getDb()->deleteRecords(static::DB_TBL_META, array('smt' => 'usermeta_key = ?', 'vals' => array($keyValue)))) {
+            $error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
     
     public function saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)
     {
@@ -3046,6 +3055,17 @@ class User extends MyAppModel
             return false;
         }
         return true;
+    }
+
+    public static function getUserMetaDetail(string $col, string $value = '')
+    {
+        $srch = new SearchBase(static::DB_TBL_META, 't_um');
+        $srch->addCondition(static::DB_TBL_META_PREFIX . 'key', '=', $col);
+        if (!empty($value)) {
+            $srch->addCondition(static::DB_TBL_META_PREFIX . 'value', '=', $value);
+        }
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs);
     }
     
     public function getUserSelectedCookies()

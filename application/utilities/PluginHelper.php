@@ -188,8 +188,7 @@ trait PluginHelper
         return $reflect->newInstanceArgs($args);
     }
 
-    /**
-     * updateSettings
+     /** updateSettings
      *
      * @param  int $pluginId
      * @param  array $data
@@ -223,5 +222,46 @@ trait PluginHelper
     public function getRecordId()
     {
         return $this->recordId;
+    }
+
+     /**
+     * formatOutput
+     *
+     * @param  int $status
+     * @param  string $msg
+     * @param  array $data
+     * @return array
+     */
+    public function formatOutput(int $status, string $msg, array $data = [], $responseCode = Plugin::RC_BAD_REQUEST): array
+    {
+        return [
+            'status' => $status,
+            'responseCode' => (Plugin::ACTIVE == $status) ? Plugin::RC_OK : $responseCode,
+            'msg' => $msg,
+            'data' => $data
+        ];
+    }
+
+    /**
+     * dieWithJsonResponse
+     *
+     * @param  array $data
+     * @return void
+     */
+    public function dieWithJsonResponse(array $data = [])
+    {
+        $status = array_key_exists('status', $data) && 0 < FatUtility::int($data['status']) ? FatUtility::int($data['status']) : Plugin::RETURN_FALSE;
+        $msg = 0 < $status ? Labels::getLabel("MSG_SUCCESS", $this->langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $this->langId);
+        $data['msg'] = array_key_exists('msg', $data) ? $data['msg'] : $msg;
+
+        $isAjaxCall = FatUtility::isAjaxCall();
+
+        if (Plugin::RETURN_FALSE == $status) {
+            LibHelper::exitWithError($data, $isAjaxCall, !$isAjaxCall);
+        } else {
+            LibHelper::exitWithSuccess($data, $isAjaxCall, !$isAjaxCall);
+        }
+
+        CommonHelper::redirectUserReferer();
     }
 }

@@ -688,15 +688,17 @@ function getGeoAddress(data) {
     displayGeoAddress(address);
 }
 
-var canSetCookie = false;
-function setCookie(cname, cvalue, exdays = 365) {
-    if (false == canSetCookie) {
-        return false;
-    }
+function setCookie(cname, cvalue, canSetCookie = true, exdays = 365, callback = '') {
+	if (false == canSetCookie) {
+		return false;
+	}
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=." + window.location.hostname + ";path=/";
+    if ('' != callback) {
+        callback();
+    }
 }
 
 function getCookie(cname) {
@@ -721,7 +723,6 @@ function displayGeoAddress(address) {
 }
 
 function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'formatted_address', saveCookie = true, callback = 'googleSelectedAddress') {
-    canSetCookie = saveCookie;
     if (1 > $("#" + elementId).length) {
         var msg = (langLbl.fieldNotFound).replace('{field}', elementId + ' Field');
         $.systemMessage(msg, 'alert--danger');

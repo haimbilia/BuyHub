@@ -26,14 +26,15 @@ $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
 $urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selprod_id)");
 $urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), '/') . '</span>';
 
-$fld = $frmSellerProduct->getField('selprod_subtract_stock');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+if (false === Plugin::isActive('EasyEcom')) {
+    $fld = $frmSellerProduct->getField('selprod_subtract_stock');
+    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 
-$fld = $frmSellerProduct->getField('selprod_track_inventory');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
-
+    $fld = $frmSellerProduct->getField('selprod_track_inventory');
+    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+}
 $fld = $frmSellerProduct->getField('use_shop_policy');
 $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
@@ -70,6 +71,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                     </div>
                 </div>
             </div>
+            <?php if (false === Plugin::isActive('EasyEcom')) { ?>
             <div class="row">
                 <div class="col-md-6">
                     <div class="field-set d-flex align-items-center">
@@ -88,6 +90,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                     </div>
                 </div>
             </div>
+            <?php } ?>
             <div class="row">
                 <div class="selprod_threshold_stock_level_fld col-md-6">
                     <div class="field-set">

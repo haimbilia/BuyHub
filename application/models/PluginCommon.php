@@ -30,6 +30,7 @@ class PluginCommon extends MyAppModel
     public const TYPE_SHIPPING_SERVICES = 8;
     public const TYPE_TAX_SERVICES  = 10;
     public const TYPE_SPLIT_PAYMENT_METHOD  = 11;
+    public const TYPE_MARKETPLACE_CHANNELS  = 12;
     public const TYPE_REGULAR_PAYMENT_METHOD  = 13;
     public const TYPE_SHIPMENT_TRACKING = 14;
     public const TYPE_DATA_MIGRATION = 16;
@@ -62,6 +63,12 @@ class PluginCommon extends MyAppModel
     ];
 
 
+    /* Response Codes */
+    public const RC_OK = 200;
+    public const RC_BAD_REQUEST = 400;
+    public const RC_UNAUTHORIZED = 401;
+    /* Response Codes */
+
     /**
      * getTypeArr - Used to get plugin type
      *
@@ -81,6 +88,7 @@ class PluginCommon extends MyAppModel
             // self::TYPE_FULL_TEXT_SEARCH => Labels::getLabel('LBL_FULL_TEXT_SEARCH', $langId), /* NOT IN USE */
             self::TYPE_SPLIT_PAYMENT_METHOD => Labels::getLabel('LBL_SPLIT_PAYMENT_METHODS', $langId),
             self::TYPE_REGULAR_PAYMENT_METHOD => Labels::getLabel('LBL_REGULAR_PAYMENT_METHODS', $langId),
+            self::TYPE_MARKETPLACE_CHANNELS => Labels::getLabel('LBL_MARKEPLACE_CHANNELS', $langId),
             self::TYPE_SHIPPING_SERVICES => Labels::getLabel('LBL_SHIPPING_SERVICES', $langId),
             self::TYPE_SHIPMENT_TRACKING => Labels::getLabel('LBL_SHIPMENT_TRACKING', $langId),
             self::TYPE_DATA_MIGRATION => Labels::getLabel('LBL_DATA_MIGRATION', $langId),
@@ -104,6 +112,7 @@ class PluginCommon extends MyAppModel
             // self::TYPE_FULL_TEXT_SEARCH => "full-text-search", /* NOT IN USE */
             self::TYPE_TAX_SERVICES => "tax",
             self::TYPE_SPLIT_PAYMENT_METHOD => "payment-methods",
+            self::TYPE_MARKETPLACE_CHANNELS => "marketplace-channels",
             self::TYPE_REGULAR_PAYMENT_METHOD => "payment-methods",
             self::TYPE_SHIPPING_SERVICES => "shipping-services",
             self::TYPE_SHIPMENT_TRACKING => "shipment-tracking",

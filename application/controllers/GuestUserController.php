@@ -1,9 +1,10 @@
 <?php
-
-use PhpParser\Node\Stmt\Label;
-
 class GuestUserController extends MyAppController
 {
+    private $authToken = '';
+    private $username = '';
+
+
     public function loginForm($isRegisterForm = 0)
     {   
         /* if(UserAuthentication::doCookieLogin()){
@@ -1260,5 +1261,119 @@ class GuestUserController extends MyAppController
         } else {
             FatApp::redirectUser(UrlHelper::generateUrl('Products', 'view', array($selProdId)));
         }
+    }
+
+    /**
+     * formatOutput
+     *
+     * @param  int $status
+     * @param  string $msg
+     * @param  array $data
+     * @return array
+     */
+    public function formatOutput(int $status, string $msg, array $data = []): array
+    {
+        return [
+            'status' => $status,
+            'msg' => $msg,
+            'data' => $data
+        ];
+    }
+    
+    /**
+     * validateAuthLoginRequest
+     *
+     * @return void
+     */
+    private function validateAuthLoginRequest(bool $authTokenRequest = false)
+    {
+        $maketPlaceAuthToken = $_SERVER['HTTP_EEC_TOKEN'];
+        $uAuth = new UserAuthentication();
+        if (false === $uAuth->validateMarketplaceAuthToken($maketPlaceAuthToken)) {
+            $msg = Labels::getLabel("MSG_UNAUTHORIZED_ACCESS", $this->siteLangId);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            FatUtility::dieJsonError($resp);
+        }
+
+        $requestParam = "";
+        if (true === $authTokenRequest) {
+            $requestParam = $this->username = FatApp::getPostedData('username', FatUtility::VAR_STRING, '');
+        } else {
+            $requestParam = $this->authToken = FatApp::getPostedData('authToken', FatUtility::VAR_STRING, '');
+        }
+
+        if (empty($requestParam)) {
+            $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            FatUtility::dieJsonError($resp);
+        }
+    }
+
+    /**
+     * getAuthToken - This function is used by Marketplace API (E.g. EasyEcom) if access token is expired.
+     * 
+     * @return void
+     */
+    public function getAuthToken()
+    {
+        $this->validateAuthLoginRequest(true);
+
+        $uObj = new User();
+        $data = $uObj->checkUserByEmailOrUserName($this->username, $this->username);
+        if (false === $data || empty($data)) {
+            $msg = Labels::getLabel('MSG_INVALID_USER', $this->siteLangId);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            FatUtility::dieJsonError($resp);
+        }
+        $userId = array_key_exists('user_id', $data) ? $data['user_id'] : '';
+        $uObj->setMainTableRecordId($userId);
+
+        if (!$newAuthToken = $uObj->setMobileAppToken(UserAuthentication::TOKEN_AGE_IN_DAYS)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+        
+        if (false === $uObj->updateUserMeta('seller_auth_token', $newAuthToken)) {
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $uObj->getError());
+            FatUtility::dieJsonError($resp);
+        }
+
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->siteLangId);
+        $resp = $this->formatOutput(Plugin::RETURN_TRUE, $msg, ['authToken' => $newAuthToken]);
+        CommonHelper::jsonEncodeUnicode($resp, true);
+    }
+
+    /**
+     * getAuthLoginToken - This function is used by Marketplace API (E.g. EasyEcom). It is being used when easyecom submit's user temp token from cookie while providing access to their account location. 
+     * 
+     * @return void
+     */
+    public function getAuthLoginToken()
+    {
+        $this->validateAuthLoginRequest();
+
+        $srch = new SearchBase(User::DB_TBL_USR_MOBILE_TEMP_TOKEN);
+        $srch->addCondition('uttr_token', '=', $this->authToken);
+        $srch->addCondition('uttr_expiry', '>=', date('Y-m-d H:i:s'));
+        $srch->addMultipleFields(['uttr_user_id']);
+        $srch->doNotCalculateRecords();
+        $srch->setPagesize(1);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (empty($row)) {
+            $msg = Labels::getLabel("MSG_INVALID_REQUEST_TOKEN_OR_EXPIRED", $this->siteLangId);
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            FatUtility::dieJsonError($resp);
+        }
+
+        $user = new User($row['uttr_user_id']);
+        if (false === $user->deleteUserAPITempToken()) {
+            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $user->getError());
+            FatUtility::dieJsonError($resp);
+        }
+
+        $authToken = User::getUserMeta($row['uttr_user_id'], 'seller_auth_token');
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->siteLangId);
+        $resp = $this->formatOutput(Plugin::RETURN_TRUE, $msg, ['authToken' => $authToken]);
+        CommonHelper::jsonEncodeUnicode($resp, true);
     }
 }

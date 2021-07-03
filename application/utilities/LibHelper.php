@@ -2,6 +2,8 @@
 
 class LibHelper extends FatUtility
 {
+    private const ENCRYPTION_KEY = '__^%&Q@$&*!@#$%^&*^__';
+
     public static function dieJsonError($message)
     {
         if (true === MOBILE_APP_API_CALL) {
@@ -18,7 +20,13 @@ class LibHelper extends FatUtility
     public static function exitWithError($message, $json = false, $redirect = false)
     {
         if (true === MOBILE_APP_API_CALL) {
-            $message = strip_tags($message);
+            if (is_array($message)) {
+                array_walk_recursive($message, function (&$item) {
+                    $item = trim(strip_tags($item));
+                });
+            } else {
+                $message = strip_tags($message);
+            }
             FatUtility::dieJsonError($message);
         }
 
@@ -32,6 +40,28 @@ class LibHelper extends FatUtility
 
         if (true === $redirect) {
             Message::addErrorMessage($message);
+        }
+    }
+
+    public static function exitWithSuccess($message, $json = false, $redirect = false)
+    {
+        if (true === MOBILE_APP_API_CALL) {
+            if (is_array($message)) {
+                array_walk_recursive($message, function (&$item) {
+                    $item = trim(strip_tags($item));
+                });
+            } else {
+                $message = strip_tags($message);
+            }
+            FatUtility::dieJsonSuccess($message);
+        }
+
+        if (true === $json) {
+            FatUtility::dieJsonSuccess($message);
+        }
+
+        if (true === $redirect) {
+            Message::addMessage($message);
         }
     }
 
@@ -94,6 +124,12 @@ class LibHelper extends FatUtility
         return (int) $iValue;
     }
 
+    /**
+     * bytesToSize
+     *
+     * @param  mixed $bytes
+     * @return void
+     */
     public static function bytesToSize($bytes)
     {
         if ($bytes >= 1073741824) {
@@ -113,6 +149,70 @@ class LibHelper extends FatUtility
         return $bytes;
     }
 
+    /**
+     * verify
+     *
+     * @param  string $bundle
+     * @param  string $key
+     * @return bool
+     */
+    public static function verify(string $bundle, string $key): bool
+    {
+        return hash_equals(
+            hash_hmac('sha256', mb_substr($bundle, 64, null, '8bit'), $key),
+            mb_substr($bundle, 0, 64, '8bit')
+        );
+    }
+
+    /**
+     * getKey
+     *
+     * @param  int $keysize
+     * @return string
+     */
+    public static function getKey(int $keysize = 16): string
+    {
+        return hash_pbkdf2('sha256', self::ENCRYPTION_KEY, 'some_token', 100000, $keysize, true);
+    }
+
+    /**
+     * encrypt
+     *
+     * @param  string $string
+     * @return string
+     */
+    public static function encrypt(string $string): string
+    {
+        $iv = random_bytes(16);
+        $key = self::getKey();
+        $string = openssl_encrypt($string, 'aes-256-ctr', $key, OPENSSL_RAW_DATA, $iv);
+        $result = hash_hmac('sha256', $string, $key) . $string;
+        return bin2hex($iv) . bin2hex($result);
+    }
+
+    /**
+     * decrypt
+     *
+     * @param  string $hash
+     * @return string
+     */
+    public static function decrypt(string $hash): string
+    {
+        $iv = hex2bin(substr($hash, 0, 32));
+        $data = hex2bin(substr($hash, 32));
+        $key = self::getKey();
+        if (!self::verify($data, $key)) {
+            return null;
+        }
+        return openssl_decrypt(mb_substr($data, 64, null, '8bit'), 'aes-256-ctr', $key, OPENSSL_RAW_DATA, $iv);
+    }
+
+    /**
+     * isJson
+     *
+     * @param  string $string
+     * @return bool
+     */
     public static function isJson($string, &$error = ''): bool
     {
         json_decode($string);

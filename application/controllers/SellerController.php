@@ -2108,7 +2108,7 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-
+        
         $shop_id = 0;
         $stateId = 0;
         $countryId = (isset($shopDetails['shop_country_id'])) ? $shopDetails['shop_country_id'] : FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223);
@@ -4531,8 +4531,10 @@ class SellerController extends SellerBaseController
         }
 
         $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'selprod_title' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
-        $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Maintain_Stock_Levels', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Track_Product_Inventory', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, array(), false, 0);
+        if (false === Plugin::isActive('EasyEcom')) {
+          $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Maintain_Stock_Levels', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
+          $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Track_Product_Inventory', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, array(), false, 0);
+        }
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Alert_Stock_Level', $this->siteLangId), 'selprod_threshold_stock_level');
         $fld->requirements()->setInt();
         $fld = $frm->addIntegerField(Labels::getLabel('LBL_Minimum_Purchase_Quantity', $this->siteLangId), 'selprod_min_order_qty');
@@ -5545,6 +5547,7 @@ class SellerController extends SellerBaseController
         $this->set('msg', Labels::getLabel('LBL_Product_Data_Translated_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+
     public function compareWithInventoryMinPurchase()
     {
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);

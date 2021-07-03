@@ -84,7 +84,7 @@ class Configurations extends FatModel
 
     public static function dateFormatPhpArr()
     {
-        return array( 'Y-m-d' => 'Y-m-d', 'd/m/Y' => 'd/m/Y', 'm-d-Y' => 'm-d-Y', 'M d, Y' => 'M d, Y');
+        return array( 'Y-m-d' => 'Y-m-d', 'd/m/Y' => 'd/m/Y', 'm-d-Y' => 'm-d-Y', 'M d, Y' => 'M d, Y', 'd.m.Y' => 'd.m.Y');
     }
 
     public static function dateFormatMysqlArr()

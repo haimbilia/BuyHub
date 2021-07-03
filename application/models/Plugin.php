@@ -141,13 +141,13 @@ class Plugin extends PluginCommon
      * @param  int $langId
      * @param  bool $assoc
      * @param  bool $active
-     * @return mixed
+     * @return array
      */
-    public static function getDataByType(int $typeId, int $langId = 0, bool $assoc = false, bool $active = true)
+    public static function getDataByType(int $typeId, int $langId = 0, bool $assoc = false, bool $active = true): array
     {
         $typeId = FatUtility::int($typeId);
         if (1 > $typeId) {
-            return false;
+            return [];
         }
 
         if (in_array($typeId, self::getKingpinTypeArr()) && empty((new self())->getDefaultPluginKeyName($typeId))) {

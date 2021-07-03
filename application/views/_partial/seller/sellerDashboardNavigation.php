@@ -1,6 +1,8 @@
 <?php
 $controller = strtolower($controller);
 $action = strtolower($action);
+$plugin = new Plugin();
+
 ?> <sidebar class="sidebar no-print">
     <div class="logo-wrapper">
         <?php
@@ -277,9 +279,40 @@ $action = strtolower($action);
                     <li class="divider"></li>
                 <?php } ?>
                 <?php if (
-                    $userPrivilege->canViewMetaTags(UserAuthentication::getLoggedUserId(), true) ||
-                    $userPrivilege->canViewUrlRewriting(UserAuthentication::getLoggedUserId(), true)
-                ) { ?>
+                    $userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true)
+                    ) { ?>
+                    <li class="menu__item">
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_OMNI_CHANNEL_MANAGEMENT', $siteLangId);?></span></div>
+                    </li>
+                    <?php
+                    $marketPlaceChannels = Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
+                    foreach ($marketPlaceChannels as $channel) { 
+                        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $channel['plugin_id']);
+                        $uploadedTime = '';
+                        $aspectRatio = '';
+                        if (!empty($fileData)) {
+                            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                            $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
+                        }
+                        $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($channel['plugin_id'], 'ICON'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        ?>
+                        <li class="menu__item <?php echo ($controller == strtolower($channel['plugin_code'])) ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo $channel['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
+                                    <i class="icn shop">
+                                        <img src="<?php echo $imageUrl; ?>" data-ratio="<?php echo $aspectRatio; ?>">
+                                    </i>
+                                    <span class="menu-item__title"><?php echo $channel['plugin_name'];?></span>
+                                </a>
+                            </div>
+                        </li>
+                    <?php  } ?>
+                    <li class="divider"></li>
+                <?php } ?>
+                <?php if (
+                        $userPrivilege->canViewMetaTags(UserAuthentication::getLoggedUserId(), true) ||
+                        $userPrivilege->canViewUrlRewriting(UserAuthentication::getLoggedUserId(), true)
+                    ) { ?>
                     <li class="menu__item">
                         <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_SEO', $siteLangId); ?></span></div>
                     </li>

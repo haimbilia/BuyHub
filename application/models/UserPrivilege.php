@@ -37,7 +37,7 @@ class UserPrivilege
     public const SECTION_FINANCIAL_REPORT = 34;
     public const SECTION_BADGES = 35;
     public const SECTION_BADGE_LINKS = 36;
-
+    public const SECTION_MARKETPLACE_CHANNEL = 37;
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -942,5 +942,15 @@ class UserPrivilege
     public function canEditBadgeLinks($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_WRITE, $returnResult);
+    }
+    
+    public function canViewMarketplaceChannel($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditMarketplaceChannel($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_WRITE, $returnResult);
     }
 }
