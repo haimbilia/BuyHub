@@ -37,11 +37,16 @@
                             <div class="col-md-12">
                                 <?php if ('custom' == $stripeAccountType) { ?>
                                     <a class="btn btn-brand btn-sm" onClick="deleteAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'deleteAccount') ?>" title="<?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>">
-                                        <?php echo Labels::getLabel('LBL_DELETE_ACCOUNT', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('LBL_DELETE_ACCOUNT_FROM_STRIPE', $siteLangId); ?>
                                     </a>
                                 <?php } ?>
                                 <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
-                                    <?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>
+                                    <?php 
+                                        $msg = CommonHelper::replaceStringData(Labels::getLabel('LBL_UNLINK_ACCOUNT_FROM_{WEBSITE-NAME}', $siteLangId), [
+                                            '{WEBSITE-NAME}' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId)
+                                        ]);
+                                        echo $msg; 
+                                    ?>
                                 </a>
                                 <?php if (!empty($accountId) && true === $initialFormSubmitted && false === $userAccountIsValid) { 
                                     $msg = Labels::getLabel('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', $siteLangId);
@@ -72,7 +77,7 @@
             <script>
                 requiredFieldsForm();
             </script>
-        <?php } elseif (!empty($accountId) && !empty($stripeUserData)) { ?>
+        <?php } elseif (!empty($accountId) && !empty($stripeUserData) &&  true === $userAccountIsValid) { ?>
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <ul class="stripe-stats">

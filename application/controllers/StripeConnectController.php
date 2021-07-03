@@ -84,7 +84,7 @@ class StripeConnectController extends PaymentMethodBaseController
             }
             $stripeUserData = $this->stripeConnect->getResponse()->toArray();
         }
-        
+
         /* This will return url only for ExpressAccount connected to admin account. */
         $this->stripeConnect->createLoginLink();
 
