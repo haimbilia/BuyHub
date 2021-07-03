@@ -118,6 +118,7 @@ Fixes:
     => 054742 - wrong message is populating on button on tooltip
     => 054591 - Getting delivery field in tax invoice on pickup order
     => 054711 - when multiple products are linked with same shipping profile then pagination count is not proper
+    ====================TV-9.3.1.20210703==========================
 
 
 Develop
@@ -203,9 +204,6 @@ Fixes:
     => 055093 - while changing seller approval request if admin declines request without message then on front end it's listing heading- reason for cancellation which is blank
     => 055092 - when cookies are not allowed from admin still then user have option for the same in account
     => 055090 - when truncate request is raised by user then in admin> it's listing- view purpose which is not there on user end
-
-New Features:
-    => Admin shipped products listing page
     => 053451 - missing country code plugin with phone number field
     => 053462 - Instagram login not working after configuration, gives error
     => 053757 - when order status is changed then sms are not triggering to buyer for the same
@@ -232,6 +230,20 @@ New Features:
     => 054816 - getting uneven behavior in related and buy together products on clicking which are already added
     => 055441 - delete order from admin option should comes exactly after 2 days 
     => 055444 - On order status update email tracking url not coming 
+    => 054201	while adding catalog for digital item> only option to add attachment at inventory level is either Yes or No
+    => 054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
+    => 054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
+    => 054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
+    => 054212	while adding inventory> when we add link and url is long then UI is not proper
+    => 055154	digital items> files linked with specific language are listing all on front end in preview
+    => 055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
+    => 055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
+    ====================TV-9.3.1.20210703==========================
+
+New Features:
+    => Admin shipped products listing page
+    => task-84719 Preview module for digital files
+    => task-85619 Adding files when digital order is delivered   
 
 Enhancements :
    => At shop level  pickup interval option given
@@ -325,24 +337,3 @@ Notes:
         To Test Sandbox Payment Refer This: https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods
 
 
-=======================================
-
-Released Version:
-
-Tasks:
-    task-84719 Preview module for digital files
-    task-85619 Adding files when digital order is delivered
-
-=======================================
-
-Released Version:
-
-bugs:
-    #054201	while adding catalog for digital item> only option to add attachment at inventory level is either Yes or No
-    #054208 - while uploading files> it's taking too much time to save data and meanwhile loader disappears- seems like process has been aborted
-    #054204	while adding catalog> when add attachment is set to No then > download tab is listing for that inventory setup too
-    #054206	there needs to be some message on inventory level when attachments are not allowed to add at inventory
-    #054212	while adding inventory> when we add link and url is long then UI is not proper
-    #055154	digital items> files linked with specific language are listing all on front end in preview
-    #055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
-    #055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
