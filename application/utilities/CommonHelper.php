@@ -1361,7 +1361,7 @@ class CommonHelper extends FatUtility
         return $str;
     }
 
-    public static function showProductDiscountedText($product = array(), $langId)
+    public static function showProductDiscountedText(array $product, int $langId)
     {
         $langId = FatUtility::int($langId);
         if (empty($product) || $langId <= 0) {
