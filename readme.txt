@@ -239,6 +239,7 @@ Fixes:
     => 055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
     => 055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
     ====================TV-9.3.1.20210703==========================
+    => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
 
 New Features:
     => Admin shipped products listing page
