@@ -76,6 +76,12 @@ class BadgesController extends AdminBaseController
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
 
+        $conditionType = FatApp::getPostedData('badge_condition_type');
+        if ('' != $conditionType) {
+            $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
+            $srch->addCondition('badge_condition_type', '=', $conditionType);
+        }
+
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
@@ -232,6 +238,9 @@ class BadgesController extends AdminBaseController
         if (Badge::TYPE_BADGE == $badgeType) {
             $approvalArr = Badge::getApprovalStatusArr($this->adminLangId);
             $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);
+            
+            $conditionTypeArr = Badge::getConditionTypeArr($this->adminLangId);
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', $conditionTypeArr);
         }
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));

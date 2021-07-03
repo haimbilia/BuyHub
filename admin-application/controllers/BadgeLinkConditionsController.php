@@ -156,7 +156,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $srch->addCondition('blinkcond_badge_id', '=', $badgeId);
 
         if (!empty($badgeType)) {
-            $srch->addHaving(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
+            $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
         $conditionSellerId = FatApp::getPostedData('blinkcond_user_id');
@@ -176,21 +176,17 @@ class BadgeLinkConditionsController extends AdminBaseController
 
         $trigger = FatApp::getPostedData('record_condition'); //Trigger
         if (!empty($trigger)) {
-            if (BadgeLinkCondition::REC_COND_AUTO == $trigger) {
-                $srch->addHaving('badgelink_record_ids', 'IS', 'mysql_func_null', 'AND', true);
-            } else {
-                $srch->addHaving('badgelink_record_ids', 'IS NOT', 'mysql_func_null', 'AND', true);
-            }
+            $srch->addCondition('badge_condition_type', '=', $trigger);
         }
 
         $conditionType = FatApp::getPostedData('blinkcond_condition_type');
         if (!empty($conditionType)) {
             $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type', '=',  $conditionType);
         }
-        $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
-        $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id');
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
+        $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id');
+        $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
         $this->set('recordCondition', $recordCondition);
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));

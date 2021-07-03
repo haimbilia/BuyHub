@@ -66,7 +66,6 @@ $(document).on('change', '.icon-language-js', function () {
     clearSearch = function () {
         document.frmSearch.reset();
         searchRecords(document.frmSearch);
-        $('.searchHead--js').click();
     };
 
     toggleStatus = function (e, obj, status) {
