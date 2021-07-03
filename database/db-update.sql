@@ -928,7 +928,9 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', 1, 'How frequently available funds are paid out. One of: daily, manual, weekly, or monthly. Default is daily.', ''),
 ('LBL_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', 1, 'The number of days charge funds are held before being paid out. May also be set to minimum, representing the lowest available value for the account country. Default is minimum. The delay_days parameter does not apply when the interval is manual.', ''),
 ('LBL_STRIPE_CONNECT_WEEK_DAY_DESC', 1, 'The day of the week when available funds are paid out, specified as monday, tuesday, etc. (required and applicable only if interval is weekly.)', ''),
-('LBL_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', '');
+('LBL_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', ''),
+('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', 1, 'Your Account Setup Is Incomplete. {click-here} To Complete Your Account Setup.', '');
+-- ---------Task 86672 Stripe Connect Changes ------ -- 
 
 -- ---------Task 86672 Stripe Connect Changes ------ -- 
 

@@ -121,24 +121,6 @@ class StripeConnectController extends PaymentMethodBaseController
     }
 
     /**
-     * completeAccount()
-     *
-     * @return void
-     */
-    public function completeAccount()
-    {
-        if (false === $this->stripeConnect->requestAccountLinks()) {
-            $this->setError();
-        }
-        $resp = $this->stripeConnect->getResponse()->toArray();
-        $json = [
-            'msg' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
-            'link' => $resp['url']
-        ];
-        FatUtility::dieJsonSuccess($json);
-    }
-
-    /**
      * requiredFieldsForm
      *
      * @return void
@@ -251,7 +233,39 @@ class StripeConnectController extends PaymentMethodBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
         }
 
-        FatUtility::dieJsonSuccess($msg);
+        if (false === $this->stripeConnect->requestAccountLinks()) {
+            $msg = $this->stripeConnect->getError();
+            if (true === $redirect) {
+                Message::addMessage($msg);
+                FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
+            }
+            FatUtility::dieJsonError($msg);
+        }
+
+        $resp = $this->stripeConnect->getResponse()->toArray();
+        $json = [
+            'msg' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
+            'link' => $resp['url']
+        ];
+        FatUtility::dieJsonSuccess($json);
+    }
+
+    /**
+     * completeAccount()
+     *
+     * @return void
+     */
+    public function completeAccount()
+    {
+        if (false === $this->stripeConnect->requestAccountLinks()) {
+            $this->setError();
+        }
+        $resp = $this->stripeConnect->getResponse()->toArray();
+        $json = [
+            'msg' => Labels::getLabel('MSG_REDIRECTING...', $this->siteLangId),
+            'link' => $resp['url']
+        ];
+        FatUtility::dieJsonSuccess($json);
     }
 
     /**
@@ -398,8 +412,8 @@ class StripeConnectController extends PaymentMethodBaseController
         }
 
         if (0 < $j) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
-            $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearForm();'));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONTINUE', $this->siteLangId));
+            $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearForm();'));
         }
 
         return $frm;

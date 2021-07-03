@@ -529,7 +529,6 @@ class StripeConnect extends PaymentMethodBase
     /**
      * getBusinessTypeFields
      *
-     * @param  string $businessType
      * @return array
      */
     public function getBusinessTypeFields(): array

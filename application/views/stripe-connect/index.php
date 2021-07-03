@@ -28,11 +28,6 @@
                             <a class="btn btn-outline-brand btn-sm mr-2" onClick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
                                 <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
                             </a>
-                            <?php
-                            /* Not Required. */
-                            /* <a class="btn btn-brand btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'login') ?>" title="<?php echo Labels::getLabel('MSG_LOGIN', $siteLangId); ?>">
-                                <?php echo Labels::getLabel('LBL_ALREADY_HAVE_ACCOUNT_?', $siteLangId); ?>
-                            </a> */ ?>
                         </div>
                     </div>
                 <?php } else { ?>
@@ -48,18 +43,19 @@
                                 <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
                                     <?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>
                                 </a>
-                                <?php if (!empty($accountId) && true === $initialFormSubmitted && false === $userAccountIsValid) { ?>
-                                    <a class="btn btn-secondary btn-sm mr-2" onClick="completeAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'completeAccount'); ?>">
-                                        <?php echo Labels::getLabel('LBL_COMPLETE_ACCOUNT', $siteLangId); ?>
-                                    </a>
+                                <?php if (!empty($accountId) && true === $initialFormSubmitted && false === $userAccountIsValid) { 
+                                    $msg = Labels::getLabel('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', $siteLangId);
+                                    $htm = '<a href="javascript:void(0);" onClick="completeAccount(this)" data-href="' . UrlHelper::generateUrl($keyName, 'completeAccount') . '">' . Labels::getLabel('LBL_CLICK_HERE', $siteLangId) . '</a>';
+                                    $msg = CommonHelper::replaceStringData($msg, ['{CLICK-HERE}' => $htm]);
+                                    ?>
+                                    <ul class="errorlist erlist_merchantCatCode mt-4">
+                                        <li>
+                                            <?php echo $msg; ?>
+                                        </li>
+                                    </ul>
                                 <?php } ?>
                             </div>
                         </div>
-                        <?php /* if (!empty($userAccountErrors)) { ?>
-                            <ul class="errorlist erlist_merchantCatCode">
-                                <li><a href="javascript:void(0);"><?php echo $userAccountErrors; ?></a></li>
-                            </ul>
-                        <?php } */ ?>
                     </div>
                 <?php } ?>
                 <?php if (!empty($loginUrl)) { ?>
@@ -80,49 +76,6 @@
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <ul class="stripe-stats">
-                        <?php /* <li>
-                            <div class="stats">
-                                <span class="title"><?php echo Labels::getLabel('MSG_BUSINESS_PROFILE_NAME', $siteLangId); ?></span>
-                                <p><?php echo $stripeUserData['business_profile']['name']; ?></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stats">
-                                <p>
-                                    <?php echo Labels::getLabel('MSG_CHARGES', $siteLangId); ?> :
-                                    <?php echo 0 < $stripeUserData['charges_enabled'] ? Labels::getLabel('MSG_ENABLED', $siteLangId) : Labels::getLabel('MSG_NOT_ENABLED', $siteLangId); ?>
-                                </p>
-                                <p>
-                                    <?php echo Labels::getLabel('MSG_PAYOUTS', $siteLangId); ?> :
-                                    <?php echo ucwords($stripeUserData['settings']['payouts']['schedule']['interval']); ?>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stats">
-                                <span class="title"><?php echo Labels::getLabel('MSG_SUPPORT_EMAIL', $siteLangId); ?></span>
-                                <p><?php echo $stripeUserData['business_profile']['support_email']; ?></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stats">
-                                <span class="title"><?php echo Labels::getLabel('MSG_SUPPORT_PHONE', $siteLangId); ?></span>
-                                <p><?php echo $stripeUserData['business_profile']['support_phone']; ?></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stats">
-                                <span class="title"><?php echo Labels::getLabel('MSG_SUPPORT_ADDRESS', $siteLangId); ?></span>
-                                <?php $address = $stripeUserData['business_profile']['support_address']; ?>
-                                <p><?php echo $address['line1']; ?></p>
-                                <p><?php echo $address['line2']; ?></p>
-                                <p>
-                                    <?php echo $address['city'] . ', ' .
-                                        $address['state'] . ', ' .
-                                        $address['country'] . ' ' . $address['postal_code'] . ''; ?>
-                                </p>
-                            </div>
-                        </li> */ ?>
                         <li>
                             <div class="stats">
                                 <p>
