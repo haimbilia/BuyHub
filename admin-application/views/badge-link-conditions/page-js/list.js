@@ -1,39 +1,6 @@
 $(document).ready(function () {
     searchRecords(document.frmSearch);
-
-    var selector = $("select[name='blinkcond_user_id']");
-    selector.select2({
-        tags: true,
-        closeOnSelect: true,
-        allowClear: true,
-        dir: layoutDirection,
-        placeholder: selector.attr('placeholder'),
-        ajax: {
-            url: fcom.makeUrl('Users', 'autoCompleteJson'),
-            dataType: 'json',
-            delay: 250,
-            method: 'post',
-            data: function (params) {
-                return {
-                    keyword: params.term,
-                    user_is_supplier: 1,
-                    credential_active: 1,
-                    credential_verified: 1,
-                };
-            },
-            processResults: function (data, params) {
-                return { results: data };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-        templateResult: function (result) {
-            return result.name;
-        },
-        templateSelection: function (result) {
-            return result.name || selector.attr('placeholder');
-        }
-    });
+    bindSellerSelect2();
 });
 
 $(document).on('click', '.selectAll-js, .selectItem--js', function () {
@@ -111,5 +78,42 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
             return;
         }
         $('.badgesLinksList--js').submit();
-    }; 
+    };
+
+    bindSellerSelect2 = function () {
+        var selector = $("select[name='blinkcond_user_id']");
+        selector.select2({
+            width: 'element',
+            tags: true,
+            closeOnSelect: true,
+            allowClear: true,
+            dir: layoutDirection,
+            placeholder: selector.attr('placeholder'),
+            ajax: {
+                url: fcom.makeUrl('Users', 'autoCompleteJson'),
+                dataType: 'json',
+                delay: 250,
+                method: 'post',
+                data: function (params) {
+                    return {
+                        keyword: params.term,
+                        user_is_supplier: 1,
+                        credential_active: 1,
+                        credential_verified: 1,
+                    };
+                },
+                processResults: function (data, params) {
+                    return { results: data };
+                },
+                cache: true
+            },
+            minimumInputLength: 0,
+            templateResult: function (result) {
+                return result.name;
+            },
+            templateSelection: function (result) {
+                return result.name || selector.attr('placeholder');
+            }
+        });
+    }
 })()

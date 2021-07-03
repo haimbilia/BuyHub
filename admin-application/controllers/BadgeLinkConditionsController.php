@@ -207,6 +207,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $dataToFill = [];
         $recordCondition = BadgeLinkCondition::REC_COND_AUTO;
 
+        $sellerId = 0;
         if ($badgeLinkCondId > 0) {
             $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->adminLangId, true);
             $srch->addCondition('blinkcond_id', '=', $badgeLinkCondId);
@@ -268,6 +269,7 @@ class BadgeLinkConditionsController extends AdminBaseController
             $dataToFill['blinkcond_to_date'] = $toDate;
 
             $this->recordData = $dataToFill;
+            $sellerId = $dataToFill['blinkcond_user_id'];
         }
 
         $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
@@ -284,6 +286,7 @@ class BadgeLinkConditionsController extends AdminBaseController
 
         $position = array_key_exists('blinkcond_position', $dataToFill) ? $dataToFill['blinkcond_position'] : Badge::RIBB_POS_TRIGHT;
         $this->set('position', $position);
+        $this->set('sellerId', $sellerId);
         $this->set('badgeData', $this->getBadgeData($badgeId));
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set('frm', $frm);
@@ -361,9 +364,12 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->objPrivilege->canEditBadgeLinks();
 
         $recordCondition = FatApp::getPostedData('record_condition', FatUtility::VAR_INT, 0);
-        $conditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
         $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
+        $badgeLinkCondId = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
+        $position = FatApp::getPostedData('blinkcond_position', FatUtility::VAR_INT, 0);
+
         $sellerId = FatApp::getPostedData('blinkcond_user_id', FatUtility::VAR_INT, 0);
+
         if (1 > $sellerId && BadgeLinkCondition::REC_COND_MANUAL == $recordCondition) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_USER_SELECTION', $this->adminLangId));
         }
@@ -379,7 +385,9 @@ class BadgeLinkConditionsController extends AdminBaseController
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
+        $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
         $records = FatApp::getPostedData('record_ids', FatUtility::VAR_STRING, '');
+
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition) {
             if (empty($records)) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_LINK_TO_IS_MANDATORY', $this->adminLangId));
@@ -434,29 +442,27 @@ class BadgeLinkConditionsController extends AdminBaseController
             }
         }
 
-        $badgeLinkCondId = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
         $newRecord = (1 > $badgeLinkCondId);
         $post['blinkcond_user_id'] = $sellerId;
 
         $record = new BadgeLinkCondition($badgeLinkCondId);
         $record->assignValues($post);
         if (!$record->save()) {
-            FatUtility::dieJsonError($record->getError());
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE.', $this->adminLangId);
+                if (Badge::TYPE_RIBBON == $badgeType) {
+                    $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE_WITH_SAME_POSITION.', $this->adminLangId);
+                }
+            }
+            FatUtility::dieJsonError($msg);
         }
 
         $badgeLinkCondId = $record->getMainTableRecordId();
 
-        $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
-        $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
-        $position = FatApp::getPostedData('blinkcond_position', FatUtility::VAR_INT, 0);
-
         $msg = '';
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition && !empty($records)) {
             $db = FatApp::getDb();
-            /* $db->deleteRecords(BadgeLinkCondition::DB_TBL_BADGE_LINKS, array(
-                'smt' => 'badgelink_blinkcond_id = ?',
-                'vals' => [$badgeLinkCondId]
-            )); */
             foreach ($records as $recordId) {
                 if (false === BadgeLinkCondition::isUnique($badgeType, $recordType, $recordId, $position)) {
                     if (empty($msg)) {
@@ -525,9 +531,11 @@ class BadgeLinkConditionsController extends AdminBaseController
         $frm->addHiddenField('', 'record_ids', json_encode($recordIds));
 
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition) {
+            $sellerId = FatApp::getPostedData('blinkcond_user_id', FatUtility::VAR_INT, 0);
+
             $frm->addHiddenField('', 'blinkcond_user_id');
             $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELLER', $this->adminLangId), 'seller', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_SELLER', $this->adminLangId)]);
-            $fld->requirement->setRequired(true);
+            $fld->requirement->setRequired((1 > $sellerId));
         }
 
         $frm->addTextBox(Labels::getLabel('LBL_FROM_DATE', $this->adminLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);

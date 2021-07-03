@@ -51,12 +51,14 @@ if (Badge::TYPE_BADGE == $badgeType) {
 					echo $frm->getFieldHtml('record_condition');
 					
 					$sellerFld = $frm->getField('seller');
+
+					$firstRowCol = (Badge::TYPE_RIBBON == $badgeType && 1 > $sellerId) ? '3' : '4';
 				?>
 				<div class="row">
 					<?php if (null != $sellerFld) { 
 						echo $frm->getFieldHtml('blinkcond_user_id');
-						?>
-						<div class="col-md-4">
+						if (1 > $sellerId) {?>
+						<div class="col-md-<?php echo $firstRowCol; ?>">
 							<div class="field-set">
 									<div class="caption-wraper">
 										<label class="field_label">
@@ -73,9 +75,10 @@ if (Badge::TYPE_BADGE == $badgeType) {
 								</div>
 							</div>
 						</div>
-					<?php } ?>
+					<?php }
+					} ?>
 					<?php if (Badge::TYPE_RIBBON == $badgeType) { ?>
-						<div class="col-md-4 position--js">
+						<div class="col-md-3 position--js">
 							<div class="field-set">
 								<div class="caption-wraper">
 									<label class="field_label">
@@ -93,7 +96,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 							</div>
 						</div>
 					<?php } ?>
-					<div class="col-md-4">
+					<div class="col-md-<?php echo $firstRowCol; ?>">
 						<div class="field-set">
 							<div class="caption-wraper">
 								<label class="field_label">
@@ -110,7 +113,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-<?php echo $firstRowCol; ?>">
 						<div class="field-set">
 							<div class="caption-wraper">
 								<label class="field_label">

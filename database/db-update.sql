@@ -1026,3 +1026,9 @@ INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `p
                     </ul>'
   FROM `tbl_plugins` WHERE plugin_code = "EasyEcom";
 -- --------EasyECom---------- --
+
+
+-- ----- Task 84994 : Badges & Ribbons ---- --
+ALTER TABLE `tbl_badge_link_conditions`
+  ADD UNIQUE KEY `blinkcond_id` (`blinkcond_badge_id`,`blinkcond_user_id`,`blinkcond_position`, `blinkcond_record_type`);
+-- ----- Badges & Ribbons ---- --
