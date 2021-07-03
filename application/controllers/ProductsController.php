@@ -1235,8 +1235,7 @@ class ProductsController extends MyAppController
             }
 
             if (($key = array_search($keyword, $recentSearchArr)) !== false) {
-                unset($recentSearchArr[$key]);
-                var_dump($recentSearchArr);
+                unset($recentSearchArr[$key]);                
                 setcookie('recentSearchKeywords_' . $this->siteLangId, serialize($recentSearchArr), time() + 60 * 60 * 72, CONF_WEBROOT_URL);
             }
         } else {
