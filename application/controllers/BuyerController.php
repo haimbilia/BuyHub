@@ -294,7 +294,7 @@ class BuyerController extends BuyerBaseController
 
         $this->_template->render();
     }
-    
+
     public function downloadDigitalFile($aFileId, $recordId = 0)
     {
         $aFileId = FatUtility::int($aFileId);
@@ -496,7 +496,7 @@ class BuyerController extends BuyerBaseController
     public function downloads()
     {
         $frm = $this->getOrderProductDownloadSearchForm($this->siteLangId);
-        
+
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
@@ -529,18 +529,18 @@ class BuyerController extends BuyerBaseController
 
         $rs = $srch->getResultSet();
         $orderProducts = FatApp::getDb()->fetchAll($rs);
-        
+
         foreach ($orderProducts as &$op) {
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
-                $dateAvailable = '';
+                $dateAvailable = date('Y-m-d', strtotime(date('Y-m-d') . '+ 1 year'));
                 if ($op['op_selprod_download_validity_in_days'] != '-1') {
                     $dateAvailable = date('Y-m-d', strtotime($op['order_date_added'] . ' + ' . $op['op_selprod_download_validity_in_days'] . ' days'));
                 }
-                $file['expiry_date'] = $dateAvailable;
+                $file['expiry_date'] =  $dateAvailable;
 
                 $file['downloadable'] = true;
-                if ($dateAvailable != '' && $dateAvailable < date('Y-m-d')) {
+                if ($dateAvailable < date('Y-m-d')) {
                     $file['downloadable'] = false;
                 }
 
@@ -565,7 +565,7 @@ class BuyerController extends BuyerBaseController
             $links = FatApp::getDb()->fetchAll($linkSrch->getResultSet());
 
             foreach ($links as &$link) {
-                $dateAvailable = '';
+                $dateAvailable = date('Y-m-d', strtotime(date('Y-m-d') . '+ 1 year'));
                 if ($op['op_selprod_download_validity_in_days'] != '-1') {
                     $dateAvailable = date('Y-m-d', strtotime($op['order_date_added'] . ' + ' . $op['op_selprod_download_validity_in_days'] . ' days'));
                 }
@@ -573,7 +573,7 @@ class BuyerController extends BuyerBaseController
                 $link['expiry_date'] = $dateAvailable;
 
                 $link['downloadable'] = true;
-                if ($dateAvailable != '' && $dateAvailable < date('Y-m-d')) {
+                if ($dateAvailable < date('Y-m-d')) {
                     $link['downloadable'] = false;
                 }
 
@@ -590,7 +590,7 @@ class BuyerController extends BuyerBaseController
             }
             $op['links'] = $links;
         }
-        
+
         $this->set('downloads', $orderProducts);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
