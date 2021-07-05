@@ -1050,7 +1050,7 @@ class BrandsController extends AdminBaseController
 
         $langData = Language::getAttributesById($langId, array('language_code'));
 
-        CommonHelper::convertToCsv($sheetData, 'Brands_' . $langData['language_code'] . '_' . date("d-M-Y") . '.csv', ',');
+        CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Brands', $this->adminLangId) . ' ' . $langData['language_code'] . '_' . date("d-M-Y") . '.csv', ',');
         exit;
     }
 
@@ -1099,7 +1099,7 @@ class BrandsController extends AdminBaseController
             array_push($sheetData, $sheetArr);
         }
 
-        CommonHelper::convertToCsv($sheetData, 'Brands_Media_' . $languageCodes[$langId] . '_' . date("d-M-Y") . '.csv', ',');
+        CommonHelper::convertToCsv($sheetData, Labels::getLabel('Brands_Media', $this->adminLangId) . ' ' . $languageCodes[$langId] . '_' . date("d-M-Y") . '.csv', ',');
         exit;
     }
 
