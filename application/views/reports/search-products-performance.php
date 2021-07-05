@@ -57,7 +57,7 @@ foreach ($arrListing as $sn => $row) {
 					$txt .= '<div class="item__specification">' . Labels::getLabel('LBL_Options', $siteLangId) . ": </strong>" . $row['op_selprod_options'] . '</div>';
 				}
 				$txt .= '</div>';
-				$td->appendElement('plaintext', array(), $txt, true);
+				$span->appendElement('plaintext', array(), $txt, true);
 				break;
 
 			default:
@@ -80,7 +80,7 @@ $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => 
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 <script>
 	var x = $(".card-body").width();
-	var actualWidth = x / 7;
+	var actualWidth = x / 6;
 	$('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
 	$('.datatable_cell_left').children('span').css('display', 'block');
 	$('.datatable_cell_left').children('span').css('white-space', 'normal');
