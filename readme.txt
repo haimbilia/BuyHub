@@ -203,6 +203,7 @@ Fixes:
     => 055093 - while changing seller approval request if admin declines request without message then on front end it's listing heading- reason for cancellation which is blank
     => 055092 - when cookies are not allowed from admin still then user have option for the same in account
     => 055090 - when truncate request is raised by user then in admin> it's listing- view purpose which is not there on user end
+    => 055597 - before checkout> there is no halt on last step- it's redirecting automatically to payment gateway
 
 New Features:
     => Admin shipped products listing page
