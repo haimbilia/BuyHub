@@ -44,21 +44,19 @@ if (null != $fld) {
 }
 
 ?>
-<div class="card-body">
-    <div class="box__head row">
-        <h4 class="col"><?php echo Labels::getLabel('LBL_REQUEST_TO_BIND_BADGE', $siteLangId); ?></h4>
-        <div class="section__toolbar col-auto">
-            <a href="javascript:void(0);" onclick="backToListing();" title="Back" class="btn-clean btn-sm btn-icon btn-secondary ">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-        </div>
+<div class="box__head row">
+    <h4 class="col"><?php echo Labels::getLabel('LBL_REQUEST_TO_BIND_BADGE', $siteLangId); ?></h4>
+    <div class="section__toolbar col-auto">
+        <a href="javascript:void(0);" onclick="backToListing();" title="Back" class="btn-clean btn-sm btn-icon btn-secondary ">
+            <i class="fas fa-arrow-left"></i>
+        </a>
     </div>
-    <div class="box__body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form__subcontent">
-                    <?php echo $frm->getFormHtml(); ?>
-                </div>
+</div>
+<div class="box__body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form__subcontent">
+                <?php echo $frm->getFormHtml(); ?>
             </div>
         </div>
     </div>

@@ -74,7 +74,15 @@ $(document).on('change', '.icon-language-js', function () {
     addBadgeReqForm = function (badgeReqId, badgeId) {
         fcom.ajax(fcom.makeUrl(controller, 'badgeReqForm', [badgeReqId, badgeId]), '', function (t) {
             $('.pagebody--js').hide();
-            $('.editRecord--js').html(t);
+            var editRecordEle = $('.editRecord--js');
+            if (1 > editRecordEle.parents('.card-body').length && 1 > editRecordEle.parents('.card').length) {
+                $('.editRecord--js').html('<div class="card"><div class="card-body">' + t + '</div></div>');
+            } else if (1 > editRecordEle.parents('.card-body').length) {
+                $('.editRecord--js').html('<div class="card-body">' + t + '</div>');
+            } else {
+                $('.editRecord--js').html(t);
+            }
+            
             bindRecordsSelect2();
             updateRecordIds();
             $("select[name='breq_blinkcond_id']").trigger('change');

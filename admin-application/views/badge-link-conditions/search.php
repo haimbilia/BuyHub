@@ -4,7 +4,6 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'cond_seller_name' => Labels::getLabel('LBL_SELLER', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
-    'record_condition' => Labels::getLabel('LBL_CONDITION_TYPE', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $adminLangId),
     'action' => '',
@@ -15,7 +14,7 @@ if (!$canEdit || 1 > count($arrListing)) {
 }
 
 if (Badge::TYPE_RIBBON == $badgeType) {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $arr_flds['record_condition']);
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
 } else {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position' ]);
 }
@@ -86,13 +85,6 @@ foreach ($arrListing as $sn => $row) {
                     $htm = $fromValue . $toValue . $perc;
                     $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-toggle='tooltip' data-placement='top' title='" . $htm . "'></i>", true);
                 }
-                break;
-            case 'record_condition':
-                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . $recordConditionArr[$recordCondition] . '</span>';;
-                if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition) {
-                    $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $recordConditionArr[$recordCondition] . '</span>';
-                }
-                $td->appendElement('plaintext', [], $htm, true);
                 break;
             case 'action':
                 if ($canEdit) {

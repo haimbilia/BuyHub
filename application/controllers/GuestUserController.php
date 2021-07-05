@@ -373,6 +373,7 @@ class GuestUserController extends MyAppController
         $this->_template->render(true, true, 'guest-user/registration-form.php');
     }
 
+    /* Used for APP only. */
     public function checkEmailExists()
     {
         $emailAddress = FatApp::getPostedData('email', FatUtility::VAR_STRING, '');
@@ -385,7 +386,9 @@ class GuestUserController extends MyAppController
         if (empty($data)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_RESULT_NOT_FOUND', $this->siteLangId));
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId));
+        $json['msg'] = Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId);
+        $json['data']['found'] = 1;
+        FatUtility::dieJsonSuccess($json);
     }
 
     public function register()

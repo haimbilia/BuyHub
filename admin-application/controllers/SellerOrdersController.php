@@ -707,16 +707,16 @@ class SellerOrdersController extends AdminBaseController
 
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
-
+            $opship_tracking_url = '';
             if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && $pluginValidation) {
+                $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
                 if (0 < $manualShipping) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $trackingNumber,
                         //    "opship_tracking_url" => $post['opship_tracking_url'],
                     ];
-
-                    $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
+                    
                     if (!empty($opship_tracking_url)) {
                         $updateData['opship_tracking_url'] =  $opship_tracking_url;
                     }

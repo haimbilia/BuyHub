@@ -253,9 +253,9 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         if (RECORD_TYPE_PRODUCT == recordType) {
             arr['selprod_user_id'] = sellerId;
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
-            arr['selprod_user_id'] = sellerId;
+            arr['product_seller_id'] = sellerId;
         } else if (RECORD_TYPE_SHOP == recordType) {
-            arr['selprod_user_id'] = sellerId;
+            arr['shop_user_id'] = sellerId;
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
             return false;

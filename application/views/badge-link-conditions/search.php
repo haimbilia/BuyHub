@@ -2,9 +2,8 @@
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
-    'record_condition' => Labels::getLabel('LBL_TRIGGER', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $siteLangId),
-    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $siteLangId),
     'action' => '',
 );
 
@@ -13,9 +12,15 @@ if (!$canEdit || 1 > count($arrListing)) {
 }
 
 if (Badge::TYPE_RIBBON == $badgeType) {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $arr_flds['record_condition']);
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
 } else {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position' ]);
+}
+
+if (BadgeLinkCondition::REC_COND_AUTO == $recordCondition) {
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
+} else {
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
 }
 
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($siteLangId);
@@ -67,14 +72,6 @@ foreach ($arrListing as $sn => $row) {
                     $htm = $fromValue . $toValue . $perc;
                     $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-toggle='tooltip' data-placement='top' title='" . $htm . "'></i>", true);
                 }
-                break;
-            case 'record_condition':
-                $condition = (empty($row['badgelink_record_ids']) ? BadgeLinkCondition::REC_COND_AUTO : BadgeLinkCondition::REC_COND_MANUAL);
-                $htm = ' <span class="label label-inline label-success rounded-pill">' . $recordConditionArr[$condition] . '</span>';;
-                if (BadgeLinkCondition::REC_COND_MANUAL == $condition) {
-                    $htm = ' <span class="label label-inline label-info rounded-pill">' . $recordConditionArr[$condition] . '</span>';
-                }
-                $td->appendElement('plaintext', [], $htm, true);
                 break;
             case 'action':
                 if ($canEdit && empty($conditionTypeArr[$row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']])) {

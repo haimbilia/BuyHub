@@ -526,6 +526,10 @@ class ShopsController extends AdminBaseController
             $srch->addCondition('shop_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
+        if (isset($post['shop_user_id'])) {
+            $srch->addCondition('shop_user_id', '=', $post['shop_user_id']);
+        }
+
         $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $srch->addMultipleFields(array('shop_id', 'IFNULL(shop_name,shop_identifier) as shop_name'));
 

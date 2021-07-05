@@ -68,10 +68,12 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
-                $class = applicationConstants::YES == $row[$key] ? 'badge--unified-danger' : 'badge--unified-brand'; 
+                $class = (applicationConstants::YES == $row[$key] ? 'badge--unified-warning' : 'badge--unified-success'); 
                 $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $adminLangId) . '</span>';;
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
-                    $htm = ' <span class="badge ' . $class . ' badge--inline badge--pill">' . $approvalStatusArr[$row[$key]] . '</span>';
+                    $lbl = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? Labels::getLabel('LBL_NOT_ALLOWED', $adminLangId) : $approvalStatusArr[$row[$key]];
+                    $class = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? 'badge--unified-danger' : $class;
+                    $htm = ' <span class="badge ' . $class . ' badge--inline badge--pill">' . $lbl . '</span>';
                 }
                 $td->appendElement('plaintext', [], $htm, true);
                 break;

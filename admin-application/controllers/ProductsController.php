@@ -280,6 +280,11 @@ class ProductsController extends AdminBaseController
             $cnd->attachCondition('product_identifier', 'LIKE', '%'. $keyword . '%', 'OR');
         }
 
+        $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_STRING, '');
+        if (!empty($sellerId)) {
+            $srch->addCondition('product_seller_id', '=', $sellerId);
+        }
+
         $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $srch->addMultipleFields(array('product_id', 'product_name', 'product_identifier'));
         $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
