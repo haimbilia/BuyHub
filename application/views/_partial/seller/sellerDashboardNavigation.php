@@ -421,7 +421,7 @@ $plugin = new Plugin();
                     <?php } ?>
 
                     <li class="menu__item">
-                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Reports", $siteLangId); ?></span></div>
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_INVENTORY_Reports", $siteLangId); ?></span></div>
                     </li>
                     <?php if ($userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsinventory') ? 'is-active' : ''; ?>">

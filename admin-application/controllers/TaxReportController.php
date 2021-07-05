@@ -81,8 +81,8 @@ class TaxReportController extends AdminBaseController
             while ($row = $db->fetch($rs)) {
                 $arr = array($row['op_shop_name'], $row['owner_name'] . "\n(" . $row['owner_email'] . ")", $row['totChildOrders'], CommonHelper::displayMoneyFormat($row['totTax'], true, true));
                 array_push($sheetData, $arr);
-            }
-            CommonHelper::convertToCsv($sheetData, 'Tax_Report_' . date("d-M-Y") . '.csv', ',');
+            }            
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Tax_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
             $srch->setPageNumber($page);

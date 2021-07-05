@@ -1,35 +1,87 @@
-$(document).ready(function(){
-	searchProductsInventoryStockStatus(document.frmProductInventoryStockStatusSrch);
+$(document).ready(function () {
+	searchReport(document.frmReportSearch);
 });
 
-(function() {
-	var runningAjaxReq = false;
+$(document).on("click", ".headerColumnJs", function (e) {
+	var fld = $(this).attr('data-field');
+	var frm = document.frmReportSearchPaging;
+	document.getElementById("sortBy").value = fld;
+	$(frm.sortBy).val(fld);
+	if (document.getElementById("sortOrder").value == 'ASC') {
+		$(frm.sortOrder).val('DESC');
+		document.getElementById("sortOrder").value = 'DESC';
+	} else {
+		$(frm.sortOrder).val('ASC');
+		document.getElementById("sortOrder").value = 'ASC';
+	}
+	searchReport(frm, false);
+});
+
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
+(function () {
 	var dv = '#listingDiv';
-	
-	searchProductsInventoryStockStatus = function(frm){
-		$(dv).html( fcom.getLoader() );
-		var data = fcom.frmData(frm);
-		fcom.ajax(fcom.makeUrl('Reports', 'searchProductsInventoryStockStatus'), data, function(t) {			
-			$(dv).html(t);
+
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
+			page = 1;
+		}
+		var frm = document.frmReportSearchPaging;
+		$(frm.page).val(page);
+		searchReport(frm);
+	};
+	redirectBack = function (redirecrt) {
+		window.location = redirecrt;
+	}
+	reloadList = function (withloader) {
+		var frm = document.frmReportSearchPaging;
+		searchReport(frm, withloader);
+	};
+
+	searchReport = function (frm, withloader) {
+		setColumnsData(frm);
+		var data = '';
+		if (frm) {
+			data = fcom.frmData(frm);
+		}
+
+		if (typeof withloader == 'undefined' || withloader != false) {
+			$(dv).html(fcom.getLoader());
+		}
+
+		fcom.ajax(fcom.makeUrl(controllerName, 'searchProductsInventoryStockStatus'), data, function (res) {
+			$(dv).html(res);
 		});
 	};
-	
-	goToProductsInventoryStockStatusPage = function(page) {
-		if(typeof page==undefined || page == null){
-			page = 1;
-		}		
-		var frm = document.frmProductInventoryStockStatusSrchPaging;		
-		$( frm.page ).val( page );
-		searchProductsInventoryStockStatus( frm );
+
+	exportReport = function () {
+		setColumnsData(document.frmReportSearch);
+		document.frmReportSearch.action = fcom.makeUrl(controllerName, 'exportProductsInventoryStockStatusReport', ['export']);
+		document.frmReportSearch.submit();
 	}
-	
-	clearSearch = function(){
-		document.frmProductInventoryStockStatusSrch.reset();
-		searchProductsInventoryStockStatus( document.frmProductInventoryStockStatusSrch );
+
+	clearSearch = function () {
+		document.frmReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
+		});
+		searchReport(document.frmReportSearch);
 	};
-	
-	exportProductsInventoryStockStatusReport = function(){
-		document.frmProductInventorySrchPaging.action = fcom.makeUrl('Reports','exportProductsInventoryStockStatusReport');
-		document.frmProductInventorySrchPaging.submit();
+
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
+		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
 	};
 })();

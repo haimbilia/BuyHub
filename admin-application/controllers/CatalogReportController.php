@@ -135,7 +135,8 @@ class CatalogReportController extends AdminBaseController
                 array_push($sheetData, $arr);
             }
 
-            CommonHelper::convertToCsv($sheetData, 'Catalog_Report_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Catalog_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
+
             exit;
         }
 

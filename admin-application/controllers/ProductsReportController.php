@@ -214,7 +214,7 @@ class ProductsReportController extends AdminBaseController
                 array_push($sheetData, $arr);
             }
 
-            CommonHelper::convertToCsv($sheetData, 'Products_Report_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
             $srch->setPageNumber($page);
