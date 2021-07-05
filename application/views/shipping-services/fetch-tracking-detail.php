@@ -13,7 +13,7 @@
         <?php } ?>
     <?php } else { ?>
         <li class="event">
-            <?php echo Labels::getLabel('MSG_NO_DETAIL_FOUND', $this->siteLangId); ?>
+            <?php echo Labels::getLabel('MSG_NO_DETAIL_FOUND', $siteLangId); ?>
         </li>
     <?php } ?>
 </ul>

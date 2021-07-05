@@ -897,7 +897,7 @@ class Shipping
 
         if (0 < $sellerId) {
             $sellerPluginObj = new SellerPlugin(0, $sellerId);
-            $pluginData = $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
+            $pluginData = $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);            
             if (!empty($pluginData)) {
                 $isSellerPluginObjActive = true;
                 $pluginObj = $sellerPluginObj;

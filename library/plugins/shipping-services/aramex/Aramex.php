@@ -564,7 +564,7 @@ class Aramex extends ShippingServicesBase
                 'response' => $trackingDetail,
             ];
 
-            if (array_key_exists('TrackingResults', $trackingDetail)) {
+            if (isset($trackingDetail['TrackingResults']['KeyValueOfstringArrayOfTrackingResultmFAkxlpY']['Value']['TrackingResult'])) {
                 $trackingResult = $trackingDetail['TrackingResults']['KeyValueOfstringArrayOfTrackingResultmFAkxlpY']['Value']['TrackingResult'];
                 if (is_array($trackingResult) && array_key_exists(0, $trackingResult)) {
                     foreach ($trackingResult as $trkData) {

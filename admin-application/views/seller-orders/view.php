@@ -24,8 +24,6 @@ if (!empty($order['opship_tracking_url'])) {
     $orderStatusLbl = Labels::getLabel('LBL_SHIPPED', $adminLangId);
 }
 
-$plugin = new Plugin();
-$keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
 $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
 
 ?>
@@ -79,9 +77,10 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                 ],
                                 'label' => '<i class="fas fa-print"></i>'
                             ];                                           
-                            if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && !$shippingHanldedBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
-                                $allowedForPlugin = in_array($keyName, ['EasyPost', 'Aramex']);                                
-                                if(1 < $order['opshipping_rate_id'] && in_array($order['orderstatus_id'], [FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS"),FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS")])){
+                            if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && !$shippingHanldedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
+                                $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
+                                
+                                if (1 < $order['opshipping_rate_id'] && empty($order['opship_order_number'])) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -90,10 +89,8 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                         ],
                                         'label' => '<i class="fas fa-file-invoice"></i>'
                                     ];
-                                }
-                                
-                                if (0 < $order['opshipping_plugin_id'] && !empty($order['opshipping_carrier_code']) && !empty($order['opshipping_carrier_code'])) {
-                                        if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && !$allowedForPlugin) {
+                                } else {                                  
+                                    if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && !$allowedForPlugin) {
                                         $data['otherButtons'][] = [
                                             'attr' => [
                                                 'href' => 'javascript:void(0)',
@@ -102,7 +99,7 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                             ],
                                             'label' => '<i class="fas fa-file-download"></i>'
                                         ];
-                                    } elseif (!empty($order['opr_response'])) {                                  
+                                    } elseif (!empty($order['opr_response'])) {
                                         $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
                                         $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
                                         $data['otherButtons'][] = [
@@ -113,10 +110,10 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                             ],
                                             'label' => '<i class="fas fa-file-export"></i>'
                                         ];
-                                    }
-
-                                    if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_tracking_number']) && $order["opshipping_fulfillment_type"] == Shipping::FULFILMENT_SHIP) {
-                                        if ($allowedForPlugin) {
+                                    }                                    
+                                    
+                                    if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_tracking_number'])) {
+                                        if ('EasyPost' == $shippingApiObj->keyName) {
                                             $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
                                         } else {
                                             $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId);
@@ -129,33 +126,32 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                             ],
                                             'label' => '<i class="fas fa-shipping-fast"></i>'
                                         ];
-                                    }                               
-                                    $pluginObj = PluginHelper::callPlugin($keyName, [$adminLangId], $error, $adminLangId, false); 
-                                    if ($order['orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED && false !== $pluginObj && true === $pluginObj->canCreatePickup()) {                                 
-                                        if(!$pickUpDetails ||  1 > $pickUpDetails['opsp_scheduled']){
-                                           $data['otherButtons'][] = [
-                                            'attr' => [
-                                                'href' => 'javascript:void(0)',
-                                                'onclick' => 'getPickupForm(' . $order['op_id'] . ')',
-                                                'title' => Labels::getLabel('LBL_CREATE_PICKUP', $adminLangId)
-                                            ],
-                                            'label' => '<i class="fas fa-truck-pickup"></i>'
-                                        ]; 
-                                        }else{
+                                    }                                  
+                                    if ($order['orderstatus_id'] == OrderStatus::ORDER_SHIPPED &&  true === $shippingApiObj->canCreatePickup()) {
+                                        if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
                                             $data['otherButtons'][] = [
-                                            'attr' => [
-                                                'href' => 'javascript:void(0)',
-                                                'onclick' => 'cancelPickup(' . $order['op_id'] . ')',
-                                                'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $adminLangId)
-                                            ],
-                                            'label' => '<i class="far fa-times-circle"></i>'
-                                        ];                                        
-                                        }                                    
-                                    }
-                                }                                
+                                                'attr' => [
+                                                    'href' => 'javascript:void(0)',
+                                                    'onclick' => 'getPickupForm(' . $order['op_id'] . ')',
+                                                    'title' => Labels::getLabel('LBL_CREATE_PICKUP', $adminLangId)
+                                                ],
+                                                'label' => '<i class="fas fa-truck-pickup"></i>'
+                                            ];
+                                        } else {
+                                            $data['otherButtons'][] = [
+                                                'attr' => [
+                                                    'href' => 'javascript:void(0)',
+                                                    'onclick' => 'cancelPickup(' . $order['op_id'] . ')',
+                                                    'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $adminLangId)
+                                                ],
+                                                'label' => '<i class="far fa-times-circle"></i>'
+                                            ];
+                                        }
+                                    }                                    
+                                }
                             }
 
-                            $this->includeTemplate('_partial/action-buttons.php', $data, false);
+                        $this->includeTemplate('_partial/action-buttons.php', $data, false);
                         } ?>
                     </div>
                     <div class="sectionbody">
@@ -390,7 +386,7 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                     </div>
                     <?php if(!empty($pickUpDetails) && 0 < $pickUpDetails['opsp_scheduled']){
                           $pickUpPostedDetails = json_decode($pickUpDetails['opsp_requested_data'],true);                  
-                          $pickUpflds = $pluginObj->getPickupFormElementsArr();
+                          $pickUpflds = $shippingApiObj->getPickupFormElementsArr();
                            ?>
                             <div class="<?php echo $colClass?>">
                                 <section class="section">
@@ -774,7 +770,7 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
 <?php } ?>
 
 <script>
-    var canShipByPlugin = <?php echo (true === $canShipByPlugin ? 1 : 0); ?>;
+    var canShipByPlugin = <?php echo (!empty($shippingApiObj) ? 1 : 0); ?>;
     var orderShippedStatus = <?php echo OrderStatus::ORDER_SHIPPED; ?>;
     trackOrder = function(trackingNumber, courier, orderNumber) {
         $.facebox(function() {
@@ -785,3 +781,5 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
         });
     };
 </script>
+
+

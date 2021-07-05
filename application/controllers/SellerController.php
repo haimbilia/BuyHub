@@ -498,24 +498,24 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
-
-        /* ShipStation */
-        $this->loadShippingService();
-        $this->set('canShipByPlugin', (null !== $this->shippingService));
-
-        if (!empty($orderDetail["opship_orderid"]) && method_exists($this->shippingService, 'loadOrder')) {
-            if (null != $this->shippingService && false === $this->shippingService->loadOrder($orderDetail["opship_orderid"])) {
-                Message::addErrorMessage($this->shippingService->getError());
-                FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
+        
+        $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
+        
+        $shippingApiObj;
+        if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;            
+            if($shippingApiObj){
+                $shippingApiObj->getSettings();
             }
-            $orderDetail['thirdPartyorderInfo'] = (null != $this->shippingService ? $this->shippingService->getResponse() : []);
+            if (!empty($orderDetail["opship_orderid"]) && method_exists($shippingApiObj, 'loadOrder')) {
+                if (null != $shippingApiObj && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
+                    Message::addErrorMessage($this->shippingService->getError());
+                    FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
+                }
+                $orderDetail['thirdPartyorderInfo'] = (null != $shippingApiObj ? $shippingApiObj->getResponse() : []);
+            }
         }
-        /* ShipStation */
-
-        /* AfterShip */
-        $this->loadTrackingService();
-        $this->set('canTrackByPlugin', (null !== $this->trackingService));
-        /* AfterShip */
+        $this->set('shippingApiObj', $shippingApiObj);
 
         $codOrder = false;
         if (strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
@@ -574,11 +574,6 @@ class SellerController extends SellerBaseController
         );
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
         $frm->fill($data);
-
-        $shippedBySeller = applicationConstants::NO;
-        if (CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id'])) {
-            $shippedBySeller = applicationConstants::YES;
-        }
 
         $digitalDownloads = array();
         $digitalDownloadLinks = array();

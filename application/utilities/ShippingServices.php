@@ -9,42 +9,8 @@ trait ShippingServices
     private $shipmentResponse = '';
     private $error = '';
     private $tpResponse = []; /* Third Party API Response */
-        
-    /**
-     * init - This function is already called where this trait included.
-     *
-     * @param  bool $return
-     * @return void
-     */
-    private function init(bool $return = false)
-    {
-        $plugin = new Plugin();
-        $this->keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-        if (false === $this->keyName) {
-            $this->error = $plugin->getError();
-            if (true === $return) {
-                return false;
-            }
-            FatUtility::dieJsonError($this->error);
-        }
-        
-        $this->shippingService = PluginHelper::callPlugin($this->keyName, [$this->langId], $error, $this->langId);
-        if (false === $this->shippingService) {
-            $this->error = $error;
-            if (true === $return) {
-                return false;
-            }
-            FatUtility::dieJsonError($error);
-        }
-
-        if (false === $this->shippingService->init()) {
-            $this->error = $this->shippingService->getError();
-            if (true === $return) {
-                return false;
-            }
-            FatUtility::dieJsonError($this->error);
-        }
-    }
+      
+    
     
     /**
      * generateLabel - Used for shipstation only.
@@ -209,7 +175,7 @@ trait ShippingServices
         $opSrch->addMultipleFields(
                 array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
                     'opsp_api_req_id', 'opsp_scheduled', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_selprod_id', 'op_qty', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit',
-                    'op_product_weight', 'op_product_weight_unit','opshipping_rate_id'
+                    'op_product_weight', 'op_product_weight_unit','opshipping_rate_id','opshipping_plugin_id'
                 )
         );
 
@@ -537,9 +503,12 @@ trait ShippingServices
             $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             return false;
         }
+        
+        $this->loadShippingService($orderData);
 
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
+        
 
         $cacheKey = Shipping::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($this->shippingService);
         $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
@@ -662,7 +631,7 @@ trait ShippingServices
 
         $opId = $post['op_id'];
         $orderData = $this->getOrderProductDetail($opId);
-        if (empty($orderData)) {
+        if (empty($orderData) ||  0 < $orderData['opshipping_plugin_id']) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
         }
 
@@ -685,5 +654,26 @@ trait ShippingServices
         }
         LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
+    
+    private function loadShippingService($orderData)
+    {
+        $shippingBySeller = CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']);
+        $this->shippingService = (new Shipping($this->langId))->getShippingApiObj(($shippingBySeller ? $orderData['opshipping_by_seller_user_id'] : 0));
+        if (false === $this->shippingService) {
+            $this->error = $error;
+            if (true === $return) {
+                return false;
+            }
+            FatUtility::dieJsonError($error);
+        }
 
+        if (false === $this->shippingService->init()) {
+            $this->error = $this->shippingService->getError();
+            if (true === $return) {
+                return false;
+            }
+            FatUtility::dieJsonError($this->error);
+        }        
+    }
+    
 }

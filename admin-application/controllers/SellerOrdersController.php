@@ -65,38 +65,7 @@ class SellerOrdersController extends AdminBaseController
         }
     }
 
-    /**
-     * loadTrackingService
-     *
-     * @return void
-     */
-    private function loadTrackingService()
-    {
-        /* Return if already loaded. */
-        if (!empty($this->trackingService)) {
-            return;
-        }
-
-        $plugin = new Plugin();
-        $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPMENT_TRACKING);
-
-        /* Carry on with default functionality if plugin not active. */
-        if (false === $keyName) {
-            return;
-        }
-
-        $this->trackingService = PluginHelper::callPlugin($keyName, [$this->adminLangId], $error, $this->adminLangId, false);
-        if (false === $this->trackingService) {
-            Message::addErrorMessage($error);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        if (false === $this->trackingService->init()) {
-            Message::addErrorMessage($this->shippingService->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-    }
-
+    
     public function index($order_id = '')
     {
         $this->objPrivilege->canViewSellerOrders();
@@ -257,28 +226,27 @@ class SellerOrdersController extends AdminBaseController
         if ($opRow == false) {
             Message::addErrorMessage($this->str_invalid_request);
             CommonHelper::redirectUserReferer();
-        }
-
+        }        
+       
+        
+        $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opRow['op_selprod_user_id'], $opRow['opshipping_by_seller_user_id']);
+        
+        $shippingApiObj;
         if ($opRow['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
             /* ShipStation */
-            $this->loadShippingService();
-            $this->set('canShipByPlugin', (null !== $this->shippingService));
-
+            $shippingApiObj = (new Shipping($this->adminLangId))->getShippingApiObj(($shippingHanldedBySeller ? $opRow['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            if($shippingApiObj){
+                $shippingApiObj->getSettings();
+            }
             if (!empty($opRow["opship_orderid"])) {
-                if (null != $this->shippingService && false === $this->shippingService->loadOrder($opRow["opship_orderid"])) {
-                    Message::addErrorMessage($this->shippingService->getError());
+                if (null != $shippingApiObj && false === $shippingApiObj->loadOrder($opRow["opship_orderid"])) {
+                    Message::addErrorMessage($shippingApiObj->getError());
                     FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
                 }
-                $opRow['thirdPartyorderInfo'] = (null != $this->shippingService ? $this->shippingService->getResponse() : []);
+                $opRow['thirdPartyorderInfo'] = !empty($shippingApiObj) ? $shippingApiObj->getResponse() : [];
             }
-            /* ShipStation */
 
-            /* AfterShip */
-            $this->loadTrackingService();
-            $this->set('canTrackByPlugin', (null !== $this->trackingService));
-            /* AfterShip */
-
-            if (null !== $this->shippingService && null !== $this->trackingService) {
+            if (null !== $shippingApiObj && null !== $this->trackingService) {
                 $srch = TrackingCourierCodeRelation::getSearchObject();
                 $srch->addCondition("tccr_shipapi_courier_code", "=", $opRow['opshipping_carrier_code']);
                 $srch->doNotCalculateRecords();
@@ -290,9 +258,8 @@ class SellerOrdersController extends AdminBaseController
                     FatApp::redirectUser(UrlHelper::generateUrl("TrackingCodeRelation"));
                 }
             }
-        } else {
-            $this->set('canShipByPlugin', '');
         }
+        $this->set('shippingApiObj', $shippingApiObj);
 
         $orderObj = new Orders($opRow['order_id']);
 
@@ -333,8 +300,6 @@ class SellerOrdersController extends AdminBaseController
         $frm->fill($data);
 
         $orderStatuses = Orders::getOrderProductStatusArr($this->adminLangId);
-
-        $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opRow['op_selprod_user_id'], $opRow['opshipping_by_seller_user_id']);
 
         $allowedShippingUserStatuses = $orderObj->getAdminAllowedUpdateShippingUser();
         $displayShippingUserForm = false;

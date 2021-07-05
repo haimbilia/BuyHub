@@ -215,7 +215,8 @@ function pageRedirect(op_id) {
                 return;
             }
             $.mbsmessage(t.msg, false, 'alert--success');
-            window.location.reload();            
+            proceedToShipment(frm.op_id.value);
+            $.facebox.close()
         });
     };
 })();

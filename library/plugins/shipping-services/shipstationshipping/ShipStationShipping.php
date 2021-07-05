@@ -177,7 +177,7 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['items'] = [$this->getItem()];
         return $this->doRequest(self::REQUEST_CREATE_ORDER, $this->order); //Return bool
     }
-
+    
     /**
      * bindLabel - This function should be called after addOrder
      *
