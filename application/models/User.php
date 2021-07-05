@@ -746,7 +746,7 @@ class User extends MyAppModel
         $data = array(
             'user_name' => '',
             'user_phone_dcode' => '',
-            'user_phone' => '',
+            'user_phone' => NULL,
             'user_dob' => '',
             'user_city' => '',
             'user_country_id' => '',
