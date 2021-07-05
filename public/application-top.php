@@ -16,18 +16,18 @@ error_reporting((CONF_DEVELOPMENT_MODE) ? E_ALL : E_ALL & ~E_NOTICE & ~E_WARNING
 require_once CONF_INSTALLATION_PATH . 'library/autoloader.php';
 
 /* --- Redirect SSL --- */
-// if (true == USE_X_FORWARDED_PROTO) {
-//     /* USE when $_SERVER['HTTPS'] will not provided by server . Generally in AWS server when load balance used for SSL. */
-//     if ((!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')  && (FatApp::getConfig('CONF_USE_SSL', FatUtility::VAR_INT, 0) == 1)) {
-//         $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-//         FatApp::redirectUser($redirect);
-//     }
-// } else {
-//     if ((!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on')  && (FatApp::getConfig('CONF_USE_SSL', FatUtility::VAR_INT, 0) == 1)) {
-//         $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-//         FatApp::redirectUser($redirect);
-//     }
-// }
+if (true == USE_X_FORWARDED_PROTO) {
+    /* USE when $_SERVER['HTTPS'] will not provided by server . Generally in AWS server when load balance used for SSL. */
+    if ((!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')  && (FatApp::getConfig('CONF_USE_SSL', FatUtility::VAR_INT, 0) == 1)) {
+        $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        FatApp::redirectUser($redirect);
+    }
+} else {
+    if ((!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on')  && (FatApp::getConfig('CONF_USE_SSL', FatUtility::VAR_INT, 0) == 1)) {
+        $redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        FatApp::redirectUser($redirect);
+    }
+}
 /* --- Redirect SSL --- */
 
 /* We must set it before initiating db connection. So that connection timezone is in sync with php */
