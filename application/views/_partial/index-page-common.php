@@ -1,5 +1,25 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+if (!empty($frmSearch)) {
+    $frmSearch->setFormTagAttribute('onSubmit', 'searchRecords(this); return(false);');
+    $frmSearch->setFormTagAttribute('class', 'form formSearch--js');
+    $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
+    $frmSearch->developerTags['fld_default_col'] = 6;
+
+    $fld = $frmSearch->getField('btn_submit');
+    if (null != $fld) {
+        $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
+        $fld->developerTags['col'] = 2;
+    }
+
+    $fld = $frmSearch->getField('btn_clear');
+    if (null != $fld) {
+        $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+        $fld->setFieldTagAttribute('onClick', 'clearSearch()');
+        $fld->developerTags['col'] = 2;
+    }
+}
+
 $otherTabsData = isset($otherTabsData) && is_array($otherTabsData) ? $otherTabsData : [];
 
 $pagesTabsData = ([
@@ -55,6 +75,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 </div>
             </div>
         </div>
-        <span class="card editRecord--js"></span>
+        <span class="editRecord--js"></span>
     </div>
 </main>

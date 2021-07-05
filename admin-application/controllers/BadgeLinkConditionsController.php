@@ -187,6 +187,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id');
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        
         $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
         $this->set('recordCondition', $recordCondition);
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
@@ -205,7 +206,6 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->objPrivilege->canEditBadgeLinks();
 
         $dataToFill = [];
-        $recordCondition = BadgeLinkCondition::REC_COND_AUTO;
 
         $sellerId = 0;
         if ($badgeLinkCondId > 0) {
@@ -217,7 +217,6 @@ class BadgeLinkConditionsController extends AdminBaseController
             $srch->joinSellerProduct($this->adminLangId);
             $srch->joinShop($this->adminLangId);
             /* Bind Records */
-            $srch->getResultSet();
             $result = FatApp::getDb()->fetchAll($srch->getResultSet());
             foreach ($result as $badgeLink) {
                 if (array_key_exists('badgelink_record_id', $badgeLink) && empty($badgeLink['badgelink_record_id'])) {
@@ -327,6 +326,7 @@ class BadgeLinkConditionsController extends AdminBaseController
 
     public function conditionForm(int $badgeType, int $badgeId, int $badgeLinkCondId = 0)
     {
+        
         $frmSearch = "";
         if (0 < $badgeLinkCondId) {
             $frmSearch = $this->getSearchConditionForm();

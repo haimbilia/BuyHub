@@ -10,10 +10,10 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId());
     }
 
-    public function list(int $badgeId)
+    public function list(int $badgeId, int $badgeType)
     {
-        $badgeType = Badge::getAttributesById($badgeId, 'badge_type');
-        $frmSearch = $this->getSearchForm($badgeType);
+        $conditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $frmSearch = $this->getSearchForm($badgeType, $conditionType);
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
 
@@ -21,6 +21,8 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->set("frmSearch", $frmSearch);
         $this->set("badgeId", $badgeId);
         $this->set("badgeType", $badgeType);
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('custom/page-css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -47,7 +49,6 @@ class BadgeLinkConditionsController extends SellerBaseController
         $srch->getResultSet();
         $srch->addHaving('seller_id', '=', UserAuthentication::getLoggedUserId());
         $result = FatApp::getDb()->fetchAll($srch->getResultSet());
-        // CommonHelper::printArray($result, true);
         $records = [];
         foreach ($result as $badgeLink) {
             if (array_key_exists('badgelink_record_id', $badgeLink) && empty($badgeLink['badgelink_record_id'])) {
@@ -95,7 +96,14 @@ class BadgeLinkConditionsController extends SellerBaseController
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
         $badgeType = FatApp::getPostedData('badge_type');
-        $searchForm = $this->getSearchForm($badgeType);
+        $badgeId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, 0);
+        if (1 > $badgeId) {
+            $msg = (Badge::TYPE_BADGE == $badgeType) ? Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId) : Labels::getLabel('MSG_INVALID_RIBBON', $this->siteLangId);
+            FatUtility::dieJsonError($msg);
+        }
+        $conditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+
+        $searchForm = $this->getSearchForm($badgeType, $conditionType);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         $page = ($page <= 0) ? 1 : $page;
@@ -106,23 +114,23 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->siteLangId);
+        $srch->joinUser();
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
-        $badgeId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, 0);
         $srch->addCondition('blinkcond_badge_id', '=', $badgeId);
 
         if (!empty($badgeType)) {
-            $srch->addHaving(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
+            $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
+        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
         $recordType = FatApp::getPostedData('blinkcond_record_type'); //Link Type
         if (!empty($recordType)) {
             $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', '=',  $recordType);
         }
-
 
         $position = FatApp::getPostedData('blinkcond_position');
         if (!empty($position)) {
@@ -131,11 +139,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $trigger = FatApp::getPostedData('record_condition'); //Trigger
         if (!empty($trigger)) {
-            if (BadgeLinkCondition::REC_COND_AUTO == $trigger) {
-                $srch->addHaving('badgelink_record_ids', 'IS', 'mysql_func_null', 'AND', true);
-            } else {
-                $srch->addHaving('badgelink_record_ids', 'IS NOT', 'mysql_func_null', 'AND', true);
-            }
+            $srch->addCondition('badge_condition_type', '=', $trigger);
         }
 
         $conditionType = FatApp::getPostedData('blinkcond_condition_type');
@@ -154,6 +158,8 @@ class BadgeLinkConditionsController extends SellerBaseController
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
+        $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $this->set('recordCondition', $recordCondition);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
         $this->set("badgeType", $badgeType);
         $this->set("arrListing", $records);
@@ -232,19 +238,18 @@ class BadgeLinkConditionsController extends SellerBaseController
             $dataToFill['blinkcond_to_date'] = $toDate;
 
             $this->recordData = $dataToFill;
-            $recordCondition = BadgeLinkCondition::REC_COND_MANUAL;
-            if (empty($dataToFill['badgelink_record_ids'])) {
-                $recordCondition = BadgeLinkCondition::REC_COND_AUTO;
-            }
-            $dataToFill['record_condition'] = $recordCondition;
+
         }
+
+        $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
 
         if (Badge::TYPE_BADGE == $badgeType) {
-            $frm = $this->getBadgeForm($badgeLinkCondId);
+            $frm = $this->getBadgeForm($recordCondition);
         } else if (Badge::TYPE_RIBBON == $badgeType) {
-            $frm = $this->getRibbonForm($badgeLinkCondId);
+            $frm = $this->getRibbonForm($recordCondition);
         }
 
+        $dataToFill['record_condition'] = $recordCondition;
         $dataToFill['blinkcond_badge_id'] = $badgeId;
         $frm->fill($dataToFill);
 
@@ -297,7 +302,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $frmSearch = "";
         if (0 < $badgeLinkCondId) {
-            $frmSearch = $this->getConditionForm();
+            $frmSearch = $this->getSearchConditionForm();
             $frmSearch->fill(['blinkcond_id' => $badgeLinkCondId, 'blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         }
 
@@ -314,7 +319,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->_template->render();
     }
 
-    private function getConditionForm()
+    private function getSearchConditionForm()
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'blinkcond_id');
@@ -332,12 +337,13 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->userPrivilege->canEditBadgeLinks();
 
         $recordCondition = FatApp::getPostedData('record_condition', FatUtility::VAR_INT, 0);
-        $conditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
         $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
+        $badgeLinkCondId = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
+        $position = FatApp::getPostedData('blinkcond_position', FatUtility::VAR_INT, 0);
         if (Badge::TYPE_BADGE == $badgeType) {
-            $frm = $this->getBadgeForm();
+            $frm = $this->getBadgeForm($recordCondition);
         } else if (Badge::TYPE_RIBBON == $badgeType) {
-            $frm = $this->getRibbonForm();
+            $frm = $this->getRibbonForm($recordCondition);
         }
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -345,7 +351,9 @@ class BadgeLinkConditionsController extends SellerBaseController
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
+        $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
         $records = FatApp::getPostedData('record_ids', FatUtility::VAR_STRING, '');
+
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition) {
             if (empty($records)) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_LINK_TO_IS_MANDATORY', $this->siteLangId));
@@ -400,27 +408,27 @@ class BadgeLinkConditionsController extends SellerBaseController
             }
         }
 
-        $badgeLinkCondId = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
         $newRecord = (1 > $badgeLinkCondId);
+        $post['blinkcond_user_id'] = UserAuthentication::getLoggedUserId();
+
         $record = new BadgeLinkCondition($badgeLinkCondId);
         $record->assignValues($post);
         if (!$record->save()) {
-            FatUtility::dieJsonError($record->getError());
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE.', $this->siteLangId);
+                if (Badge::TYPE_RIBBON == $badgeType) {
+                    $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE_WITH_SAME_POSITION.', $this->siteLangId);
+                }
+            }
+            FatUtility::dieJsonError($msg);
         }
 
         $badgeLinkCondId = $record->getMainTableRecordId();
 
-        $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
-        $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
-        $position = FatApp::getPostedData('blinkcond_position', FatUtility::VAR_INT, 0);
-
         $msg = '';
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition && !empty($records)) {
             $db = FatApp::getDb();
-            /* $db->deleteRecords(BadgeLinkCondition::DB_TBL_BADGE_LINKS, array(
-                'smt' => 'badgelink_blinkcond_id = ?',
-                'vals' => [$badgeLinkCondId]
-            )); */
             foreach ($records as $recordId) {
                 if (false === BadgeLinkCondition::isUnique($badgeType, $recordType, $recordId, $position)) {
                     if (empty($msg)) {
@@ -445,18 +453,19 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSearchForm(int $badgeType)
+    private function getSearchForm(int $badgeType, int $conditionType)
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'blinkcond_badge_id');
         $frm->addHiddenField('', 'badge_type');
-
-        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId));
-
-        if (Badge::TYPE_BADGE == $badgeType) {
-            $frm->addSelectBox(Labels::getLabel('LBL_TRIGGER', $this->siteLangId), 'record_condition', BadgeLinkCondition::getRecordConditionArr($this->siteLangId));
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId));
+        $frm->addHiddenField('', 'record_condition', $conditionType);
+        if (Badge::COND_MANUAL == $conditionType) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId));
         } else {
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId));
+        }
+
+        if (Badge::TYPE_RIBBON == $badgeType) {
             $frm->addSelectBox(Labels::getLabel('LBL_POSITION', $this->siteLangId), 'blinkcond_position', Badge::getRibbonPostionArr($this->siteLangId));
         }
 
@@ -465,19 +474,12 @@ class BadgeLinkConditionsController extends SellerBaseController
         return $frm;
     }
 
-    private function getCommonFields(int $badgeLinkCondId): object
+    private function getCommonFields(int $recordCondition): object
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'blinkcond_id');
         $frm->addHiddenField('', 'blinkcond_badge_id');
-        $frm->addHiddenField('', 'record_condition', BadgeLinkCondition::REC_COND_MANUAL);
-        if (0 < $badgeLinkCondId) {
-            $frm->addHiddenField('', 'blinkcond_record_type');
-        } else {
-            $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr);
-            $fld->requirement->setRequired(true);
-        }
+        $frm->addHiddenField('', 'record_condition');
 
         $selectedBadge = $recordIds = [];
         if (is_array($this->recordData) && 0 < count($this->recordData)) {
@@ -490,30 +492,41 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $frm->addTextBox(Labels::getLabel('LBL_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
         $frm->addTextBox(Labels::getLabel('LBL_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
+        $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr);
+        $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_MANUAL == $recordCondition));
 
         $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         return $frm;
     }
 
-    private function getBadgeForm(int $badgeLinkCondId = 0)
+    private function getBadgeForm(int $recordCondition)
     {
-        $frm = $this->getCommonFields($badgeLinkCondId);
+        $frm = $this->getCommonFields($recordCondition);
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_BADGE);
+
+        $conditionTypesArr = BadgeLinkCondition::getConditionTypesArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId), 'blinkcond_condition_type', $conditionTypesArr);
+        $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));
+
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_FROM', $this->siteLangId), 'blinkcond_condition_from');
+        $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_AUTO == $recordCondition));
+
+        $frm->addTextBox(Labels::getLabel('LBL_TO', $this->siteLangId), 'blinkcond_condition_to');
         return $frm;
     }
 
-    private function getRibbonForm(int $badgeLinkCondId = 0)
+    private function getRibbonForm(int $recordCondition)
     {
-        $frm = $this->getCommonFields($badgeLinkCondId);
+        $frm = $this->getCommonFields($recordCondition);
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_RIBBON);
-        if (0 < $badgeLinkCondId) {
-            $frm->addHiddenField('', 'blinkcond_position');
-        } else {
-            $positionArr = Badge::getRibbonPostionArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_POSITION', $this->siteLangId), 'blinkcond_position', $positionArr, '', [], '');
-        }
+
+        $positionArr = Badge::getRibbonPostionArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_POSITION', $this->siteLangId), 'blinkcond_position', $positionArr, '', [], '');
+
         return $frm;
     }
 

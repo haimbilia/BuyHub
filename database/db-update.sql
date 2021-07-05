@@ -1034,3 +1034,7 @@ ALTER TABLE `tbl_badge_link_conditions`
 -- ----- Badges & Ribbons ---- --
 
 -- ------------------TV-9.3.1.20210703--------------------
+-- ----- Task 84994 : Badges & Ribbons ---- --
+ALTER TABLE `tbl_badge_links` ADD `badgelink_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`badgelink_id`);
+
+

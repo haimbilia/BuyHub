@@ -11,7 +11,6 @@ if (null != $fld) {
 	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
 
-
 $fld = $frm->getField('record_condition');
 if (null != $fld) {
 	$fld->addFieldTagAttribute('class', 'recCond--js');

@@ -278,14 +278,13 @@ $plugin = new Plugin();
                     <?php } ?>
                     <li class="divider"></li>
                 <?php } ?>
-                <?php if (
-                    $userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true)
-                    ) { ?>
+                <?php 
+                    $marketPlaceChannels = (array) Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
+                    if ($userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true) && 0 < count($marketPlaceChannels)) { ?>
                     <li class="menu__item">
                         <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_OMNI_CHANNEL_MANAGEMENT', $siteLangId);?></span></div>
                     </li>
                     <?php
-                    $marketPlaceChannels = Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
                     foreach ($marketPlaceChannels as $channel) { 
                         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $channel['plugin_id']);
                         $uploadedTime = '';
