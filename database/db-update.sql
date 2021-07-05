@@ -1038,3 +1038,7 @@ ALTER TABLE `tbl_badge_link_conditions`
 ALTER TABLE `tbl_badge_links` ADD `badgelink_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`badgelink_id`);
 
 
+-- ---- Task : 87287 Stripe Connect Subscription ---- --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_STRIPE_CONNECT_INVALID_ACCOUNT_CURRENCY', 1, 'You Cannot Create Account With Different Currency Other Than System Currency {SYSTEM-CURRECNY}', '') ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- ---- Task : 87287 Stripe Connect Subscription ---- --
