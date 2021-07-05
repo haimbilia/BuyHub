@@ -1033,6 +1033,7 @@ ALTER TABLE `tbl_badge_link_conditions`
   ADD UNIQUE KEY `blinkcond_id` (`blinkcond_badge_id`,`blinkcond_user_id`,`blinkcond_position`, `blinkcond_record_type`);
 -- ----- Badges & Ribbons ---- --
 
+-- ------------------TV-9.3.1.20210703--------------------
 -- ----- Task 84994 : Badges & Ribbons ---- --
 ALTER TABLE `tbl_badge_links` ADD `badgelink_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`badgelink_id`);
 

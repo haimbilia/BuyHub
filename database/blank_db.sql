@@ -14215,14 +14215,6 @@ CREATE TABLE `tbl_product_requests` (
   `preq_status_updated_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tbl_product_requests`
---
-
-INSERT INTO `tbl_product_requests` (`preq_id`, `preq_user_id`, `preq_prodcat_id`, `preq_brand_id`, `preq_content`, `preq_sel_prod_data`, `preq_ean_upc_code`, `preq_specifications`, `preq_comment`, `preq_status`, `preq_submitted_for_approval`, `preq_deleted`, `preq_added_on`, `preq_requested_on`, `preq_status_updated_on`) VALUES
-(1, 4, 153, 0, '{\"product_identifier\":\"Pranika Soft Play Colourful Dough Clay Set\",\"product_type\":1,\"product_model\":\"PRA6899\",\"brand_name\":\"Archies\",\"product_brand_id\":111,\"product_featured\":1,\"product_min_selling_price\":10,\"ptt_taxcat_id\":8,\"product_dimension_unit\":1,\"product_length\":5,\"product_width\":5,\"product_height\":5,\"product_weight_unit\":1,\"product_weight\":50,\"product_active\":1,\"product_cod_enabled\":0,\"option_name\":\"\",\"tag_name\":\"\",\"product_upc\":\"\",\"shipping_country\":\"\",\"ps_free\":\"\",\"ps_from_country_id\":\"\",\"product_id\":\"\",\"product_options\":\"\",\"preq_prodcat_id\":153,\"product_added_by_admin_id\":0,\"product_tags\":null,\"product_option\":null,\"product_shipping\":[{\"pship_id\":\"\",\"country_name\":\"\",\"country_id\":\"\",\"company_name\":\"\",\"company_id\":\"\",\"processing_time\":\"\",\"processing_time_id\":\"\",\"cost\":\"\",\"additional_cost\":\"\"}],\"product_seller_id\":4}', '{\"selprod_url_keyword\":\"Pranika Soft Play Colourful Dough Clay Set\",\"selprod_price\":10,\"selprod_stock\":500,\"selprod_min_order_qty\":1,\"selprod_subtract_stock\":1,\"selprod_track_inventory\":0,\"selprod_threshold_stock_level\":0,\"selprod_sku\":\"SK45267\",\"selprod_condition\":1,\"selprod_available_from\":\"2019-03-27\",\"selprod_active\":1,\"selprod_urlrewrite_id\":\"\",\"selprod_cod_enabled\":0}', '', '{\"prod_spec_name\":{\"1\":[\"Type\",\"Color\",\"Suitable For\"],\"2\":[\"Type\",\"Color\",\"Suitable For\"]},\"prod_spec_value\":{\"1\":[\"Plasticine\",\"Multicolor\",\"3+\"],\"2\":[\"Plasticine\",\"Multicolor\",\"3+\"]},\"product_id\":1,\"prodspec_id\":0}', '', 0, 1, 0, '2019-03-27 18:10:01', '2020-12-09 16:18:38', '0000-00-00 00:00:00'),
-(2, 5, 167, 0, '{\"product_identifier\":\"Fastrack All Nighters Watch\",\"product_type\":1,\"product_model\":\"3166KL01\",\"brand_name\":\"Fast Lane\",\"product_brand_id\":113,\"product_featured\":1,\"product_min_selling_price\":250,\"ptt_taxcat_id\":4,\"product_dimension_unit\":1,\"product_length\":12,\"product_width\":12,\"product_height\":12,\"product_weight_unit\":1,\"product_weight\":25,\"product_active\":1,\"product_cod_enabled\":0,\"option_name\":\"\",\"tag_name\":\"\",\"product_upc\":\"\",\"shipping_country\":\"\",\"ps_free\":\"\",\"ps_from_country_id\":\"\",\"product_id\":\"\",\"product_options\":\"\",\"preq_prodcat_id\":167,\"product_added_by_admin_id\":0,\"product_tags\":null,\"product_option\":null,\"product_shipping\":[{\"pship_id\":\"\",\"country_name\":\"\",\"country_id\":\"\",\"company_name\":\"\",\"company_id\":\"\",\"processing_time\":\"\",\"processing_time_id\":\"\",\"cost\":\"\",\"additional_cost\":\"\"}],\"product_seller_id\":5}', '{\"selprod_url_keyword\":\"Fastrack 3166KL01 All Nighters Watch\",\"selprod_price\":250,\"selprod_stock\":1,\"selprod_min_order_qty\":250,\"selprod_subtract_stock\":1,\"selprod_track_inventory\":0,\"selprod_threshold_stock_level\":0,\"selprod_sku\":\"SKY64822\",\"selprod_condition\":1,\"selprod_available_from\":\"2019-03-27\",\"selprod_active\":1,\"selprod_urlrewrite_id\":\"\",\"selprod_cod_enabled\":0}', '', '', '', 0, 1, 0, '2019-03-27 18:22:23', '2020-12-09 16:18:38', '0000-00-00 00:00:00');
-
 -- --------------------------------------------------------
 
 --
@@ -14234,14 +14226,6 @@ CREATE TABLE `tbl_product_requests_lang` (
   `preqlang_lang_id` bigint(15) NOT NULL,
   `preq_lang_data` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tbl_product_requests_lang`
---
-
-INSERT INTO `tbl_product_requests_lang` (`preqlang_preq_id`, `preqlang_lang_id`, `preq_lang_data`) VALUES
-(1, 1, '{\"product_name\":\"Pranika Soft Play Colourful Dough Clay Set\",\"selprod_title\":\"Pranika Soft Play Colourful Dough Clay Set - Super Spongy - 6 Moulding Dough Tubs of 50g Each\",\"selprod_comments\":\"\",\"product_description\":\"\",\"product_youtube_video\":\"\"}'),
-(2, 1, '{\"product_name\":\"Fastrack All Nighters Watch\",\"selprod_title\":\"Fastrack 3166KL01 All Nighters Watch - For Men\",\"selprod_comments\":\"\",\"product_description\":\"\",\"product_youtube_video\":\"\"}');
 
 -- --------------------------------------------------------
 
@@ -14260,15 +14244,7 @@ CREATE TABLE `tbl_product_saved_search` (
   `pssearch_updated_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tbl_product_saved_search`
---
-
-INSERT INTO `tbl_product_saved_search` (`pssearch_id`, `pssearch_user_id`, `pssearch_name`, `pssearch_type`, `pssearch_record_id`, `pssearch_url`, `pssearch_added_on`, `pssearch_updated_on`) VALUES
-(1, 4, 'iPhone', 2, 0, 'keyword-iphone&price-min-range-459&price-max-range-869&currency-1&sort-keyword-relevancy&pagesize-12&', '2019-07-18 13:11:15', '2019-07-18 13:11:15'),
-(2, 4, 'Archies', 6, 0, 'price-min-range-314&price-max-range-1684&currency-1&brand-111-archies&sort-popularity-desc&pagesize-12&', '2019-07-18 13:11:48', '2019-07-18 13:11:48');
-
--- --------------------------------------------------------
+--------------------------------------------------------
 
 --
 -- Table structure for table `tbl_product_shipping_rates`
@@ -14338,15 +14314,6 @@ CREATE TABLE `tbl_product_specifics` (
   `ps_product_id` int(11) NOT NULL,
   `product_warranty` int(11) NOT NULL COMMENT 'In Days'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_product_specifics`
---
-
-INSERT INTO `tbl_product_specifics` (`ps_product_id`, `product_warranty`) VALUES
-(74, 0),
-(75, 50),
-(76, 365);
 
 -- --------------------------------------------------------
 
