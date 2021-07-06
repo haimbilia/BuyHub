@@ -1334,6 +1334,25 @@ class StripeConnect extends PaymentMethodBase
         FatCache::set('stripePayoutDays' . $this->langId, FatUtility::convertToJson($days), '.txt');
         return $days;
     }
+    
+    /**
+     * getOtherPaymentMethods
+     *
+     * @return array
+     */
+    public function getOtherPaymentMethods(): array
+    {
+        $this->loadBaseCurrencyCode();
+        $paymentMethodsArr = ['card'];
+        if (in_array(strtoupper($this->systemCurrencyCode), ['EUR'])) {
+            $paymentMethodsArr = array_merge($paymentMethodsArr, ['sofort', 'ideal', 'giropay', 'bancontact', 'eps']);
+        }
+
+        if (in_array(strtoupper($this->systemCurrencyCode), ['pln'])) {
+            $paymentMethodsArr = array_merge($paymentMethodsArr, ['p24']);
+        }
+        return $paymentMethodsArr;
+    }
 
     /**
      * doRequest
