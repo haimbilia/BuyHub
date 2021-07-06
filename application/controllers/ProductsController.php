@@ -220,7 +220,7 @@ class ProductsController extends MyAppController
         if (empty($keyword)) {
             $catCriteria = $headerFormParamsAssocArr;
             $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
-
+            
             $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
             $catProdSrchObj->doNotCalculateRecords();
             $catProdSrchObj->removeFld('1 as availableInLocation');

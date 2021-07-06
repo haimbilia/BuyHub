@@ -190,6 +190,7 @@ trait BadgeRequestSetup
             $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
             $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
         }
+        
         $this->set('blinkCondId', $blinkCondId);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);

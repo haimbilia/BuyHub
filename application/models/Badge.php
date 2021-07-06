@@ -234,6 +234,7 @@ class Badge extends MyAppModel
         $orderCancellationRate = OrderProduct::getCancellationRate($sellerId);
 
         $attr = [
+            'blinkcond_id',
             'blinkcond_badge_id',
             'blinkcond_record_type',
             'badge_display_inside',
@@ -325,9 +326,13 @@ class Badge extends MyAppModel
 
         $srch->addCondition('badge_type', '=', $type);
         $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
-        $srch->addGroupBy('blinkcond_badge_id');
-        $srch->addOrder('blinkcond_id', 'DESC');
-
+        if ($type == Badge::TYPE_RIBBON) {
+            $srch->addGroupBy('blinkcond_position');
+        } else {
+            $srch->addGroupBy('blinkcond_id');
+        }
+        
+        $srch->addOrder('badgelink_id', 'DESC');
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 

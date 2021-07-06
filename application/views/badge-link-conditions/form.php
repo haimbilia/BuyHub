@@ -58,6 +58,9 @@ if (Badge::TYPE_BADGE == $badgeType) {
 							echo $frm->getFieldHtml('badge_type');
 							echo $frm->getFieldHtml('record_condition');
 
+							if (0 < $blinkcond_id) {
+								echo $frm->getFieldHtml('blinkcond_record_type');
+							}
 							?>
 							<div class="row">
 								<?php
@@ -118,24 +121,26 @@ if (Badge::TYPE_BADGE == $badgeType) {
 								</div>
 							</div>
 							<div class="row linkType--js">
-								<div class="col-md-4">
-									<div class="field-set">
-										<div class="caption-wraper">
-											<label class="field_label">
-												<?php
-												$fld = $frm->getField('blinkcond_record_type');
-												echo $fld->getCaption();
-												?>
-											</label>
-										</div>
-										<div class="field-wraper">
-											<div class="field_cover">
-												<?php echo $frm->getFieldHtml('blinkcond_record_type'); ?>
+								<?php if (1 > $blinkcond_id) { ?>
+									<div class="col-md-4">
+										<div class="field-set">
+											<div class="caption-wraper">
+												<label class="field_label">
+													<?php
+													$fld = $frm->getField('blinkcond_record_type');
+													echo $fld->getCaption();
+													?>
+												</label>
+											</div>
+											<div class="field-wraper">
+												<div class="field_cover">
+													<?php echo $frm->getFieldHtml('blinkcond_record_type'); ?>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="col-md-8">
+								<?php } ?>
+								<div class="col-md-<?php echo (1 > $blinkcond_id) ? '8' : '12'; ?>">
 									<div class="field-set">
 										<div class="caption-wraper">
 											<label class="field_label">
