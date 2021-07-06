@@ -1357,7 +1357,7 @@ class CheckoutController extends MyAppController
                 if(FatApp::getConfig('CONF_TAX_COLLECTED_BY_SELLER',FatUtility::VAR_INT,0)){
                 $taxCollectedBySeller = applicationConstants::YES;
                 } */
-                 
+                
                 $orderData['products'][CART::CART_KEY_PREFIX_PRODUCT . $productInfo['selprod_id']] = array(
                     'op_selprod_id' => $productInfo['selprod_id'],
                     'op_is_batch' => 0,
@@ -1371,10 +1371,10 @@ class CheckoutController extends MyAppController
                     'op_selprod_condition' => $productInfo['selprod_condition'],
                     'op_product_model' => $productInfo['product_model'],
                     'op_product_type' => $productInfo['product_type'],
-                    'op_product_length' => $productInfo['product_length'],
-                    'op_product_width' => $productInfo['product_width'],
-                    'op_product_height' => $productInfo['product_height'],
-                    'op_product_dimension_unit' => $productInfo['product_dimension_unit'],
+                    'op_product_length' => $cartProduct['shippack_length'],
+                    'op_product_width' => $cartProduct['shippack_width'],
+                    'op_product_height' => $cartProduct['shippack_height'],
+                    'op_product_dimension_unit' => $cartProduct['shippack_units'],
                     'op_product_weight' => $productInfo['product_weight'],
                     'op_product_weight_unit' => $productInfo['product_weight_unit'],
                     'op_shop_id' => $productInfo['shop_id'],

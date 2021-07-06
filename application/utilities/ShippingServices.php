@@ -2,16 +2,13 @@
 
 trait ShippingServices
 {
-    private $keyName;
     private $filename = '';
     private $labelData = '';
     private $trackingNumber = '';
     private $shipmentResponse = '';
     private $error = '';
     private $tpResponse = []; /* Third Party API Response */
-      
-    
-    
+
     /**
      * generateLabel - Used for shipstation only.
      *
@@ -19,25 +16,27 @@ trait ShippingServices
      * @return void
      */
     public function generateLabel(int $opId)
-    {        
+    {
         $orderData = $this->getOrderProductDetail($opId);
-        if (empty($orderData) || 1 > $orderData['opshipping_plugin_id']) {     
+        if (empty($orderData) || 1 > $orderData['opshipping_plugin_id']) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId));
             return false;
-        }        
-        
+        }
+
+        $this->loadShippingService($orderData);
+
         if (false === $this->shippingService->addOrder($opId)) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
         $order = $this->shippingService->getResponse();
-        
+
         $shipmentApiOrderId = $order['orderId'];
         $requestParam = [
             'orderId' => $order['orderId'],
             'carrierCode' => $order['carrierCode'],
             'serviceCode' => $order['serviceCode'],
             'confirmation' => $order['confirmation'],
-            'shipDate' => date('Y-m-d'),// date('Y-m-d', strtotime('+7 day')),
+            'shipDate' => date('Y-m-d'), // date('Y-m-d', strtotime('+7 day')),
             'weight' => $order['weight'],
             'dimensions' => $order['dimensions'],
         ];
@@ -45,11 +44,11 @@ trait ShippingServices
         if (false === $this->shippingService->bindLabel($requestParam)) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
-        
+
         $response = $this->shippingService->getResponse(false);
         $responseArr = json_decode($response, true);
         $recordCol = ['opship_op_id' => $opId];
-        
+
         $dataToSave = [
             'opship_orderid' => $shipmentApiOrderId,
             'opship_shipment_id' => $responseArr['shipmentId'],
@@ -82,7 +81,7 @@ trait ShippingServices
             $this->error = Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->langId);
             return false;
         }
-        $this->shipmentResponse = json_decode($orderProductDetail['opr_response'], true);
+        $this->shipmentResponse = json_decode($orderProductDetail['opr_response'], true);       
         $this->filename = "label-" . $orderProductDetail['op_invoice_number'];
         $this->labelData = array_key_exists('labelData', $this->shipmentResponse) ? $this->shipmentResponse['labelData'] : $this->shipmentResponse;
         return true;
@@ -117,6 +116,8 @@ trait ShippingServices
         if (false === $this->loadLabelData($opId)) {
             LibHelper::dieJsonError($this->error);
         }
+        $data = $this->getOrderProductDetail($opId);
+        $this->loadShippingService($data);       
         $this->shippingService->downloadLabel($this->labelData, $this->filename);
     }
 
@@ -131,9 +132,11 @@ trait ShippingServices
         if (false === $this->loadLabelData($opId)) {
             LibHelper::dieJsonError($this->error);
         }
+        $data = $this->getOrderProductDetail($opId);
+        $this->loadShippingService($data);
         $this->shippingService->downloadLabel($this->labelData, $this->filename, true);
     }
-    
+
     /**
      * previewReturnLabel
      *
@@ -142,7 +145,14 @@ trait ShippingServices
      */
     public function previewReturnLabel(int $opId)
     {
-        if ('ShipStationShipping' == $this->keyName) {
+        $data = $this->getOrderProductDetail($opId);
+        if (empty($data) || 1 > $data['opshipping_plugin_id']) {
+            $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            LibHelper::dieJsonError($msg);
+        }
+        $this->loadShippingService($data);
+
+        if ('ShipStationShipping' == $this->shippingService->keyName) {
             $msg = Labels::getLabel("MSG_RETURN_CASE_NOT_ALLOWED_BY_SERVICE_PROVIDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
@@ -150,9 +160,11 @@ trait ShippingServices
         if (false === $this->loadReturnLabelData($opId)) {
             LibHelper::dieJsonError($this->error);
         }
+        $data = $this->getOrderProductDetail($opId);
+        $this->loadShippingService($data);
         $this->shippingService->downloadReturnLabel($this->labelData, $this->filename);
     }
-    
+
     /**
      * getOrderProductDetail
      *
@@ -173,9 +185,9 @@ trait ShippingServices
         $opSrch->addCondition('op.op_id', '=', $opId);
 
         $opSrch->addMultipleFields(
-                array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
+            array('op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
                     'opsp_api_req_id', 'opsp_scheduled', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_selprod_id', 'op_qty', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit',
-                    'op_product_weight', 'op_product_weight_unit','opshipping_rate_id','opshipping_plugin_id'
+                    'op_product_weight', 'op_product_weight_unit', 'opshipping_rate_id', 'opshipping_plugin_id'
                 )
         );
 
@@ -197,31 +209,34 @@ trait ShippingServices
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
-        
-        if (empty($data["opship_orderid"]) && 'ShipStationShipping' == $this->keyName) {
+          
+        $this->loadShippingService($data);
+
+        if (empty($data["opship_orderid"]) && 'ShipStationShipping' == $this->shippingService->keyName) {
             $msg = Labels::getLabel("MSG_MUST_GENERATE_LABEL_BEFORE_SHIPMENT", $this->langId);
             LibHelper::dieJsonError($msg);
         }
 
-        if ('ShipStationShipping' == $this->keyName) {
+        if ('ShipStationShipping' == $this->shippingService->keyName) {
             $opshipmentId = $data["opship_orderid"];
         } else {
             $opshipmentId = $data["opshipping_service_code"];
         }
-
+        
         if (method_exists($this->shippingService, 'loadOrder')) {
             if (false === $this->shippingService->loadOrder($opshipmentId)) {
                 LibHelper::dieJsonError($this->shippingService->getError());
             }
-            $shipmentData = $this->shippingService->getResponse();
-            if (array_key_exists('orderStatus', $shipmentData) && ('shipped' == strtolower($shipmentData['orderStatus']) || 'unknown' != strtolower($shipmentData['orderStatus']))) {
+            $shipmentData = $this->shippingService->getResponse();            
+           
+            if (array_key_exists('orderStatus', $shipmentData) && 'shipped' == strtolower($shipmentData['orderStatus'])) {
                 $status = ucwords($shipmentData['orderStatus']);
                 $msg = Labels::getLabel("LBL_ALREADY_{STATUS}", $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
                 LibHelper::dieJsonError($msg);
             }
         }
-        
+
         $requestParam = [
             "op_order_id" => $data['op_order_id'],
             "op_invoice_number" => $data['op_invoice_number'],
@@ -239,22 +254,26 @@ trait ShippingServices
         }
 
         $orderInfo = $this->shippingService->getResponse();
-        
-        $trackingNumber = ('ShipStationShipping' == $this->keyName) ? $data['opship_tracking_number'] : $orderInfo['tracking_code'];
+
+        $trackingNumber = ('ShipStationShipping' == $this->shippingService->keyName) ? $data['opship_tracking_number'] : $orderInfo['tracking_code'];
         $updateData = [
             'opship_op_id' => $opId,
             'opship_order_number' => $orderInfo['orderNumber'],
             "opship_tracking_number" => $trackingNumber,
         ];
 
-
-        if (in_array($this->keyName, ['EasyPost'])) {
+        if (in_array($this->shippingService->keyName, ['EasyPost'])) {
             $updateData["opship_tracking_url"] = $orderInfo['tracking_url'];
         }
-        
+
         if (!$db->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
             LibHelper::dieJsonError($db->getError());
         }
+        
+        $labelResponse = OrderProductShipment::getAttributesById($opId, 'opr_response');
+        if(!empty($labelResponse)){
+            $orderInfo = $orderInfo + json_decode($labelResponse, true);
+        }        
 
         $opObj = new OrderProduct($opId);
         if (false === $opObj->bindResponse(OrderProduct::RESPONSE_TYPE_SHIPMENT, json_encode($orderInfo))) {
@@ -265,7 +284,7 @@ trait ShippingServices
             'msg' => Labels::getLabel('LBL_SUCCESS', $this->langId),
             'tracking_number' => $trackingNumber
         ];
-  
+
         LibHelper::dieJsonSuccess($json);
     }
 
@@ -279,22 +298,23 @@ trait ShippingServices
     public function returnShipment(int $opId, int $qty)
     {
         $data = $this->getOrderProductDetail($opId);
-        
+
         if (empty($data)) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
+        $this->loadShippingService($data);
 
         if (1 > $qty) {
             $msg = Labels::getLabel("MSG_INVALID_RETURN_QTY", $this->langId);
             LibHelper::dieJsonError($msg);
         }
-                
-        if ('ShipStationShipping' == $this->keyName || !method_exists($this->shippingService, 'returnShipment')) {
+
+        if ('ShipStationShipping' == $this->shippingService->keyName || !method_exists($this->shippingService, 'returnShipment')) {
             $msg = Labels::getLabel("MSG_RETURN_CASE_NOT_ALLOWED_BY_SERVICE_PROVIDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
-        
+
         if (false === $this->shippingService->returnShipment($data["opshipping_service_code"], $qty)) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
@@ -315,17 +335,18 @@ trait ShippingServices
     public function refundShipment(int $opId)
     {
         $data = $this->getOrderProductDetail($opId);
-        
+
         if (empty($data)) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
-                
-        if ('ShipStationShipping' == $this->keyName || !method_exists($this->shippingService, 'refundShipment')) {
+        $this->loadShippingService($data);
+
+        if ('ShipStationShipping' == $this->shippingService->keyName || !method_exists($this->shippingService, 'refundShipment')) {
             $msg = Labels::getLabel("MSG_RETURN_CASE_NOT_ALLOWED_BY_SERVICE_PROVIDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
-        
+
         if (false === $this->shippingService->refundShipment($data["opshipping_service_code"])) {
             LibHelper::dieJsonError($this->shippingService->getError());
         }
@@ -335,7 +356,7 @@ trait ShippingServices
             LibHelper::dieJsonError($opObj->getError());
         }
     }
-    
+
     /**
      * fetchTrackingDetail
      *
@@ -347,7 +368,7 @@ trait ShippingServices
     {
         $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $opInvoiceId);
         $this->set('trackingData', $trackingData);
-        $this->_template->render(false,false);
+        $this->_template->render(false, false);
     }
 
     /**
@@ -362,7 +383,7 @@ trait ShippingServices
             LibHelper::dieJsonError($msg);
         }
 
-        $frm = new Form('frm' . $this->keyName);
+        $frm = new Form('frm' . $this->shippingService->keyName);
         $frm->addHiddenField('', 'op_id');
         $formElements = $this->shippingService->getPickupFormElementsArr();
         foreach ($formElements as $colName => $colLabel) {
@@ -371,12 +392,12 @@ trait ShippingServices
             $attributes = [];
             if (is_array($colLabel)) {
                 $htmlAfterField = array_key_exists('htmlAfterField', $colLabel) ? $colLabel['htmlAfterField'] : '';
-                $fieldFn = array_key_exists('fieldType', $colLabel) ? $colLabel['fieldType'] : '' ;
-                $required = array_key_exists('required', $colLabel) ? $colLabel['required'] : true ;
+                $fieldFn = array_key_exists('fieldType', $colLabel) ? $colLabel['fieldType'] : '';
+                $required = array_key_exists('required', $colLabel) ? $colLabel['required'] : true;
                 $attributes = array_key_exists('attributes', $colLabel) ? $colLabel['attributes'] : [];
                 $colLabel = array_key_exists('label', $colLabel) ? $colLabel['label'] : '';
             }
-            $fieldFn = !empty($fieldFn) ? $fieldFn : (('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox');
+            $fieldFn = !empty($fieldFn) ? $fieldFn : (('password' == strtolower($colName)) ? 'addPasswordField' : 'addTextBox');
 
             $fld = $frm->$fieldFn($colLabel, $colName, '', $attributes);
             $fld->requirement->setRequired($required);
@@ -386,7 +407,7 @@ trait ShippingServices
         $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->langId));
         return $frm;
     }
-    
+
     /**
      * pickupForm
      *
@@ -398,7 +419,7 @@ trait ShippingServices
         $frm = $this->getPickupForm();
         $frm->fill(['op_id' => $opId]);
         $this->set('frm', $frm);
-        $this->_template->render(false,false);
+        $this->_template->render(false, false);
     }
 
     /**
@@ -408,12 +429,13 @@ trait ShippingServices
      */
     public function createPickup()
     {
-         
         $frm = $this->getPickupForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['btn_submit']);
 
         $data = $this->getOrderProductDetail($post['op_id']);
+        $this->loadShippingService($data);
+
         $data += $post;
         if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->createPickup($data)) {
             $msg = $this->shippingService->getError();
@@ -440,30 +462,31 @@ trait ShippingServices
 
         LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
-    
+
     public function cancelPickup(int $opId)
-    {       
-        $data = $this->getOrderProductDetail($opId);        
-        if (empty($data)  || empty($data['opsp_scheduled']) || 1 > $data['opsp_scheduled'] ) {
+    {
+        $data = $this->getOrderProductDetail($opId);
+        if (empty($data) || empty($data['opsp_scheduled']) || 1 > $data['opsp_scheduled']) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
         }
-        
+        $this->loadShippingService($data);
+
         if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->cancelPickup($data)) {
             $msg = $this->shippingService->getError();
             if (empty($msg)) {
                 $msg = Labels::getLabel('LBL_THIS_SERVICE_IS_NOT_AVAILABLE', $this->langId);
             }
             LibHelper::dieJsonError($msg);
-        }       
+        }
 
-        $resp = $this->shippingService->getResponse(); 
-       
-        if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled'=> applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))){
+        $resp = $this->shippingService->getResponse();
+
+        if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled' => applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))) {
             LibHelper::dieJsonError(FatApp::getDb()->getError());
         }
         LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
-    
+
     public function shippingRatesForm(int $opId)
     {
         $frm = $this->getShippingRatesForm($opId);
@@ -503,14 +526,13 @@ trait ShippingServices
             $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             return false;
         }
-        
-        $this->loadShippingService($orderData);
+
+        $this->loadShippingService($orderData, true);
 
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
-        
 
-        $cacheKey = Shipping::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($this->shippingService);
+        $cacheKey = Shipping::CARRIER_CACHE_KEY_NAME . $this->langId . $this->shippingService->keyName;
         $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
         if ($carriers) {
             $carriers = unserialize($carriers);
@@ -563,13 +585,13 @@ trait ShippingServices
         $productDimensionClass = isset($dimensionUnits[$orderData['op_product_dimension_unit']]) ? $dimensionUnits[$orderData['op_product_dimension_unit']] : '';
         $productWeightInOunce = Shipping::convertWeightInOunce($prodWeight, $productWeightClass);
 
-        $this->shippingService->setWeight($productWeightInOunce);        
+        $this->shippingService->setWeight($productWeightInOunce);
 
         if (method_exists($this->shippingService, 'setDimensions')) {
             $this->shippingService->setDimensions($orderData['op_product_length'], $orderData['op_product_width'], $orderData['op_product_height'], $productDimensionClass);
         }
 
-        $cacheKeyArr = [            
+        $cacheKeyArr = [
             $orderData['op_product_length'],
             $orderData['op_product_width'],
             $orderData['op_product_height'],
@@ -605,9 +627,8 @@ trait ShippingServices
                     'cost' => $value['shipmentCost'] + $value['otherCost'],
                     'service_code' => $value['serviceCode'],
                     'carrier_code' => $carrierCode,
-                    'plugin_id' => 1,
+                    'plugin_id' => $this->shippingService->getKey('plugin_id'),
                     'is_seller_plugin' => (0 < $this->shippingService->getRecordId() ? 1 : 0),
-                    
                 ];
                 $keyCounter++;
             }
@@ -631,13 +652,13 @@ trait ShippingServices
 
         $opId = $post['op_id'];
         $orderData = $this->getOrderProductDetail($opId);
-        if (empty($orderData) ||  0 < $orderData['opshipping_plugin_id']) {
+        if (empty($orderData)) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
         }
 
         $rates = $this->getShippingRatesFromApi($opId);
-        
-        if (1 > count($rates) || !isset($rates[$post['shipping_rates']]) || 1 > $orderData['opshipping_rate_id']) {
+
+        if (1 > count($rates) || !isset($rates[$post['shipping_rates']])) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
         }
 
@@ -654,8 +675,8 @@ trait ShippingServices
         }
         LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
-    
-    private function loadShippingService($orderData)
+
+    private function loadShippingService($orderData, $loadPluginSetting = false)
     {
         $shippingBySeller = CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']);
         $this->shippingService = (new Shipping($this->langId))->getShippingApiObj(($shippingBySeller ? $orderData['opshipping_by_seller_user_id'] : 0));
@@ -673,7 +694,6 @@ trait ShippingServices
                 return false;
             }
             FatUtility::dieJsonError($this->error);
-        }        
+        }
     }
-    
 }

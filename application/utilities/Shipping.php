@@ -13,12 +13,9 @@ class Shipping
     public const RATE_CACHE_KEY_NAME = "shipRateCache_";
     public const CARRIER_CACHE_KEY_NAME = "shipCarrierCache_";
 
-    private $langId;
-    private $pluginKey = '';
-    private $pluginId = 0;
+    private $langId;   
     private $successMsg = '';
     private $shippedByArr = [];
-    private $shippingApiObj;
     private $selProdShipRates = [];
     private $selectedShippingService = [];
     private $systemRatesToFetchSelprodIds = [];
@@ -375,7 +372,6 @@ class Shipping
                     continue;
                 }
                 unset($physicalSelProdIdArr[$rates['selprod_id']]);
-
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
@@ -386,8 +382,8 @@ class Shipping
                         'shiprate_min_val' => 0,
                         'shiprate_max_val' => 0,
                         'shipping_level' => $shippingLevel,
-                        'shipping_type' => $this->getPluginId(),
-                        'is_seller_plugin' => (0 < $shippingApiObj->getRecordId() ? 1 : 0),
+                        'shipping_type' => $shippingApiObj->getKey('plugin_id'),
+                        'is_seller_plugin' => $shippingApiObj->getRecordId(),
                         'carrier_code' => $carrierCode,
                     ];
 
@@ -507,7 +503,7 @@ class Shipping
             $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
             $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [];
         }
-     
+        
         return $this->formatOutput(applicationConstants::SUCCESS, $this->shippedByArr);
     }
 
@@ -764,71 +760,7 @@ class Shipping
 
         return Fatutility::float($productWeight * $coversionRate);
     }
-
-    /**
-     * loadDefaultPluginData
-     *
-     * @return bool
-     */
-    private function loadDefaultPluginData(): bool
-    {
-        $pluginObj = new Plugin();
-        $plugindata = $pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
-
-        if (empty($plugindata) || 1 > $plugindata['plugin_active']) {
-            $this->error = Labels::getLabel("MSG_NO_DEFAULT_SHIPPING_PLUGIN_FOUND", $this->langId);
-            return false;
-        }
-        $keyName = $plugindata['plugin_code'];
-
-        $directory = Plugin::getDirectory($plugindata['plugin_type']);
-        if (false == $directory) {
-            $this->error =  Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', $this->langId);
-            return false;
-        }
-
-        if (false === PluginHelper::includePlugin($keyName, $directory, $this->error, $this->langId, false)) {
-            return false;
-        }
-
-        $this->shippingApiObj = new $keyName($this->langId);
-
-        if (method_exists($this->shippingApiObj, 'init') && false === $this->shippingApiObj->init()) {
-            $this->error = $this->shippingApiObj->getError();
-            return false;
-        }
-
-        $this->pluginKey = $keyName;
-        $this->pluginId = $plugindata['plugin_id'];
-        return true;
-    }
-    
-    /**
-     * getPluginKey
-     *
-     * @return string
-     */
-    public function getPluginKey(): string
-    {
-        if (empty($this->pluginKey)) {
-            $this->loadDefaultPluginData();
-        }
-        return $this->pluginKey;
-    }
-
-    /**
-     * getPluginId
-     *
-     * @return int
-     */
-    public function getPluginId(): int
-    {
-        if (1 > $this->pluginId) {
-            $this->loadDefaultPluginData();
-        }
-        return $this->pluginId;
-    }
-
+           
     /**
      * formatShippingRates
      *

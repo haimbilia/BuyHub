@@ -110,9 +110,9 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                             ],
                                             'label' => '<i class="fas fa-file-export"></i>'
                                         ];
-                                    }                                    
+                                    }  
                                     
-                                    if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_tracking_number'])) {
+                                    if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_order_number'])) {
                                         if ('EasyPost' == $shippingApiObj->keyName) {
                                             $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
                                         } else {

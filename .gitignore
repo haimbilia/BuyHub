@@ -107,6 +107,7 @@ $RECYCLE.BIN/
 php_errors.log
 
 .php_cs.cache
+/.php-cs-fixer.cache
 
 # Php Unit Test
 .phpunit.result.cache

@@ -4,7 +4,6 @@ class SellerOrdersController extends AdminBaseController
 {
     use ShippingServices;
 
-    private $shippingService;
     private $trackingService;
     private $paymentPlugin;
     private $method = '';
@@ -23,49 +22,7 @@ class SellerOrdersController extends AdminBaseController
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
     }
-
-    /**
-     * loadShippingService
-     *
-     * @return void
-     */
-    private function loadShippingService()
-    {
-        /* Return if already loaded. */
-        if (!empty($this->shippingService)) {
-            return;
-        }
-
-        $plugin = new Plugin();
-        $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-
-        /* Carry on with default functionality if plugin not active. */
-        if (false === $keyName) {
-            return;
-        }
-
-        $this->shippingService = PluginHelper::callPlugin($keyName, [$this->adminLangId], $error, $this->adminLangId, false);
-
-        if (false === $this->shippingService) {
-            if ('search' == strtolower($this->method)) {
-                Message::addErrorMessage($error);
-                FatUtility::dieWithError(Message::getHtml());
-            } else {
-                FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
-            }
-        }
-
-        if (false === $this->shippingService->init()) {
-            if ('search' == strtolower($this->method)) {
-                Message::addErrorMessage($this->shippingService->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            } else {
-                FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
-            }
-        }
-    }
-
-    
+        
     public function index($order_id = '')
     {
         $this->objPrivilege->canViewSellerOrders();
@@ -203,7 +160,7 @@ class SellerOrdersController extends AdminBaseController
         $op_id = FatUtility::int($op_id);
 
         $srch = new OrderProductSearch($this->adminLangId, true, true);
-        $srch->joinOrderProductShipment();
+        $srch->joinOrderProductShipment();     
         $srch->joinOrderUser();
         $srch->joinPaymentMethod();
         $srch->joinShippingUsers();
@@ -212,11 +169,12 @@ class SellerOrdersController extends AdminBaseController
         $srch->addOrderProductCharges();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->addMultipleFields(
             array(
-                'ops.*', 'order_id', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'ouc.credential_username as buyer_username', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as buyer_username', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone_dcode', 'op.op_shop_owner_phone',
+                'ops.*', 'order_id', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'ouc.credential_username as buyer_username', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as buyer_username', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone_dcode', 'op.op_shop_owner_phone',
                 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off','orderstatus_id'
+                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off','orderstatus_id','ops_plugin.plugin_code as opshipping_plugin_code'
             )
         );
         $srch->addCondition('op_id', '=', $op_id);
@@ -226,9 +184,8 @@ class SellerOrdersController extends AdminBaseController
         if ($opRow == false) {
             Message::addErrorMessage($this->str_invalid_request);
             CommonHelper::redirectUserReferer();
-        }        
-       
-        
+        }
+     
         $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opRow['op_selprod_user_id'], $opRow['opshipping_by_seller_user_id']);
         
         $shippingApiObj;
@@ -593,27 +550,21 @@ class SellerOrdersController extends AdminBaseController
         }
 
         $op_id = FatUtility::int($post['op_id']);
-        if (1 > $op_id) {
+        if (1 > $op_id) {            
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
         }
-
-        $plugin = new Plugin();
-        $this->keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-        $pluginValidation = true;
-        $allowedPlugins = in_array($this->keyName, ['EasyPost', 'Aramex']);
-        if (!empty($this->keyName) && $allowedPlugins) {
-            $pluginValidation = false;
-        }
-
+     
+        $shippingApiObj = (new Shipping($this->adminLangId))->getShippingApiObj() ?? NULL;
+        
         $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
-        if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && $pluginValidation) {
+        if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
             Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-
+        
         $oCancelRequestSrch = new OrderCancelRequestSearch();
         $oCancelRequestSrch->doNotCalculateRecords();
         $oCancelRequestSrch->doNotLimitRecords();
@@ -633,19 +584,21 @@ class SellerOrdersController extends AdminBaseController
         $srch->joinShippingUsers();
         //$srch->joinSellerProducts();
         $srch->joinShippingCharges();
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $op_id);
+        $srch->addMultipleFields(['op.*','pm.*','order_language_id','ops_plugin.plugin_code as opshipping_plugin_code']);   
         $rs = $srch->getResultSet();
         $orderDetail = array();
         if ($rs) {
             $orderDetail = FatApp::getDb()->fetch($rs);
         }
-
-        if (empty($orderDetail)) {
+       
+        if (empty($orderDetail)) {            
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
         }
-
+        
         if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
         } else if ($orderDetail['plugin_code'] == 'PayAtStore') {
@@ -666,7 +619,7 @@ class SellerOrdersController extends AdminBaseController
             (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"),
             (array) FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")
         );
-
+       
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -675,7 +628,7 @@ class SellerOrdersController extends AdminBaseController
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
 
-            if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && $pluginValidation) {
+            if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && !empty($shippingApiObj) && in_array($shippingApiObj->keyName, ['AfterShipShipment'])) {
                 $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING,'plugin_id') ?? 0;                
                 if (0 < $manualShipping) {
                     $updateData = [
@@ -947,8 +900,7 @@ class SellerOrdersController extends AdminBaseController
         $fld->requirements()->setRequired();
 
         $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->adminLangId), 'customer_notified', applicationConstants::getYesNoArr($this->adminLangId), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
-
-        if (array_key_exists('opship_tracking_number', $orderData) && empty($orderData['opship_tracking_number'])) {
+        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  OrderStatus::ORDER_SHIPPED) {
             $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->adminLangId), 'manual_shipping', 1, array(), false, 0);
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->adminLangId));
             $manualShipUnReqObj->setRequired(false);
