@@ -180,6 +180,7 @@ if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
 }
 
 $product['product_description'] = strip_tags(html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8'), applicationConstants::ALLOWED_HTML_TAGS_FOR_APP);
+$product['product_description'] = str_replace('/editor/editor-image/',FatUtility::generateFullUrl().'editor/editor-image/',$product['product_description']);
 
 if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
     foreach ($product['moreSellersArr'] as &$value) {
