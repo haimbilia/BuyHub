@@ -609,3 +609,7 @@ DELETE FROM tbl_language_labels WHERE label_key = "LBL_Most_WishList_Added_Produ
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_CLEAR_SEARCH";
 
 ALTER TABLE `tbl_badge_link_conditions` DROP INDEX `blinkcond_id`;
+-- ---- Task : 87287 Stripe Connect Subscription ---- --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_STRIPE_CONNECT_INVALID_ACCOUNT_CURRENCY', 1, 'You Cannot Create Account With Different Currency Other Than System Currency {SYSTEM-CURRECNY}', '') ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- ---- Task : 87287 Stripe Connect Subscription ---- --
