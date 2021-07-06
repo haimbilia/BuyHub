@@ -1,15 +1,13 @@
 
-Multivendor - Released Version : RV-9.3.0
-    => IOS/Android Buyer APP version : 2.0
+Multivendor - Released Version : RV-9.3.1
+    => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
 
 New Feature : 
     => 82248 : DPO Payment Gateway Integration
 
-Updates : 
+Updates/Fixes : 
     => 83842 : Out of stock fixes
-
-Fixes:
     => 047746 - Get current location not working
     => 046939 - Add product tag giving error
     => 047306 - On shop collection while linking product remove icon not coming
@@ -232,5 +230,4 @@ Notes:
 
     2Checkout Payment Gateway:
         To Test Sandbox Payment Refer This: https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods
-
 
