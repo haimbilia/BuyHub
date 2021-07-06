@@ -44,7 +44,7 @@ class TopCategoriesReportController extends AdminBaseController
         $uWsrch->joinProducts();
         $uWsrch->joinProductToCategory();
         $uWsrch->addGroupBy('ptc_prodcat_id');
-        $uWsrch->addMultipleFields(array( 'uwlp_selprod_id', 'uwlist_user_id', 'ptc_prodcat_id', 'count(uwlist_user_id) as wishlist_user_counts' ));
+        $uWsrch->addMultipleFields(array('uwlp_selprod_id', 'uwlist_user_id', 'ptc_prodcat_id', 'count(uwlist_user_id) as wishlist_user_counts'));
 
         /* ] */
 
@@ -74,12 +74,12 @@ class TopCategoriesReportController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array( 'c.prodcat_id', 'IFNULL(c.prodcat_identifier, c_l.prodcat_name) as prodcat_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty', 'GETCATCODE(prodcat_id) AS prodcat_code', 'prodcat_active', 'prodcat_deleted', 'IFNULL(tquwl.wishlist_user_counts, 0) as wishlistUserCounts'));
+        $srch->addMultipleFields(array('c.prodcat_id', 'IFNULL(c.prodcat_identifier, c_l.prodcat_name) as prodcat_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty', 'GETCATCODE(prodcat_id) AS prodcat_code', 'prodcat_active', 'prodcat_deleted', 'IFNULL(tquwl.wishlist_user_counts, 0) as wishlistUserCounts'));
         $srch->addGroupBy('prodcat_id');
         $srch->addHaving('totSoldQty', '>', 0);
         $srch->addOrder('totSoldQty', $orderBy);
         $srch->addOrder('prodcat_name');
-        
+
         if ($export == 'export') {
             /* Cat Tree Structure Assoc Arr[ */
             $catObj = new ProductCategory();
@@ -91,14 +91,14 @@ class TopCategoriesReportController extends AdminBaseController
             $arr = array(Labels::getLabel('LBL_Category', $this->adminLangId), Labels::getLabel('LBL_Sold_Quantity', $this->adminLangId), Labels::getLabel('LBL_Favorites', $this->adminLangId));
             array_push($sheetData, $arr);
             while ($row = $db->fetch($rs)) {
-                $arr = array( $catTreeAssocArr[$row['prodcat_id']], $row['totSoldQty'], $row['wishlistUserCounts'] );
+                $arr = array($catTreeAssocArr[$row['prodcat_id']], $row['totSoldQty'], $row['wishlistUserCounts']);
                 array_push($sheetData, $arr);
             }
             if ($orderBy == "DESC") {
-                CommonHelper::convertToCsv($sheetData, 'Top_Categories_Report_' . date("d-M-Y") . '.csv', ',');
+                CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Top_Categories_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
                 exit;
             } else {
-                CommonHelper::convertToCsv($sheetData, 'Bad_Categories_Report_' . date("d-M-Y") . '.csv', ',');
+                CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Bad_Categories_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
                 exit;
             }
         } else {
@@ -129,7 +129,7 @@ class TopCategoriesReportController extends AdminBaseController
     {
         $frm = new Form('frmTopCategoriesReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addSelectBox(Labels::getLabel('LBL_Record_Per_Page', $this->adminLangId), 'pagesize', array( 10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Record_Per_Page', $this->adminLangId), 'pagesize', array(10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
         $frm->addHiddenField('', 'order_by', 'DESC');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearSearch();'));

@@ -115,7 +115,7 @@ class LabelsController extends AdminBaseController
         }
 
         $arr = array();
-        
+
         if (0 < $autoFillLangData) {
             $languages = Language::getAllNames();
             $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -220,20 +220,20 @@ class LabelsController extends AdminBaseController
         $srch->joinTable(Language::DB_TBL, 'INNER JOIN', 'label_lang_id = language_id AND language_active = ' . applicationConstants::ACTIVE);
         $srch->addOrder('label_key', 'DESC');
         $srch->addOrder('label_lang_id', 'ASC');
-        $srch->addMultipleFields(array( 'label_id', 'label_key', 'label_lang_id', 'label_caption' ));
+        $srch->addMultipleFields(array('label_id', 'label_key', 'label_lang_id', 'label_caption'));
 
         $rs = $srch->getResultSet();
 
         $langSrch = Language::getSearchObject();
         $langSrch->doNotCalculateRecords();
-        $langSrch->addMultipleFields(array( 'language_id', 'language_code', 'language_name' ));
+        $langSrch->addMultipleFields(array('language_id', 'language_code', 'language_name'));
         $langSrch->addOrder('language_id', 'ASC');
         $langRs = $langSrch->getResultSet();
         $languages = FatApp::getDb()->fetchAll($langRs);
         $sheetData = array();
 
         /* Sheet Heading Row[ */
-        $arr = array( Labels::getLabel('LBL_Key', $adminLangId) );
+        $arr = array(Labels::getLabel('LBL_Key', $adminLangId));
         if ($languages) {
             foreach ($languages as $lang) {
                 array_push($arr, $lang['language_code']);
@@ -252,7 +252,7 @@ class LabelsController extends AdminBaseController
         while ($row = $db->fetch($rs)) {
             if ($key != $row['label_key']) {
                 if (!empty($langArr)) {
-                    $arr[$counter] = array('label_key' => $key );
+                    $arr[$counter] = array('label_key' => $key);
                     foreach ($langArr as $k => $val) {
                         if (is_array($val)) {
                             foreach ($val as $key => $v) {
@@ -276,7 +276,7 @@ class LabelsController extends AdminBaseController
 
         foreach ($arr as $a) {
             $sheetArr = array();
-            $sheetArr = array( $a['label_key'] );
+            $sheetArr = array($a['label_key']);
             if (!empty($a['data'])) {
                 foreach ($a['data'] as $langId => $caption) {
                     array_push($sheetArr, html_entity_decode($caption));
@@ -285,7 +285,7 @@ class LabelsController extends AdminBaseController
             array_push($sheetData, $sheetArr);
         }
 
-        CommonHelper::convertToCsv($sheetData, 'Labels_' . date("d-M-Y") . '.csv', ',');
+        CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Labels', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
         exit;
     }
 
@@ -317,7 +317,7 @@ class LabelsController extends AdminBaseController
         /* All Languages[  */
         $langSrch = Language::getSearchObject();
         $langSrch->doNotCalculateRecords();
-        $langSrch->addMultipleFields(array( 'language_id', 'language_code', 'language_name' ));
+        $langSrch->addMultipleFields(array('language_id', 'language_code', 'language_name'));
         $langSrch->addOrder('language_id', 'ASC');
         $langRs = $langSrch->getResultSet();
         $languages = $db->fetchAll($langRs, 'language_code');
@@ -345,12 +345,12 @@ class LabelsController extends AdminBaseController
                     $sql = "SELECT label_key FROM " . Labels::DB_TBL . " WHERE label_key = " . $db->quoteVariable($labelKey) . " AND label_lang_id = " . $langIndexLangIds[$key];
                     $rs = $db->query($sql);
                     if ($row = $db->fetch($rs)) {
-                        $db->updateFromArray(Labels::DB_TBL, array( 'label_caption' => $caption ), array('smt' => 'label_key = ? AND label_lang_id = ?', 'vals' => array( $labelKey, $langIndexLangIds[$key] ) ));
+                        $db->updateFromArray(Labels::DB_TBL, array('label_caption' => $caption), array('smt' => 'label_key = ? AND label_lang_id = ?', 'vals' => array($labelKey, $langIndexLangIds[$key])));
                     } else {
                         $dataToSaveArr = array(
-                        'label_key' => $labelKey,
-                        'label_lang_id' => $langIndexLangIds[$key],
-                        'label_caption' => $caption,
+                            'label_key' => $labelKey,
+                            'label_lang_id' => $langIndexLangIds[$key],
+                            'label_caption' => $caption,
                         );
                         $db->insertFromArray(Labels::DB_TBL, $dataToSaveArr);
                     }

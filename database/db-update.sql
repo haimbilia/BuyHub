@@ -1039,4 +1039,8 @@ ALTER TABLE `tbl_badge_links` ADD `badgelink_id` INT NOT NULL AUTO_INCREMENT FIR
 ALTER TABLE `tbl_badge_links`
   ADD UNIQUE KEY `badgelink_blinkcond_id` (`badgelink_blinkcond_id`,`badgelink_record_id`);
 
-
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_Note:_Performance_Report_on_the_basis_of_Sold_Quantity";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_Products_Performance_Report";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_Top_Performing_Products";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_Most_WishList_Added_Products";
+-- ------------------TV-9.3.1.20210705------------------------

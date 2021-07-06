@@ -167,7 +167,8 @@ class ShopsReportController extends AdminBaseController
 
                 array_push($sheetData, $arr);
             }
-            CommonHelper::convertToCsv($sheetData, 'Shops_Report_' . date("d-M-Y") . '.csv', ',');
+            
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Shops_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
             $srch->setPageNumber($page);

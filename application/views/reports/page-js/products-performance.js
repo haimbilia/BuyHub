@@ -1,78 +1,87 @@
-$(document).ready(function(){
-	topPerformingProducts();
+$(document).ready(function () {
+	searchReport(document.frmReportSearch);
 });
 
-(function() {
-	var runningAjaxReq = false;
+$(document).on("click", ".headerColumnJs", function (e) {
+	var fld = $(this).attr('data-field');
+	var frm = document.frmReportSearchPaging;
+	document.getElementById("sortBy").value = fld;
+	$(frm.sortBy).val(fld);
+	if (document.getElementById("sortOrder").value == 'ASC') {
+		$(frm.sortOrder).val('DESC');
+		document.getElementById("sortOrder").value = 'DESC';
+	} else {
+		$(frm.sortOrder).val('ASC');
+		document.getElementById("sortOrder").value = 'ASC';
+	}
+	searchReport(frm, false);
+});
+
+$(function () {
+	$("#sortable").sortable({
+		stop: function () {
+			reloadList(false);
+		}
+	}).disableSelection();
+});
+
+(function () {
 	var dv = '#listingDiv';
 
-	goToMostWishListAddedProdSearchPage = function(page) {
-		if(typeof page==undefined || page == null){
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
-		var frm = document.frmMostWishListAddedProdSrchPaging;
-		$( frm.page ).val( page );
-		mostWishListAddedProducts(page);
-	}
-
-	goToTopPerformingProductsSearchPage = function(page) {
-		if(typeof page==undefined || page == null){
-			page =1;
-		}
-		var frm = document.frmSrchProdPerformancePaging;
+		var frm = document.frmReportSearchPaging;
 		$(frm.page).val(page);
-		topPerformingProducts(frm);
+		searchReport(frm);
+	};
+	redirectBack = function (redirecrt) {
+		window.location = redirecrt;
+	}
+	reloadList = function (withloader) {
+		var frm = document.frmReportSearchPaging;
+		searchReport(frm, withloader);
+	};
+
+	searchReport = function (frm, withloader) {
+		setColumnsData(frm);
+		var data = '';
+		if (frm) {
+			data = fcom.frmData(frm);
+		}
+
+		if (typeof withloader == 'undefined' || withloader != false) {
+			$(dv).html(fcom.getLoader());
+		}
+
+		fcom.ajax(fcom.makeUrl(controllerName, 'searchProductsPerformance'), data, function (res) {
+			$(dv).html(res);
+		});
+	};
+
+	exportReport = function () {
+		setColumnsData(document.frmReportSearch);
+		document.frmReportSearch.action = fcom.makeUrl(controllerName, 'searchProductsPerformance', ['export']);
+		document.frmReportSearch.submit();
 	}
 
-	topPerformingProducts = function(frm){
-		if(typeof frm == undefined || frm == null){
-			frm = document.frmProdPerformanceSrch;
-		}
-		$(dv).html(fcom.getLoader());
-		var data = fcom.frmData(frm);
-		fcom.ajax(fcom.makeUrl('Reports', 'searchProductsPerformance', [1]), data, function(t) {
-			$('#performanceReportExport').attr('onClick', "exportProdPerformanceReport(1)");
-			$(dv).html(t);
+	clearSearch = function () {
+		document.frmReportSearch.reset();
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			if ($(this).attr('disabled') != 'disabled') {
+				$(this).prop('checked', false);
+			}
 		});
+		searchReport(document.frmReportSearch);
 	};
 
-	badPerformingProducts = function(frm){
-		$(dv).html( fcom.getLoader() );
-		var data = fcom.frmData(frm);
-		fcom.ajax(fcom.makeUrl('Reports', 'searchProductsPerformance'), data, function(t) {
-			$('#performanceReportExport').attr('onClick', "exportProdPerformanceReport(0)");
-			$(dv).html(t);
+	setColumnsData = function (frm) {
+		reportColumns = [];
+		$("input:checkbox[name=reportColumns]:checked").each(function () {
+			reportColumns.push($(this).val());
 		});
+
+		$(frm.reportColumns).val(JSON.stringify(reportColumns));
 	};
-
-	mostWishListAddedProducts = function(page){
-	/* 	$(dv).html( fcom.getLoader() );
-		var data = fcom.frmData(frm);
-		data += '&order_by=ASC'; */
-		if(typeof page==undefined || page == null){
-			page = 1;
-		}
-		var data = '&page='+page;
-		fcom.ajax(fcom.makeUrl('Reports', 'searchMostWishListAddedProducts'), data, function(t) {
-			$('#performanceReportExport').attr('onClick', 'exportMostFavProdReport()');
-			$(dv).html(t);
-		});
-	};
-
-	exportMostFavProdReport = function(){
-		document.frmMostWishListAddedProdSrchPaging.action = fcom.makeUrl('Reports','exportMostWishListAddedProducts');
-		document.frmMostWishListAddedProdSrchPaging.submit();
-	};
-
-	exportProdPerformanceReport = function( topPerformed ){
-		/* if( orderBy == "ASC"){
-			document.frmProdPerformanceSrch;
-			//topPerformingProducts
-		} else {
-
-		} */
-		document.frmSrchProdPerformancePaging.action = fcom.makeUrl('Reports','exportProductPerformance', [topPerformed] );
-		document.frmSrchProdPerformancePaging.submit();
-	}
-
 })();

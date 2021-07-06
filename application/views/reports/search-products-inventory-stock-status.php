@@ -1,103 +1,101 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
-    <?php $arr_flds = array(
-        'sr'        =>    Labels::getLabel('LBL_#', $siteLangId),
-        'name'        =>    Labels::getLabel('LBL_Product', $siteLangId),
-        'selprod_stock'    =>    Labels::getLabel('LBL_Stock_Available', $siteLangId),
-        'stock_on_order' =>    Labels::getLabel('LBL_Stock_On_Order', $siteLangId),
-        'selprod_cost'    =>    Labels::getLabel('LBL_Cost_Price', $siteLangId),
-        'inventory_value'    =>    Labels::getLabel('LBL_Inventory_Value_', $siteLangId) . '<br/>(' . Labels::getLabel('LBL_Stock_Available', $siteLangId) . ' * ' . Labels::getLabel('LBL_Cost_Price', $siteLangId) . ')',
-        'selprod_price'    =>    Labels::getLabel('LBL_Unit_Price', $siteLangId),
-        'total_value'    =>    Labels::getLabel('LBL_Total_Value_', $siteLangId) . '<br/>(' . Labels::getLabel('LBL_Stock_Available', $siteLangId) . ' * ' . Labels::getLabel('LBL_Unit_Price', $siteLangId) . ')'
-    );
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+echo '<div class="datatable datatable-sticky scroll scroll-x">';
+$tbl = new HtmlElement(
+    'table',
+    array('width' => '100%', 'class' => 'datatable__table')
+);
 
-    $tbl = new HtmlElement('table', array('class' => 'table'));
-    $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-    foreach ($arr_flds as $val) {
-        $e = $th->appendElement('th', array(), $val, true);
+$th = $tbl->appendElement('thead', ['class' => 'datatable__head'])->appendElement('tr', ['class' => 'datatable__row']);
+$count = 0;
+$staticFlds = [];
+foreach ($fields as $key => $val) {
+    $cls = 'datatable_cell datatable_cell-sort datatable_cell_top headerColumnJs';
+    if (0 == $count) {
+        $staticFlds = [$key];
+        $cls .= ' datatable_cell_left';
     }
 
-    $sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
-    foreach ($arrListing as $sn => $listing) {
-        $sr_no++;
-        $tr = $tbl->appendElement('tr', array('class' => ''));
+    $cls .= ($key == $sortBy) ? ' datatable_cell-sorted' : '';
 
-        foreach ($arr_flds as $key => $val) {
-            $td = $tr->appendElement('td');
-            switch ($key) {
-                case 'sr':
-                    $td->appendElement('plaintext', array(), $sr_no, true);
-                    break;
-                case 'name':
-                    $name = '<div class="item__title">' . $listing['product_name'] . '</div>';
-                    if ($listing['selprod_title'] != '') {
-                        $name .= '<div class="item__sub_title"><strong>' . Labels::getLabel('LBL_Custom_Title', $siteLangId) . ": </strong>" . $listing['selprod_title'] . '</div>';
-                    }
+    $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key]);
+    $span = $td->appendElement('span');
+    $span->appendElement('plaintext', array(), $val);
+    if ($key == $sortBy) {
+        $arrow = ($sortOrder == applicationConstants::SORT_ASC) ? '<i class="fas fa-arrow-down"></i>' : '<i class="fas fa-arrow-up"></i>';
+        $span->appendElement('plaintext', array(), $arrow, true);
+    }
+    $count++;
+}
 
-                    if ($listing['brand_name'] != '') {
-                        $name .= '<div class="item__brand">' . Labels::getLabel('LBL_Brand', $siteLangId) . ": </strong>" . $listing['brand_name'] . '</div>';
-                    }
+$tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
+$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+foreach ($arrListing as $sn => $row) {
+    $cls = (($sr_no % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $sr_no]);
 
-                    if ($listing['selprod_sku'] != '') {
-                        $name .= '<div class="item__brand">' . Labels::getLabel('LBL_Sku', $siteLangId) . ": </strong>" . $listing['selprod_sku'] . '</div>';
-                    }
-                    $variantStr = '';
-                    if (is_array($listing['options']) && count($listing['options'])) {
-                        $name .= '<div class="item__specification">';
-                        $count = count($listing['options']);
-                        foreach ($listing['options'] as $op) {
-                            $name .= '' . wordwrap($op['optionvalue_name'], 150, "<br>\n");
-                            if ($count != 1) {
-                                $variantStr .= ' | ';
-                            }
-                            $count--;
+    foreach ($fields as $key => $val) {
+        if (in_array($key, $staticFlds)) {
+            $td = $tr->appendElement('th', ['class' => 'datatable_cell datatable_cell_left']);
+            $span = $td->appendElement('span');
+        } else {
+            $td = $tr->appendElement('td', ['class' => 'datatable_cell']);
+            $span = $td->appendElement('span');
+        }
+        switch ($key) {
+            case 'listserial':
+                $span->appendElement('plaintext', array(), $sr_no);
+                break;
+
+            case 'product_name':
+                $name = '<div class="item__title">' . $row['product_name'] . '</div>';
+                if ($row['selprod_title'] != '') {
+                    $name .= '<div class="item__sub_title"><strong>' . Labels::getLabel('LBL_Custom_Title', $siteLangId) . ": </strong>" . $row['selprod_title'] . '</div>';
+                }
+
+                $variantStr = '';
+                if (is_array($row['options']) && count($row['options'])) {
+                    $name .= '<div class="item__specification">';
+                    $count = count($row['options']);
+                    foreach ($row['options'] as $op) {
+                        $name .= '' . wordwrap($op['optionvalue_name'], 150, "<br>\n");
+                        if ($count != 1) {
+                            $variantStr .= ' | ';
                         }
-                        $name .= '</div>';
+                        $count--;
                     }
-
-                    $td->setAttribute('width', '40%');
-                    $td->appendElement('plaintext', array(), $name, true);
-                    break;
-
-                case 'selprod_stock':
-                    $td->appendElement('plaintext', array(), $listing['selprod_stock'], true);
-                    break;
-
-                case 'stock_on_order':
-                    $td->appendElement('plaintext', array(), $listing['stock_on_order'], true);
-                    break;
-
-                case 'selprod_cost':
-                    $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($listing['selprod_cost']), true);
-                    break;
-
-                case 'inventory_value':
-                    $inventory_value = $listing['selprod_stock'] * $listing['selprod_cost'];
-                    $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($inventory_value), true);
-                    break;
-
-                case 'selprod_price':
-                    $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($listing['selprod_price']), true);
-                    break;
-
-                case 'total_value':
-                    $total_value = $listing['selprod_stock'] * $listing['selprod_price'];
-                    $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($total_value), true);
-                    break;
-
-                default:
-                    $td->appendElement('plaintext', array(), $listing[$key], true);
-                    break;
-            }
+                    $name .= '</div>';
+                }
+               
+                $span->appendElement('plaintext', array(), $name, true);
+                break;
+            case 'selprod_cost':
+            case 'inventory_value':
+            case 'selprod_price':
+            case 'total_value':
+                $span->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+                break;
+            default:
+                $span->appendElement('plaintext', array(), $row[$key], true);
+                break;
         }
     }
-    echo $tbl->getHtml();
-    if (count($arrListing) == 0) {
-        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
-        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-    } ?>
+
+    $sr_no++;
+}
+echo $tbl->getHtml();
+if (count($arrListing) == 0) {
+    $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+} ?>
 </div>
 <?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductInventoryStockStatusSrchPaging'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToProductsInventoryStockStatusPage');
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSearchPaging', 'method' => 'post'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage');
+$this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
+<script>
+    var x = $(".card-body").width();
+    var actualWidth = x / 6;
+    $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
+    $('.datatable_cell_left').children('span').css('display', 'block');
+    $('.datatable_cell_left').children('span').css('white-space', 'normal');
+</script>

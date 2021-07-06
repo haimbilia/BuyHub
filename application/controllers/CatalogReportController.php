@@ -136,25 +136,24 @@ class CatalogReportController extends SellerBaseController
 
                 array_push($sheetData, $arr);
             }
-
-            CommonHelper::convertToCsv($sheetData, 'Catalog_Report_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Catalog_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
-        } else {
-            $srch->setPageNumber($page);
-            $srch->setPageSize($pageSize);
-            $rs = $srch->getResultSet();
-            $arrListing = $db->fetchAll($rs);
-            $this->set("arrListing", $arrListing);
-            $this->set('pageCount', $srch->pages());
-            $this->set('recordCount', $srch->recordCount());
-            $this->set('page', $page);
-            $this->set('pageSize', $pageSize);
-            $this->set('postedData', $post);
-            $this->set('sortBy', $sortBy);
-            $this->set('sortOrder', $sortOrder);
-            $this->set('fields', $fields);
-            $this->_template->render(false, false);
         }
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $rs = $srch->getResultSet();
+        $arrListing = $db->fetchAll($rs);
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->_template->render(false, false);
     }
 
     public function export()

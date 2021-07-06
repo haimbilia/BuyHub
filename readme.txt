@@ -205,9 +205,6 @@ Fixes:
     => 055092 - when cookies are not allowed from admin still then user have option for the same in account
     => 055090 - when truncate request is raised by user then in admin> it's listing- view purpose which is not there on user end
     => 055597 - before checkout> there is no halt on last step- it's redirecting automatically to payment gateway
-
-New Features:
-    => Admin shipped products listing page
     => 053451 - missing country code plugin with phone number field
     => 053462 - Instagram login not working after configuration, gives error
     => 053757 - when order status is changed then sms are not triggering to buyer for the same
@@ -244,8 +241,9 @@ New Features:
     => 055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
     ====================TV-9.3.1.20210703==========================
     => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
+    =====================TV-9.3.1.20210705========================
 
-New Features:
+New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
     => task-85619 Adding files when digital order is delivered   

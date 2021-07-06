@@ -569,7 +569,7 @@ class ImportExportController extends AdminBaseController
                     case Importexport::TYPE_INVENTORIES:
                         $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getSellerProductContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
-                    /* case Importexport::TYPE_OPTIONS:
+                        /* case Importexport::TYPE_OPTIONS:
                         $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getOptionContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break; */
                 }
@@ -1006,7 +1006,7 @@ class ImportExportController extends AdminBaseController
             }
             array_push($sheetData, $sheetArr);
         }
-        CommonHelper::convertToCsv($sheetData, 'Labels_' . date("d-M-Y") . '.csv', ',');
+        CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Labels', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
     }
 
     public function importLabelsForm()
@@ -1077,7 +1077,7 @@ class ImportExportController extends AdminBaseController
                         'label_key' => $labelKey,
                         'label_lang_id' => $langIndexLangIds[$key],
                         'label_caption' => $caption,
-                        'label_type' => $type ,
+                        'label_type' => $type,
                     );
                     $db->insertFromArray(Labels::DB_TBL, $dataToSaveArr, false, array(), array('label_caption' => $caption));
                     /* $sql = "SELECT label_key FROM ". Labels::DB_TBL ." WHERE label_key = " . $db->quoteVariable($labelKey). " AND label_lang_id = " .  $langIndexLangIds[$key];
