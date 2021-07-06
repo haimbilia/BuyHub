@@ -14,6 +14,7 @@ if (!empty($frmSearch)) {
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
         $fld->developerTags['col'] = 2;
+        $fld->developerTags['noCaptionTag'] = ($badgeLbl);
     }
 
     $fld = $frmSearch->getField('btn_clear');
@@ -21,6 +22,7 @@ if (!empty($frmSearch)) {
         $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
         $fld->setFieldTagAttribute('onClick', 'clearSearch()');
         $fld->developerTags['col'] = 2;
+        $fld->developerTags['noCaptionTag'] = ($badgeLbl);
     }
 }
 

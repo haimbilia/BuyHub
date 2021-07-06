@@ -214,30 +214,32 @@ class BadgeLinkCondition extends MyAppModel
     }
     
     /**
-     * isUnique
+     * isUnique : Used for Badge
      *
-     * @param  int $badgeType
+     * @param  int $badgeId
+     * @param  int $userId
      * @param  int $recordType
-     * @param  int $record_id
-     * @param  int $position
      * @return void
      */
-    public static function isUnique(int $badgeType, int $recordType, int $record_id, int $position = 0): bool
+    public static function isUnique(int $badgeId, int $userId, int $recordType): bool
     {
-        return true; /* Require Discussion. */
-        
-        /* $srch = self::getBadgeLinksSearchObj(CommonHelper::getLangId());
-        $srch->addFld('blinkcond_badge_id');
-        $srch->doNotCalculateRecords();
+        $srch = new BadgeSearch();
         $srch->setPageSize(1);
-        $srch->addHaving(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
-        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', '=',  $recordType);
-        if (Badge::TYPE_RIBBON == $badgeType && 0 < $position) {
-            $srch->addCondition('blinkcond_position', '=', $position);
-        }
-        $srch->addCondition('badgelink_record_id', '=', $record_id);
-        $result = (array) FatApp::getDb()->fetch($srch->getResultSet());
-        return (empty($result)); */
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_badge_id = badge_id');
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
+        $srch->addCondition('badge_id', '=', $badgeId);
+        $srch->addCondition('badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addCondition('blinkcond_user_id', '=', $userId);
+        $srch->addCondition('blinkcond_record_type', '=', $recordType);
+        $srch->addDirectCondition('(
+            CASE 
+                WHEN breq_id IS NOT NULL
+                THEN breq_status = ' . BadgeRequest::REQUEST_APPROVED . ' OR breq_status = ' . BadgeRequest::REQUEST_PENDING . '
+                ELSE TRUE
+            END
+        )');
+        $srch->getResultSet();
+        return (1 > $srch->recordCount());
     }
     
     /**
@@ -252,45 +254,36 @@ class BadgeLinkCondition extends MyAppModel
         $srch = new BadgeSearch($langId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'blc.blinkcond_badge_id =  bdg.badge_id', 'blc');
-        $srch->joinTable(self::DB_TBL_BADGE_LINKS, 'INNER JOIN', 'blnks.badgelink_blinkcond_id = blc.blinkcond_id', 'blnks');
+
+        $srch->joinTable(self::DB_TBL, 'LEFT JOIN', 'blc.blinkcond_badge_id =  bdg.badge_id', 'blc');
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
-
-        $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
-        $srch->addCondition('badge_required_approval', '=', applicationConstants::YES);
-
-        $srch->addDirectCondition("(
-            CASE 
-                WHEN breq_id IS NOT NULL
-                THEN breq_status = " . BadgeRequest::REQUEST_APPROVED . "
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'condition_type', '=', Badge::COND_MANUAL);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'required_approval', '=', applicationConstants::YES);
+      
+        $srch->addDirectCondition('(
+            CASE
+                WHEN (
+                        (blinkcond_id > 0 AND breq_id IS NULL)
+                        OR
+                        (breq_status = 1 AND breq_user_id = ' . UserAuthentication::getLoggedUserId() . ') 
+                    )
+                THEN FALSE
                 ELSE TRUE
             END
-        )");
+        )');
         
-        $badgeNameField = "CONCAT(
-                                COALESCE(badge_name, badge_identifier), ' | ', 
-                                (CASE 
-                                    WHEN blinkcond_record_type = " . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . " THEN '" . Labels::getLabel('LBL_SELLER_PRODUCT', $langId) . "'
-                                    WHEN blinkcond_record_type = " . BadgeLinkCondition::RECORD_TYPE_PRODUCT . " THEN '" . Labels::getLabel('LBL_PRODUCT', $langId) . "'
-                                    WHEN blinkcond_record_type = " . BadgeLinkCondition::RECORD_TYPE_SHOP . " THEN '" . Labels::getLabel('LBL_SHOP', $langId) . "'
-                                    ELSE ''
-                                END),  
-                                (CASE 
-                                    WHEN blinkcond_from_date != 0 AND blinkcond_to_date != 0
-                                    THEN CONCAT(' | (', blinkcond_from_date, ' - ', blinkcond_to_date, ')')
-                                    WHEN blinkcond_from_date != 0
-                                    THEN CONCAT(' | (" . Labels::getLabel('LBL_FROM', $langId) . " : ', blinkcond_from_date, ')')
-                                    ELSE ''
-                                END)
-                            ) AS badge_name";
+        $badgeNameField = "COALESCE(badge_name, badge_identifier) badge_name";
 
+
+        $srch->addGroupBy(Badge::DB_TBL_PREFIX . 'id');
+        $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         if (true === $assoc) {
             $srch->addMultipleFields([
-                    'blinkcond_id',
+                    'badge_id',
                     $badgeNameField
                 ]
             );
-            $srch->getResultSet();
             return (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         }
 

@@ -38,6 +38,7 @@ $(document).on('change', '.icon-language-js', function () {
     };
 
     backToListing = function () {
+        searchRecords(document.frmSearch);
         $('.editRecord--js').html("");
         $('.pagebody--js').fadeIn();
     }
@@ -187,20 +188,10 @@ $(document).on('change', '.icon-language-js', function () {
                 return result.name || result.value;
             }
         }).on('select2:selecting', function (e) {
-            var badgeType = $('input[name="badge_type"]').val();
-            var recordType = $('[name="breq_record_type"]').val();
             var position = 0;
             if (0 < $('select[name="blinkcond_position"]').length) {
                 position = $('select[name="blinkcond_position"]').val();
             }
-
-            // fcom.ajax(fcom.makeUrl(controller, 'isUnique', [badgeType, recordType, e.params.args.data.id, position]), '', function (t) {
-            /* var resp = JSON.parse(t);
-            if (1 > resp.status) {
-                selector.val('').trigger('change');
-                $.systemMessage(resp.msg, 'alert--danger');
-                return false;
-            } */
 
             var recordIds = $("input[name='record_ids']");
             var JSONObj = [e.params.args.data.id];

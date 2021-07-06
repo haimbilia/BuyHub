@@ -64,7 +64,7 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             reloadList();
-            $(document).trigger('close.facebox');
+            backToListing();
         });
     };
 
