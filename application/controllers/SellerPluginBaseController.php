@@ -34,4 +34,9 @@ class SellerPluginBaseController extends SellerBaseController
         }
         return true;
     }
+    
+    protected function getUserMeta($key = '')
+    {
+        return User::getUserMeta(UserAuthentication::getLoggedUserId(), $key);
+    }
 }
