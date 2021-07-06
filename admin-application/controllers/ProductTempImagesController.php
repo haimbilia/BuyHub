@@ -83,7 +83,7 @@ class ProductTempImagesController extends AdminBaseController
 
         $frm->addSelectBox(Labels::getLabel('LBL_Is_Downloaded', $this->adminLangId), 'is_downloaded', $is_downloaded, -1, array(), '');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
         return $frm;
     }
 

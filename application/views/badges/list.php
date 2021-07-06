@@ -10,17 +10,26 @@ if (!empty($frmSearch)) {
     $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
     $frmSearch->developerTags['fld_default_col'] = 4;
 
+    $fld = $frmSearch->getField('keyword');
+    if (Badge::TYPE_RIBBON == $badgeType){
+        $fld->developerTags['col'] = 6;
+        $fld->setFieldTagAttribute('placeholder', $fld->getCaption());
+        $fld->developerTags['noCaptionTag'] = true;
+    }
+
     $fld = $frmSearch->getField('btn_submit');
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-        $fld->developerTags['col'] = 2;
+        $fld->developerTags['col'] = ($badgeLbl) ? 2 : 3;
+        $fld->developerTags['noCaptionTag'] = !($badgeLbl);
     }
 
     $fld = $frmSearch->getField('btn_clear');
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
         $fld->setFieldTagAttribute('onClick', 'clearSearch()');
-        $fld->developerTags['col'] = 2;
+        $fld->developerTags['col'] = ($badgeLbl) ? 2 : 3;
+        $fld->developerTags['noCaptionTag'] = !($badgeLbl);
     }
 }
 

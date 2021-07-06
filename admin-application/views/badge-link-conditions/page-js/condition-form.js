@@ -38,7 +38,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_condition_type"]', 
     }
 });
 
-$(document).on('change', formClass + 'select[name="blinkcond_record_type"]', function () {
+$(document).on('change', formClass + '[name="blinkcond_record_type"]', function () {
     if ("" == $(this).val() && REC_COND_MANUAL == $(formClass + ".recCond--js").val()) {
         $(this).val(RECORD_TYPE_SELLER_PRODUCT);
         return;
@@ -100,7 +100,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
             } else {
                 $(formClass + ".conditionType--js").hide();
-                $(formClass + 'select[name="blinkcond_record_type"]').trigger('change');
+                $(formClass + '[name="blinkcond_record_type"]').trigger('change');
 
                 var conditionSelectors = $(formClass + 'select[name="blinkcond_condition_type"], ' + formClass + 'input[name="blinkcond_condition_from"], ' + formClass + 'input[name="blinkcond_condition_to"]');
                 conditionSelectors.attr('data-fatreq', JSON.stringify({ required: false }));
@@ -133,7 +133,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             bindSellerSelect2();
 
             if ($(formClass + '.recCond--js').val() == REC_COND_MANUAL) {
-                $(formClass + 'select[name="blinkcond_record_type"]').trigger('change');
+                $(formClass + '[name="blinkcond_record_type"]').trigger('change');
                 hideSearchFormFilter(blinkcond_id);
             } else {
                 $('.listingSection--js, .searchform_filter').hide();
@@ -217,7 +217,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         
         var searchSelector = $(formClass + "select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
-        var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+        var recordType = $(formClass + '[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             return fcom.makeUrl('Products', 'autoComplete');
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
@@ -231,7 +231,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     }
 
     getRecordData = function (data) {
-        var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+        var recordType = $(formClass + '[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType || RECORD_TYPE_SHOP == recordType) {
             return data
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
@@ -249,7 +249,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             return false;
         }
         var arr = {keyword: params.term};        
-        var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+        var recordType = $(formClass + '[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             arr['selprod_user_id'] = sellerId;
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
@@ -295,7 +295,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             }
         }).on('select2:selecting', function (e) {
             var badgeType = $(formClass + 'input[name="badge_type"]').val();
-            var recordType = $(formClass + 'select[name="blinkcond_record_type"]').val();
+            var recordType = $(formClass + '[name="blinkcond_record_type"]').val();
             var position = 0;
             if (0 < $(formClass + 'select[name="blinkcond_position"]').length) {
                 position = $(formClass + 'select[name="blinkcond_position"]').val();

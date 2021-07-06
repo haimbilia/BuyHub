@@ -510,7 +510,7 @@ class QuestionnairesController extends AdminBaseController
         $frm->addDateField(Labels::getLabel('LBL_From_Date', $this->adminLangId), 'from_date', '', array('readonly' => 'readonly'));
         $frm->addDateField(Labels::getLabel('LBL_To_Date', $this->adminLangId), 'to_date', '', array('readonly' => 'readonly'));
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -543,7 +543,7 @@ class QuestionnairesController extends AdminBaseController
         $frm->addHiddenField('', 'page');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

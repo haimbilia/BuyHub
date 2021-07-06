@@ -65,9 +65,8 @@ foreach ($arrListing as $sn => $row) {
                     }
                     $name .= '</div>';
                 }
-
-                $td->setAttribute('width', '40%');
-                $td->appendElement('plaintext', array(), $name, true);
+               
+                $span->appendElement('plaintext', array(), $name, true);
                 break;
             case 'selprod_cost':
             case 'inventory_value':
@@ -95,7 +94,7 @@ $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => 
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 <script>
     var x = $(".card-body").width();
-    var actualWidth = x / 7;
+    var actualWidth = x / 6;
     $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
     $('.datatable_cell_left').children('span').css('display', 'block');
     $('.datatable_cell_left').children('span').css('white-space', 'normal');

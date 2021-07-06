@@ -6,7 +6,7 @@ foreach ($downloads as $key => &$op) {
 
     $op['files'] = array_values($op['files']);
 
-    foreach ($op['files'] as &$file) {        
+    foreach ($op['files'] as &$file) {
         $file['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $file['afile_id'] . '/' . $file['afile_record_id'];
     }
 }
@@ -21,6 +21,3 @@ $data = array(
 if (1 > $recordCount) {
     $status = applicationConstants::OFF;
 }
-
-
-

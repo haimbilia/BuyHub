@@ -14,11 +14,6 @@ if (null != $fld) {
     $fld->htmlAfterField = '<div class="recordsContainer--js p-0 box--scroller"></div>';
 }
 
-$fld = $frm->getField('breq_blinkcond_id');
-if (null != $fld && 0 < $blinkCondId) {
-    $fld->setFieldTagAttribute('data-oldvalue', $blinkCondId);
-}
-
 $fld = $frm->getField('breq_message');
 if (null != $fld) {
     $fld->developerTags['col'] = 4;
@@ -36,11 +31,6 @@ if (null != $fld) {
                                     <i class="fas fa-times"></i>
                                 </a>';
     }
-}
-
-$fld = $frm->getField('breq_blinkcond_id');
-if (null != $fld) {
-    $fld->addFieldTagAttribute('onchange', 'getRecordType(this)');
 }
 
 ?>

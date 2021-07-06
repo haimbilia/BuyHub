@@ -1,76 +1,87 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
-	<?php $arr_flds = array(
-		'name'	=>	Labels::getLabel('LBL_Product', $siteLangId),
-		'op_selprod_sku'	=>	Labels::getLabel('LBL_SKU', $siteLangId),
-		'wishlist_user_counts'	=>	Labels::getLabel('LBL_WishList_User_Counts', $siteLangId)
-	);
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+echo '<div class="datatable datatable-sticky scroll scroll-x">';
+$tbl = new HtmlElement(
+	'table',
+	array('width' => '100%', 'class' => 'datatable__table')
+);
 
-	if ($topPerformed) {
-		$arr_flds['totSoldQty'] = Labels::getLabel('LBL_Sold_Quantity', $siteLangId);
-	} else {
-		$arr_flds['totRefundQty'] = Labels::getLabel('LBL_Refund_Quantity', $siteLangId);
+$th = $tbl->appendElement('thead', ['class' => 'datatable__head'])->appendElement('tr', ['class' => 'datatable__row']);
+$count = 0;
+$staticFlds = [];
+foreach ($fields as $key => $val) {
+	$cls = 'datatable_cell datatable_cell-sort datatable_cell_top headerColumnJs';
+	if (0 == $count) {
+		$staticFlds = [$key];
+		$cls .= ' datatable_cell_left';
 	}
 
-	$tbl = new HtmlElement('table', array('class' => 'table'));
-	$th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-	foreach ($arr_flds as $val) {
-		$e = $th->appendElement('th', array(), $val);
+	$cls .= ($key == $sortBy) ? ' datatable_cell-sorted' : '';
+
+	$td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key]);
+	$span = $td->appendElement('span');
+	$span->appendElement('plaintext', array(), $val);
+	if ($key == $sortBy) {
+		$arrow = ($sortOrder == applicationConstants::SORT_ASC) ? '<i class="fas fa-arrow-down"></i>' : '<i class="fas fa-arrow-up"></i>';
+		$span->appendElement('plaintext', array(), $arrow, true);
 	}
+	$count++;
+}
 
-	$sr_no = 0;
-	foreach ($arrListing as $sn => $listing) {
-		$sr_no++;
-		$tr = $tbl->appendElement('tr', array('class' => ''));
+$tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
+$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+foreach ($arrListing as $sn => $row) {
+	$cls = (($sr_no % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
+	$tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $sr_no]);
 
-		foreach ($arr_flds as $key => $val) {
-			$td = $tr->appendElement('td');
-			switch ($key) {
-				case 'name':
-					$txt = '<div class="item__description">';
-					$txt .= '<div class="item__title">' . $listing['op_product_name'] . '</div>';
-					if ($listing['op_selprod_title'] != '') {
-						$txt .= '<div class="item__sub_title"><strong>' . Labels::getLabel('LBL_Custom_Title', $siteLangId) . ": </strong>" . $listing['op_selprod_title'] . '</div>';
-					}
+	foreach ($fields as $key => $val) {
+		if (in_array($key, $staticFlds)) {
+			$td = $tr->appendElement('th', ['class' => 'datatable_cell datatable_cell_left']);
+			$span = $td->appendElement('span');
+		} else {
+			$td = $tr->appendElement('td', ['class' => 'datatable_cell']);
+			$span = $td->appendElement('span');
+		}
+		switch ($key) {
+			case 'listserial':
+				$span->appendElement('plaintext', array(), $sr_no);
+				break;
 
-					if ($listing['op_selprod_options'] != '') {
-						$txt .= '<div class="item__specification">' . Labels::getLabel('LBL_Options', $siteLangId) . ": </strong>" . $listing['op_selprod_options'] . '</div>';
-					}
+			case 'product_name':
+				$txt = '<div class="item__description">';
+				$txt .= '<div class="item__title">' . $row['product_name'] . '</div>';
+				if ($row['op_selprod_title'] != '') {
+					$txt .= '<div class="item__sub_title"><strong>' . Labels::getLabel('LBL_Custom_Title', $siteLangId) . ": </strong>" . $row['op_selprod_title'] . '</div>';
+				}
 
-					if ($listing['op_brand_name'] != '') {
-						$txt .= '<div class="item__brand"><strong>' . Labels::getLabel('LBL_Brand', $siteLangId) . ": </strong>" . $listing['op_brand_name'] . '</div>';
-					}
-					$txt .= '</div>';
-					$td->appendElement('plaintext', array(), $txt, true);
-					break;
+				if ($row['op_selprod_options'] != '') {
+					$txt .= '<div class="item__specification">' . Labels::getLabel('LBL_Options', $siteLangId) . ": </strong>" . $row['op_selprod_options'] . '</div>';
+				}
+				$txt .= '</div>';
+				$span->appendElement('plaintext', array(), $txt, true);
+				break;
 
-				case 'totSoldQty':
-					$td->appendElement('plaintext', array(), $listing['totSoldQty'], true);
-					break;
-
-				case 'totRefundQty':
-					$td->appendElement('plaintext', array(), $listing['totRefundQty'], true);
-					break;
-
-				case 'wishlist_user_counts':
-					$td->appendElement('plaintext', array(), $listing['wishlist_user_counts'], true);
-					break;
-				default:
-					$td->appendElement('plaintext', array(), $listing[$key], true);
-					break;
-			}
+			default:
+				$span->appendElement('plaintext', array(), $row[$key], true);
+				break;
 		}
 	}
 
-	$noteLbl = Labels::getLabel("LBL_Note:_Performance_Report_on_the_basis_of_Sold_Quantity", $siteLangId);
-	echo $tbl->getHtml();
-	if (count($arrListing) == 0) {
-		$message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
-		$this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-	} ?>
+	$sr_no++;
+}
+echo $tbl->getHtml();
+if (count($arrListing) == 0) {
+	$message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+	$this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+} ?>
 </div>
 <?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSrchProdPerformancePaging'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToTopPerformingProductsSearchPage');
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-?>
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSearchPaging', 'method' => 'post'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage');
+$this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
+<script>
+	var x = $(".card-body").width();
+	var actualWidth = x / 6;
+	$('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
+	$('.datatable_cell_left').children('span').css('display', 'block');
+	$('.datatable_cell_left').children('span').css('white-space', 'normal');
+</script>

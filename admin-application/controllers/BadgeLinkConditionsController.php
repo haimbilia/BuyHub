@@ -3,6 +3,7 @@
 class BadgeLinkConditionsController extends AdminBaseController
 {
     private $recordData = [];
+    private $badgeLinkCondId = 0;
     public function __construct($action)
     {
         parent::__construct($action);
@@ -204,13 +205,14 @@ class BadgeLinkConditionsController extends AdminBaseController
     public function form(int $badgeType, int $badgeId, int $badgeLinkCondId = 0)
     {
         $this->objPrivilege->canEditBadgeLinks();
+        $this->badgeLinkCondId = $badgeLinkCondId;
 
         $dataToFill = [];
 
         $sellerId = 0;
-        if ($badgeLinkCondId > 0) {
+        if ($this->badgeLinkCondId > 0) {
             $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->adminLangId, true);
-            $srch->addCondition('blinkcond_id', '=', $badgeLinkCondId);
+            $srch->addCondition('blinkcond_id', '=', $this->badgeLinkCondId);
 
             /* Bind Records */
             $srch->joinProduct($this->adminLangId);
@@ -292,7 +294,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->set('badgeType', $badgeType);
         $this->set('badgeId', $badgeId);
         $this->set('rowData', $dataToFill);
-        $this->set('blinkcond_id', $badgeLinkCondId);
+        $this->set('blinkcond_id', $this->badgeLinkCondId);
 
         $this->_template->render(false, false);
     }
@@ -520,6 +522,9 @@ class BadgeLinkConditionsController extends AdminBaseController
         $frm->addHiddenField('', 'blinkcond_id');
         $frm->addHiddenField('', 'blinkcond_badge_id');
         $frm->addHiddenField('', 'record_condition');
+        if (0 < $this->badgeLinkCondId) {
+            $frm->addHiddenField('', 'blinkcond_record_type');
+        }
 
         $selectedBadge = $recordIds = [];
         if (is_array($this->recordData) && 0 < count($this->recordData)) {
@@ -541,9 +546,11 @@ class BadgeLinkConditionsController extends AdminBaseController
         $frm->addTextBox(Labels::getLabel('LBL_FROM_DATE', $this->adminLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
         $frm->addTextBox(Labels::getLabel('LBL_TO_DATE', $this->adminLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
 
-        $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->adminLangId), 'blinkcond_record_type', $recordTypesArr);
-        $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_MANUAL == $recordCondition));
+        if (1 > $this->badgeLinkCondId) {
+            $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->adminLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->adminLangId), 'blinkcond_record_type', $recordTypesArr);
+            $fld->requirement->setRequired((BadgeLinkCondition::REC_COND_MANUAL == $recordCondition));
+        }
 
         $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->adminLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->adminLangId), 'class' => 'recordIds--js'], '');
 

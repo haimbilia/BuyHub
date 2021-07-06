@@ -4,6 +4,7 @@
     $arr_flds = array(
         'listserial' => Labels::getLabel('LBL_#', $siteLangId),
         'badge_name' => Labels::getLabel('LBL_BADGE', $siteLangId),
+        'breq_record_type' => Labels::getLabel('LBL_RECORD_TYPE', $siteLangId),
         'breq_status' => Labels::getLabel('LBL_Status', $siteLangId),
         'breq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $siteLangId),
     );
@@ -14,6 +15,8 @@
     if (0 < count($arrListing)) {
         $tableClass = "table-justified";
     }
+
+    $recordTypeArr = BadgeLinkCondition::getRecordTypeArr($siteLangId);
     $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
     foreach ($arr_flds as $val) {
@@ -36,6 +39,10 @@
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                     break;
+                case 'breq_record_type':
+                    $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : $recordTypeArr[$row[$key]];
+                    $td->appendElement('plaintext', [], $txt, true);
+                    break;
                 case 'breq_status':
                     $class = (BadgeRequest::REQUEST_PENDING == $row[$key]) ? 'label-info' : ((BadgeRequest::REQUEST_APPROVED == $row[$key]) ? 'label-success' : 'label-danger');
 
@@ -46,13 +53,20 @@
                     $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key]) : Labels::getLabel('LBL_NA', $siteLangId), true);
                     break;
                 case 'action':
-                    $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);
-                    $li = $ul->appendElement("li");
                     if ($row['breq_status'] == BadgeRequest::REQUEST_PENDING) {
+                        $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);
+                        $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
                             '<i class="fa fa-edit"></i>',
+                            true
+                        );
+                        $li = $ul->appendElement("li");
+                        $li->appendElement(
+                            'a',
+                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId)),
+                            '<i class="fa fa-trash"></i>',
                             true
                         );
                     }

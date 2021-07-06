@@ -46,8 +46,8 @@ $mins = abs($mins);
 $hrs = floor($mins / 60);
 $mins -= $hrs * 60;
 $offset = sprintf('%+d:%02d', $hrs * $sgn, $mins);
-/* FatApp::getDb()->query("SET sql_mode = 'NO_ENGINE_SUBSTITUTION'");
-FatApp::getDb()->query("SET time_zone = '" . $offset . "'"); */
+/* FatApp::getDb()->query("SET sql_mode = 'NO_ENGINE_SUBSTITUTION'"); */
+FatApp::getDb()->query("SET time_zone = '" . $offset . "'");
 /* ] */
 
 ini_set('session.cookie_httponly', true);
@@ -57,11 +57,10 @@ FatApp::getDb()->query("SET NAMES utf8mb4");
 /* FatApp::getDb()->clearQueryLog();
 FatApp::getDb()->logQueries(true,CONF_UPLOADS_PATH.'logQuery.txt'); */
 
-
 $_SESSION['WYSIWYGFileManagerRequirements'] = CONF_INSTALLATION_PATH . 'public/WYSIWYGFileManagerRequirements.php';
 if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
     require_once CONF_INSTALLATION_PATH . 'library/aws/aws-autoloader.php';
     AttachedFile::registerS3ClientStream();
 }
 define('SYSTEM_INIT', true);
-define('CONF_WEB_APP_VERSION', 'TV-9.3.1.20210703');
+define('CONF_WEB_APP_VERSION', 'TV-9.3.1.20210705');

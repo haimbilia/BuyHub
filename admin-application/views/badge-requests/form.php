@@ -18,13 +18,9 @@ if (null != $fld) {
 	$fld->htmlAfterField = '<div class="recordsContainer--js p-0 box--scroller"></div>';
 }
 
-$fld = $frm->getField('breq_blinkcond_id');
-if (null != $fld && 0 < $blinkCondId) {
-    $fld->setFieldTagAttribute('data-oldvalue', $blinkCondId);
-}
-
-$fld = $frm->getField('breq_blinkcond_id');
+$fld = $frm->getField('breq_status');
 if (null != $fld) {
+    $fld->developerTags['col'] = 2;
 	$fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_BADGE_REQUEST_REFERENCE_FILE', $adminLangId) . '</small>';
     if (0 < $badgeReqId && true === $fileFound) {
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $adminLangId). '" href="'.UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($badgeReqId)).'">
@@ -32,12 +28,6 @@ if (null != $fld) {
                                 </a>';
     }
 }
-
-$fld = $frm->getField('breq_blinkcond_id');
-if (null != $fld) {
-	$fld->addFieldTagAttribute('onchange', 'getRecordType(this)');
-}
-
 ?>
 
 <section class="section">
