@@ -24,6 +24,7 @@ class Collections extends MyAppModel
     public const COLLECTION_TYPE_TESTIMONIAL = 10;
     public const COLLECTION_TYPE_CONTENT_BLOCK = 11;
     public const COLLECTION_TYPE_REVIEWS = 12;
+    public const COLLECTION_TYPE_FAQ_CATEGORY = 13;
 
     //public const SUBTYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT1 = 1;
@@ -43,6 +44,7 @@ class Collections extends MyAppModel
     public const TYPE_TESTIMONIAL_LAYOUT1 = 15;
     public const TYPE_CONTENT_BLOCK_LAYOUT1 = 16;
     public const TYPE_PENDING_REVIEWS1 = 17; // Applicable For Apps only.
+    public const TYPE_FAQ_CATEGORY_LAYOUT1 = 18; // Applicable For Apps only.
 
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
@@ -67,6 +69,7 @@ class Collections extends MyAppModel
         self::COLLECTION_TYPE_SPONSORED_SHOPS,
         self::COLLECTION_TYPE_BANNER,
         self::COLLECTION_TYPE_FAQ,
+        self::COLLECTION_TYPE_FAQ_CATEGORY,
         self::COLLECTION_TYPE_TESTIMONIAL,
         self::COLLECTION_TYPE_CONTENT_BLOCK,
         self::COLLECTION_TYPE_REVIEWS,
@@ -148,6 +151,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_SPONSORED_SHOPS => Labels::getLabel('LBL_Sponsored_Shops', $langId),
             self::COLLECTION_TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
             self::COLLECTION_TYPE_FAQ => Labels::getLabel('LBL_FAQ', $langId),
+            self::COLLECTION_TYPE_FAQ_CATEGORY => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
             self::COLLECTION_TYPE_TESTIMONIAL => Labels::getLabel('LBL_Testimonial', $langId),
             self::COLLECTION_TYPE_CONTENT_BLOCK => Labels::getLabel('LBL_Content_Blocks', $langId),
             self::COLLECTION_TYPE_REVIEWS => Labels::getLabel('LBL_REVIEWS', $langId),
@@ -184,6 +188,7 @@ class Collections extends MyAppModel
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_Testimonial_Layout1', $langId),
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_block_Layout1', $langId),
             self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
+            self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Faq_Categories', $langId),            
         ];
     }
 
@@ -213,6 +218,9 @@ class Collections extends MyAppModel
             ],
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
+            ],
+            self::COLLECTION_TYPE_FAQ_CATEGORY => [
+                self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
             ],
             self::COLLECTION_TYPE_REVIEWS => [
                 self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
@@ -329,6 +337,7 @@ class Collections extends MyAppModel
             self::TYPE_BANNER_LAYOUT2 => 'Banner-Layout-2.png',
             self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
+            self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'Testimonial-layout-1.png',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'Content-Block-layout-1.png',
             self::TYPE_PENDING_REVIEWS1 => 'Pending-Reviews-1.png',
@@ -683,6 +692,35 @@ class Collections extends MyAppModel
         );
         $srch->joinTable(FaqCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'faqcat_id = fc.' . FaqCategory::tblFld('id') . ' and fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'fc_l');
         $srch->addMultipleFields(array('ctr_display_order', 'faq_id as record_id', 'CONCAT(IFNULL(faq_title, faq_identifier), " | ", IFNULL (faqcat_name, faqcat_identifier)) as record_title'));
+        $srch->addOrder('ctr_display_order', 'ASC');
+        $rs = $srch->getResultSet();
+        $db = FatApp::getDb();
+        return $db->fetchAll($rs);
+    }
+
+    /**
+     * getFaqCategory
+     *
+     * @param  int $collectionId
+     * @param  int $langId
+     * @return array
+     */
+    public static function getFaqCategories(int $collectionId, int $langId): array
+    {
+        if (!$collectionId || !$langId) {
+            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $langId), E_USER_ERROR);
+            return false;
+        }
+
+        $srch = new SearchBase(static::DB_TBL_COLLECTION_TO_RECORDS);
+        $srch->doNotLimitRecords();
+        $srch->doNotCalculateRecords();
+        $srch->addCondition(static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id', '=', $collectionId);
+
+        $srch->joinTable(FaqCategory::DB_TBL, 'INNER JOIN', FaqCategory::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
+        $srch->joinTable(FaqCategory::DB_TBL_LANG, 'LEFT JOIN', 'lang.faqcatlang_faqcat_id = ' . FaqCategory::DB_TBL_PREFIX . 'id AND faqcatlang_lang_id = ' . $langId, 'lang');
+       
+        $srch->addMultipleFields(array('ctr_display_order', 'faqcat_id as record_id', 'IFNULL (faqcat_name, faqcat_identifier) as record_title'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
