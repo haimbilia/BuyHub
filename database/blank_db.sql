@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb5ubuntu0.5
+-- version 4.9.5deb2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 30, 2020 at 02:00 PM
--- Server version: 5.7.32-0ubuntu0.18.04.1
--- PHP Version: 7.4.8
+-- Generation Time: Jul 06, 2021 at 03:11 PM
+-- Server version: 8.0.25-0ubuntu0.20.04.1
+-- PHP Version: 7.4.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -17,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `yokartv8_test_blank`
+-- Database: `yokart_blank_9.3.1`
 --
 -- --------------------------------------------------------
 
@@ -26,21 +28,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tbl_abandoned_cart` (
-  `abandonedcart_id` int(11) NOT NULL,
-  `abandonedcart_user_id` int(11) NOT NULL,
-  `abandonedcart_selprod_id` int(11) NOT NULL,
+  `abandonedcart_id` int NOT NULL,
+  `abandonedcart_user_id` int NOT NULL,
+  `abandonedcart_selprod_id` int NOT NULL,
   `abandonedcart_type` tinyint(1) NOT NULL COMMENT 'Defined in model	',
-  `abandonedcart_qty` int(11) NOT NULL,
+  `abandonedcart_qty` int NOT NULL,
   `abandonedcart_amount` decimal(10,2) NOT NULL,
   `abandonedcart_action` tinyint(1) NOT NULL COMMENT 'Defined in model',
-  `abandonedcart_email_count` int(11) NOT NULL,
+  `abandonedcart_email_count` int NOT NULL,
   `abandonedcart_discount_notification` tinyint(1) NOT NULL,
   `abandonedcart_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_abandoned_cart`
---
 -- --------------------------------------------------------
 
 --
@@ -48,10 +47,10 @@ CREATE TABLE `tbl_abandoned_cart` (
 --
 
 CREATE TABLE `tbl_abusive_words` (
-  `abusive_id` int(11) NOT NULL,
-  `abusive_keyword` varchar(100) NOT NULL,
-  `abusive_lang_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `abusive_id` int NOT NULL,
+  `abusive_keyword` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `abusive_lang_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -60,26 +59,27 @@ CREATE TABLE `tbl_abusive_words` (
 --
 
 CREATE TABLE `tbl_addresses` (
-  `addr_id` int(11) NOT NULL,
-  `addr_type` int(11) NOT NULL,
-  `addr_record_id` int(11) NOT NULL,
-  `addr_added_by` int(11) NOT NULL,
-  `addr_lang_id` int(11) NOT NULL,
-  `addr_title` varchar(255) NOT NULL,
-  `addr_name` varchar(255) NOT NULL,
-  `addr_address1` varchar(255) NOT NULL,
-  `addr_address2` varchar(255) NOT NULL,
-  `addr_city` varchar(255) NOT NULL,
-  `addr_state_id` int(11) NOT NULL,
-  `addr_country_id` int(11) NOT NULL,
-  `addr_phone` varchar(100) NOT NULL,
-  `addr_zip` varchar(20) NOT NULL,
-  `addr_lat` varchar(150) NOT NULL,
-  `addr_lng` varchar(150) NOT NULL,
+  `addr_id` int NOT NULL,
+  `addr_type` int NOT NULL,
+  `addr_record_id` int NOT NULL,
+  `addr_added_by` int NOT NULL,
+  `addr_lang_id` int NOT NULL,
+  `addr_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_address1` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_address2` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_city` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_state_id` int NOT NULL,
+  `addr_country_id` int NOT NULL,
+  `addr_phone_dcode` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_phone` bigint NOT NULL,
+  `addr_zip` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_lat` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `addr_lng` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
   `addr_is_default` tinyint(1) NOT NULL,
   `addr_deleted` tinyint(1) NOT NULL,
   `addr_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -88,14 +88,14 @@ CREATE TABLE `tbl_addresses` (
 --
 
 CREATE TABLE `tbl_admin` (
-  `admin_id` int(11) NOT NULL,
-  `admin_username` varchar(100) NOT NULL,
-  `admin_password` varchar(100) NOT NULL,
-  `admin_email` varchar(150) NOT NULL,
-  `admin_name` varchar(100) NOT NULL,
-  `admin_active` tinyint(4) NOT NULL,
+  `admin_id` int NOT NULL,
+  `admin_username` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `admin_password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `admin_email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `admin_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `admin_active` tinyint NOT NULL,
   `admin_email_notification` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_admin`
@@ -115,13 +115,13 @@ INSERT INTO `tbl_admin` (`admin_id`, `admin_username`, `admin_password`, `admin_
 --
 
 CREATE TABLE `tbl_admin_auth_token` (
-  `admauth_admin_id` int(11) NOT NULL,
-  `admauth_token` varchar(32) NOT NULL,
+  `admauth_admin_id` int NOT NULL,
+  `admauth_token` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
   `admauth_expiry` datetime NOT NULL,
-  `admauth_browser` text NOT NULL,
+  `admauth_browser` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `admauth_last_access` datetime NOT NULL,
-  `admauth_last_ip` varchar(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='To store admin cookies information, Remember Me functionalit';
+  `admauth_last_ip` varchar(16) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='To store admin cookies information, Remember Me functionalit';
 
 -- --------------------------------------------------------
 
@@ -130,10 +130,10 @@ CREATE TABLE `tbl_admin_auth_token` (
 --
 
 CREATE TABLE `tbl_admin_password_reset_requests` (
-  `aprr_admin_id` int(10) NOT NULL,
-  `aprr_token` varchar(50) NOT NULL,
+  `aprr_admin_id` int NOT NULL,
+  `aprr_token` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `aprr_expiry` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -142,10 +142,10 @@ CREATE TABLE `tbl_admin_password_reset_requests` (
 --
 
 CREATE TABLE `tbl_admin_permissions` (
-  `admperm_admin_id` int(11) NOT NULL,
-  `admperm_section_id` int(11) NOT NULL,
-  `admperm_value` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `admperm_admin_id` int NOT NULL,
+  `admperm_section_id` int NOT NULL,
+  `admperm_value` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -154,16 +154,16 @@ CREATE TABLE `tbl_admin_permissions` (
 --
 
 CREATE TABLE `tbl_ads_batches` (
-  `adsbatch_id` int(11) NOT NULL,
-  `adsbatch_user_id` int(11) NOT NULL,
-  `adsbatch_name` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `adsbatch_lang_id` tinyint(2) NOT NULL,
-  `adsbatch_target_country_id` int(11) NOT NULL,
+  `adsbatch_id` int NOT NULL,
+  `adsbatch_user_id` int NOT NULL,
+  `adsbatch_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `adsbatch_lang_id` tinyint NOT NULL,
+  `adsbatch_target_country_id` int NOT NULL,
   `adsbatch_expired_on` datetime NOT NULL,
   `adsbatch_synced_on` datetime NOT NULL,
-  `adsbatch_status` tinyint(2) NOT NULL,
+  `adsbatch_status` tinyint NOT NULL,
   `adsbatch_added_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -172,13 +172,13 @@ CREATE TABLE `tbl_ads_batches` (
 --
 
 CREATE TABLE `tbl_ads_batch_products` (
-  `abprod_adsbatch_id` int(11) NOT NULL,
-  `abprod_selprod_id` int(11) NOT NULL,
-  `abprod_cat_id` int(11) NOT NULL COMMENT 'Google Product Category',
-  `abprod_age_group` varchar(15) NOT NULL,
-  `abprod_item_group_identifier` varchar(100) NOT NULL,
-  `abprod_product_info` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `abprod_adsbatch_id` int NOT NULL,
+  `abprod_selprod_id` int NOT NULL,
+  `abprod_cat_id` int NOT NULL COMMENT 'Google Product Category',
+  `abprod_age_group` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `abprod_item_group_identifier` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `abprod_product_info` text COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -187,12 +187,12 @@ CREATE TABLE `tbl_ads_batch_products` (
 --
 
 CREATE TABLE `tbl_affiliate_commission_settings` (
-  `afcommsetting_id` int(11) NOT NULL,
-  `afcommsetting_prodcat_id` int(11) NOT NULL,
-  `afcommsetting_user_id` int(11) NOT NULL COMMENT 'affiliate user_id',
+  `afcommsetting_id` int NOT NULL,
+  `afcommsetting_prodcat_id` int NOT NULL,
+  `afcommsetting_user_id` int NOT NULL COMMENT 'affiliate user_id',
   `afcommsetting_fees` decimal(12,4) NOT NULL,
   `afcommsetting_is_mandatory` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -201,15 +201,15 @@ CREATE TABLE `tbl_affiliate_commission_settings` (
 --
 
 CREATE TABLE `tbl_affiliate_commission_setting_history` (
-  `acsh_id` int(11) NOT NULL,
-  `acsh_afcommsetting_id` int(11) NOT NULL,
-  `acsh_afcommsetting_prodcat_id` int(11) NOT NULL,
-  `acsh_afcommsetting_user_id` int(11) NOT NULL,
+  `acsh_id` int NOT NULL,
+  `acsh_afcommsetting_id` int NOT NULL,
+  `acsh_afcommsetting_prodcat_id` int NOT NULL,
+  `acsh_afcommsetting_user_id` int NOT NULL,
   `acsh_afcommsetting_fees` decimal(12,2) NOT NULL,
   `acsh_afcommsetting_is_mandatory` tinyint(1) NOT NULL,
   `acsh_afcommsetting_deleted` tinyint(1) NOT NULL,
   `acsh_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -218,21 +218,21 @@ CREATE TABLE `tbl_affiliate_commission_setting_history` (
 --
 
 CREATE TABLE `tbl_attached_files` (
-  `afile_id` int(11) NOT NULL,
-  `afile_type` int(11) NOT NULL,
-  `afile_record_id` int(11) NOT NULL,
-  `afile_record_subid` int(11) NOT NULL,
-  `afile_lang_id` int(11) NOT NULL,
-  `afile_screen` int(11) NOT NULL COMMENT '1=>Desktop,2=>Ipad/Tablet,3=>Mobile',
-  `afile_physical_path` varchar(250) NOT NULL,
-  `afile_name` varchar(200) NOT NULL COMMENT 'For display Only',
-  `afile_attribute_title` varchar(250) NOT NULL,
-  `afile_attribute_alt` varchar(250) NOT NULL,
-  `afile_aspect_ratio` int(11) NOT NULL,
-  `afile_display_order` int(11) NOT NULL,
-  `afile_downloaded_times` int(11) NOT NULL,
+  `afile_id` int NOT NULL,
+  `afile_type` int NOT NULL,
+  `afile_record_id` int NOT NULL,
+  `afile_record_subid` int NOT NULL,
+  `afile_lang_id` int NOT NULL,
+  `afile_screen` int NOT NULL COMMENT '1=>Desktop,2=>Ipad/Tablet,3=>Mobile',
+  `afile_physical_path` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `afile_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For display Only',
+  `afile_attribute_title` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `afile_attribute_alt` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `afile_aspect_ratio` int NOT NULL,
+  `afile_display_order` int NOT NULL,
+  `afile_downloaded_times` int NOT NULL,
   `afile_updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_attached_files`
@@ -333,18 +333,18 @@ INSERT INTO `tbl_attached_files` (`afile_id`, `afile_type`, `afile_record_id`, `
 --
 
 CREATE TABLE `tbl_attached_files_temp` (
-  `afile_id` int(11) NOT NULL,
-  `afile_type` int(11) NOT NULL,
-  `afile_record_id` int(11) NOT NULL,
-  `afile_record_subid` int(11) NOT NULL,
-  `afile_lang_id` int(11) NOT NULL,
-  `afile_screen` int(11) NOT NULL COMMENT '1=>Desktop,2=>Ipad/Tablet,3=>Mobile',
-  `afile_physical_path` varchar(250) NOT NULL,
-  `afile_name` varchar(200) NOT NULL COMMENT 'For display Only',
-  `afile_display_order` int(11) NOT NULL,
+  `afile_id` int NOT NULL,
+  `afile_type` int NOT NULL,
+  `afile_record_id` int NOT NULL,
+  `afile_record_subid` int NOT NULL,
+  `afile_lang_id` int NOT NULL,
+  `afile_screen` int NOT NULL COMMENT '1=>Desktop,2=>Ipad/Tablet,3=>Mobile',
+  `afile_physical_path` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `afile_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For display Only',
+  `afile_display_order` int NOT NULL,
   `afile_downloaded` tinyint(1) NOT NULL,
   `afile_unique` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -353,9 +353,9 @@ CREATE TABLE `tbl_attached_files_temp` (
 --
 
 CREATE TABLE `tbl_attribute_groups` (
-  `attrgrp_id` int(11) NOT NULL,
-  `attrgrp_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for Product Comparison';
+  `attrgrp_id` int NOT NULL,
+  `attrgrp_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Used for Product Comparison';
 
 -- --------------------------------------------------------
 
@@ -364,13 +364,13 @@ CREATE TABLE `tbl_attribute_groups` (
 --
 
 CREATE TABLE `tbl_attribute_group_attributes` (
-  `attr_id` int(11) NOT NULL,
-  `attr_attrgrp_id` int(11) NOT NULL,
-  `attr_identifier` varchar(200) NOT NULL,
-  `attr_type` int(11) NOT NULL COMMENT 'number, text defined in class',
-  `attr_display_order` int(11) NOT NULL,
-  `attr_fld_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for Product Comparison';
+  `attr_id` int NOT NULL,
+  `attr_attrgrp_id` int NOT NULL,
+  `attr_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `attr_type` int NOT NULL COMMENT 'number, text defined in class',
+  `attr_display_order` int NOT NULL,
+  `attr_fld_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Used for Product Comparison';
 
 -- --------------------------------------------------------
 
@@ -379,13 +379,13 @@ CREATE TABLE `tbl_attribute_group_attributes` (
 --
 
 CREATE TABLE `tbl_attribute_group_attributes_lang` (
-  `attrlang_attr_id` int(11) NOT NULL,
-  `attrlang_lang_id` int(11) NOT NULL,
-  `attr_name` varchar(150) NOT NULL,
-  `attr_options` text NOT NULL,
-  `attr_prefix` varchar(30) NOT NULL,
-  `attr_postfix` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for Product Comparison';
+  `attrlang_attr_id` int NOT NULL,
+  `attrlang_lang_id` int NOT NULL,
+  `attr_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `attr_options` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `attr_prefix` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
+  `attr_postfix` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Used for Product Comparison';
 
 -- --------------------------------------------------------
 
@@ -394,12 +394,12 @@ CREATE TABLE `tbl_attribute_group_attributes_lang` (
 --
 
 CREATE TABLE `tbl_banners` (
-  `banner_id` int(11) NOT NULL,
-  `banner_blocation_id` int(11) NOT NULL,
-  `banner_type` int(11) NOT NULL,
-  `banner_record_id` int(11) NOT NULL,
-  `banner_url` varchar(255) NOT NULL,
-  `banner_target` varchar(100) NOT NULL,
+  `banner_id` int NOT NULL,
+  `banner_blocation_id` int NOT NULL,
+  `banner_type` int NOT NULL,
+  `banner_record_id` int NOT NULL,
+  `banner_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `banner_target` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `banner_added_on` datetime NOT NULL,
   `banner_start_date` date NOT NULL,
   `banner_end_date` date NOT NULL,
@@ -407,9 +407,9 @@ CREATE TABLE `tbl_banners` (
   `banner_end_time` time NOT NULL,
   `banner_active` tinyint(1) NOT NULL,
   `banner_deleted` tinyint(1) NOT NULL,
-  `banner_display_order` int(11) NOT NULL,
+  `banner_display_order` int NOT NULL,
   `banner_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -418,14 +418,14 @@ CREATE TABLE `tbl_banners` (
 --
 
 CREATE TABLE `tbl_banners_clicks` (
-  `bclick_id` bigint(20) NOT NULL,
-  `bclick_banner_id` int(11) NOT NULL,
-  `bclick_user_id` int(11) NOT NULL,
+  `bclick_id` bigint NOT NULL,
+  `bclick_banner_id` int NOT NULL,
+  `bclick_user_id` int NOT NULL,
   `bclick_datetime` datetime NOT NULL,
-  `bclick_ip` varchar(50) NOT NULL,
+  `bclick_ip` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `bclick_cost` decimal(10,4) NOT NULL,
-  `bclick_session_id` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `bclick_session_id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -434,10 +434,10 @@ CREATE TABLE `tbl_banners_clicks` (
 --
 
 CREATE TABLE `tbl_banners_lang` (
-  `bannerlang_banner_id` int(11) NOT NULL,
-  `bannerlang_lang_id` int(11) NOT NULL,
-  `banner_title` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `bannerlang_banner_id` int NOT NULL,
+  `bannerlang_lang_id` int NOT NULL,
+  `banner_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -446,12 +446,12 @@ CREATE TABLE `tbl_banners_lang` (
 --
 
 CREATE TABLE `tbl_banners_logs` (
-  `lbanner_banner_id` int(11) NOT NULL,
+  `lbanner_banner_id` int NOT NULL,
   `lbanner_date` date NOT NULL,
-  `lbanner_impressions` int(11) NOT NULL DEFAULT '1',
-  `lbanner_clicks` int(11) NOT NULL,
-  `lbanner_orders` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `lbanner_impressions` int NOT NULL DEFAULT '1',
+  `lbanner_clicks` int NOT NULL,
+  `lbanner_orders` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -460,13 +460,13 @@ CREATE TABLE `tbl_banners_logs` (
 --
 
 CREATE TABLE `tbl_banner_locations` (
-  `blocation_id` int(11) NOT NULL,
-  `blocation_identifier` varchar(255) NOT NULL,
-  `blocation_collection_id` int(11) NOT NULL,
-  `blocation_banner_count` int(11) NOT NULL,
+  `blocation_id` int NOT NULL,
+  `blocation_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `blocation_collection_id` int NOT NULL,
+  `blocation_banner_count` int NOT NULL,
   `blocation_promotion_cost` decimal(10,4) NOT NULL,
   `blocation_active` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_banner_locations`
@@ -482,10 +482,10 @@ INSERT INTO `tbl_banner_locations` (`blocation_id`, `blocation_identifier`, `blo
 --
 
 CREATE TABLE `tbl_banner_locations_lang` (
-  `blocationlang_blocation_id` int(11) NOT NULL,
-  `blocationlang_lang_id` int(11) NOT NULL,
-  `blocation_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `blocationlang_blocation_id` int NOT NULL,
+  `blocationlang_lang_id` int NOT NULL,
+  `blocation_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -494,11 +494,11 @@ CREATE TABLE `tbl_banner_locations_lang` (
 --
 
 CREATE TABLE `tbl_banner_location_dimensions` (
-  `bldimension_blocation_id` int(11) NOT NULL,
-  `bldimension_device_type` int(11) NOT NULL,
+  `bldimension_blocation_id` int NOT NULL,
+  `bldimension_device_type` int NOT NULL,
   `blocation_banner_width` decimal(10,0) NOT NULL,
   `blocation_banner_height` decimal(10,0) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_banner_location_dimensions`
@@ -516,15 +516,16 @@ INSERT INTO `tbl_banner_location_dimensions` (`bldimension_blocation_id`, `bldim
 --
 
 CREATE TABLE `tbl_blog_contributions` (
-  `bcontributions_id` int(11) NOT NULL,
-  `bcontributions_author_first_name` varchar(150) NOT NULL,
-  `bcontributions_author_last_name` varchar(150) NOT NULL,
-  `bcontributions_author_email` varchar(255) NOT NULL,
-  `bcontributions_author_phone` varchar(25) NOT NULL,
+  `bcontributions_id` int NOT NULL,
+  `bcontributions_author_first_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `bcontributions_author_last_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `bcontributions_author_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `bcontributions_author_phone_dcode` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `bcontributions_author_phone` bigint NOT NULL,
   `bcontributions_status` tinyint(1) NOT NULL,
   `bcontributions_added_on` datetime NOT NULL,
-  `bcontributions_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `bcontributions_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -533,17 +534,17 @@ CREATE TABLE `tbl_blog_contributions` (
 --
 
 CREATE TABLE `tbl_blog_post` (
-  `post_id` int(11) NOT NULL,
-  `post_identifier` varchar(255) NOT NULL,
+  `post_id` int NOT NULL,
+  `post_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `post_published` tinyint(1) NOT NULL,
   `post_comment_opened` tinyint(1) NOT NULL,
   `post_featured` tinyint(1) NOT NULL,
   `post_added_on` datetime NOT NULL,
   `post_published_on` datetime NOT NULL,
   `post_updated_on` datetime NOT NULL,
-  `post_view_count` bigint(20) NOT NULL,
+  `post_view_count` bigint NOT NULL,
   `post_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -552,14 +553,14 @@ CREATE TABLE `tbl_blog_post` (
 --
 
 CREATE TABLE `tbl_blog_post_categories` (
-  `bpcategory_id` int(11) NOT NULL,
-  `bpcategory_identifier` varchar(200) NOT NULL,
-  `bpcategory_parent` int(11) NOT NULL,
-  `bpcategory_display_order` int(11) NOT NULL,
+  `bpcategory_id` int NOT NULL,
+  `bpcategory_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `bpcategory_parent` int NOT NULL,
+  `bpcategory_display_order` int NOT NULL,
   `bpcategory_featured` tinyint(1) NOT NULL,
   `bpcategory_active` tinyint(1) NOT NULL,
   `bpcategory_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -568,10 +569,10 @@ CREATE TABLE `tbl_blog_post_categories` (
 --
 
 CREATE TABLE `tbl_blog_post_categories_lang` (
-  `bpcategorylang_bpcategory_id` int(11) NOT NULL,
-  `bpcategorylang_lang_id` int(11) NOT NULL,
-  `bpcategory_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `bpcategorylang_bpcategory_id` int NOT NULL,
+  `bpcategorylang_lang_id` int NOT NULL,
+  `bpcategory_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -580,18 +581,18 @@ CREATE TABLE `tbl_blog_post_categories_lang` (
 --
 
 CREATE TABLE `tbl_blog_post_comments` (
-  `bpcomment_id` int(11) NOT NULL,
-  `bpcomment_post_id` int(11) NOT NULL,
-  `bpcomment_user_id` int(11) NOT NULL,
-  `bpcomment_author_name` varchar(150) NOT NULL,
-  `bpcomment_author_email` varchar(255) NOT NULL,
-  `bpcomment_content` text NOT NULL,
+  `bpcomment_id` int NOT NULL,
+  `bpcomment_post_id` int NOT NULL,
+  `bpcomment_user_id` int NOT NULL,
+  `bpcomment_author_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `bpcomment_author_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `bpcomment_content` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `bpcomment_approved` tinyint(1) NOT NULL,
   `bpcomment_deleted` tinyint(1) NOT NULL,
   `bpcomment_added_on` datetime NOT NULL,
-  `bpcomment_user_ip` varchar(20) NOT NULL,
-  `bpcomment_user_agent` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `bpcomment_user_ip` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `bpcomment_user_agent` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -600,13 +601,13 @@ CREATE TABLE `tbl_blog_post_comments` (
 --
 
 CREATE TABLE `tbl_blog_post_lang` (
-  `postlang_post_id` int(11) NOT NULL,
-  `postlang_lang_id` int(11) NOT NULL,
-  `post_author_name` varchar(100) NOT NULL,
-  `post_title` varchar(255) NOT NULL,
-  `post_short_description` text NOT NULL,
-  `post_description` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `postlang_post_id` int NOT NULL,
+  `postlang_lang_id` int NOT NULL,
+  `post_author_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `post_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `post_short_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `post_description` longtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -615,9 +616,9 @@ CREATE TABLE `tbl_blog_post_lang` (
 --
 
 CREATE TABLE `tbl_blog_post_to_category` (
-  `ptc_bpcategory_id` int(11) NOT NULL,
-  `ptc_post_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ptc_bpcategory_id` int NOT NULL,
+  `ptc_post_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -626,18 +627,18 @@ CREATE TABLE `tbl_blog_post_to_category` (
 --
 
 CREATE TABLE `tbl_brands` (
-  `brand_id` int(11) NOT NULL,
-  `brand_identifier` varchar(200) NOT NULL,
-  `brand_seller_id` int(11) NOT NULL,
+  `brand_id` int NOT NULL,
+  `brand_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `brand_seller_id` int NOT NULL,
   `brand_featured` tinyint(1) NOT NULL,
   `brand_active` tinyint(1) NOT NULL,
-  `brand_status` tinyint(4) NOT NULL,
+  `brand_status` tinyint NOT NULL,
   `brand_deleted` tinyint(1) NOT NULL,
-  `brand_comments` varchar(250) NOT NULL,
+  `brand_comments` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
   `brand_updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `brand_requested_on` datetime NOT NULL,
   `brand_status_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -646,11 +647,11 @@ CREATE TABLE `tbl_brands` (
 --
 
 CREATE TABLE `tbl_brands_lang` (
-  `brandlang_brand_id` int(11) NOT NULL,
-  `brandlang_lang_id` int(11) NOT NULL,
-  `brand_name` varchar(200) NOT NULL,
-  `brand_short_description` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `brandlang_brand_id` int NOT NULL,
+  `brandlang_lang_id` int NOT NULL,
+  `brand_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `brand_short_description` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -659,14 +660,14 @@ CREATE TABLE `tbl_brands_lang` (
 --
 
 CREATE TABLE `tbl_catalog_request_messages` (
-  `scatrequestmsg_id` int(11) NOT NULL,
-  `scatrequestmsg_scatrequest_id` int(11) NOT NULL,
-  `scatrequestmsg_from_user_id` int(11) NOT NULL,
-  `scatrequestmsg_from_admin_id` int(11) NOT NULL,
-  `scatrequestmsg_msg` text NOT NULL,
+  `scatrequestmsg_id` int NOT NULL,
+  `scatrequestmsg_scatrequest_id` int NOT NULL,
+  `scatrequestmsg_from_user_id` int NOT NULL,
+  `scatrequestmsg_from_admin_id` int NOT NULL,
+  `scatrequestmsg_msg` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `scatrequestmsg_date` datetime NOT NULL,
   `scatrequestmsg_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -675,22 +676,22 @@ CREATE TABLE `tbl_catalog_request_messages` (
 --
 
 CREATE TABLE `tbl_collections` (
-  `collection_id` int(11) NOT NULL,
-  `collection_identifier` varchar(150) NOT NULL,
-  `collection_type` tinyint(4) NOT NULL COMMENT 'defined in collection model',
-  `collection_criteria` int(11) NOT NULL,
-  `collection_primary_records` tinyint(4) NOT NULL,
-  `collection_child_records` tinyint(4) NOT NULL,
-  `collection_display_order` int(11) NOT NULL,
+  `collection_id` int NOT NULL,
+  `collection_identifier` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `collection_type` tinyint NOT NULL COMMENT 'defined in collection model',
+  `collection_criteria` int NOT NULL,
+  `collection_primary_records` tinyint NOT NULL,
+  `collection_child_records` tinyint NOT NULL,
+  `collection_display_order` int NOT NULL,
   `collection_active` tinyint(1) NOT NULL,
   `collection_deleted` tinyint(1) NOT NULL,
-  `collection_link_url` varchar(255) NOT NULL,
-  `collection_layout_type` tinyint(4) NOT NULL COMMENT 'defined in collections model',
+  `collection_link_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `collection_layout_type` tinyint NOT NULL COMMENT 'defined in collections model',
   `collection_display_media_only` tinyint(1) NOT NULL,
   `collection_for_web` tinyint(1) NOT NULL,
   `collection_for_app` tinyint(1) NOT NULL,
   `collection_img_updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -699,12 +700,12 @@ CREATE TABLE `tbl_collections` (
 --
 
 CREATE TABLE `tbl_collections_lang` (
-  `collectionlang_collection_id` int(11) NOT NULL,
-  `collectionlang_lang_id` int(11) NOT NULL,
-  `collection_name` varchar(255) NOT NULL,
-  `collection_description` text NOT NULL,
-  `collection_link_caption` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `collectionlang_collection_id` int NOT NULL,
+  `collectionlang_lang_id` int NOT NULL,
+  `collection_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `collection_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `collection_link_caption` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -713,10 +714,10 @@ CREATE TABLE `tbl_collections_lang` (
 --
 
 CREATE TABLE `tbl_collection_to_records` (
-  `ctr_collection_id` int(11) NOT NULL,
-  `ctr_record_id` int(11) NOT NULL,
-  `ctr_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `ctr_collection_id` int NOT NULL,
+  `ctr_record_id` int NOT NULL,
+  `ctr_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -725,15 +726,15 @@ CREATE TABLE `tbl_collection_to_records` (
 --
 
 CREATE TABLE `tbl_commission_settings` (
-  `commsetting_id` int(11) NOT NULL,
-  `commsetting_product_id` int(11) NOT NULL,
-  `commsetting_user_id` int(11) NOT NULL,
-  `commsetting_prodcat_id` int(11) NOT NULL,
+  `commsetting_id` int NOT NULL,
+  `commsetting_product_id` int NOT NULL,
+  `commsetting_user_id` int NOT NULL,
+  `commsetting_prodcat_id` int NOT NULL,
   `commsetting_fees` decimal(10,2) NOT NULL COMMENT 'in %',
   `commsetting_is_mandatory` tinyint(1) NOT NULL,
   `commsetting_deleted` tinyint(1) NOT NULL,
   `commsetting_by_package` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_commission_settings`
@@ -749,16 +750,16 @@ INSERT INTO `tbl_commission_settings` (`commsetting_id`, `commsetting_product_id
 --
 
 CREATE TABLE `tbl_commission_setting_history` (
-  `csh_id` int(11) NOT NULL,
-  `csh_commsetting_id` int(11) NOT NULL,
-  `csh_commsetting_product_id` int(11) NOT NULL,
-  `csh_commsetting_user_id` int(11) NOT NULL,
-  `csh_commsetting_prodcat_id` int(11) NOT NULL,
+  `csh_id` int NOT NULL,
+  `csh_commsetting_id` int NOT NULL,
+  `csh_commsetting_product_id` int NOT NULL,
+  `csh_commsetting_user_id` int NOT NULL,
+  `csh_commsetting_prodcat_id` int NOT NULL,
   `csh_commsetting_fees` decimal(10,2) NOT NULL COMMENT 'in %',
   `csh_commsetting_is_mandatory` tinyint(1) NOT NULL,
   `csh_commsetting_deleted` tinyint(1) NOT NULL,
   `csh_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -767,10 +768,10 @@ CREATE TABLE `tbl_commission_setting_history` (
 --
 
 CREATE TABLE `tbl_configurations` (
-  `conf_name` varchar(70) NOT NULL,
-  `conf_val` text NOT NULL,
-  `conf_common` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `conf_name` varchar(70) COLLATE utf8mb4_general_ci NOT NULL,
+  `conf_val` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `conf_common` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_configurations`
@@ -855,6 +856,7 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 ('CONF_DEFAULT_CANCEL_SUBSCRIPTION_ORDER_STATUS', '12', 0),
 ('CONF_DEFAULT_COMPLETED_ORDER_STATUS', '1', 0),
 ('CONF_DEFAULT_DEIVERED_ORDER_STATUS', '5', 0),
+('CONF_DEFAULT_INPROCESS_ORDER_STATUS', '3', 0),
 ('CONF_DEFAULT_ORDER_STATUS', '1', 0),
 ('CONF_DEFAULT_PAID_ORDER_STATUS', '2', 0),
 ('CONF_DEFAULT_PLUGIN_1', '0', 0),
@@ -880,7 +882,7 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 ('CONF_DIGITAL_RETURN_READY_ORDER_STATUS', 'a:0:{}', 0),
 ('CONF_DISPLAY_CURRENCY_SYMBOL', 'L', 0),
 ('CONF_EMAIL_TEMPLATE_COLOR_CODE1', 'ff3a59', 0),
-('CONF_EMAIL_TEMPLATE_FOOTER_HTML1', '<table>        \r\n	<tbody>            \r\n		<tr style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                \r\n			<td style=\"padding:30px 0;\">Get in touch if you have any questions regarding our Services.<br />\r\n				                    Feel free to contact us 24/7. We are here to help.<br />\r\n				                    <br />\r\n				                    All the best,<br />\r\n				                    The {website_name} Team<br />\r\n				                    </td>            \r\n		</tr>            \r\n		<tr>            \r\n			<td>                \r\n				<!--\r\n				page footer start here\r\n				-->\r\n				                \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                    \r\n					<tbody>                        \r\n						<tr>                            \r\n							<td style=\"height:30px;\"></td>                        \r\n						</tr>                        \r\n						<tr>                            \r\n							<td style=\"background:rgba(0,0,0,0.04);padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                                \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                    \r\n									<tbody>                                        \r\n										<tr>                                            \r\n											<td style=\"padding:30px 0; font-size:20px; color:#000;\">Need more help?<br />\r\n												                                                 <a href=\"{contact_us_url}\" style=\"color:#ff3a59;\">We are here, ready to talk</a></td>                                        \r\n										</tr> <tr>  \r\n\r\n											<td style=\"padding:0 15px 15px 15px;\">{social_media_icons}</td>\r\n										</tr>                                   \r\n									</tbody>                                \r\n								</table></td>                        \r\n						</tr>                        \r\n						<tr>                            \r\n							<td style=\"padding:0; color:#999;vertical-align:top; line-height:20px;\">                                \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                    \r\n									<tbody>                                        \r\n										<tr>                                            \r\n											<td style=\"padding:20px 0 30px; text-align:center; font-size:13px; color:#999;\">{website_name} Inc.\r\n                                                \r\n												<!--\r\n												if these emails get annoying, please feel free to  <a href=\"#\" style=\"text-decoration:underline; color:#666;\">unsubscribe</a>.\r\n												-->\r\n												                                                </td>                                        \r\n										</tr>                                    \r\n									</tbody>                                \r\n								</table></td>                        \r\n						</tr>                        \r\n						<tr>                            \r\n							<td style=\"padding:0; height:50px;\"></td>                        \r\n						</tr>                    \r\n					</tbody>                \r\n				</table>                \r\n				<!--\r\n				page footer end here\r\n				-->\r\n				                   </td>        \r\n		</tr>    \r\n	</tbody>\r\n</table>', 0),
+('CONF_EMAIL_TEMPLATE_FOOTER_HTML1', '<table align=\"center\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%; margin:auto;\">\r\n                        <tr>\r\n                            <td style=\"background:#fff;vertical-align:top;text-align: center;\">\r\n                                <table cellpadding=\"0\" cellspacing=\"0\" style=\"width: 100%;\">\r\n                                    <tr>\r\n                                        <td style=\"color:#999;padding:30px 30px;\">\r\n                                            Get in touch if you have any questions regarding our Services.<br /> Feel free to contact us 24/7. We are here to help.<br />\r\n                                            <br /> All the best,<br /> The {website_name} Team<br />\r\n                                        </td>\r\n                                    </tr>\r\n                                </table>\r\n                            </td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td style=\"padding: 30px 30px;background:rgba(0,0,0,0.04); text-align: center;\">\r\n                                <h4 style=\"font-size:20px; color:#000;margin: 0;\">Need more help?</h4>\r\n                                <a href=\"{contact_us_url}\" style=\"color:#ff3a59;\">We are here, ready to talk</a>\r\n                                <br> <br>\r\n                                {social_media_icons}\r\n                            </td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td style=\"padding:0; text-align: center; font-size:13px; color:#999;vertical-align:top; line-height:20px;padding: 10px;\">\r\n                                {website_name} Inc.\r\n                            </td>\r\n                        </tr>\r\n                    </table>', 0),
 ('conf_email_template_logo_ratio', '1', 0),
 ('CONF_EMAIL_VERIFICATION_AFFILIATE_REGISTRATION', '1', 0),
 ('CONF_EMAIL_VERIFICATION_REGISTRATION', '1', 0),
@@ -927,10 +929,11 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 ('CONF_HOTJAR_HEAD_SCRIPT', '', 0),
 ('conf_items_per_page', '10', 0),
 ('CONF_ITEMS_PER_PAGE_CATALOG', '12', 0),
-('CONF_LANG_LABELS_UPDATED_AT', '1609314235', 0),
+('CONF_LANG_LABELS_UPDATED_AT', '1625563663', 0),
 ('CONF_LANG_SPECIFIC_URL', '1', 1),
 ('CONF_LAYOUT_MEGA_MENU', '0', 0),
 ('CONF_LIVE_CHAT_CODE', '<!--Start of Zendesk Chat Script--> <script type=\"text/javascript\"> window.$zopim||(function(d,s){var z=$zopim=function(c){ z._.push(c)},$=z.s= d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set. _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute(\'charset\',\'utf-8\'); $.src=\'https://v2.zopim.com/?4WyiH4X7HCl71H4ytqxQzgBLNoU9HoMM\';z.t=+new Date;$. type=\'text/javascript\';e.parentNode.insertBefore($,e)})(document,\'script\'); </script> <!--End of Zendesk Chat Script-->', 0),
+('CONF_LOADER', '1', 1),
 ('CONF_LOCATION_LEVEL', '0', 0),
 ('CONF_MAILCHIMP_KEY', '', 0),
 ('CONF_MAILCHIMP_LIST_ID', '', 0),
@@ -962,12 +965,8 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 ('CONF_PPC_CLICK_COUNT_TIME_INTERVAL', '3', 0),
 ('CONF_PPC_MIN_WALLET_BALANCE', '20', 0),
 ('CONF_PPC_PRODUCTS_HOME_PAGE', '10', 0),
-('conf_ppc_products_home_page_caption_1', 'Sponsored Products', 0),
-('CONF_PPC_PRODUCTS_HOME_PAGE_CAPTION_2', 'المنتجات برعاية', 0),
 ('CONF_PPC_SHOPS_HOME_PAGE', '4', 2),
 ('CONF_PPC_SHOPS_HOME_PAGE_CAPTION', '', 0),
-('conf_ppc_shops_home_page_caption_1', 'Sponsored Shops', 0),
-('CONF_PPC_SHOPS_HOME_PAGE_CAPTION_2', 'محلات برعاية', 0),
 ('CONF_PPC_SLIDES_HOME_PAGE', '5', 0),
 ('CONF_PPC_WALLET_BALANCE_ALERT', '100', 0),
 ('CONF_PPC_WALLET_CHARGE_DAYS_INTERVAL', '1', 0),
@@ -986,6 +985,7 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 ('CONF_PURCHASE_ORDER_STATUS', 'a:6:{i:0;s:1:\"2\";i:1;s:1:\"3\";i:2;s:1:\"4\";i:3;s:1:\"5\";i:4;s:1:\"7\";i:5;s:1:\"9\";}', 0),
 ('conf_pwa_service_worker', '1', 0),
 ('CONF_RADIUS_DISTANCE_IN_MILES', '0', 0),
+('conf_read_labels_from_file', '1', 0),
 ('CONF_READ_MORE_COOKIES_BUTTON_TEXT_1', 'Read More', 0),
 ('conf_recaptacha_sitekey', '', 0),
 ('CONF_RECAPTCHA_SECRETKEY', '', 0),
@@ -1121,9 +1121,9 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
 --
 
 CREATE TABLE `tbl_content_block_to_category` (
-  `cbtc_prodcat_id` int(11) NOT NULL,
-  `cbtc_cpage_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cbtc_prodcat_id` int NOT NULL,
+  `cbtc_cpage_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1132,11 +1132,11 @@ CREATE TABLE `tbl_content_block_to_category` (
 --
 
 CREATE TABLE `tbl_content_pages` (
-  `cpage_id` int(11) NOT NULL,
-  `cpage_identifier` varchar(255) NOT NULL,
-  `cpage_layout` tinyint(4) NOT NULL,
+  `cpage_id` int NOT NULL,
+  `cpage_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `cpage_layout` tinyint NOT NULL,
   `cpage_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_content_pages`
@@ -1154,12 +1154,12 @@ INSERT INTO `tbl_content_pages` (`cpage_id`, `cpage_identifier`, `cpage_layout`,
 --
 
 CREATE TABLE `tbl_content_pages_block_lang` (
-  `cpblocklang_id` int(11) NOT NULL,
-  `cpblocklang_lang_id` int(11) NOT NULL,
-  `cpblocklang_cpage_id` int(11) NOT NULL,
-  `cpblocklang_block_id` int(11) NOT NULL,
-  `cpblocklang_text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cpblocklang_id` int NOT NULL,
+  `cpblocklang_lang_id` int NOT NULL,
+  `cpblocklang_cpage_id` int NOT NULL,
+  `cpblocklang_block_id` int NOT NULL,
+  `cpblocklang_text` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_content_pages_block_lang`
@@ -1194,13 +1194,13 @@ INSERT INTO `tbl_content_pages_block_lang` (`cpblocklang_id`, `cpblocklang_lang_
 --
 
 CREATE TABLE `tbl_content_pages_lang` (
-  `cpagelang_cpage_id` int(11) NOT NULL,
-  `cpagelang_lang_id` int(11) NOT NULL,
-  `cpage_title` varchar(255) NOT NULL,
-  `cpage_content` text NOT NULL,
-  `cpage_image_title` varchar(255) NOT NULL,
-  `cpage_image_content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cpagelang_cpage_id` int NOT NULL,
+  `cpagelang_lang_id` int NOT NULL,
+  `cpage_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `cpage_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `cpage_image_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `cpage_image_content` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_content_pages_lang`
@@ -1223,15 +1223,15 @@ INSERT INTO `tbl_content_pages_lang` (`cpagelang_cpage_id`, `cpagelang_lang_id`,
 --
 
 CREATE TABLE `tbl_countries` (
-  `country_id` int(11) NOT NULL,
-  `country_code` varchar(2) NOT NULL,
-  `country_code_alpha3` varchar(3) NOT NULL,
+  `country_id` int NOT NULL,
+  `country_code` varchar(2) COLLATE utf8mb4_general_ci NOT NULL,
+  `country_code_alpha3` varchar(3) COLLATE utf8mb4_general_ci NOT NULL,
   `country_active` tinyint(1) NOT NULL,
-  `country_zone_id` int(11) NOT NULL,
-  `country_currency_id` int(11) NOT NULL,
-  `country_language_id` int(11) NOT NULL,
+  `country_zone_id` int NOT NULL,
+  `country_currency_id` int NOT NULL,
+  `country_language_id` int NOT NULL,
   `country_updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_countries`
@@ -1495,10 +1495,10 @@ INSERT INTO `tbl_countries` (`country_id`, `country_code`, `country_code_alpha3`
 --
 
 CREATE TABLE `tbl_countries_lang` (
-  `countrylang_country_id` int(11) NOT NULL,
-  `countrylang_lang_id` int(11) NOT NULL,
-  `country_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `countrylang_country_id` int NOT NULL,
+  `countrylang_lang_id` int NOT NULL,
+  `country_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_countries_lang`
@@ -2011,22 +2011,22 @@ INSERT INTO `tbl_countries_lang` (`countrylang_country_id`, `countrylang_lang_id
 --
 
 CREATE TABLE `tbl_coupons` (
-  `coupon_id` int(11) NOT NULL,
-  `coupon_identifier` varchar(200) NOT NULL,
-  `coupon_type` tinyint(4) NOT NULL COMMENT 'Defined in model like discount or free shipping coupon',
-  `coupon_code` varchar(50) NOT NULL,
-  `coupon_valid_for` int(11) NOT NULL COMMENT 'Defined in Discount Coupon model',
+  `coupon_id` int NOT NULL,
+  `coupon_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `coupon_type` tinyint NOT NULL COMMENT 'Defined in model like discount or free shipping coupon',
+  `coupon_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `coupon_valid_for` int NOT NULL COMMENT 'Defined in Discount Coupon model',
   `coupon_min_order_value` decimal(12,2) NOT NULL,
   `coupon_discount_in_percent` tinyint(1) NOT NULL,
   `coupon_discount_value` decimal(12,2) NOT NULL,
   `coupon_max_discount_value` decimal(12,2) NOT NULL,
   `coupon_start_date` date NOT NULL,
   `coupon_end_date` date NOT NULL,
-  `coupon_uses_count` int(11) NOT NULL,
-  `coupon_uses_coustomer` int(11) NOT NULL,
+  `coupon_uses_count` int NOT NULL,
+  `coupon_uses_coustomer` int NOT NULL,
   `coupon_active` tinyint(1) NOT NULL,
   `coupon_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2035,13 +2035,13 @@ CREATE TABLE `tbl_coupons` (
 --
 
 CREATE TABLE `tbl_coupons_history` (
-  `couponhistory_id` int(11) NOT NULL,
-  `couponhistory_coupon_id` int(11) NOT NULL,
-  `couponhistory_order_id` varchar(15) NOT NULL,
-  `couponhistory_user_id` int(11) NOT NULL,
+  `couponhistory_id` int NOT NULL,
+  `couponhistory_coupon_id` int NOT NULL,
+  `couponhistory_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `couponhistory_user_id` int NOT NULL,
   `couponhistory_amount` double(12,2) NOT NULL,
   `couponhistory_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2050,11 +2050,11 @@ CREATE TABLE `tbl_coupons_history` (
 --
 
 CREATE TABLE `tbl_coupons_hold` (
-  `couponhold_id` int(11) NOT NULL,
-  `couponhold_coupon_id` int(11) NOT NULL,
-  `couponhold_user_id` int(11) NOT NULL,
+  `couponhold_id` int NOT NULL,
+  `couponhold_coupon_id` int NOT NULL,
+  `couponhold_user_id` int NOT NULL,
   `couponhold_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2063,10 +2063,10 @@ CREATE TABLE `tbl_coupons_hold` (
 --
 
 CREATE TABLE `tbl_coupons_hold_pending_order` (
-  `ochold_order_id` varchar(15) CHARACTER SET utf8 NOT NULL,
-  `ochold_coupon_id` int(11) NOT NULL,
+  `ochold_order_id` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `ochold_coupon_id` int NOT NULL,
   `ochold_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_coupons_hold_pending_order`
@@ -2082,11 +2082,11 @@ INSERT INTO `tbl_coupons_hold_pending_order` (`ochold_order_id`, `ochold_coupon_
 --
 
 CREATE TABLE `tbl_coupons_lang` (
-  `couponlang_coupon_id` int(11) NOT NULL,
-  `couponlang_lang_id` int(11) NOT NULL,
-  `coupon_title` varchar(255) NOT NULL,
-  `coupon_description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `couponlang_coupon_id` int NOT NULL,
+  `couponlang_lang_id` int NOT NULL,
+  `coupon_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `coupon_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2095,9 +2095,9 @@ CREATE TABLE `tbl_coupons_lang` (
 --
 
 CREATE TABLE `tbl_coupon_to_brands` (
-  `ctb_brand_id` int(11) NOT NULL,
-  `ctb_coupon_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `ctb_brand_id` int NOT NULL,
+  `ctb_coupon_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2106,9 +2106,9 @@ CREATE TABLE `tbl_coupon_to_brands` (
 --
 
 CREATE TABLE `tbl_coupon_to_category` (
-  `ctc_prodcat_id` int(11) NOT NULL,
-  `ctc_coupon_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ctc_prodcat_id` int NOT NULL,
+  `ctc_coupon_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2117,9 +2117,9 @@ CREATE TABLE `tbl_coupon_to_category` (
 --
 
 CREATE TABLE `tbl_coupon_to_plan` (
-  `ctplan_spplan_id` int(11) NOT NULL,
-  `ctplan_coupon_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ctplan_spplan_id` int NOT NULL,
+  `ctplan_coupon_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2128,9 +2128,9 @@ CREATE TABLE `tbl_coupon_to_plan` (
 --
 
 CREATE TABLE `tbl_coupon_to_products` (
-  `ctp_product_id` int(11) NOT NULL,
-  `ctp_coupon_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ctp_product_id` int NOT NULL,
+  `ctp_coupon_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2139,9 +2139,9 @@ CREATE TABLE `tbl_coupon_to_products` (
 --
 
 CREATE TABLE `tbl_coupon_to_seller` (
-  `cts_user_id` int(11) NOT NULL,
-  `cts_coupon_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cts_user_id` int NOT NULL,
+  `cts_coupon_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2150,9 +2150,9 @@ CREATE TABLE `tbl_coupon_to_seller` (
 --
 
 CREATE TABLE `tbl_coupon_to_shops` (
-  `cts_shop_id` int(11) NOT NULL,
-  `cts_coupon_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `cts_shop_id` int NOT NULL,
+  `cts_coupon_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2161,9 +2161,9 @@ CREATE TABLE `tbl_coupon_to_shops` (
 --
 
 CREATE TABLE `tbl_coupon_to_users` (
-  `ctu_user_id` int(11) NOT NULL,
-  `ctu_coupon_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ctu_user_id` int NOT NULL,
+  `ctu_coupon_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2172,12 +2172,12 @@ CREATE TABLE `tbl_coupon_to_users` (
 --
 
 CREATE TABLE `tbl_cron_log` (
-  `cronlog_id` int(11) NOT NULL,
-  `cronlog_cron_id` int(11) NOT NULL,
+  `cronlog_id` int NOT NULL,
+  `cronlog_cron_id` int NOT NULL,
   `cronlog_started_at` datetime NOT NULL,
   `cronlog_ended_at` datetime NOT NULL,
-  `cronlog_details` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cronlog_details` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2186,12 +2186,12 @@ CREATE TABLE `tbl_cron_log` (
 --
 
 CREATE TABLE `tbl_cron_schedules` (
-  `cron_id` int(11) NOT NULL,
-  `cron_name` varchar(255) NOT NULL,
-  `cron_command` varchar(255) NOT NULL,
-  `cron_duration` int(11) NOT NULL COMMENT 'Minutes',
-  `cron_active` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cron_id` int NOT NULL,
+  `cron_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `cron_command` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `cron_duration` int NOT NULL COMMENT 'Minutes',
+  `cron_active` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_cron_schedules`
@@ -2214,7 +2214,8 @@ INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_
 (14, 'Automating the order completion process', 'Orders/changeOrderStatus', 1440, 1),
 (15, 'Abandoned Cart Reminder Email', 'AbandonedCart/sendReminderAbandonedCart', 600, 1),
 (16, 'Send FCM Push Notifications', 'PushNotification/send', 15, 1),
-(17, 'Full text search', 'FullTextSearch/setup', 1440, 1);
+(17, 'Full text search', 'FullTextSearch/setup', 1440, 1),
+(18, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', 1440, 1);
 
 -- --------------------------------------------------------
 
@@ -2223,15 +2224,15 @@ INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_
 --
 
 CREATE TABLE `tbl_currency` (
-  `currency_id` int(11) NOT NULL,
-  `currency_code` varchar(10) NOT NULL,
-  `currency_symbol_left` varchar(10) NOT NULL,
-  `currency_symbol_right` varchar(10) NOT NULL,
+  `currency_id` int NOT NULL,
+  `currency_code` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `currency_symbol_left` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `currency_symbol_right` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
   `currency_value` decimal(20,8) NOT NULL,
   `currency_active` tinyint(1) NOT NULL,
   `currency_date_modified` datetime NOT NULL,
-  `currency_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `currency_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_currency`
@@ -2250,10 +2251,10 @@ INSERT INTO `tbl_currency` (`currency_id`, `currency_code`, `currency_symbol_lef
 --
 
 CREATE TABLE `tbl_currency_lang` (
-  `currencylang_currency_id` int(11) NOT NULL,
-  `currencylang_lang_id` int(11) NOT NULL,
-  `currency_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `currencylang_currency_id` int NOT NULL,
+  `currencylang_lang_id` int NOT NULL,
+  `currency_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_currency_lang`
@@ -2276,14 +2277,14 @@ INSERT INTO `tbl_currency_lang` (`currencylang_currency_id`, `currencylang_lang_
 --
 
 CREATE TABLE `tbl_email_archives` (
-  `emailarchive_id` int(11) NOT NULL,
-  `emailarchive_to_email` varchar(100) NOT NULL,
-  `emailarchive_tpl_name` varchar(255) NOT NULL,
-  `emailarchive_subject` text NOT NULL,
-  `emailarchive_body` text NOT NULL,
-  `emailarchive_headers` text NOT NULL,
+  `emailarchive_id` int NOT NULL,
+  `emailarchive_to_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `emailarchive_tpl_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `emailarchive_subject` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `emailarchive_body` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `emailarchive_headers` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `emailarchive_sent_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2292,109 +2293,109 @@ CREATE TABLE `tbl_email_archives` (
 --
 
 CREATE TABLE `tbl_email_templates` (
-  `etpl_code` varchar(50) NOT NULL,
-  `etpl_lang_id` int(11) NOT NULL,
-  `etpl_name` varchar(255) NOT NULL,
-  `etpl_subject` varchar(255) NOT NULL,
-  `etpl_body` text NOT NULL,
-  `etpl_replacements` text NOT NULL,
+  `etpl_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `etpl_lang_id` int NOT NULL,
+  `etpl_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `etpl_subject` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `etpl_body` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `etpl_replacements` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `etpl_status` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_email_templates`
 --
 
 INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
-('abandoned_cart_deleted_discount_notification', 1, 'Abandoned Cart Deleted Discount Notification', 'Abandoned Cart Deleted Discount Notification', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td style=\"background:#ff3a59;\">\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Abandoned Cart Deleted</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong></td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:0 10px; line-height:1.3; text-align:center; color:#333333;vertical-align:top; font-size: 30px;\">We noticed you removed <span style=\"text-decoration: underline;\">{product_name}</span> from your cart.</td>\n                                    </tr> \n                                               \n                                    <tr>\n                                    <td style=\"padding:20px 0 10px 10px; line-height:1.3; text-align:center; color:#999999;vertical-align:top; font-size:16px;\">Just for you : Get <span style=\"color:#333; font-weight: bold;\">{discount}</span> off on your order with code <span style=\"color:#333; font-weight: bold;\">{coupon_code}.</span>\n                                                   \n                                        <a href=\"{checkout_now}\" style=\"background: #ff3a59;border:none; border-radius: 4px; color: #fff; cursor: pointer;margin:10px 0 0 0;width: auto; font-weight: normal; padding: 10px 20px; display: inline-block; \">Check out now </a></td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{discount} <br>\r\n{coupon_code} <br>\r\n{checkout_now} <br>', 1),
-('abandoned_cart_discount_notification', 1, 'Abandoned Cart Discount Notification', 'Abandoned Cart Discount Notification', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td style=\"background:#ff3a59;\">\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Abandoned Cart Discount</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    \n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong></td>\n                                    </tr>\n                                    \n                                    <tr>\n                                                <td style=\"padding:0 10px; line-height:1.3; text-align:center; color:#333333;vertical-align:top; font-size: 30px;\">Finish your order before your items sell out!</td>\n                                    </tr> \n\n                                    <tr>\n                                        <td style=\"padding:20px 0 10px 10px; line-height:1.3; text-align:center; color:#999999;vertical-align:top; font-size:16px;\">Just for you : Get <span style=\"color:#333; font-weight: bold;\">{discount} OFF</span> off on your order with code <span style=\"color:#333; font-weight: bold;\">{coupon_code}.</span>\n\n                                        <a href=\"{checkout_now}\" style=\"background: #ff3a59;border:none; border-radius: 4px; color: #fff; cursor: pointer;margin:10px 0 0 0;width: auto; font-weight: normal; padding: 10px 20px; display: inline-block;\">Check out now </a></td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:30px 0;\">\n                                            <table>\n                                                <tr>\n                                                    <td style=\"padding-right: 25px;\"><img style=\"border: solid 1px #ececec; padding: 10px; border-radius: 4px;\" src=\"{product_image}\"></td>\n                                                    <td style=\"text-align: left;\">\n                                                        <span style=\"font-size: 20px; font-weight:normal; color:#999999; \">{product_name}</span>\n                                                         <span style=\"font-size: 14px; font-weight: bold; color:#000000; display: block; padding: 20px 0;\">{product_price}</span>\n                                                    </td>\n                                                </tr>\n                                            </table>\n\n                                        </td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{discount} <br>\r\n{coupon_code} <br>\r\n{checkout_now} <br>\r\n{product_image} <br>\r\n{product_name} <br>\r\n{product_price}<br>', 1),
-('abandoned_cart_email', 1, 'Abandoned Cart Email', 'Abandoned Cart Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td style=\"background:#ff3a59;\">\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Abandoned Cart</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong></td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:0 10px; line-height:1.3; text-align:center; color:#333333;vertical-align:top; font-size: 30px;\">We noticed you left something behind!</td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:30px 0;\">\n                                        <table>{product_detail_table}</table>\n                                        </td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{product_detail_table} <br/>', 1),
-('account_credited_debited', 1, 'Credits Received/Debited Email for Vendor', 'Your account has been {txn_type} on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Transaction</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your account has been {txn_type} at <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">ID</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{txn_id}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Amount<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{txn_amount}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Comment</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{txn_comments}</td>\r\n                                                    </tr> \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br />\r\n{txn_type} - Credited or Debited<br>{txn_id} - Transaction ID<br/>{txn_amount} - Transaction Amount<br>{txn_comments} - Transaction Comments<br>{website_name} - Name of the website.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('admin_forgot_password', 1, 'Forgot Password Email', 'Forgot Password Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n			<tr>\r\n				<td style=\"background:#ff3a59;\">\r\n					<!--\r\n					page title start here\r\n					-->\r\n					   \r\n					<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n						<tbody>\r\n							<tr>\r\n								<td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n									<h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n									<h2 style=\"margin:0; font-size:34px; padding:0;\">Retrieve Password!</h2></td>\r\n							</tr>\r\n						</tbody>\r\n					</table>\r\n					<!--\r\n					page title end here\r\n					-->\r\n					   </td>\r\n			</tr>\r\n			<tr>\r\n				<td>\r\n					<!--\r\n					page body start here\r\n					-->\r\n					   \r\n					<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n						<tbody>\r\n							<tr>\r\n								<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n									<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n										<tbody>\r\n											<tr>\r\n												<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n													It seems that you have used forgot password option at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n											</tr>\r\n											<tr>\r\n												<td style=\"padding:20px 0 30px;\">Please click here to below link to change your password.<br />\r\n													<a href=\"{reset_url}\" style=\"font-size:15px; color:#ff3a59;\">Click here</a></td>\r\n											</tr>\r\n											<tr>\r\n												<td style=\"padding:0 0 30px;\">Please ignore this email if you did not use the forgot password option</td>\r\n											</tr>\r\n											\r\n										</tbody>\r\n									</table></td>\r\n							</tr>\r\n						</tbody>\r\n					</table>\r\n					<!--\r\n					page body end here\r\n					-->\r\n					   </td>\r\n			</tr>\r\n			</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('admin_notification_abusive_review_posted', 1, 'Abusive Review posted - Notificationsssas', 'Abusive review posted at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n		<tr>\r\n			<td style=\"background:#ff3a59;\">\r\n				<!--\r\n				page title start here\r\n				-->\r\n				   \r\n				<table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n					<tbody>\r\n						<tr>\r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Order feedback survey</h2></td>\r\n						</tr>\r\n					</tbody>\r\n				</table>\r\n				<!--\r\n				page title end here\r\n				-->\r\n				   </td>\r\n		</tr>\r\n		<tr>\r\n			<td>\r\n				<!--\r\n				page body start here\r\n				-->\r\n				   \r\n				<table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n					<tbody>\r\n						<tr>\r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n								<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n									<tbody>\r\n										<tr>\r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n												{user_full_name} has posted an abusive review at <a href=\"{website_url}\">{website_name}</a>.<a href=\"{review_url}\" style=\"color:#ff3a59;\">Link to review</a></td>\r\n										</tr>\r\n										\r\n									</tbody>\r\n								</table></td>\r\n						</tr>\r\n					</tbody>\r\n				</table>\r\n				<!--\r\n				page body end here\r\n				-->\r\n				   </td>\r\n		</tr>\r\n	</table>', '{user_full_name} Name of the email receiver<br/> \r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('admin_order_email', 1, 'Admin Order Email', 'Order placed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Received</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            An order has been received on your site <a href=\"{website_url}\">{website_name}</a> with Order Invoice Number {order_invoice_number}.<br />\r\n                                            Please find the order information below.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\n{order_invoice_number} - Invoice Number of the order.<br/>\n{order_date} - Date of the order.<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{order_products_table_format} Order Products Summary in Tabular Format.<br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
-('ADMIN_ORDER_PAYMENT_TRANSFERRED_TO_BANK', 1, 'Order Payment Transferred To Bank', 'Order #{ORDER_ID} Payment Transferred To Bank', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Bank s</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\" colspan=\"2\">\r\n                                            <strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            Order Payment Detail Submitted BY {USER_NAME} For #{ORDER_ID}. <br />\r\n                                            Please find the transfer information below.\r\n                                        </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Payment Method</td>\r\n                                        <td style=\"padding:0 0 30px;\">{PAYMENT_METHOD}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Transaction Id</td>\r\n                                        <td style=\"padding:0 0 30px;\">{TRANSACTION_ID}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Amount</td>\r\n                                        <td style=\"padding:0 0 30px;\">{AMOUNT}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Comments</td>\r\n                                        <td style=\"padding:0 0 30px;\">{COMMENTS}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{USER_NAME} - Name of the User.<br>\r\n{ORDER_ID} - Order Id.<br>\r\n{PAYMENT_METHOD} - Payment Method Used By Buyer.<br>\r\n{TRANSACTION_ID} - Transaction Id<br>\r\n{AMOUNT} - Amount<br>\r\n{COMMENTS} - Comments.<br>', 1),
-('affiliate_share_invitation_email', 1, 'Affiliate Invitation Email for Friends', 'Your friend has invited you for Amazing Discounts on {website_name}.', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Yo!kart Invitation!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Friend </strong><br />\r\n                                            This is an invitation from {user_full_name} to join them on <a href=\"{website_url}\">{website_name}</a> and enjoy Amazing Discounts.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Click the link below to accept this invitation:<br />\r\n                                            <a href=\"{tracking_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{invitation_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{tracking_url} referral url\r\n{invitation_message} <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('affiliate_welcome_registration', 1, 'Affiliate Welcome Mail on Registration', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            Thank you for signing up at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">We are thrilled to have you aboard! You have taken a great first step and we are so excited to connect directly with you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">If you require any assistance in using our site, or have any feedback or suggestions, you can email us at {contact_us_email}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the signed up user.<br>\r\n{email} Email Address of the signed up user.<br>\r\n{username} Username of the signed up User <br/>\r\n{contact_us_email} - Contact Us Email Address<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('blog_comment_status_changed', 1, 'Blog Comment Status Change - Notification', 'Blog Comment Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Blog Contribution Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                        Your Comment (for the post \'{post_title}\' / posted on {posted_on_datetime}) status has been changed to {new_status} at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                        </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_status} New/Current Order Status<br/>\r\n{posted_on_datetime} - Comment Posted on date time.<br/>\r\n{post_title} - Blog Post title.<br/>\r\n{comment} - Comment.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('blog_contribution_status_changed', 1, 'Blog Contribution Status Change - Notification', 'Blog Contribution Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Blog Contribution Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                        Your blog contribution (posted on {posted_on_datetime}) status has been changed to {new_status} at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                        </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_status} New/Current Order Status<br/>\r\n{posted_on_datetime} - Contribution Posted on date time.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('buyer_notification_review_order_product', 1, 'Buyer Review Order product - Notification', 'Review you order at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order feedback survey</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                                                                          Thanks for shoppint ( Order Invoice Number {invoice_number}) with <a href=\"{website_url}\">{website_name}</a>. Please feedback your experience to this order  <a href=\"{review_page_url}\" style=\"color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_order_status} New/Current Order Status<br/>\r\n{invoice_number} - Child Order Invoice Number.<br/>\r\n{order_items_table_format} - Child Order Items in Tabular Format.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('buyer_notification_review_status_updated', 1, 'Buyer Product Review Status Change - Notification', 'Product Review Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Review Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            Your Review status has been changed to {new_status} at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                            </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_status} New/Current Review Status<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('cancellation_request_approved_declined', 1, 'Cancellation Request Approved/Declined Email for User', 'Order Cancellation Request {request_status} on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Cancellation Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your order cancellation request on {invoice_number} has been {request_status} on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{invoice_number} Order Invoice Number<br />\r\n{request_status} New Withdrawal Request Status<br />\r\n{website_name} Name of the website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
+('abandoned_cart_deleted_discount_notification', 1, 'Abandoned Cart Deleted Discount Notification', 'Abandoned Cart Deleted Discount Notification', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td >\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Abandoned Cart Deleted</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong></td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:0 10px; line-height:1.3; text-align:center; color:#333333;vertical-align:top; font-size: 30px;\">We noticed you removed <span style=\"text-decoration: underline;\">{product_name}</span> from your cart.</td>\n                                    </tr> \n                                               \n                                    <tr>\n                                    <td style=\"padding:20px 0 10px 10px; line-height:1.3; text-align:center; color:#999999;vertical-align:top; font-size:16px;\">Just for you : Get <span style=\"color:#333; font-weight: bold;\">{discount}</span> off on your order with code <span style=\"color:#333; font-weight: bold;\">{coupon_code}.</span>\n                                                   \n                                        <a href=\"{checkout_now}\" style=\"background: #ff3a59;border:none; border-radius: 4px; color: #fff; cursor: pointer;margin:10px 0 0 0;width: auto; font-weight: normal; padding: 10px 20px; display: inline-block; \">Check out now </a></td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{discount} <br>\r\n{coupon_code} <br>\r\n{checkout_now} <br>', 1),
+('abandoned_cart_discount_notification', 1, 'Abandoned Cart Discount Notification', 'Abandoned Cart Discount Notification', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td >\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Abandoned Cart Discount</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    \n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong></td>\n                                    </tr>\n                                    \n                                    <tr>\n                                                <td style=\"padding:0 10px; line-height:1.3; text-align:center; color:#333333;vertical-align:top; font-size: 30px;\">Finish your order before your items sell out!</td>\n                                    </tr> \n\n                                    <tr>\n                                        <td style=\"padding:20px 0 10px 10px; line-height:1.3; text-align:center; color:#999999;vertical-align:top; font-size:16px;\">Just for you : Get <span style=\"color:#333; font-weight: bold;\">{discount} OFF</span> off on your order with code <span style=\"color:#333; font-weight: bold;\">{coupon_code}.</span>\n\n                                        <a href=\"{checkout_now}\" style=\"background: #ff3a59;border:none; border-radius: 4px; color: #fff; cursor: pointer;margin:10px 0 0 0;width: auto; font-weight: normal; padding: 10px 20px; display: inline-block;\">Check out now </a></td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:30px 0;\">\n                                            <table>\n                                                <tr>\n                                                    <td style=\"padding-right: 25px;\"><img style=\"border: solid 1px #ececec; padding: 10px; border-radius: 4px;\" src=\"{product_image}\"></td>\n                                                    <td style=\"text-align: left;\">\n                                                        <span style=\"font-size: 20px; font-weight:normal; color:#999999; \">{product_name}</span>\n                                                         <span style=\"font-size: 14px; font-weight: bold; color:#000000; display: block; padding: 20px 0;\">{product_price}</span>\n                                                    </td>\n                                                </tr>\n                                            </table>\n\n                                        </td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{discount} <br>\r\n{coupon_code} <br>\r\n{checkout_now} <br>\r\n{product_image} <br>\r\n{product_name} <br>\r\n{product_price}<br>', 1),
+('abandoned_cart_email', 1, 'Abandoned Cart Email', 'Abandoned Cart Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td >\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Abandoned Cart</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong></td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:0 10px; line-height:1.3; text-align:center; color:#333333;vertical-align:top; font-size: 30px;\">We noticed you left something behind!</td>\n                                    </tr>\n                                    <tr>\n                                        <td style=\"padding:30px 0;\">\n                                        <table>{product_detail_table}</table>\n                                        </td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{product_detail_table} <br/>', 1),
+('account_credited_debited', 1, 'Credits Received/Debited Email for Vendor', 'Your account has been {txn_type} on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Transaction</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your account has been {txn_type} at <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">ID</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{txn_id}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Amount<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{txn_amount}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Comment</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{txn_comments}</td>\r\n                                                    </tr> \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br />\r\n{txn_type} - Credited or Debited<br>{txn_id} - Transaction ID<br/>{txn_amount} - Transaction Amount<br>{txn_comments} - Transaction Comments<br>{website_name} - Name of the website.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('admin_forgot_password', 1, 'Forgot Password Email', 'Forgot Password Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n			<tr>\r\n				<td >\r\n					<!--\r\n					page title start here\r\n					-->\r\n					   \r\n					<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n						<tbody>\r\n							<tr>\r\n								<td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n									<h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n									<h2 style=\"margin:0; font-size:34px; padding:0;\">Retrieve Password!</h2></td>\r\n							</tr>\r\n						</tbody>\r\n					</table>\r\n					<!--\r\n					page title end here\r\n					-->\r\n					   </td>\r\n			</tr>\r\n			<tr>\r\n				<td>\r\n					<!--\r\n					page body start here\r\n					-->\r\n					   \r\n					<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n						<tbody>\r\n							<tr>\r\n								<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n									<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n										<tbody>\r\n											<tr>\r\n												<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n													It seems that you have used forgot password option at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n											</tr>\r\n											<tr>\r\n												<td style=\"padding:20px 0 30px;\">Please click here to below link to change your password.<br />\r\n													<a href=\"{reset_url}\" style=\"font-size:15px; color:#ff3a59;\">Click here</a></td>\r\n											</tr>\r\n											<tr>\r\n												<td style=\"padding:0 0 30px;\">Please ignore this email if you did not use the forgot password option</td>\r\n											</tr>\r\n											\r\n										</tbody>\r\n									</table></td>\r\n							</tr>\r\n						</tbody>\r\n					</table>\r\n					<!--\r\n					page body end here\r\n					-->\r\n					   </td>\r\n			</tr>\r\n			</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('admin_notification_abusive_review_posted', 1, 'Abusive Review posted - Notificationsssas', 'Abusive review posted at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n		<tr>\r\n			<td >\r\n				<!--\r\n				page title start here\r\n				-->\r\n				   \r\n				<table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n					<tbody>\r\n						<tr>\r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Order feedback survey</h2></td>\r\n						</tr>\r\n					</tbody>\r\n				</table>\r\n				<!--\r\n				page title end here\r\n				-->\r\n				   </td>\r\n		</tr>\r\n		<tr>\r\n			<td>\r\n				<!--\r\n				page body start here\r\n				-->\r\n				   \r\n				<table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n					<tbody>\r\n						<tr>\r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n								<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n									<tbody>\r\n										<tr>\r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n												{user_full_name} has posted an abusive review at <a href=\"{website_url}\">{website_name}</a>.<a href=\"{review_url}\" style=\"color:#ff3a59;\">Link to review</a></td>\r\n										</tr>\r\n										\r\n									</tbody>\r\n								</table></td>\r\n						</tr>\r\n					</tbody>\r\n				</table>\r\n				<!--\r\n				page body end here\r\n				-->\r\n				   </td>\r\n		</tr>\r\n	</table>', '{user_full_name} Name of the email receiver<br/> \r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('admin_order_email', 1, 'Admin Order Email', 'Order placed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Received</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            An order has been received on your site <a href=\"{website_url}\">{website_name}</a> with Order Invoice Number {order_invoice_number}.<br />\r\n                                            Please find the order information below.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\n{order_invoice_number} - Invoice Number of the order.<br/>\n{order_date} - Date of the order.<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{order_products_table_format} Order Products Summary in Tabular Format.<br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
+('ADMIN_ORDER_PAYMENT_TRANSFERRED_TO_BANK', 1, 'Order Payment Transferred To Bank', 'Order #{ORDER_ID} Payment Transferred To Bank', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Bank s</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\" colspan=\"2\">\r\n                                            <strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            Order Payment Detail Submitted BY {USER_NAME} For #{ORDER_ID}. <br />\r\n                                            Please find the transfer information below.\r\n                                        </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Payment Method</td>\r\n                                        <td style=\"padding:0 0 30px;\">{PAYMENT_METHOD}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Transaction Id</td>\r\n                                        <td style=\"padding:0 0 30px;\">{TRANSACTION_ID}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Amount</td>\r\n                                        <td style=\"padding:0 0 30px;\">{AMOUNT}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Comments</td>\r\n                                        <td style=\"padding:0 0 30px;\">{COMMENTS}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{USER_NAME} - Name of the User.<br>\r\n{ORDER_ID} - Order Id.<br>\r\n{PAYMENT_METHOD} - Payment Method Used By Buyer.<br>\r\n{TRANSACTION_ID} - Transaction Id<br>\r\n{AMOUNT} - Amount<br>\r\n{COMMENTS} - Comments.<br>', 1),
+('affiliate_share_invitation_email', 1, 'Affiliate Invitation Email for Friends', 'Your friend has invited you for Amazing Discounts on {website_name}.', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Yo!kart Invitation!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Friend </strong><br />\r\n                                            This is an invitation from {user_full_name} to join them on <a href=\"{website_url}\">{website_name}</a> and enjoy Amazing Discounts.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Click the link below to accept this invitation:<br />\r\n                                            <a href=\"{tracking_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{invitation_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{tracking_url} referral url\r\n{invitation_message} <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('affiliate_welcome_registration', 1, 'Affiliate Welcome Mail on Registration', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            Thank you for signing up at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">We are thrilled to have you aboard! You have taken a great first step and we are so excited to connect directly with you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">If you require any assistance in using our site, or have any feedback or suggestions, you can email us at {contact_us_email}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the signed up user.<br>\r\n{email} Email Address of the signed up user.<br>\r\n{username} Username of the signed up User <br/>\r\n{contact_us_email} - Contact Us Email Address<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('blog_comment_status_changed', 1, 'Blog Comment Status Change - Notification', 'Blog Comment Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Blog Contribution Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                        Your Comment (for the post \'{post_title}\' / posted on {posted_on_datetime}) status has been changed to {new_status} at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                        </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_status} New/Current Order Status<br/>\r\n{posted_on_datetime} - Comment Posted on date time.<br/>\r\n{post_title} - Blog Post title.<br/>\r\n{comment} - Comment.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('blog_contribution_status_changed', 1, 'Blog Contribution Status Change - Notification', 'Blog Contribution Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Blog Contribution Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                        Your blog contribution (posted on {posted_on_datetime}) status has been changed to {new_status} at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                        </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_status} New/Current Order Status<br/>\r\n{posted_on_datetime} - Contribution Posted on date time.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('buyer_notification_review_order_product', 1, 'Buyer Review Order product - Notification', 'Review you order at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order feedback survey</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                                                                          Thanks for shoppint ( Order Invoice Number {invoice_number}) with <a href=\"{website_url}\">{website_name}</a>. Please feedback your experience to this order  <a href=\"{review_page_url}\" style=\"color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_order_status} New/Current Order Status<br/>\r\n{invoice_number} - Child Order Invoice Number.<br/>\r\n{order_items_table_format} - Child Order Items in Tabular Format.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('buyer_notification_review_status_updated', 1, 'Buyer Product Review Status Change - Notification', 'Product Review Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Review Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            Your Review status has been changed to {new_status} at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                            </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \r\n{new_status} New/Current Review Status<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('cancellation_request_approved_declined', 1, 'Cancellation Request Approved/Declined Email for User', 'Order Cancellation Request {request_status} on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Cancellation Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your order cancellation request on {invoice_number} has been {request_status} on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{invoice_number} Order Invoice Number<br />\r\n{request_status} New Withdrawal Request Status<br />\r\n{website_name} Name of the website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('cancel_subscription_email', 1, 'Cancel Subscription Email', 'Cancel Subscription Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Cancel Subscription!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            your &nbsp;{spackage_name}<span style=\"color: rgb(149, 149, 149); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 13px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\"> plan has been canceled.</span></td>\r\n                                    </tr>\r\n\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{spackage_name} Package name <br>\r\n', 1);
 INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
-('cancel_subscription_email', 1, 'Cancel Subscription Email', 'Cancel Subscription Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Cancel Subscription!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            your &nbsp;{spackage_name}<span style=\"color: rgb(149, 149, 149); font-family: \" open=\"\" sans\",=\"\" sans-serif;=\"\" font-size:=\"\" 13px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\"> plan has been canceled.</span></td>\r\n                                    </tr>\r\n\r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{spackage_name} Package name <br>\r\n', 1),
-('catalog_request_message_user', 1, 'Catalog request message notification', 'New message received on catalog request at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has posted a message on catalog request at <a href=\"{website_url}\">{website_name}</a><br />\r\n                                            Message is given as below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{message}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Please {click_here} to reply to this message.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver<br/>\n{username} username of the person posted a message.<br />\n{request_number} Request number on which message is posted.<br />\n{message} message body/comments sent by the sender<br />\n{click_here} Link to reply to the message <br />\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
-('child_order_status_change', 1, 'Child Order Status Change - Notification', 'Order Item Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Item Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            Your order item status has been changed to {new_order_status} corresponding to Order Invoice Number {invoice_number}. at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                            Details are given below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{shipment_information}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_admin_comments}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \n{new_order_status} New/Current Order Status<br/>\n{invoice_number} - Child Order Invoice Number.<br/>\n{order_items_table_format} - Child Order Items in Tabular Format.<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{social_media_icons} <br>\n{contact_us_url} <br>\n', 1),
-('COD_OTP_VERIFICATION', 1, 'COD OTP Verification', 'COD OTP Verification', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4\r\n                                style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">\r\n                            </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">COD OTP Verification</h2>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <strong style=\"font-size:18px;color:#333;\">Dear\r\n                                                {user_name}\r\n                                            </strong><br />\r\n                                            {OTP} is the OTP for cash on delivery order verification.<br />\r\n                                            <a href=\"{website_url}\">{website_name}</a>\r\n                                        </td>\r\n                                    </tr>\r\n                                </tbody>\r\n                            </table>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br>\r\n{OTP} - One Time Password<br>\r\n{website_name} - Name of the website.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('contact_us', 1, 'Contact-Us', 'Contact Us Form Submitted on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Contact Us Data</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            {name} has submitted the contact us form on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email Address<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email_address}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Phone Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{phone_number}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Message</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{message}</td>\r\n                                                    </tr>   \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                   \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the person who has submitted the contact form<br />\r\n{email_address} Email Address of the sender<br />\r\n{phone_number} Phone Number of the sender<br />\r\n{message} Additional message sent by sender\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('customer_digital_order_email', 1, 'Customer Digital Order Email - Notification', 'Digital Order Details from {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"100%\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thanks for placing a digital order on <a href=\"{website_url}\">{website_name}</a>. Your order has been received and will be processed and Seller will send the download link once payment has been confirmed.<br />\r\n                                            Your order information is given below.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{order_invoice_number} - Invoice Number of the order.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order Item Summary in Tabular Format.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('customer_order_email', 1, 'Customer Order Email - Notification', 'Order Details from {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thanks for placing an order on <a href=\"{website_url}\">{website_name}</a>. Your order has been received and will be processed once payment has been confirmed.<br />\r\n                                            Your order information is give below.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\n{order_invoice_number} - Invoice Number of the order.<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{order_products_table_format} Order Products Summary in Tabular Format.<br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
-('data_request_notification_to_admin', 1, 'Data request notification to admin', 'Request Data', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Data Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            \r\n                                            <div>Data request has been placed by {user_full_name}</div>\r\n                                            <div>Phone Number: {user_phone}</div>\r\n                                            <div>Username: {username}</div>\r\n                                            <div>Purpose of request:</div>\r\n                                            <div><span style=\"color: rgb(153, 153, 153); font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{ureq_purpose}</span><br />\r\n                                                </div></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Full User name\r\n{username} Username\r\n{user_phone} User phone Number\r\n{ureq_purpose} Request Purpose', 1),
-('failed_login_attempt', 1, 'Failed Login Attempt', 'Failed Login Attempt', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\"><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\"></a><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{website_name}</a></h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Are you facing problem logging in?</td>                                          \r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0px 0px 20px;\">\r\n                                            <p>You seem to be facing problem logging in at <a href=\"{website_url}\">{website_name}</a><br />\r\n                                                Please note that your username and password are both case sensitive.<br />\r\n                                                You can use forgot password feature if you have lost your password.<br />\r\n                                                If you were not trying logging in, it might be a hacking attempt.<br />\r\n                                                Also, you should keep your email password secured.<br />\r\n                                                </p></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '', 1),
-('forgot_password', 1, 'Forgot Password Email', 'Password reset instructions at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Forgot Password!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            It seems that you have used forgot password option at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Please visit the link given below to reset your password. Please note that the link is valid for next 24 hours only.<br />\r\n                                            Password reset url: <a href=\"{reset_url}\">{reset_url}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('gdpr_request_status_update_notification_to_user', 1, 'GDPR request status update notification to user', 'GDPR Request Status Updated', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Request Status Update</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear <span style=\"color: rgb(153, 153, 153); font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{username}</span></strong>\r\n                                            <div>Your Request for {request_type} has been completed.</div></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{username} Username\r\n{request_type} Request Type', 1),
-('guest_welcome_registration', 1, 'Welcome Mail on Registration', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            Your email has been registered. Next time you shop with us, log in for faster checkout at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">We are thrilled to have you aboard! You have taken a great first step and we are so excited to connect directly with you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">If you require any assistance in using our site, or have any feedback or suggestions, you can email us at {contact_us_email}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the signed up user.<br>\r\n{email} Email Address of the signed up user.<br>\r\n{username} Username of the signed up User <br/>\r\n{contact_us_email} - Contact Us Email Address<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('low_balance_promotional_email', 1, 'Low Balance Promotional Email', 'Maintain Wallet to Keep Promtions Working', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    </tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Low Wallet Balance</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name} </strong><br />\r\n                                            Please maintain your wallet balance to keep Promotions Working.&nbsp;<br />\r\n                                            Balance required - &nbsp;{requiredBalance}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>	', '{user_name} Name of the email receiver<br>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{reset_url} URL to reset the password<br>\n{social_media_icons} <br>\n{contact_us_url} <br>\n{requiredBalance} Balance For promotions Auto debit Required', 1),
-('low_balance_subscription_email', 1, 'Low Balance Email', 'Low Balance Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Low Wallet Balance</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name} </strong><br />\r\n                                            Please maintain your wallet balance to Continue Seller Services.&nbsp;<br />\r\n                                            Balance required - &nbsp;{requiredBalance}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{reset_url} URL to reset the password<br>\n{social_media_icons} <br>\n{contact_us_url} <br>\n{requiredBalance} Balance For promotions Auto debit Required', 1),
-('new_affiliate_registration_admin', 1, 'New Affiliate Registration - Admin', 'New Affiliate Registration on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Affiliate Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            We have received a new affiliate registration on <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{username} Username of the person registered<br />\r\n{email} Email Address of the person registered<br />\r\n{phone} Phone Number of the person registered<br />\r\n{name} Name of the person registered<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
+('catalog_request_message_user', 1, 'Catalog request message notification', 'New message received on catalog request at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has posted a message on catalog request at <a href=\"{website_url}\">{website_name}</a><br />\r\n                                            Message is given as below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{message}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Please {click_here} to reply to this message.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver<br/>\n{username} username of the person posted a message.<br />\n{request_number} Request number on which message is posted.<br />\n{message} message body/comments sent by the sender<br />\n{click_here} Link to reply to the message <br />\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
+('child_order_status_change', 1, 'Child Order Status Change - Notification', 'Order Item Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Changed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Item Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            Your order item status has been changed to {new_order_status} corresponding to Order Invoice Number {invoice_number}. at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                            Details are given below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{shipment_information}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_admin_comments}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br/> \n{new_order_status} New/Current Order Status<br/>\n{invoice_number} - Child Order Invoice Number.<br/>\n{order_items_table_format} - Child Order Items in Tabular Format.<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{social_media_icons} <br>\n{contact_us_url} <br>\n', 1),
+('COD_OTP_VERIFICATION', 1, 'COD OTP Verification', 'COD OTP Verification', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4\r\n                                style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">\r\n                            </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">COD OTP Verification</h2>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n\r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <strong style=\"font-size:18px;color:#333;\">Dear\r\n                                                {user_name}\r\n                                            </strong><br />\r\n                                            {OTP} is the OTP for cash on delivery order verification.<br />\r\n                                            <a href=\"{website_url}\">{website_name}</a>\r\n                                        </td>\r\n                                    </tr>\r\n                                </tbody>\r\n                            </table>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br>\r\n{OTP} - One Time Password<br>\r\n{website_name} - Name of the website.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('contact_us', 1, 'Contact-Us', 'Contact Us Form Submitted on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Contact Us Data</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            {name} has submitted the contact us form on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email Address<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email_address}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Phone Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{phone_number}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Message</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{message}</td>\r\n                                                    </tr>   \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                   \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the person who has submitted the contact form<br />\r\n{email_address} Email Address of the sender<br />\r\n{phone_number} Phone Number of the sender<br />\r\n{message} Additional message sent by sender\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('customer_digital_order_email', 1, 'Customer Digital Order Email - Notification', 'Digital Order Details from {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"100%\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thanks for placing a digital order on <a href=\"{website_url}\">{website_name}</a>. Your order has been received and will be processed and Seller will send the download link once payment has been confirmed.<br />\r\n                                            Your order information is given below.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{order_invoice_number} - Invoice Number of the order.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order Item Summary in Tabular Format.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('customer_order_email', 1, 'Customer Order Email - Notification', 'Order Details from {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thanks for placing an order on <a href=\"{website_url}\">{website_name}</a>. Your order has been received and will be processed once payment has been confirmed.<br />\r\n                                            Your order information is give below.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n        </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\n{order_invoice_number} - Invoice Number of the order.<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{order_products_table_format} Order Products Summary in Tabular Format.<br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
+('data_request_notification_to_admin', 1, 'Data request notification to admin', 'Request Data', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Data Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            \r\n                                            <div>Data request has been placed by {user_full_name}</div>\r\n                                            <div>Phone Number: {user_phone}</div>\r\n                                            <div>Username: {username}</div>\r\n                                            <div>Purpose of request:</div>\r\n                                            <div><span style=\"color: rgb(153, 153, 153); font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{ureq_purpose}</span><br />\r\n                                                </div></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Full User name\r\n{username} Username\r\n{user_phone} User phone Number\r\n{ureq_purpose} Request Purpose', 1),
+('failed_login_attempt', 1, 'Failed Login Attempt', 'Failed Login Attempt', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\"><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\"></a><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{website_name}</a></h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Are you facing problem logging in?</td>                                          \r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0px 0px 20px;\">\r\n                                            <p>You seem to be facing problem logging in at <a href=\"{website_url}\">{website_name}</a><br />\r\n                                                Please note that your username and password are both case sensitive.<br />\r\n                                                You can use forgot password feature if you have lost your password.<br />\r\n                                                If you were not trying logging in, it might be a hacking attempt.<br />\r\n                                                Also, you should keep your email password secured.<br />\r\n                                                </p></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '', 1),
+('forgot_password', 1, 'Forgot Password Email', 'Password reset instructions at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Forgot Password!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            It seems that you have used forgot password option at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Please visit the link given below to reset your password. Please note that the link is valid for next 24 hours only.<br />\r\n                                            Password reset url: <a href=\"{reset_url}\">{reset_url}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{reset_url} URL to reset the password<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('gdpr_request_status_update_notification_to_user', 1, 'GDPR request status update notification to user', 'GDPR Request Status Updated', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Request Status Update</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear <span style=\"color: rgb(153, 153, 153); font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{username}</span></strong>\r\n                                            <div>Your Request for {request_type} has been completed.</div></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{username} Username\r\n{request_type} Request Type', 1),
+('guest_welcome_registration', 1, 'Welcome Mail on Registration', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            Your email has been registered. Next time you shop with us, log in for faster checkout at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">We are thrilled to have you aboard! You have taken a great first step and we are so excited to connect directly with you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">If you require any assistance in using our site, or have any feedback or suggestions, you can email us at {contact_us_email}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the signed up user.<br>\r\n{email} Email Address of the signed up user.<br>\r\n{username} Username of the signed up User <br/>\r\n{contact_us_email} - Contact Us Email Address<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('low_balance_promotional_email', 1, 'Low Balance Promotional Email', 'Maintain Wallet to Keep Promtions Working', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    </tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Low Wallet Balance</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name} </strong><br />\r\n                                            Please maintain your wallet balance to keep Promotions Working.&nbsp;<br />\r\n                                            Balance required - &nbsp;{requiredBalance}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>	', '{user_name} Name of the email receiver<br>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{reset_url} URL to reset the password<br>\n{social_media_icons} <br>\n{contact_us_url} <br>\n{requiredBalance} Balance For promotions Auto debit Required', 1),
+('low_balance_subscription_email', 1, 'Low Balance Email', 'Low Balance Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 30px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Low Wallet Balance</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name} </strong><br />\r\n                                            Please maintain your wallet balance to Continue Seller Services.&nbsp;<br />\r\n                                            Balance required - &nbsp;{requiredBalance}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{reset_url} URL to reset the password<br>\n{social_media_icons} <br>\n{contact_us_url} <br>\n{requiredBalance} Balance For promotions Auto debit Required', 1),
+('new_affiliate_registration_admin', 1, 'New Affiliate Registration - Admin', 'New Affiliate Registration on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Affiliate Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            We have received a new affiliate registration on <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{username} Username of the person registered<br />\r\n{email} Email Address of the person registered<br />\r\n{phone} Phone Number of the person registered<br />\r\n{name} Name of the person registered<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
 INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
-('new_catalog_request_admin', 1, 'New Catalog Request - Admin', 'New Catalog Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td style=\"background:#ff3a59;\">            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                            \r\n								<h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>                            \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog Request</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n												                                            We have received a new Catalog request on <a href=\"{website_url}\">{website_name}</a>.<br />\r\n												                                             Please find the details below:</td>                                    \r\n										</tr>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\">                                            \r\n												<table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">                                                \r\n													<tbody>                                                    \r\n														                                             \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Catalog Title</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\"> 	{request_title}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Brand Name</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\"> 	{brand_name}</td>                                                    \r\n														</tr>                                                \r\n													</tbody>                                            \r\n												</table></td>                                    \r\n										</tr>                                       \r\n                                \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table>', '{website_name} Name of the website<br />\r\n{request_title} Catalog title<br />\r\n{brand_name} Brand name<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('new_custom_catalog_request_admin', 1, 'New Custom Catalog Request - Admin', 'New Custom Catalog Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n            \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Requested</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n            </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n            \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">We have received a new Catalog request on <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                                 Please find\r\n                                            the details below:</strong></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Catalog Title</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\"> {request_title}</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n            </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{request_title} Catalog title of catalog<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('new_registration_admin', 1, 'New Registration - Admin', 'New Registration on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td style=\"background:#ff3a59;\">            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                            \r\n								<h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>                            \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">New Account Created!</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n												                                            We have received a new registration on <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>                                    \r\n										</tr>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\">                                            \r\n												<table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">                                                \r\n													<tbody>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Phone<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{phone}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Type</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{user_type}</td>                                                    \r\n														</tr>                                                \r\n													</tbody>                                            \r\n												</table></td>                                    \r\n										</tr>                                \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table>', '{website_name} Name of the website<br /> {username} Username of the person registered<br /> {email} Email Address of the person registered<br />{phone} Phone number of the person registered<br /> {name} Name of the person registered<br /> {user_type} Type of the User registered<br /> {social_media_icons} <br> {contact_us_url} <br>', 1),
-('new_seller_approved_admin', 1, 'New Seller Approval - Admin', 'New Seller Approval on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Seller Approved</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Seller Approval</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            <span style=\"color: rgb(153, 153, 153); font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">New seller has been registered on</span> <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Reference Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{reference_number}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>\r\n                                                    </tr>  \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{username} \r\n\r\nUsername of the person registered<br />\r\n{email} Email Address of the person registered<br />\r\n{name} Name of the person sent request<br />\r\n{reference_number} \r\n\r\nReference Number of the request<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('new_subscription_purchase', 1, 'New Subscription Plan Purchased', 'New Subscription Plan purchased at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Subscription Plan</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            Order payment status has been changed to {new_order_status} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{user_full_name} User Name <br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('new_subscription_purchase_admin', 1, 'Admin - New Subscription Plan Purchased', 'New Subscription Plan purchased at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Subscription Purchase</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            New subscription plan has been purchase by user &nbsp;corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('new_supplier_approval_admin', 1, 'New Seller Approval Request - Admin', 'New Seller Approval Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Seller Approval</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            We have received a new seller approval request on <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Reference Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{reference_number}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>\r\n                                                    </tr>  \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{username} \r\n\r\nUsername of the person registered<br />\r\n{email} Email Address of the person registered<br />\r\n{name} Name of the person sent request<br />\r\n{reference_number} \r\n\r\nReference Number of the request<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('order_cancellation_notification', 1, 'Order Cancellation Notification - Vendor & Admin', 'Order Cancellation Request Received on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Cancellation</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Buyer has submitted the Order Cancellation Request corresponding to Order Invoice Number {invoice_number}.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{website_name} Name of the website<br />\r\n{click_here} Click here Link to update inventory.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('password_changed_successfully', 1, 'Password Changed Successfully', 'Password Changed Successfully at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Changed Password!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {full_name} </strong><br />\r\n                                            You have successfully changed your password, now you can log in with your new password.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Please click here to below link to Login to your Account.<br />\r\n                                            <a href=\"{login_link}\" style=\"font-size:15px; color:#ff3a59;\">Click here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{full_name} Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('primary_order_bank_transfer_payment_status_admin', 1, 'Admin - Primary Order Payment Status', 'Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (Bank Transfer) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('primary_order_bank_transfer_payment_status_buyer', 1, 'Buyers - Primary Order Payment Status', 'Order Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (Bank Transfer) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('primary_order_payment_status_admin', 1, 'Admin - Primary Order Payment Status', 'Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (cash on delivery) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('primary_order_payment_status_buyer', 1, 'Buyers - Primary Order Payment Status', 'Order Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (cash on delivery) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('primary_order_payment_status_change_admin', 1, 'Admin - Primary Order Payment Status Change', 'Payment Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Payment Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            Order payment status has been changed to {new_order_status} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
+('new_catalog_request_admin', 1, 'New Catalog Request - Admin', 'New Catalog Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td >            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                            \r\n								<h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>                            \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog Request</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n												                                            We have received a new Catalog request on <a href=\"{website_url}\">{website_name}</a>.<br />\r\n												                                             Please find the details below:</td>                                    \r\n										</tr>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\">                                            \r\n												<table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">                                                \r\n													<tbody>                                                    \r\n														                                             \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Catalog Title</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\"> 	{request_title}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Brand Name</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\"> 	{brand_name}</td>                                                    \r\n														</tr>                                                \r\n													</tbody>                                            \r\n												</table></td>                                    \r\n										</tr>                                       \r\n                                \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table>', '{website_name} Name of the website<br />\r\n{request_title} Catalog title<br />\r\n{brand_name} Brand name<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('new_custom_catalog_request_admin', 1, 'New Custom Catalog Request - Admin', 'New Custom Catalog Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n            \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Requested</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n            </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n            \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">We have received a new Catalog request on <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                                 Please find\r\n                                            the details below:</strong></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Catalog Title</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\"> {request_title}</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n            </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{request_title} Catalog title of catalog<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('new_registration_admin', 1, 'New Registration - Admin', 'New Registration on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td >            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                            \r\n								<h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>                            \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">New Account Created!</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n												                                            We have received a new registration on <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>                                    \r\n										</tr>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\">                                            \r\n												<table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">                                                \r\n													<tbody>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Phone<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{phone}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>                                                    \r\n														</tr>                                                    \r\n														<tr>                                                        \r\n															<td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Type</td>                                                        \r\n															<td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{user_type}</td>                                                    \r\n														</tr>                                                \r\n													</tbody>                                            \r\n												</table></td>                                    \r\n										</tr>                                \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table>', '{website_name} Name of the website<br /> {username} Username of the person registered<br /> {email} Email Address of the person registered<br />{phone} Phone number of the person registered<br /> {name} Name of the person registered<br /> {user_type} Type of the User registered<br /> {social_media_icons} <br> {contact_us_url} <br>', 1),
+('new_seller_approved_admin', 1, 'New Seller Approval - Admin', 'New Seller Approval on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Seller Approved</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Seller Approval</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            <span style=\"color: rgb(153, 153, 153); font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">New seller has been registered on</span> <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Reference Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{reference_number}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>\r\n                                                    </tr>  \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{username} \r\n\r\nUsername of the person registered<br />\r\n{email} Email Address of the person registered<br />\r\n{name} Name of the person sent request<br />\r\n{reference_number} \r\n\r\nReference Number of the request<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('new_subscription_purchase', 1, 'New Subscription Plan Purchased', 'New Subscription Plan purchased at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Subscription Plan</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            Order payment status has been changed to {new_order_status} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{user_full_name} User Name <br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('new_subscription_purchase_admin', 1, 'Admin - New Subscription Plan Purchased', 'New Subscription Plan purchased at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Subscription Purchase</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            New subscription plan has been purchase by user &nbsp;corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('new_supplier_approval_admin', 1, 'New Seller Approval Request - Admin', 'New Seller Approval Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Seller Approval</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            We have received a new seller approval request on <a href=\"{website_url}\">{website_name}</a>. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Reference Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{reference_number}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Username<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{username}</td>\r\n                                                    </tr>  \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Email</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{email}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Name</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{name}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of the website<br />\r\n{username} \r\n\r\nUsername of the person registered<br />\r\n{email} Email Address of the person registered<br />\r\n{name} Name of the person sent request<br />\r\n{reference_number} \r\n\r\nReference Number of the request<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('order_cancellation_notification', 1, 'Order Cancellation Notification - Vendor & Admin', 'Order Cancellation Request Received on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Cancellation</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Buyer has submitted the Order Cancellation Request corresponding to Order Invoice Number {invoice_number}.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{website_name} Name of the website<br />\r\n{click_here} Click here Link to update inventory.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('password_changed_successfully', 1, 'Password Changed Successfully', 'Password Changed Successfully at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Changed Password!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {full_name} </strong><br />\r\n                                            You have successfully changed your password, now you can log in with your new password.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Please click here to below link to Login to your Account.<br />\r\n                                            <a href=\"{login_link}\" style=\"font-size:15px; color:#ff3a59;\">Click here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{full_name} Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('primary_order_bank_transfer_payment_status_admin', 1, 'Admin - Primary Order Payment Status', 'Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (Bank Transfer) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('primary_order_bank_transfer_payment_status_buyer', 1, 'Buyers - Primary Order Payment Status', 'Order Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (Bank Transfer) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('primary_order_payment_status_admin', 1, 'Admin - Primary Order Payment Status', 'Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (cash on delivery) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('primary_order_payment_status_buyer', 1, 'Buyers - Primary Order Payment Status', 'Order Payment Status at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">{order_payment_method}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your order has been placed to {order_payment_method} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{order_payment_method} Order payment method (cash on delivery) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('primary_order_payment_status_change_admin', 1, 'Admin - Primary Order Payment Status Change', 'Payment Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Payment Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\r\n                                            Order payment status has been changed to {new_order_status} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
 INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
-('primary_order_payment_status_change_buyer', 1, 'Buyers - Primary Order Payment Status Change', 'Order Payment Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Payment Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your order payment status has been changed to {new_order_status} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{new_order_status} New Payment Status (Pending/Paid) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('product_return', 1, 'Product Return - Vendor Notification', 'Product return request submitted on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Return</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            {username} has submitted a {return_request_type} request on a product. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Order Id/Invoice Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{child_order_invoice_number}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Product<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_prod_title}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Qty</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_qty}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request ID</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_request_id}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request Type</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_request_type}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Reason</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_reason}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Comments</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_comments}</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{username} Username of the person, who placed return request.<br/>\r\n{return_request_type} - Refund or Return. .<br/>\r\n{return_prod_title} - Product for which return request is placed.<br />\r\n{return_qty} Return request QTY.<br />\r\n{return_reason} Return Reason selected by buyer.<br />\r\n{return_comments} Comments submitted by the buyer<br />\r\n{return_request_id} Return Request Number<br/>\r\n{child_order_invoice_number} Order ID/Invoice Number\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n\r\n', 1),
-('promotion_approval_required_to_admin', 1, 'Approval Required for promotion', 'New Promotion Request  at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Promotion Approval Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            New &nbsp;promotion approval request has been &nbsp;by {user_full_name} &nbsp;corresponding to Promotion - {promotion_name}.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n\r\n\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{promotion_name} Promotion Name<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('promotion_request_status_change', 1, 'Promotion Status Change', 'Your Promotion Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Promotion Approval Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your promotion approval request has been {new_request_status} corresponding to Promotion - {promotion_name}.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n\r\n\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{promotion_name} Promotion Name<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('reminder_for_items_in_cart', 1, 'Reminder for items in Cart', 'Reminder for items in Cart', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\"><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\"></a><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{website_name}</a>&nbsp;is missing you!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thank you for adding products to your cart.</td>                                          \r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{products_in_cart_format}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <div>Proceed to checkout, before someone else grabs your products</div><br />\r\n                                            <a href=\"{checkout_url}\" style=\"background-color: #FF3A59;border: none;color: white;padding: 10px 20px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '', 1),
-('reminder_for_items_in_wishlist', 1, 'Reminder for items in wishlist', 'Reminder for items in wishlist', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\"><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\"></a><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{website_name}</a>&nbsp;is missing you!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            We are glad you liked our products.</td>                                          \r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{products_in_wishlist_format}</td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Kindly check your favorite products by clicking the following link.<br />\r\n                                            <a href=\"{wishlist_url}\" style=\"background-color: #FF3A59;border: none;color: white;padding: 10px 20px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '', 1),
-('report_shop', 1, 'Report a shop', 'Report submitted on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            {username} has reported a shop on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"font-size:12px; color:#666;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"109\">Shop</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"664\">{shop_name}</td>\r\n                                                    </tr>    \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\">Reason</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\">{report_reason}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\">Message</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\">{report_message}</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{username} Username of the person who submitted the Report<br />\r\n{shop_name} Shop Name<br />\r\n{report_reason} Reason for reported<br />\r\n{report_message} Message submitted by the reporter<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('return_request_message_user', 1, 'Return request message notification - for Buyer/Vendor', 'New message received on return request at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has posted a message on request reference number {request_number} at <a href=\"{website_url}\">{website_name}</a><br />\r\n                                            Message is given as below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{message}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Please {click_here} to reply to this message.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver<br/>\r\n{username} username of the person posted a message.<br />\r\n{request_number} Request number on which message is posted.<br />\r\n{message} message body/comments sent by the sender<br />\r\n{click_here} Link to reply to the message <br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('return_request_status_change_notification', 1, 'Return request status change notification', 'Return request status changed on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Return Request Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has {new_status_name} return request reference number {request_number} on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br />\r\n{username} username of the person<br />\r\n{new_status_name} New Status of the Request<br />\r\n{request_number} Request number<br />\r\n{website_name} Name of the website.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('reward_points_credited_debited', 1, 'Reward Points Received/Debited Email for Buyer/Seller', 'Your account has been {debit_credit_type} reward points on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Reward Point Transaction</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your account has been {debit_credit_type} reward points at <a href=\"{website_url}\">{website_name}</a>.. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Points</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{reward_points}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Comment<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{comments}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br />\n{debit_credit_type} - Credited or Debited<br>\n{reward_points} - Reward Points<br>{comments} - Comments<br>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>', 1),
-('seller_brand_request_admin_email', 1, 'Seller - Brand request', 'New Brand Requested at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Brand Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            New Brand has been requested by Seller {user_full_name}- {brand_name}</td>\r\n                                    </tr>\r\n                                    \r\n                                       \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{brand_name} Brand Name <br>\r\n\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('seller_brand_request_status_change', 1, 'Seller - Brand request Change Status', 'Your Brand Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Brand Request -{brand_name}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n                                            Your brand approval request has been {new_request_status}&nbsp;</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            {brand_request_comments}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n	</table>', '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{brand_request_comments} Added comment on status change<br>\r\n{brand_name} Brand Name (Approved/Declined) <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('seller_catalog_request_status_change', 1, 'Seller - Catalog Request Status Change', 'Your Catalog Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog Approval Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n                                            Your catalog approval request has been {new_request_status} corresponding to Reference Number - {reference_number}.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request Comments</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{request_comments}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n\r\n\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('seller_category_request_admin_email', 1, 'Seller - Category request', 'New Product Category Requested at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Product Category Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            New Product Category has been requested by Seller {user_full_name}- {prodcat_name}</td>\r\n                                    </tr>\r\n                                    \r\n                                       \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{prodcat_name} Product Category Name <br>\r\n\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
+('primary_order_payment_status_change_buyer', 1, 'Buyers - Primary Order Payment Status Change', 'Order Payment Status Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Payment Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your order payment status has been changed to {new_order_status} corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{new_order_status} New Payment Status (Pending/Paid) <br>\r\n{invoice_number} Invoice Number of the order<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('product_return', 1, 'Product Return - Vendor Notification', 'Product return request submitted on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Return</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            {username} has submitted a {return_request_type} request on a product. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Order Id/Invoice Number</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{child_order_invoice_number}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Product<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_prod_title}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Qty</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_qty}</td>\r\n                                                    </tr> \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request ID</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_request_id}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request Type</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_request_type}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Reason</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_reason}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Comments</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{return_comments}</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{username} Username of the person, who placed return request.<br/>\r\n{return_request_type} - Refund or Return. .<br/>\r\n{return_prod_title} - Product for which return request is placed.<br />\r\n{return_qty} Return request QTY.<br />\r\n{return_reason} Return Reason selected by buyer.<br />\r\n{return_comments} Comments submitted by the buyer<br />\r\n{return_request_id} Return Request Number<br/>\r\n{child_order_invoice_number} Order ID/Invoice Number\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n\r\n', 1),
+('promotion_approval_required_to_admin', 1, 'Approval Required for promotion', 'New Promotion Request  at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Promotion Approval Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            New &nbsp;promotion approval request has been &nbsp;by {user_full_name} &nbsp;corresponding to Promotion - {promotion_name}.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n\r\n\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{promotion_name} Promotion Name<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('promotion_request_status_change', 1, 'Promotion Status Change', 'Your Promotion Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Promotion Approval Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your promotion approval request has been {new_request_status} corresponding to Promotion - {promotion_name}.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n\r\n\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{promotion_name} Promotion Name<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('reminder_for_items_in_cart', 1, 'Reminder for items in Cart', 'Reminder for items in Cart', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\"><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\"></a><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{website_name}</a>&nbsp;is missing you!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thank you for adding products to your cart.</td>                                          \r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{products_in_cart_format}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <div>Proceed to checkout, before someone else grabs your products</div><br />\r\n                                            <a href=\"{checkout_url}\" style=\"background-color: #FF3A59;border: none;color: white;padding: 10px 20px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '', 1),
+('reminder_for_items_in_wishlist', 1, 'Reminder for items in wishlist', 'Reminder for items in wishlist', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\"><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\"></a><a href=\"http://yokart-v8-1.staging.4demo.biz/admin/%7Bwebsite_url%7D\" style=\"font-family: Arial; text-align: center; background-color: rgb(255, 255, 255);\">{website_name}</a>&nbsp;is missing you!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            We are glad you liked our products.</td>                                          \r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{products_in_wishlist_format}</td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Kindly check your favorite products by clicking the following link.<br />\r\n                                            <a href=\"{wishlist_url}\" style=\"background-color: #FF3A59;border: none;color: white;padding: 10px 20px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '', 1),
+('report_shop', 1, 'Report a shop', 'Report submitted on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            {username} has reported a shop on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"font-size:12px; color:#666;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"109\">Shop</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"664\">{shop_name}</td>\r\n                                                    </tr>    \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\">Reason</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\">{report_reason}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\">Message</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\">{report_message}</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{username} Username of the person who submitted the Report<br />\r\n{shop_name} Shop Name<br />\r\n{report_reason} Reason for reported<br />\r\n{report_message} Message submitted by the reporter<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('return_request_message_user', 1, 'Return request message notification - for Buyer/Vendor', 'New message received on return request at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has posted a message on request reference number {request_number} at <a href=\"{website_url}\">{website_name}</a><br />\r\n                                            Message is given as below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{message}</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">Please {click_here} to reply to this message.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver<br/>\r\n{username} username of the person posted a message.<br />\r\n{request_number} Request number on which message is posted.<br />\r\n{message} message body/comments sent by the sender<br />\r\n{click_here} Link to reply to the message <br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('return_request_status_change_notification', 1, 'Return request status change notification', 'Return request status changed on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Return Request Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has {new_status_name} return request reference number {request_number} on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br />\r\n{username} username of the person<br />\r\n{new_status_name} New Status of the Request<br />\r\n{request_number} Request number<br />\r\n{website_name} Name of the website.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('reward_points_credited_debited', 1, 'Reward Points Received/Debited Email for Buyer/Seller', 'Your account has been {debit_credit_type} reward points on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Reward Point Transaction</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your account has been {debit_credit_type} reward points at <a href=\"{website_url}\">{website_name}</a>.. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Points</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{reward_points}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Comment<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{comments}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br />\n{debit_credit_type} - Credited or Debited<br>\n{reward_points} - Reward Points<br>{comments} - Comments<br>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>', 1),
+('seller_brand_request_admin_email', 1, 'Seller - Brand request', 'New Brand Requested at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Brand Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            New Brand has been requested by Seller {user_full_name}- {brand_name}</td>\r\n                                    </tr>\r\n                                    \r\n                                       \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{brand_name} Brand Name <br>\r\n\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('seller_brand_request_status_change', 1, 'Seller - Brand request Change Status', 'Your Brand Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Brand Request -{brand_name}</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n                                            Your brand approval request has been {new_request_status}&nbsp;</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            {brand_request_comments}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n	</table>', '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{brand_request_comments} Added comment on status change<br>\r\n{brand_name} Brand Name (Approved/Declined) <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('seller_catalog_request_status_change', 1, 'Seller - Catalog  Status Change', 'Your Catalog {product_name} {new_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">    \r\n	<tbody>\r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page title start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                           \r\n								                           \r\n								<h2 style=\"margin:0; font-size:34px; padding:0;\">Catalog {new_status}</h2></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page title end here\r\n				-->\r\n				               </td>    \r\n		</tr>    \r\n		<tr>        \r\n			<td>            \r\n				<!--\r\n				page body start here\r\n				-->\r\n				               \r\n            \r\n				<table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                \r\n					<tbody>                    \r\n						<tr>                        \r\n							<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n								<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n									<tbody>                                    \r\n										<tr>                                        \r\n											<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n												                                              Your catalog {product_name} has been {new_status} on {website_name}.</td>                                    \r\n										</tr> \r\n									</tbody>                            \r\n								</table></td>                    \r\n						</tr>                \r\n					</tbody>            \r\n				</table>            \r\n				<!--\r\n				page body end here\r\n				-->\r\n				               </td>    \r\n		</tr>\r\n	</tbody>\r\n</table> ', '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{product_name} Product Name <br>\r\n{new_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('seller_category_request_admin_email', 1, 'Seller - Category request', 'New Product Category Requested at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"><br />\r\n                                </h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">New Product Category Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            New Product Category has been requested by Seller {user_full_name}- {prodcat_name}</td>\r\n                                    </tr>\r\n                                    \r\n                                       \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n{prodcat_name} Product Category Name <br>\r\n\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
 INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
-('seller_custom_catalog_request_status_change', 1, 'Supplier - Custom Catalog Request Status Change', 'Your Custom Catalog Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Custom Catalog Approval Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n                                            Your catalog approval request has been {new_request_status}.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request Comments</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{request_comments}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('send_message', 1, 'Send a Message', 'Message received on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has sent you a message on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"font-size:12px; color:#666;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"109\">Subject</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"664\">{message_subject}</td>\r\n                                                    </tr>    \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\">Message</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\">{message}</td>\r\n                                                    </tr>    \r\n                                                </tbody>\r\n                                            </table><br />\r\n                                            Please {click_here} to reply to this message.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the person who is receiving this email<br />\r\n{username} Username of the sender<br />\r\n{message_subject} Subject of the message<br />\r\n{message} Additional message/text sent by sender\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('share_earn_invitation_email', 1, 'Invitation Email for Friends', 'Your friend has invited you for Amazing Discounts on {website_name}.', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Yo!kart Invitation!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Friend </strong><br />\r\n                                            This is an invitation from {user_full_name} to join them on <a href=\"{website_url}\">{website_name}</a> and enjoy Amazing Discounts.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Click the link below to accept this invitation:<br />\r\n                                            <a href=\"{tracking_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{invitation_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\n{website_name} Name of our website<br>\n{website_url} URL/Link of our website<br>\n{tracking_url} referral url\n{invitation_message} <br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
-('subscription_free_package_reminder_email', 1, 'Subscription Free Package Reminder Email', 'Subscription Reminder Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Reminder!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            your Subscription is going to be expire in next 2 days. Kindly Purchase any Package to &nbsp;continue your subscription on&nbsp;<a href=\"{website_url}\">{website_name}</a>&nbsp;.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{tracking_url} referral url\r\n{invitation_message} <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('subscription_reminder_email', 1, 'Subscription Reminder Email', 'Subscription Reminder Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Reminder!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            your Subscription is going to be expire in next 2 days. Kindly maintain your minimum wallet balance to continue your subscription on&nbsp;<a href=\"{website_url}\">{website_name}</a>&nbsp;.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{tracking_url} referral url\r\n{invitation_message} <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('subscription_renew_admin', 1, 'Admin - Subscription Renew', 'Subscription Renewed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Reminder!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            your Subscription is going to be expire in next 2 days. Kindly maintain your minimum wallet balance to continue your subscription on&nbsp;<a href=\"{website_url}\">{website_name}</a>&nbsp;.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('subscription_renew_user', 1, 'Renew Subscription Plan', 'Subscription Renewed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Renew</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            \r\n                                            <div>your subscription has been renewed.</div>\r\n                                            <div>corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</div></td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{user_full_name} User Name <br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('supplier_request_status_change_buyer', 1, 'Buyers - Seller Request Status Change', 'Your Seller Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Seller Approval Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your seller approval request has been {new_request_status} corresponding to Reference Number - {reference_number}.{request_comments}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n\r\n\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('taxapi_order_creation_failure', 1, 'TaxApi Order Creation Failure Email', 'TaxApi Order Creation Failed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td style=\"background:#ff3a59;\">\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">TaxApi Order Creation Failure</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\n                                                System has tried to create an order/transaction on TaxApi after order is marked as completed by admin, but not able to create an Order/Transaction on TaxApi due to below Error on your site <a href=\"{website_url}\">{website_name}</a> with Yokart Order Invoice Number {invoice_number}.<br />\n                                                Please find the TaxApi Error information below.\n                                        </td>\n                                    </tr>\n                                    <tr>\n                                            <td style=\"padding:0 0 30px;\">{error_message}</td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{invoice_number} - Yokart Order Invoice Number.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{error_message} -  Error Message received from TaxApi while creating order \r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('test_email', 1, 'Test Email', 'Test Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\"><br />\r\n            \r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><span style=\"font-size: 18px; font-weight: bold; color: rgb(51, 51, 51);\">This is the test email &nbsp;from&nbsp;</span>&nbsp;<a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><br />\r\n                                            </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\"><br />\r\n                                            </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '\r\n{website_name} Name of our website<br>\r\n', 1),
-('threshold_notification_vendor', 1, 'Threshold Level Notification - Seller', 'Product threshold level achieved on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Product Stock Alert</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name}</strong><br />\r\n                                            Your product {prod_title} has achieved threshold level on <a href=\"{website_url}\">{website_name}</a> \r\n                                    Please {click_here} to refill stock quantity.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{shop_name} Shop Name<br />\r\n{prod_title} Name of the product<br />\r\n{website_name} Name of the website<br />\r\n{click_here} Click here Link to update inventory.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('threshold_notification_vendor_custom', 1, 'Custom Threshold Level Notification - Seller', '{admin_subject}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Product Stock Alert</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your product {prod_title} has achieved threshold level on <a href=\"{website_url}\">{website_name}</a> \r\n                                    Please {click_here} to refill stock quantity.\r\n                                    \r\n                                    </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                    <td>{admin_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{prod_title} Name of the product<br />\r\n{website_name} Name of the website<br />\r\n{click_here} Click here Link to update inventory.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{admin_message} Message to append\r\n{admin_subject} Subject of email', 1),
-('user_admin_password_changed_successfully', 1, 'User/Admin Password Changed Successfully', 'Password reset successfully {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your password has been changed successfully.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Please click on below link to Login to your account.<br />\r\n                                            <a href=\"{website_url}\" style=\"font-size:15px; color:#ff3a59;\">Click to Login</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name}<br>\r\n{website_name}<br>\r\n{website_url}<br>\r\n{login_link}<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('user_change_email_request_notification', 1, 'Email Change Request', 'Email Change Request at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            It seems that you have requested to change email to {new_email} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{new_email} New email address \r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{verification_url} Url to verify email\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('user_discount_coupon_notification', 1, 'Discount Gift Voucher', 'Discount Gift Voucher at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Discount Gift Voucher</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                        Your are eligible to avail {discount_value} discount on your next purchase at<a href=\"{website_url}\">{website_name}</a>.. Please find the details below:\r\n                                        </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Coupon Code</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{coupon_code}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Expired On</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{expired_on}</td>\r\n                                                    </tr> 																														                                                      \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br />\r\n{discount_value} - Discounted value<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>', 1),
-('user_email_changed_notification', 1, 'Email Changed', 'Email Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your Email Address has been changed to {new_email} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{new_email} New email address \r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{verification_url} Url to verify email\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
+('seller_custom_catalog_request_status_change', 1, 'Supplier - Custom Catalog Request Status Change', 'Your Custom Catalog Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Custom Catalog Approval Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name} </strong><br />\r\n                                            Your catalog approval request has been {new_request_status}.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request Comments</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{request_comments}</td>\r\n                                                    </tr>                                                        \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('send_message', 1, 'Send a Message', 'Message received on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            {username} has sent you a message on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"font-size:12px; color:#666;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"109\">Subject</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"664\">{message_subject}</td>\r\n                                                    </tr>    \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\">Message</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\">{message}</td>\r\n                                                    </tr>    \r\n                                                </tbody>\r\n                                            </table><br />\r\n                                            Please {click_here} to reply to this message.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the person who is receiving this email<br />\r\n{username} Username of the sender<br />\r\n{message_subject} Subject of the message<br />\r\n{message} Additional message/text sent by sender\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('share_earn_invitation_email', 1, 'Invitation Email for Friends', 'Your friend has invited you for Amazing Discounts on {website_name}.', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Yo!kart Invitation!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                                 \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Friend </strong><br />\r\n                                            This is an invitation from {user_full_name} to join them on <a href=\"{website_url}\">{website_name}</a> and enjoy Amazing Discounts.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Click the link below to accept this invitation:<br />\r\n                                            <a href=\"{tracking_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">{invitation_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\n{website_name} Name of our website<br>\n{website_url} URL/Link of our website<br>\n{tracking_url} referral url\n{invitation_message} <br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
+('subscription_free_package_reminder_email', 1, 'Subscription Free Package Reminder Email', 'Subscription Reminder Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Reminder!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            your Subscription is going to be expire in next 2 days. Kindly Purchase any Package to &nbsp;continue your subscription on&nbsp;<a href=\"{website_url}\">{website_name}</a>&nbsp;.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{tracking_url} referral url\r\n{invitation_message} <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('subscription_reminder_email', 1, 'Subscription Reminder Email', 'Subscription Reminder Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Reminder!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            your Subscription is going to be expire in next 2 days. Kindly maintain your minimum wallet balance to continue your subscription on&nbsp;<a href=\"{website_url}\">{website_name}</a>&nbsp;.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{tracking_url} referral url\r\n{invitation_message} <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('subscription_renew_admin', 1, 'Admin - Subscription Renew', 'Subscription Renewed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Reminder!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name}</strong><br />\r\n                                            your Subscription is going to be expire in next 2 days. Kindly maintain your minimum wallet balance to continue your subscription on&nbsp;<a href=\"{website_url}\">{website_name}</a>&nbsp;.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('subscription_renew_user', 1, 'Renew Subscription Plan', 'Subscription Renewed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Subscription Renew</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            \r\n                                            <div>your subscription has been renewed.</div>\r\n                                            <div>corresponding to Order Invoice Number - {invoice_number} at <a href=\"{website_url}\">{website_name}</a>.</div></td>\r\n                                    </tr>                                          \r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">{order_products_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{website_name} Name of our website<br>\r\n{user_full_name} User Name <br>\r\n{invoice_number} Invoice Number of the Order<br>\r\n{new_order_status} New Order Status<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('supplier_request_status_change_buyer', 1, 'Buyers - Seller Request Status Change', 'Your Seller Request {new_request_status} at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Seller Approval Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your seller approval request has been {new_request_status} corresponding to Reference Number - {reference_number}.{request_comments}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} - Name of the email receiver.<br/>\r\n{website_name} Name of our website<br>\r\n\r\n\r\n{new_request_status} New Request Status (Approved/Declined) <br>\r\n{reference_number} Reference Number of the request<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('taxapi_order_creation_failure', 1, 'TaxApi Order Creation Failure Email', 'TaxApi Order Creation Failed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td >\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">TaxApi Order Creation Failure</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin </strong><br />\n                                                System has tried to create an order/transaction on TaxApi after order is marked as completed by admin, but not able to create an Order/Transaction on TaxApi due to below Error on your site <a href=\"{website_url}\">{website_name}</a> with Yokart Order Invoice Number {invoice_number}.<br />\n                                                Please find the TaxApi Error information below.\n                                        </td>\n                                    </tr>\n                                    <tr>\n                                            <td style=\"padding:0 0 30px;\">{error_message}</td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{invoice_number} - Yokart Order Invoice Number.<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{error_message} -  Error Message received from TaxApi while creating order \r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('test_email', 1, 'Test Email', 'Test Email', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td ><br />\r\n            \r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><span style=\"font-size: 18px; font-weight: bold; color: rgb(51, 51, 51);\">This is the test email &nbsp;from&nbsp;</span>&nbsp;<a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><br />\r\n                                            </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\"><br />\r\n                                            </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '\r\n{website_name} Name of our website<br>\r\n', 1),
+('threshold_notification_vendor', 1, 'Threshold Level Notification - Seller', 'Product threshold level achieved on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Product Stock Alert</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {shop_name}</strong><br />\r\n                                            Your product {prod_title} has achieved threshold level on <a href=\"{website_url}\">{website_name}</a> \r\n                                    Please {click_here} to refill stock quantity.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{shop_name} Shop Name<br />\r\n{prod_title} Name of the product<br />\r\n{website_name} Name of the website<br />\r\n{click_here} Click here Link to update inventory.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('threshold_notification_vendor_custom', 1, 'Custom Threshold Level Notification - Seller', '{admin_subject}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Product Stock Alert</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                            Your product {prod_title} has achieved threshold level on <a href=\"{website_url}\">{website_name}</a> \r\n                                    Please {click_here} to refill stock quantity.\r\n                                    \r\n                                    </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                    <td>{admin_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{prod_title} Name of the product<br />\r\n{website_name} Name of the website<br />\r\n{click_here} Click here Link to update inventory.\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n{admin_message} Message to append\r\n{admin_subject} Subject of email', 1),
+('user_admin_password_changed_successfully', 1, 'User/Admin Password Changed Successfully', 'Password reset successfully {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your password has been changed successfully.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">Please click on below link to Login to your account.<br />\r\n                                            <a href=\"{website_url}\" style=\"font-size:15px; color:#ff3a59;\">Click to Login</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name}<br>\r\n{website_name}<br>\r\n{website_url}<br>\r\n{login_link}<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('user_change_email_request_notification', 1, 'Email Change Request', 'Email Change Request at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            It seems that you have requested to change email to {new_email} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{new_email} New email address \r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{verification_url} Url to verify email\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('user_discount_coupon_notification', 1, 'Discount Gift Voucher', 'Discount Gift Voucher at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Discount Gift Voucher</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                        Your are eligible to avail {discount_value} discount on your next purchase at<a href=\"{website_url}\">{website_name}</a>.. Please find the details below:\r\n                                        </td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Coupon Code</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{coupon_code}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Expired On</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{expired_on}</td>\r\n                                                    </tr> 																														                                                      \r\n                                                </tbody>\r\n                                            </table></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver.<br />\r\n{discount_value} - Discounted value<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>', 1),
+('user_email_changed_notification', 1, 'Email Changed', 'Email Changed at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Your Email Address has been changed to {new_email} at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{new_email} New email address \r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{verification_url} Url to verify email\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
 INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
-('user_email_verification', 1, 'Email Verification', 'Email Verification at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"100%\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            It seems that you have used change email address option at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">You need to confirm your email to get your account activated with this email address. To confirm the email, please click the link below or copy-paste the below given url in your browser address bar:<br />\r\n                                            {verification_url}<br />\r\n                                            <a href=\"{verification_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{verification_url} Url to verify email\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('user_send_email', 1, 'User & Affiliate Send Email', '{admin_subject}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {full_name}</strong><br />\r\n                                            {admin_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of the website<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('user_signup_verification', 1, 'Email Confirmation on Registration', 'Email Verification at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thank you for registering at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">You need to confirm your email to get your FREE account activated. To confirm the email, please click the link below or copy-paste the below given url in your browser address bar:<br />\r\n                                            {verification_url}<br />\r\n                                            <a href=\"{verification_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{verification_url} Url to verify email<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('vendor_bank_transfer_order_email', 1, 'Vendor Bank Transfer Order Email', 'Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td style=\"background:#ff3a59;\">\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Bank Transfer</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                    <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\n                                      An order has been placed for your product(s) at <a href=\"{website_url}\">{website_name}</a>.<br />\n                                     Order details &amp; Shipping information are given below:</td>\n                                  </tr>\n                                 <tr>\n                                    <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\n                                 </tr>                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{vendor_name} Name of the vendor<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order items in Tabular Format.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('vendor_cod_order_email', 1, 'Vendor COD Order Email', 'Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td style=\"background:#ff3a59;\">\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Cash On Delivery</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\n                                                An order has been placed for your product(s) at <a href=\"{website_url}\">{website_name}</a>.<br />\n                                                Order details &amp; Shipping information are given below:</td>\n                                    </tr>\n                                    <tr>\n                                            <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{vendor_name} Name of the vendor<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order items in Tabular Format.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('vendor_digital_order_email', 1, 'Vendor Digital Order Email', 'Digital Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n                             \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                             \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\r\n                                            An order has been placed for your Digital product(s) at <a href=\"{website_url}\">{website_name}</a>. Please Share the downloadable link &nbsp;and other Credentials with the user at Email &nbsp;: {order_user_email}&nbsp;<br />\r\n                                            Order details are given below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                     \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '{vendor_name} Name of the vendor<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order items in Tabular Format.<br>\r\n{order_user_email} Buyer Email Address\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
-('vendor_order_email', 1, 'Vendor Order Email', 'Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\r\n                                            An order has been placed for your product(s) at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                            Order details &amp; Shipping information are given below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{vendor_name} Name of the vendor<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{order_items_table_format} Order items in Tabular Format.<br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
-('welcome_registration', 1, 'Welcome Mail on Registration', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            Thank you for signing up at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">We are thrilled to have you aboard! You have taken a great first step and we are so excited to connect directly with you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">If you require any assistance in using our site, or have any feedback or suggestions, you can email us at {contact_us_email}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the signed up user.<br>\r\n{email} Email Address of the signed up user.<br>\r\n{username} Username of the signed up User <br/>\r\n{contact_us_email} - Contact Us Email Address<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
-('withdrawal_request_admin', 1, 'Withdrawal Request - Admin', 'Withdrawal Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Withdrawal Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            {username} has submitted a withdrawal request on {website_name}. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request ID</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{request_id}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Amount<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{request_amount}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" colspan=\"2\">Withdrawal details are as below:</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table>\r\n                                            \r\n                                            {withdrawal_detail_table_format_html}\r\n                                            </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{username} Username of the person submitted the withdrawal request<br />\r\n{website_name} Name of the website<br />\r\n{request_id} Withdrawal Request ID<br />\r\n{request_amount} Withdrawal Request Amount<br />\r\n{social_media_icons} <br>\r\n{withdrawal_detail_table_format_html}: Withdrawal Payment Details like Bank Details, Cheque Details, PayPal Details etc\r\n{contact_us_url} <br>', 1),
-('withdrawal_request_approved_declined', 1, 'Withdrawal Request Approved/Declined Email for User', 'Fund Withdrawal Request {request_status} on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td style=\"background:#ff3a59;\">\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Withdrawal Request Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                                                                          Your fund withdrawal request {request_id} of {request_amount} has been {request_status} on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{request_id} Withdrawal Request ID<br />\r\n{request_amount} Withdrawal Request Amount.<br />\r\n{request_status} New Withdrawal Request Status<br />\r\n{website_name} Name of the website\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
+('user_email_verification', 1, 'Email Verification', 'Email Verification at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"600\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" border=\"0\" width=\"100%\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            It seems that you have used change email address option at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">You need to confirm your email to get your account activated with this email address. To confirm the email, please click the link below or copy-paste the below given url in your browser address bar:<br />\r\n                                            {verification_url}<br />\r\n                                            <a href=\"{verification_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL/Link of our website<br>\r\n{verification_url} Url to verify email\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('user_send_email', 1, 'User & Affiliate Send Email', '{admin_subject}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Message Posted</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {full_name}</strong><br />\r\n                                            {admin_message}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver<br>\r\n{website_name} Name of the website<br />\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('user_signup_verification', 1, 'Email Confirmation on Registration', 'Email Verification at {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Verification!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_full_name} </strong><br />\r\n                                            Thank you for registering at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">You need to confirm your email to get your FREE account activated. To confirm the email, please click the link below or copy-paste the below given url in your browser address bar:<br />\r\n                                            {verification_url}<br />\r\n                                            <a href=\"{verification_url}\" style=\"font-size:15px; color:#ff3a59;\">Click Here</a></td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_full_name} Name of the email receiver.<br>\r\n{website_name} Name of our website<br>\r\n{verification_url} Url to verify email<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('vendor_bank_transfer_order_email', 1, 'Vendor Bank Transfer Order Email', 'Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td >\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Bank Transfer</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                    <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\n                                      An order has been placed for your product(s) at <a href=\"{website_url}\">{website_name}</a>.<br />\n                                     Order details &amp; Shipping information are given below:</td>\n                                  </tr>\n                                 <tr>\n                                    <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\n                                 </tr>                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{vendor_name} Name of the vendor<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order items in Tabular Format.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('vendor_cod_order_email', 1, 'Vendor COD Order Email', 'Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n    <tr>\n        <td >\n            <!--\n            page title start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Order Placed</h4>\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Cash On Delivery</h2></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page title end here\n            -->\n               </td>\n    </tr>\n    <tr>\n        <td>\n            <!--\n            page body start here\n            -->\n               \n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                <tbody>\n                    <tr>\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n                                <tbody>\n                                    <tr>\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\n                                                An order has been placed for your product(s) at <a href=\"{website_url}\">{website_name}</a>.<br />\n                                                Order details &amp; Shipping information are given below:</td>\n                                    </tr>\n                                    <tr>\n                                            <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\n                                    </tr>\n                                    \n                                </tbody>\n                            </table></td>\n                    </tr>\n                </tbody>\n            </table>\n            <!--\n            page body end here\n            -->\n        </td>\n    </tr>\n</table>', '{vendor_name} Name of the vendor<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order items in Tabular Format.<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('vendor_digital_order_email', 1, 'Vendor Digital Order Email', 'Digital Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n                             \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n                             \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\r\n                                            An order has been placed for your Digital product(s) at <a href=\"{website_url}\">{website_name}</a>. Please Share the downloadable link &nbsp;and other Credentials with the user at Email &nbsp;: {order_user_email}&nbsp;<br />\r\n                                            Order details are given below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                     \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n             </td>\r\n    </tr>\r\n</table>', '{vendor_name} Name of the vendor<br/>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{order_items_table_format} Order items in Tabular Format.<br>\r\n{order_user_email} Buyer Email Address\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1),
+('vendor_order_email', 1, 'Vendor Order Email', 'Order Received From {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\"></h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Order Placed</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {vendor_name} </strong><br />\r\n                                            An order has been placed for your product(s) at <a href=\"{website_url}\">{website_name}</a>.<br />\r\n                                            Order details &amp; Shipping information are given below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:5px 0 30px;\">{order_items_table_format}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{vendor_name} Name of the vendor<br/>\n{website_name} Name of our website<br>\n{website_url} URL of our website<br>\n{order_items_table_format} Order items in Tabular Format.<br>\n{social_media_icons} <br>\n{contact_us_url} <br>', 1),
+('welcome_registration', 1, 'Welcome Mail on Registration', 'Welcome to {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Congratulations</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Account Created!</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {name} </strong><br />\r\n                                            Thank you for signing up at <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">We are thrilled to have you aboard! You have taken a great first step and we are so excited to connect directly with you.</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:0 0 30px;\">If you require any assistance in using our site, or have any feedback or suggestions, you can email us at {contact_us_email}</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{name} Name of the signed up user.<br>\r\n{email} Email Address of the signed up user.<br>\r\n{username} Username of the signed up User <br/>\r\n{contact_us_email} - Contact Us Email Address<br/>\r\n{website_name} Name of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', 1),
+('withdrawal_request_admin', 1, 'Withdrawal Request - Admin', 'Withdrawal Request on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Withdrawal Request</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear Admin</strong><br />\r\n                                            {username} has submitted a withdrawal request on {website_name}. Please find the details below:</td>\r\n                                    </tr>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\">\r\n                                            <table style=\"border:1px solid #ddd; border-collapse:collapse;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\r\n                                                <tbody>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Request ID</td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{request_id}</td>\r\n                                                    </tr>                                                        \r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" width=\"153\">Amount<span class=\"Apple-tab-span\" style=\"white-space:pre\"></span></td>\r\n                                                        <td style=\"padding:10px;font-size:13px; color:#333;border:1px solid #ddd;\" width=\"620\">{request_amount}</td>\r\n                                                    </tr>\r\n                                                    <tr>\r\n                                                        <td style=\"padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;\" colspan=\"2\">Withdrawal details are as below:</td>\r\n                                                    </tr>\r\n                                                </tbody>\r\n                                            </table>\r\n                                            \r\n                                            {withdrawal_detail_table_format_html}\r\n                                            </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{username} Username of the person submitted the withdrawal request<br />\r\n{website_name} Name of the website<br />\r\n{request_id} Withdrawal Request ID<br />\r\n{request_amount} Withdrawal Request Amount<br />\r\n{social_media_icons} <br>\r\n{withdrawal_detail_table_format_html}: Withdrawal Payment Details like Bank Details, Cheque Details, PayPal Details etc\r\n{contact_us_url} <br>', 1),
+('withdrawal_request_approved_declined', 1, 'Withdrawal Request Approved/Declined Email for User', 'Fund Withdrawal Request {request_status} on {website_name}', '<table width=\"100%\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n    <tr>\r\n        <td >\r\n            <!--\r\n            page title start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">\r\n                            <h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Updated</h4>\r\n                            <h2 style=\"margin:0; font-size:34px; padding:0;\">Withdrawal Request Status</h2></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page title end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n    <tr>\r\n        <td>\r\n            <!--\r\n            page body start here\r\n            -->\r\n               \r\n            <table width=\"600\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                <tbody>\r\n                    <tr>\r\n                        <td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">\r\n                            <table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\r\n                                <tbody>\r\n                                    <tr>\r\n                                        <td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n                                                                                          Your fund withdrawal request {request_id} of {request_amount} has been {request_status} on <a href=\"{website_url}\">{website_name}</a>.</td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table></td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n            <!--\r\n            page body end here\r\n            -->\r\n               </td>\r\n    </tr>\r\n</table>', '{user_name} Name of the email receiver<br />\r\n{request_id} Withdrawal Request ID<br />\r\n{request_amount} Withdrawal Request Amount.<br />\r\n{request_status} New Withdrawal Request Status<br />\r\n{website_name} Name of the website\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
 
 -- --------------------------------------------------------
 
@@ -2403,13 +2404,13 @@ INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `et
 --
 
 CREATE TABLE `tbl_empty_cart_items` (
-  `emptycartitem_id` int(11) NOT NULL,
-  `emptycartitem_identifier` varchar(255) NOT NULL,
-  `emptycartitem_url` varchar(255) NOT NULL,
+  `emptycartitem_id` int NOT NULL,
+  `emptycartitem_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `emptycartitem_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `emptycartitem_url_is_newtab` tinyint(1) NOT NULL,
   `emptycartitem_active` tinyint(1) NOT NULL,
-  `emptycartitem_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `emptycartitem_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_empty_cart_items`
@@ -2427,10 +2428,10 @@ INSERT INTO `tbl_empty_cart_items` (`emptycartitem_id`, `emptycartitem_identifie
 --
 
 CREATE TABLE `tbl_empty_cart_items_lang` (
-  `emptycartitemlang_emptycartitem_id` int(11) NOT NULL,
-  `emptycartitemlang_lang_id` int(11) NOT NULL,
-  `emptycartitem_title` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `emptycartitemlang_emptycartitem_id` int NOT NULL,
+  `emptycartitemlang_lang_id` int NOT NULL,
+  `emptycartitem_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_empty_cart_items_lang`
@@ -2451,11 +2452,11 @@ INSERT INTO `tbl_empty_cart_items_lang` (`emptycartitemlang_emptycartitem_id`, `
 --
 
 CREATE TABLE `tbl_extra_attributes` (
-  `eattribute_id` int(11) NOT NULL,
-  `eattribute_eattrgroup_id` int(11) NOT NULL,
-  `eattribute_identifier` varchar(255) NOT NULL,
-  `eattrgroup_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `eattribute_id` int NOT NULL,
+  `eattribute_eattrgroup_id` int NOT NULL,
+  `eattribute_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `eattrgroup_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2464,10 +2465,10 @@ CREATE TABLE `tbl_extra_attributes` (
 --
 
 CREATE TABLE `tbl_extra_attributes_lang` (
-  `eattributelang_eattribute_id` int(11) NOT NULL,
-  `eattributelang_lang_id` int(11) NOT NULL,
-  `eattribute_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `eattributelang_eattribute_id` int NOT NULL,
+  `eattributelang_lang_id` int NOT NULL,
+  `eattribute_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2476,12 +2477,12 @@ CREATE TABLE `tbl_extra_attributes_lang` (
 --
 
 CREATE TABLE `tbl_extra_attribute_groups` (
-  `eattrgroup_id` int(11) NOT NULL,
-  `eattrgroup_seller_id` int(11) NOT NULL,
-  `eattrgroup_identifier` varchar(255) NOT NULL,
-  `eattrgroup_display_order` varchar(255) NOT NULL,
+  `eattrgroup_id` int NOT NULL,
+  `eattrgroup_seller_id` int NOT NULL,
+  `eattrgroup_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `eattrgroup_display_order` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `eattrgroup_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2490,10 +2491,10 @@ CREATE TABLE `tbl_extra_attribute_groups` (
 --
 
 CREATE TABLE `tbl_extra_attribute_groups_lang` (
-  `eattrgrouplang_eattrgroup_id` int(11) NOT NULL,
-  `eattrgrouplang_lang_id` int(11) NOT NULL,
-  `eattrgroup_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `eattrgrouplang_eattrgroup_id` int NOT NULL,
+  `eattrgrouplang_lang_id` int NOT NULL,
+  `eattrgroup_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2502,14 +2503,14 @@ CREATE TABLE `tbl_extra_attribute_groups_lang` (
 --
 
 CREATE TABLE `tbl_extra_pages` (
-  `epage_id` int(11) NOT NULL,
-  `epage_identifier` varchar(255) NOT NULL,
-  `epage_type` tinyint(4) NOT NULL COMMENT 'defined in ExtraPage Model',
+  `epage_id` int NOT NULL,
+  `epage_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `epage_type` tinyint NOT NULL COMMENT 'defined in ExtraPage Model',
   `epage_content_for` tinyint(1) NOT NULL,
   `epage_active` tinyint(1) NOT NULL,
   `epage_default` tinyint(1) NOT NULL COMMENT 'Default can not deactivated',
-  `epage_default_content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `epage_default_content` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_extra_pages`
@@ -2543,7 +2544,6 @@ INSERT INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_type`, `ep
 (38, 'Products Inventory - Admin', 38, 1, 1, 0, '<div class=\"grouplisting\">                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – General Data  </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined unique id for the Product. This field needs to be unique.</p>                                        </li>                                           				<li>                                                                                      					<h5>Product Identifier</h5>                                                                                      					<p>User defined identifier for the Product. This field needs to be the same as Product Identifier defined in the Product Catalog Content sheet. </p>                                        </li>                                         				<li>                                                                                      					<h5>Username</h5>                                                                                      					<p>Username of the seller to which inventory is being updated.</p>                                        </li>                                         				<li>                                                                                      					<h5>Selling price</h5>                                                                                      					<p>Selling price of the product </p>                                        </li>                                         				<li>                                                                                      					<h5>Stock</h5>                                                                                      					<p>Quantity available for the product </p>                                        </li>                                         				<li>                                                                                      					<h5>Min Order Quantity</h5>                                                                                      					<p>Minimum quantity that a buyer can purchase for the product</p>                                        </li>                                         				<li>                                                                                      					<h5>Subtract Stock</h5>                                                                                      					<p>User defined field to mark if the system should subtract stock or not once an order is placed. Possible inputs for this field are \'Yes\' &amp; \'No\'.</p>                                        </li>                                         				<li>                                                                                      					<h5>Track Inventory</h5>                                                                                      					<p>User defined field to mark if the system should monitor inventory or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. </p>                                        </li>                                         				<li>                                                                                      					<h5>Threshold Stock Level</h5>                                                                                      					<p>User defined field to input threshold stock level upon which the system would generate an alert email. This will only work if both Subtract Stock &amp; Track Inventory are set as \'Yes\'.</p>                                        </li>                                         				<li>                                                                                      					<h5>Condition identifier</h5>                                                                                      					<p> User defined field to define a particular product\'s condition in the system. Possible inputs for this field are \'New\', \'Used\' &amp; \'Refurbished\'.</p>                                        </li>                                         				<li>                                                                                      					<h5>Digital Product Max Download time</h5>                                                                                      					<p>User defined field to define maximum number of times a digital product can be downloaded. Possible inputs for this field are integers.</p>                                        </li>                                         				<li>                                                                                      					<h5>Download validity in days</h5>                                                                                      					<p>User defined field to define maximum number of days until the digital product can be downloaded. Possible inputs for this field are integers.</p>                                        </li>                                         				<li>                                                                                      					<h5>Title</h5>                                                                                      					<p>User defined field to define the title of the product in the shop. </p>                                        </li>                                         				<li>                                                                                      					<h5>Comments</h5>                                                                                      					<p> User defined field to input comments for the product.</p>                                        </li>                                                                                  				<li>                                                                                      					<h5>URL Keyword</h5>                                                                                      					<p>User defined field for input of URL keywords, used for URL rewriting.&nbsp;&nbsp;</p>                                        </li>                                         				<li>                                                                                      					<h5>Added on </h5>                                                                                      					<p>User defined date field to input the date the product is added into the system. Date format is mm/dd/yy</p>                                        </li>                                         				<li>                                                                                      					<h5>Available from </h5>                                                                                      					<p> User defined date field to input the date the product is available from. Date format is mm/dd/yy</p>                                        </li>                                         				<li>                                                                                      					<h5>Active</h5>                                                                                      					<p>User defined field to mark a particular product as Active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\' to display products in the system.</p>                                        </li>                                         				<li>                                                                                      					<h5>COD Available</h5>                                                                                      					<p>User defined field to mark a particular product is available for cash on delivery in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. </p>                                        </li>                                         				<li>                                                                                      					<h5>Deleted</h5>                                                                                      					<p>User defined field to mark a particular product as deleted in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'No\' to display products in the system.</p>                                        </li>                                         				<li>                                                                                      					<h5>Sold count</h5>                                                                                      					<p>System defined field to show the user cold count for a particular product. This field cannot be updated by the user.</p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Product Options  </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id </h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.    </p>                                        </li>                                           				<li>                                                                                      					<h5>Option Identifier</h5>                                                                                      					<p>User defined unique identifier for the Option. This field needs to be the same as the option identifier defined in the Options content sheet.</p>                                        </li>                                            				<li>                                                                                      					<h5>Option Value Identifier</h5>                                                                                      					<p>User defined unique identifier for the Option value. This field needs to be the same as the option value identifier defined in the Options value content sheet.</p>                                        </li>                                        			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – SEO Data </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.  </p>                                        </li>                                         				<li>                                                                                      					<h5>Meta Identifier</h5>                                                                                      					<p>User defined unique identifier for the Meta data. This works as a unique key for the system to identify a particular Meta data.</p>                                        </li>                                             				<li>                                                                                      					<h5>Meta Title</h5>                                                                                      					<p>User defined input field for the user to define Meta title for the product.</p>                                        </li>                                             				<li>                                                                                      					<h5>Meta Keywords</h5>                                                                                      					<p>User defined input field for the user to define Meta keywords for the product.</p>                                        </li>                                             				<li>                                                                                      					<h5>Meta Description</h5>                                                                                      					<p>User defined input field for the user to define Meta Description for the product.</p>                                        </li>                                             				<li>                                                                                      					<h5>Other Meta Tags </h5>                                                                                      					<p>User defined input field for the user to define other Meta tags for the product.</p>                                        </li>                                         			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Special Price</h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id </h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.  </p>                                        </li>                                           				<li>                                                                                      					<h5>Start Date</h5>                                                                                      					<p>User defined date field to input the date from which the special price of the product starts from. Date format is mm/dd/yy</p>                                        </li>                                         				<li>                                                                                      					<h5>End Date</h5>                                                                                      					<p>User defined date field to input the date from which the special price of the product ends on. Date format is mm/dd/yy</p>                                        </li>                                         				<li>                                                                                      					<h5>Price</h5>                                                                                      					<p>User defined field for special price of the product. </p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Volume Discount </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.    </p>                                        </li>                                           				<li>                                                                                      					<h5>Min Quantity</h5>                                                                                      					<p>User defined field for minimum quantity of the product to be purchased for volume discount.</p>                                        </li>                                           				<li>                                                                                      					<h5>Discount Percentage</h5>                                                                                      					<p>User defined field for discount percentage to be applied to the product in case of the volume discount. </p>                                        </li>                                       			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Buy Together </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.    </p>                                        </li>                                           				<li>                                                                                      					<h5>Buy Together Selprod Id</h5>                                                                                      					<p>User defined product identifier for the buy together related Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                       			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Related Products </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                           				<li>                                                                                      					<h5>Related Selprod Id</h5>                                                                                      					<p>User defined product identifier for the related Products. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                         			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Seller Product Policy  </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id </h5>                                                                                      					<p> User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                         				<li>                                                                                      					<h5>Policy Point Identifier</h5>                                                                                      					<p>User defined policy point identifier for the Product. This field needs to be the same as the policy point identifier defined on the Policy Points Management page under the CMS tab in the admin console. </p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Media  </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                            				<li>                                                                                      					<h5>Lang Code</h5>                                                                                      					<p>User defined field to link the image for a particular language. \'Universal\' is to be used as an option to link the media in all languages. Language codes can be looked up by clicking the language option in the top header. Language codes need to be used if the product has different images for each language.</p>                                        </li>                                         				<li>                                                                                      					<h5>File Path</h5>                                                                                      					<p>File path needs to be a publically accessible URL for example URL\'s from Google Drive, Dropbox etc. Images stored locally on your personal device/machine cannot be uploaded.</p>                                        </li>                                         				<li>                                                                                      					<h5>File Name</h5>                                                                                      					<p>Name of the image file </p>                                        </li>                                         				<li>                                                                                      					<h5>Display order</h5>                                                                                      					<p>When a product has multiple images then this field defines the order of display. If you are unsure about this field add display order as \'1\'.</p>                                        </li>                                     			</ul>                                </div>                            </div>                        </div>'),
 (39, 'Products Inventory - Seller', 39, 1, 1, 0, '<div class=\"grouplisting\">                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – General Data </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined unique id for the Product. This field needs to be unique.</p>                                        </li>                                         				<li>                                                                                      					<h5>Product Identifier</h5>                                                                                      					<p>User defined identifier for the Product. This field needs to be the same as Product Identifier defined in the Product Catalog sheet.  </p>                                        </li>                                         				<li>                                                                                      					<h5>Selling price </h5>                                                                                      					<p>Selling price of the product</p>                                        </li>                                         				<li>                                                                                      					<h5>Stock</h5>                                                                                      					<p>Quantity available for the product </p>                                        </li>                                         				<li>                                                                                      					<h5>Min Order Quantity</h5>                                                                                      					<p>Minimum quantity that a buyer can purchase for the product</p>                                        </li>                                         				<li>                                                                                      					<h5>Subtract Stock</h5>                                                                                      					<p>User defined field to mark if the system should subtract stock or not once an order is placed. Possible inputs for this field are \'Yes\' &amp; \'No\'. </p>                                        </li>                                         				<li>                                                                                      					<h5>Track Inventory</h5>                                                                                      					<p> User defined field to mark if the system should monitor inventory or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. </p>                                        </li>                                         				<li>                                                                                      					<h5>Threshold Stock Level </h5>                                                                                      					<p>User defined field to input threshold stock level upon which the system would generate an alert email. This will only work if both Subtract Stock &amp; Track Inventory are set as \'Yes\'.</p>                                        </li>                                         				<li>                                                                                      					<h5>Condition identifier </h5>                                                                                      					<p>User defined field to define a particular product\'s condition in the system. Possible inputs for this field are \'New\', \'Used\' &amp; \'Refurbished\'.</p>                                        </li>                                         				<li>                                                                                      					<h5>Digital Product Max Download time</h5>                                                                                      					<p>User defined field to define maximum number of times a digital product can be downloaded. Possible inputs for this field are integers.</p>                                        </li>                                         				<li>                                                                                      					<h5>Download validity in days</h5>                                                                                      					<p>User defined field to define maximum number of days until the digital product can be downloaded. Possible inputs for this field are integers.</p>                                        </li>                                         				<li>                                                                                      					<h5>Title </h5>                                                                                      					<p>User defined field to define the title of the product in the shop. </p>                                        </li>                                         				<li>                                                                                      					<h5>Comments</h5>                                                                                      					<p>User defined field to input comments for the product.</p>                                        </li>                                         				<li>                                                                                      					<h5>URL Keyword</h5>                                                                                      					<p>&nbsp;User defined field for input of URL keywords, used for URL rewriting.&nbsp;&nbsp;</p>                                        </li>                                         				<li>                                                                                      					<h5>Available from</h5>                                                                                      					<p>User defined date field to input the date the product is available from. Date format is mm/dd/yy</p>                                        </li>                                         				<li>                                                                                      					<h5>Active</h5>                                                                                      					<p>User defined field to mark a particular product as Active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\' to display products in the system.</p>                                        </li>                                         				<li>                                                                                      					<h5>COD Available</h5>                                                                                      					<p>User defined field to mark a particular product is available for cash on delivery in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. </p>                                        </li>                                                                              			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Product Options</h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.    </p>                                        </li>                                          				<li>                                                                                      					<h5>Option Identifier</h5>                                                                                      					<p>User defined unique identifier for the Option. This field needs to be the same as Option Identifier defined in Option export sheet. </p>                                        </li>                                          				<li>                                                                                      					<h5>Option Value Identifier</h5>                                                                                      					<p>User defined unique identifier for the Option value. This field needs to be the same as Option Value Identifier defined in Option Value export sheet.</p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – SEO</h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id </h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.    </p>                                        </li>                                         				<li>                                                                                      					<h5>Meta Identifier</h5>                                                                                      					<p>User defined unique identifier for the Meta data. This works as a unique key for the system to identify a particular Meta data.</p>                                        </li>                                         				<li>                                                                                      					<h5>Meta Title</h5>                                                                                      					<p>User defined input field for the user to define Meta title for the product. </p>                                        </li>                                         				<li>                                                                                      					<h5>Meta Keywords</h5>                                                                                      					<p>User defined input field for the user to define Meta keywords for the product.</p>                                        </li>                                         				<li>                                                                                      					<h5>Meta Description</h5>                                                                                      					<p>User defined input field for the user to define Meta Description for the product.</p>                                        </li>                                         				<li>                                                                                      					<h5>Other Meta Tags </h5>                                                                                      					<p>User defined input field for the user to define other Meta tags for the product.</p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Special Price </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                         				<li>                                                                                      					<h5>Start Date</h5>                                                                                      					<p>User defined date field to input the date from which the special price of the product starts from. Date format is mm/dd/yy</p>                                        </li>                                         				<li>                                                                                      					<h5>End Date</h5>                                                                                      					<p>User defined date field to input the date from which the special price of the product ends on. Date format is mm/dd/yy</p>                                        </li>                                         				<li>                                                                                      					<h5>Price</h5>                                                                                      					<p>User defined field for special price of the product. </p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Volume Discount </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                         				<li>                                                                                      					<h5>Min Quantity </h5>                                                                                      					<p>User defined field for minimum quantity of the product to be purchased for volume discount.</p>                                        </li>                                         				<li>                                                                                      					<h5>Discount Percentage </h5>                                                                                      					<p>User defined field for discount percentage to be applied to the product in case of the volume discount. </p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Buy Together </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id </h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                         				<li>                                                                                      					<h5>Buy Together Selprod Id</h5>                                                                                      					<p>User defined product identifier for the buy together related Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5>  Seller Products – Related Products</h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                         				<li>                                                                                      					<h5>Related Selprod Id</h5>                                                                                      					<p>User defined product identifier for the related Products. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.  </p>                                        </li>                                     			</ul>                                </div>                            </div>                             	<div class=\"groups group-js\">                                 		<div class=\"group__head group__head-js\"> 			<h5> Seller Products – Seller Product Policy </h5></div>                                 		<div class=\"group__body group__body-js\">                                     			<ul>                                                                      				<li>                                                                                      					<h5>Seller Product Id</h5>                                                                                      					<p>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.</p>                                        </li>                                         				<li>                                                                                      					<h5>Policy Point Identifier </h5>                                                                                      					<p> User defined policy point identifier for the Product. This field needs to be the same as the policy point identifier defined on the Policy Points Management page under the CMS tab in the admin console. </p>                                        </li>                                     			</ul>                                </div>                            </div>                        </div>'),
 (40, 'Product Inventory Update Instructions', 40, 1, 1, 0, '<h4><br /> 	<br /> 	Seller Product Id</h4>User defined product identifier for the Product. This field needs to be the same as the seller product identifier defined in the Seller Product General Data sheet.     <h4><br /> 	SKU</h4>User defined field for the product SKU. <h4><br /> 	Product</h4>User defined field for the product name. <h4><br /> 	Price</h4>User defined field for the product price. <h4><br /> 	Stock/quantity</h4>User defined field for the stock/quantity of the product.'),
-(44, 'Policy points', 44, 1, 1, 0, ''),
 (45, 'Marketplace Product Instructions', 41, 0, 1, 0, '<div class=\"delivery-term-data-inner\">\r\n                <div class=\"heading\">Products<span>All the information you need regarding this page</span></div>\r\n                <ul class=\"\">\r\n                    <li>\r\n                        This page lists all the marketplace products added by admin and seller.\r\n                        Marketplace products are of two types:-\r\n                        <ul>\r\n                            <li><strong>System Products</strong>: Available to all sellers and any seller can add to their own store.</li>\r\n                            <li><strong>My Products</strong>: Available only for you. No other seller can add to their own store.</li>\r\n                        </ul>\r\n                    </li>\r\n                    <li>On clicking \"<strong>Add Product</strong>\" button, seller can add new product to marketplace products.</li>\r\n                    <li>On click of \"<strong>Add to Store</strong>\" the seller can pick the product and add the products to his store inventory.</li>\r\n                </ul>\r\n            </div>'),
 (46, 'Seller Inventory Instructions', 42, 0, 1, 0, '<div class=\"delivery-term-data-inner\">\r\n                    <div class=\"heading\">Store Inventory<span>All the information you need regarding this page</span></div>\r\n                    <ul>\r\n                        <li>This tab lists all the products available to your front end store.</li>\r\n                        <li>For each product variant, separate copy need to be created by seller either from Marketplace product tab or clone product icon.</li>\r\n                        <li>To add new product to your store inventory, seller will have to pick the products from the marketplace products tabs from \"Add to Store\" button</li>\r\n                    </ul>\r\n                </div>'),
 (47, 'Product Request Instructions', 43, 0, 1, 0, '<div class=\"delivery-term-data-inner\">\r\n                    <div class=\"heading\">Requested Products<span>All the information you need regarding this page</span></div>\r\n                    <ul>\r\n                        <li>This tab lists all the products requested by seller to the admin which are not available in the marketplace products.</li>\r\n                        <li>On admin approval, the product will be added to the marketplace products and to the seller inventory.</li>\r\n                    </ul>\r\n                </div>');
@@ -2555,11 +2555,11 @@ INSERT INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_type`, `ep
 --
 
 CREATE TABLE `tbl_extra_pages_lang` (
-  `epagelang_epage_id` int(11) NOT NULL,
-  `epagelang_lang_id` int(11) NOT NULL,
-  `epage_label` varchar(255) NOT NULL,
-  `epage_content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `epagelang_epage_id` int NOT NULL,
+  `epagelang_lang_id` int NOT NULL,
+  `epage_label` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `epage_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_extra_pages_lang`
@@ -2613,10 +2613,10 @@ INSERT INTO `tbl_extra_pages_lang` (`epagelang_epage_id`, `epagelang_lang_id`, `
 --
 
 CREATE TABLE `tbl_failed_login_attempts` (
-  `attempt_username` varchar(150) NOT NULL,
-  `attempt_ip` varchar(50) NOT NULL,
+  `attempt_username` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `attempt_ip` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `attempt_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2625,14 +2625,14 @@ CREATE TABLE `tbl_failed_login_attempts` (
 --
 
 CREATE TABLE `tbl_faqs` (
-  `faq_id` int(11) NOT NULL,
-  `faq_faqcat_id` int(11) NOT NULL,
-  `faq_identifier` varchar(255) NOT NULL,
+  `faq_id` int NOT NULL,
+  `faq_faqcat_id` int NOT NULL,
+  `faq_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `faq_active` tinyint(1) NOT NULL,
   `faq_deleted` tinyint(1) NOT NULL,
-  `faq_display_order` int(11) NOT NULL,
+  `faq_display_order` int NOT NULL,
   `faq_featured` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2641,11 +2641,11 @@ CREATE TABLE `tbl_faqs` (
 --
 
 CREATE TABLE `tbl_faqs_lang` (
-  `faqlang_faq_id` int(11) NOT NULL,
-  `faqlang_lang_id` int(11) NOT NULL,
-  `faq_title` varchar(255) NOT NULL,
-  `faq_content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `faqlang_faq_id` int NOT NULL,
+  `faqlang_lang_id` int NOT NULL,
+  `faq_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `faq_content` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2654,14 +2654,14 @@ CREATE TABLE `tbl_faqs_lang` (
 --
 
 CREATE TABLE `tbl_faq_categories` (
-  `faqcat_id` int(11) NOT NULL,
-  `faqcat_identifier` varchar(150) NOT NULL,
+  `faqcat_id` int NOT NULL,
+  `faqcat_identifier` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
   `faqcat_active` tinyint(1) NOT NULL,
-  `faqcat_type` tinyint(4) NOT NULL,
+  `faqcat_type` tinyint NOT NULL,
   `faqcat_deleted` tinyint(1) NOT NULL,
-  `faqcat_display_order` int(11) NOT NULL,
+  `faqcat_display_order` int NOT NULL,
   `faqcat_featured` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2670,10 +2670,10 @@ CREATE TABLE `tbl_faq_categories` (
 --
 
 CREATE TABLE `tbl_faq_categories_lang` (
-  `faqcatlang_faqcat_id` int(11) NOT NULL,
-  `faqcatlang_lang_id` int(11) NOT NULL,
-  `faqcat_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `faqcatlang_faqcat_id` int NOT NULL,
+  `faqcatlang_lang_id` int NOT NULL,
+  `faqcat_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2682,12 +2682,12 @@ CREATE TABLE `tbl_faq_categories_lang` (
 --
 
 CREATE TABLE `tbl_filters` (
-  `filter_id` int(11) NOT NULL,
-  `filter_filtergroup_id` int(11) NOT NULL,
-  `filter_identifier` varchar(255) NOT NULL,
-  `filter_display_order` int(11) NOT NULL,
+  `filter_id` int NOT NULL,
+  `filter_filtergroup_id` int NOT NULL,
+  `filter_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `filter_display_order` int NOT NULL,
   `filter_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2696,10 +2696,10 @@ CREATE TABLE `tbl_filters` (
 --
 
 CREATE TABLE `tbl_filters_lang` (
-  `filterlang_filter_id` int(11) NOT NULL,
-  `filterlang_lang_id` int(11) NOT NULL,
-  `filter_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `filterlang_filter_id` int NOT NULL,
+  `filterlang_lang_id` int NOT NULL,
+  `filter_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2708,11 +2708,11 @@ CREATE TABLE `tbl_filters_lang` (
 --
 
 CREATE TABLE `tbl_filter_groups` (
-  `filtergroup_id` int(11) NOT NULL,
-  `filtergroup_identifier` varchar(255) NOT NULL,
+  `filtergroup_id` int NOT NULL,
+  `filtergroup_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `filtergroup_active` tinyint(1) NOT NULL,
   `filtergroup_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2721,10 +2721,10 @@ CREATE TABLE `tbl_filter_groups` (
 --
 
 CREATE TABLE `tbl_filter_groups_lang` (
-  `filtergrouplang_filtergroup_id` int(11) NOT NULL,
-  `filtergrouplang_lang_id` int(11) NOT NULL,
-  `filtergroup_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `filtergrouplang_filtergroup_id` int NOT NULL,
+  `filtergrouplang_lang_id` int NOT NULL,
+  `filtergroup_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2733,10 +2733,10 @@ CREATE TABLE `tbl_filter_groups_lang` (
 --
 
 CREATE TABLE `tbl_import_export_settings` (
-  `impexp_setting_key` varchar(255) NOT NULL,
+  `impexp_setting_key` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `impexp_setting_value` tinyint(1) NOT NULL,
-  `impexp_setting_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `impexp_setting_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2745,14 +2745,14 @@ CREATE TABLE `tbl_import_export_settings` (
 --
 
 CREATE TABLE `tbl_languages` (
-  `language_id` int(11) NOT NULL,
-  `language_code` varchar(5) NOT NULL,
-  `language_country_code` varchar(5) NOT NULL,
-  `language_name` varchar(100) NOT NULL,
+  `language_id` int NOT NULL,
+  `language_code` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `language_country_code` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `language_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `language_active` tinyint(1) NOT NULL DEFAULT '1',
-  `language_css` varchar(10) NOT NULL,
-  `language_layout_direction` varchar(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `language_css` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `language_layout_direction` varchar(3) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_languages`
@@ -2769,12 +2769,12 @@ INSERT INTO `tbl_languages` (`language_id`, `language_code`, `language_country_c
 --
 
 CREATE TABLE `tbl_language_labels` (
-  `label_id` int(11) NOT NULL,
-  `label_key` varchar(255) NOT NULL,
-  `label_lang_id` int(11) NOT NULL,
-  `label_caption` text NOT NULL,
+  `label_id` int NOT NULL,
+  `label_key` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `label_lang_id` int NOT NULL,
+  `label_caption` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `label_type` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_language_labels`
@@ -12065,7 +12065,6 @@ INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `la
 (19733, 'LBL_BANK_PAYOUT', 1, 'Bank Payout', 1),
 (19734, 'LBL_ADD_CREDITS', 1, 'Add Credits', 1),
 (19735, 'LBL_WITHDRAW', 1, 'Withdraw', 1),
-(19736, 'LBL_ADD_WALLET_CREDITS_[$]', 1, 'Add Wallet Credits [$]', 1),
 (19737, 'LBL_ENTER_AMOUNT', 1, 'Enter Amount', 1),
 (19738, 'LBL_GATEWAY_TXN_ID', 1, 'Gateway Txn Id', 1),
 (19739, 'LBL_AFFILIATE_REGISTRATION', 1, 'Affiliate Registration', 1),
@@ -12629,9 +12628,9 @@ INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `la
 (20398, 'APP_ERROR_SELECT_TIME_SLOT', 1, 'Please select pickup time slot.', 2),
 (20399, 'APP_ERROR_SELECT_PICKUP_DATE', 1, 'Please select pickup date.', 2),
 (20400, 'APP_GOOGLE_PAY', 1, 'Google Pay', 2),
-(20401, 'APP_BANK_NAME', 1, 'Bank Name', 2);
+(20401, 'APP_BANK_NAME', 1, 'Bank Name', 2),
+(20402, 'APP_BANK_BRANCH', 1, 'Bank Branch', 2);
 INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
-(20402, 'APP_BANK_BRANCH', 1, 'Bank Branch', 2),
 (20403, 'APP_ACCOUNT_', 1, 'Account #', 2),
 (20404, 'APP_IFSC_MICR', 1, 'IFSC/MICR', 2),
 (20405, 'APP_ROUTING', 1, 'Routing #', 2),
@@ -12770,7 +12769,23 @@ INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `la
 (20603, 'APP_INTERNAL_ERROR_MSG', 1, 'Some internal error occured!', 2),
 (20604, 'APP_UNAUTHORISED', 1, 'Your session has been expired,\nPlease login again for authentication!', 2),
 (20605, 'APP_CANCELED', 1, 'Request Canceled!', 2),
-(20606, 'APP_FAILED', 1, 'Failed!', 2);
+(20606, 'APP_FAILED', 1, 'Failed!', 2),
+(20607, 'LBL_INDIVIDUAL_ADDITIONAL_IDENTIFYING_DOCUMENT', 1, 'A document showing address, either a passport, local ID card, or utility bill from a well-known utility company.', 0),
+(20608, 'LBL_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', 1, 'How frequently available funds are paid out. One of: daily, manual, weekly, or monthly. Default is daily.', 0),
+(20609, 'LBL_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', 1, 'The number of days charge funds are held before being paid out. May also be set to minimum, representing the lowest available value for the account country. Default is minimum. The delay_days parameter does not apply when the interval is manual.', 0),
+(20610, 'LBL_STRIPE_CONNECT_WEEK_DAY_DESC', 1, 'The day of the week when available funds are paid out, specified as monday, tuesday, etc. (required and applicable only if interval is weekly.)', 0),
+(20611, 'LBL_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', 0),
+(20612, 'LBL_DIAL_CODE_FIELD_NOT_FOUND', 1, 'Dial Code Field Not Found', 1),
+(20613, 'MSG_WAITING_FOR_PAYMENT_RESPONSE..', 1, 'Waiting For Payment Response..', 1),
+(20614, 'MSG_RESPONSE_RECEIVED._UPDATING_RECORDS..', 1, 'Response Received. Updating Records..', 1),
+(20615, 'MSG_PLEASE_FILL_REQUIRED_FIELDS', 1, 'Please Fill Required Fields', 1),
+(20616, 'MSG_ALREADY_SELECTED', 1, 'Already Selected', 1),
+(20617, 'MSG_TYPE_TO_SEARCH..', 1, 'Type To Search..', 1),
+(20618, 'LBL_RESEND_OTP?', 1, 'Resend Otp?', 1),
+(20619, 'MSG_REDIRECTING...', 1, 'Redirecting...', 1),
+(20620, 'MSG_YOU_ARE_NOT_ALLOWED_TO_ADD_MORE_THAN_8_IMAGES', 1, 'You Are Not Allowed To Add More Than 8 Images', 1),
+(20621, 'MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', 1, 'Are You Sure ? Deleting Account Will Unlink All Transactions Related To This Account.', 1),
+(20622, 'MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', 1, 'Are You Sure ? Unlinking Account Will Unlink All Transactions Related To This Account.', 1);
 
 -- --------------------------------------------------------
 
@@ -12779,12 +12794,12 @@ INSERT INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `la
 --
 
 CREATE TABLE `tbl_layout_templates` (
-  `ltemplate_id` int(11) NOT NULL,
-  `ltemplate_indentifier` varchar(255) NOT NULL,
-  `ltemplate_type` int(11) NOT NULL,
+  `ltemplate_id` int NOT NULL,
+  `ltemplate_indentifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ltemplate_type` int NOT NULL,
   `ltemplate_active` tinyint(1) NOT NULL,
-  `ltemplate_deleted` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ltemplate_deleted` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_layout_templates`
@@ -12800,15 +12815,15 @@ INSERT INTO `tbl_layout_templates` (`ltemplate_id`, `ltemplate_indentifier`, `lt
 --
 
 CREATE TABLE `tbl_manual_shipping_api` (
-  `mshipapi_id` int(11) NOT NULL,
-  `mshipapi_sduration_id` int(11) NOT NULL,
+  `mshipapi_id` int NOT NULL,
+  `mshipapi_sduration_id` int NOT NULL,
   `mshipapi_volume_upto` decimal(10,2) NOT NULL,
   `mshipapi_weight_upto` decimal(10,2) NOT NULL,
-  `mshipapi_zip` varchar(100) NOT NULL,
-  `mshipapi_state_id` int(11) NOT NULL,
-  `mshipapi_country_id` int(11) NOT NULL,
+  `mshipapi_zip` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `mshipapi_state_id` int NOT NULL,
+  `mshipapi_country_id` int NOT NULL,
   `mshipapi_cost` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -12817,10 +12832,10 @@ CREATE TABLE `tbl_manual_shipping_api` (
 --
 
 CREATE TABLE `tbl_manual_shipping_api_lang` (
-  `mshipapilang_mshipapi_id` int(11) NOT NULL,
-  `mshipapilang_lang_id` int(11) NOT NULL,
-  `mshipapi_comment` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `mshipapilang_mshipapi_id` int NOT NULL,
+  `mshipapilang_lang_id` int NOT NULL,
+  `mshipapi_comment` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -12829,14 +12844,14 @@ CREATE TABLE `tbl_manual_shipping_api_lang` (
 --
 
 CREATE TABLE `tbl_meta_tags` (
-  `meta_id` int(11) NOT NULL,
-  `meta_controller` varchar(200) NOT NULL,
-  `meta_action` varchar(200) NOT NULL,
-  `meta_record_id` int(11) NOT NULL,
-  `meta_subrecord_id` int(11) NOT NULL,
+  `meta_id` int NOT NULL,
+  `meta_controller` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `meta_action` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `meta_record_id` int NOT NULL,
+  `meta_subrecord_id` int NOT NULL,
   `meta_default` tinyint(1) NOT NULL,
-  `meta_advanced` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `meta_advanced` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -12845,13 +12860,13 @@ CREATE TABLE `tbl_meta_tags` (
 --
 
 CREATE TABLE `tbl_meta_tags_lang` (
-  `metalang_meta_id` int(11) NOT NULL,
-  `metalang_lang_id` int(11) NOT NULL,
-  `meta_title` varchar(200) NOT NULL,
-  `meta_keywords` text NOT NULL,
-  `meta_description` text NOT NULL,
-  `meta_other_meta_tags` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `metalang_meta_id` int NOT NULL,
+  `metalang_lang_id` int NOT NULL,
+  `meta_title` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `meta_keywords` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `meta_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `meta_other_meta_tags` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -12860,13 +12875,13 @@ CREATE TABLE `tbl_meta_tags_lang` (
 --
 
 CREATE TABLE `tbl_navigations` (
-  `nav_id` int(11) NOT NULL,
-  `nav_identifier` varchar(150) DEFAULT NULL,
+  `nav_id` int NOT NULL,
+  `nav_identifier` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `nav_active` tinyint(1) DEFAULT NULL,
   `nav_is_multilevel` tinyint(1) NOT NULL,
   `nav_type` tinyint(1) NOT NULL,
   `nav_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_navigations`
@@ -12887,10 +12902,10 @@ INSERT INTO `tbl_navigations` (`nav_id`, `nav_identifier`, `nav_active`, `nav_is
 --
 
 CREATE TABLE `tbl_navigations_lang` (
-  `navlang_nav_id` int(11) NOT NULL,
-  `navlang_lang_id` int(11) NOT NULL,
-  `nav_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `navlang_nav_id` int NOT NULL,
+  `navlang_lang_id` int NOT NULL,
+  `nav_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_navigations_lang`
@@ -12914,19 +12929,19 @@ INSERT INTO `tbl_navigations_lang` (`navlang_nav_id`, `navlang_lang_id`, `nav_na
 --
 
 CREATE TABLE `tbl_navigation_links` (
-  `nlink_id` int(11) NOT NULL,
-  `nlink_nav_id` int(11) NOT NULL,
-  `nlink_cpage_id` int(11) NOT NULL,
-  `nlink_category_id` int(11) NOT NULL,
-  `nlink_identifier` varchar(200) NOT NULL,
-  `nlink_target` varchar(100) NOT NULL,
-  `nlink_type` tinyint(4) NOT NULL,
-  `nlink_parent_id` int(11) NOT NULL,
+  `nlink_id` int NOT NULL,
+  `nlink_nav_id` int NOT NULL,
+  `nlink_cpage_id` int NOT NULL,
+  `nlink_category_id` int NOT NULL,
+  `nlink_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `nlink_target` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nlink_type` tinyint NOT NULL,
+  `nlink_parent_id` int NOT NULL,
   `nlink_login_protected` tinyint(1) NOT NULL,
   `nlink_deleted` tinyint(1) NOT NULL,
-  `nlink_url` varchar(100) NOT NULL,
-  `nlink_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `nlink_url` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nlink_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_navigation_links`
@@ -12958,10 +12973,10 @@ INSERT INTO `tbl_navigation_links` (`nlink_id`, `nlink_nav_id`, `nlink_cpage_id`
 --
 
 CREATE TABLE `tbl_navigation_links_lang` (
-  `nlinklang_nlink_id` int(11) NOT NULL,
-  `nlinklang_lang_id` int(11) NOT NULL,
-  `nlink_caption` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `nlinklang_nlink_id` int NOT NULL,
+  `nlinklang_lang_id` int NOT NULL,
+  `nlink_caption` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_navigation_links_lang`
@@ -13009,15 +13024,15 @@ INSERT INTO `tbl_navigation_links_lang` (`nlinklang_nlink_id`, `nlinklang_lang_i
 --
 
 CREATE TABLE `tbl_notifications` (
-  `notification_id` bigint(15) NOT NULL,
-  `notification_record_type` int(11) NOT NULL,
-  `notification_record_id` bigint(15) NOT NULL,
-  `notification_user_id` int(11) NOT NULL,
+  `notification_id` bigint NOT NULL,
+  `notification_record_type` int NOT NULL,
+  `notification_record_id` bigint NOT NULL,
+  `notification_user_id` int NOT NULL,
   `notification_marked_read` tinyint(1) NOT NULL,
-  `notification_label_key` int(11) NOT NULL,
+  `notification_label_key` int NOT NULL,
   `notification_deleted` tinyint(1) NOT NULL,
   `notification_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13026,15 +13041,15 @@ CREATE TABLE `tbl_notifications` (
 --
 
 CREATE TABLE `tbl_options` (
-  `option_id` int(11) NOT NULL,
-  `option_identifier` varchar(255) NOT NULL,
-  `option_seller_id` int(11) NOT NULL,
-  `option_type` int(11) NOT NULL COMMENT 'Defined in Model',
+  `option_id` int NOT NULL,
+  `option_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `option_seller_id` int NOT NULL,
+  `option_type` int NOT NULL COMMENT 'Defined in Model',
   `option_deleted` tinyint(1) NOT NULL,
   `option_is_separate_images` tinyint(1) NOT NULL,
   `option_is_color` tinyint(1) NOT NULL,
   `option_display_in_filter` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13043,10 +13058,10 @@ CREATE TABLE `tbl_options` (
 --
 
 CREATE TABLE `tbl_options_lang` (
-  `optionlang_option_id` int(11) NOT NULL,
-  `optionlang_lang_id` int(11) NOT NULL,
-  `option_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `optionlang_option_id` int NOT NULL,
+  `optionlang_lang_id` int NOT NULL,
+  `option_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13055,12 +13070,12 @@ CREATE TABLE `tbl_options_lang` (
 --
 
 CREATE TABLE `tbl_option_values` (
-  `optionvalue_id` int(11) NOT NULL,
-  `optionvalue_option_id` int(11) NOT NULL,
-  `optionvalue_identifier` varchar(255) NOT NULL,
-  `optionvalue_color_code` varchar(10) NOT NULL,
-  `optionvalue_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `optionvalue_id` int NOT NULL,
+  `optionvalue_option_id` int NOT NULL,
+  `optionvalue_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `optionvalue_color_code` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `optionvalue_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13069,10 +13084,10 @@ CREATE TABLE `tbl_option_values` (
 --
 
 CREATE TABLE `tbl_option_values_lang` (
-  `optionvaluelang_optionvalue_id` int(11) NOT NULL,
-  `optionvaluelang_lang_id` int(11) NOT NULL,
-  `optionvalue_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `optionvaluelang_optionvalue_id` int NOT NULL,
+  `optionvaluelang_lang_id` int NOT NULL,
+  `optionvalue_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13081,46 +13096,46 @@ CREATE TABLE `tbl_option_values_lang` (
 --
 
 CREATE TABLE `tbl_orders` (
-  `order_id` varchar(15) NOT NULL,
-  `order_type` int(11) NOT NULL COMMENT 'products, subscription, wallet tarns etc etc',
-  `order_user_id` int(11) NOT NULL,
+  `order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_type` int NOT NULL COMMENT 'products, subscription, wallet tarns etc etc',
+  `order_user_id` int NOT NULL,
   `order_payment_status` tinyint(1) NOT NULL COMMENT 'defined in order model',
-  `order_status` int(11) NOT NULL,
+  `order_status` int NOT NULL,
   `order_net_amount` decimal(10,2) NOT NULL,
-  `order_is_wallet_selected` tinyint(4) NOT NULL,
+  `order_is_wallet_selected` tinyint NOT NULL,
   `order_wallet_amount_charge` decimal(10,2) NOT NULL,
   `order_tax_charged` decimal(10,2) NOT NULL,
   `order_site_commission` decimal(10,2) NOT NULL,
-  `order_discount_coupon_code` varchar(50) NOT NULL,
-  `order_discount_type` tinyint(4) NOT NULL,
+  `order_discount_coupon_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_discount_type` tinyint NOT NULL,
   `order_discount_value` decimal(10,2) NOT NULL,
   `order_discount_total` decimal(10,2) NOT NULL,
-  `order_discount_info` text NOT NULL,
+  `order_discount_info` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `order_volume_discount_total` decimal(10,2) NOT NULL,
   `order_reward_point_used` decimal(10,2) NOT NULL,
   `order_reward_point_value` decimal(10,2) NOT NULL,
-  `order_user_comments` varchar(255) NOT NULL,
-  `order_admin_comments` text NOT NULL,
-  `order_language_id` int(11) NOT NULL,
-  `order_language_code` varchar(4) NOT NULL,
-  `order_currency_id` int(11) NOT NULL,
-  `order_currency_code` varchar(10) NOT NULL,
+  `order_user_comments` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_admin_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `order_language_id` int NOT NULL,
+  `order_language_code` varchar(4) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_currency_id` int NOT NULL,
+  `order_currency_code` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
   `order_currency_value` decimal(10,8) NOT NULL,
-  `order_shippingapi_id` int(11) NOT NULL,
-  `order_shippingapi_code` varchar(100) NOT NULL,
-  `order_pmethod_id` int(11) NOT NULL COMMENT 'Payment method',
+  `order_shippingapi_id` int NOT NULL,
+  `order_shippingapi_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_pmethod_id` int NOT NULL COMMENT 'Payment method',
   `order_date_added` datetime NOT NULL,
   `order_date_updated` datetime NOT NULL,
-  `order_referrer_user_id` int(11) NOT NULL,
-  `order_referrer_reward_points` int(11) NOT NULL,
-  `order_referral_reward_points` int(11) NOT NULL,
-  `order_affiliate_user_id` int(11) NOT NULL,
+  `order_referrer_user_id` int NOT NULL,
+  `order_referrer_reward_points` int NOT NULL,
+  `order_referral_reward_points` int NOT NULL,
+  `order_affiliate_user_id` int NOT NULL,
   `order_affiliate_total_commission` decimal(10,2) NOT NULL,
-  `order_cart_data` text NOT NULL,
-  `order_renew` tinyint(4) NOT NULL,
+  `order_cart_data` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `order_renew` tinyint NOT NULL,
   `order_deleted` tinyint(1) NOT NULL,
   `order_rounding_off` decimal(4,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13129,10 +13144,10 @@ CREATE TABLE `tbl_orders` (
 --
 
 CREATE TABLE `tbl_orders_lang` (
-  `orderlang_order_id` varchar(15) NOT NULL,
-  `orderlang_lang_id` int(11) NOT NULL,
-  `order_shippingapi_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `orderlang_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `orderlang_lang_id` int NOT NULL,
+  `order_shippingapi_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13141,14 +13156,14 @@ CREATE TABLE `tbl_orders_lang` (
 --
 
 CREATE TABLE `tbl_orders_status` (
-  `orderstatus_id` int(11) NOT NULL,
-  `orderstatus_identifier` varchar(255) NOT NULL,
-  `orderstatus_color_class` tinyint(4) DEFAULT NULL COMMENT 'Defined in applicationConstant',
-  `orderstatus_type` tinyint(4) NOT NULL,
-  `orderstatus_priority` int(11) NOT NULL,
+  `orderstatus_id` int NOT NULL,
+  `orderstatus_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `orderstatus_color_class` tinyint DEFAULT NULL COMMENT 'Defined in applicationConstant',
+  `orderstatus_type` tinyint NOT NULL,
+  `orderstatus_priority` int NOT NULL,
   `orderstatus_is_active` tinyint(1) NOT NULL,
   `orderstatus_is_digital` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_orders_status`
@@ -13178,17 +13193,18 @@ INSERT INTO `tbl_orders_status` (`orderstatus_id`, `orderstatus_identifier`, `or
 --
 
 CREATE TABLE `tbl_orders_status_history` (
-  `oshistory_id` int(11) NOT NULL,
-  `oshistory_order_id` varchar(15) NOT NULL,
-  `oshistory_op_id` int(11) NOT NULL,
-  `oshistory_orderstatus_id` int(11) NOT NULL,
-  `oshistory_order_payment_status` int(11) NOT NULL,
+  `oshistory_id` int NOT NULL,
+  `oshistory_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `oshistory_op_id` int NOT NULL,
+  `oshistory_orderstatus_id` int NOT NULL,
+  `oshistory_order_payment_status` int NOT NULL,
   `oshistory_date_added` datetime NOT NULL,
   `oshistory_customer_notified` tinyint(1) NOT NULL,
-  `oshistory_tracking_number` varchar(255) NOT NULL,
-  `oshistory_courier` varchar(255) NOT NULL,
-  `oshistory_comments` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `oshistory_tracking_number` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `oshistory_tracking_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `oshistory_courier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `oshistory_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13197,10 +13213,10 @@ CREATE TABLE `tbl_orders_status_history` (
 --
 
 CREATE TABLE `tbl_orders_status_lang` (
-  `orderstatuslang_orderstatus_id` int(11) NOT NULL,
-  `orderstatuslang_lang_id` int(11) NOT NULL,
-  `orderstatus_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `orderstatuslang_orderstatus_id` int NOT NULL,
+  `orderstatuslang_lang_id` int NOT NULL,
+  `orderstatus_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13209,9 +13225,9 @@ CREATE TABLE `tbl_orders_status_lang` (
 --
 
 CREATE TABLE `tbl_order_cancel_reasons` (
-  `ocreason_id` int(11) NOT NULL,
-  `ocreason_identifier` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ocreason_id` int NOT NULL,
+  `ocreason_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_order_cancel_reasons`
@@ -13233,11 +13249,11 @@ INSERT INTO `tbl_order_cancel_reasons` (`ocreason_id`, `ocreason_identifier`) VA
 --
 
 CREATE TABLE `tbl_order_cancel_reasons_lang` (
-  `ocreasonlang_ocreason_id` int(11) NOT NULL,
-  `ocreasonlang_lang_id` int(11) NOT NULL,
-  `ocreason_title` varchar(255) NOT NULL,
-  `ocreason_description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ocreasonlang_ocreason_id` int NOT NULL,
+  `ocreasonlang_lang_id` int NOT NULL,
+  `ocreason_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ocreason_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13246,17 +13262,17 @@ CREATE TABLE `tbl_order_cancel_reasons_lang` (
 --
 
 CREATE TABLE `tbl_order_cancel_requests` (
-  `ocrequest_id` int(11) NOT NULL,
-  `ocrequest_user_id` int(11) NOT NULL,
-  `ocrequest_op_id` int(11) NOT NULL,
-  `ocrequest_ocreason_id` int(11) NOT NULL,
-  `ocrequest_message` text NOT NULL,
+  `ocrequest_id` int NOT NULL,
+  `ocrequest_user_id` int NOT NULL,
+  `ocrequest_op_id` int NOT NULL,
+  `ocrequest_ocreason_id` int NOT NULL,
+  `ocrequest_message` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `ocrequest_date` datetime NOT NULL,
-  `ocrequest_status` tinyint(4) NOT NULL,
-  `ocrequest_payment_gateway_req_id` varchar(255) NOT NULL,
+  `ocrequest_status` tinyint NOT NULL,
+  `ocrequest_payment_gateway_req_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `ocrequest_refund_in_wallet` tinyint(1) NOT NULL COMMENT 'Defined In PaymentMethods Model',
-  `ocrequest_admin_comment` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ocrequest_admin_comment` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13265,12 +13281,12 @@ CREATE TABLE `tbl_order_cancel_requests` (
 --
 
 CREATE TABLE `tbl_order_extras` (
-  `oextra_order_id` varchar(15) NOT NULL,
-  `order_ip_address` varchar(25) NOT NULL,
-  `order_forwarded_ip` varchar(50) NOT NULL,
-  `order_user_agent` varchar(255) NOT NULL,
-  `order_accept_language` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `oextra_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_ip_address` varchar(25) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_forwarded_ip` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_user_agent` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_accept_language` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13279,16 +13295,16 @@ CREATE TABLE `tbl_order_extras` (
 --
 
 CREATE TABLE `tbl_order_payments` (
-  `opayment_id` bigint(20) NOT NULL,
-  `opayment_order_id` varchar(15) NOT NULL,
-  `opayment_method` varchar(250) NOT NULL,
-  `opayment_gateway_txn_id` varchar(100) NOT NULL,
+  `opayment_id` bigint NOT NULL,
+  `opayment_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `opayment_method` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `opayment_gateway_txn_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `opayment_amount` decimal(10,2) NOT NULL,
-  `opayment_txn_status` tinyint(4) NOT NULL,
-  `opayment_comments` text NOT NULL,
-  `opayment_gateway_response` text NOT NULL,
+  `opayment_txn_status` tinyint NOT NULL,
+  `opayment_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `opayment_gateway_response` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `opayment_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13297,55 +13313,57 @@ CREATE TABLE `tbl_order_payments` (
 --
 
 CREATE TABLE `tbl_order_products` (
-  `op_id` int(11) NOT NULL,
-  `op_order_id` varchar(15) NOT NULL,
-  `op_invoice_number` varchar(50) NOT NULL,
-  `op_selprod_id` int(11) NOT NULL,
+  `op_id` int NOT NULL,
+  `op_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_invoice_number` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_selprod_id` int NOT NULL,
   `op_is_batch` tinyint(1) NOT NULL,
-  `op_selprod_user_id` int(11) NOT NULL,
-  `op_selprod_code` varchar(255) NOT NULL COMMENT 'code algo defined in seller_products table',
-  `op_batch_selprod_id` varchar(255) NOT NULL,
-  `op_qty` int(11) NOT NULL,
+  `op_selprod_user_id` int NOT NULL,
+  `op_selprod_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'code algo defined in seller_products table',
+  `op_batch_selprod_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_qty` int NOT NULL,
   `op_unit_price` decimal(10,2) NOT NULL,
   `op_unit_cost` decimal(10,2) NOT NULL,
-  `op_selprod_sku` varchar(255) NOT NULL,
+  `op_selprod_sku` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `op_commission_charged` decimal(10,2) NOT NULL,
   `op_commission_percentage` decimal(10,2) NOT NULL,
   `op_affiliate_commission_charged` decimal(10,2) NOT NULL,
   `op_affiliate_commission_percentage` decimal(10,2) NOT NULL,
-  `op_selprod_condition` int(11) NOT NULL,
-  `op_product_model` varchar(100) NOT NULL,
-  `op_product_type` int(11) NOT NULL COMMENT 'physical,digital defined in model',
+  `op_selprod_condition` int NOT NULL,
+  `op_product_model` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_product_type` int NOT NULL COMMENT 'physical,digital defined in model',
   `op_product_length` decimal(10,2) NOT NULL,
   `op_product_width` decimal(10,2) NOT NULL,
   `op_product_height` decimal(10,2) NOT NULL,
-  `op_product_dimension_unit` int(11) NOT NULL,
+  `op_product_dimension_unit` int NOT NULL,
   `op_product_weight` decimal(10,2) NOT NULL,
-  `op_product_weight_unit` int(11) NOT NULL,
-  `op_shop_id` int(11) NOT NULL,
-  `op_shop_owner_name` varchar(255) NOT NULL,
-  `op_shop_owner_username` varchar(255) NOT NULL,
-  `op_shop_owner_email` varchar(150) NOT NULL,
-  `op_shop_owner_phone` varchar(50) NOT NULL,
-  `op_sduration_id` int(11) NOT NULL,
-  `op_status_id` int(11) NOT NULL,
-  `op_refund_qty` int(11) NOT NULL,
+  `op_product_weight_unit` int NOT NULL,
+  `op_shop_id` int NOT NULL,
+  `op_shop_owner_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_shop_owner_username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_shop_owner_email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_shop_owner_phone_dcode` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_shop_owner_phone` bigint NOT NULL,
+  `op_sduration_id` int NOT NULL,
+  `op_status_id` int NOT NULL,
+  `op_refund_qty` int NOT NULL,
   `op_refund_amount` decimal(10,2) NOT NULL,
   `op_refund_commission` decimal(10,2) NOT NULL,
   `op_refund_shipping` decimal(10,2) NOT NULL,
+  `op_refund_tax` decimal(10,2) NOT NULL,
   `op_refund_affiliate_commission` decimal(10,2) NOT NULL,
   `op_shipped_date` datetime NOT NULL,
   `op_completion_date` datetime NOT NULL,
-  `op_sent_review_reminder` int(11) NOT NULL,
-  `op_review_reminder_count` int(11) NOT NULL,
+  `op_sent_review_reminder` int NOT NULL,
+  `op_review_reminder_count` int NOT NULL,
   `op_sent_last_reminder` date NOT NULL,
-  `op_selprod_max_download_times` int(11) NOT NULL,
-  `op_selprod_download_validity_in_days` int(11) NOT NULL,
-  `op_free_ship_upto` int(11) NOT NULL,
+  `op_selprod_max_download_times` int NOT NULL,
+  `op_selprod_download_validity_in_days` int NOT NULL,
+  `op_free_ship_upto` int NOT NULL,
   `op_actual_shipping_charges` float NOT NULL,
-  `op_tax_code` varchar(150) NOT NULL,
+  `op_tax_code` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
   `op_rounding_off` decimal(4,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13354,20 +13372,20 @@ CREATE TABLE `tbl_order_products` (
 --
 
 CREATE TABLE `tbl_order_products_lang` (
-  `oplang_op_id` int(11) NOT NULL,
-  `oplang_lang_id` int(11) NOT NULL,
-  `oplang_order_id` varchar(15) NOT NULL,
-  `op_product_name` varchar(255) NOT NULL,
-  `op_selprod_title` varchar(255) NOT NULL,
-  `op_selprod_options` text NOT NULL,
-  `op_brand_name` varchar(255) NOT NULL,
-  `op_shop_name` varchar(150) NOT NULL,
-  `op_shipping_duration_name` varchar(150) NOT NULL,
-  `op_shipping_durations` varchar(150) NOT NULL,
-  `op_products_dimension_unit_name` varchar(100) NOT NULL,
-  `op_product_weight_unit_name` varchar(100) NOT NULL,
-  `op_product_tax_options` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `oplang_op_id` int NOT NULL,
+  `oplang_lang_id` int NOT NULL,
+  `oplang_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_product_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_selprod_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_selprod_options` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `op_brand_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_shop_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_shipping_duration_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_shipping_durations` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_products_dimension_unit_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_product_weight_unit_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `op_product_tax_options` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13376,12 +13394,12 @@ CREATE TABLE `tbl_order_products_lang` (
 --
 
 CREATE TABLE `tbl_order_product_charges` (
-  `opcharge_id` int(11) NOT NULL,
-  `opcharge_order_type` int(11) NOT NULL,
-  `opcharge_op_id` int(11) NOT NULL,
-  `opcharge_type` int(11) NOT NULL,
+  `opcharge_id` int NOT NULL,
+  `opcharge_order_type` int NOT NULL,
+  `opcharge_op_id` int NOT NULL,
+  `opcharge_type` int NOT NULL,
   `opcharge_amount` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13390,10 +13408,10 @@ CREATE TABLE `tbl_order_product_charges` (
 --
 
 CREATE TABLE `tbl_order_product_charges_lang` (
-  `opchargelang_opcharge_id` int(11) NOT NULL,
-  `opchargelang_lang_id` int(11) NOT NULL,
-  `opcharge_description` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `opchargelang_opcharge_id` int NOT NULL,
+  `opchargelang_lang_id` int NOT NULL,
+  `opcharge_description` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13402,11 +13420,11 @@ CREATE TABLE `tbl_order_product_charges_lang` (
 --
 
 CREATE TABLE `tbl_order_product_digital_download_links` (
-  `opddl_link_id` int(11) NOT NULL,
-  `opddl_op_id` int(11) NOT NULL,
-  `opddl_downloadable_link` varchar(500) NOT NULL,
-  `opddl_downloaded_times` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `opddl_link_id` int NOT NULL,
+  `opddl_op_id` int NOT NULL,
+  `opddl_downloadable_link` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
+  `opddl_downloaded_times` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_order_product_digital_download_links`
@@ -13425,11 +13443,11 @@ INSERT INTO `tbl_order_product_digital_download_links` (`opddl_link_id`, `opddl_
 --
 
 CREATE TABLE `tbl_order_product_settings` (
-  `opsetting_op_id` int(11) NOT NULL,
+  `opsetting_op_id` int NOT NULL,
   `op_commission_include_tax` tinyint(1) NOT NULL,
   `op_commission_include_shipping` tinyint(1) NOT NULL,
   `op_tax_collected_by_seller` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13438,14 +13456,14 @@ CREATE TABLE `tbl_order_product_settings` (
 --
 
 CREATE TABLE `tbl_order_product_shipment` (
-  `opship_op_id` int(11) NOT NULL,
-  `opship_orderid` varchar(150) CHARACTER SET utf8 NOT NULL COMMENT 'From third party',
-  `opship_order_number` varchar(150) NOT NULL COMMENT 'From third party',
-  `opship_shipment_id` varchar(150) NOT NULL,
-  `opship_tracking_number` varchar(150) NOT NULL,
-  `opship_tracking_url` varchar(255) NOT NULL,
-  `opship_response` longtext CHARACTER SET utf8 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `opship_op_id` int NOT NULL,
+  `opship_orderid` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party',
+  `opship_order_number` varchar(150) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party',
+  `opship_shipment_id` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `opship_tracking_number` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `opship_tracking_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `opship_response` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13454,20 +13472,20 @@ CREATE TABLE `tbl_order_product_shipment` (
 --
 
 CREATE TABLE `tbl_order_product_shipping` (
-  `opshipping_op_id` int(11) NOT NULL,
-  `opshipping_fulfillment_type` tinyint(4) NOT NULL DEFAULT '2' COMMENT 'Defined in model',
-  `opshipping_code` varchar(255) NOT NULL,
-  `opshipping_rate_id` int(11) NOT NULL,
-  `opshipping_by_seller_user_id` int(11) NOT NULL,
-  `opshipping_level` int(4) NOT NULL,
-  `opshipping_label` varchar(255) NOT NULL,
-  `opshipping_carrier_code` varchar(150) NOT NULL,
-  `opshipping_service_code` varchar(150) NOT NULL,
-  `opshipping_pickup_addr_id` int(11) NOT NULL,
+  `opshipping_op_id` int NOT NULL,
+  `opshipping_fulfillment_type` tinyint NOT NULL DEFAULT '2' COMMENT 'Defined in model',
+  `opshipping_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `opshipping_rate_id` int NOT NULL,
+  `opshipping_by_seller_user_id` int NOT NULL,
+  `opshipping_level` int NOT NULL,
+  `opshipping_label` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `opshipping_carrier_code` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `opshipping_service_code` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `opshipping_pickup_addr_id` int NOT NULL,
   `opshipping_date` date NOT NULL,
   `opshipping_time_slot_from` time NOT NULL,
   `opshipping_time_slot_to` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13476,12 +13494,12 @@ CREATE TABLE `tbl_order_product_shipping` (
 --
 
 CREATE TABLE `tbl_order_product_shipping_lang` (
-  `opshippinglang_op_id` int(11) NOT NULL,
-  `opshippinglang_lang_id` int(11) NOT NULL,
-  `opshipping_title` varchar(150) NOT NULL,
-  `opshipping_duration` varchar(150) NOT NULL,
-  `opshipping_duration_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `opshippinglang_op_id` int NOT NULL,
+  `opshippinglang_lang_id` int NOT NULL,
+  `opshipping_title` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `opshipping_duration` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `opshipping_duration_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13490,11 +13508,11 @@ CREATE TABLE `tbl_order_product_shipping_lang` (
 --
 
 CREATE TABLE `tbl_order_product_specifics` (
-  `ops_op_id` int(11) NOT NULL,
-  `op_selprod_return_age` int(11) NOT NULL COMMENT 'In Days',
-  `op_selprod_cancellation_age` int(11) NOT NULL COMMENT 'In Days',
-  `op_product_warranty` int(11) NOT NULL COMMENT 'In Days'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `ops_op_id` int NOT NULL,
+  `op_selprod_return_age` int NOT NULL COMMENT 'In Days',
+  `op_selprod_cancellation_age` int NOT NULL COMMENT 'In Days',
+  `op_product_warranty` int NOT NULL COMMENT 'In Days'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_order_product_specifics`
@@ -13557,9 +13575,9 @@ INSERT INTO `tbl_order_product_specifics` (`ops_op_id`, `op_selprod_return_age`,
 --
 
 CREATE TABLE `tbl_order_product_to_shipping_users` (
-  `optsu_op_id` int(11) NOT NULL,
-  `optsu_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `optsu_op_id` int NOT NULL,
+  `optsu_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13568,14 +13586,14 @@ CREATE TABLE `tbl_order_product_to_shipping_users` (
 --
 
 CREATE TABLE `tbl_order_prod_charges_logs` (
-  `opchargelog_id` int(11) NOT NULL,
-  `opchargelog_op_id` int(11) NOT NULL,
-  `opchargelog_type` int(11) NOT NULL,
-  `opchargelog_identifier` varchar(255) NOT NULL,
+  `opchargelog_id` int NOT NULL,
+  `opchargelog_op_id` int NOT NULL,
+  `opchargelog_type` int NOT NULL,
+  `opchargelog_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `opchargelog_value` decimal(10,2) NOT NULL,
-  `opchargelog_is_percent` tinyint(4) NOT NULL,
+  `opchargelog_is_percent` tinyint NOT NULL,
   `opchargelog_percentvalue` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13584,21 +13602,22 @@ CREATE TABLE `tbl_order_prod_charges_logs` (
 --
 
 CREATE TABLE `tbl_order_prod_charges_logs_lang` (
-  `opchargeloglang_opchargelog_id` int(11) NOT NULL,
-  `opchargeloglang_op_id` int(11) NOT NULL,
-  `opchargeloglang_lang_id` int(11) NOT NULL,
-  `opchargelog_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `opchargeloglang_opchargelog_id` int NOT NULL,
+  `opchargeloglang_op_id` int NOT NULL,
+  `opchargeloglang_lang_id` int NOT NULL,
+  `opchargelog_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `tbl_order_return_reasons`
 --
 
 CREATE TABLE `tbl_order_return_reasons` (
-  `orreason_id` int(11) NOT NULL,
-  `orreason_identifier` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `orreason_id` int NOT NULL,
+  `orreason_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_order_return_reasons`
@@ -13618,11 +13637,11 @@ INSERT INTO `tbl_order_return_reasons` (`orreason_id`, `orreason_identifier`) VA
 --
 
 CREATE TABLE `tbl_order_return_reasons_lang` (
-  `orreasonlang_orreason_id` int(11) NOT NULL,
-  `orreasonlang_lang_id` int(11) NOT NULL,
-  `orreason_title` varchar(255) NOT NULL,
-  `orreason_description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `orreasonlang_orreason_id` int NOT NULL,
+  `orreasonlang_lang_id` int NOT NULL,
+  `orreason_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `orreason_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_order_return_reasons_lang`
@@ -13647,19 +13666,19 @@ INSERT INTO `tbl_order_return_reasons_lang` (`orreasonlang_orreason_id`, `orreas
 --
 
 CREATE TABLE `tbl_order_return_requests` (
-  `orrequest_id` int(11) NOT NULL,
-  `orrequest_user_id` int(11) NOT NULL,
-  `orrequest_reference` varchar(100) NOT NULL,
-  `orrequest_op_id` int(11) NOT NULL,
-  `orrequest_qty` int(11) NOT NULL,
-  `orrequest_returnreason_id` int(11) NOT NULL,
-  `orrequest_type` int(11) NOT NULL COMMENT 'defined in model',
+  `orrequest_id` int NOT NULL,
+  `orrequest_user_id` int NOT NULL,
+  `orrequest_reference` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `orrequest_op_id` int NOT NULL,
+  `orrequest_qty` int NOT NULL,
+  `orrequest_returnreason_id` int NOT NULL,
+  `orrequest_type` int NOT NULL COMMENT 'defined in model',
   `orrequest_date` datetime NOT NULL,
-  `orrequest_status` int(11) NOT NULL COMMENT 'defined in model',
-  `orrequest_payment_gateway_req_id` varchar(255) NOT NULL,
+  `orrequest_status` int NOT NULL COMMENT 'defined in model',
+  `orrequest_payment_gateway_req_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `orrequest_refund_in_wallet` tinyint(1) NOT NULL COMMENT 'Defined In PaymentMethods Model',
-  `orrequest_admin_comment` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `orrequest_admin_comment` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13668,14 +13687,14 @@ CREATE TABLE `tbl_order_return_requests` (
 --
 
 CREATE TABLE `tbl_order_return_request_messages` (
-  `orrmsg_id` int(11) NOT NULL,
-  `orrmsg_orrequest_id` int(11) NOT NULL,
-  `orrmsg_from_user_id` int(11) NOT NULL,
-  `orrmsg_from_admin_id` int(11) NOT NULL,
-  `orrmsg_msg` text NOT NULL,
+  `orrmsg_id` int NOT NULL,
+  `orrmsg_orrequest_id` int NOT NULL,
+  `orrmsg_from_user_id` int NOT NULL,
+  `orrmsg_from_admin_id` int NOT NULL,
+  `orrmsg_msg` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `orrmsg_date` datetime NOT NULL,
   `orrmsg_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13684,22 +13703,22 @@ CREATE TABLE `tbl_order_return_request_messages` (
 --
 
 CREATE TABLE `tbl_order_seller_subscriptions` (
-  `ossubs_id` int(11) NOT NULL,
-  `ossubs_type` int(11) NOT NULL,
-  `ossubs_plan_id` int(11) NOT NULL,
-  `ossubs_order_id` varchar(255) NOT NULL,
-  `ossubs_status_id` int(11) NOT NULL,
-  `ossubs_images_allowed` int(11) NOT NULL,
-  `ossubs_products_allowed` int(11) NOT NULL,
-  `ossubs_inventory_allowed` int(11) NOT NULL,
-  `ossubs_interval` int(11) NOT NULL,
-  `ossubs_frequency` char(4) NOT NULL,
+  `ossubs_id` int NOT NULL,
+  `ossubs_type` int NOT NULL,
+  `ossubs_plan_id` int NOT NULL,
+  `ossubs_order_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ossubs_status_id` int NOT NULL,
+  `ossubs_images_allowed` int NOT NULL,
+  `ossubs_products_allowed` int NOT NULL,
+  `ossubs_inventory_allowed` int NOT NULL,
+  `ossubs_interval` int NOT NULL,
+  `ossubs_frequency` char(4) COLLATE utf8mb4_general_ci NOT NULL,
   `ossubs_commission` decimal(10,2) NOT NULL,
-  `ossubs_invoice_number` varchar(50) NOT NULL,
+  `ossubs_invoice_number` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `ossubs_price` decimal(10,2) NOT NULL,
   `ossubs_from_date` date NOT NULL,
   `ossubs_till_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13708,11 +13727,11 @@ CREATE TABLE `tbl_order_seller_subscriptions` (
 --
 
 CREATE TABLE `tbl_order_seller_subscriptions_lang` (
-  `ossubslang_ossubs_id` int(11) NOT NULL,
-  `ossubslang_lang_id` int(11) NOT NULL,
-  `ossubslang_order_id` varchar(15) NOT NULL,
-  `ossubs_subscription_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ossubslang_ossubs_id` int NOT NULL,
+  `ossubslang_lang_id` int NOT NULL,
+  `ossubslang_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `ossubs_subscription_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13721,21 +13740,22 @@ CREATE TABLE `tbl_order_seller_subscriptions_lang` (
 --
 
 CREATE TABLE `tbl_order_user_address` (
-  `oua_order_id` varchar(15) NOT NULL,
-  `oua_op_id` int(11) NOT NULL,
-  `oua_type` tinyint(4) NOT NULL COMMENT '1=>Billing Address, 2=> Shipping Address defined in model',
-  `oua_name` varchar(255) NOT NULL,
-  `oua_address1` varchar(250) NOT NULL,
-  `oua_address2` varchar(250) NOT NULL,
-  `oua_city` varchar(255) NOT NULL,
-  `oua_state` varchar(255) NOT NULL,
-  `oua_state_code` varchar(100) NOT NULL,
-  `oua_country` varchar(255) NOT NULL,
-  `oua_country_code` varchar(2) NOT NULL,
-  `oua_country_code_alpha3` varchar(3) NOT NULL,
-  `oua_phone` varchar(100) NOT NULL,
-  `oua_zip` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `oua_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_op_id` int NOT NULL,
+  `oua_type` tinyint NOT NULL COMMENT '1=>Billing Address, 2=> Shipping Address defined in model',
+  `oua_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_address1` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_address2` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_city` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_state` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_state_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_country` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_country_code` varchar(2) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_country_code_alpha3` varchar(3) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_phone_dcode` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `oua_phone` bigint NOT NULL,
+  `oua_zip` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13744,13 +13764,13 @@ CREATE TABLE `tbl_order_user_address` (
 --
 
 CREATE TABLE `tbl_plugins` (
-  `plugin_id` int(11) NOT NULL,
-  `plugin_identifier` varchar(50) NOT NULL,
-  `plugin_type` int(11) NOT NULL,
-  `plugin_code` varchar(100) NOT NULL,
+  `plugin_id` int NOT NULL,
+  `plugin_identifier` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `plugin_type` int NOT NULL,
+  `plugin_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `plugin_active` tinyint(1) NOT NULL,
-  `plugin_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `plugin_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_plugins`
@@ -13791,9 +13811,10 @@ INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plu
 (36, 'AfterShip Shipment', 14, 'AfterShipShipment', 0, 1),
 (37, 'Pay At Store', 13, 'PayAtStore', 0, 1),
 (38, 'Mpesa', 13, 'Mpesa', 0, 9),
-(39, 'Dpo', 13, 'Dpo', 0, 21),
+(39, 'Paygate', 13, 'Paygate', 0, 21),
 (40, 'Paynow', 13, 'Paynow', 0, 22),
-(41, 'Paystack', 13, 'Paystack', 0, 23);
+(41, 'Paystack', 13, 'Paystack', 0, 23),
+(44, 'Dpo', 13, 'Dpo', 0, 23);
 
 -- --------------------------------------------------------
 
@@ -13802,11 +13823,11 @@ INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plu
 --
 
 CREATE TABLE `tbl_plugins_lang` (
-  `pluginlang_plugin_id` int(11) NOT NULL,
-  `pluginlang_lang_id` int(11) NOT NULL,
-  `plugin_name` varchar(200) NOT NULL,
-  `plugin_description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `pluginlang_plugin_id` int NOT NULL,
+  `pluginlang_lang_id` int NOT NULL,
+  `plugin_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `plugin_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_plugins_lang`
@@ -13839,10 +13860,10 @@ INSERT INTO `tbl_plugins_lang` (`pluginlang_plugin_id`, `pluginlang_lang_id`, `p
 --
 
 CREATE TABLE `tbl_plugin_settings` (
-  `pluginsetting_plugin_id` int(11) NOT NULL,
-  `pluginsetting_key` varchar(100) NOT NULL,
-  `pluginsetting_value` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `pluginsetting_plugin_id` int NOT NULL,
+  `pluginsetting_key` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `pluginsetting_value` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_plugin_settings`
@@ -13859,13 +13880,13 @@ INSERT INTO `tbl_plugin_settings` (`pluginsetting_plugin_id`, `pluginsetting_key
 --
 
 CREATE TABLE `tbl_policy_points` (
-  `ppoint_id` int(11) NOT NULL,
-  `ppoint_identifier` varchar(255) NOT NULL,
-  `ppoint_type` int(11) NOT NULL,
-  `ppoint_display_order` int(11) NOT NULL,
+  `ppoint_id` int NOT NULL,
+  `ppoint_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ppoint_type` int NOT NULL,
+  `ppoint_display_order` int NOT NULL,
   `ppoint_active` tinyint(1) NOT NULL,
   `ppoint_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13874,10 +13895,10 @@ CREATE TABLE `tbl_policy_points` (
 --
 
 CREATE TABLE `tbl_policy_points_lang` (
-  `ppointlang_ppoint_id` int(11) NOT NULL,
-  `ppointlang_lang_id` int(11) NOT NULL,
-  `ppoint_title` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ppointlang_ppoint_id` int NOT NULL,
+  `ppointlang_lang_id` int NOT NULL,
+  `ppoint_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13886,14 +13907,14 @@ CREATE TABLE `tbl_policy_points_lang` (
 --
 
 CREATE TABLE `tbl_polling` (
-  `polling_id` int(11) NOT NULL,
-  `polling_identifier` varchar(255) NOT NULL,
-  `polling_type` int(11) NOT NULL,
+  `polling_id` int NOT NULL,
+  `polling_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `polling_type` int NOT NULL,
   `polling_start_date` datetime NOT NULL,
   `polling_end_date` datetime NOT NULL,
   `polling_active` tinyint(1) NOT NULL,
   `polling_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13902,12 +13923,12 @@ CREATE TABLE `tbl_polling` (
 --
 
 CREATE TABLE `tbl_polling_feedback` (
-  `pollfeedback_id` int(11) NOT NULL,
-  `pollfeedback_polling_id` int(11) NOT NULL,
-  `pollfeedback_response_type` int(11) NOT NULL,
-  `pollfeedback_response_ip` varchar(100) NOT NULL,
+  `pollfeedback_id` int NOT NULL,
+  `pollfeedback_polling_id` int NOT NULL,
+  `pollfeedback_response_type` int NOT NULL,
+  `pollfeedback_response_ip` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `pollfeedback_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13916,10 +13937,10 @@ CREATE TABLE `tbl_polling_feedback` (
 --
 
 CREATE TABLE `tbl_polling_lang` (
-  `pollinglang_polling_id` int(11) NOT NULL,
-  `pollinglang_lang_id` int(11) NOT NULL,
-  `polling_question` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `pollinglang_polling_id` int NOT NULL,
+  `pollinglang_lang_id` int NOT NULL,
+  `polling_question` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13928,9 +13949,9 @@ CREATE TABLE `tbl_polling_lang` (
 --
 
 CREATE TABLE `tbl_polling_to_category` (
-  `ptc_polling_id` int(11) NOT NULL,
-  `ptc_prodcat_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ptc_polling_id` int NOT NULL,
+  `ptc_prodcat_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13939,9 +13960,9 @@ CREATE TABLE `tbl_polling_to_category` (
 --
 
 CREATE TABLE `tbl_polling_to_products` (
-  `ptp_polling_id` int(11) NOT NULL,
-  `ptp_product_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ptp_polling_id` int NOT NULL,
+  `ptp_product_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13950,36 +13971,36 @@ CREATE TABLE `tbl_polling_to_products` (
 --
 
 CREATE TABLE `tbl_products` (
-  `product_id` int(11) NOT NULL,
-  `product_identifier` varchar(100) NOT NULL,
-  `product_attrgrp_id` int(11) NOT NULL,
-  `product_type` int(11) NOT NULL COMMENT 'Physical, digital. Defined in model',
-  `product_model` varchar(100) NOT NULL,
-  `product_brand_id` int(11) NOT NULL,
-  `product_added_by_admin_id` int(11) NOT NULL,
-  `product_seller_id` int(11) NOT NULL COMMENT 'used to handle custom products, directly entered by seller',
+  `product_id` int NOT NULL,
+  `product_identifier` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `product_attrgrp_id` int NOT NULL,
+  `product_type` int NOT NULL COMMENT 'Physical, digital. Defined in model',
+  `product_model` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `product_brand_id` int NOT NULL,
+  `product_added_by_admin_id` int NOT NULL,
+  `product_seller_id` int NOT NULL COMMENT 'used to handle custom products, directly entered by seller',
   `product_length` decimal(10,2) NOT NULL,
   `product_width` decimal(10,2) NOT NULL,
   `product_height` decimal(10,2) NOT NULL,
-  `product_dimension_unit` int(11) NOT NULL,
+  `product_dimension_unit` int NOT NULL,
   `product_weight` decimal(10,2) NOT NULL,
-  `product_weight_unit` int(11) NOT NULL,
+  `product_weight_unit` int NOT NULL,
   `product_added_on` datetime NOT NULL,
   `product_img_updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `product_featured` tinyint(4) NOT NULL,
-  `product_active` tinyint(4) NOT NULL,
-  `product_approved` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'needed for custom products mostly',
-  `product_fulfillment_type` int(11) NOT NULL,
-  `product_upc` varchar(100) NOT NULL,
-  `product_isbn` varchar(100) NOT NULL,
-  `product_ship_country` int(11) NOT NULL,
-  `product_ship_free` tinyint(4) NOT NULL,
+  `product_featured` tinyint NOT NULL,
+  `product_active` tinyint NOT NULL,
+  `product_approved` tinyint NOT NULL DEFAULT '0' COMMENT 'needed for custom products mostly',
+  `product_fulfillment_type` int NOT NULL,
+  `product_upc` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `product_isbn` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `product_ship_country` int NOT NULL,
+  `product_ship_free` tinyint NOT NULL,
   `product_cod_enabled` tinyint(1) NOT NULL,
   `product_min_selling_price` decimal(12,4) NOT NULL,
   `product_deleted` tinyint(1) NOT NULL,
-  `product_ship_package` int(11) NOT NULL,
+  `product_ship_package` int NOT NULL,
   `product_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -13988,15 +14009,15 @@ CREATE TABLE `tbl_products` (
 --
 
 CREATE TABLE `tbl_products_browsing_history` (
-  `pbhistory_id` bigint(20) NOT NULL,
-  `pbhistory_sessionid` varchar(20) NOT NULL,
-  `pbhistory_selprod_code` varchar(255) NOT NULL,
-  `pbhistory_swsetting_key` int(11) NOT NULL,
-  `pbhistory_user_id` int(11) NOT NULL,
-  `pbhistory_product_id` int(11) NOT NULL,
-  `pbhistory_count` int(11) NOT NULL,
+  `pbhistory_id` bigint NOT NULL,
+  `pbhistory_sessionid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `pbhistory_selprod_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `pbhistory_swsetting_key` int NOT NULL,
+  `pbhistory_user_id` int NOT NULL,
+  `pbhistory_product_id` int NOT NULL,
+  `pbhistory_count` int NOT NULL,
   `pbhistory_datetime` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14005,14 +14026,14 @@ CREATE TABLE `tbl_products_browsing_history` (
 --
 
 CREATE TABLE `tbl_products_lang` (
-  `productlang_product_id` int(11) NOT NULL,
-  `productlang_lang_id` int(11) NOT NULL,
-  `product_name` varchar(200) NOT NULL,
-  `product_short_description` text NOT NULL,
-  `product_description` text NOT NULL,
-  `product_tags_string` text NOT NULL,
-  `product_youtube_video` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `productlang_product_id` int NOT NULL,
+  `productlang_lang_id` int NOT NULL,
+  `product_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `product_short_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `product_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `product_tags_string` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `product_youtube_video` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14021,12 +14042,12 @@ CREATE TABLE `tbl_products_lang` (
 --
 
 CREATE TABLE `tbl_products_min_price` (
-  `pmp_product_id` int(11) NOT NULL,
-  `pmp_selprod_id` int(11) NOT NULL,
+  `pmp_product_id` int NOT NULL,
+  `pmp_selprod_id` int NOT NULL,
   `pmp_min_price` decimal(10,2) NOT NULL,
   `pmp_max_price` decimal(10,2) NOT NULL,
-  `pmp_splprice_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `pmp_splprice_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14035,9 +14056,9 @@ CREATE TABLE `tbl_products_min_price` (
 --
 
 CREATE TABLE `tbl_products_shipped_by_seller` (
-  `psbs_product_id` int(11) NOT NULL,
-  `psbs_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `psbs_product_id` int NOT NULL,
+  `psbs_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14046,11 +14067,11 @@ CREATE TABLE `tbl_products_shipped_by_seller` (
 --
 
 CREATE TABLE `tbl_products_shipping` (
-  `ps_product_id` int(11) NOT NULL,
-  `ps_user_id` int(11) NOT NULL,
-  `ps_from_country_id` int(11) NOT NULL,
+  `ps_product_id` int NOT NULL,
+  `ps_user_id` int NOT NULL,
+  `ps_from_country_id` int NOT NULL,
   `ps_free` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14059,10 +14080,10 @@ CREATE TABLE `tbl_products_shipping` (
 --
 
 CREATE TABLE `tbl_products_temp_ids` (
-  `pti_product_id` int(11) NOT NULL,
-  `pti_product_temp_id` int(11) NOT NULL,
-  `pti_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `pti_product_id` int NOT NULL,
+  `pti_product_temp_id` int NOT NULL,
+  `pti_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14071,21 +14092,21 @@ CREATE TABLE `tbl_products_temp_ids` (
 --
 
 CREATE TABLE `tbl_product_categories` (
-  `prodcat_id` int(11) NOT NULL,
-  `prodcat_identifier` varchar(100) NOT NULL,
-  `prodcat_parent` int(11) NOT NULL DEFAULT '0',
-  `prodcat_seller_id` int(11) NOT NULL,
-  `prodcat_display_order` int(11) NOT NULL DEFAULT '0',
-  `prodcat_featured` tinyint(4) NOT NULL,
-  `prodcat_active` int(11) NOT NULL DEFAULT '1',
-  `prodcat_status` tinyint(4) NOT NULL COMMENT 'Defined in productCategory Model',
-  `prodcat_deleted` int(11) NOT NULL DEFAULT '0',
-  `prodcat_code` varchar(255) NOT NULL,
-  `prodcat_ordercode` varchar(255) NOT NULL,
+  `prodcat_id` int NOT NULL,
+  `prodcat_identifier` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `prodcat_parent` int NOT NULL DEFAULT '0',
+  `prodcat_seller_id` int NOT NULL,
+  `prodcat_display_order` int NOT NULL DEFAULT '0',
+  `prodcat_featured` tinyint NOT NULL,
+  `prodcat_active` int NOT NULL DEFAULT '1',
+  `prodcat_status` tinyint NOT NULL COMMENT 'Defined in productCategory Model',
+  `prodcat_deleted` int NOT NULL DEFAULT '0',
+  `prodcat_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `prodcat_ordercode` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `prodcat_updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `prodcat_requested_on` datetime NOT NULL,
   `prodcat_status_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14094,12 +14115,12 @@ CREATE TABLE `tbl_product_categories` (
 --
 
 CREATE TABLE `tbl_product_categories_lang` (
-  `prodcatlang_prodcat_id` int(11) NOT NULL,
-  `prodcatlang_lang_id` int(11) NOT NULL,
-  `prodcat_name` varchar(200) NOT NULL,
-  `prodcat_content_block` text NOT NULL,
-  `prodcat_description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `prodcatlang_prodcat_id` int NOT NULL,
+  `prodcatlang_lang_id` int NOT NULL,
+  `prodcat_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `prodcat_content_block` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodcat_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14108,10 +14129,10 @@ CREATE TABLE `tbl_product_categories_lang` (
 --
 
 CREATE TABLE `tbl_product_category_relations` (
-  `pcr_prodcat_id` int(11) NOT NULL,
-  `pcr_parent_id` int(11) NOT NULL,
-  `pcr_level` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `pcr_prodcat_id` int NOT NULL,
+  `pcr_parent_id` int NOT NULL,
+  `pcr_level` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14120,12 +14141,12 @@ CREATE TABLE `tbl_product_category_relations` (
 --
 
 CREATE TABLE `tbl_product_groups` (
-  `prodgroup_id` int(11) NOT NULL,
-  `prodgroup_user_id` int(11) NOT NULL,
-  `prodgroup_identifier` varchar(255) NOT NULL,
+  `prodgroup_id` int NOT NULL,
+  `prodgroup_user_id` int NOT NULL,
+  `prodgroup_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `prodgroup_price` decimal(10,2) NOT NULL,
-  `prodgroup_active` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `prodgroup_active` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14134,10 +14155,10 @@ CREATE TABLE `tbl_product_groups` (
 --
 
 CREATE TABLE `tbl_product_groups_lang` (
-  `prodgrouplang_prodgroup_id` int(11) NOT NULL,
-  `prodgrouplang_lang_id` int(11) NOT NULL,
-  `prodgroup_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `prodgrouplang_prodgroup_id` int NOT NULL,
+  `prodgrouplang_lang_id` int NOT NULL,
+  `prodgroup_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14146,7 +14167,7 @@ CREATE TABLE `tbl_product_groups_lang` (
 --
 
 CREATE TABLE `tbl_product_numeric_attributes` (
-  `prodnumattr_product_id` int(11) NOT NULL,
+  `prodnumattr_product_id` int NOT NULL,
   `prodnumattr_num_1` decimal(10,2) NOT NULL,
   `prodnumattr_num_2` decimal(10,2) NOT NULL,
   `prodnumattr_num_3` decimal(10,2) NOT NULL,
@@ -14177,7 +14198,7 @@ CREATE TABLE `tbl_product_numeric_attributes` (
   `prodnumattr_num_28` decimal(10,2) NOT NULL,
   `prodnumattr_num_29` decimal(10,2) NOT NULL,
   `prodnumattr_num_30` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for Product Comparison';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Used for Product Comparison';
 
 -- --------------------------------------------------------
 
@@ -14186,10 +14207,10 @@ CREATE TABLE `tbl_product_numeric_attributes` (
 --
 
 CREATE TABLE `tbl_product_product_recommendation` (
-  `ppr_viewing_product_id` int(11) NOT NULL,
-  `ppr_recommended_product_id` int(11) NOT NULL,
+  `ppr_viewing_product_id` int NOT NULL,
+  `ppr_recommended_product_id` int NOT NULL,
   `ppr_weightage` decimal(12,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14198,22 +14219,22 @@ CREATE TABLE `tbl_product_product_recommendation` (
 --
 
 CREATE TABLE `tbl_product_requests` (
-  `preq_id` bigint(15) NOT NULL,
-  `preq_user_id` int(11) NOT NULL,
-  `preq_prodcat_id` int(11) NOT NULL,
-  `preq_brand_id` int(11) NOT NULL,
-  `preq_content` text NOT NULL,
-  `preq_sel_prod_data` text NOT NULL,
-  `preq_ean_upc_code` text NOT NULL,
-  `preq_specifications` text NOT NULL,
-  `preq_comment` text NOT NULL,
-  `preq_status` tinyint(4) NOT NULL,
+  `preq_id` bigint NOT NULL,
+  `preq_user_id` int NOT NULL,
+  `preq_prodcat_id` int NOT NULL,
+  `preq_brand_id` int NOT NULL,
+  `preq_content` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `preq_sel_prod_data` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `preq_ean_upc_code` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `preq_specifications` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `preq_comment` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `preq_status` tinyint NOT NULL,
   `preq_submitted_for_approval` tinyint(1) NOT NULL,
   `preq_deleted` tinyint(1) NOT NULL,
   `preq_added_on` datetime NOT NULL,
   `preq_requested_on` datetime NOT NULL,
   `preq_status_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_product_requests`
@@ -14230,10 +14251,10 @@ INSERT INTO `tbl_product_requests` (`preq_id`, `preq_user_id`, `preq_prodcat_id`
 --
 
 CREATE TABLE `tbl_product_requests_lang` (
-  `preqlang_preq_id` bigint(15) NOT NULL,
-  `preqlang_lang_id` bigint(15) NOT NULL,
-  `preq_lang_data` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `preqlang_preq_id` bigint NOT NULL,
+  `preqlang_lang_id` bigint NOT NULL,
+  `preq_lang_data` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_product_requests_lang`
@@ -14250,15 +14271,15 @@ INSERT INTO `tbl_product_requests_lang` (`preqlang_preq_id`, `preqlang_lang_id`,
 --
 
 CREATE TABLE `tbl_product_saved_search` (
-  `pssearch_id` int(11) NOT NULL,
-  `pssearch_user_id` int(11) NOT NULL,
-  `pssearch_name` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
-  `pssearch_type` int(11) NOT NULL,
-  `pssearch_record_id` int(11) NOT NULL,
-  `pssearch_url` text CHARACTER SET utf8mb4 NOT NULL,
+  `pssearch_id` int NOT NULL,
+  `pssearch_user_id` int NOT NULL,
+  `pssearch_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pssearch_type` int NOT NULL,
+  `pssearch_record_id` int NOT NULL,
+  `pssearch_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `pssearch_added_on` datetime NOT NULL,
   `pssearch_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_product_saved_search`
@@ -14275,16 +14296,16 @@ INSERT INTO `tbl_product_saved_search` (`pssearch_id`, `pssearch_user_id`, `psse
 --
 
 CREATE TABLE `tbl_product_shipping_rates` (
-  `pship_id` int(11) NOT NULL,
-  `pship_prod_id` bigint(20) NOT NULL,
-  `pship_user_id` int(11) NOT NULL,
-  `pship_country` int(11) NOT NULL,
-  `pship_method` int(11) NOT NULL DEFAULT '1',
-  `pship_company` int(11) NOT NULL,
-  `pship_duration` int(11) NOT NULL,
+  `pship_id` int NOT NULL,
+  `pship_prod_id` bigint NOT NULL,
+  `pship_user_id` int NOT NULL,
+  `pship_country` int NOT NULL,
+  `pship_method` int NOT NULL DEFAULT '1',
+  `pship_company` int NOT NULL,
+  `pship_duration` int NOT NULL,
   `pship_charges` decimal(10,4) NOT NULL,
   `pship_additional_charges` decimal(10,4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14293,15 +14314,15 @@ CREATE TABLE `tbl_product_shipping_rates` (
 --
 
 CREATE TABLE `tbl_product_special_prices` (
-  `splprice_id` int(11) NOT NULL,
-  `splprice_selprod_id` int(11) NOT NULL,
+  `splprice_id` int NOT NULL,
+  `splprice_selprod_id` int NOT NULL,
   `splprice_start_date` datetime NOT NULL,
   `splprice_end_date` datetime NOT NULL,
   `splprice_price` decimal(10,2) NOT NULL,
-  `splprice_display_dis_type` int(11) NOT NULL COMMENT 'Only for presentation, Flat or %',
+  `splprice_display_dis_type` int NOT NULL COMMENT 'Only for presentation, Flat or %',
   `splprice_display_dis_val` decimal(10,2) NOT NULL COMMENT 'Only for presentation',
   `splprice_display_list_price` decimal(10,2) NOT NULL COMMENT 'Only for presentation'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14310,9 +14331,9 @@ CREATE TABLE `tbl_product_special_prices` (
 --
 
 CREATE TABLE `tbl_product_specifications` (
-  `prodspec_id` int(11) NOT NULL,
-  `prodspec_product_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `prodspec_id` int NOT NULL,
+  `prodspec_product_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14321,12 +14342,12 @@ CREATE TABLE `tbl_product_specifications` (
 --
 
 CREATE TABLE `tbl_product_specifications_lang` (
-  `prodspeclang_prodspec_id` int(11) NOT NULL,
-  `prodspeclang_lang_id` int(11) NOT NULL,
-  `prodspec_name` varchar(200) NOT NULL,
-  `prodspec_value` varchar(255) NOT NULL,
-  `prodspec_group` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `prodspeclang_prodspec_id` int NOT NULL,
+  `prodspeclang_lang_id` int NOT NULL,
+  `prodspec_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `prodspec_value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `prodspec_group` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14335,9 +14356,9 @@ CREATE TABLE `tbl_product_specifications_lang` (
 --
 
 CREATE TABLE `tbl_product_specifics` (
-  `ps_product_id` int(11) NOT NULL,
-  `product_warranty` int(11) NOT NULL COMMENT 'In Days'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `ps_product_id` int NOT NULL,
+  `product_warranty` int NOT NULL COMMENT 'In Days'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_product_specifics`
@@ -14355,13 +14376,13 @@ INSERT INTO `tbl_product_specifics` (`ps_product_id`, `product_warranty`) VALUES
 --
 
 CREATE TABLE `tbl_product_stock_hold` (
-  `pshold_id` bigint(11) NOT NULL,
-  `pshold_selprod_id` int(11) NOT NULL,
-  `pshold_user_id` varchar(100) NOT NULL COMMENT 'varchar, bcoz, it may contain user_id or session_id',
-  `pshold_prodgroup_id` int(11) NOT NULL,
-  `pshold_selprod_stock` int(11) NOT NULL,
+  `pshold_id` bigint NOT NULL,
+  `pshold_selprod_id` int NOT NULL,
+  `pshold_user_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'varchar, bcoz, it may contain user_id or session_id',
+  `pshold_prodgroup_id` int NOT NULL,
+  `pshold_selprod_stock` int NOT NULL,
   `pshold_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table used to hold stock of the product are added to cart';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table used to hold stock of the product are added to cart';
 
 -- --------------------------------------------------------
 
@@ -14370,49 +14391,49 @@ CREATE TABLE `tbl_product_stock_hold` (
 --
 
 CREATE TABLE `tbl_product_text_attributes` (
-  `prodtxtattr_product_id` int(11) NOT NULL,
-  `prodtxtattr_lang_id` int(11) NOT NULL,
-  `prodtxtattr_text_1` mediumtext NOT NULL,
-  `prodtxtattr_text_2` mediumtext NOT NULL,
-  `prodtxtattr_text_3` mediumtext NOT NULL,
-  `prodtxtattr_text_4` mediumtext NOT NULL,
-  `prodtxtattr_text_5` mediumtext NOT NULL,
-  `prodtxtattr_text_6` mediumtext NOT NULL,
-  `prodtxtattr_text_7` mediumtext NOT NULL,
-  `prodtxtattr_text_8` mediumtext NOT NULL,
-  `prodtxtattr_text_9` mediumtext NOT NULL,
-  `prodtxtattr_text_10` mediumtext NOT NULL,
-  `prodtxtattr_text_11` mediumtext NOT NULL,
-  `prodtxtattr_text_12` mediumtext NOT NULL,
-  `prodtxtattr_text_13` mediumtext NOT NULL,
-  `prodtxtattr_text_14` mediumtext NOT NULL,
-  `prodtxtattr_text_15` mediumtext NOT NULL,
-  `prodtxtattr_text_16` mediumtext NOT NULL,
-  `prodtxtattr_text_17` mediumtext NOT NULL,
-  `prodtxtattr_text_18` mediumtext NOT NULL,
-  `prodtxtattr_text_19` mediumtext NOT NULL,
-  `prodtxtattr_text_20` mediumtext NOT NULL,
-  `prodtxtattr_text_21` mediumtext NOT NULL,
-  `prodtxtattr_text_22` mediumtext NOT NULL,
-  `prodtxtattr_text_23` mediumtext NOT NULL,
-  `prodtxtattr_text_24` mediumtext NOT NULL,
-  `prodtxtattr_text_25` mediumtext NOT NULL,
-  `prodtxtattr_text_26` mediumtext NOT NULL,
-  `prodtxtattr_text_27` mediumtext NOT NULL,
-  `prodtxtattr_text_28` mediumtext NOT NULL,
-  `prodtxtattr_text_29` mediumtext NOT NULL,
-  `prodtxtattr_text_30` mediumtext NOT NULL,
-  `prodtxtattr_text_31` mediumtext NOT NULL,
-  `prodtxtattr_text_32` mediumtext NOT NULL,
-  `prodtxtattr_text_33` mediumtext NOT NULL,
-  `prodtxtattr_text_34` mediumtext NOT NULL,
-  `prodtxtattr_text_35` mediumtext NOT NULL,
-  `prodtxtattr_text_36` mediumtext NOT NULL,
-  `prodtxtattr_text_37` mediumtext NOT NULL,
-  `prodtxtattr_text_38` mediumtext NOT NULL,
-  `prodtxtattr_text_39` mediumtext NOT NULL,
-  `prodtxtattr_text_40` mediumtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for Product Comparison';
+  `prodtxtattr_product_id` int NOT NULL,
+  `prodtxtattr_lang_id` int NOT NULL,
+  `prodtxtattr_text_1` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_2` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_3` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_4` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_5` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_6` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_7` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_8` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_9` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_10` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_11` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_12` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_13` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_14` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_15` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_16` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_17` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_18` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_19` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_20` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_21` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_22` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_23` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_24` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_25` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_26` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_27` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_28` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_29` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_30` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_31` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_32` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_33` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_34` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_35` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_36` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_37` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_38` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_39` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `prodtxtattr_text_40` longtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Used for Product Comparison';
 
 -- --------------------------------------------------------
 
@@ -14421,9 +14442,9 @@ CREATE TABLE `tbl_product_text_attributes` (
 --
 
 CREATE TABLE `tbl_product_to_category` (
-  `ptc_product_id` int(11) NOT NULL,
-  `ptc_prodcat_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ptc_product_id` int NOT NULL,
+  `ptc_prodcat_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14432,10 +14453,10 @@ CREATE TABLE `tbl_product_to_category` (
 --
 
 CREATE TABLE `tbl_product_to_groups` (
-  `ptg_prodgroup_id` int(11) NOT NULL,
-  `ptg_selprod_id` int(11) NOT NULL,
+  `ptg_prodgroup_id` int NOT NULL,
+  `ptg_selprod_id` int NOT NULL,
   `ptg_is_main_product` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14444,9 +14465,9 @@ CREATE TABLE `tbl_product_to_groups` (
 --
 
 CREATE TABLE `tbl_product_to_options` (
-  `prodoption_product_id` int(11) NOT NULL,
-  `prodoption_option_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `prodoption_product_id` int NOT NULL,
+  `prodoption_option_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14455,9 +14476,9 @@ CREATE TABLE `tbl_product_to_options` (
 --
 
 CREATE TABLE `tbl_product_to_tags` (
-  `ptt_product_id` int(11) NOT NULL,
-  `ptt_tag_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ptt_product_id` int NOT NULL,
+  `ptt_tag_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14466,10 +14487,10 @@ CREATE TABLE `tbl_product_to_tags` (
 --
 
 CREATE TABLE `tbl_product_to_tax` (
-  `ptt_product_id` int(11) NOT NULL,
-  `ptt_taxcat_id` int(11) NOT NULL,
-  `ptt_seller_user_id` int(11) NOT NULL COMMENT 'Seller Id'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ptt_product_id` int NOT NULL,
+  `ptt_taxcat_id` int NOT NULL,
+  `ptt_seller_user_id` int NOT NULL COMMENT 'Seller Id'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14478,11 +14499,11 @@ CREATE TABLE `tbl_product_to_tax` (
 --
 
 CREATE TABLE `tbl_product_volume_discount` (
-  `voldiscount_id` bigint(11) NOT NULL,
-  `voldiscount_selprod_id` int(11) NOT NULL,
-  `voldiscount_min_qty` int(11) NOT NULL,
+  `voldiscount_id` bigint NOT NULL,
+  `voldiscount_selprod_id` int NOT NULL,
+  `voldiscount_min_qty` int NOT NULL,
   `voldiscount_percentage` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14491,14 +14512,14 @@ CREATE TABLE `tbl_product_volume_discount` (
 --
 
 CREATE TABLE `tbl_promotions` (
-  `promotion_id` int(11) NOT NULL,
-  `promotion_identifier` varchar(255) NOT NULL,
-  `promotion_user_id` int(11) NOT NULL,
-  `promotion_type` int(11) NOT NULL,
-  `promotion_record_id` int(11) NOT NULL,
+  `promotion_id` int NOT NULL,
+  `promotion_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `promotion_user_id` int NOT NULL,
+  `promotion_type` int NOT NULL,
+  `promotion_record_id` int NOT NULL,
   `promotion_budget` decimal(10,4) NOT NULL,
   `promotion_cpc` decimal(10,4) NOT NULL,
-  `promotion_duration` tinyint(4) NOT NULL,
+  `promotion_duration` tinyint NOT NULL,
   `promotion_start_date` date NOT NULL,
   `promotion_end_date` date NOT NULL,
   `promotion_start_time` time NOT NULL,
@@ -14507,7 +14528,7 @@ CREATE TABLE `tbl_promotions` (
   `promotion_added_on` datetime NOT NULL,
   `promotion_approved` tinyint(1) NOT NULL,
   `promotion_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14516,17 +14537,17 @@ CREATE TABLE `tbl_promotions` (
 --
 
 CREATE TABLE `tbl_promotions_charges` (
-  `pcharge_id` bigint(20) NOT NULL,
-  `pcharge_user_id` int(11) NOT NULL,
-  `pcharge_promotion_id` int(11) NOT NULL,
+  `pcharge_id` bigint NOT NULL,
+  `pcharge_user_id` int NOT NULL,
+  `pcharge_promotion_id` int NOT NULL,
   `pcharge_charged_amount` decimal(10,4) NOT NULL,
-  `pcharge_clicks` int(11) NOT NULL,
+  `pcharge_clicks` int NOT NULL,
   `pcharge_date` datetime NOT NULL,
-  `pcharge_start_piclick_id` bigint(20) NOT NULL,
-  `pcharge_end_piclick_id` bigint(20) NOT NULL,
+  `pcharge_start_piclick_id` bigint NOT NULL,
+  `pcharge_end_piclick_id` bigint NOT NULL,
   `pcharge_start_date` datetime NOT NULL,
   `pcharge_end_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14535,14 +14556,14 @@ CREATE TABLE `tbl_promotions_charges` (
 --
 
 CREATE TABLE `tbl_promotions_clicks` (
-  `pclick_id` bigint(20) NOT NULL,
-  `pclick_promotion_id` int(11) NOT NULL,
-  `pclick_user_id` int(11) NOT NULL,
+  `pclick_id` bigint NOT NULL,
+  `pclick_promotion_id` int NOT NULL,
+  `pclick_user_id` int NOT NULL,
   `pclick_datetime` datetime NOT NULL,
-  `pclick_ip` varchar(50) NOT NULL,
+  `pclick_ip` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `pclick_cost` decimal(10,4) NOT NULL,
-  `pclick_session_id` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `pclick_session_id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14551,10 +14572,10 @@ CREATE TABLE `tbl_promotions_clicks` (
 --
 
 CREATE TABLE `tbl_promotions_lang` (
-  `promotionlang_promotion_id` bigint(20) NOT NULL,
-  `promotionlang_lang_id` int(11) NOT NULL,
-  `promotion_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `promotionlang_promotion_id` bigint NOT NULL,
+  `promotionlang_lang_id` int NOT NULL,
+  `promotion_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14563,12 +14584,12 @@ CREATE TABLE `tbl_promotions_lang` (
 --
 
 CREATE TABLE `tbl_promotions_logs` (
-  `plog_promotion_id` int(11) NOT NULL,
+  `plog_promotion_id` int NOT NULL,
   `plog_date` date NOT NULL,
-  `plog_impressions` int(11) NOT NULL,
-  `plog_clicks` int(11) NOT NULL,
-  `plog_orders` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `plog_impressions` int NOT NULL,
+  `plog_clicks` int NOT NULL,
+  `plog_orders` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14577,11 +14598,11 @@ CREATE TABLE `tbl_promotions_logs` (
 --
 
 CREATE TABLE `tbl_promotion_item_charges` (
-  `picharge_id` bigint(20) NOT NULL,
-  `picharge_pclick_id` bigint(20) NOT NULL,
+  `picharge_id` bigint NOT NULL,
+  `picharge_pclick_id` bigint NOT NULL,
   `picharge_datetime` datetime NOT NULL,
   `picharge_cost` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14590,12 +14611,12 @@ CREATE TABLE `tbl_promotion_item_charges` (
 --
 
 CREATE TABLE `tbl_push_notifications` (
-  `pnotification_id` int(11) NOT NULL,
+  `pnotification_id` int NOT NULL,
   `pnotification_type` tinyint(1) NOT NULL,
-  `pnotification_lang_id` tinyint(4) NOT NULL,
-  `pnotification_title` varchar(200) CHARACTER SET utf8 NOT NULL,
-  `pnotification_description` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `pnotification_url` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `pnotification_lang_id` tinyint NOT NULL,
+  `pnotification_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pnotification_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pnotification_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `pnotification_notified_on` datetime NOT NULL,
   `pnotification_for_buyer` tinyint(1) NOT NULL,
   `pnotification_for_seller` tinyint(1) NOT NULL,
@@ -14604,7 +14625,7 @@ CREATE TABLE `tbl_push_notifications` (
   `pnotification_uauth_last_access` datetime NOT NULL,
   `pnotification_status` tinyint(1) NOT NULL,
   `pnotification_added_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_push_notifications`
@@ -14620,9 +14641,9 @@ INSERT INTO `tbl_push_notifications` (`pnotification_id`, `pnotification_type`, 
 --
 
 CREATE TABLE `tbl_push_notification_to_users` (
-  `pntu_pnotification_id` int(11) NOT NULL,
-  `pntu_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `pntu_pnotification_id` int NOT NULL,
+  `pntu_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14631,13 +14652,13 @@ CREATE TABLE `tbl_push_notification_to_users` (
 --
 
 CREATE TABLE `tbl_questionnaires` (
-  `questionnaire_id` int(11) NOT NULL,
-  `questionnaire_identifier` varchar(255) NOT NULL,
+  `questionnaire_id` int NOT NULL,
+  `questionnaire_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `questionnaire_start_date` datetime NOT NULL,
   `questionnaire_end_date` datetime NOT NULL,
   `questionnaire_active` tinyint(1) NOT NULL,
-  `questionnaire_deleted` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `questionnaire_deleted` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14646,11 +14667,11 @@ CREATE TABLE `tbl_questionnaires` (
 --
 
 CREATE TABLE `tbl_questionnaires_lang` (
-  `questionnairelang_questionnaire_id` int(11) NOT NULL,
-  `questionnairelang_lang_id` int(11) NOT NULL,
-  `questionnaire_name` varchar(255) NOT NULL,
-  `questionnaire_description` varchar(500) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `questionnairelang_questionnaire_id` int NOT NULL,
+  `questionnairelang_lang_id` int NOT NULL,
+  `questionnaire_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `questionnaire_description` varchar(500) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14659,10 +14680,10 @@ CREATE TABLE `tbl_questionnaires_lang` (
 --
 
 CREATE TABLE `tbl_questionnaires_to_question` (
-  `qtq_questionnaire_id` int(11) NOT NULL,
-  `qtq_question_id` int(11) NOT NULL,
-  `qtq_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `qtq_questionnaire_id` int NOT NULL,
+  `qtq_question_id` int NOT NULL,
+  `qtq_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14671,15 +14692,15 @@ CREATE TABLE `tbl_questionnaires_to_question` (
 --
 
 CREATE TABLE `tbl_questionnaire_feedback` (
-  `qfeedback_id` int(11) NOT NULL,
-  `qfeedback_questionnaire_id` int(11) NOT NULL,
-  `qfeedback_user_name` varchar(200) NOT NULL,
-  `qfeedback_user_email` varchar(200) NOT NULL,
-  `qfeedback_user_gender` int(11) NOT NULL,
-  `qfeedback_user_ip` varchar(20) NOT NULL,
-  `qfeedback_lang_id` int(11) NOT NULL,
+  `qfeedback_id` int NOT NULL,
+  `qfeedback_questionnaire_id` int NOT NULL,
+  `qfeedback_user_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `qfeedback_user_email` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `qfeedback_user_gender` int NOT NULL,
+  `qfeedback_user_ip` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `qfeedback_lang_id` int NOT NULL,
   `qfeedback_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14688,14 +14709,14 @@ CREATE TABLE `tbl_questionnaire_feedback` (
 --
 
 CREATE TABLE `tbl_questions` (
-  `question_id` int(11) NOT NULL,
-  `question_qbank_id` int(11) NOT NULL,
-  `question_identifier` varchar(255) NOT NULL,
-  `question_type` int(11) NOT NULL,
-  `question_required` tinyint(4) NOT NULL,
+  `question_id` int NOT NULL,
+  `question_qbank_id` int NOT NULL,
+  `question_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `question_type` int NOT NULL,
+  `question_required` tinyint NOT NULL,
   `question_active` tinyint(1) NOT NULL,
   `question_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14704,11 +14725,11 @@ CREATE TABLE `tbl_questions` (
 --
 
 CREATE TABLE `tbl_questions_lang` (
-  `questionlang_question_id` int(11) NOT NULL,
-  `questionlang_lang_id` int(11) NOT NULL,
-  `question_title` varchar(255) NOT NULL,
-  `question_options` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `questionlang_question_id` int NOT NULL,
+  `questionlang_lang_id` int NOT NULL,
+  `question_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `question_options` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14717,11 +14738,11 @@ CREATE TABLE `tbl_questions_lang` (
 --
 
 CREATE TABLE `tbl_question_banks` (
-  `qbank_id` int(11) NOT NULL,
-  `qbank_identifier` varchar(255) NOT NULL,
+  `qbank_id` int NOT NULL,
+  `qbank_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `qbank_active` tinyint(1) NOT NULL,
   `qbank_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14730,10 +14751,10 @@ CREATE TABLE `tbl_question_banks` (
 --
 
 CREATE TABLE `tbl_question_banks_lang` (
-  `qbanklang_qbank_id` int(11) NOT NULL,
-  `qbanklang_lang_id` int(11) NOT NULL,
-  `qbank_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `qbanklang_qbank_id` int NOT NULL,
+  `qbanklang_lang_id` int NOT NULL,
+  `qbank_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14742,10 +14763,10 @@ CREATE TABLE `tbl_question_banks_lang` (
 --
 
 CREATE TABLE `tbl_question_to_answers` (
-  `qta_qfeedback_id` int(11) NOT NULL,
-  `qta_question_id` int(11) NOT NULL,
-  `qta_answers` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `qta_qfeedback_id` int NOT NULL,
+  `qta_question_id` int NOT NULL,
+  `qta_answers` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14754,15 +14775,15 @@ CREATE TABLE `tbl_question_to_answers` (
 --
 
 CREATE TABLE `tbl_recommendation_activity_browsing` (
-  `rab_session_id` varchar(100) NOT NULL,
-  `rab_user_id` bigint(20) NOT NULL,
-  `rab_record_id` bigint(20) NOT NULL,
-  `rab_record_type` int(11) NOT NULL,
-  `rab_weightage_key` int(11) NOT NULL,
+  `rab_session_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `rab_user_id` bigint NOT NULL,
+  `rab_record_id` bigint NOT NULL,
+  `rab_record_type` int NOT NULL,
+  `rab_weightage_key` int NOT NULL,
   `rab_weightage` decimal(12,2) NOT NULL,
-  `rab_order_id` varchar(15) NOT NULL,
+  `rab_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
   `rab_last_action_datetime` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14771,9 +14792,9 @@ CREATE TABLE `tbl_recommendation_activity_browsing` (
 --
 
 CREATE TABLE `tbl_related_products` (
-  `related_sellerproduct_id` int(11) NOT NULL,
-  `related_recommend_sellerproduct_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `related_sellerproduct_id` int NOT NULL,
+  `related_recommend_sellerproduct_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14782,9 +14803,9 @@ CREATE TABLE `tbl_related_products` (
 --
 
 CREATE TABLE `tbl_report_reasons` (
-  `reportreason_id` int(11) NOT NULL,
-  `reportreason_identifier` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `reportreason_id` int NOT NULL,
+  `reportreason_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_report_reasons`
@@ -14803,11 +14824,11 @@ INSERT INTO `tbl_report_reasons` (`reportreason_id`, `reportreason_identifier`) 
 --
 
 CREATE TABLE `tbl_report_reasons_lang` (
-  `reportreasonlang_reportreason_id` int(11) NOT NULL,
-  `reportreasonlang_lang_id` int(11) NOT NULL,
-  `reportreason_title` varchar(255) NOT NULL,
-  `reportreason_description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `reportreasonlang_reportreason_id` int NOT NULL,
+  `reportreasonlang_lang_id` int NOT NULL,
+  `reportreason_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `reportreason_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_report_reasons_lang`
@@ -14830,10 +14851,10 @@ INSERT INTO `tbl_report_reasons_lang` (`reportreasonlang_reportreason_id`, `repo
 --
 
 CREATE TABLE `tbl_rewards_on_purchase` (
-  `rop_id` int(11) NOT NULL,
+  `rop_id` int NOT NULL,
   `rop_purchase_upto` decimal(10,2) NOT NULL,
-  `rop_reward_point` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `rop_reward_point` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14842,11 +14863,11 @@ CREATE TABLE `tbl_rewards_on_purchase` (
 --
 
 CREATE TABLE `tbl_search_items` (
-  `searchitem_id` int(11) NOT NULL,
-  `searchitem_keyword` varchar(255) NOT NULL,
-  `searchitem_count` int(11) NOT NULL DEFAULT '1',
+  `searchitem_id` int NOT NULL,
+  `searchitem_keyword` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `searchitem_count` int NOT NULL DEFAULT '1',
   `searchitem_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14855,13 +14876,13 @@ CREATE TABLE `tbl_search_items` (
 --
 
 CREATE TABLE `tbl_seller_brand_requests` (
-  `sbrandreq_id` int(11) NOT NULL,
-  `sbrandreq_seller_id` int(11) NOT NULL,
-  `sbrandreq_identifier` varchar(250) NOT NULL,
-  `sbrandreq_status` int(11) NOT NULL,
-  `sbrandreq_deleted` int(11) NOT NULL,
+  `sbrandreq_id` int NOT NULL,
+  `sbrandreq_seller_id` int NOT NULL,
+  `sbrandreq_identifier` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `sbrandreq_status` int NOT NULL,
+  `sbrandreq_deleted` int NOT NULL,
   `sbrandreq_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14870,10 +14891,10 @@ CREATE TABLE `tbl_seller_brand_requests` (
 --
 
 CREATE TABLE `tbl_seller_brand_requests_lang` (
-  `sbrandreqlang_sbrandreq_id` int(11) NOT NULL,
-  `sbrandreqlang_lang_id` int(11) NOT NULL,
-  `sbrandreq_name` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sbrandreqlang_sbrandreq_id` int NOT NULL,
+  `sbrandreqlang_lang_id` int NOT NULL,
+  `sbrandreq_name` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14882,16 +14903,16 @@ CREATE TABLE `tbl_seller_brand_requests_lang` (
 --
 
 CREATE TABLE `tbl_seller_catalog_requests` (
-  `scatrequest_id` int(11) NOT NULL,
-  `scatrequest_user_id` int(11) NOT NULL,
-  `scatrequest_reference` varchar(100) NOT NULL,
-  `scatrequest_title` varchar(255) NOT NULL,
-  `scatrequest_content` text NOT NULL,
-  `scatrequest_comments` text NOT NULL,
-  `scatrequest_status` tinyint(4) NOT NULL,
+  `scatrequest_id` int NOT NULL,
+  `scatrequest_user_id` int NOT NULL,
+  `scatrequest_reference` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `scatrequest_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `scatrequest_content` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `scatrequest_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `scatrequest_status` tinyint NOT NULL,
   `scatrequest_date` datetime NOT NULL,
   `scatrequest_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14900,17 +14921,17 @@ CREATE TABLE `tbl_seller_catalog_requests` (
 --
 
 CREATE TABLE `tbl_seller_packages` (
-  `spackage_id` int(11) NOT NULL,
-  `spackage_identifier` varchar(255) NOT NULL,
-  `spackage_type` int(11) NOT NULL,
+  `spackage_id` int NOT NULL,
+  `spackage_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `spackage_type` int NOT NULL,
   `spackage_commission_rate` decimal(10,2) NOT NULL,
-  `spackage_products_allowed` int(11) NOT NULL,
-  `spackage_inventory_allowed` int(11) NOT NULL,
-  `spackage_images_per_product` int(11) NOT NULL,
-  `spackage_free_trial_days` int(11) NOT NULL,
-  `spackage_display_order` int(11) NOT NULL,
-  `spackage_active` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `spackage_products_allowed` int NOT NULL,
+  `spackage_inventory_allowed` int NOT NULL,
+  `spackage_images_per_product` int NOT NULL,
+  `spackage_free_trial_days` int NOT NULL,
+  `spackage_display_order` int NOT NULL,
+  `spackage_active` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14919,11 +14940,11 @@ CREATE TABLE `tbl_seller_packages` (
 --
 
 CREATE TABLE `tbl_seller_packages_lang` (
-  `spackagelang_spackage_id` int(11) NOT NULL,
-  `spackagelang_lang_id` int(11) NOT NULL,
-  `spackage_name` varchar(255) NOT NULL,
-  `spackage_text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `spackagelang_spackage_id` int NOT NULL,
+  `spackagelang_lang_id` int NOT NULL,
+  `spackage_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `spackage_text` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14932,16 +14953,16 @@ CREATE TABLE `tbl_seller_packages_lang` (
 --
 
 CREATE TABLE `tbl_seller_packages_plan` (
-  `spplan_id` int(11) NOT NULL,
-  `spplan_spackage_id` int(11) NOT NULL,
-  `spplan_trial_interval` int(11) NOT NULL,
-  `spplan_trial_frequency` char(11) NOT NULL,
-  `spplan_interval` int(11) NOT NULL,
-  `spplan_frequency` char(11) NOT NULL,
+  `spplan_id` int NOT NULL,
+  `spplan_spackage_id` int NOT NULL,
+  `spplan_trial_interval` int NOT NULL,
+  `spplan_trial_frequency` char(11) COLLATE utf8mb4_general_ci NOT NULL,
+  `spplan_interval` int NOT NULL,
+  `spplan_frequency` char(11) COLLATE utf8mb4_general_ci NOT NULL,
   `spplan_price` decimal(10,2) NOT NULL,
-  `spplan_display_order` int(11) NOT NULL,
-  `spplan_active` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `spplan_display_order` int NOT NULL,
+  `spplan_active` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14950,34 +14971,34 @@ CREATE TABLE `tbl_seller_packages_plan` (
 --
 
 CREATE TABLE `tbl_seller_products` (
-  `selprod_id` int(11) NOT NULL,
-  `selprod_user_id` int(11) NOT NULL,
-  `selprod_product_id` int(11) NOT NULL,
-  `selprod_code` varchar(100) NOT NULL COMMENT 'generated by product_id and option value ids associated with this product',
+  `selprod_id` int NOT NULL,
+  `selprod_user_id` int NOT NULL,
+  `selprod_product_id` int NOT NULL,
+  `selprod_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'generated by product_id and option value ids associated with this product',
   `selprod_price` decimal(10,2) NOT NULL COMMENT 'Selling Price',
   `selprod_cost` decimal(10,2) NOT NULL,
-  `selprod_stock` int(11) NOT NULL,
-  `selprod_min_order_qty` int(11) NOT NULL,
-  `selprod_subtract_stock` tinyint(4) NOT NULL,
-  `selprod_track_inventory` tinyint(4) NOT NULL,
-  `selprod_threshold_stock_level` int(11) NOT NULL,
-  `selprod_sku` varchar(100) NOT NULL,
-  `selprod_condition` int(11) NOT NULL COMMENT 'defined in product model',
+  `selprod_stock` int NOT NULL,
+  `selprod_min_order_qty` int NOT NULL,
+  `selprod_subtract_stock` tinyint NOT NULL,
+  `selprod_track_inventory` tinyint NOT NULL,
+  `selprod_threshold_stock_level` int NOT NULL,
+  `selprod_sku` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_condition` int NOT NULL COMMENT 'defined in product model',
   `selprod_added_on` datetime NOT NULL,
   `selprod_updated_on` datetime NOT NULL,
   `selprod_available_from` datetime NOT NULL,
-  `selprod_comments` text NOT NULL,
-  `selprod_active` tinyint(4) NOT NULL,
+  `selprod_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_active` tinyint NOT NULL,
   `selprod_cod_enabled` tinyint(1) NOT NULL,
-  `selprod_fulfillment_type` tinyint(4) NOT NULL DEFAULT '-1',
-  `selprod_sold_count` int(11) NOT NULL,
-  `selprod_url_keyword` varchar(255) NOT NULL,
-  `selprod_max_download_times` int(11) NOT NULL,
-  `selprod_downloadable_link` text NOT NULL,
-  `selprod_download_validity_in_days` int(11) NOT NULL,
-  `selprod_urlrewrite_id` bigint(20) NOT NULL,
-  `selprod_deleted` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `selprod_fulfillment_type` tinyint NOT NULL DEFAULT '-1',
+  `selprod_sold_count` int NOT NULL,
+  `selprod_url_keyword` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_max_download_times` int NOT NULL,
+  `selprod_downloadable_link` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_download_validity_in_days` int NOT NULL,
+  `selprod_urlrewrite_id` bigint NOT NULL,
+  `selprod_deleted` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -14986,14 +15007,14 @@ CREATE TABLE `tbl_seller_products` (
 --
 
 CREATE TABLE `tbl_seller_products_lang` (
-  `selprodlang_selprod_id` int(11) NOT NULL,
-  `selprodlang_lang_id` int(11) NOT NULL,
-  `selprod_title` varchar(255) NOT NULL,
-  `selprod_features` text NOT NULL,
-  `selprod_warranty` text NOT NULL,
-  `selprod_return_policy` text NOT NULL,
-  `selprod_comments` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `selprodlang_selprod_id` int NOT NULL,
+  `selprodlang_lang_id` int NOT NULL,
+  `selprod_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_features` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_warranty` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_return_policy` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `selprod_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15002,10 +15023,10 @@ CREATE TABLE `tbl_seller_products_lang` (
 --
 
 CREATE TABLE `tbl_seller_products_temp_ids` (
-  `spti_selprod_id` bigint(15) NOT NULL,
-  `spti_selprod_temp_id` bigint(15) NOT NULL,
-  `spti_user_id` bigint(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `spti_selprod_id` bigint NOT NULL,
+  `spti_selprod_temp_id` bigint NOT NULL,
+  `spti_user_id` bigint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15014,10 +15035,10 @@ CREATE TABLE `tbl_seller_products_temp_ids` (
 --
 
 CREATE TABLE `tbl_seller_product_options` (
-  `selprodoption_selprod_id` int(11) NOT NULL,
-  `selprodoption_option_id` int(11) NOT NULL COMMENT 'Do we really need it?',
-  `selprodoption_optionvalue_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `selprodoption_selprod_id` int NOT NULL,
+  `selprodoption_option_id` int NOT NULL COMMENT 'Do we really need it?',
+  `selprodoption_optionvalue_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15026,9 +15047,9 @@ CREATE TABLE `tbl_seller_product_options` (
 --
 
 CREATE TABLE `tbl_seller_product_policies` (
-  `sppolicy_selprod_id` int(11) NOT NULL,
-  `sppolicy_ppoint_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sppolicy_selprod_id` int NOT NULL,
+  `sppolicy_ppoint_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15037,10 +15058,10 @@ CREATE TABLE `tbl_seller_product_policies` (
 --
 
 CREATE TABLE `tbl_seller_product_rating` (
-  `sprating_spreview_id` int(11) NOT NULL,
-  `sprating_rating_type` int(11) NOT NULL,
-  `sprating_rating` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sprating_spreview_id` int NOT NULL,
+  `sprating_rating_type` int NOT NULL,
+  `sprating_rating` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15049,19 +15070,19 @@ CREATE TABLE `tbl_seller_product_rating` (
 --
 
 CREATE TABLE `tbl_seller_product_reviews` (
-  `spreview_id` int(11) NOT NULL,
-  `spreview_seller_user_id` int(11) NOT NULL,
-  `spreview_order_id` varchar(15) NOT NULL,
-  `spreview_product_id` int(11) NOT NULL,
-  `spreview_selprod_id` int(11) NOT NULL,
-  `spreview_selprod_code` varchar(255) NOT NULL,
-  `spreview_postedby_user_id` int(11) NOT NULL,
-  `spreview_title` varchar(255) NOT NULL,
-  `spreview_description` text NOT NULL,
+  `spreview_id` int NOT NULL,
+  `spreview_seller_user_id` int NOT NULL,
+  `spreview_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `spreview_product_id` int NOT NULL,
+  `spreview_selprod_id` int NOT NULL,
+  `spreview_selprod_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `spreview_postedby_user_id` int NOT NULL,
+  `spreview_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `spreview_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `spreview_posted_on` datetime NOT NULL,
-  `spreview_status` tinyint(4) NOT NULL,
-  `spreview_lang_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `spreview_status` tinyint NOT NULL,
+  `spreview_lang_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15070,10 +15091,10 @@ CREATE TABLE `tbl_seller_product_reviews` (
 --
 
 CREATE TABLE `tbl_seller_product_reviews_abuse` (
-  `spra_spreview_id` int(11) NOT NULL,
-  `spra_user_id` int(11) NOT NULL,
-  `spra_comments` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `spra_spreview_id` int NOT NULL,
+  `spra_user_id` int NOT NULL,
+  `spra_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15082,10 +15103,10 @@ CREATE TABLE `tbl_seller_product_reviews_abuse` (
 --
 
 CREATE TABLE `tbl_seller_product_reviews_helpful` (
-  `sprh_spreview_id` int(11) NOT NULL,
-  `sprh_user_id` int(11) NOT NULL,
+  `sprh_spreview_id` int NOT NULL,
+  `sprh_user_id` int NOT NULL,
   `sprh_helpful` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15094,10 +15115,10 @@ CREATE TABLE `tbl_seller_product_reviews_helpful` (
 --
 
 CREATE TABLE `tbl_seller_product_specifics` (
-  `sps_selprod_id` int(11) NOT NULL,
-  `selprod_return_age` int(11) NOT NULL COMMENT 'In Days',
-  `selprod_cancellation_age` int(11) NOT NULL COMMENT 'In Days'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `sps_selprod_id` int NOT NULL,
+  `selprod_return_age` int NOT NULL COMMENT 'In Days',
+  `selprod_cancellation_age` int NOT NULL COMMENT 'In Days'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15106,10 +15127,10 @@ CREATE TABLE `tbl_seller_product_specifics` (
 --
 
 CREATE TABLE `tbl_shippingapi_settings` (
-  `shipsetting_shippingapi_id` int(11) NOT NULL,
-  `shipsetting_key` varchar(100) NOT NULL,
-  `shipsetting_value` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `shipsetting_shippingapi_id` int NOT NULL,
+  `shipsetting_key` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `shipsetting_value` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15118,12 +15139,12 @@ CREATE TABLE `tbl_shippingapi_settings` (
 --
 
 CREATE TABLE `tbl_shipping_apis` (
-  `shippingapi_id` int(11) NOT NULL,
-  `shippingapi_identifier` varchar(255) NOT NULL,
+  `shippingapi_id` int NOT NULL,
+  `shippingapi_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `shippingapi_active` tinyint(1) NOT NULL,
-  `shippingapi_display_order` int(11) NOT NULL,
-  `shippingapi_code` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `shippingapi_display_order` int NOT NULL,
+  `shippingapi_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_shipping_apis`
@@ -15140,10 +15161,10 @@ INSERT INTO `tbl_shipping_apis` (`shippingapi_id`, `shippingapi_identifier`, `sh
 --
 
 CREATE TABLE `tbl_shipping_apis_lang` (
-  `shippingapilang_shippingapi_id` int(11) NOT NULL,
-  `shippingapilang_lang_id` int(11) NOT NULL,
-  `shippingapi_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `shippingapilang_shippingapi_id` int NOT NULL,
+  `shippingapilang_lang_id` int NOT NULL,
+  `shippingapi_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_shipping_apis_lang`
@@ -15162,13 +15183,13 @@ INSERT INTO `tbl_shipping_apis_lang` (`shippingapilang_shippingapi_id`, `shippin
 --
 
 CREATE TABLE `tbl_shipping_company` (
-  `scompany_id` int(11) NOT NULL,
-  `scompany_identifier` varchar(255) NOT NULL,
-  `scompany_trackingurl` varchar(255) NOT NULL,
+  `scompany_id` int NOT NULL,
+  `scompany_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `scompany_trackingurl` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `scompany_active` tinyint(1) NOT NULL,
-  `scompany_display_order` int(11) NOT NULL,
-  `scompany_code` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `scompany_display_order` int NOT NULL,
+  `scompany_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15177,10 +15198,10 @@ CREATE TABLE `tbl_shipping_company` (
 --
 
 CREATE TABLE `tbl_shipping_company_lang` (
-  `scompanylang_scompany_id` int(11) NOT NULL,
-  `scompanylang_lang_id` int(11) NOT NULL,
-  `scompany_name` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `scompanylang_scompany_id` int NOT NULL,
+  `scompanylang_lang_id` int NOT NULL,
+  `scompany_name` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15189,13 +15210,13 @@ CREATE TABLE `tbl_shipping_company_lang` (
 --
 
 CREATE TABLE `tbl_shipping_durations` (
-  `sduration_id` int(11) NOT NULL,
-  `sduration_identifier` varchar(255) NOT NULL,
-  `sduration_from` int(11) NOT NULL,
-  `sduration_to` int(11) NOT NULL,
+  `sduration_id` int NOT NULL,
+  `sduration_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `sduration_from` int NOT NULL,
+  `sduration_to` int NOT NULL,
   `sduration_days_or_weeks` tinyint(1) NOT NULL,
   `sduration_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15204,10 +15225,10 @@ CREATE TABLE `tbl_shipping_durations` (
 --
 
 CREATE TABLE `tbl_shipping_durations_lang` (
-  `sdurationlang_sduration_id` int(11) NOT NULL,
-  `sdurationlang_lang_id` int(11) NOT NULL,
-  `sduration_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sdurationlang_sduration_id` int NOT NULL,
+  `sdurationlang_lang_id` int NOT NULL,
+  `sduration_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15216,11 +15237,11 @@ CREATE TABLE `tbl_shipping_durations_lang` (
 --
 
 CREATE TABLE `tbl_shipping_locations` (
-  `shiploc_shipzone_id` int(11) NOT NULL,
-  `shiploc_zone_id` int(11) NOT NULL,
-  `shiploc_country_id` int(11) NOT NULL,
-  `shiploc_state_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `shiploc_shipzone_id` int NOT NULL,
+  `shiploc_zone_id` int NOT NULL,
+  `shiploc_country_id` int NOT NULL,
+  `shiploc_state_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15229,13 +15250,13 @@ CREATE TABLE `tbl_shipping_locations` (
 --
 
 CREATE TABLE `tbl_shipping_packages` (
-  `shippack_id` int(11) NOT NULL,
-  `shippack_name` varchar(255) NOT NULL,
+  `shippack_id` int NOT NULL,
+  `shippack_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `shippack_length` decimal(10,2) NOT NULL,
   `shippack_width` decimal(10,2) NOT NULL,
   `shippack_height` decimal(10,2) NOT NULL,
-  `shippack_units` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `shippack_units` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15244,19 +15265,32 @@ CREATE TABLE `tbl_shipping_packages` (
 --
 
 CREATE TABLE `tbl_shipping_profile` (
-  `shipprofile_id` int(11) NOT NULL,
-  `shipprofile_user_id` int(11) NOT NULL,
-  `shipprofile_name` varchar(255) NOT NULL,
+  `shipprofile_id` int NOT NULL,
+  `shipprofile_user_id` int NOT NULL,
+  `shipprofile_identifier` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `shipprofile_active` tinyint(1) NOT NULL DEFAULT '1',
   `shipprofile_default` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_shipping_profile`
 --
 
-INSERT INTO `tbl_shipping_profile` (`shipprofile_id`, `shipprofile_user_id`, `shipprofile_name`, `shipprofile_active`, `shipprofile_default`) VALUES
+INSERT INTO `tbl_shipping_profile` (`shipprofile_id`, `shipprofile_user_id`, `shipprofile_identifier`, `shipprofile_active`, `shipprofile_default`) VALUES
 (1, 0, 'Order Level Shipping', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_shipping_profile_lang`
+--
+
+CREATE TABLE `tbl_shipping_profile_lang` (
+  `shipprofilelang_shipprofile_id` int NOT NULL,
+  `shipprofilelang_lang_id` int NOT NULL,
+  `shipprofile_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -15264,10 +15298,10 @@ INSERT INTO `tbl_shipping_profile` (`shipprofile_id`, `shipprofile_user_id`, `sh
 --
 
 CREATE TABLE `tbl_shipping_profile_products` (
-  `shippro_shipprofile_id` int(11) NOT NULL,
-  `shippro_product_id` int(11) NOT NULL,
-  `shippro_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `shippro_shipprofile_id` int NOT NULL,
+  `shippro_product_id` int NOT NULL,
+  `shippro_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15276,10 +15310,10 @@ CREATE TABLE `tbl_shipping_profile_products` (
 --
 
 CREATE TABLE `tbl_shipping_profile_zones` (
-  `shipprozone_id` int(11) NOT NULL,
-  `shipprozone_shipprofile_id` int(11) NOT NULL,
-  `shipprozone_shipzone_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `shipprozone_id` int NOT NULL,
+  `shipprozone_shipprofile_id` int NOT NULL,
+  `shipprozone_shipzone_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15288,14 +15322,14 @@ CREATE TABLE `tbl_shipping_profile_zones` (
 --
 
 CREATE TABLE `tbl_shipping_rates` (
-  `shiprate_id` int(11) NOT NULL,
-  `shiprate_shipprozone_id` int(255) NOT NULL,
-  `shiprate_identifier` varchar(255) NOT NULL,
+  `shiprate_id` int NOT NULL,
+  `shiprate_shipprozone_id` int NOT NULL,
+  `shiprate_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `shiprate_cost` decimal(10,2) NOT NULL,
-  `shiprate_condition_type` int(11) NOT NULL DEFAULT '0',
+  `shiprate_condition_type` int NOT NULL DEFAULT '0',
   `shiprate_min_val` decimal(10,2) NOT NULL DEFAULT '0.00',
   `shiprate_max_val` decimal(10,2) NOT NULL DEFAULT '0.00'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15304,10 +15338,10 @@ CREATE TABLE `tbl_shipping_rates` (
 --
 
 CREATE TABLE `tbl_shipping_rates_lang` (
-  `shipratelang_shiprate_id` int(11) NOT NULL,
-  `shipratelang_lang_id` int(11) NOT NULL,
-  `shiprate_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `shipratelang_shiprate_id` int NOT NULL,
+  `shipratelang_lang_id` int NOT NULL,
+  `shiprate_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15316,11 +15350,11 @@ CREATE TABLE `tbl_shipping_rates_lang` (
 --
 
 CREATE TABLE `tbl_shipping_zone` (
-  `shipzone_id` int(11) NOT NULL,
-  `shipzone_user_id` int(11) NOT NULL,
-  `shipzone_name` varchar(255) NOT NULL,
-  `shipzone_active` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `shipzone_id` int NOT NULL,
+  `shipzone_user_id` int NOT NULL,
+  `shipzone_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `shipzone_active` tinyint NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15329,32 +15363,33 @@ CREATE TABLE `tbl_shipping_zone` (
 --
 
 CREATE TABLE `tbl_shops` (
-  `shop_id` int(11) NOT NULL,
-  `shop_user_id` int(11) NOT NULL,
-  `shop_ltemplate_id` int(11) NOT NULL,
-  `shop_identifier` varchar(255) NOT NULL,
-  `shop_postalcode` varchar(50) NOT NULL,
-  `shop_country_id` int(11) NOT NULL,
-  `shop_state_id` int(11) NOT NULL,
-  `shop_phone` varchar(50) NOT NULL,
-  `shop_invoice_prefix` varchar(20) NOT NULL,
-  `shop_invoice_suffix` bigint(15) NOT NULL,
+  `shop_id` int NOT NULL,
+  `shop_user_id` int NOT NULL,
+  `shop_ltemplate_id` int NOT NULL,
+  `shop_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_postalcode` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_country_id` int NOT NULL,
+  `shop_state_id` int NOT NULL,
+  `shop_phone_dcode` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_phone` bigint NOT NULL,
+  `shop_invoice_prefix` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_invoice_suffix` bigint NOT NULL,
   `shop_custom_color_status` tinyint(1) NOT NULL,
-  `shop_theme_background_color` varchar(100) NOT NULL,
-  `shop_theme_header_color` varchar(100) NOT NULL,
-  `shop_theme_text_color` varchar(100) NOT NULL,
-  `shop_theme_button_text_color` varchar(100) NOT NULL,
+  `shop_theme_background_color` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_theme_header_color` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_theme_text_color` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_theme_button_text_color` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `shop_active` tinyint(1) NOT NULL DEFAULT '1',
   `shop_featured` tinyint(1) NOT NULL,
   `shop_cod_min_wallet_balance` decimal(10,0) NOT NULL DEFAULT '-1',
   `shop_supplier_display_status` tinyint(1) NOT NULL,
   `shop_created_on` datetime NOT NULL,
   `shop_updated_on` datetime NOT NULL,
-  `shop_free_ship_upto` int(11) NOT NULL,
-  `shop_lat` varchar(100) NOT NULL,
-  `shop_lng` varchar(100) NOT NULL,
-  `shop_fulfillment_type` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `shop_free_ship_upto` int NOT NULL,
+  `shop_lat` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_lng` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_fulfillment_type` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15363,20 +15398,20 @@ CREATE TABLE `tbl_shops` (
 --
 
 CREATE TABLE `tbl_shops_lang` (
-  `shoplang_shop_id` int(11) NOT NULL,
-  `shoplang_lang_id` int(11) NOT NULL,
-  `shop_name` varchar(200) NOT NULL,
-  `shop_contact_person` varchar(255) NOT NULL,
-  `shop_description` text NOT NULL,
-  `shop_address_line_1` varchar(255) NOT NULL,
-  `shop_address_line_2` varchar(255) NOT NULL,
-  `shop_city` varchar(150) NOT NULL,
-  `shop_payment_policy` text NOT NULL,
-  `shop_delivery_policy` text NOT NULL,
-  `shop_refund_policy` text NOT NULL,
-  `shop_additional_info` text NOT NULL,
-  `shop_seller_info` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `shoplang_shop_id` int NOT NULL,
+  `shoplang_lang_id` int NOT NULL,
+  `shop_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_contact_person` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_description` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_address_line_1` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_address_line_2` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_city` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_payment_policy` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_delivery_policy` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_refund_policy` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_additional_info` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_seller_info` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15385,12 +15420,12 @@ CREATE TABLE `tbl_shops_lang` (
 --
 
 CREATE TABLE `tbl_shops_to_theme` (
-  `stt_id` int(11) NOT NULL,
-  `stt_shop_id` int(11) NOT NULL,
-  `stt_bg_color` varchar(100) NOT NULL,
-  `stt_header_color` varchar(100) NOT NULL,
-  `stt_text_color` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `stt_id` int NOT NULL,
+  `stt_shop_id` int NOT NULL,
+  `stt_bg_color` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `stt_header_color` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `stt_text_color` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15399,11 +15434,11 @@ CREATE TABLE `tbl_shops_to_theme` (
 --
 
 CREATE TABLE `tbl_shop_collections` (
-  `scollection_id` int(11) NOT NULL,
-  `scollection_shop_id` int(11) NOT NULL,
-  `scollection_identifier` varchar(150) NOT NULL,
+  `scollection_id` int NOT NULL,
+  `scollection_shop_id` int NOT NULL,
+  `scollection_identifier` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
   `scollection_active` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15412,10 +15447,10 @@ CREATE TABLE `tbl_shop_collections` (
 --
 
 CREATE TABLE `tbl_shop_collections_lang` (
-  `scollectionlang_scollection_id` int(11) NOT NULL,
-  `scollectionlang_lang_id` int(11) NOT NULL,
-  `scollection_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `scollectionlang_scollection_id` int NOT NULL,
+  `scollectionlang_lang_id` int NOT NULL,
+  `scollection_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15424,9 +15459,9 @@ CREATE TABLE `tbl_shop_collections_lang` (
 --
 
 CREATE TABLE `tbl_shop_collection_products` (
-  `scp_scollection_id` int(11) NOT NULL,
-  `scp_selprod_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `scp_scollection_id` int NOT NULL,
+  `scp_selprod_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15435,13 +15470,13 @@ CREATE TABLE `tbl_shop_collection_products` (
 --
 
 CREATE TABLE `tbl_shop_reports` (
-  `sreport_id` int(11) NOT NULL,
-  `sreport_shop_id` int(11) NOT NULL,
-  `sreport_reportreason_id` int(11) NOT NULL,
-  `sreport_message` text NOT NULL,
-  `sreport_user_id` int(11) NOT NULL COMMENT 'user_id, who reported shop as spam',
+  `sreport_id` int NOT NULL,
+  `sreport_shop_id` int NOT NULL,
+  `sreport_reportreason_id` int NOT NULL,
+  `sreport_message` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `sreport_user_id` int NOT NULL COMMENT 'user_id, who reported shop as spam',
   `sreport_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15450,24 +15485,25 @@ CREATE TABLE `tbl_shop_reports` (
 --
 
 CREATE TABLE `tbl_shop_specifics` (
-  `ss_shop_id` int(11) NOT NULL,
-  `shop_return_age` int(11) NOT NULL COMMENT 'In Days',
-  `shop_cancellation_age` int(11) NOT NULL COMMENT 'In Days',
-  `shop_invoice_codes` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `ss_shop_id` int NOT NULL,
+  `shop_return_age` int NOT NULL COMMENT 'In Days',
+  `shop_cancellation_age` int NOT NULL COMMENT 'In Days',
+  `shop_invoice_codes` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `shop_pickup_interval` tinyint(1) NOT NULL COMMENT 'In Hours'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_shop_specifics`
 --
 
-INSERT INTO `tbl_shop_specifics` (`ss_shop_id`, `shop_return_age`, `shop_cancellation_age`, `shop_invoice_codes`) VALUES
-(0, 50, 20, ''),
-(1, 7, 7, ''),
-(2, 0, 0, ''),
-(3, 0, 0, ''),
-(4, 0, 0, ''),
-(5, 0, 0, ''),
-(6, 0, 0, '');
+INSERT INTO `tbl_shop_specifics` (`ss_shop_id`, `shop_return_age`, `shop_cancellation_age`, `shop_invoice_codes`, `shop_pickup_interval`) VALUES
+(0, 50, 20, '', 0),
+(1, 7, 7, '', 0),
+(2, 0, 0, '', 0),
+(3, 0, 0, '', 0),
+(4, 0, 0, '', 0),
+(5, 0, 0, '', 0),
+(6, 0, 0, '', 0);
 
 -- --------------------------------------------------------
 
@@ -15476,16 +15512,16 @@ INSERT INTO `tbl_shop_specifics` (`ss_shop_id`, `shop_return_age`, `shop_cancell
 --
 
 CREATE TABLE `tbl_slides` (
-  `slide_id` int(11) NOT NULL,
-  `slide_identifier` varchar(200) NOT NULL,
-  `slide_type` int(11) NOT NULL,
-  `slide_record_id` int(11) NOT NULL,
-  `slide_url` varchar(200) NOT NULL,
-  `slide_target` varchar(100) NOT NULL,
+  `slide_id` int NOT NULL,
+  `slide_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `slide_type` int NOT NULL,
+  `slide_record_id` int NOT NULL,
+  `slide_url` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `slide_target` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `slide_active` tinyint(1) NOT NULL,
-  `slide_display_order` int(11) NOT NULL,
+  `slide_display_order` int NOT NULL,
   `slide_img_updated_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_slides`
@@ -15504,10 +15540,10 @@ INSERT INTO `tbl_slides` (`slide_id`, `slide_identifier`, `slide_type`, `slide_r
 --
 
 CREATE TABLE `tbl_slides_lang` (
-  `slidelang_slide_id` int(11) NOT NULL,
-  `slidelang_lang_id` int(11) NOT NULL,
-  `slide_title` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `slidelang_slide_id` int NOT NULL,
+  `slidelang_lang_id` int NOT NULL,
+  `slide_title` varchar(200) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15516,14 +15552,14 @@ CREATE TABLE `tbl_slides_lang` (
 --
 
 CREATE TABLE `tbl_smart_log_actions` (
-  `slog_id` bigint(20) NOT NULL,
-  `slog_ip` varchar(100) NOT NULL,
+  `slog_id` bigint NOT NULL,
+  `slog_ip` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `slog_datetime` datetime NOT NULL,
-  `slog_swsetting_key` int(11) NOT NULL,
-  `slog_record_id` bigint(20) NOT NULL,
-  `slog_record_code` varchar(255) NOT NULL,
-  `slog_type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `slog_swsetting_key` int NOT NULL,
+  `slog_record_id` bigint NOT NULL,
+  `slog_record_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `slog_type` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15532,12 +15568,12 @@ CREATE TABLE `tbl_smart_log_actions` (
 --
 
 CREATE TABLE `tbl_smart_products_weightage` (
-  `spw_product_id` bigint(20) NOT NULL,
+  `spw_product_id` bigint NOT NULL,
   `spw_weightage` decimal(10,2) NOT NULL,
   `spw_custom_weightage` decimal(10,2) NOT NULL,
   `spw_custom_weightage_valid_till` date NOT NULL,
   `spw_is_excluded` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15546,10 +15582,10 @@ CREATE TABLE `tbl_smart_products_weightage` (
 --
 
 CREATE TABLE `tbl_smart_remommended_products` (
-  `tsrp_source_product_id` bigint(20) NOT NULL,
-  `tsrp_recommended_product_id` bigint(20) NOT NULL,
-  `tsrp_recommendation_weightage` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `tsrp_source_product_id` bigint NOT NULL,
+  `tsrp_recommended_product_id` bigint NOT NULL,
+  `tsrp_recommendation_weightage` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15558,14 +15594,14 @@ CREATE TABLE `tbl_smart_remommended_products` (
 --
 
 CREATE TABLE `tbl_smart_user_activity_browsing` (
-  `uab_id` int(11) NOT NULL,
-  `uab_session_id` varchar(50) NOT NULL,
-  `uab_user_id` int(11) NOT NULL,
-  `uab_record_id` int(11) NOT NULL,
-  `uab_record_type` int(11) NOT NULL,
-  `uab_sub_record_code` varchar(255) NOT NULL,
+  `uab_id` int NOT NULL,
+  `uab_session_id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `uab_user_id` int NOT NULL,
+  `uab_record_id` int NOT NULL,
+  `uab_record_type` int NOT NULL,
+  `uab_sub_record_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `uab_last_action_datetime` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15574,10 +15610,10 @@ CREATE TABLE `tbl_smart_user_activity_browsing` (
 --
 
 CREATE TABLE `tbl_smart_weightage_settings` (
-  `swsetting_key` int(11) NOT NULL COMMENT 'defined in model',
-  `swsetting_name` varchar(100) NOT NULL,
+  `swsetting_key` int NOT NULL COMMENT 'defined in model',
+  `swsetting_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `swsetting_weightage` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15586,15 +15622,15 @@ CREATE TABLE `tbl_smart_weightage_settings` (
 --
 
 CREATE TABLE `tbl_sms_archives` (
-  `smsarchive_id` int(11) NOT NULL,
-  `smsarchive_response_id` varchar(255) NOT NULL,
-  `smsarchive_to` varchar(255) NOT NULL,
-  `smsarchive_tpl_name` varchar(255) NOT NULL,
-  `smsarchive_body` text NOT NULL,
+  `smsarchive_id` int NOT NULL,
+  `smsarchive_response_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `smsarchive_to` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `smsarchive_tpl_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `smsarchive_body` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `smsarchive_sent_on` datetime NOT NULL,
-  `smsarchive_status` varchar(255) NOT NULL,
-  `smsarchive_response` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `smsarchive_status` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `smsarchive_response` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15603,13 +15639,13 @@ CREATE TABLE `tbl_sms_archives` (
 --
 
 CREATE TABLE `tbl_sms_templates` (
-  `stpl_code` varchar(50) NOT NULL,
-  `stpl_lang_id` int(11) NOT NULL,
-  `stpl_name` varchar(100) NOT NULL,
-  `stpl_body` varchar(255) NOT NULL,
-  `stpl_replacements` text NOT NULL,
+  `stpl_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `stpl_lang_id` int NOT NULL,
+  `stpl_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `stpl_body` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `stpl_replacements` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `stpl_status` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_sms_templates`
@@ -15667,7 +15703,7 @@ INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl
 ('reward_points_credited_debited', 1, 'Reward Points Transction', 'Hello {user_name},\r\n{reward_points} reward points have been {debit_credit_type} to your account. Reward points balance is {reward_point_balance}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Full Name\", \"variable\":\"{user_full_name}\"},{\"title\":\"Reward Points\", \"variable\":\"{reward_points}\"},{\"title\":\"Debited\", \"variable\":\"{debit_credit_type\"},{\"title\":\"Reward Point Balance\", \"variable\":\"{reward_point_balance}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('seller_brand_request_admin_email', 1, 'Brand Request', 'Hello Admin,\r\n{user_full_name} has requested a new brand by the name of {brand_name}.\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{user_full_name}\"},{\"title\":\"Brand Name\", \"variable\":\"{brand_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('seller_brand_request_status_change', 1, 'Brand Request Status Update', 'Hello {user_full_name},\r\nYour request for approving {brand_name} has been {new_request_status}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{user_full_name}\"},{\"title\":\"Brand Name\", \"variable\":\"{brand_name}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
-('seller_catalog_request_status_change', 1, 'Private Product Request Status', 'Hello {user_full_name},\r\nYour request for approval of {reference_number} has been {new_request_status}.\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{user_full_name}\"},{\"title\":\"Reference Number\", \"variable\":\"{reference_number}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
+('seller_catalog_request_status_change', 1, 'Private Product Request Status', 'Hello {shop_name},\r\nYour catalog {product_name} has been {new_status} on {website_name}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"New Status\", \"variable\":\"{new_status}\"},{\"title\":\"Product Name\", \"variable\":\"{product_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('seller_custom_catalog_request_status_change', 1, 'Custom Catalog Status Update', 'Hello {user_full_name},\r\nYour catalog approval request for {prod_title} has been {new_request_status}.\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Full Name\", \"variable\":\"{user_full_name}\"},{\"title\":\"Product Title\", \"variable\":\"{prod_title}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('send_message', 1, 'New Message Received', 'Hello {user_full_name},\r\n{username} has sent you a message on {SITE_NAME}.\r\n{SITE_URL}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Full Name\", \"variable\":\"{user_full_name}\"},{\"title\":\"Username\", \"variable\":\"{username}\"},{\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"},{\"title\":\"Site Url\", \"variable\":\"{SITE_URL}\"}]', 1),
 ('share_earn_invitation_email', 1, 'Invite A Friend', 'Hello {user_full_name} has invited you to join them on {SITE_NAME} and enjoy Amazing Discounts.\r\nClick the link to accept the invitation:\r\n{tracking_url}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Full Name\", \"variable\":\"{user_full_name}\"},{\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"},{\"title\":\"Tracking Url\", \"variable\":\"{tracking_url}\"}]', 1),
@@ -15685,6 +15721,7 @@ INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl
 ('user_email_verification', 1, 'Email Verification New Email', 'Hello {user_full_name},\r\nYou have used change email option at {SITE_NAME}.\r\nYou need to confirm your email to get your account activated with this email address.\r\n{verification_url}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Full Name\", \"variable\":\"{user_full_name}\"}, {\"title\":\"Verification Url\", \"variable\":\"{verification_url}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('user_send_email', 1, 'New Email From Admin', 'Hello {full_name},\r\nYou have a new email from\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Full Name\", \"variable\":\"{full_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('user_signup_verification', 1, 'Verification New Email', 'Hello {user_full_name},\r\nThank you for registering at {SITE_NAME}.\r\nConfirm your email by clicking the link {verification_url}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Full Name\", \"variable\":\"{user_full_name}\"},{\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"},{\"title\":\"Verification Url\", \"variable\":\"{verification_url}\"}]', 1),
+('vendor_cod_order_email', 1, 'Order Received', 'Hello {vendor_name}\r\nYou have received a new cash on delivery order {order_id} at {SITE_NAME}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller\", \"variable\":\"{vendor_name}\"},{\"title\":\"Order Id\", \"variable\":\"{order_id}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('vendor_digital_order_email', 1, 'New Digital Order Seller', 'Hello {vendor_name},\r\nA new order {order_id} is received. Please access the orders tab in you account for more options.\r\n{SITE_URL}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller\", \"variable\":\"{vendor_name}\"},{\"title\":\"Order Id\", \"variable\":\"{order_id}\"},{\"title\":\"Site Url\", \"variable\":\"{SITE_URL}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('vendor_order_email', 1, 'New Order Seller', 'Hello {vendor_name},\r\nA new order {order_id} is received. Please access the orders tab in you account for more options.\r\n{SITE_URL}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller\", \"variable\":\"{vendor_name}\"},{\"title\":\"Order Id\", \"variable\":\"{order_id}\"},{\"title\":\"Site Url\", \"variable\":\"{SITE_URL}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
 ('welcome_registration', 1, 'Welcome Sms Notification', 'Hello {name},\r\nThank you for signing up at {SITE_URL}.\r\nWe are thrilled to have you aboard! Please access your account for exciting deals & offers.\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User\", \"variable\":\"{name}\"},{\"title\":\"Website Domain\", \"variable\":\"{SITE_URL}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1),
@@ -15698,13 +15735,13 @@ INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl
 --
 
 CREATE TABLE `tbl_social_platforms` (
-  `splatform_id` int(11) NOT NULL,
-  `splatform_user_id` int(11) NOT NULL,
-  `splatform_identifier` varchar(255) NOT NULL,
-  `splatform_url` varchar(255) NOT NULL,
+  `splatform_id` int NOT NULL,
+  `splatform_user_id` int NOT NULL,
+  `splatform_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `splatform_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `splatform_active` tinyint(1) NOT NULL,
-  `splatform_icon_class` varchar(100) NOT NULL COMMENT 'defined in model'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `splatform_icon_class` varchar(100) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'defined in model'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15713,10 +15750,10 @@ CREATE TABLE `tbl_social_platforms` (
 --
 
 CREATE TABLE `tbl_social_platforms_lang` (
-  `splatformlang_splatform_id` int(11) NOT NULL,
-  `splatformlang_lang_id` int(11) NOT NULL,
-  `splatform_title` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `splatformlang_splatform_id` int NOT NULL,
+  `splatformlang_lang_id` int NOT NULL,
+  `splatform_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -15725,13 +15762,13 @@ CREATE TABLE `tbl_social_platforms_lang` (
 --
 
 CREATE TABLE `tbl_states` (
-  `state_id` int(11) NOT NULL,
-  `state_code` varchar(10) NOT NULL,
-  `state_country_id` int(11) NOT NULL,
-  `state_identifier` varchar(100) NOT NULL,
+  `state_id` int NOT NULL,
+  `state_code` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `state_country_id` int NOT NULL,
+  `state_identifier` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `state_active` tinyint(1) NOT NULL,
   `state_updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_states`
@@ -20502,10 +20539,10 @@ INSERT INTO `tbl_states` (`state_id`, `state_code`, `state_country_id`, `state_i
 --
 
 CREATE TABLE `tbl_states_lang` (
-  `statelang_state_id` int(11) NOT NULL,
-  `statelang_lang_id` int(11) NOT NULL,
-  `state_name` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `statelang_state_id` int NOT NULL,
+  `statelang_lang_id` int NOT NULL,
+  `state_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_states_lang`
@@ -25273,16 +25310,16 @@ INSERT INTO `tbl_states_lang` (`statelang_state_id`, `statelang_lang_id`, `state
 --
 
 CREATE TABLE `tbl_success_stories` (
-  `sstory_id` int(11) NOT NULL,
-  `sstory_user_id` int(11) NOT NULL,
-  `sstory_identifier` varchar(200) NOT NULL,
-  `sstory_site_domain` varchar(255) NOT NULL,
+  `sstory_id` int NOT NULL,
+  `sstory_user_id` int NOT NULL,
+  `sstory_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `sstory_site_domain` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `sstory_active` tinyint(1) NOT NULL,
   `sstory_deleted` tinyint(1) NOT NULL,
-  `sstory_display_order` int(11) NOT NULL,
+  `sstory_display_order` int NOT NULL,
   `sstory_added_on` datetime NOT NULL,
   `sstory_featured` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25291,12 +25328,12 @@ CREATE TABLE `tbl_success_stories` (
 --
 
 CREATE TABLE `tbl_success_stories_lang` (
-  `sstorylang_sstory_id` int(11) NOT NULL,
-  `sstorylang_lang_id` int(11) NOT NULL,
-  `sstory_title` varchar(255) NOT NULL,
-  `sstory_name` varchar(150) NOT NULL,
-  `sstory_content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sstorylang_sstory_id` int NOT NULL,
+  `sstorylang_lang_id` int NOT NULL,
+  `sstory_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `sstory_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `sstory_content` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25305,11 +25342,11 @@ CREATE TABLE `tbl_success_stories_lang` (
 --
 
 CREATE TABLE `tbl_system_logs` (
-  `slog_id` int(11) NOT NULL,
-  `slog_type` int(11) NOT NULL,
-  `slog_details` text NOT NULL,
+  `slog_id` int NOT NULL,
+  `slog_type` int NOT NULL,
+  `slog_details` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `slog_created_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25318,11 +25355,11 @@ CREATE TABLE `tbl_system_logs` (
 --
 
 CREATE TABLE `tbl_tags` (
-  `tag_id` int(11) NOT NULL,
-  `tag_identifier` varchar(200) NOT NULL,
-  `tag_user_id` int(11) NOT NULL COMMENT 'Added by user',
-  `tag_admin_id` int(11) NOT NULL COMMENT 'Added by admin'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `tag_id` int NOT NULL,
+  `tag_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `tag_user_id` int NOT NULL COMMENT 'Added by user',
+  `tag_admin_id` int NOT NULL COMMENT 'Added by admin'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25331,10 +25368,10 @@ CREATE TABLE `tbl_tags` (
 --
 
 CREATE TABLE `tbl_tags_lang` (
-  `taglang_tag_id` int(11) NOT NULL,
-  `taglang_lang_id` int(11) NOT NULL,
-  `tag_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `taglang_tag_id` int NOT NULL,
+  `taglang_lang_id` int NOT NULL,
+  `tag_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25343,12 +25380,12 @@ CREATE TABLE `tbl_tags_lang` (
 --
 
 CREATE TABLE `tbl_tag_product_recommendation` (
-  `tpr_tag_id` bigint(20) NOT NULL,
-  `tpr_product_id` bigint(20) NOT NULL,
+  `tpr_tag_id` bigint NOT NULL,
+  `tpr_product_id` bigint NOT NULL,
   `tpr_weightage` decimal(12,2) NOT NULL,
   `tpr_custom_weightage` decimal(12,2) NOT NULL,
   `tpr_custom_weightage_valid_till` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25357,15 +25394,15 @@ CREATE TABLE `tbl_tag_product_recommendation` (
 --
 
 CREATE TABLE `tbl_tax_categories` (
-  `taxcat_id` int(11) NOT NULL,
-  `taxcat_identifier` varchar(200) NOT NULL,
-  `taxcat_code` varchar(50) NOT NULL,
-  `taxcat_parent` int(11) NOT NULL,
-  `taxcat_plugin_id` int(11) NOT NULL,
+  `taxcat_id` int NOT NULL,
+  `taxcat_identifier` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `taxcat_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `taxcat_parent` int NOT NULL,
+  `taxcat_plugin_id` int NOT NULL,
   `taxcat_active` tinyint(1) NOT NULL,
   `taxcat_deleted` tinyint(1) NOT NULL,
   `taxcat_last_updated` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25374,10 +25411,10 @@ CREATE TABLE `tbl_tax_categories` (
 --
 
 CREATE TABLE `tbl_tax_categories_lang` (
-  `taxcatlang_taxcat_id` int(11) NOT NULL,
-  `taxcatlang_lang_id` int(11) NOT NULL,
-  `taxcat_name` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `taxcatlang_taxcat_id` int NOT NULL,
+  `taxcatlang_lang_id` int NOT NULL,
+  `taxcat_name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25386,12 +25423,12 @@ CREATE TABLE `tbl_tax_categories_lang` (
 --
 
 CREATE TABLE `tbl_tax_rules` (
-  `taxrule_id` int(11) NOT NULL,
-  `taxrule_taxcat_id` int(11) NOT NULL,
-  `taxrule_taxstr_id` int(11) NOT NULL,
-  `taxrule_name` varchar(255) NOT NULL,
+  `taxrule_id` int NOT NULL,
+  `taxrule_taxcat_id` int NOT NULL,
+  `taxrule_taxstr_id` int NOT NULL,
+  `taxrule_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `taxrule_rate` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25400,11 +25437,11 @@ CREATE TABLE `tbl_tax_rules` (
 --
 
 CREATE TABLE `tbl_tax_rule_details` (
-  `taxruledet_id` int(11) NOT NULL,
-  `taxruledet_taxrule_id` int(11) NOT NULL,
-  `taxruledet_taxstr_id` int(11) NOT NULL,
+  `taxruledet_id` int NOT NULL,
+  `taxruledet_taxrule_id` int NOT NULL,
+  `taxruledet_taxstr_id` int NOT NULL,
   `taxruledet_rate` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25413,13 +25450,13 @@ CREATE TABLE `tbl_tax_rule_details` (
 --
 
 CREATE TABLE `tbl_tax_rule_locations` (
-  `taxruleloc_taxcat_id` int(11) NOT NULL,
-  `taxruleloc_taxrule_id` int(11) NOT NULL,
-  `taxruleloc_country_id` int(11) NOT NULL,
-  `taxruleloc_state_id` int(11) NOT NULL,
-  `taxruleloc_type` int(11) DEFAULT NULL COMMENT 'including or excluding',
-  `taxruleloc_unique` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `taxruleloc_taxcat_id` int NOT NULL,
+  `taxruleloc_taxrule_id` int NOT NULL,
+  `taxruleloc_country_id` int NOT NULL,
+  `taxruleloc_state_id` int NOT NULL,
+  `taxruleloc_type` int DEFAULT NULL COMMENT 'including or excluding',
+  `taxruleloc_unique` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25428,11 +25465,11 @@ CREATE TABLE `tbl_tax_rule_locations` (
 --
 
 CREATE TABLE `tbl_tax_structure` (
-  `taxstr_id` int(11) NOT NULL,
-  `taxstr_identifier` varchar(255) NOT NULL,
-  `taxstr_parent` int(11) NOT NULL,
-  `taxstr_is_combined` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `taxstr_id` int NOT NULL,
+  `taxstr_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `taxstr_parent` int NOT NULL,
+  `taxstr_is_combined` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25441,10 +25478,10 @@ CREATE TABLE `tbl_tax_structure` (
 --
 
 CREATE TABLE `tbl_tax_structure_lang` (
-  `taxstrlang_taxstr_id` int(11) NOT NULL,
-  `taxstrlang_lang_id` int(11) NOT NULL,
-  `taxstr_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `taxstrlang_taxstr_id` int NOT NULL,
+  `taxstrlang_lang_id` int NOT NULL,
+  `taxstr_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25453,13 +25490,13 @@ CREATE TABLE `tbl_tax_structure_lang` (
 --
 
 CREATE TABLE `tbl_testimonials` (
-  `testimonial_id` int(11) NOT NULL,
-  `testimonial_identifier` varchar(150) NOT NULL,
+  `testimonial_id` int NOT NULL,
+  `testimonial_identifier` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
   `testimonial_active` tinyint(1) NOT NULL,
   `testimonial_deleted` tinyint(1) NOT NULL,
   `testimonial_added_on` datetime NOT NULL,
-  `testimonial_user_name` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `testimonial_user_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25468,11 +25505,11 @@ CREATE TABLE `tbl_testimonials` (
 --
 
 CREATE TABLE `tbl_testimonials_lang` (
-  `testimoniallang_testimonial_id` int(11) NOT NULL,
-  `testimoniallang_lang_id` int(11) NOT NULL,
-  `testimonial_title` varchar(255) NOT NULL,
-  `testimonial_text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `testimoniallang_testimonial_id` int NOT NULL,
+  `testimoniallang_lang_id` int NOT NULL,
+  `testimonial_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `testimonial_text` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25481,11 +25518,11 @@ CREATE TABLE `tbl_testimonials_lang` (
 --
 
 CREATE TABLE `tbl_theme` (
-  `theme_id` int(11) NOT NULL,
-  `theme_name` varchar(250) NOT NULL,
-  `theme_display_order` int(11) NOT NULL,
-  `theme_added_by` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `theme_id` int NOT NULL,
+  `theme_name` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `theme_display_order` int NOT NULL,
+  `theme_added_by` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_theme`
@@ -25516,11 +25553,11 @@ INSERT INTO `tbl_theme` (`theme_id`, `theme_name`, `theme_display_order`, `theme
 --
 
 CREATE TABLE `tbl_theme_colors` (
-  `tcolor_theme_id` int(11) NOT NULL,
-  `tcolor_key` int(11) NOT NULL,
-  `tcolor_value` varchar(10) NOT NULL,
-  `tcolor_display_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `tcolor_theme_id` int NOT NULL,
+  `tcolor_key` int NOT NULL,
+  `tcolor_value` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `tcolor_display_order` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_theme_colors`
@@ -25791,13 +25828,13 @@ INSERT INTO `tbl_theme_colors` (`tcolor_theme_id`, `tcolor_key`, `tcolor_value`,
 --
 
 CREATE TABLE `tbl_threads` (
-  `thread_id` bigint(20) NOT NULL,
-  `thread_subject` varchar(255) NOT NULL,
-  `thread_started_by` int(11) NOT NULL COMMENT 'user_id',
+  `thread_id` bigint NOT NULL,
+  `thread_subject` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `thread_started_by` int NOT NULL COMMENT 'user_id',
   `thread_start_date` date NOT NULL,
-  `thread_type` int(11) NOT NULL COMMENT 'defined in model',
-  `thread_record_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `thread_type` int NOT NULL COMMENT 'defined in model',
+  `thread_record_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25806,15 +25843,15 @@ CREATE TABLE `tbl_threads` (
 --
 
 CREATE TABLE `tbl_thread_messages` (
-  `message_id` bigint(20) NOT NULL,
-  `message_thread_id` int(11) NOT NULL,
-  `message_from` int(11) NOT NULL COMMENT 'user_id',
-  `message_to` int(11) NOT NULL COMMENT 'user_id',
-  `message_text` text NOT NULL,
+  `message_id` bigint NOT NULL,
+  `message_thread_id` int NOT NULL,
+  `message_from` int NOT NULL COMMENT 'user_id',
+  `message_to` int NOT NULL COMMENT 'user_id',
+  `message_text` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `message_date` datetime NOT NULL,
   `message_is_unread` tinyint(1) NOT NULL DEFAULT '1',
   `message_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25823,15 +25860,15 @@ CREATE TABLE `tbl_thread_messages` (
 --
 
 CREATE TABLE `tbl_time_slots` (
-  `tslot_id` int(11) NOT NULL,
+  `tslot_id` int NOT NULL,
   `tslot_availability` tinyint(1) NOT NULL,
-  `tslot_type` int(11) NOT NULL,
-  `tslot_record_id` int(11) NOT NULL,
-  `tslot_subrecord_id` int(11) NOT NULL,
-  `tslot_day` int(11) NOT NULL,
+  `tslot_type` int NOT NULL,
+  `tslot_record_id` int NOT NULL,
+  `tslot_subrecord_id` int NOT NULL,
+  `tslot_day` int NOT NULL,
   `tslot_from_time` time NOT NULL,
   `tslot_to_time` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25840,10 +25877,10 @@ CREATE TABLE `tbl_time_slots` (
 --
 
 CREATE TABLE `tbl_tool_tips` (
-  `tooltip_id` int(11) NOT NULL,
-  `tooltip_key` varchar(255) NOT NULL,
-  `tooltip_default_value` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `tooltip_id` int NOT NULL,
+  `tooltip_key` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `tooltip_default_value` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25852,10 +25889,10 @@ CREATE TABLE `tbl_tool_tips` (
 --
 
 CREATE TABLE `tbl_tool_tips_lang` (
-  `tooltiplang_tooltip_id` int(11) NOT NULL,
-  `tooltiplang_lang_id` int(11) NOT NULL,
-  `tooltip_text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `tooltiplang_tooltip_id` int NOT NULL,
+  `tooltiplang_lang_id` int NOT NULL,
+  `tooltip_text` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25864,11 +25901,11 @@ CREATE TABLE `tbl_tool_tips_lang` (
 --
 
 CREATE TABLE `tbl_tracking_courier_code_relation` (
-  `tccr_shipapi_plugin_id` int(11) NOT NULL,
-  `tccr_shipapi_courier_code` varchar(255) NOT NULL,
-  `tccr_tracking_plugin_id` int(11) NOT NULL,
-  `tccr_tracking_courier_code` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `tccr_shipapi_plugin_id` int NOT NULL,
+  `tccr_shipapi_courier_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `tccr_tracking_plugin_id` int NOT NULL,
+  `tccr_tracking_courier_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25877,13 +25914,13 @@ CREATE TABLE `tbl_tracking_courier_code_relation` (
 --
 
 CREATE TABLE `tbl_transactions_failure_log` (
-  `txnlog_id` bigint(20) NOT NULL,
-  `txnlog_type` int(11) NOT NULL COMMENT 'Defined In Transaction Failure Log Model',
-  `txnlog_record_id` varchar(150) NOT NULL,
-  `txnlog_response` text NOT NULL,
+  `txnlog_id` bigint NOT NULL,
+  `txnlog_type` int NOT NULL COMMENT 'Defined In Transaction Failure Log Model',
+  `txnlog_record_id` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `txnlog_response` text COLLATE utf8mb4_general_ci NOT NULL,
   `txnlog_updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `txnlog_added_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25892,9 +25929,9 @@ CREATE TABLE `tbl_transactions_failure_log` (
 --
 
 CREATE TABLE `tbl_unique_check_failed_attempt` (
-  `ucfattempt_ip` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `ucfattempt_ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `ucfattempt_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_unique_check_failed_attempt`
@@ -25914,12 +25951,12 @@ INSERT INTO `tbl_unique_check_failed_attempt` (`ucfattempt_ip`, `ucfattempt_time
 --
 
 CREATE TABLE `tbl_upc_codes` (
-  `upc_code_id` bigint(15) NOT NULL,
-  `upc_code` varchar(255) NOT NULL,
-  `upc_product_id` bigint(15) NOT NULL,
-  `upc_options` text NOT NULL,
+  `upc_code_id` bigint NOT NULL,
+  `upc_code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `upc_product_id` bigint NOT NULL,
+  `upc_options` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `upc_msrp` decimal(10,2) NOT NULL COMMENT 'selling price option specific'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -25928,13 +25965,13 @@ CREATE TABLE `tbl_upc_codes` (
 --
 
 CREATE TABLE `tbl_updated_record_log` (
-  `urlog_id` bigint(15) NOT NULL,
-  `urlog_record_id` int(11) NOT NULL,
-  `urlog_subrecord_id` int(11) NOT NULL,
-  `urlog_record_type` int(11) NOT NULL,
+  `urlog_id` bigint NOT NULL,
+  `urlog_record_id` int NOT NULL,
+  `urlog_subrecord_id` int NOT NULL,
+  `urlog_record_type` int NOT NULL,
   `urlog_added_on` datetime NOT NULL,
   `urlog_executed` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_updated_record_log`
@@ -26096,9 +26133,9 @@ INSERT INTO `tbl_updated_record_log` (`urlog_id`, `urlog_record_id`, `urlog_subr
 --
 
 CREATE TABLE `tbl_upsell_products` (
-  `upsell_sellerproduct_id` int(11) NOT NULL,
-  `upsell_recommend_sellerproduct_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `upsell_sellerproduct_id` int NOT NULL,
+  `upsell_recommend_sellerproduct_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26107,11 +26144,11 @@ CREATE TABLE `tbl_upsell_products` (
 --
 
 CREATE TABLE `tbl_url_rewrite` (
-  `urlrewrite_id` int(11) NOT NULL,
-  `urlrewrite_original` varchar(255) NOT NULL,
-  `urlrewrite_custom` varchar(255) NOT NULL,
-  `urlrewrite_lang_id` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `urlrewrite_id` int NOT NULL,
+  `urlrewrite_original` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `urlrewrite_custom` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `urlrewrite_lang_id` int NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26120,39 +26157,39 @@ CREATE TABLE `tbl_url_rewrite` (
 --
 
 CREATE TABLE `tbl_users` (
-  `user_id` int(11) NOT NULL,
-  `user_name` varchar(100) NOT NULL,
-  `user_dial_code` varchar(10) NOT NULL,
-  `user_phone` bigint(20) DEFAULT NULL,
+  `user_id` int NOT NULL,
+  `user_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_phone_dcode` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_phone` bigint DEFAULT NULL,
   `user_dob` date NOT NULL,
-  `user_profile_info` text NOT NULL,
-  `user_address1` varchar(250) NOT NULL,
-  `user_address2` varchar(250) NOT NULL,
-  `user_zip` varchar(20) NOT NULL,
-  `user_country_id` int(11) NOT NULL,
-  `user_state_id` int(11) NOT NULL,
-  `user_city` varchar(255) NOT NULL,
+  `user_profile_info` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `user_address1` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_address2` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_zip` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_country_id` int NOT NULL,
+  `user_state_id` int NOT NULL,
+  `user_city` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `user_is_buyer` tinyint(1) NOT NULL,
   `user_is_supplier` tinyint(1) NOT NULL,
-  `user_parent` int(11) NOT NULL,
-  `user_is_advertiser` tinyint(4) NOT NULL,
-  `user_is_affiliate` tinyint(4) NOT NULL,
+  `user_parent` int NOT NULL,
+  `user_is_advertiser` tinyint NOT NULL,
+  `user_is_affiliate` tinyint NOT NULL,
   `user_is_shipping_company` tinyint(1) NOT NULL,
-  `user_autorenew_subscription` tinyint(4) NOT NULL,
-  `user_fb_access_token` varchar(255) NOT NULL,
-  `user_referral_code` varchar(100) DEFAULT NULL,
-  `user_referrer_user_id` int(11) NOT NULL COMMENT 'Using Share&Earn Module from buyer promotion',
-  `user_affiliate_referrer_user_id` int(11) NOT NULL,
-  `user_preferred_dashboard` tinyint(4) NOT NULL,
+  `user_autorenew_subscription` tinyint NOT NULL,
+  `user_fb_access_token` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_referral_code` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `user_referrer_user_id` int NOT NULL COMMENT 'Using Share&Earn Module from buyer promotion',
+  `user_affiliate_referrer_user_id` int NOT NULL,
+  `user_preferred_dashboard` tinyint NOT NULL,
   `user_regdate` datetime NOT NULL,
-  `user_company` varchar(500) NOT NULL,
-  `user_products_services` text NOT NULL,
+  `user_company` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_products_services` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `user_affiliate_commission` decimal(10,2) NOT NULL COMMENT 'filled only when user_is_affiliate = 1',
-  `user_registered_initially_for` int(11) NOT NULL COMMENT 'user type defined in user model',
-  `user_order_tracking_url` varchar(255) NOT NULL,
+  `user_registered_initially_for` int NOT NULL COMMENT 'user type defined in user model',
+  `user_order_tracking_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `user_updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_deleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26161,16 +26198,16 @@ CREATE TABLE `tbl_users` (
 --
 
 CREATE TABLE `tbl_user_auth_token` (
-  `uauth_user_id` int(11) NOT NULL,
-  `uauth_token` varchar(32) NOT NULL,
-  `uauth_fcm_id` varchar(300) NOT NULL,
+  `uauth_user_id` int NOT NULL,
+  `uauth_token` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
+  `uauth_fcm_id` varchar(300) COLLATE utf8mb4_general_ci NOT NULL,
   `uauth_device_os` tinyint(1) NOT NULL COMMENT 'Defined In User Model',
   `uauth_user_type` tinyint(1) NOT NULL,
   `uauth_expiry` datetime NOT NULL,
-  `uauth_browser` text NOT NULL,
+  `uauth_browser` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `uauth_last_access` datetime NOT NULL,
-  `uauth_last_ip` varchar(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='To store cookies information';
+  `uauth_last_ip` varchar(16) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='To store cookies information';
 
 -- --------------------------------------------------------
 
@@ -26179,13 +26216,13 @@ CREATE TABLE `tbl_user_auth_token` (
 --
 
 CREATE TABLE `tbl_user_bank_details` (
-  `ub_user_id` int(11) NOT NULL,
-  `ub_bank_name` varchar(255) NOT NULL,
-  `ub_account_holder_name` varchar(255) NOT NULL,
-  `ub_account_number` varchar(100) NOT NULL,
-  `ub_ifsc_swift_code` varchar(100) NOT NULL,
-  `ub_bank_address` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ub_user_id` int NOT NULL,
+  `ub_bank_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ub_account_holder_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ub_account_number` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `ub_ifsc_swift_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `ub_bank_address` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26194,15 +26231,15 @@ CREATE TABLE `tbl_user_bank_details` (
 --
 
 CREATE TABLE `tbl_user_cart` (
-  `usercart_user_id` varchar(100) NOT NULL,
-  `usercart_type` int(11) NOT NULL,
-  `usercart_details` text NOT NULL,
+  `usercart_user_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `usercart_type` int NOT NULL,
+  `usercart_details` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `usercart_added_date` datetime NOT NULL,
-  `usercart_sent_reminder` int(11) NOT NULL,
+  `usercart_sent_reminder` int NOT NULL,
   `usercart_reminder_date` datetime NOT NULL,
   `usercart_last_used_date` datetime NOT NULL,
-  `usercart_last_session_id` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `usercart_last_session_id` varchar(200) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26211,10 +26248,10 @@ CREATE TABLE `tbl_user_cart` (
 --
 
 CREATE TABLE `tbl_user_collections` (
-  `uc_user_id` int(11) NOT NULL,
-  `uc_type` int(11) NOT NULL,
-  `uc_record_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `uc_user_id` int NOT NULL,
+  `uc_type` int NOT NULL,
+  `uc_record_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26223,13 +26260,13 @@ CREATE TABLE `tbl_user_collections` (
 --
 
 CREATE TABLE `tbl_user_credentials` (
-  `credential_user_id` int(11) NOT NULL,
-  `credential_username` varchar(255) NOT NULL,
-  `credential_email` varchar(150) DEFAULT NULL,
-  `credential_password` varchar(100) NOT NULL,
-  `credential_active` tinyint(4) NOT NULL,
-  `credential_verified` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `credential_user_id` int NOT NULL,
+  `credential_username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `credential_email` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `credential_password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `credential_active` tinyint NOT NULL,
+  `credential_verified` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26238,10 +26275,10 @@ CREATE TABLE `tbl_user_credentials` (
 --
 
 CREATE TABLE `tbl_user_email_verification` (
-  `uev_user_id` int(11) NOT NULL,
-  `uev_token` varchar(50) NOT NULL,
-  `uev_email` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `uev_user_id` int NOT NULL,
+  `uev_token` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `uev_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26250,15 +26287,15 @@ CREATE TABLE `tbl_user_email_verification` (
 --
 
 CREATE TABLE `tbl_user_extras` (
-  `uextra_id` int(11) NOT NULL,
-  `uextra_user_id` int(11) NOT NULL,
-  `uextra_company_name` varchar(100) NOT NULL,
-  `uextra_website` varchar(100) NOT NULL,
-  `uextra_tax_id` varchar(100) NOT NULL,
-  `uextra_payment_method` int(11) NOT NULL COMMENT 'constant defined in user model',
-  `uextra_cheque_payee_name` varchar(100) NOT NULL,
-  `uextra_paypal_email_id` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `uextra_id` int NOT NULL,
+  `uextra_user_id` int NOT NULL,
+  `uextra_company_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `uextra_website` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `uextra_tax_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `uextra_payment_method` int NOT NULL COMMENT 'constant defined in user model',
+  `uextra_cheque_payee_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `uextra_paypal_email_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26267,10 +26304,10 @@ CREATE TABLE `tbl_user_extras` (
 --
 
 CREATE TABLE `tbl_user_favourite_products` (
-  `ufp_id` int(11) NOT NULL,
-  `ufp_user_id` int(11) NOT NULL,
-  `ufp_selprod_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ufp_id` int NOT NULL,
+  `ufp_user_id` int NOT NULL,
+  `ufp_selprod_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26279,10 +26316,10 @@ CREATE TABLE `tbl_user_favourite_products` (
 --
 
 CREATE TABLE `tbl_user_favourite_shops` (
-  `ufs_id` int(11) NOT NULL,
-  `ufs_user_id` int(11) NOT NULL,
-  `ufs_shop_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ufs_id` int NOT NULL,
+  `ufs_user_id` int NOT NULL,
+  `ufs_shop_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26291,10 +26328,10 @@ CREATE TABLE `tbl_user_favourite_shops` (
 --
 
 CREATE TABLE `tbl_user_meta` (
-  `usermeta_user_id` int(11) NOT NULL,
-  `usermeta_key` varchar(180) NOT NULL,
-  `usermeta_value` text CHARACTER SET latin1 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `usermeta_user_id` int NOT NULL,
+  `usermeta_key` varchar(180) COLLATE utf8mb4_general_ci NOT NULL,
+  `usermeta_value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_user_meta`
@@ -26322,14 +26359,14 @@ INSERT INTO `tbl_user_meta` (`usermeta_user_id`, `usermeta_key`, `usermeta_value
 --
 
 CREATE TABLE `tbl_user_notifications` (
-  `unotification_id` bigint(20) NOT NULL,
-  `unotification_user_id` int(11) NOT NULL,
-  `unotification_body` text NOT NULL,
+  `unotification_id` bigint NOT NULL,
+  `unotification_user_id` int NOT NULL,
+  `unotification_body` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `unotification_date` datetime NOT NULL,
   `unotification_is_read` tinyint(1) NOT NULL,
-  `unotification_type` varchar(50) NOT NULL,
-  `unotification_data` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `unotification_type` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `unotification_data` mediumtext COLLATE utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_user_notifications`
@@ -26674,10 +26711,10 @@ INSERT INTO `tbl_user_notifications` (`unotification_id`, `unotification_user_id
 --
 
 CREATE TABLE `tbl_user_password_reset_requests` (
-  `uprr_user_id` int(11) NOT NULL,
-  `uprr_token` varchar(255) NOT NULL,
+  `uprr_user_id` int NOT NULL,
+  `uprr_token` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `uprr_expiry` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26686,10 +26723,10 @@ CREATE TABLE `tbl_user_password_reset_requests` (
 --
 
 CREATE TABLE `tbl_user_permissions` (
-  `userperm_user_id` int(11) NOT NULL,
-  `userperm_section_id` int(11) NOT NULL,
-  `userperm_value` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `userperm_user_id` int NOT NULL,
+  `userperm_section_id` int NOT NULL,
+  `userperm_value` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26698,13 +26735,12 @@ CREATE TABLE `tbl_user_permissions` (
 --
 
 CREATE TABLE `tbl_user_phone_verification` (
-  `upv_user_id` int(11) NOT NULL,
-  `upv_otp` int(6) NOT NULL,
-  `upv_country_iso` varchar(10) NOT NULL,
-  `upv_dial_code` varchar(10) NOT NULL,
-  `upv_phone` bigint(20) NOT NULL,
+  `upv_user_id` int NOT NULL,
+  `upv_otp` int NOT NULL,
+  `upv_phone_dcode` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `upv_phone` bigint NOT NULL,
   `upv_expired_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26713,10 +26749,10 @@ CREATE TABLE `tbl_user_phone_verification` (
 --
 
 CREATE TABLE `tbl_user_product_recommendation` (
-  `upr_user_id` int(11) NOT NULL,
-  `upr_product_id` bigint(20) NOT NULL,
+  `upr_user_id` int NOT NULL,
+  `upr_product_id` bigint NOT NULL,
   `upr_weightage` decimal(12,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26725,15 +26761,15 @@ CREATE TABLE `tbl_user_product_recommendation` (
 --
 
 CREATE TABLE `tbl_user_requests_history` (
-  `ureq_id` int(11) NOT NULL,
-  `ureq_user_id` int(11) NOT NULL,
-  `ureq_type` tinyint(4) NOT NULL,
-  `ureq_purpose` text CHARACTER SET utf8 NOT NULL,
-  `ureq_status` tinyint(4) NOT NULL,
+  `ureq_id` int NOT NULL,
+  `ureq_user_id` int NOT NULL,
+  `ureq_type` tinyint NOT NULL,
+  `ureq_purpose` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `ureq_status` tinyint NOT NULL,
   `ureq_date` datetime NOT NULL,
   `ureq_approved_date` datetime NOT NULL,
-  `ureq_deleted` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `ureq_deleted` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26742,12 +26778,13 @@ CREATE TABLE `tbl_user_requests_history` (
 --
 
 CREATE TABLE `tbl_user_return_address` (
-  `ura_user_id` int(11) NOT NULL,
-  `ura_state_id` int(1) NOT NULL,
-  `ura_country_id` int(11) NOT NULL,
-  `ura_zip` varchar(50) NOT NULL,
-  `ura_phone` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ura_user_id` int NOT NULL,
+  `ura_state_id` int NOT NULL,
+  `ura_country_id` int NOT NULL,
+  `ura_zip` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `ura_phone_dcode` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `ura_phone` bigint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26756,13 +26793,13 @@ CREATE TABLE `tbl_user_return_address` (
 --
 
 CREATE TABLE `tbl_user_return_address_lang` (
-  `uralang_user_id` int(11) NOT NULL,
-  `uralang_lang_id` int(11) NOT NULL,
-  `ura_name` varchar(255) NOT NULL,
-  `ura_city` varchar(255) NOT NULL,
-  `ura_address_line_1` varchar(255) NOT NULL,
-  `ura_address_line_2` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `uralang_user_id` int NOT NULL,
+  `uralang_lang_id` int NOT NULL,
+  `ura_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ura_city` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ura_address_line_1` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ura_address_line_2` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26771,16 +26808,16 @@ CREATE TABLE `tbl_user_return_address_lang` (
 --
 
 CREATE TABLE `tbl_user_reward_points` (
-  `urp_id` int(11) NOT NULL,
-  `urp_user_id` int(11) NOT NULL,
-  `urp_referral_user_id` int(11) NOT NULL,
-  `urp_points` int(11) NOT NULL,
-  `urp_comments` text NOT NULL,
-  `urp_used_order_id` varchar(15) NOT NULL,
+  `urp_id` int NOT NULL,
+  `urp_user_id` int NOT NULL,
+  `urp_referral_user_id` int NOT NULL,
+  `urp_points` int NOT NULL,
+  `urp_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `urp_used_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
   `urp_date_added` date NOT NULL,
   `urp_date_expiry` date NOT NULL,
-  `urp_used` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `urp_used` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26789,15 +26826,15 @@ CREATE TABLE `tbl_user_reward_points` (
 --
 
 CREATE TABLE `tbl_user_reward_point_breakup` (
-  `urpbreakup_id` int(11) NOT NULL,
-  `urpbreakup_urp_id` int(11) NOT NULL,
-  `urpbreakup_points` int(11) NOT NULL,
+  `urpbreakup_id` int NOT NULL,
+  `urpbreakup_urp_id` int NOT NULL,
+  `urpbreakup_points` int NOT NULL,
   `urpbreakup_expiry` date NOT NULL,
   `urpbreakup_used` tinyint(1) NOT NULL,
-  `urpbreakup_referral_user_id` int(11) NOT NULL,
-  `urpbreakup_used_order_id` varchar(15) NOT NULL,
+  `urpbreakup_referral_user_id` int NOT NULL,
+  `urpbreakup_used_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
   `urpbreakup_used_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26806,13 +26843,13 @@ CREATE TABLE `tbl_user_reward_point_breakup` (
 --
 
 CREATE TABLE `tbl_user_supplier_form_fields` (
-  `sformfield_id` int(11) NOT NULL,
-  `sformfield_identifier` varchar(255) NOT NULL,
-  `sformfield_type` int(11) NOT NULL,
+  `sformfield_id` int NOT NULL,
+  `sformfield_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `sformfield_type` int NOT NULL,
   `sformfield_required` tinyint(1) NOT NULL,
-  `sformfield_display_order` int(11) NOT NULL,
+  `sformfield_display_order` int NOT NULL,
   `sformfield_mandatory` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_user_supplier_form_fields`
@@ -26830,11 +26867,11 @@ INSERT INTO `tbl_user_supplier_form_fields` (`sformfield_id`, `sformfield_identi
 --
 
 CREATE TABLE `tbl_user_supplier_form_fields_lang` (
-  `sformfieldlang_sformfield_id` int(11) NOT NULL,
-  `sformfieldlang_lang_id` int(11) NOT NULL,
-  `sformfield_caption` varchar(255) NOT NULL,
-  `sformfield_comment` mediumtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sformfieldlang_sformfield_id` int NOT NULL,
+  `sformfieldlang_lang_id` int NOT NULL,
+  `sformfield_caption` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `sformfield_comment` longtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_user_supplier_form_fields_lang`
@@ -26857,14 +26894,14 @@ INSERT INTO `tbl_user_supplier_form_fields_lang` (`sformfieldlang_sformfield_id`
 --
 
 CREATE TABLE `tbl_user_supplier_requests` (
-  `usuprequest_id` bigint(20) NOT NULL,
-  `usuprequest_reference` varchar(50) NOT NULL,
-  `usuprequest_user_id` bigint(20) NOT NULL,
+  `usuprequest_id` bigint NOT NULL,
+  `usuprequest_reference` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `usuprequest_user_id` bigint NOT NULL,
   `usuprequest_date` datetime NOT NULL,
   `usuprequest_status` tinyint(1) NOT NULL,
-  `usuprequest_comments` text NOT NULL,
-  `usuprequest_attempts` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `usuprequest_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `usuprequest_attempts` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26873,11 +26910,11 @@ CREATE TABLE `tbl_user_supplier_requests` (
 --
 
 CREATE TABLE `tbl_user_supplier_request_values` (
-  `sfreqvalue_id` bigint(20) NOT NULL,
-  `sfreqvalue_request_id` int(11) NOT NULL,
-  `sfreqvalue_formfield_id` int(11) NOT NULL,
-  `sfreqvalue_text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sfreqvalue_id` bigint NOT NULL,
+  `sfreqvalue_request_id` int NOT NULL,
+  `sfreqvalue_formfield_id` int NOT NULL,
+  `sfreqvalue_text` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26886,10 +26923,10 @@ CREATE TABLE `tbl_user_supplier_request_values` (
 --
 
 CREATE TABLE `tbl_user_supplier_request_values_lang` (
-  `sfreqvaluelang_sfreqvalue_id` int(11) NOT NULL,
-  `sfreqvaluelang_lang_id` int(11) NOT NULL,
-  `sfreqvalue_sformfield_caption` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `sfreqvaluelang_sfreqvalue_id` int NOT NULL,
+  `sfreqvaluelang_lang_id` int NOT NULL,
+  `sfreqvalue_sformfield_caption` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26898,10 +26935,10 @@ CREATE TABLE `tbl_user_supplier_request_values_lang` (
 --
 
 CREATE TABLE `tbl_user_temp_token_requests` (
-  `uttr_user_id` int(11) NOT NULL,
-  `uttr_token` varchar(255) NOT NULL,
+  `uttr_user_id` int NOT NULL,
+  `uttr_token` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `uttr_expiry` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_user_temp_token_requests`
@@ -26917,19 +26954,19 @@ INSERT INTO `tbl_user_temp_token_requests` (`uttr_user_id`, `uttr_token`, `uttr_
 --
 
 CREATE TABLE `tbl_user_transactions` (
-  `utxn_id` bigint(20) NOT NULL,
-  `utxn_user_id` int(11) NOT NULL,
+  `utxn_id` bigint NOT NULL,
+  `utxn_user_id` int NOT NULL,
   `utxn_date` datetime NOT NULL,
   `utxn_credit` decimal(10,2) NOT NULL,
   `utxn_debit` decimal(10,2) NOT NULL,
-  `utxn_gateway_txn_id` varchar(150) NOT NULL,
-  `utxn_comments` text NOT NULL,
+  `utxn_gateway_txn_id` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `utxn_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `utxn_status` tinyint(1) NOT NULL,
-  `utxn_order_id` varchar(15) NOT NULL,
-  `utxn_op_id` int(11) NOT NULL,
-  `utxn_withdrawal_id` int(11) NOT NULL,
-  `utxn_type` int(11) NOT NULL COMMENT 'defined in transactions model'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `utxn_order_id` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `utxn_op_id` int NOT NULL,
+  `utxn_withdrawal_id` int NOT NULL,
+  `utxn_type` int NOT NULL COMMENT 'defined in transactions model'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26938,12 +26975,12 @@ CREATE TABLE `tbl_user_transactions` (
 --
 
 CREATE TABLE `tbl_user_wish_lists` (
-  `uwlist_id` int(11) NOT NULL,
-  `uwlist_type` int(11) NOT NULL,
-  `uwlist_user_id` int(11) NOT NULL,
-  `uwlist_title` varchar(255) NOT NULL,
+  `uwlist_id` int NOT NULL,
+  `uwlist_type` int NOT NULL,
+  `uwlist_user_id` int NOT NULL,
+  `uwlist_title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `uwlist_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26952,12 +26989,12 @@ CREATE TABLE `tbl_user_wish_lists` (
 --
 
 CREATE TABLE `tbl_user_wish_list_products` (
-  `uwlp_uwlist_id` int(11) NOT NULL,
-  `uwlp_selprod_id` int(11) NOT NULL COMMENT 'from "tbl_seller_products"',
+  `uwlp_uwlist_id` int NOT NULL,
+  `uwlp_selprod_id` int NOT NULL COMMENT 'from "tbl_seller_products"',
   `uwlp_added_on` datetime NOT NULL,
-  `uwlp_sent_reminder` int(11) NOT NULL,
+  `uwlp_sent_reminder` int NOT NULL,
   `uwlp_reminder_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26966,22 +27003,22 @@ CREATE TABLE `tbl_user_wish_list_products` (
 --
 
 CREATE TABLE `tbl_user_withdrawal_requests` (
-  `withdrawal_id` bigint(20) NOT NULL,
-  `withdrawal_user_id` int(11) NOT NULL,
-  `withdrawal_payment_method` int(11) NOT NULL COMMENT 'defined in user model',
+  `withdrawal_id` bigint NOT NULL,
+  `withdrawal_user_id` int NOT NULL,
+  `withdrawal_payment_method` int NOT NULL COMMENT 'defined in user model',
   `withdrawal_amount` decimal(10,2) NOT NULL,
-  `withdrawal_bank` varchar(255) NOT NULL,
-  `withdrawal_account_holder_name` varchar(255) NOT NULL,
-  `withdrawal_account_number` varchar(100) NOT NULL,
-  `withdrawal_ifc_swift_code` varchar(100) NOT NULL,
-  `withdrawal_bank_address` text NOT NULL,
-  `withdrawal_instructions` text NOT NULL,
+  `withdrawal_bank` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `withdrawal_account_holder_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `withdrawal_account_number` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `withdrawal_ifc_swift_code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `withdrawal_bank_address` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `withdrawal_instructions` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
   `withdrawal_request_date` datetime NOT NULL,
   `withdrawal_status` tinyint(1) NOT NULL,
-  `withdrawal_cheque_payee_name` varchar(100) NOT NULL,
-  `withdrawal_paypal_email_id` varchar(100) NOT NULL,
-  `withdrawal_comments` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `withdrawal_cheque_payee_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `withdrawal_paypal_email_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `withdrawal_comments` mediumtext COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -26990,10 +27027,10 @@ CREATE TABLE `tbl_user_withdrawal_requests` (
 --
 
 CREATE TABLE `tbl_user_withdrawal_requests_specifics` (
-  `uwrs_withdrawal_id` int(11) NOT NULL,
-  `uwrs_key` varchar(180) NOT NULL,
-  `uwrs_value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `uwrs_withdrawal_id` int NOT NULL,
+  `uwrs_key` varchar(180) COLLATE utf8mb4_general_ci NOT NULL,
+  `uwrs_value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_user_withdrawal_requests_specifics`
@@ -27017,10 +27054,10 @@ INSERT INTO `tbl_user_withdrawal_requests_specifics` (`uwrs_withdrawal_id`, `uwr
 --
 
 CREATE TABLE `tbl_zones` (
-  `zone_id` int(11) NOT NULL,
-  `zone_identifier` varchar(255) NOT NULL,
-  `zone_active` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `zone_id` int NOT NULL,
+  `zone_identifier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `zone_active` tinyint NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_zones`
@@ -27045,10 +27082,10 @@ INSERT INTO `tbl_zones` (`zone_id`, `zone_identifier`, `zone_active`) VALUES
 --
 
 CREATE TABLE `tbl_zones_lang` (
-  `zonelang_zone_id` int(11) NOT NULL,
-  `zonelang_lang_id` int(11) NOT NULL,
-  `zone_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `zonelang_zone_id` int NOT NULL,
+  `zonelang_lang_id` int NOT NULL,
+  `zone_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_zones_lang`
@@ -27916,7 +27953,8 @@ ALTER TABLE `tbl_products`
   ADD PRIMARY KEY (`product_id`),
   ADD UNIQUE KEY `product_identifier` (`product_identifier`),
   ADD KEY `product_seller_id` (`product_seller_id`),
-  ADD KEY `product_brand_id` (`product_brand_id`);
+  ADD KEY `product_brand_id` (`product_brand_id`),
+  ADD KEY `product_ship_package` (`product_ship_package`);
 
 --
 -- Indexes for table `tbl_products_browsing_history`
@@ -28411,7 +28449,13 @@ ALTER TABLE `tbl_shipping_packages`
 --
 ALTER TABLE `tbl_shipping_profile`
   ADD PRIMARY KEY (`shipprofile_id`),
-  ADD UNIQUE KEY `shipprofile_name` (`shipprofile_name`,`shipprofile_user_id`);
+  ADD UNIQUE KEY `shipprofile_name` (`shipprofile_identifier`,`shipprofile_user_id`);
+
+--
+-- Indexes for table `tbl_shipping_profile_lang`
+--
+ALTER TABLE `tbl_shipping_profile_lang`
+  ADD UNIQUE KEY `shipprofilelang_shipprofile_id` (`shipprofilelang_shipprofile_id`,`shipprofilelang_lang_id`);
 
 --
 -- Indexes for table `tbl_shipping_profile_products`
@@ -28451,7 +28495,9 @@ ALTER TABLE `tbl_shipping_zone`
 --
 ALTER TABLE `tbl_shops`
   ADD PRIMARY KEY (`shop_id`),
-  ADD UNIQUE KEY `shop_user_id` (`shop_user_id`);
+  ADD UNIQUE KEY `shop_user_id` (`shop_user_id`),
+  ADD KEY `shop_country_id` (`shop_country_id`),
+  ADD KEY `shop_state_id` (`shop_state_id`);
 
 --
 -- Indexes for table `tbl_shops_lang`
@@ -28761,7 +28807,7 @@ ALTER TABLE `tbl_url_rewrite`
 ALTER TABLE `tbl_users`
   ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `user_referral_code` (`user_referral_code`),
-  ADD UNIQUE KEY `user_dial_code` (`user_dial_code`,`user_phone`);
+  ADD UNIQUE KEY `user_dial_code` (`user_phone_dcode`,`user_phone`);
 
 --
 -- Indexes for table `tbl_user_auth_token`
@@ -28973,752 +29019,903 @@ ALTER TABLE `tbl_zones_lang`
 -- AUTO_INCREMENT for table `tbl_abandoned_cart`
 --
 ALTER TABLE `tbl_abandoned_cart`
-  MODIFY `abandonedcart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `abandonedcart_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+
 --
 -- AUTO_INCREMENT for table `tbl_abusive_words`
 --
 ALTER TABLE `tbl_abusive_words`
-  MODIFY `abusive_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `abusive_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_addresses`
 --
 ALTER TABLE `tbl_addresses`
-  MODIFY `addr_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `addr_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_admin`
 --
 ALTER TABLE `tbl_admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `admin_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT for table `tbl_ads_batches`
 --
 ALTER TABLE `tbl_ads_batches`
-  MODIFY `adsbatch_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `adsbatch_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_affiliate_commission_settings`
 --
 ALTER TABLE `tbl_affiliate_commission_settings`
-  MODIFY `afcommsetting_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `afcommsetting_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_affiliate_commission_setting_history`
 --
 ALTER TABLE `tbl_affiliate_commission_setting_history`
-  MODIFY `acsh_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `acsh_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_attached_files`
 --
 ALTER TABLE `tbl_attached_files`
-  MODIFY `afile_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2492;
+  MODIFY `afile_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2492;
+
 --
 -- AUTO_INCREMENT for table `tbl_attached_files_temp`
 --
 ALTER TABLE `tbl_attached_files_temp`
-  MODIFY `afile_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `afile_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_attribute_groups`
 --
 ALTER TABLE `tbl_attribute_groups`
-  MODIFY `attrgrp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `attrgrp_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_attribute_group_attributes`
 --
 ALTER TABLE `tbl_attribute_group_attributes`
-  MODIFY `attr_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `attr_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_banners`
 --
 ALTER TABLE `tbl_banners`
-  MODIFY `banner_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `banner_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_banners_clicks`
 --
 ALTER TABLE `tbl_banners_clicks`
-  MODIFY `bclick_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `bclick_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_banners_logs`
 --
 ALTER TABLE `tbl_banners_logs`
-  MODIFY `lbanner_banner_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `lbanner_banner_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_banner_locations`
 --
 ALTER TABLE `tbl_banner_locations`
-  MODIFY `blocation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `blocation_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `tbl_blog_contributions`
 --
 ALTER TABLE `tbl_blog_contributions`
-  MODIFY `bcontributions_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bcontributions_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_blog_post`
 --
 ALTER TABLE `tbl_blog_post`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `post_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_blog_post_categories`
 --
 ALTER TABLE `tbl_blog_post_categories`
-  MODIFY `bpcategory_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bpcategory_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_blog_post_comments`
 --
 ALTER TABLE `tbl_blog_post_comments`
-  MODIFY `bpcomment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bpcomment_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_brands`
 --
 ALTER TABLE `tbl_brands`
-  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `brand_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_catalog_request_messages`
 --
 ALTER TABLE `tbl_catalog_request_messages`
-  MODIFY `scatrequestmsg_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `scatrequestmsg_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_collections`
 --
 ALTER TABLE `tbl_collections`
-  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `collection_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_commission_settings`
 --
 ALTER TABLE `tbl_commission_settings`
-  MODIFY `commsetting_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `commsetting_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `tbl_commission_setting_history`
 --
 ALTER TABLE `tbl_commission_setting_history`
-  MODIFY `csh_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `csh_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_content_pages`
 --
 ALTER TABLE `tbl_content_pages`
-  MODIFY `cpage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cpage_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `tbl_content_pages_block_lang`
 --
 ALTER TABLE `tbl_content_pages_block_lang`
-  MODIFY `cpblocklang_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `cpblocklang_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+
 --
 -- AUTO_INCREMENT for table `tbl_countries`
 --
 ALTER TABLE `tbl_countries`
-  MODIFY `country_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
+  MODIFY `country_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
+
 --
 -- AUTO_INCREMENT for table `tbl_coupons`
 --
 ALTER TABLE `tbl_coupons`
-  MODIFY `coupon_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `coupon_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_coupons_history`
 --
 ALTER TABLE `tbl_coupons_history`
-  MODIFY `couponhistory_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `couponhistory_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_coupons_hold`
 --
 ALTER TABLE `tbl_coupons_hold`
-  MODIFY `couponhold_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `couponhold_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_cron_log`
 --
 ALTER TABLE `tbl_cron_log`
-  MODIFY `cronlog_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cronlog_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_cron_schedules`
 --
 ALTER TABLE `tbl_cron_schedules`
-  MODIFY `cron_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `cron_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
 --
 -- AUTO_INCREMENT for table `tbl_currency`
 --
 ALTER TABLE `tbl_currency`
-  MODIFY `currency_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `currency_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT for table `tbl_email_archives`
 --
 ALTER TABLE `tbl_email_archives`
-  MODIFY `emailarchive_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `emailarchive_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_empty_cart_items`
 --
 ALTER TABLE `tbl_empty_cart_items`
-  MODIFY `emptycartitem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `emptycartitem_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `tbl_extra_attributes`
 --
 ALTER TABLE `tbl_extra_attributes`
-  MODIFY `eattribute_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `eattribute_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_extra_attribute_groups`
 --
 ALTER TABLE `tbl_extra_attribute_groups`
-  MODIFY `eattrgroup_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `eattrgroup_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_extra_pages`
 --
 ALTER TABLE `tbl_extra_pages`
-  MODIFY `epage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `epage_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
 --
 -- AUTO_INCREMENT for table `tbl_faqs`
 --
 ALTER TABLE `tbl_faqs`
-  MODIFY `faq_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `faq_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_faq_categories`
 --
 ALTER TABLE `tbl_faq_categories`
-  MODIFY `faqcat_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `faqcat_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_filters`
 --
 ALTER TABLE `tbl_filters`
-  MODIFY `filter_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `filter_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_filter_groups`
 --
 ALTER TABLE `tbl_filter_groups`
-  MODIFY `filtergroup_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `filtergroup_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_languages`
 --
 ALTER TABLE `tbl_languages`
-  MODIFY `language_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `language_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `tbl_language_labels`
 --
 ALTER TABLE `tbl_language_labels`
-  MODIFY `label_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20607;
+  MODIFY `label_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20623;
+
 --
 -- AUTO_INCREMENT for table `tbl_layout_templates`
 --
 ALTER TABLE `tbl_layout_templates`
-  MODIFY `ltemplate_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10002;
+  MODIFY `ltemplate_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10002;
+
 --
 -- AUTO_INCREMENT for table `tbl_manual_shipping_api`
 --
 ALTER TABLE `tbl_manual_shipping_api`
-  MODIFY `mshipapi_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `mshipapi_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_meta_tags`
 --
 ALTER TABLE `tbl_meta_tags`
-  MODIFY `meta_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `meta_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_navigations`
 --
 ALTER TABLE `tbl_navigations`
-  MODIFY `nav_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `nav_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT for table `tbl_navigation_links`
 --
 ALTER TABLE `tbl_navigation_links`
-  MODIFY `nlink_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `nlink_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
 --
 -- AUTO_INCREMENT for table `tbl_notifications`
 --
 ALTER TABLE `tbl_notifications`
-  MODIFY `notification_id` bigint(15) NOT NULL AUTO_INCREMENT;
+  MODIFY `notification_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_options`
 --
 ALTER TABLE `tbl_options`
-  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `option_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_option_values`
 --
 ALTER TABLE `tbl_option_values`
-  MODIFY `optionvalue_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `optionvalue_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_orders_status`
 --
 ALTER TABLE `tbl_orders_status`
-  MODIFY `orderstatus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `orderstatus_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
 --
 -- AUTO_INCREMENT for table `tbl_orders_status_history`
 --
 ALTER TABLE `tbl_orders_status_history`
-  MODIFY `oshistory_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `oshistory_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_cancel_reasons`
 --
 ALTER TABLE `tbl_order_cancel_reasons`
-  MODIFY `ocreason_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ocreason_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_cancel_requests`
 --
 ALTER TABLE `tbl_order_cancel_requests`
-  MODIFY `ocrequest_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ocrequest_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_payments`
 --
 ALTER TABLE `tbl_order_payments`
-  MODIFY `opayment_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `opayment_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_products`
 --
 ALTER TABLE `tbl_order_products`
-  MODIFY `op_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `op_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_product_charges`
 --
 ALTER TABLE `tbl_order_product_charges`
-  MODIFY `opcharge_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `opcharge_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_product_digital_download_links`
 --
 ALTER TABLE `tbl_order_product_digital_download_links`
-  MODIFY `opddl_link_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `opddl_link_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_prod_charges_logs`
 --
 ALTER TABLE `tbl_order_prod_charges_logs`
-  MODIFY `opchargelog_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `opchargelog_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_return_reasons`
 --
 ALTER TABLE `tbl_order_return_reasons`
-  MODIFY `orreason_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `orreason_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_return_requests`
 --
 ALTER TABLE `tbl_order_return_requests`
-  MODIFY `orrequest_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `orrequest_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_return_request_messages`
 --
 ALTER TABLE `tbl_order_return_request_messages`
-  MODIFY `orrmsg_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `orrmsg_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_order_seller_subscriptions`
 --
 ALTER TABLE `tbl_order_seller_subscriptions`
-  MODIFY `ossubs_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ossubs_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_plugins`
 --
 ALTER TABLE `tbl_plugins`
-  MODIFY `plugin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `plugin_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+
 --
 -- AUTO_INCREMENT for table `tbl_policy_points`
 --
 ALTER TABLE `tbl_policy_points`
-  MODIFY `ppoint_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ppoint_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_polling`
 --
 ALTER TABLE `tbl_polling`
-  MODIFY `polling_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `polling_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_polling_feedback`
 --
 ALTER TABLE `tbl_polling_feedback`
-  MODIFY `pollfeedback_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pollfeedback_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_products`
 --
 ALTER TABLE `tbl_products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_products_browsing_history`
 --
 ALTER TABLE `tbl_products_browsing_history`
-  MODIFY `pbhistory_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pbhistory_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_categories`
 --
 ALTER TABLE `tbl_product_categories`
-  MODIFY `prodcat_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `prodcat_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_groups`
 --
 ALTER TABLE `tbl_product_groups`
-  MODIFY `prodgroup_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `prodgroup_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_requests`
 --
 ALTER TABLE `tbl_product_requests`
-  MODIFY `preq_id` bigint(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `preq_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_saved_search`
 --
 ALTER TABLE `tbl_product_saved_search`
-  MODIFY `pssearch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pssearch_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_shipping_rates`
 --
 ALTER TABLE `tbl_product_shipping_rates`
-  MODIFY `pship_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pship_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_special_prices`
 --
 ALTER TABLE `tbl_product_special_prices`
-  MODIFY `splprice_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `splprice_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_specifications`
 --
 ALTER TABLE `tbl_product_specifications`
-  MODIFY `prodspec_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `prodspec_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_stock_hold`
 --
 ALTER TABLE `tbl_product_stock_hold`
-  MODIFY `pshold_id` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pshold_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_product_volume_discount`
 --
 ALTER TABLE `tbl_product_volume_discount`
-  MODIFY `voldiscount_id` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `voldiscount_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_promotions`
 --
 ALTER TABLE `tbl_promotions`
-  MODIFY `promotion_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `promotion_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_promotions_charges`
 --
 ALTER TABLE `tbl_promotions_charges`
-  MODIFY `pcharge_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pcharge_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_promotions_clicks`
 --
 ALTER TABLE `tbl_promotions_clicks`
-  MODIFY `pclick_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pclick_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_promotion_item_charges`
 --
 ALTER TABLE `tbl_promotion_item_charges`
-  MODIFY `picharge_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `picharge_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_push_notifications`
 --
 ALTER TABLE `tbl_push_notifications`
-  MODIFY `pnotification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pnotification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `tbl_questionnaires`
 --
 ALTER TABLE `tbl_questionnaires`
-  MODIFY `questionnaire_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `questionnaire_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_questionnaire_feedback`
 --
 ALTER TABLE `tbl_questionnaire_feedback`
-  MODIFY `qfeedback_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `qfeedback_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_questions`
 --
 ALTER TABLE `tbl_questions`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `question_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_question_banks`
 --
 ALTER TABLE `tbl_question_banks`
-  MODIFY `qbank_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `qbank_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_report_reasons`
 --
 ALTER TABLE `tbl_report_reasons`
-  MODIFY `reportreason_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `reportreason_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT for table `tbl_rewards_on_purchase`
 --
 ALTER TABLE `tbl_rewards_on_purchase`
-  MODIFY `rop_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `rop_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_search_items`
 --
 ALTER TABLE `tbl_search_items`
-  MODIFY `searchitem_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `searchitem_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_seller_brand_requests`
 --
 ALTER TABLE `tbl_seller_brand_requests`
-  MODIFY `sbrandreq_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `sbrandreq_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_seller_catalog_requests`
 --
 ALTER TABLE `tbl_seller_catalog_requests`
-  MODIFY `scatrequest_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `scatrequest_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_seller_packages`
 --
 ALTER TABLE `tbl_seller_packages`
-  MODIFY `spackage_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `spackage_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_seller_packages_plan`
 --
 ALTER TABLE `tbl_seller_packages_plan`
-  MODIFY `spplan_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `spplan_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_seller_products`
 --
 ALTER TABLE `tbl_seller_products`
-  MODIFY `selprod_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `selprod_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_seller_product_reviews`
 --
 ALTER TABLE `tbl_seller_product_reviews`
-  MODIFY `spreview_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `spreview_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shippingapi_settings`
 --
 ALTER TABLE `tbl_shippingapi_settings`
-  MODIFY `shipsetting_shippingapi_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `shipsetting_shippingapi_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_apis`
 --
 ALTER TABLE `tbl_shipping_apis`
-  MODIFY `shippingapi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `shippingapi_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_company`
 --
 ALTER TABLE `tbl_shipping_company`
-  MODIFY `scompany_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `scompany_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_durations`
 --
 ALTER TABLE `tbl_shipping_durations`
-  MODIFY `sduration_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `sduration_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_packages`
 --
 ALTER TABLE `tbl_shipping_packages`
-  MODIFY `shippack_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `shippack_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_profile`
 --
 ALTER TABLE `tbl_shipping_profile`
-  MODIFY `shipprofile_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `shipprofile_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_profile_zones`
 --
 ALTER TABLE `tbl_shipping_profile_zones`
-  MODIFY `shipprozone_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `shipprozone_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_rates`
 --
 ALTER TABLE `tbl_shipping_rates`
-  MODIFY `shiprate_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `shiprate_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shipping_zone`
 --
 ALTER TABLE `tbl_shipping_zone`
-  MODIFY `shipzone_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `shipzone_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shops`
 --
 ALTER TABLE `tbl_shops`
-  MODIFY `shop_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `shop_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shops_to_theme`
 --
 ALTER TABLE `tbl_shops_to_theme`
-  MODIFY `stt_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `stt_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shop_collections`
 --
 ALTER TABLE `tbl_shop_collections`
-  MODIFY `scollection_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `scollection_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_shop_reports`
 --
 ALTER TABLE `tbl_shop_reports`
-  MODIFY `sreport_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `sreport_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_slides`
 --
 ALTER TABLE `tbl_slides`
-  MODIFY `slide_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `slide_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
 --
 -- AUTO_INCREMENT for table `tbl_smart_log_actions`
 --
 ALTER TABLE `tbl_smart_log_actions`
-  MODIFY `slog_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `slog_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_smart_user_activity_browsing`
 --
 ALTER TABLE `tbl_smart_user_activity_browsing`
-  MODIFY `uab_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `uab_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_sms_archives`
 --
 ALTER TABLE `tbl_sms_archives`
-  MODIFY `smsarchive_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `smsarchive_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_social_platforms`
 --
 ALTER TABLE `tbl_social_platforms`
-  MODIFY `splatform_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `splatform_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_states`
 --
 ALTER TABLE `tbl_states`
-  MODIFY `state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4752;
+  MODIFY `state_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4752;
+
 --
 -- AUTO_INCREMENT for table `tbl_success_stories`
 --
 ALTER TABLE `tbl_success_stories`
-  MODIFY `sstory_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `sstory_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_system_logs`
 --
 ALTER TABLE `tbl_system_logs`
-  MODIFY `slog_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `slog_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_tags`
 --
 ALTER TABLE `tbl_tags`
-  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tag_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_tax_categories`
 --
 ALTER TABLE `tbl_tax_categories`
-  MODIFY `taxcat_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `taxcat_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_tax_rules`
 --
 ALTER TABLE `tbl_tax_rules`
-  MODIFY `taxrule_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `taxrule_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_tax_rule_details`
 --
 ALTER TABLE `tbl_tax_rule_details`
-  MODIFY `taxruledet_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `taxruledet_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_tax_structure`
 --
 ALTER TABLE `tbl_tax_structure`
-  MODIFY `taxstr_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `taxstr_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_testimonials`
 --
 ALTER TABLE `tbl_testimonials`
-  MODIFY `testimonial_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `testimonial_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_theme`
 --
 ALTER TABLE `tbl_theme`
-  MODIFY `theme_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `theme_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
 --
 -- AUTO_INCREMENT for table `tbl_threads`
 --
 ALTER TABLE `tbl_threads`
-  MODIFY `thread_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `thread_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_thread_messages`
 --
 ALTER TABLE `tbl_thread_messages`
-  MODIFY `message_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `message_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_time_slots`
 --
 ALTER TABLE `tbl_time_slots`
-  MODIFY `tslot_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tslot_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_tool_tips`
 --
 ALTER TABLE `tbl_tool_tips`
-  MODIFY `tooltip_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tooltip_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_transactions_failure_log`
 --
 ALTER TABLE `tbl_transactions_failure_log`
-  MODIFY `txnlog_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `txnlog_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_upc_codes`
 --
 ALTER TABLE `tbl_upc_codes`
-  MODIFY `upc_code_id` bigint(15) NOT NULL AUTO_INCREMENT;
+  MODIFY `upc_code_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_updated_record_log`
 --
 ALTER TABLE `tbl_updated_record_log`
-  MODIFY `urlog_id` bigint(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=490;
+  MODIFY `urlog_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=490;
+
 --
 -- AUTO_INCREMENT for table `tbl_url_rewrite`
 --
 ALTER TABLE `tbl_url_rewrite`
-  MODIFY `urlrewrite_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `urlrewrite_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_extras`
 --
 ALTER TABLE `tbl_user_extras`
-  MODIFY `uextra_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `uextra_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_favourite_products`
 --
 ALTER TABLE `tbl_user_favourite_products`
-  MODIFY `ufp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ufp_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_favourite_shops`
 --
 ALTER TABLE `tbl_user_favourite_shops`
-  MODIFY `ufs_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ufs_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_notifications`
 --
 ALTER TABLE `tbl_user_notifications`
-  MODIFY `unotification_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=330;
+  MODIFY `unotification_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=330;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_requests_history`
 --
 ALTER TABLE `tbl_user_requests_history`
-  MODIFY `ureq_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ureq_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_reward_points`
 --
 ALTER TABLE `tbl_user_reward_points`
-  MODIFY `urp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `urp_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_reward_point_breakup`
 --
 ALTER TABLE `tbl_user_reward_point_breakup`
-  MODIFY `urpbreakup_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `urpbreakup_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_supplier_form_fields`
 --
 ALTER TABLE `tbl_user_supplier_form_fields`
-  MODIFY `sformfield_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `sformfield_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_supplier_requests`
 --
 ALTER TABLE `tbl_user_supplier_requests`
-  MODIFY `usuprequest_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `usuprequest_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_supplier_request_values`
 --
 ALTER TABLE `tbl_user_supplier_request_values`
-  MODIFY `sfreqvalue_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `sfreqvalue_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_temp_token_requests`
 --
 ALTER TABLE `tbl_user_temp_token_requests`
-  MODIFY `uttr_user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `uttr_user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_transactions`
 --
 ALTER TABLE `tbl_user_transactions`
-  MODIFY `utxn_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `utxn_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_wish_lists`
 --
 ALTER TABLE `tbl_user_wish_lists`
-  MODIFY `uwlist_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `uwlist_id` int NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_user_withdrawal_requests`
 --
 ALTER TABLE `tbl_user_withdrawal_requests`
-  MODIFY `withdrawal_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `withdrawal_id` bigint NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tbl_zones`
 --
 ALTER TABLE `tbl_zones`
-  MODIFY `zone_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `zone_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
