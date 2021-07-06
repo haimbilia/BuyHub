@@ -32,7 +32,7 @@ class CategoryRequestsController extends AdminBaseController
         $frm = new Form('frmCategoryReqSearch', array('id' => 'frmcategoryReqSearch'));
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearCategoryRequestSearch();'));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearCategoryRequestSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

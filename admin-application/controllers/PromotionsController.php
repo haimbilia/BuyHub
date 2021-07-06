@@ -896,7 +896,7 @@ class PromotionsController extends AdminBaseController
         $frm->addHiddenField('', 'promotion_id');
         $frm->addSelectBox('', 'type', array('-1' => Labels::getLabel('LBL_All_Type', $this->adminLangId)) + Promotion::getTypeArr($this->adminLangId), '', array(), '');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId), array('onclick' => 'clearPromotionSearch();'));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearPromotionSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
