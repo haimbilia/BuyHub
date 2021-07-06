@@ -8,7 +8,7 @@ CREATE TABLE `tbl_order_product_responses` (
   `opr_type` int NOT NULL,
   `opr_response` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `opr_added_on` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ALTER TABLE `tbl_order_product_responses`
 ADD PRIMARY KEY (`opr_op_id`,`opr_type`);
 
@@ -140,7 +140,7 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_i
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_PERSONALISE_COOKIES_INFORMATION", "1", "These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.", "2");
 ALTER TABLE `tbl_admin` CHANGE `admin_password` `admin_password_old` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
 ALTER TABLE `tbl_admin` ADD `admin_password` VARCHAR(100) NOT NULL AFTER `admin_password_old`;
-ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
 -- --- task_81779_advanced_GDPR_module --- --
 
@@ -155,11 +155,11 @@ INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `et
 
 CREATE TABLE IF NOT EXISTS `tbl_rating_types` (
   `ratingtype_id` bigint NOT NULL,
-  `ratingtype_identifier` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ratingtype_identifier` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `ratingtype_type` tinyint(4) NOT NULL,
   `ratingtype_default` tinyint NOT NULL,
   `ratingtype_active` tinyint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_rating_types`
