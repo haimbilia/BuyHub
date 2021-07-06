@@ -145,6 +145,7 @@ Fixes:
     => 054816 - getting uneven behavior in related and buy together products on clicking which are already added
     => 055441 - delete order from admin option should comes exactly after 2 days 
     => 055444 - On order status update email tracking url not coming 
+    => 054761 - despite having sku non mandatory it's not adding inventory from seller end
 
 Enhancements :
    => Make provision to made seller

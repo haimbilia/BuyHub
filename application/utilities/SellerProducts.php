@@ -528,7 +528,7 @@ trait SellerProducts
             $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionKey];
             $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
-            $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey];
+            $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
             
             if (-1 < $prodAllowedLimit && $prodAllowedLimit <= $productCount) {
                 $data_to_be_save['selprod_active'] = applicationConstants::INACTIVE;
