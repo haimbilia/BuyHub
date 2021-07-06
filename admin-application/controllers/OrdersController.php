@@ -418,7 +418,7 @@ class OrdersController extends AdminBaseController
         $deleted = ($deletedOrders) ? 1 : 0;
         $frm->addHiddenField('', 'is_deleted', $deleted);
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

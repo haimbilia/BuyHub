@@ -1044,5 +1044,6 @@ DELETE FROM tbl_language_labels WHERE label_key = "LBL_Products_Performance_Repo
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_Top_Performing_Products";
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_Most_WishList_Added_Products";
 -- ------------------TV-9.3.1.20210705------------------------
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_CLEAR_SEARCH";
 
 ALTER TABLE `tbl_badge_link_conditions` DROP INDEX `blinkcond_id`;

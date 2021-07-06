@@ -335,7 +335,7 @@ class AdminBaseController extends FatController
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', '');
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -397,7 +397,7 @@ class AdminBaseController extends FatController
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'shipping_company_user_id', 0);
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

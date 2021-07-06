@@ -81,7 +81,7 @@ class AttachedFile extends MyAppModel
 
     public const RATIO_TYPE_SQUARE = 1;
     public const RATIO_TYPE_RECTANGULAR = 2;
-    
+
     public const FILETYPE_PRODCAT_IMAGE_PATH = 'category/';
     public const FILETYPE_PRODUCT_IMAGE_PATH = 'product/';
     public const FILETYPE_BLOG_POST_IMAGE_PATH = 'blog-post/';
@@ -487,29 +487,20 @@ class AttachedFile extends MyAppModel
     } */
 
     /* always call this function using image controller and pass relavant arguments. */
-    public static function displayImage($image_name, $w, $h, $no_image = '', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
+    public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
     {
         ob_end_clean();
         ini_set('memory_limit', '-1');
-        if ($no_image == '') {
-            $no_image = 'images/defaults/no_image.jpg';
-        } else {
-            $no_image = 'images/defaults/' . $no_image;
-        }
+        $noImage = 'images/defaults/' . $noImage;
+        $imageQuality = (true == $imageCompression) ? 80 : 100;
 
-        $originalImageName = $image_name;
-
-        if (trim($uploadedFilePath) != '') {
-            $uploadedFilePath = CONF_UPLOADS_PATH . $uploadedFilePath;
-        } else {
-            $uploadedFilePath = CONF_UPLOADS_PATH;
-        }
+        $uploadedFilePath = CONF_UPLOADS_PATH . trim($uploadedFilePath);
 
         $fileMimeType = '';
-        $imagePath = $uploadedFilePath . $image_name;
+        $imagePath = $uploadedFilePath . $imageName;
 
-        if (empty($image_name) || !file_exists($uploadedFilePath . $image_name)) {
-            $imagePath = $no_image;
+        if (empty($imageName) || !file_exists($uploadedFilePath . $imageName)) {
+            $imagePath = $noImage;
         }
 
         // $fileMimeType = mime_content_type($imagePath);
@@ -535,32 +526,28 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        try {
+        /*In S3 bucket for some large files PHP functions like getImageSize gives some error. So handled the same accordingly */
+        $tempPath = '';
+        if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
             static::setLastModified($imagePath);
             static::setContentType($imagePath);
-            $img = new ImageResize($imagePath);
-        } catch (Exception $e) {
-            try {
-                /*In S3 bucket for some large files PHP functions like getImageSize gives some error. So handled the same accordingly */
-                if (CONF_USE_FAT_CACHE && strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
-                    static::setLastModified($imagePath);
-                    static::setContentType($imagePath);
-                    $readFileFromCache = FatCache::get($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
-                    if (!$readFileFromCache) {
-                        $fileContent = file_get_contents($imagePath);
-                        FatCache::set($imagePath, $fileContent, '.jpg');
-                    }
-
-                    $tempPath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
-                    $img = new ImageResize($tempPath);
-                } else {
-                    $img = static::getDefaultImage($imagePath, $w, $h);
-                    $img->setExtraSpaceColor(204, 204, 204);
-                }
-            } catch (Exception $e) {
-                $img = static::getDefaultImage($imagePath, $w, $h);
-                $img->setExtraSpaceColor(204, 204, 204);
+            $readFileFromCache = FatCache::get($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+            if (!$readFileFromCache) {
+                $fileContent = file_get_contents($imagePath);
+                FatCache::set($imagePath, $fileContent, '.jpg');
             }
+            $tempPath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+        } else {
+            $tempPath = $imagePath;
+            static::setLastModified($imagePath);
+            static::setContentType($imagePath);
+        }
+
+        try {
+            $img = new ImageResize($tempPath);
+        } catch (Exception $e) {
+            $img = static::getDefaultImage($imagePath, $w, $h);
+            $img->setExtraSpaceColor(204, 204, 204);
         }
 
         $img->setResizeMethod($resizeType);
@@ -574,9 +561,7 @@ class AttachedFile extends MyAppModel
             $wtrmrk_file = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
             if (!empty($wtrmrk_file)) {
                 $wtrmrk_file = $uploadedFilePath . $wtrmrk_file;
-                $ext_watermark = substr($wtrmrk_file, -3);
                 $imageInfo = getimagesize($wtrmrk_file);
-                $OriginalImageInfo = getimagesize($imagePath);
                 $img_w = $w;
                 $img_h = $h;
                 $wtrmrk_w = $imageInfo[0];
@@ -586,29 +571,18 @@ class AttachedFile extends MyAppModel
             }
         }
 
-
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_end_clean();
             ob_start();
             ini_set('memory_limit', '-1');
             static::setContentType($imagePath, $fileMimeType);
-            if ($imageCompression) {
-                $img->displayImage(80, false);
-            } else {
-                $img->displayImage(100, false);
-            }
+            $img->displayImage($imageQuality, false);
             $imgData = ob_get_clean();
             FatCache::set($_SERVER['REQUEST_URI'], $imgData, '.jpg');
             static::loadImage($imgData, $imagePath);
         }
-
         static::setContentType($imagePath);
-
-        if ($imageCompression) {
-            $img->displayImage(80, false);
-        } else {
-            $img->displayImage(100, false);
-        }
+        $img->displayImage($imageQuality, false);
     }
 
     public static function loadImage($imgData, $image_name)
@@ -675,27 +649,15 @@ class AttachedFile extends MyAppModel
         return $img = new ImageResize($image_name);
     }
 
-    public static function displayOriginalImage($image_name, $no_image = '', $uploadedFilePath = '', $cache = false)
+    public static function displayOriginalImage($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)
     {
         ob_end_clean();
-        if ($no_image == '') {
-            $no_image = 'images/defaults/no_image.jpg';
-        } else {
-            $no_image = 'images/defaults/' . $no_image;
-        }
+        $noImage = 'images/defaults/' . $noImage;
+        $uploadedFilePath = CONF_UPLOADS_PATH . trim($uploadedFilePath);
+        $imagePath = $uploadedFilePath . $imageName;
 
-        if (trim($uploadedFilePath) != '') {
-            $uploadedFilePath = CONF_UPLOADS_PATH . $uploadedFilePath;
-        } else {
-            $uploadedFilePath = CONF_UPLOADS_PATH;
-        }
-
-        $fileMimeType = '';
-
-        $imagePath = $uploadedFilePath . $image_name;
-
-        if (empty($image_name) || !file_exists($uploadedFilePath . $image_name)) {
-            $imagePath = $no_image;
+        if (empty($imageName) || !file_exists($uploadedFilePath . $imageName)) {
+            $imagePath = $noImage;
         }
 
         if (strpos($_SERVER['REQUEST_URI'], '?t=') === false) {
@@ -704,7 +666,6 @@ class AttachedFile extends MyAppModel
         }
 
         static::setHeaders();
-
         static::checkModifiedHeader($imagePath);
 
         if (CONF_USE_FAT_CACHE && $cache) {
@@ -1043,10 +1004,10 @@ class AttachedFile extends MyAppModel
 
         $res = static::getAttributesById($afileId);
 
-        if (false === $res){
+        if (false === $res) {
             return $mediaPath;
-        } 
-        
+        }
+
         if ($res['afile_type'] !== static::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW) {
             return $mediaPath;
         }
@@ -1054,17 +1015,17 @@ class AttachedFile extends MyAppModel
         $mediaPath =  LibHelper::generateFullUrl('image', 'productVideo', array($afileId)) . '?' . time();
         /* if (defined('S3_SECRET') && !empty(S3_SECRET)) {
             $mediaPath = self::FILETYPE_PRODUCT_VIDEOS_PATH . $file_row['afile_physical_path'];
-        } */ 
+        } */
 
         return $mediaPath;
     }
-    
+
     public static function getVideo($path)
     {
         if (empty($path)) {
             return '';
         }
-        $path = CONF_UPLOADS_PATH. $path;
+        $path = CONF_UPLOADS_PATH . $path;
 
         $fileMimeType = mime_content_type($path);
         header("Content-Type: " . $fileMimeType);
@@ -1074,5 +1035,4 @@ class AttachedFile extends MyAppModel
         header("Content-Length: " . filesize($path));
         return readfile($path);
     }
-
 }

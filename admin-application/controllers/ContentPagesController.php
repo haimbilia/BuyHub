@@ -386,7 +386,7 @@ class ContentPagesController extends AdminBaseController
         $frm = new Form('frmPagesSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Page_Identifier', $this->adminLangId), 'keyword', '');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear_Search', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

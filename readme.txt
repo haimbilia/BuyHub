@@ -242,11 +242,13 @@ Fixes:
     ====================TV-9.3.1.20210703==========================
     => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
     =====================TV-9.3.1.20210705========================
+     => 054761 - despite having sku non mandatory it's not adding inventory from seller end
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
     => task-85619 Adding files when digital order is delivered   
+   
 
 Enhancements :
    => At shop level  pickup interval option given
