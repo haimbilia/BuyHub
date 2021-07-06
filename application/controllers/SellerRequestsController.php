@@ -177,26 +177,6 @@ class SellerRequestsController extends SellerBaseController
         return $srch;
     }
 
-    private function getRequestedBadgeObj()
-    {
-        $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
-        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
-        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
-        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
-
-        $srch->addMultipleFields(array_merge(
-            BadgeRequest::ATTR,
-            [
-                'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
-                Badge::DB_TBL_PREFIX . 'id'
-            ]
-        ));
-
-        $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
-        $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
-        return $srch;
-    }
-
     /* ------Product Category Request [------*/
 
     public function categoryReqForm($categoryReqId = 0)
@@ -731,7 +711,6 @@ class SellerRequestsController extends SellerBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $requestedBadges = FatApp::getDb()->fetchAll($srch->getResultSet());
-
         $this->set('canEdit', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $requestedBadges);
         $this->set('pageCount', $srch->pages());
@@ -784,6 +763,25 @@ class SellerRequestsController extends SellerBaseController
             unlink(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path']);
         }
 
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_REMOVED', $this->siteLangId));
+    }
+
+    public function deleteBadgeRequest(int $badgeReqId)
+    {
+        $badgeReqData = BadgeRequest::getAttributesById($badgeReqId, ['breq_user_id', 'breq_status']);
+        if (empty($badgeReqData) || $badgeReqData['breq_user_id'] !== UserAuthentication::getLoggedUserId()) {
+            FatUtility::dieJsonError('MSG_INVALID_REQUEST', $this->siteLangId);
+        }
+
+        if ($badgeReqData['breq_status'] !== BadgeRequest::REQUEST_PENDING) {
+            FatUtility::dieJsonError('MSG_ALREADY_APPROVED/_REJECTED', $this->siteLangId);
+        }
+        $deleteQuery = "DELETE br, blc, blnk
+        FROM tbl_badge_requests br
+        LEFT JOIN tbl_badge_link_conditions blc ON br.breq_blinkcond_id = blc.blinkcond_id
+        LEFT JOIN tbl_badge_links blnk ON br.breq_blinkcond_id = blnk.badgelink_blinkcond_id
+        WHERE br.breq_id = " . $badgeReqId;
+        FatApp::getDb()->query($deleteQuery);
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_REMOVED', $this->siteLangId));
     }
 }

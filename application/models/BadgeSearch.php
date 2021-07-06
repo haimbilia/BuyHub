@@ -20,7 +20,7 @@ class BadgeSearch extends SearchBase
         if ($this->langId > 0) {
             $this->joinTable(
                 Badge::DB_TBL_LANG,
-                'LEFT OUTER JOIN',
+                'LEFT JOIN',
                 'bdg_l.badgelang_badge_id = bdg.badge_id AND bdg_l.badgelang_lang_id = ' . $langId,
                 'bdg_l'
             );

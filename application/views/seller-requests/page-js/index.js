@@ -286,8 +286,8 @@
     };
 
     /* Badge Request [ */
-    addBadgeReqForm = function (badgeReqId) {
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeReqForm', [badgeReqId]), '', function (t) {
+    addBadgeReqForm = function (badgeReqId, badgeId = 0) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'badgeReqForm', [badgeReqId, badgeId]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
             bindRecordsSelect2();
@@ -334,6 +334,11 @@
         });
     };
 
+    deleteBadgeRequest = function(badgeReqId) {
+        if (!confirm(langLbl.confirmDelete)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) {searchBadgeRequests();});
+    }
+
     searchBadgeRequests = function () {
         checkRunningAjax();
         $(dv).html(fcom.getLoader());
@@ -347,7 +352,7 @@
     getRecordTypeURL = function () {
         var searchSelector = $("select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
-        var recordType = $('input[name="breq_record_type"]').val();
+        var recordType = $('[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             return fcom.makeUrl('Products', 'autoComplete');
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
@@ -361,7 +366,7 @@
     }
 
     getRecordData = function (data) {
-        var recordType = $('input[name="breq_record_type"]').val();
+        var recordType = $('[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             return data
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
@@ -406,44 +411,35 @@
             }
         }).on('select2:selecting', function (e) {
             var badgeType = $('input[name="badge_type"]').val();
-            var recordType = $('input[name="breq_record_type"]').val();
+            var recordType = $('[name="breq_record_type"]').val();
             var position = 0;
             if (0 < $('select[name="blinkcond_position"]').length) {
                 position = $('select[name="blinkcond_position"]').val();
             }
 
-            // fcom.ajax(fcom.makeUrl(controller, 'isUnique', [badgeType, recordType, e.params.args.data.id, position]), '', function (t) {
-                /* var resp = JSON.parse(t);
-                if (1 > resp.status) {
+            var recordIds = $("input[name='record_ids']");
+            var JSONObj = [e.params.args.data.id];
+            var badgeLinkRecordIds = recordIds.val();
+            if ('' != badgeLinkRecordIds) {
+                JSONObj = JSON.parse(badgeLinkRecordIds);
+                if (JSONObj.includes(e.params.args.data.id)) {
                     selector.val('').trigger('change');
-                    $.systemMessage(resp.msg, 'alert--danger');
+                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
                     return false;
-                } */
-
-                var recordIds = $("input[name='record_ids']");
-                var JSONObj = [e.params.args.data.id];
-                var badgeLinkRecordIds = recordIds.val();
-                if ('' != badgeLinkRecordIds) {
-                    JSONObj = JSON.parse(badgeLinkRecordIds);
-                    if (JSONObj.includes(e.params.args.data.id)) {
-                        selector.val('').trigger('change');
-                        $.systemMessage(langLbl.alreadySelected, 'alert--danger');
-                        return false;
-                    }
-                    JSONObj.push(e.params.args.data.id);
                 }
-                recordIds.val(JSON.stringify(JSONObj));
-                setTimeout(function () {
-                    selector.val('').trigger('change');
-                }, 200);
-                var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' +( e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
-                var tbl = "";
-                if (1 > $('table.recordListing--js').length) {
-                    var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
-                    $('.recordsContainer--js').html(tbl);
-                }
-                $('.recordListing--js').append(htm);
-            // });
+                JSONObj.push(e.params.args.data.id);
+            }
+            recordIds.val(JSON.stringify(JSONObj));
+            setTimeout(function () {
+                selector.val('').trigger('change');
+            }, 200);
+            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' +( e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+            var tbl = "";
+            if (1 > $('table.recordListing--js').length) {
+                var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
+                $('.recordsContainer--js').html(tbl);
+            }
+            $('.recordListing--js').append(htm);
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
         });
@@ -470,26 +466,6 @@
         var badgeReqId = $('input[name="breq_id"]').val();
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'unlinkRecord', [badgeReqId, removeRecordId]), '', function (t) {
             reloadRecordsList(badgeReqId);
-        });
-    }
-
-    getRecordType = function (element) {
-        var recordType = $('input[name="breq_record_type"]');
-        var oldValue = $(element).data('oldvalue');
-        if (oldValue != element.value) {
-            $('select.recordIds--js, input[name="record_ids"]').val("").trigger('change');
-            $('.recordsContainer--js').html("");
-            $(element).data('oldvalue', element.value);
-        }
-
-        if ("" == element.value) {
-            recordType.val("");
-            return false;
-        }
-
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'getRecordType', [element.value]), '', function (t) {
-            var res = $.parseJSON(t);
-            recordType.val(res.recordType);
         });
     }
 

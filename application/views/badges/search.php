@@ -80,6 +80,8 @@ foreach ($arrListing as $sn => $row) {
                     $btnClass = 'btn btn-outline-brand btn-sm ';
                     if (0 < (int) $row['canAccess']) {
                         $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)), "<i class='fas fa-link icon'></i>", true);
+                    } else if (0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
+                        $td->appendElement('plaintext', [], Labels::getLabel('LBL_REQUESTED', $siteLangId), true);
                     } else {
                         $icon = '<i class="icn shop">
                                     <svg class="svg">

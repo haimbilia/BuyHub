@@ -1,30 +1,63 @@
 <?php
 
 trait BadgeRequestSetup
-{    
+{
+    /**
+     * getRequestedBadgeObj
+     *
+     * @return object
+     */
+    private function getRequestedBadgeObj(): object
+    {
+        $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
+
+        $srch->addMultipleFields(array_merge(
+            BadgeRequest::ATTR,
+            [
+                'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
+                Badge::DB_TBL_PREFIX . 'id'
+            ]
+        ));
+
+        $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
+        $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
+        return $srch;
+    }
+
     /**
      * getBadgeForm
      *
-     * @param  mixed $badgeId
+     * @param  mixed $badgeReqId
      * @return object
      */
-    private function getBadgeForm(int $badgeId = 0): object
+    private function getBadgeForm(int $badgeReqId = 0, int $badgeId = 0): object
     {
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
         $frm->addHiddenField('', 'record_ids');
-        if (0 < $badgeId) {
-            $frm->addHiddenField('', 'breq_blinkcond_id', 0);
+        $frm->addHiddenField('', 'breq_blinkcond_id');
+
+        if (0 < $badgeReqId || 0 < $badgeId) {
             $frm->addHiddenField('', 'badge_id', $badgeId);
+         
+            if (0 < $badgeReqId) {
+            }
 
             $frm->addDateTimeField(Labels::getLabel('LBL_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
             $frm->addDateTimeField(Labels::getLabel('LBL_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
-            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
         } else {
             $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'breq_blinkcond_id', $approvalRequiredBadges, '', [], '');
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'badge_id', $approvalRequiredBadges, '', [], '');
             $fld->requirements()->setRequired(true);
-            $frm->addHiddenField('', 'breq_record_type');
+        }
+
+        if (0 < $badgeReqId) {
+            $frm->addHiddenField('', 'breq_record_type', );
+        } else {
+            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
         }
 
         $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
@@ -35,7 +68,7 @@ trait BadgeRequestSetup
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->siteLangId));
         return $frm;
     }
-        
+
     /**
      * setupBadgeRequestImage
      *
@@ -47,7 +80,7 @@ trait BadgeRequestSetup
         if (!array_key_exists('breq_file', $_FILES) || empty($_FILES['breq_file']['name'])) {
             return true;
         }
-        
+
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->saveImage(
             $_FILES['breq_file']['tmp_name'],
@@ -65,7 +98,7 @@ trait BadgeRequestSetup
         }
         return true;
     }
-    
+
     /**
      * setupBadgeReq
      *
@@ -74,8 +107,10 @@ trait BadgeRequestSetup
     public function setupBadgeReq()
     {
         $this->userPrivilege->canEditBadges();
+
+        $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
         $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $frm = $this->getBadgeForm($badgeId);
+        $frm = $this->getBadgeForm($badgeReqId, $badgeId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
@@ -105,12 +140,17 @@ trait BadgeRequestSetup
                 FatUtility::dieJsonError(Labels::getLabel('MSG_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
             }
 
+            $userId = UserAuthentication::getLoggedUserId();
+            if (false === BadgeLinkCondition::isUnique($badgeId, $userId, $recordType)) {
+                FatUtility::dieJsonError(Labels::getLabel('MSG_REQUEST_FOR_THIS_BADGE_ALREADY_APPROVED/_PENDING', $this->siteLangId));
+            }
+            
             $data = [
                 'blinkcond_badge_id' => $badgeId,
                 'blinkcond_record_type' => $recordType,
                 'blinkcond_from_date' => $fromDate,
                 'blinkcond_to_date' => $toDate,
-
+                'blinkcond_user_id' => $userId,
             ];
             $record = new BadgeLinkCondition($badgeLinkCondId);
             $record->assignValues($data);
@@ -122,10 +162,6 @@ trait BadgeRequestSetup
             $post['breq_blinkcond_id'] = $badgeLinkCondId;
         }
         /* Badge Condition Setup if added. */
-
-
-        $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
-
         $post['breq_requested_on'] = date('Y-m-d H:i:s');
         $post['breq_user_id'] = UserAuthentication::getLoggedUserId();
 
@@ -134,7 +170,7 @@ trait BadgeRequestSetup
             $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/REJECTED', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
-        
+
         $record = new BadgeRequest($badgeReqId);
         $record->assignValues($post);
 
@@ -154,7 +190,7 @@ trait BadgeRequestSetup
             );
             FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData);
         }
-        
+
         $msg = Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId);
         if (0 < $badgeReqId) {
             $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId);
@@ -163,7 +199,7 @@ trait BadgeRequestSetup
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     /**
      * badgeReqForm
      *
@@ -174,8 +210,8 @@ trait BadgeRequestSetup
     public function badgeReqForm($badgeReqId = 0, $badgeId = 0)
     {
         $this->userPrivilege->canEditBadges();
-        $frm = $this->getBadgeForm($badgeId);
-        $blinkCondId = 0;
+        $frm = $this->getBadgeForm($badgeReqId, $badgeId);
+        $badgeId = 0;
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
             $srch->addCondition('breq_id', '=', $badgeReqId);
@@ -184,19 +220,19 @@ trait BadgeRequestSetup
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
             $requestedBadge['record_ids'] = json_encode($this->records($badgeReqId, true));
-            $blinkCondId = $requestedBadge['breq_blinkcond_id'];
+            $badgeId = $requestedBadge['badge_id'];
             $frm->fill($requestedBadge);
 
             $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
             $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
         }
-        
-        $this->set('blinkCondId', $blinkCondId);
+
+        $this->set('badgeId', $badgeId);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false, 'badges/badge-req-form.php');
     }
-    
+
     /**
      * getRecordType
      *
@@ -211,7 +247,7 @@ trait BadgeRequestSetup
 
         FatUtility::dieJsonSuccess($json);
     }
-    
+
     /**
      * records
      *
@@ -243,7 +279,7 @@ trait BadgeRequestSetup
 
         $srch->addCondition('breq_id', '=', $badgeReqId);
         $result = FatApp::getDb()->fetchAll($srch->getResultSet(), 'badgelink_record_id');
-        
+
         if (true === $returnAllRecordIds) {
             return array_keys($result);
         }
@@ -269,7 +305,7 @@ trait BadgeRequestSetup
 
                 $option = '';
                 foreach ($optionName as $index => $optname) {
-                    $option .= !empty($optname) ? ' | ' .  $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';   
+                    $option .= !empty($optname) ? ' | ' .  $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';
                 }
                 $recordName = $name . $option . ' | ' . $seller;
             }
@@ -289,7 +325,7 @@ trait BadgeRequestSetup
         $this->set('postedData', FatApp::getPostedData());
         $this->_template->render(false, false, 'badges/records.php');
     }
-    
+
     /**
      * unlinkRecord
      *

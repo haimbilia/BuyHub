@@ -434,13 +434,6 @@ class BadgeLinkConditionsController extends SellerBaseController
         if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition && !empty($records)) {
             $db = FatApp::getDb();
             foreach ($records as $recordId) {
-                if (false === BadgeLinkCondition::isUnique($badgeType, $recordType, $recordId, $position)) {
-                    if (empty($msg)) {
-                        $msg = Labels::getLabel('MGS_UNABLE_TO_BIND_SOME_RECORDS._ALREADY_LINKED_WITH_OTHER_BADGE_LINK_RECORD', $this->siteLangId);
-                    }
-                    continue;
-                }
-
                 $linkData = array(
                     'badgelink_blinkcond_id' => $badgeLinkCondId,
                     'badgelink_record_id' => $recordId
@@ -573,15 +566,6 @@ class BadgeLinkConditionsController extends SellerBaseController
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }
 
-    public function isUnique(int $badgeType, int $recordType, int $record_id, int $position = 0)
-    {
-        if (false === BadgeLinkCondition::isUnique($badgeType, $recordType, $record_id, $position)) {
-            $msg = Labels::getLabel('MSG_THIS_RECORD_IS_LINKED_WITH_OTHER_BADGE_LINK_RECORD_WITH_SAME_POSITION.', $this->siteLangId);
-            FatUtility::dieJsonError($msg);
-        }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_UNIQUE', $this->siteLangId));
-    }
-
     public function linkRecord(int $badgeType, int $blinkcond_id, int $record_id, int $position = 0)
     {
         if (1 > $blinkcond_id || 1 > $record_id) {
@@ -589,12 +573,6 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $recordType = BadgeLinkCondition::getAttributesById($blinkcond_id, 'blinkcond_record_type');
-
-        if (false === BadgeLinkCondition::isUnique($badgeType, $recordType, $record_id, $position)) {
-            $msg = Labels::getLabel('MSG_THIS_RECORD_IS_LINKED_WITH_OTHER_BADGE_LINK_RECORD', $this->siteLangId);
-            FatUtility::dieJsonError($msg);
-        }
-
         $linkData = array(
             'badgelink_blinkcond_id' => $blinkcond_id,
             'badgelink_record_id' => $record_id

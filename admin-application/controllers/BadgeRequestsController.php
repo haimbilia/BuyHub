@@ -176,17 +176,13 @@ class BadgeRequestsController extends AdminBaseController
         $frm->addHiddenField('', 'record_ids');
         $frm->addHiddenField('', 'breq_record_type');
         $frm->addHiddenField('', 'breq_user_id');
-
-        $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->adminLangId), 'breq_blinkcond_id', $approvalRequiredBadges, '', [], '');
-        $fld->requirements()->setRequired(true);
-
-        $statusArr = BadgeRequest::getStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'breq_status', $statusArr, '', array(), '');
+        $frm->addHiddenField('', 'breq_blinkcond_id');
 
         $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->adminLangId), 'breq_message');
-        
         $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->adminLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->adminLangId), 'class' => 'recordIds--js'], '');
+        
+        $statusArr = BadgeRequest::getStatusArr($this->adminLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'breq_status', $statusArr, '', array(), '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_UPDATE", $this->adminLangId));
         return $frm;
     }
