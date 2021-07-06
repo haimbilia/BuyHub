@@ -332,7 +332,7 @@ class Badge extends MyAppModel
             $srch->addGroupBy('blinkcond_id');
         }
         
-        $srch->addOrder('badgelink_id', 'DESC');
+        $srch->addOrder('blinkcond_id', 'DESC');
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
