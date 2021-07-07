@@ -219,9 +219,11 @@ class BadgeLinkCondition extends MyAppModel
      * @param  int $badgeId
      * @param  int $userId
      * @param  int $recordType
+     * @param  int $position
+     * @param  int $badgeLinkCondId : Other than this id.
      * @return void
      */
-    public static function isUnique(int $badgeId, int $userId, int $recordType): bool
+    public static function isUnique(int $badgeId, int $userId, int $recordType, int $position = 0, int $badgeLinkCondId = 0): bool
     {
         $srch = new BadgeSearch();
         $srch->setPageSize(1);
@@ -231,6 +233,10 @@ class BadgeLinkCondition extends MyAppModel
         $srch->addCondition('badge_condition_type', '=', Badge::COND_MANUAL);
         $srch->addCondition('blinkcond_user_id', '=', $userId);
         $srch->addCondition('blinkcond_record_type', '=', $recordType);
+        $srch->addCondition('blinkcond_position', '=', $position);
+        if (0 < $badgeLinkCondId) {
+            $srch->addCondition('blinkcond_id', '!=', $badgeLinkCondId);
+        }
         $srch->addDirectCondition('(
             CASE 
                 WHEN breq_id IS NOT NULL

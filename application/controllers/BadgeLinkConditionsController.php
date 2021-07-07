@@ -372,6 +372,16 @@ class BadgeLinkConditionsController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel('MSG_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
         }
 
+        $userId = UserAuthentication::getLoggedUserId();
+        $badgeId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, 0);
+        if (false === BadgeLinkCondition::isUnique($badgeId, $userId, $recordType, $position, $badgeLinkCondId)) {
+            $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE.', $this->siteLangId);
+            if (Badge::TYPE_RIBBON == $badgeType) {
+                $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE_WITH_SAME_POSITION.', $this->siteLangId);
+            }
+            FatUtility::dieJsonError($msg);
+        }
+
         if (Badge::TYPE_BADGE == $badgeType) {
             if (BadgeLinkCondition::REC_COND_AUTO == $recordCondition) {
                 $records = []; /* Records Binding Not Required. */
@@ -418,14 +428,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $record = new BadgeLinkCondition($badgeLinkCondId);
         $record->assignValues($post);
         if (!$record->save()) {
-            $msg = $record->getError();
-            if (false !== strpos(strtolower($msg), 'duplicate')) {
-                $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE.', $this->siteLangId);
-                if (Badge::TYPE_RIBBON == $badgeType) {
-                    $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE_WITH_SAME_POSITION.', $this->siteLangId);
-                }
-            }
-            FatUtility::dieJsonError($msg);
+            FatUtility::dieJsonError($record->getError());
         }
 
         $badgeLinkCondId = $record->getMainTableRecordId();

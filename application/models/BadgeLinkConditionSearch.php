@@ -3,11 +3,10 @@
 class BadgeLinkConditionSearch extends SearchBase
 {
     private $badgeLinksJoin = false;
-
+    
     /**
      * __construct
      *
-     * @param  int $langId   
      * @return void
      */
     public function __construct()
