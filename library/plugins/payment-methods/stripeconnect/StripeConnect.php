@@ -398,6 +398,7 @@ class StripeConnect extends PaymentMethodBase
      */
     public function createAccount(): bool
     {
+        $this->loadBaseCurrencyCode();
         if ($this->systemCurrencyCode != Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')) {
             $msg = Labels::getLabel('MSG_STRIPE_CONNECT_INVALID_ACCOUNT_CURRENCY.', $this->langId);
             $this->error = CommonHelper::replaceStringData($msg, ['SYSTEM-CURRECNY}' => $this->systemCurrencyCode]);
