@@ -154,25 +154,30 @@ class StripeConnectPayController extends PaymentController
         $successUrl = CommonHelper::generateFullUrl('custom', 'paymentSuccess', [$this->orderId]);
 
         $data = array();
+        $orderFormattedData = $this->stripeConnect->formatCustomerDataFromOrder($this->orderInfo);
+        $data = [
+            'mode' => 'payment',
+            'payment_method_types' => $this->stripeConnect->getOtherPaymentMethods(),
+            'success_url' => $successUrl,
+            'cancel_url' => $cancelBtnUrl,
+            'client_reference_id' => $orderId,
+            'customer' => $this->customerId,
+        ];
+
         if ($this->orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
-            $orderFormattedData = $this->stripeConnect->formatCustomerDataFromOrder($this->orderInfo);
-            $data = [
-                'mode' => 'payment',
-                'payment_method_types' => $this->stripeConnect->getOtherPaymentMethods(),
-                'success_url' => $successUrl,
-                'cancel_url' => $cancelBtnUrl,
-                'client_reference_id' => $orderId,
-                'line_items' => [],
-                'customer' => $this->customerId,
-                'payment_intent_data' => [
-                    'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
-                    'shipping' => $orderFormattedData['shipping'],
-                    'metadata' => [
-                        'orderId' => $orderId
+            $data = array_merge(
+                $data,
+                [
+                    'line_items' => [],
+                    'payment_intent_data' => [
+                        'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
+                        'shipping' => $orderFormattedData['shipping'],
+                        'metadata' => [
+                            'orderId' => $orderId
+                        ]
                     ]
                 ]
-            ];
-            
+            );
             foreach ($orderProducts as $op) {
                 $netAmount = CommonHelper::orderProductAmount($op, 'NETAMOUNT');
                 $amountToBePaidToSeller = CommonHelper::orderProductAmount($op, 'NETAMOUNT', false, User::USER_TYPE_SELLER);
@@ -202,56 +207,50 @@ class StripeConnectPayController extends PaymentController
 
                 $data['payment_intent_data']['statement_descriptor'] = $orderId;
             }
-        }
-
-        if ($this->orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
+        } else if ($this->orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $stipePlanInfo = SellerPackagePlans::getAttributesById($orderProducts[key($orderProducts)]['ossubs_plan_id']);
-            $stipePlanId = $stipePlanInfo['spplan_stripe_id'];
-            $trial_day = 0;
-            if ($stipePlanInfo['spplan_trial_interval'] > 0) {
-                switch ($stipePlanInfo['spplan_trial_frequency']) {
-                    case 'Y':
-                        $trial_day = 365 * $stipePlanInfo['spplan_trial_interval'];
-                        break;
-                    case 'M':
-                        $trial_day = 30 * $stipePlanInfo['spplan_trial_interval'];
-                        break;
-                    case 'W':
-                        $trial_day = 7 * $stipePlanInfo['spplan_trial_interval'];
-                        break;
-                    default:
-                        $trial_day = $stipePlanInfo['spplan_trial_interval'];
-                        break;
-                }
-            }
+            $packageName = current(SellerPackages::getAttributesByLangId($this->siteLangId, $stipePlanInfo['spplan_spackage_id'], ['COALESCE(spackage_name, spackage_identifier) as spackage_name'], true));
+            $nickname = Labels::getLabel('LBL_{NAME}_SUBSCRIPTION_PAYMENT', $this->siteLangId);
 
-            $data = [
-                'mode' => 'subscription',
-                'payment_method_types' => ['card'],
-                'success_url' => $successUrl,
-                'cancel_url' => $cancelBtnUrl,
-                'line_items' => [
-                    [
-                        'price' => $stipePlanId,
-                        'quantity' => 1,
-                        'description' => 'Subscription Type Payment'
-                    ],
-                ],
-                'customer' => $this->customerId,
-                'metadata' => [
-                    'orderId' => $orderId
-                ],
-                'subscription_data' => [
+            $priceData = [
+                'unit_amount' => $this->convertInPaisa($stipePlanInfo['spplan_price']),
+                'currency' => $this->orderInfo['order_currency_code'],
+                'product_data' => [
+                    'name' => $packageName,
                     'metadata' => [
-                        'orderId' => $orderId,
-                        'statement_descriptor' => $orderId
+                        'spplan_id' => $stipePlanInfo['spplan_id'],
+                        'spplan_spackage_id' => $stipePlanInfo['spplan_spackage_id']
                     ]
                 ],
-                'client_reference_id' => $orderId
+                'nickname' => CommonHelper::replaceStringData($nickname, ['{NAME}' => $packageName])
             ];
-            if ($trial_day > 0) {
-                $data['subscription_data']['trial_period_days'] = $trial_day;
+
+            if (false === $this->stripeConnect->createPriceObject($priceData)) {
+                $this->setErrorAndRedirect($this->stripeConnect->getError());
             }
+
+            $data = array_merge(
+                $data,
+                [
+                    'line_items' => [
+                        [
+                            'price' => $this->stripeConnect->getPriceId(),
+                            'quantity' => 1,
+                            'description' => CommonHelper::replaceStringData($nickname, ['{NAME}' => $packageName])
+                        ],
+                    ],
+                    'payment_intent_data' => [
+                        'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
+                        'shipping' => $orderFormattedData['shipping'],
+                        'metadata' => [
+                            'orderId' => $orderId
+                        ]
+                    ]
+                ]
+            );
+        } else {
+            $msg = Labels::getLabel('MSG_INVALID_ORDER_TYPE', $this->siteLangId);
+            $this->setErrorAndRedirect($msg);
         }
 
         if (false === $this->stripeConnect->initiateSession($data)) {
@@ -318,7 +317,8 @@ class StripeConnectPayController extends PaymentController
 
         $orderId = isset($payload['data']['object']['metadata']['orderId']) ? $payload['data']['object']['metadata']['orderId'] : '';
         $status = isset($payload['data']['object']['status']) ? $payload['data']['object']['status'] : Labels::getLabel("MSG_FAILURE", $this->siteLangId);
-        if ($payload['type'] != "payment_intent.succeeded") {
+
+        if (StripeConnect::PAYMENT_RESPONSE_INTENT_TYPE_SUCCESS != $payload['type']) {
             $msg = Labels::getLabel('MSG_UNABLE_TO_CHARGE_:_{STATUS}', $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
             $recordId = empty($orderId) ? time() : $orderId;
@@ -331,7 +331,12 @@ class StripeConnectPayController extends PaymentController
             CommonHelper::printArray($error, true);
         }
 
+
+        $this->orderId = $orderId;
+        $orderPaymentObj = new OrderPayment($this->orderId, $this->siteLangId);
+        $this->orderInfo = $this->getOrderInfo($this->orderId);
         $paymentIntendId = isset($payload['data']['object']['id']) ? $payload['data']['object']['id'] : '';
+
         if (empty($orderId) || empty($paymentIntendId)) {
             $error = [
                 'msg' => Labels::getLabel('MSG_INVALID_REQUEST_ORDER/PAYMENT_INTENT_ID', $this->siteLangId),
@@ -341,8 +346,6 @@ class StripeConnectPayController extends PaymentController
             CommonHelper::printArray($error, true);
         }
 
-        $this->orderId = $orderId;
-        $this->orderInfo = $this->getOrderInfo($this->orderId);
         if ($this->orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
             $error = [
                 'msg' => Labels::getLabel('MSG_INVALID_ORDER._ALREADY_PAID_OR_CANCELLED', $this->siteLangId),
@@ -366,126 +369,122 @@ class StripeConnectPayController extends PaymentController
         $message = $chargeResponse['status'];
 
         /* Recording Payment in DB */
-        $orderPaymentObj = new OrderPayment($this->orderId, $this->siteLangId);
-
         $this->paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-
-
         if (false === $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $chargeId, $this->paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($chargeResponse), false, 0, Orders::ORDER_PAYMENT_PAID)) {
             $orderPaymentObj->addOrderPaymentComments($message);
         }
 
-        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if ($this->orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
+            $orderObj = new Orders();
+            $orderProducts = $orderObj->getChildOrders(array('order_id' => $this->orderInfo['id']), $this->orderInfo['order_type'], $this->orderInfo['order_language_id']);
 
-        $orderObj = new Orders();
-        $orderProducts = $orderObj->getChildOrders(array('order_id' => $orderInfo['id']), $orderInfo['order_type'], $orderInfo['order_language_id']);
+            foreach ($orderProducts as $op) {
+                $netSellerAmount = CommonHelper::orderProductAmount($op, 'NET_VENDOR_AMOUNT', false, User::USER_TYPE_SELLER);
+                $discount = CommonHelper::orderProductAmount($op, 'DISCOUNT');
+                $rewardPoint = CommonHelper::orderProductAmount($op, 'REWARDPOINT');
+                $totalDiscount = abs($discount) + abs($rewardPoint);
 
-        foreach ($orderProducts as $op) {
-            $netSellerAmount = CommonHelper::orderProductAmount($op, 'NET_VENDOR_AMOUNT', false, User::USER_TYPE_SELLER);
-            $discount = CommonHelper::orderProductAmount($op, 'DISCOUNT');
-            $rewardPoint = CommonHelper::orderProductAmount($op, 'REWARDPOINT');
-            $totalDiscount = abs($discount) + abs($rewardPoint);
+                $firstTransferAmount = $netSellerAmount - $totalDiscount;
+                $pendingTransferAmount = $totalDiscount;
 
-            $firstTransferAmount = $netSellerAmount - $totalDiscount;
-            $pendingTransferAmount = $totalDiscount;
-
-            if (0 == $pendingTransferAmount) {
-                $firstTransferAmount = $firstTransferAmount - $op['op_commission_charged'];
-            } else {
-                if ($op['op_commission_charged'] <= $pendingTransferAmount) {
-                    $pendingTransferAmount = $pendingTransferAmount - $op['op_commission_charged'];
+                if (0 == $pendingTransferAmount) {
+                    $firstTransferAmount = $firstTransferAmount - $op['op_commission_charged'];
                 } else {
-                    $pendingTransferAmount = $op['op_commission_charged'] - $pendingTransferAmount;
-                    $firstTransferAmount = $firstTransferAmount - $pendingTransferAmount;
+                    if ($op['op_commission_charged'] <= $pendingTransferAmount) {
+                        $pendingTransferAmount = $pendingTransferAmount - $op['op_commission_charged'];
+                    } else {
+                        $pendingTransferAmount = $op['op_commission_charged'] - $pendingTransferAmount;
+                        $firstTransferAmount = $firstTransferAmount - $pendingTransferAmount;
+                    }
                 }
-            }
 
-            $accountId = User::getUserMeta($op['op_selprod_user_id'], 'stripe_account_id');
-            // Credit sold product amount to seller wallet.
-            $msg = 'MSG_PRODUCT_SOLD_#{invoice-no}.';
-            if (0 < $pendingTransferAmount) {
-                $msg .= "_DISCOUNT/REWARD_POINTS_INCLUSIVE.";
-            }
-            $comments = Labels::getLabel($msg, $this->siteLangId);
-            $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
-            Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $netSellerAmount, $this->siteLangId, $comments, $op['op_id']);
+                $accountId = User::getUserMeta($op['op_selprod_user_id'], 'stripe_account_id');
+                // Credit sold product amount to seller wallet.
+                $msg = 'MSG_PRODUCT_SOLD_#{invoice-no}.';
+                if (0 < $pendingTransferAmount) {
+                    $msg .= "_DISCOUNT/REWARD_POINTS_INCLUSIVE.";
+                }
+                $comments = Labels::getLabel($msg, $this->siteLangId);
+                $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number']]);
+                Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $netSellerAmount, $this->siteLangId, $comments, $op['op_id']);
 
-            $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
-            $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
-            Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
+                $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
+                $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
+                Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
 
-            if (!empty($accountId)) {
-                $charge = [
-                    'amount' => $this->convertInPaisa($firstTransferAmount),
-                    'currency' => $orderInfo['order_currency_code'],
-                    'destination' => $accountId,
-                    // 'transfer_group' => $op['op_invoice_number'],
-                    'description' => $comments,
-                    'metadata' => [
-                        'op_id' => $op['op_id']
-                    ],
-                    'source_transaction' => $chargeId
-                ];
-
-                if (false === $this->stripeConnect->doTransfer($charge)) {
-                    $error = [
-                        'msg' => $this->stripeConnect->getError(),
-                        'response' => $charge,
+                if (!empty($accountId)) {
+                    $charge = [
+                        'amount' => $this->convertInPaisa($firstTransferAmount),
+                        'currency' => $this->orderInf['order_currency_code'],
+                        'destination' => $accountId,
+                        // 'transfer_group' => $op['op_invoice_number'],
+                        'description' => $comments,
+                        'metadata' => [
+                            'op_id' => $op['op_id']
+                        ],
+                        'source_transaction' => $chargeId
                     ];
-                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-                    continue;
+
+                    if (false === $this->stripeConnect->doTransfer($charge)) {
+                        $error = [
+                            'msg' => $this->stripeConnect->getError(),
+                            'response' => $charge,
+                        ];
+                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        continue;
+                    }
+
+                    $resp = $this->stripeConnect->getResponse();
+
+                    if (empty($resp->id)) {
+                        $error = [
+                            'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER', $this->siteLangId),
+                            'response' => $resp,
+                        ];
+                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        continue;
+                    }
+
+                    // Debit sold product amount from seller wallet.
+                    $comments = $comments . ' ' . Labels::getLabel('MSG_TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
+                    $comments = CommonHelper::replaceStringData($comments, ['{account-id}' => $accountId]);
+                    Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, $firstTransferAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
                 }
 
-                $resp = $this->stripeConnect->getResponse();
+                if (0 < $pendingTransferAmount) {
+                    // Credit sold product discount amount to seller wallet.
+                    $discountComments = Labels::getLabel('MSG_AMOUNT_CREDITED_FOR_DISCOUNT_APPLIED_ON_PRODUCT_SOLD_#{invoice-no}.', $this->siteLangId);
+                    $discountComments = CommonHelper::replaceStringData($discountComments, ['{invoice-no}' => $op['op_invoice_number']]);
+                    /*  Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $discount, $this->siteLangId, $discountComments, $op['op_id']); */
 
-                if (empty($resp->id)) {
-                    $error = [
-                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER', $this->siteLangId),
-                        'response' => $resp,
-                    ];
-                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-                    continue;
+                    unset($charge['source_transaction']);
+                    $charge['amount'] = $this->convertInPaisa($pendingTransferAmount);
+                    $charge['description'] = $discountComments;
+                    $charge['metadata']['source_transaction'] = $chargeId;
+                    if (false === $this->stripeConnect->doTransfer($charge)) {
+                        $error = [
+                            'msg' => $this->stripeConnect->getError(),
+                            'response' => $this->stripeConnect->getResponse(),
+                        ];
+                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        continue;
+                    }
+
+                    $resp = $this->stripeConnect->getResponse();
+                    if (empty($resp->id)) {
+                        $error = [
+                            'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER_PENDING_AMOUNT', $this->siteLangId),
+                            'response' => $resp,
+                        ];
+                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        continue;
+                    }
+
+                    // Debit sold product discount amount from seller wallet.
+                    $comments = Labels::getLabel('MSG_AMOUNT_DEBITED_FOR_DISCOUNT_APPLIED_ON_PRODUCT_SOLD_#{invoice-no}._TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
+                    $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number'], '{account-id}' => $accountId]);
+                    Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, $pendingTransferAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
                 }
-
-                // Debit sold product amount from seller wallet.
-                $comments = $comments . ' ' . Labels::getLabel('MSG_TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
-                $comments = CommonHelper::replaceStringData($comments, ['{account-id}' => $accountId]);
-                Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, $firstTransferAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
-            }
-
-            if (0 < $pendingTransferAmount) {
-                // Credit sold product discount amount to seller wallet.
-                $discountComments = Labels::getLabel('MSG_AMOUNT_CREDITED_FOR_DISCOUNT_APPLIED_ON_PRODUCT_SOLD_#{invoice-no}.', $this->siteLangId);
-                $discountComments = CommonHelper::replaceStringData($discountComments, ['{invoice-no}' => $op['op_invoice_number']]);
-                /*  Transactions::creditWallet($op['op_selprod_user_id'], Transactions::TYPE_PRODUCT_SALE, $discount, $this->siteLangId, $discountComments, $op['op_id']); */
-
-                unset($charge['source_transaction']);
-                $charge['amount'] = $this->convertInPaisa($pendingTransferAmount);
-                $charge['description'] = $discountComments;
-                $charge['metadata']['source_transaction'] = $chargeId;
-                if (false === $this->stripeConnect->doTransfer($charge)) {
-                    $error = [
-                        'msg' => $this->stripeConnect->getError(),
-                        'response' => $this->stripeConnect->getResponse(),
-                    ];
-                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-                    continue;
-                }
-
-                $resp = $this->stripeConnect->getResponse();
-                if (empty($resp->id)) {
-                    $error = [
-                        'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER_PENDING_AMOUNT', $this->siteLangId),
-                        'response' => $resp,
-                    ];
-                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-                    continue;
-                }
-
-                // Debit sold product discount amount from seller wallet.
-                $comments = Labels::getLabel('MSG_AMOUNT_DEBITED_FOR_DISCOUNT_APPLIED_ON_PRODUCT_SOLD_#{invoice-no}._TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
-                $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $op['op_invoice_number'], '{account-id}' => $accountId]);
-                Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, $pendingTransferAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
             }
         }
     }

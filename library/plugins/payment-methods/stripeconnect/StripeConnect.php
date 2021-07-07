@@ -66,6 +66,9 @@ class StripeConnect extends PaymentMethodBase
     public const REQUEST_CREATE_PAYMENT_METHOD = 27;
     public const REQUEST_CAPTURE_PAYMENT = 28;
     public const REQUEST_CREATE_ACCOUNT_LINKS = 29;
+    public const REQUEST_CREATE_COUPON = 30;
+
+    public const PAYMENT_RESPONSE_INTENT_TYPE_SUCCESS = 'payment_intent.succeeded';
 
     /**
      * __construct
@@ -1359,6 +1362,34 @@ class StripeConnect extends PaymentMethodBase
         }
         return $paymentMethodsArr;
     }
+    
+    /**
+     * bindCoupon
+     *
+     * @param  mixed $data
+     * @return bool
+     */
+    public function bindCoupon(array $data): bool
+    {
+        $requestParam = [
+            'duration' => 'once',
+            'metadata' => [
+                'coupon_code' => $data['coupon_code'],
+            ],
+            'name' => $data['coupon_identifier'],
+        ];
+
+        if (1 == $data['coupon_discount_in_percent']) {
+            $requestParam['percent_off'] = $data['coupon_discount_value'];
+        } else {
+            $this->loadBaseCurrencyCode();
+            $requestParam['amount_off'] = $data['coupon_discount_value'];
+            $requestParam['currency'] = $this->systemCurrencyCode;
+        }
+
+        $this->resp = $this->doRequest(self::REQUEST_CREATE_COUPON, $requestParam);
+        return (false !==  $this->resp);
+    }
 
     /**
      * doRequest
@@ -1456,6 +1487,9 @@ class StripeConnect extends PaymentMethodBase
                     break;
                 case self::REQUEST_CREATE_ACCOUNT_LINKS:
                     return $this->createAccountLinks($requestParam);
+                    break;
+                case self::REQUEST_CREATE_COUPON:
+                    return $this->createCoupon($requestParam);
                     break;
             }
         } catch (\Stripe\Exception\CardException $e) {

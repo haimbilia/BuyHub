@@ -105,7 +105,7 @@ trait PluginHelper
 
         return true;
     }
-
+    
     /**
      * includePlugin
      *
@@ -128,9 +128,8 @@ trait PluginHelper
         }
         
         if (true === $checkActive && 1 > Plugin::isActive($keyName)) {
-            $name = current(Plugin::getAttributesByCode($keyName, 'COALESCE(plugin_name, plugin_identifier) as plugin_name', $langId));
             $str =  Labels::getLabel('MSG_{NAME}_IS_NOT_ACTIVE', $langId);
-            $error = CommonHelper::replaceStringData($str, ['{NAME}' => $name]);
+            $error = CommonHelper::replaceStringData($str, ['{NAME}' => $keyName]);
             return false;
         }
 
@@ -185,6 +184,52 @@ trait PluginHelper
         }
 
         $reflect  = new ReflectionClass($keyName);
+        return $reflect->newInstanceArgs($args);
+    }
+        
+    /**
+     * callKingPin
+     *
+     * @param  int $type
+     * @param  array $args
+     * @param  string $error
+     * @param  bool $checkActive
+     * @param  int $langId
+     * @return mixed
+     */
+    public static function callKingPin(int $type, array $args = [], &$error = '', bool $checkActive = true, int $langId = 0)
+    {
+        $langId = 1 > $langId ? CommonHelper::getLangId() : $langId;
+
+        if (1 > $type || !in_array($type, Plugin::getKingpinTypeArr())) {
+            $error = Labels::getLabel('LBL_INVALID_PLUGIN_TYPE', $langId);
+        }
+
+        $plugin = new Plugin();
+        $row = $plugin->getDefaultPluginData($type, '', $langId);
+        if (!$row) {
+            $error =  $plugin->getError();
+            return false;
+        }
+
+        if (true === $checkActive && Plugin::INACTIVE == $row['plugin_active']) {
+            $str =  Labels::getLabel('MSG_{NAME}_IS_NOT_ACTIVE', $langId);
+            $error = CommonHelper::replaceStringData($str, ['{NAME}' => $row['plugin_code']]);
+            return false;
+        }
+
+        $directory = Plugin::getDirectory($row['plugin_type']);
+
+        if (false == $directory) {
+            $error =  Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', $langId);
+            return false;
+        }
+
+        if (false === PluginHelper::includePlugin($row['plugin_code'], $directory, $error, $langId, false)) {
+            return false;
+        }
+
+        $reflect  = new ReflectionClass($row['plugin_code']);
         return $reflect->newInstanceArgs($args);
     }
 

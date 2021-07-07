@@ -56,12 +56,12 @@ class SmsArchive extends MyAppModel
         $pluginKey = Plugin::getAttributesById($smsGateway, 'plugin_code');
 
         $error = '';
-        if (false === PluginHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_SMS_NOTIFICATION), $error, $this->langId)) {
+        $smsGateway = PluginHelper::callPlugin($pluginKey, [$this->langId], $error, $this->langId);
+        if (false === $smsGateway) {
             $this->error = $error;
             return false;
         }
 
-        $smsGateway = new $pluginKey($this->langId);
         $response = $smsGateway->send($this->toNumber, $this->body);
 
         if (false == $response || false == $response['status']) {

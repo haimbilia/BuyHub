@@ -235,13 +235,17 @@ class MyAppModel extends FatModel
         return $row;
     }
 
-    public static function getAttributesByLangId($langId, $recordId, $attr = null)
+    public static function getAttributesByLangId($langId, $recordId, $attr = null, bool $includePrimaryTable = false)
     {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
+        $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
 
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
+        if (true === $includePrimaryTable) {
+            $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id');
+        }
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);

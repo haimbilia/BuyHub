@@ -756,11 +756,12 @@ class Shipping
             return false;
         }
 
-        if (false === PluginHelper::includePlugin($keyName, $directory, $this->error, $this->langId, false)) {
+        $error = '';
+        $this->shippingApiObj = PluginHelper::callPlugin($keyName, [$this->langId], $error, $this->langId);
+        if (false === $this->shippingApiObj) {
+            $this->error = $error;
             return false;
         }
-
-        $this->shippingApiObj = new $keyName($this->langId);
 
         if (false === $this->shippingApiObj->init()) {
             $this->error = $this->shippingApiObj->getError();

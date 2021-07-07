@@ -293,13 +293,13 @@ $plugin = new Plugin();
                             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                             $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
                         }
-                        $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($channel['plugin_id'], 'ICON'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         ?>
                         <li class="menu__item <?php echo ($controller == strtolower($channel['plugin_code'])) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo $channel['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
-                                    <i class="icn shop">
-                                        <img src="<?php echo $imageUrl; ?>" data-ratio="<?php echo $aspectRatio; ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo strtolower($channel['plugin_code']); ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo strtolower($channel['plugin_code']); ?>"></use>
+                                        </svg>
                                     </i>
                                     <span class="menu-item__title"><?php echo $channel['plugin_name'];?></span>
                                 </a>

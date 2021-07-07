@@ -493,11 +493,10 @@ class FullTextSearch extends FatModel
         }
         
         $error = '';
-        if (false === PluginHelper::includePlugin($defaultPlugin, 'full-text-search', $error, $langId)) {
+        $srch = PluginHelper::callPlugin($defaultPlugin, [$langId], $error, $langId);
+        if (false === $srch) {
             trigger_error($error, E_USER_ERROR);
         }
-        
-        $srch = new $defaultPlugin($langId);
             
         if (array_key_exists('keyword', $criteria)) {
             $srch->addKeywordCondition($criteria['keyword']);
