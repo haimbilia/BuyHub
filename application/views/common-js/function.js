@@ -22,7 +22,7 @@ var Dashboard = function () {
             $("div.sidebar-overlay--js").remove();
             var visibility = 0;
         }
-        $.ajax({ url: fcom.makeUrl('Custom', 'setupSidebarVisibility', [visibility]) });
+        $.ajax({ url: fcom.makeUrl('Custom', 'setupSidebarVisibility', [visibility],siteConstants.webrootfront) });
         /* $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded"); */
         $(".hamburger-toggle").toggleClass("is-opened");
         setTimeout(function () {

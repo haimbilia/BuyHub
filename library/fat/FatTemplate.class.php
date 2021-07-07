@@ -110,6 +110,7 @@ class FatTemplate
         $str .= '<script>
 				var siteConstants = ' . json_encode(array(
             'webroot' => CONF_WEBROOT_URL . $landCode,
+            'webrootfront' => CONF_WEBROOT_FRONTEND . $landCode,
             'webroot_traditional' => CONF_WEBROOT_URL_TRADITIONAL,
             'rewritingEnabled' => (CONF_URL_REWRITING_ENABLED ? '1' : '0'),
         )) . ';

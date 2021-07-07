@@ -881,13 +881,13 @@ class CustomController extends MyAppController
 
     public function setupSidebarVisibility($openSidebar = 1)
     {
-        setcookie('openSidebar', $openSidebar, 0, CONF_WEBROOT_URL);
+        setcookie('openSidebar', $openSidebar, 0, CONF_WEBROOT_FRONTEND);
     }
 
     public function updateScreenResolution($width, $height)
     {
-        setcookie('screenWidth', $width, 0, CONF_WEBROOT_URL);
-        setcookie('screenHeight', $height, 0, CONF_WEBROOT_URL);
+        setcookie('screenWidth', $width, 0, CONF_WEBROOT_FRONTEND);
+        setcookie('screenHeight', $height, 0, CONF_WEBROOT_FRONTEND);
     }
     
     public function cookiePreferencesData()

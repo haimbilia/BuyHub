@@ -6,6 +6,9 @@ RewriteEngine on
 RewriteRule ^(?i)admin$ admin.php [PT,L]
 RewriteRule ^(?i)admin/(.*)$ admin.php?url=$1 [PT,L]
 
+RewriteRule ^(?i)dashboard$ dashboard.php [PT,L]
+RewriteRule ^(?i)dashboard/(.*)$ dashboard.php?url=$1 [PT,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 

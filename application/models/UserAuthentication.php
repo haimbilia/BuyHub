@@ -122,7 +122,7 @@ class UserAuthentication extends FatModel
             self::clearLoggedUserLoginCookie();
             return false;
         }
-        
+
         $browser = CommonHelper::userAgent();
         if (strtotime($authRow['uauth_expiry']) < strtotime('now')) {
             self::clearLoggedUserLoginCookie();
@@ -207,8 +207,8 @@ class UserAuthentication extends FatModel
                 $this->error = Labels::getLabel('ERR_YOUR_ACCOUNT_ALREADY_EXIST._PLEASE_LOGIN', $this->commonLangId);
                 return false;
             }
-            
-            if ($row && $row['user_deleted'] == applicationConstants::YES) {               
+
+            if ($row && $row['user_deleted'] == applicationConstants::YES) {
                 $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELETED', $this->commonLangId);
                 return false;
             }
@@ -299,7 +299,8 @@ class UserAuthentication extends FatModel
         return true;
     }
 
-    public function setLoginWithOtp($dcode, $phone) {
+    public function setLoginWithOtp($dcode, $phone)
+    {
         $this->loginDcode = $dcode;
         $this->loginPhone = $phone;
         $this->loginWithOtp = (!empty($this->loginDcode) && !empty($this->loginPhone));
@@ -390,11 +391,11 @@ class UserAuthentication extends FatModel
                 if (true == $encryptPassword) {
                     if (!$this->resetUserPassword($row['user_id'], $password)) {
                         SystemLog::set('Unable to set new hash user password');
-                    }else{
+                    } else {
                         if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
                             SystemLog::set('Unable to blank user old password');
                         }
-                    }                
+                    }
                 }
             } else {
                 $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
@@ -886,13 +887,13 @@ class UserAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         if (!$db->insertFromArray(
-                        static::DB_TBL_USER_PRR,
-                        array(
-                            static::DB_TBL_UPR_PREFIX . 'user_id' => intval($data['user_id']),
-                            static::DB_TBL_UPR_PREFIX . 'token' => $data['token'],
-                            static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+" . ($data['days'] ?? 1) . " DAY"))
-                        )
-                )) {
+            static::DB_TBL_USER_PRR,
+            array(
+                static::DB_TBL_UPR_PREFIX . 'user_id' => intval($data['user_id']),
+                static::DB_TBL_UPR_PREFIX . 'token' => $data['token'],
+                static::DB_TBL_UPR_PREFIX . 'expiry' => date('Y-m-d H:i:s', strtotime("+" . ($data['days'] ?? 1) . " DAY"))
+            )
+        )) {
             $this->error = $db->getError();
             return false;
         }
@@ -974,7 +975,7 @@ class UserAuthentication extends FatModel
 
         $_SESSION['referer_page_url'] = UrlHelper::getCurrUrl();
         if ($redirect == true) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         return false;
@@ -1010,7 +1011,7 @@ class UserAuthentication extends FatModel
         $affiliateSessionElementName = UserAuthentication::AFFILIATE_SESSION_ELEMENT_NAME;
         return isset($_SESSION[$affiliateSessionElementName][$key]) ? $_SESSION[$affiliateSessionElementName][$key] : false;
     }
-    
+
     /**
      * validateUserPhone
      *
@@ -1022,7 +1023,7 @@ class UserAuthentication extends FatModel
     {
         return ($phoneNumber == User::getAttributesById($userId, 'user_phone'));
     }
-    
+
     /**
      * validateMarketplaceAuthToken
      *

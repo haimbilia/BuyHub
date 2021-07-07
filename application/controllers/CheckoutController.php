@@ -51,11 +51,11 @@ class CheckoutController extends MyAppController
                 if (FatUtility::isAjaxCall()) {
                     $json['status'] = applicationConstants::NO;
                     $json['msg'] = $message;
-                    $json['url'] = UrlHelper::generateUrl('GuestUser', 'configureEmail');
+                    $json['url'] = UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND);
                     LibHelper::dieJsonError($json);
                 }
                 Message::addErrorMessage($message);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND));
             }
         }
 
@@ -314,7 +314,7 @@ class CheckoutController extends MyAppController
         $criteria = array('isUserLogged' => true);
         $cartObj = new Cart();
         if (!$this->isEligibleForNextStep($criteria)) {
-            $this->set('redirectUrl', UrlHelper::generateUrl('GuestUser', 'LoginForm'));
+            $this->set('redirectUrl', UrlHelper::generateUrl('GuestUser', 'LoginForm', [], CONF_WEBROOT_FRONTEND));
             Message::addErrorMessage(Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -379,7 +379,7 @@ class CheckoutController extends MyAppController
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
-            $this->set('redirectUrl', UrlHelper::generateUrl('GuestUser', 'LoginForm'));
+            $this->set('redirectUrl', UrlHelper::generateUrl('GuestUser', 'LoginForm', [], CONF_WEBROOT_FRONTEND));
             Message::addErrorMessage($this->errMessage);
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -2282,7 +2282,7 @@ class CheckoutController extends MyAppController
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
-            $this->set('redirectUrl', UrlHelper::generateUrl('GuestUser', 'LoginForm'));
+            $this->set('redirectUrl', UrlHelper::generateUrl('GuestUser', 'LoginForm', [], CONF_WEBROOT_FRONTEND));
             Message::addErrorMessage($this->errMessage);
             FatUtility::dieWithError(Message::getHtml());
         }

@@ -6,7 +6,7 @@ class GuestUserController extends MyAppController
 
 
     public function loginForm($isRegisterForm = 0)
-    {   
+    {
         /* if(UserAuthentication::doCookieLogin()){
         FatApp::redirectUser(UrlHelper::generateUrl('account'));
         } */
@@ -45,15 +45,15 @@ class GuestUserController extends MyAppController
         } else {
             $termsAndConditionsLinkHref = 'javascript:void(0)';
         }
-        
+
         $privacyPolicyLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
-        } 
-        
+        }
+
         $registerdata = array(
             'registerFrm' => $registerFrm,
             'termsAndConditionsLinkHref' => $termsAndConditionsLinkHref,
@@ -127,18 +127,18 @@ class GuestUserController extends MyAppController
         $this->app_user['temp_user_id'] = 0;
 
         $userId = UserAuthentication::getLoggedUserId();
-        
+
         $user = new User($userId);
         $userSelectedCookies = $user->getUserSelectedCookies();
-        if(CommonHelper::checkCookiesEnabledSession() && empty($userSelectedCookies)){
+        if (CommonHelper::checkCookiesEnabledSession() && empty($userSelectedCookies)) {
             //$user = new User($userId);            
             $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
             $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
-            if(!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)){
+            if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
                 FatUtility::dieJsonError($user->getError());
             }
         }
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $uObj = new User($userId);
             if (!$token = $uObj->setMobileAppToken()) {
@@ -397,29 +397,29 @@ class GuestUserController extends MyAppController
         $showNewsLetterCheckBox = 0 < $signUpWithPhone ? false : true;
 
         $frm = $this->getRegistrationForm($showNewsLetterCheckBox, $signUpWithPhone);
-        
+
         $userName = FatApp::getPostedData('user_username', FatUtility::VAR_STRING, '');
         if (empty($userName) || false === ValidateElement::fatbitUsername($userName)) {
             $message = Labels::getLabel("MSG_INVALID_FATBIT_USERNAME", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
         }
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if ($post == false) {
             $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
         }
-        
+
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
         if ((0 < $signUpWithPhone && empty($phoneNumber)) && empty($dialCode)) {
             $message = Labels::getLabel("MSG_INVALID_PHONE_NUMBER", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
         }
-        
+
         $post['user_phone_dcode'] = $dialCode;
         $post['user_is_buyer'] = User::USER_TYPE_BUYER;
         $post['user_preferred_dashboard'] = User::USER_BUYER_DASHBOARD;
@@ -446,7 +446,7 @@ class GuestUserController extends MyAppController
             }
 
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
         }
 
         if (1 > $signUpWithPhone && !FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
@@ -458,7 +458,7 @@ class GuestUserController extends MyAppController
                 if (!$authentication->login(FatApp::getPostedData('user_username'), FatApp::getPostedData('user_password'), $_SERVER['REMOTE_ADDR'])) {
                     $message = Labels::getLabel($authentication->getError(), $this->siteLangId);
                     LibHelper::exitWithError($message, false, true);
-                    FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+                    FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'), [], CONF_WEBROOT_FRONTEND);
                 }
 
                 if (false === MOBILE_APP_API_CALL) {
@@ -493,7 +493,7 @@ class GuestUserController extends MyAppController
             $actionUrl = 'otpForm';
         }
 
-        $redirectUrl = UrlHelper::generateUrl('GuestUser', $actionUrl);
+        $redirectUrl = UrlHelper::generateUrl('GuestUser', $actionUrl, [], CONF_WEBROOT_FRONTEND);
         if (FatUtility::isAjaxCall()) {
             $this->set('msg', Labels::getLabel('LBL_Registeration_Successfull', $this->siteLangId));
             $this->set('redirectUrl', $redirectUrl);
@@ -525,7 +525,7 @@ class GuestUserController extends MyAppController
         $code = FatUtility::convertToType($code, FatUtility::VAR_STRING);
         if (strlen($code) < 1) {
             Message::addMessage(Labels::getLabel("MSG_PLEASE_CHECK_YOUR_EMAIL_IN_ORDER_TO_VERIFY", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $arrCode = explode('_', $code, 2);
@@ -533,14 +533,14 @@ class GuestUserController extends MyAppController
         $userId = FatUtility::int($arrCode[0]);
         if ($userId < 1) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_CODE', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $userObj = new User($userId);
         $userData = User::getAttributesById($userId, array('user_id', 'user_is_affiliate'));
         if (!$userData) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_CODE', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $db = FatApp::getDb();
@@ -549,7 +549,7 @@ class GuestUserController extends MyAppController
         if (!$userObj->verifyUserEmailVerificationCode($code)) {
             $db->rollbackTransaction();
             Message::addErrorMessage(Labels::getLabel("ERR_MSG_INVALID_VERIFICATION_REQUEST", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         if ($userData['user_is_affiliate'] != applicationConstants::YES) {
@@ -562,7 +562,7 @@ class GuestUserController extends MyAppController
                 if (!$userObj->activateAccount($active)) {
                     $db->rollbackTransaction();
                     Message::addErrorMessage(Labels::getLabel('MSG_INVALID_CODE', $this->siteLangId));
-                    FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+                    FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
                 }
             }
         }
@@ -570,7 +570,7 @@ class GuestUserController extends MyAppController
         if (!$userObj->verifyAccount()) {
             $db->rollbackTransaction();
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_CODE', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $userdata = $userObj->getUserInfo(array('credential_email', 'credential_password', 'user_name', 'credential_active'), false);
@@ -584,7 +584,7 @@ class GuestUserController extends MyAppController
             if (!$userObj->userWelcomeEmailRegistration($data, $link, $this->siteLangId)) {
                 Message::addErrorMessage(Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                 $db->rollbackTransaction();
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
         }
 
@@ -595,14 +595,14 @@ class GuestUserController extends MyAppController
 
             if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
             FatApp::redirectUser(UrlHelper::generateUrl('Account'));
         }
 
         Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
 
-        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
 
     public function changeEmailVerification($code)
@@ -610,7 +610,7 @@ class GuestUserController extends MyAppController
         $code = FatUtility::convertToType($code, FatUtility::VAR_STRING);
         if (strlen($code) < 1) {
             Message::addMessage(Labels::getLabel("MSG_PLEASE_CHECK_YOUR_EMAIL_IN_ORDER_TO_VERIFY", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $arrCode = explode('_', $code, 2);
@@ -618,7 +618,7 @@ class GuestUserController extends MyAppController
         $userId = FatUtility::int($arrCode[0]);
         if ($userId < 1) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_CODE', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $userObj = new User($userId);
@@ -627,7 +627,7 @@ class GuestUserController extends MyAppController
 
         if (!$newUserEmail) {
             Message::addErrorMessage(Labels::getLabel("ERR_MSG_INVALID_VERIFICATION_REQUEST", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $usr = new User();
@@ -641,7 +641,7 @@ class GuestUserController extends MyAppController
 
         if ($record) {
             Message::addErrorMessage(Labels::getLabel("ERR_DUPLICATE_EMAIL", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
 
@@ -654,7 +654,7 @@ class GuestUserController extends MyAppController
 
         if (!$userObj->changeEmail($newUserEmail)) {
             Message::addErrorMessage(Labels::getLabel("MSG_UPDATED_EMAIL_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $email = new EmailHandler();
@@ -663,7 +663,7 @@ class GuestUserController extends MyAppController
         $dialCode = ValidateElement::formatDialCode($data['user_phone_dcode']);
         if (!empty($currentEmail) && !$email->sendEmailChangedNotification($this->siteLangId, array('user_name' => $data['user_name'], 'user_email' => $data['credential_email'], 'user_new_email' => $newUserEmail, 'user_phone_dcode' => $dialCode, 'user_phone' => $phone))) {
             Message::addErrorMessage(Labels::getLabel("MSG_UNABLE_TO_SEND_EMAIL_CHANGE_NOTIFICATION", $this->siteLangId) . $userObj->getError());
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1) || UserAuthentication::isUserLogged()) {
@@ -671,13 +671,13 @@ class GuestUserController extends MyAppController
             $authentication = new UserAuthentication();
             if (!$authentication->login($userdata['credential_username'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
             FatApp::redirectUser(UrlHelper::generateUrl('Account'));
         }
 
         Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
-        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
 
     public function registrationSuccess()
@@ -721,7 +721,7 @@ class GuestUserController extends MyAppController
                 FatUtility::dieJsonError(current($frm->getValidationErrors()));
             }
             Message::addErrorMessage($frm->getValidationErrors());
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         if (false === MOBILE_APP_API_CALL && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
@@ -731,10 +731,10 @@ class GuestUserController extends MyAppController
                     FatUtility::dieJsonError($message);
                 }
                 Message::addErrorMessage($message);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
             }
         }
-        
+
         $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $user = (0 < $withPhone) ? trim($post['user_phone_dcode']) . trim($post['user_phone']) : $post['user_email_username'];
 
@@ -747,7 +747,7 @@ class GuestUserController extends MyAppController
                     FatUtility::dieJsonError($message);
                 }
                 Message::addErrorMessage($message);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
             }
         } else {
             $row = $userAuthObj->getUserByEmailOrUserName($user, '', false);
@@ -759,7 +759,7 @@ class GuestUserController extends MyAppController
                 FatUtility::dieJsonError($message);
             }
             Message::addErrorMessage($message);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         if ($row['user_is_shipping_company'] == applicationConstants::YES) {
@@ -768,7 +768,7 @@ class GuestUserController extends MyAppController
                 FatUtility::dieJsonError($message);
             }
             Message::addErrorMessage($message);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         if (1 > $withPhone && $userAuthObj->checkUserPwdResetRequest($row['user_id'])) {
@@ -777,7 +777,7 @@ class GuestUserController extends MyAppController
                 FatUtility::dieJsonError($message);
             }
             Message::addErrorMessage($message);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $token = FatUtility::getRandomString(30);
@@ -796,7 +796,7 @@ class GuestUserController extends MyAppController
                 FatUtility::dieJsonError($message);
             }
             Message::addErrorMessage($message);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
         $row['link'] = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($row['user_id'], $token));
         $row['user_email'] = $row['credential_email'];
@@ -830,7 +830,7 @@ class GuestUserController extends MyAppController
                     FatUtility::dieJsonError($message);
                 }
                 Message::addErrorMessage($message);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
             }
         }
         /*]*/
@@ -846,7 +846,7 @@ class GuestUserController extends MyAppController
                     FatUtility::dieJsonError($message);
                 }
                 Message::addErrorMessage($message);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
             }
         } else {
             if (false === $notVerified && !$userObj->resendOtp()) {
@@ -855,7 +855,7 @@ class GuestUserController extends MyAppController
                     FatUtility::dieJsonError($message);
                 }
                 Message::addErrorMessage($message);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
             }
         }
 
@@ -885,7 +885,7 @@ class GuestUserController extends MyAppController
         }
 
         Message::addMessage($message);
-        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
 
     public function resendVerification($usernameOrEmail = '')
@@ -930,21 +930,21 @@ class GuestUserController extends MyAppController
         $userId = FatUtility::int($userId);
 
         if ($userId < 1 || strlen(trim($token)) < 20) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $userAuthObj = new UserAuthentication();
 
         if (!$userAuthObj->checkResetLink($userId, trim($token))) {
             Message::addErrorMessage($userAuthObj->getError());
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
         $userObj = new User($userId);
-        $user = $userObj->getUserInfo(array('credential_password','credential_username'), false, false);
+        $user = $userObj->getUserInfo(array('credential_password', 'credential_username'), false, false);
         if (!$user) {
             Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
-        }        
+        }
         $this->set('user_password', $user['credential_password']);
         $this->set('credential_username', $user['credential_username']);
         $frm = $this->getResetPwdForm($userId, trim($token));
@@ -994,9 +994,9 @@ class GuestUserController extends MyAppController
         if (!$userAuthObj->resetUserPassword($userId, $newPwd)) {
             FatUtility::dieJsonError($userAuthObj->getError());
         }
-        
+
         $userObj = new User($userId);
-        if(!$userObj->verifyAccount()){
+        if (!$userObj->verifyAccount()) {
             FatUtility::dieJsonError($userObj->getError());
         }
 
@@ -1050,7 +1050,7 @@ class GuestUserController extends MyAppController
         $user = new User();
         $row = $user->checkUserByPhoneOrUserName($userPhone, $userPhone);
         if (empty($row)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId)); 
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId));
         }
         $this->resendOtp($row['user_id'], 1);
     }
@@ -1059,7 +1059,7 @@ class GuestUserController extends MyAppController
     {
         $userId = FatUtility::int($userId);
         if (1 > $userId && !isset($_SESSION[UserAuthentication::TEMP_SESSION_ELEMENT_NAME]['otpUserId'])) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $userId = 0 < $userId ? $userId : $_SESSION[UserAuthentication::TEMP_SESSION_ELEMENT_NAME]['otpUserId'];
@@ -1075,7 +1075,7 @@ class GuestUserController extends MyAppController
     {
         if (!UserAuthentication::isUserLogged()) {
             Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_LOGIN_TO_CONFIGURE_EMAIL/_PHONE', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
         $userId = UserAuthentication::getLoggedUserId();
         $userObj = new User($userId);
@@ -1176,7 +1176,7 @@ class GuestUserController extends MyAppController
     }
 
     public function logout()
-    {   
+    {
         UserAuthentication::logout();
         if (true === MOBILE_APP_API_CALL) {
             $fcmToken = FatApp::getPostedData('fcmToken', FatUtility::VAR_STRING, '');
@@ -1194,7 +1194,7 @@ class GuestUserController extends MyAppController
             $this->_template->render();
         }
 
-        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
 
     private function getForgotForm($withPhone = 0)
@@ -1207,7 +1207,7 @@ class GuestUserController extends MyAppController
             $frm->addHiddenField('', 'user_phone_dcode');
             $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'class' => 'phone-js'));
             $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-            $phnFld->htmlAfterField='<span class="note">'.Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': '.implode(', ', ValidateElement::PHONE_FORMATS).'</span>';
+            $phnFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</span>';
         }
 
         CommonHelper::addCaptchaField($frm);
@@ -1241,7 +1241,7 @@ class GuestUserController extends MyAppController
         $userId = FatUtility::int($userId);
         $selProdId = FatUtility::int($selProdId);
         if (!UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
         if ($reminderEmail == true) {
             FatApp::redirectUser(UrlHelper::generateUrl('Cart'));
@@ -1282,7 +1282,7 @@ class GuestUserController extends MyAppController
             'data' => $data
         ];
     }
-    
+
     /**
      * validateAuthLoginRequest
      *
@@ -1334,7 +1334,7 @@ class GuestUserController extends MyAppController
         if (!$newAuthToken = $uObj->setMobileAppToken(UserAuthentication::TOKEN_AGE_IN_DAYS)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        
+
         if (false === $uObj->updateUserMeta('seller_auth_token', $newAuthToken)) {
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $uObj->getError());
             FatUtility::dieJsonError($resp);
