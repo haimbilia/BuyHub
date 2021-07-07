@@ -395,6 +395,12 @@ class StripeConnect extends PaymentMethodBase
      */
     public function createAccount(): bool
     {
+        if ($this->systemCurrencyCode != Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')) {
+            $msg = Labels::getLabel('MSG_STRIPE_CONNECT_INVALID_ACCOUNT_CURRENCY.', $this->langId);
+            $this->error = CommonHelper::replaceStringData($msg, ['SYSTEM-CURRECNY}' => $this->systemCurrencyCode]);
+            return false;
+        }
+
         $data = [
             'type' => 'custom',
             'country' => strtoupper($this->userData['country_code']),
@@ -406,7 +412,7 @@ class StripeConnect extends PaymentMethodBase
             'settings' => $this->getPayoutSettingsArr()
         ];
 
-        $data['default_currency'] = Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code');
+        $data['default_currency'] = $this->systemCurrencyCode;
 
         $this->resp = $this->create($data);
         if (false === $this->resp) {
@@ -1333,6 +1339,25 @@ class StripeConnect extends PaymentMethodBase
         unset($days[0]);
         FatCache::set('stripePayoutDays' . $this->langId, FatUtility::convertToJson($days), '.txt');
         return $days;
+    }
+    
+    /**
+     * getOtherPaymentMethods
+     *
+     * @return array
+     */
+    public function getOtherPaymentMethods(): array
+    {
+        $this->loadBaseCurrencyCode();
+        $paymentMethodsArr = ['card'];
+        if (in_array(strtoupper($this->systemCurrencyCode), ['EUR'])) {
+            $paymentMethodsArr = array_merge($paymentMethodsArr, ['sofort', 'ideal', 'giropay', 'bancontact', 'eps']);
+        }
+
+        if (in_array(strtoupper($this->systemCurrencyCode), ['pln'])) {
+            $paymentMethodsArr = array_merge($paymentMethodsArr, ['p24']);
+        }
+        return $paymentMethodsArr;
     }
 
     /**

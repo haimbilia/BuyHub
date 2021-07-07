@@ -158,7 +158,7 @@ class StripeConnectPayController extends PaymentController
             $orderFormattedData = $this->stripeConnect->formatCustomerDataFromOrder($this->orderInfo);
             $data = [
                 'mode' => 'payment',
-                'payment_method_types' => ['card'],
+                'payment_method_types' => $this->stripeConnect->getOtherPaymentMethods(),
                 'success_url' => $successUrl,
                 'cancel_url' => $cancelBtnUrl,
                 'client_reference_id' => $orderId,
@@ -167,7 +167,6 @@ class StripeConnectPayController extends PaymentController
                 'payment_intent_data' => [
                     'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
                     'shipping' => $orderFormattedData['shipping'],
-                    'setup_future_usage' => 'on_session',
                     'metadata' => [
                         'orderId' => $orderId
                     ]

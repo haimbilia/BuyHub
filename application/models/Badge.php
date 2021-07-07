@@ -233,32 +233,21 @@ class Badge extends MyAppModel
         $returnAcceptanceRate = OrderProduct::getReturnAcceptanceRate($sellerId);
         $orderCancellationRate = OrderProduct::getCancellationRate($sellerId);
 
-        $attr = [
-            'blinkcond_id',
-            'blinkcond_badge_id',
-            'blinkcond_record_type',
-            'badge_display_inside',
-            'blinkcond_position',
-            'badge_type',
-            'COALESCE(badge_name, badge_identifier) as badge_name',
-            'breq_id'
-        ];
-
-        $srch = new BadgeLinkConditionSearch();
-        $srch->doNotCalculateRecords();
+        $srchRecord = new BadgeLinkConditionSearch();
+        $srchRecord->doNotCalculateRecords();
 
         if ($type == Badge::TYPE_BADGE) {
-            $srch->doNotLimitRecords();
+            $srchRecord->doNotLimitRecords();
         }
 
         if ($type == Badge::TYPE_RIBBON) {
-            $srch->setPageSize(count(self::getRibbonPostionArr($langId)));
+            $srchRecord->setPageSize(count(self::getRibbonPostionArr($langId)));
         }
 
-        $srch->joinBadgeLinks();
-        $srch->joinBadgeRequest();
-        $srch->joinBadge($langId);
-        $srch->addMultipleFields($attr);
+        $srchRecord->joinBadgeLinks();
+        $srchRecord->joinBadgeRequest();
+        $srchRecord->joinBadge();
+        $srchRecord->addMultipleFields(['MAX(blinkcond_id) as m_blinkcond_id']);
 
         $recordCondition = '(CASE 
                                 WHEN blinkcond_condition_type = 0
@@ -272,8 +261,8 @@ class Badge extends MyAppModel
                                 ELSE FALSE END)';
 
         if ($type == Badge::TYPE_BADGE) {
-            $srch->addFld('blinkcond_condition_type');
-            $srch->addDirectCondition(
+            $srchRecord->addFld('blinkcond_condition_type');
+            $srchRecord->addDirectCondition(
                 '(CASE 
                     WHEN blinkcond_condition_type > 0
                     THEN 
@@ -297,14 +286,10 @@ class Badge extends MyAppModel
         }
 
         if ($type == Badge::TYPE_RIBBON) {
-            $srch->addFld([
-                'badge_shape_type',
-                'badge_color',
-            ]);
-            $srch->addDirectCondition($recordCondition);
+            $srchRecord->addDirectCondition($recordCondition);
         }
 
-        $srch->addDirectCondition(
+        $srchRecord->addDirectCondition(
             '(CASE 
                 WHEN blinkcond_from_date != 0 AND blinkcond_to_date != 0
                 THEN "' . date('Y-m-d H:i:s') . '" BETWEEN blinkcond_from_date AND blinkcond_to_date 
@@ -316,7 +301,7 @@ class Badge extends MyAppModel
             END)'
         );
 
-        $srch->addDirectCondition(
+        $srchRecord->addDirectCondition(
             '(CASE 
                 WHEN breq_id IS NOT NULL
                 THEN breq_status = ' . BadgeRequest::REQUEST_APPROVED . ' 
@@ -324,15 +309,38 @@ class Badge extends MyAppModel
             END)'
         );
 
-        $srch->addCondition('badge_type', '=', $type);
-        $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
+        $srchRecord->addCondition('badge_type', '=', $type);
+        $srchRecord->addCondition('badge_active', '=', applicationConstants::ACTIVE);
         if ($type == Badge::TYPE_RIBBON) {
-            $srch->addGroupBy('blinkcond_position');
+            $srchRecord->addGroupBy('blinkcond_position');
         } else {
-            $srch->addGroupBy('blinkcond_id');
+            $srchRecord->addGroupBy('blinkcond_id');
         }
         
-        $srch->addOrder('badgelink_id', 'DESC');
+        $srchRecord->addOrder('blinkcond_id', 'DESC');
+
+
+        $attr = [
+            'blinkcond_id',
+            'blinkcond_badge_id',
+            'blinkcond_record_type',
+            'badge_display_inside',
+            'blinkcond_position',
+            'badge_type',
+            'COALESCE(badge_name, badge_identifier) as badge_name',
+            'breq_id',
+            'badge_shape_type',
+            'badge_color',
+            'blnk.blinkcond_condition_type'
+        ];
+
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinTable('(' . $srchRecord->getQuery() . ') as m_blnk', 'INNER JOIN', 'blnk.blinkcond_id = m_blnk.m_blinkcond_id');
+        $srch->joinBadgeLinks();
+        $srch->joinBadgeRequest();
+        $srch->joinBadge($langId);
+        $srch->addMultipleFields($attr);
+        $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
