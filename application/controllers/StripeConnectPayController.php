@@ -241,7 +241,47 @@ class StripeConnectPayController extends PaymentController
                     ],
                     'payment_intent_data' => [
                         'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
-                        'shipping' => $orderFormattedData['shipping'],
+                        'metadata' => [
+                            'orderId' => $orderId
+                        ]
+                    ]
+                ]
+            );
+        } else if ($this->orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
+            $priceData = [
+                'unit_amount' => $this->convertInPaisa($this->paymentAmount),
+                'currency' => $this->orderInfo['order_currency_code'],
+                'product_data' => [
+                    'name' => Labels::getLabel('LBL_WALLET_RECHARGE', $this->siteLangId),
+                    'metadata' => [
+                        'id' => $this->orderInfo['id'],
+                        'invoice' => $this->orderInfo['invoice'],
+                        'customer_id' => $this->orderInfo['customer_id'],
+                        'customer_name' => $this->orderInfo['customer_name'],
+                        'customer_email' => $this->orderInfo['customer_email'],
+                        'customer_phone_dcode' => $this->orderInfo['customer_phone_dcode'],
+                        'customer_phone' => $this->orderInfo['customer_phone'],
+                    ]
+                ],
+                'nickname' => Labels::getLabel('LBL_WALLET_RECHARGE', $this->siteLangId),
+            ];
+
+            if (false === $this->stripeConnect->createPriceObject($priceData)) {
+                $this->setErrorAndRedirect($this->stripeConnect->getError());
+            }
+
+            $data = array_merge(
+                $data,
+                [
+                    'line_items' => [
+                        [
+                            'price' => $this->stripeConnect->getPriceId(),
+                            'quantity' => 1,
+                            'description' => Labels::getLabel('LBL_WALLET_RECHARGE', $this->siteLangId),
+                        ],
+                    ],
+                    'payment_intent_data' => [
+                        'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
                         'metadata' => [
                             'orderId' => $orderId
                         ]
