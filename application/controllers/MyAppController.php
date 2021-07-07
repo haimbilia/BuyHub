@@ -339,18 +339,6 @@ class MyAppController extends FatController
         return $nodes;
     }
 
-    public function checkIsShippingMode()
-    {
-        $json = array();
-        $post = FatApp::getPostedData();
-        if (isset($post["val"])) {
-            if ($post["val"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-                $json["shipping"] = 1;
-            }
-        }
-        echo json_encode($json);
-    }
-
     public function setUpNewsLetter()
     {
         include_once CONF_INSTALLATION_PATH . 'library/Mailchimp.php';

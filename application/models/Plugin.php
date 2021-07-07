@@ -2,6 +2,10 @@
 
 class Plugin extends PluginCommon
 {   
+    public const FLD_TYPE_TEXTBOX = 'addTextBox';
+    public const FLD_TYPE_PASSWORD = 'addPasswordField';
+    public const FLD_TYPE_DATE = 'addDateField';
+
     public function __construct(int $id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);

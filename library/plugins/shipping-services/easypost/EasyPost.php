@@ -27,6 +27,7 @@ class EasyPost extends ShippingServicesBase
     private $shipmentOrderId;
     private $orderQty = 1;
     private $refundStatus = [];
+    private $env = Plugin::ENV_SANDBOX;
 
     public $requiredKeys = [
         'api_key'

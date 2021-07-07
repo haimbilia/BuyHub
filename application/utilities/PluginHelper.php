@@ -32,6 +32,14 @@ trait PluginHelper
         $this->langId = 0 < $this->langId ? $this->langId : CommonHelper::getLangId();
         $this->pluginSetting = new PluginSetting(0, $this->keyName, $this->recordId);
     }
+    
+    private function setFormObj()
+    {
+        $this->frmObj = $this->getForm();
+        if (false === $this->frmObj) {
+            LibHelper::dieJsonError(Labels::getLabel('LBL_REQUIREMENT_SETTINGS_ARE_NOT_DEFINED', $this->siteLangId));
+        }
+    }
 
     /**
      * getSettings
@@ -61,7 +69,7 @@ trait PluginHelper
     public function getKey(string $column): string
     {
         if (!empty($this->settings)) {
-            return isset($this->settings[$column]) ? $this->settings[$column] : '';
+            return (string) (isset($this->settings[$column]) ? $this->settings[$column] : '');
         }
 
         $this->loadPluginSettingsObj();
@@ -69,7 +77,7 @@ trait PluginHelper
             $this->error = $this->pluginSetting->getError();
             return '';
         }
-        return $value;
+        return (string) $value;
     }
 
     /**
@@ -248,6 +256,113 @@ trait PluginHelper
             return false;
         }
         return true;
+    }
+    
+    public function getForm()
+    {
+        $class = get_called_class();
+        try {
+            $requirements = $class::getConfigurationKeys();
+        } catch (\Error $e) {
+            if (false == method_exists($class, 'form')) {
+                FatUtility::dieJsonError($e->getMessage());
+            }
+            $frm = $class::form($this->langId);
+        }
+        
+        if ((empty($requirements) || !is_array($requirements)) && !isset($frm)) {
+            return false;
+        }
+        if (isset($frm)) {
+            $frm = PluginSetting::addKeyFields($frm);
+        } else {
+            $frm = PluginSetting::getForm($requirements, $this->langId);
+        }
+        $frm->fill(['keyName' => $this->keyName]);
+        return $frm;
+    }
+
+    /**
+     * form - Used in case no form method defined in called class
+     *
+     * @param  int $langId
+     * @return object
+     */
+    
+    public static function form(int $langId)
+    {
+        $keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');
+        if (empty($keyName)) {
+            LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $langId));
+        }
+        $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
+        if (false == method_exists($plugin, 'getColsLabelArr')) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
+        }
+        $labelsArr = $plugin->getColsLabelArr();
+
+        $nonEnvFields = [];
+        if (array_key_exists('envFields', $labelsArr)) {
+            $nonEnvFields = array_key_exists('nonEnvFields', $labelsArr) ? $labelsArr['nonEnvFields'] : [];
+            $labelsArr = $labelsArr['envFields'];
+        }
+
+        $frm = new Form('frm' . $keyName);
+
+        $envoirment = Plugin::getEnvArr($langId);
+        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld->requirement->setRequired(true);
+        foreach ($labelsArr as $colName => $colLabel) {
+            $htmlAfterField = $fieldFn = "";
+            if (is_array($colLabel)) {
+                $htmlAfterField = $colLabel['htmlAfterField'];
+                $colLabel = $colLabel['label'];
+                $fieldFn = isset($colLabel['fieldType']) ? $colLabel['label'] : '' ;
+            }
+
+            /* Sanbox Key Field */
+            $fieldFn = !empty($fieldFn) ? $fieldFn : (('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox');
+            $fld = $frm->$fieldFn($colLabel, $colName);
+            $fld->htmlAfterField = $htmlAfterField;
+
+            $fld = new FormFieldRequirement($colName, $colLabel);
+            $fld->setRequired(false);
+            $reqFld = new FormFieldRequirement($colName, $colLabel);
+            $reqFld->setRequired(true);
+
+            $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_SANDBOX, 'eq', $colName, $reqFld);
+            $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', $colName, $fld);
+            /* Sanbox Key Field */
+
+            /* Live Key Fields */
+            $colName = 'live_' . $colName;
+            $fld = $frm->$fieldFn($colLabel, $colName);
+            $fld->htmlAfterField = $htmlAfterField;
+
+            $fld = new FormFieldRequirement($colName, $colLabel);
+            $fld->setRequired(false);
+            $reqFld = new FormFieldRequirement($colName, $colLabel);
+            $reqFld->setRequired(true);
+
+            $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_SANDBOX, 'eq', $colName, $fld);
+            $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', $colName, $reqFld);
+            /* Live Key Fields */            
+        }
+
+        if (is_array($nonEnvFields) && !empty(array_filter($nonEnvFields))){
+            foreach ($nonEnvFields as $colName => $colLabel) {
+                $htmlAfterField = "";
+                if (is_array($colLabel)) {
+                    $htmlAfterField = $colLabel['htmlAfterField'];
+                    $colLabel = $colLabel['label'];
+                }
+                $fld = $frm->addRequiredField($colLabel, $colName);
+                $fld->htmlAfterField = $htmlAfterField;
+            }
+        }
+
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        return $frm;
     }
 
     /**

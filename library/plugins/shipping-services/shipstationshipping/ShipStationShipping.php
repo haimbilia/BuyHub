@@ -17,6 +17,7 @@ class ShipStationShipping extends ShippingServicesBase
     private const REQUEST_FULFILLMENTS = 5;
     private const REQUEST_GET_ORDER = 6;
     private const REQUEST_MARK_AS_SHIPPED = 7;
+    private const REQUEST_WAREHOUSES_LIST = 8;
 
     private $resp;
     private $endpoint = '';
@@ -48,20 +49,37 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->validateSettings($this->langId);
     }
-
-    /**
-     * getCarriers
-     *
-     * @return array
-     */
+    
     public function getCarriers(): array
     {
-        if (Plugin::INACTIVE == $this->settings['plugin_active'] || false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
+        if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
             return [];
         }
         return $this->getResponse();
     }
-
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getWareHouses(): array
+    {
+        if (false === $this->doRequest(self::REQUEST_WAREHOUSES_LIST)) {
+            return [];
+        }
+        $wareHouses = $this->getResponse();
+        $output = [];
+        if (!empty($response)) {
+            foreach ($wareHouses as $wareHouse) {
+                $output[] = [
+                    'warehouseId' => $wareHouse['warehouseId'],
+                    'warehouseName' => $wareHouse['warehouseName']
+                ];
+            }
+        }
+        return $output;
+    }
+    
     /**
      * getRates
      *
@@ -72,7 +90,7 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function getRates(string $carrierCode, string $shipFromPostalCode): array
     {
-        if (Plugin::INACTIVE == $this->settings['plugin_active'] || empty($this->address)) {
+        if (empty($this->address)) {
             return [];
         }
 
@@ -88,7 +106,7 @@ class ShipStationShipping extends ShippingServicesBase
             'weight' => $this->getWeight(),
             'dimensions' => $this->getDimensions()
         ];
-
+        
         if (false === $this->doRequest(self::REQUEST_SHIPPING_RATES, $pkgDetail)) {
             return [];
         }
@@ -177,7 +195,7 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['items'] = [$this->getItem()];
         return $this->doRequest(self::REQUEST_CREATE_ORDER, $this->order); //Return bool
     }
-
+    
     /**
      * bindLabel - This function should be called after addOrder
      *
@@ -405,6 +423,9 @@ class ShipStationShipping extends ShippingServicesBase
                     break;
                 case self::REQUEST_MARK_AS_SHIPPED:
                     $this->markAsShipped($requestParam);
+                    break;
+                case self::REQUEST_WAREHOUSES_LIST:
+                    $this->wareHousesList();
                     break;
             }
 
