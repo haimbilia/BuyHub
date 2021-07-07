@@ -9,7 +9,6 @@ class HomeController extends MyAppController
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
         $sponsoredShopsInCollection = $sponsoredProdsInCollection = [];
         $collections = $this->getCollections($productSrchObj, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
-
         $sponShopLayoutCount = count($sponsoredShopsInCollection);
         $sponProdLayoutCount = count($sponsoredProdsInCollection);
         if (0 < $sponProdLayoutCount) {
@@ -875,6 +874,7 @@ class HomeController extends MyAppController
                     unset($tempObj);
                     break;
                 case Collections::COLLECTION_TYPE_FAQ:
+
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
                     $tempObj->doNotCalculateRecords();
@@ -912,6 +912,46 @@ class HomeController extends MyAppController
                         $collections[$collection['collection_id']] = $collection;
                         $collections[$collection['collection_id']]['totFaqs'] = $faqSearchTempObj->recordCount();
                         $collections[$collection['collection_id']]['faqs'] = $faqsDetail;
+                    }
+
+                    unset($faqSearchTempObj);
+                    unset($tempObj);
+                    break;
+                case Collections::COLLECTION_TYPE_FAQ_CATEGORY:
+
+                    $tempObj = clone $collectionObj;
+                    $tempObj->addCondition('collection_id', '=', $collection_id);
+                    $tempObj->doNotCalculateRecords();
+                    $tempObj->doNotLimitRecords();
+
+                    /* fetch FAQ data[ */
+                    $attr = [
+                        'faqcat_id', 'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
+                    ];
+                    $faqCategorySearchObj = FaqCategory::getSearchObject($langId);
+                    $faqCategorySearchObj->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
+                    $faqCategorySearchObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'faqcat_id = ctr.ctr_record_id', 'ctr');
+                    $faqCategorySearchObj->addMultipleFields($attr);
+                    $faqCategorySearchObj->addOrder('ctr.ctr_display_order', 'ASC');
+                    $faqCategorySearchObj->addGroupBy('faqcat_id');
+                    $faqCategorySearchObj->addFld('COUNT(*) AS faq_count');
+                    $res = $faqCategorySearchObj->getResultSet();
+                    $faqCats = $db->fetchAll($res);
+                    if (empty($faqCats)) {
+                        continue 2;
+                    }
+                    $faqMainCat = FatApp::getConfig("CONF_FAQ_PAGE_MAIN_CATEGORY", null, '');
+                    if (count($faqCats)) {
+                        $faqMainCat = empty($faqMainCat) ? current($faqCats)['faqcat_id'] : $faqMainCat;
+                    }
+                    if (true === MOBILE_APP_API_CALL) {
+                        $collections[$i] = $collection;
+                        $collections[$i]['faqMainCat'] = $faqMainCat;
+                        $collections[$i]['listCategories'] = $faqCats;
+                    } else {
+                        $collections[$collection['collection_id']] = $collection;
+                        $collections[$collection['collection_id']]['faqMainCat'] = $faqMainCat;
+                        $collections[$collection['collection_id']]['listCategories'] = $faqCats;
                     }
 
                     unset($faqSearchTempObj);
@@ -997,7 +1037,6 @@ class HomeController extends MyAppController
             }
             $i++;
         }
-
         if ($collectionCache) {
             return  unserialize($collectionCache);
         }

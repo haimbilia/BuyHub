@@ -34,6 +34,10 @@ switch ($collection_type) {
         $controllerName = 'Faq';
         $hideSelectField = '';
         break;
+    case Collections::COLLECTION_TYPE_FAQ_CATEGORY:
+        $controllerName = 'FaqCategories';
+        $hideSelectField = '';
+        break;
     case Collections::COLLECTION_TYPE_TESTIMONIAL:
         $controllerName = 'Testimonials';
         $hideSelectField = '';
