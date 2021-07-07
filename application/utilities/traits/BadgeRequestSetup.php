@@ -126,7 +126,7 @@ trait BadgeRequestSetup
             FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId));
         }
 
-        /* Badge Condition Setup if added. */
+        /* Badge Condition Setup if not added. */
         if (1 > $badgeLinkCondId) {
             $recordType = FatApp::getPostedData('breq_record_type', FatUtility::VAR_INT, 0);
             if (1 > $recordType) {
