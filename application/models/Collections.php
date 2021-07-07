@@ -85,7 +85,8 @@ class Collections extends MyAppModel
 
     public const APP_COLLECTIONS_ONLY = [
         self::TYPE_BANNER_LAYOUT3,
-        self::TYPE_PENDING_REVIEWS1
+        self::TYPE_PENDING_REVIEWS1,
+        self::TYPE_FAQ_CATEGORY_LAYOUT1
     ];
 
     /**
