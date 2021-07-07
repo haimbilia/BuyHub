@@ -1,9 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php 
-    $plugin = new Plugin();
-    $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-
     $arr_flds = array(
         'order_id'  =>    Labels::getLabel('LBL_Order_Id_Date', $siteLangId),
         'product'   =>    Labels::getLabel('LBL_Ordered_Product', $siteLangId),
@@ -106,25 +103,6 @@
                             true
                         );
                     }
-                    /*
-                    $shipBySeller = CommonHelper::canAvailShippingChargesBySeller($order['op_selprod_user_id'], $order['opshipping_by_seller_user_id']);
-                    if ($order['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && $shipBySeller && true === $canShipByPlugin && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status']) && !empty($order['opshipping_carrier_code']) && !empty($order['opshipping_service_code'])) {
-                        $li = $ul->appendElement("li");
-                        $notAllowedForPlugin = !in_array($keyName, ['EasyPost', 'Aramex']);
-
-                        if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && $notAllowedForPlugin) {
-                            $li->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'generateLabel(' . $order['op_id'] . ')', 'title' => Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId)), '<i class="fas fa-file-download"></i>', true);
-                        } elseif (!empty($order['opr_response']) && (!empty($order['opship_tracking_url']) || $notAllowedForPlugin) && OrderStatus::ORDER_CANCELLED != $order["op_status_id"]) {
-                            if (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) {
-                                $li->appendElement('a', array('href' => UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$order['op_id']]), 'target' => '_blank', 'title' => Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId)), '<i class="fas fa-file-export"></i>', true);
-                            } else {
-                                $li->appendElement('a', array('href' => UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$order['op_id']]), 'target' => '_blank', 'title' => Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId)), '<i class="fas fa-file-export"></i>', true);
-                            }
-                        }
-                    }
-                     * 
-                     */
-
                     break;
                 default:
                     $td->appendElement('plaintext', array(), '' . $order[$key], true);

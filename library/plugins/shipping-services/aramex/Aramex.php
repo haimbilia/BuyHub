@@ -572,7 +572,8 @@ class Aramex extends ShippingServicesBase
                             'description' => $trkData['UpdateDescription'],
                             'dateTime' => $trkData['UpdateDateTime'],
                             'location' => $trkData['UpdateLocation'],
-                            'comments' => $trkData['Comments']
+                            'comments' => $trkData['Comments'],
+                            'status' => (strtolower($trkData['UpdateDescription']) == strtolower('Delivered') ? self::TRACKING_STATUS_DELIVERED : self::TRACKING_STATUS_PROCESSING),
                         ];
                     }
                 } else {
@@ -580,7 +581,8 @@ class Aramex extends ShippingServicesBase
                         'description' => $trackingResult['UpdateDescription'],
                         'dateTime' => $trackingResult['UpdateDateTime'],
                         'location' => $trackingResult['UpdateLocation'],
-                        'comments' => $trackingResult['Comments']
+                        'comments' => $trackingResult['Comments'],
+                        'status' => (strtolower($trkData['UpdateDescription']) == strtolower('Delivered') ? self::TRACKING_STATUS_DELIVERED : self::TRACKING_STATUS_PROCESSING),
                     ];
                 }
             }

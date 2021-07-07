@@ -80,7 +80,7 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                             if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && !$shippingHanldedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
                                 $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
                                 
-                                if (1 < $order['opshipping_rate_id'] && empty($order['opship_order_number'])) {
+                                if (1 < $order['opshipping_rate_id'] && empty($order['opshipping_plugin_id'])) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -644,8 +644,8 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                                             if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                 if (empty($row['oshistory_courier'])) {
                                                     $trackingNumber = $row['oshistory_tracking_number'];
-                                                    if (true === Shipping::canFetchTrackingDetail()) {
-                                                        $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $row['op_invoice_number'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $adminLangId) . '">' . $trackingNumber . '</a>';
+                                                    if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
+                                                        $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $row['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $adminLangId) . '">' . $trackingNumber . '</a>';
                                                     }
                                                     $str = !empty($trackingNumber) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $adminLangId) . ' ' . $trackingNumber : '';
                                                     if (empty($order['opship_tracking_url']) && !empty($trackingNumber)) {

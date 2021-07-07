@@ -138,11 +138,6 @@ class SellerOrdersController extends AdminBaseController
             $order['charges'] = $charges;
         }
 
-        /* ShipStation */
-        $this->loadShippingService();
-        $this->set('canShipByPlugin', (NULL !== $this->shippingService));
-        /* ShipStation */
-
         $this->set("vendorOrdersList", $vendorOrdersList);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
@@ -188,7 +183,7 @@ class SellerOrdersController extends AdminBaseController
      
         $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opRow['op_selprod_user_id'], $opRow['opshipping_by_seller_user_id']);
         
-        $shippingApiObj;
+        $shippingApiObj = NULL;
         if ($opRow['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
             /* ShipStation */
             $shippingApiObj = (new Shipping($this->adminLangId))->getShippingApiObj(($shippingHanldedBySeller ? $opRow['opshipping_by_seller_user_id'] : 0)) ?? NULL;
@@ -364,12 +359,13 @@ class SellerOrdersController extends AdminBaseController
             $shippedBySeller = applicationConstants::YES;
         }
 
-        if (!empty($orderDetail["opship_orderid"])) {
-            if (null != $this->shippingService && false === $this->shippingService->loadOrder($orderDetail["opship_orderid"])) {
-                Message::addErrorMessage($this->shippingService->getError());
+        if (!empty($orderDetail["opship_orderid"])) {       
+            $shippingApiObj = (new Shipping($this->adminLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;            
+            if (!empty($shippingApiObj) && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
+                Message::addErrorMessage($shippingApiObj->getError());
                 FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
             }
-            $orderDetail['thirdPartyorderInfo'] = (null != $this->shippingService ? $this->shippingService->getResponse() : []);
+            $orderDetail['thirdPartyorderInfo'] = (null != $shippingApiObj ? $shippingApiObj->getResponse() : []);
         }
 
         $address = $orderObj->getOrderAddresses($orderDetail['op_order_id']);

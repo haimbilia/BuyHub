@@ -563,43 +563,6 @@ class CheckoutController extends MyAppController
         $this->_template->render(false, false, $template);
     }
 
-    public function getCarrierServicesList($product_key, $carrier_id = 0)
-    {
-        if (empty($product_key)) {
-            $this->errMessage = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($this->errMessage);
-            }
-            Message::addErrorMessage($this->errMessage);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            $this->errMessage = Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId);
-            FatUtility::dieJsonError($this->errMessage);
-        }
-        $this->Cart = new Cart(UserAuthentication::getLoggedUserId());
-        $carrierList = $this->Cart->getCarrierShipmentServicesList($product_key, $carrier_id, $this->siteLangId);
-        if (false == $carrierList) {
-            FatUtility::dieJsonError($this->Cart->getError());
-        }
-
-        $json = array('status' => 1, 'isCarriersFound' => 0);
-        $isCarriersFound = 0;
-        $html = $this->_template->render(false, false, 'checkout/shipping-api-carriers-services-not-found.php', true);
-        if (isset($carrierList) && count($carrierList) > 1) {
-            $json['isCarriersFound'] = 1;
-            $this->set('options', $carrierList);
-            $html = $this->_template->render(false, false, '', true);
-        }
-        if (true === MOBILE_APP_API_CALL) {
-            $this->_template->render();
-        }
-
-        $json['html'] = $html;
-        die(json_encode($json));
-    }
-
     public function setUpShippingMethod()
     {
         $this->cartObj->removeProductPickUpAddresses();

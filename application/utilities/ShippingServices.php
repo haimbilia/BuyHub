@@ -133,6 +133,10 @@ trait ShippingServices
             LibHelper::dieJsonError($this->error);
         }
         $data = $this->getOrderProductDetail($opId);
+        if (empty($data)) {
+            $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            LibHelper::dieJsonError($msg);
+        }
         $this->loadShippingService($data);
         $this->shippingService->downloadLabel($this->labelData, $this->filename, true);
     }
@@ -159,9 +163,7 @@ trait ShippingServices
 
         if (false === $this->loadReturnLabelData($opId)) {
             LibHelper::dieJsonError($this->error);
-        }
-        $data = $this->getOrderProductDetail($opId);
-        $this->loadShippingService($data);
+        }   
         $this->shippingService->downloadReturnLabel($this->labelData, $this->filename);
     }
 
@@ -364,9 +366,15 @@ trait ShippingServices
      * @param  string $opInvoiceId
      * @return void
      */
-    public function fetchTrackingDetail(string $trackingId, string $opInvoiceId)
+    public function fetchTrackingDetail(string $trackingId, string $opId)
     {
-        $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $opInvoiceId);
+        $orderData = $this->getOrderProductDetail($opId);
+        if (empty($orderData)) {
+            $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            return false;
+        }
+        $this->loadShippingService($orderData);        
+        $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $opId);
         $this->set('trackingData', $trackingData);
         $this->_template->render(false, false);
     }
@@ -416,6 +424,12 @@ trait ShippingServices
      */
     public function pickupForm(int $opId)
     {
+        $data = $this->getOrderProductDetail($opId);
+        if (empty($data)) {
+            $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            LibHelper::dieJsonError($msg);
+        }
+        $this->loadShippingService($data);
         $frm = $this->getPickupForm();
         $frm->fill(['op_id' => $opId]);
         $this->set('frm', $frm);
@@ -429,13 +443,16 @@ trait ShippingServices
      */
     public function createPickup()
     {
+        $data = $this->getOrderProductDetail(FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0));
+        if (empty($data)) {
+            $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            LibHelper::dieJsonError($msg);
+        }
+        $this->loadShippingService($data);
         $frm = $this->getPickupForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['btn_submit']);
-
-        $data = $this->getOrderProductDetail($post['op_id']);
-        $this->loadShippingService($data);
-
+        
         $data += $post;
         if (false === $this->shippingService->canCreatePickup() || false === $this->shippingService->createPickup($data)) {
             $msg = $this->shippingService->getError();
@@ -497,8 +514,18 @@ trait ShippingServices
 
     private function getShippingRatesForm($opId): object
     {
-        $rates = $this->getShippingRatesFromApi($opId);
-        $rateOptions = self::formatShippingRates($this->getShippingRatesFromApi($opId), $this->langId);
+        $orderData = $this->getOrderProductDetail($opId);
+        if (empty($orderData)) {
+            $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            return false;
+        }        
+        //$warehouses = $this->getShippingWarehouseList($orderData);        
+        $rates = $this->getShippingRatesFromApi($orderData);
+        
+        if(false === $rates){
+            LibHelper::exitWithError($this->error);
+        }
+        $rateOptions = self::formatShippingRates($rates, $this->langId);
 
         $frm = new Form('frmRates');
         $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
@@ -518,15 +545,18 @@ trait ShippingServices
         }
         return $rateOptions;
     }
-
-    private function getShippingRatesFromApi($opId)
+    
+    private function getShippingWarehouseList($orderData)
     {
-        $orderData = $this->getOrderProductDetail($opId);
-        if (empty($orderData)) {
-            $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
-            return false;
+        $this->loadShippingService($orderData, true);
+        $wareHouses = [];
+        foreach ($this->shippingService->getWareHouses() as $warehouse) {
+            $wareHouses[$warehouse['warehouseId']] = $warehouse['warehouseName'];
         }
+    }
 
+    private function getShippingRatesFromApi($orderData)
+    {        
         $this->loadShippingService($orderData, true);
 
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
@@ -560,8 +590,7 @@ trait ShippingServices
         if (method_exists($this->shippingService, 'setAddressReference')) {
             $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
             $this->shippingService->setAddressReference($referenceId);
-        }
-
+        }        
         if (method_exists($this->shippingService, 'setFromAddress')) {
             $this->shippingService->setFromAddress($shopAddress['shop_name'], $shopAddress['line1'], $shopAddress['line2'], $shopAddress['city'], $shopAddress['state'], $shopAddress['postalCode'], $shopAddress['countryCode'], $shopAddress['phone']);
         }
@@ -656,7 +685,7 @@ trait ShippingServices
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
         }
 
-        $rates = $this->getShippingRatesFromApi($opId);
+        $rates = $this->getShippingRatesFromApi($orderData);
 
         if (1 > count($rates) || !isset($rates[$post['shipping_rates']])) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
@@ -687,7 +716,7 @@ trait ShippingServices
             }
             FatUtility::dieJsonError($error);
         }
-
+ 
         if (false === $this->shippingService->init()) {
             $this->error = $this->shippingService->getError();
             if (true === $return) {

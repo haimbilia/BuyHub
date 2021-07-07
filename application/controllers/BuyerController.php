@@ -222,11 +222,16 @@ class BuyerController extends BuyerBaseController
             $taxOptions = $opChargesLog->getData($this->siteLangId);
             $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
         }
-
+        
+        $shippingApiObj = NULL;       
         if ($opId > 0) {
             $childOrderDetail = array_shift($childOrderDetail);
-        }
-
+            $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($childOrderDetail['op_selprod_user_id'], $childOrderDetail['opshipping_by_seller_user_id']);
+            if ($childOrderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
+                $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $childOrderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            }
+        }       
+        
         if (empty($childOrderDetail) || 1 > count($childOrderDetail)) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -282,7 +287,7 @@ class BuyerController extends BuyerBaseController
         $this->set('productType', $productType);
         $this->set('languages', Language::getAllNames());
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
-
+        $this->set('shippingApiObj', $shippingApiObj);
 
         $urlParts = array($orderId, $opId);
         $this->set('urlParts', $urlParts);

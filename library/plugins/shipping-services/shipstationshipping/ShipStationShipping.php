@@ -17,6 +17,7 @@ class ShipStationShipping extends ShippingServicesBase
     private const REQUEST_FULFILLMENTS = 5;
     private const REQUEST_GET_ORDER = 6;
     private const REQUEST_MARK_AS_SHIPPED = 7;
+    private const REQUEST_WAREHOUSES_LIST = 8;
 
     private $resp;
     private $endpoint = '';
@@ -48,12 +49,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->validateSettings($this->langId);
     }
-
-    /**
-     * getCarriers
-     *
-     * @return array
-     */
+    
     public function getCarriers(): array
     {
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
@@ -61,7 +57,29 @@ class ShipStationShipping extends ShippingServicesBase
         }
         return $this->getResponse();
     }
-
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getWareHouses(): array
+    {
+        if (false === $this->doRequest(self::REQUEST_WAREHOUSES_LIST)) {
+            return [];
+        }
+        $wareHouses = $this->getResponse();
+        $output = [];
+        if (!empty($response)) {
+            foreach ($wareHouses as $wareHouse) {
+                $output[] = [
+                    'warehouseId' => $wareHouse['warehouseId'],
+                    'warehouseName' => $wareHouse['warehouseName']
+                ];
+            }
+        }
+        return $output;
+    }
+    
     /**
      * getRates
      *
@@ -405,6 +423,9 @@ class ShipStationShipping extends ShippingServicesBase
                     break;
                 case self::REQUEST_MARK_AS_SHIPPED:
                     $this->markAsShipped($requestParam);
+                    break;
+                case self::REQUEST_WAREHOUSES_LIST:
+                    $this->wareHousesList();
                     break;
             }
 

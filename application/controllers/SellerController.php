@@ -11,7 +11,6 @@ class SellerController extends SellerBaseController
     use SellerUsers;  
     use ProductDigitalDownloads;
 
-    private $shippingService;
     private $trackingService;
     private $paymentPlugin;
     private $method = '';
@@ -289,12 +288,7 @@ class SellerController extends SellerBaseController
             $charges = $oObj->getOrderProductChargesArr($order['op_id']);
             $order['charges'] = $charges;
         }
-
-        /* ShipStation */
-        $this->loadShippingService();
-        $this->set('canShipByPlugin', (null !== $this->shippingService));
-        /* ShipStation */
-
+        
         $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
         $this->set('orders', $orders);
         $this->set('page', $page);
@@ -462,7 +456,7 @@ class SellerController extends SellerBaseController
         
         $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
         
-        $shippingApiObj;
+        $shippingApiObj = NULL;
         if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
             $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;            
             if($shippingApiObj){
@@ -470,7 +464,7 @@ class SellerController extends SellerBaseController
             }
             if (!empty($orderDetail["opship_orderid"]) && method_exists($shippingApiObj, 'loadOrder')) {
                 if (null != $shippingApiObj && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
-                    Message::addErrorMessage($this->shippingService->getError());
+                    Message::addErrorMessage($shippingApiObj->getError());
                     FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
                 }
                 $orderDetail['thirdPartyorderInfo'] = (null != $shippingApiObj ? $shippingApiObj->getResponse() : []);
@@ -618,11 +612,12 @@ class SellerController extends SellerBaseController
         }
 
         if (!empty($orderDetail["opship_orderid"])) {
-            if (null != $this->shippingService && false === $this->shippingService->loadOrder($orderDetail["opship_orderid"])) {
-                Message::addErrorMessage($this->shippingService->getError());
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            if (NULL != $shippingApiObj && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
+                Message::addErrorMessage($shippingApiObj->getError());
                 FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
             }
-            $orderDetail['thirdPartyorderInfo'] = (null != $this->shippingService ? $this->shippingService->getResponse() : []);
+            $orderDetail['thirdPartyorderInfo'] = (NULL != $shippingApiObj ? $shippingApiObj->getResponse() : []);
         }
 
         $address = $orderObj->getOrderAddresses($orderDetail['op_order_id']);
@@ -731,18 +726,12 @@ class SellerController extends SellerBaseController
         if (!isset($post['op_id'])) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(UserAuthentication::getLoggedUserId()) ?? NULL;
+        }        
 
         $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
-        if ($status == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
+        
         $db = FatApp::getDb();
         $db->startTransaction();
 
@@ -788,6 +777,14 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
+        $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
+        $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0) ?? NULL;
+
+        if ($status == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        
         if ($orderDetail["op_status_id"] != $post['op_status_id'] && $orderDetail['ocrequest_status'] != '' && $orderDetail['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING) {
             Message::addErrorMessage(Labels::getLabel('MSG_Buyer_Order_Cancellation_request_is_pending', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -811,9 +808,8 @@ class SellerController extends SellerBaseController
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
         }
 
-        /* [ if shipping not handled by seller then seller can not update status to ship and delived */
-        $opshipping_by_seller_user_id = isset($orderDetail['opshipping_by_seller_user_id']) ? $orderDetail['opshipping_by_seller_user_id'] : 0;
-        if (!CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $opshipping_by_seller_user_id)) {
+        /* [ if shipping not handled by seller then seller can not update status to ship and delived */      
+        if (!$shippedBySeller) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
             if ($pickupOrder) {
                 $processingStatuses = [];

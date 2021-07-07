@@ -53,8 +53,8 @@ function pageRedirect(op_id) {
 
     /* ShipStation */
     generateLabel = function (opId) {
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
-            window.location.reload();
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {            
+            setTimeout(function(){ window.location.href = fcom.makeUrl('sellerOrders', 'view',[opId]) }, 300);
         });
     }
     /* ShipStation */
@@ -146,7 +146,7 @@ function pageRedirect(op_id) {
     }
     getPickupForm = function (opId) {
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
+            fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {                
                 $.facebox(res, 'medium-fb-width');
                 if (0 < $('.date--js').length) {
                     $('.date--js').datepicker({
@@ -214,9 +214,8 @@ function pageRedirect(op_id) {
                 $.mbsmessage(t.msg, false, 'alert--danger');
                 return;
             }
-            $.mbsmessage(t.msg, false, 'alert--success');
-            proceedToShipment(frm.op_id.value);
-            $.facebox.close()
+            $.mbsmessage(t.msg, false, 'alert--success'); 
+            setTimeout(function(){ window.location.href = fcom.makeUrl('sellerOrders', 'view',[frm.op_id.value]) }, 300);
         });
     };
 })();

@@ -831,9 +831,9 @@ if (!$print) { ?>
                                                     echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
                                                     if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                         if (empty($row['oshistory_courier'])) {
-                                                            $trackingNumber = $row['oshistory_tracking_number'];
-                                                            if (true === Shipping::canFetchTrackingDetail()) {
-                                                                $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $childOrderDetail['op_invoice_number'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . $trackingNumber . '</a>';
+                                                            $trackingNumber = $row['oshistory_tracking_number'];                                                            
+                                                            if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
+                                                                $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . $trackingNumber . '</a>';
                                                             }
 
                                                             $str = !empty($trackingNumber) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . ' ( ' . $trackingNumber . ' )': '';

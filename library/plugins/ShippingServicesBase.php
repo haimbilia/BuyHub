@@ -3,6 +3,9 @@
 class ShippingServicesBase extends PluginBase
 {
     protected $addressArr = [];
+    
+    public const TRACKING_STATUS_PROCESSING = 1;
+    public const TRACKING_STATUS_DELIVERED = 2;
 
     /**
      * getSystemOrder
@@ -139,5 +142,14 @@ class ShippingServicesBase extends PluginBase
     {
         return false;
     }
-    
+
+    /**
+     * 
+     * @return bool
+     */
+    public function canFetchTrackingDetail(): bool
+    {
+        return false;
+    }
+
 }

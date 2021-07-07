@@ -40,7 +40,7 @@ $(document).ready(function () {
     /* ShippingServices */
     generateLabel = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
-            window.location.reload();
+            setTimeout(function(){ window.location.href = fcom.makeUrl('Seller', 'viewOrder',[opId]) }, 300);
         });
     }
 
@@ -204,8 +204,7 @@ $(document).ready(function () {
                 return;
             }
             $.mbsmessage(t.msg, false, 'alert--success');
-            proceedToShipment(frm.op_id.value);
-            $.facebox.close()
+            setTimeout(function(){ window.location.href = fcom.makeUrl('Seller', 'viewOrder',[frm.op_id.value]) }, 300);
         });
     };
     

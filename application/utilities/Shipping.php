@@ -795,21 +795,6 @@ class Shipping
     {
         $this->selectedShippingService = $selectedShippingService;
     }
-
-    /**
-     * canFetchTrackingDetail
-     *
-     * @return bool
-     */
-    public static function canFetchTrackingDetail(): bool
-    {
-        $obj = new self(CommonHelper::getLangId());
-        if (false === $obj->loadDefaultPluginData()) {
-            return false;
-        }
-
-        return (method_exists($obj->shippingApiObj, __FUNCTION__) && true === $obj->shippingApiObj->canFetchTrackingDetail());
-    }
     
     /**
      * 
