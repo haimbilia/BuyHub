@@ -711,7 +711,10 @@ class DataMigration
             $orderData['order_date_added'] = $order['created_at'];
             $orderData['order_currency_id'] = $currencyRow['currency_id'];
             $orderData['order_currency_code'] = $currencyRow['currency_code'];
-            $orderData['order_currency_value'] = $currencyRow['currency_value'];
+            $orderData['order_currency_value'] = $currencyRow['currency_value'];          
+            $languageRow = Language::getAttributesById(CommonHelper::getLangId());
+            $orderData['order_language_id'] = $languageRow['language_id'];
+            $orderData['order_language_code'] = $languageRow['language_code'];
 
             $userAddresses = [];
 
