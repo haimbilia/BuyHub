@@ -832,6 +832,7 @@ class SellerController extends SellerBaseController
  
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
+            $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
             $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING,'plugin_id') ?? 0;            
             if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED &&  !empty($shippingApiObj) && in_array($shippingApiObj->keyName, ['AfterShipShipment'])) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
@@ -840,7 +841,6 @@ class SellerController extends SellerBaseController
                         "opship_tracking_number" => $post['tracking_number']
                     ];
                     if (array_key_exists('opship_tracking_url', $post)) {
-                        $opship_tracking_url = $post['opship_tracking_url'];
                         $updateData['opship_tracking_url'] =  $opship_tracking_url;                        
                     }
                     if (array_key_exists('oshistory_courier', $post)) {
