@@ -711,6 +711,49 @@ class GuestUserController extends MyAppController
         $this->_template->render(false, false);
     }
 
+    public function sendResetPasswordLink( $usernameOrEmail = '')
+    {
+        if (empty($usernameOrEmail)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+        }
+        $userAuthObj = new UserAuthentication();
+        $row = $userAuthObj->getUserByEmailOrUserName($usernameOrEmail, '', false);
+        if (!$row || false === $row) {
+            $message = Labels::getLabel($userAuthObj->getError(), $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
+                FatUtility::dieJsonError($message);
+            }
+            Message::addErrorMessage($message);
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm'));
+        }
+        $token = FatUtility::getRandomString(30);
+        $row['token'] = $token;
+        $userAuthObj->deleteOldPasswordResetRequest($row['user_id']);
+
+        if (!$userAuthObj->addPasswordResetRequest($row)) {
+            $message = Labels::getLabel($userAuthObj->getError(), $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
+                FatUtility::dieJsonError($message);
+            }
+            Message::addErrorMessage($message);
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
+        }        
+        $row['link'] = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($row['user_id'], $token));
+        $row['credential_email'] = $usernameOrEmail;
+        $email = new EmailHandler();
+        if (!$email->sendForgotPasswordLinkEmail($this->siteLangId, $row)) {
+            $message = Labels::getLabel("MSG_PASSWORD_RESET_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId);
+            $error = true;
+        }
+        $message = Labels::getLabel("MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);       
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('msg', $message);
+            $this->_template->render();
+        }
+        FatUtility::dieJsonSuccess($message);
+    }
+
     public function forgotPassword()
     {
         $withPhone = FatApp::getPostedData('withPhone', FatUtility::VAR_INT, 0);
