@@ -57,17 +57,15 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             "email" => $userData['credential_email'],
             "password" => $this->getUserMeta('seller_auth_token'),
         ];
-        CommonHelper::printArray($requestData);
+        
         $curl = new Curl();
-        $curl->post(self::API_URL . 'getApiToken', json_encode($requestData));
-        $curl->setHeader('Content-Type', 'application/json');
+        $curl->post(self::API_URL . 'getApiToken', $requestData);
         if ($curl->error) {
             LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
         }
-        CommonHelper::printArray($curl->response, true);
-        $resp = json_decode($curl->response, true);
-        if (200 != $resp['code']) {
-            LibHelper::exitWithError($resp['message'], true);
+        $this->remoteUserData = json_decode($curl->response, true);
+        if (200 != $this->remoteUserData['code']) {
+            LibHelper::exitWithError($this->remoteUserData['message'], true);
         }
     }
 
@@ -260,7 +258,25 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function syncStatus(int $status)
     {
-        // $this->getRemoteUserData();
+        $this->getRemoteUserData();
+
+        $dataToUpdate = [
+            "m_id" => 219,  // This need to be placed statically. It points to YoKart at EasyEcom(ID of YoKart).
+            "syncStatus" => $status
+        ];
+
+        $url = self::API_URL . 'Maintenance/switchSyncStatus?token=' . $this->remoteUserData['data']['api_token'];
+
+        $curl = new Curl();
+        $curl->post($url, $dataToUpdate);
+        if ($curl->error) {
+            LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
+        }
+
+        if (200 != $curl->httpStatusCode) {
+            $msg = empty($curl->httpErrorMessage) ? Labels::getLabel('MSG_SOMETHING_WENT_WRONG', $this->siteLangId) : $curl->httpErrorMessage;
+            LibHelper::exitWithError($msg, true);
+        }
 
         $msg = Labels::getLabel('MSG_AUTO_SYNC_TURNED_OFF', $this->siteLangId);
         if (0 < $status) {
@@ -271,28 +287,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (false === $this->updateUserMeta('easyEcomSyncingStatus', $status)) {
             $response = ['msg' => $this->getError(), 'status' => Plugin::RETURN_FALSE];
         }
-
-        /* if (1 == $response['status']) {
-            $userData = $this->getLoggedUserInfo();
-            $dataToUpdate = [
-                "api_token" => $this->easyEcom->getKey('easyecom_token'),
-                "m_id" => 219,  // This need to be placed statically. It points to YoKart at EasyEcom(ID of YoKart).
-                "syncStatus" => $status
-            ];
-
-            $curl = new Curl();
-            $curl->post(self::PRODUCTION_URL . '/Maintenance/switchSyncStatus', json_encode($dataToUpdate));
-            $curl->setHeader('Content-Type', 'application/json');
-            if ($curl->error) {
-                LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
-            }
-
-            // $resp = json_decode($curl->response, true);
-            CommonHelper::printArray($curl->response, true);
-            if (200 != $resp['code']) {
-                LibHelper::exitWithError($resp['message'], true);
-            }
-        } */
 
         $this->dieWithJsonResponse($response);
     }
