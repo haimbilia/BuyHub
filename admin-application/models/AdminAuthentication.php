@@ -51,25 +51,41 @@ class AdminAuthentication extends FatModel
         }
         
         /* [To Do - need to remove admin_password_old in next release */
-        if (!empty($row['admin_password'])) {            
-            if (false == password_verify($password, $row['admin_password'])) {
-                $objUserAuthentication->logFailedAttempt($ip, $username);
-                $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
-                return false;
-            }
-        } else {
-            $oldPassword = UserAuthentication::encryptPassword($password, true);
-            if ($oldPassword !== $row['admin_password_old']) {
-                $objUserAuthentication->logFailedAttempt($ip, $username);
-                $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
-                return false;
-            }
-            $this->changeAdminPwd($row['admin_id'], UserAuthentication::encryptPassword($password));
-            if (!$db->updateFromArray('tbl_admin', array('admin_password_old' => ''), array('smt' => 'admin_id=?', 'vals' => array($row['admin_id'])))) {
-                $this->error = $db->getError();
-                return false;
-            };            
+        if (empty($row['admin_password'])) {    
+            $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->commonLangId));
+            $this->error = $emailErrorMsg;
+            if (FatUtility::isAjaxCall()) {
+                $json['status'] = 0;
+                $json['errorMsg'] = $this->error;
+                $json['autoClose'] = 0;
+                die(json_encode($json));
+            }                
+            return false;
         }
+        if (false == password_verify($password, $row['admin_password'])) {
+            $objUserAuthentication->logFailedAttempt($ip, $username);
+            $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+            return false;
+        }
+        // if (!empty($row['admin_password'])) {            
+        //     if (false == password_verify($password, $row['admin_password'])) {
+        //         $objUserAuthentication->logFailedAttempt($ip, $username);
+        //         $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+        //         return false;
+        //     }
+        // } else {
+        //     $oldPassword = UserAuthentication::encryptPassword($password, true);
+        //     if ($oldPassword !== $row['admin_password_old']) {
+        //         $objUserAuthentication->logFailedAttempt($ip, $username);
+        //         $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+        //         return false;
+        //     }
+        //     $this->changeAdminPwd($row['admin_id'], UserAuthentication::encryptPassword($password));
+        //     if (!$db->updateFromArray('tbl_admin', array('admin_password_old' => ''), array('smt' => 'admin_id=?', 'vals' => array($row['admin_id'])))) {
+        //         $this->error = $db->getError();
+        //         return false;
+        //     };            
+        // }
         /* To Do need - to remove admin_password_old in next release] */
 
         /*if (strtolower($row['admin_username']) != strtolower($username) || $row['admin_password'] != $password) {
@@ -122,6 +138,22 @@ class AdminAuthentication extends FatModel
         return static::getLoggedAdminAttribute('admin_id', false);
     }
 
+    public function checkAdminEmailOrUsername($emailOrUsername)
+    {      
+        $db = FatApp::getDb();
+        $srch = new SearchBase('tbl_admin');
+        $srch->addCondition('admin_email', '=', $emailOrUsername);
+        $srch->addCondition('admin_username', '=', $emailOrUsername, 'OR');
+        $srch->addMultipleFields(array('admin_id', 'admin_name', 'admin_email'));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+        if (!$row = $db->fetch($rs)) {
+            $this->error = Labels::getLabel('MSG_Invalid_email_address_or_username!', $this->adminLangId);
+            return false;
+        }      
+        return $row;
+    }
     public function checkAdminEmail($email)
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -130,7 +162,7 @@ class AdminAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin');
-        $srch->addCondition('admin_email', '=', $email);
+        $srch->addCondition('admin_email', '=', $email);       
         $srch->addMultipleFields(array('admin_id', 'admin_name', 'admin_email'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -163,13 +195,18 @@ class AdminAuthentication extends FatModel
         return true;
     }
 
-    public function deleteOldPasswordResetRequest()
+    public function deleteOldPasswordResetRequest($adminId = 0)
     {
         $db = FatApp::getDb();
-        if (!$db->deleteRecords('tbl_admin_password_reset_requests', array('smt' => 'aprr_expiry < ?', 'vals' => array(date('Y-m-d H:i:s'))))) {
+        if (0 < $adminId) {
+            $condition = array('smt' => 'aprr_admin_id = ?', 'vals' => array($adminId));
+        } else {
+            $condition = array('smt' => 'aprr_expiry < ?', 'vals' => array(date('Y-m-d H:i:s')));
+        }
+        if (!$db->deleteRecords('tbl_admin_password_reset_requests', $condition)) {
             $this->error = $db->getError();
             return false;
-        }
+        }  
         return true;
     }
 
