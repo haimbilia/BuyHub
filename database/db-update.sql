@@ -505,6 +505,7 @@ CREATE TABLE `tbl_order_product_shipment_pickup` (
   `opsp_response` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 --
 -- Indexes for dumped tables
 --
@@ -760,4 +761,9 @@ UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_
 			</tr>
 			</table>' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password' AND `tbl_email_templates`.`etpl_lang_id` = 1;
 
->>>>>>> 68c5a7ec220631f44f55363fd481c2f42cc4b89f
+{SITE_NAME} Team', '[{"title":"Seller", "variable":"{vendor_name}"},{"title":"Order Id", "variable":"{order_id}"}, {"title":"Website Name", "variable":"{SITE_NAME}"}]', 1);
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
+
+
+INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'Yoco', '13', 'Yoco', '1', '1');
+
