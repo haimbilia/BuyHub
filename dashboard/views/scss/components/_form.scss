@@ -1,3 +1,35 @@
+ @mixin input {
+     padding: 0 1rem;
+     border: $border;
+     background-color: $bg-white;
+     color: $bg-white-inverse;
+     height: 3rem;
+     width: 100%;
+     font-size: 0.85rem;
+     line-height: 2.0714285714rem;
+     border-radius: 4px;
+     outline: none;
+     font-family: inherit;
+     transition: 0.3s all ease-in-out;
+     appearance: none;
+ }
+ 
+ @mixin submit {
+     position: relative;
+     display: inline-block;
+     margin: 0 0px;
+     min-width: 64px;
+     height: 3rem;
+     text-align: center;
+     font-size: 0.9rem;
+     line-height: normal;
+     overflow: hidden;
+     outline: none;
+     cursor: pointer;
+     border-color: transparent;
+     width: auto;
+ }
+ 
  .form {
      .field-set {
          margin-bottom: 1rem;
@@ -7,7 +39,6 @@
          background: #f5f5f5;
          border-radius: $radius4;
      }
-     label,
      .field_label {
          font-size: 0.8rem;
          color: $txt-gray;
@@ -23,69 +54,50 @@
              min-height: 15px;
          }
      }
-     .field_cover {
-         position: relative;
-         .fa {
-             position: absolute;
-             top: 12px;
-             #{$end-direction}: 8px;
-             font-size: 0.8rem;
-             color: #888;
-             cursor: pointer;
-         }
-     }
      input {
-         padding: 0 1rem;
-         border: $border;
-         background-color: $bg-white;
-         color: $bg-white-inverse;
-         height: 2.5rem;
-         width: 100%;
-         font-size: 0.85rem;
-         line-height: 2.0714285714rem;
-         border-radius: $radius3;
-         outline: none;
-         font-family: inherit;
-         -webkit-transition: 0.3s all ease-in-out;
-         transition: 0.3s all ease-in-out;
-         
-         
-         appearance: none;
          &[type="text"] {
-             @extend input;
+             @include input;
          }
          &[type="email"] {
-             @extend input;
+             @include input;
          }
          &[type="phone"] {
-             @extend input;
+             @include input;
          }
          &[type="search"] {
-             @extend input;
+             @include input;
          }
          &[type="password"] {
-             @extend input;
+             @include input;
          }
          &[type="date"] {
-             @extend input;
+             @include input;
          }
          &[type="url"] {
-             @extend input;
+             @include input;
          }
          &[type="tel"] {
-             @extend input;
+             @include input;
          }
          &[type="number"] {
-             @extend input;
+             @include input;
          }
          &[type="file"] {
-             @extend input;
+             @include input;
              width: auto;
              overflow: hidden;
          }
          &[type="file"] {
              height: auto;
          }
+         //  &[type="checkbox"] {
+         //      width: inherit;
+         //      height: inherit;
+         //  }
+         //  &[type="radio"] {
+         //      width: inherit;
+         //      height: inherit;
+         //  }
          &:focus {
              border-color: $brand-color;
              outline: none !important;
@@ -94,7 +106,6 @@
          &:disabled {
              color: rgba(0, 0, 0, 0.38);
              background-color: rgba(0, 0, 0, 0.12);
-             -webkit-box-shadow: none;
              box-shadow: none;
              cursor: initial;
              border-color: transparent;
@@ -103,9 +114,9 @@
              border-color: $danger;
          }
          &.field--calender {
-             padding-#{$end-direction}: 40px;
-             background-image: url(../images/retina/calendar.svg);
-             background-size: 20px;
+             padding-#{$end-direction}: 38px !important;
+             background-image: url("data:image/svg+xml;base64,PHN2ZyAgIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDUxMiA1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgd2lkdGg9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8Zz4NCiAgICAgICAgPHBhdGggZmlsbD0iIzg4ODg4OCIgZD0ibTQ0NiA0MGgtNDZ2LTI0YzAtOC44MzYtNy4xNjMtMTYtMTYtMTZzLTE2IDcuMTY0LTE2IDE2djI0aC0yMjR2LTI0YzAtOC44MzYtNy4xNjMtMTYtMTYtMTZzLTE2IDcuMTY0LTE2IDE2djI0aC00NmMtMzYuMzkzIDAtNjYgMjkuNjA3LTY2IDY2djM0MGMwIDM2LjM5MyAyOS42MDcgNjYgNjYgNjZoMzgwYzM2LjM5MyAwIDY2LTI5LjYwNyA2Ni02NnYtMzQwYzAtMzYuMzkzLTI5LjYwNy02Ni02Ni02NnptLTM4MCAzMmg0NnYxNmMwIDguODM2IDcuMTYzIDE2IDE2IDE2czE2LTcuMTY0IDE2LTE2di0xNmgyMjR2MTZjMCA4LjgzNiA3LjE2MyAxNiAxNiAxNnMxNi03LjE2NCAxNi0xNnYtMTZoNDZjMTguNzQ4IDAgMzQgMTUuMjUyIDM0IDM0djM4aC00NDh2LTM4YzAtMTguNzQ4IDE1LjI1Mi0zNCAzNC0zNHptMzgwIDQwOGgtMzgwYy0xOC43NDggMC0zNC0xNS4yNTItMzQtMzR2LTI3MGg0NDh2MjcwYzAgMTguNzQ4LTE1LjI1MiAzNC0zNCAzNHoiLz4NCiAgICA8L2c+DQo8L3N2Zz4=");
+             background-size: 16px;
              background-color: $bg-white;
              background-repeat: no-repeat;
              background-position: calc(100% - 11px) center;
@@ -115,7 +126,7 @@
          }
      }
      select {
-         @extend input;
+         @include input;
          padding-#{$end-direction}: 35px;
          background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzA2cHgiIGhlaWdodD0iMzA2cHgiIHZpZXdCb3g9IjAgMCAzMDYgMzA2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMDYgMzA2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQoJPGc+DQoJCTxnIGlkPSJleHBhbmQtbW9yZSI+DQoJCQk8cG9seWdvbiBwb2ludHM9IjI3MC4zLDU4LjY1IDE1MywxNzUuOTUgMzUuNyw1OC42NSAwLDk0LjM1IDE1MywyNDcuMzUgMzA2LDk0LjM1IiAvPg0KCQk8L2c+DQoJPC9nPg0KDQo8L3N2Zz4NCg==");
          background-size: 10px;
@@ -127,7 +138,7 @@
          }
      }
      textarea {
-         @extend input;
+         @include input;
          resize: vertical;
          resize: vertical;
          height: 120px;
@@ -138,19 +149,7 @@
          }
      }
      [type="submit"] {
-         position: relative;
-         display: inline-block;
-         margin: 0 0px;
-         min-width: 64px;
-         height: 2.5rem;
-         text-align: center;
-         font-size: 0.9rem;
-         line-height: normal;
-         overflow: hidden;
-         outline: none;
-         cursor: pointer;
-         border-color: transparent;
-         width: auto;
+         @include submit;
          &:hover,
          &:focus {
              box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.05), 0px 4px 5px 0px rgba(0, 0, 0, 0.05), 0px 1px 10px 0px rgba(0, 0, 0, 0.05);
@@ -160,16 +159,17 @@
          }
      }
      [type="button"] {
-         @extend [type="submit"];
+         @include submit;
+         border-color: inherit;
      }
      [type="reset"] {
-         @extend [type="submit"];
+         @include submit;
      }
      input button {
-         @extend [type="submit"];
+         @include submit;
      }
      button {
-         @extend [type="submit"];
+         @include submit;
          &:before {
              content: "";
              position: absolute;
@@ -179,7 +179,6 @@
              bottom: 0;
              background-color: $bg-white;
              opacity: 0;
-             -webkit-transition: opacity 0.2s;
              transition: opacity 0.2s;
              pointer-events: none;
          }
@@ -215,12 +214,8 @@
              height: 32px;
              background-color: currentColor;
              opacity: 0;
-             -webkit-transform: translate(-50%, -50%) scale(1);
              transform: translate(-50%, -50%) scale(1);
-             -webkit-transition: opacity 1s, -webkit-transform 0.5s;
-             transition: opacity 1s, -webkit-transform 0.5s;
              transition: opacity 1s, transform 0.5s;
-             transition: opacity 1s, transform 0.5s, -webkit-transform 0.5s;
          }
          &:focus {
               :after {
@@ -230,9 +225,7 @@
          &:active {
               :after {
                  opacity: 0.4;
-                 -webkit-transform: translate(-50%, -50%) scale(0);
                  transform: translate(-50%, -50%) scale(0);
-                 -webkit-transition: -webkit-transform 0s;
                  transition: -webkit-transform 0s;
                  transition: transform 0s;
                  transition: transform 0s, -webkit-transform 0s;
@@ -244,13 +237,6 @@
              }
          }
      }
-     .btn-brand {
-         background-color: $brand-color;
-         color: $brand-color-inverse;
-     }
-     .btn-outline-brand {
-         border-color: $brand-color;
-     }
      .no--focus {
          &:focus {
              outline: none !important;
@@ -259,23 +245,6 @@
      }
      .text--small {
          display: block;
-     }
- }
- 
- .custom-select {
-     @extend select;
-     appearance: none;
-     padding-#{$end-direction}: 35px;
-     background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzA2cHgiIGhlaWdodD0iMzA2cHgiIHZpZXdCb3g9IjAgMCAzMDYgMzA2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMDYgMzA2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQoJPGc+DQoJCTxnIGlkPSJleHBhbmQtbW9yZSI+DQoJCQk8cG9seWdvbiBwb2ludHM9IjI3MC4zLDU4LjY1IDE1MywxNzUuOTUgMzUuNyw1OC42NSAwLDk0LjM1IDE1MywyNDcuMzUgMzA2LDk0LjM1IiAvPg0KCQk8L2c+DQoJPC9nPg0KDQo8L3N2Zz4NCg==");
-     background-size: 10px;
-     background-color: $bg-white;
-     background-repeat: no-repeat;
-     background-position: calc(100% - 11px) center;
-     [dir="rtl"] & {
-         background-position: calc(0% - -11px) center;
-     }
-     &-sm {
-         font-size: 0.8rem;
      }
  }
  
@@ -416,7 +385,6 @@
          width: 100%;
          height: 50px !important;
          line-height: normal;
-         
          resize: none;
          transition: all .35s ease-in-out;
          &:focus {
