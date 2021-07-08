@@ -759,5 +759,3 @@ UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_
 					   </td>
 			</tr>
 			</table>' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password' AND `tbl_email_templates`.`etpl_lang_id` = 1;
-
->>>>>>> 68c5a7ec220631f44f55363fd481c2f42cc4b89f
