@@ -375,9 +375,9 @@ class BadgeLinkConditionsController extends SellerBaseController
         $userId = UserAuthentication::getLoggedUserId();
         $badgeId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, 0);
         if (false === BadgeLinkCondition::isUnique($badgeId, $userId, $recordType, $position, $badgeLinkCondId)) {
-            $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE.', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE.', $this->siteLangId);
             if (Badge::TYPE_RIBBON == $badgeType) {
-                $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE_WITH_SAME_POSITION.', $this->siteLangId);
+                $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE_AND_SAME_POSITION.', $this->siteLangId);
             }
             FatUtility::dieJsonError($msg);
         }
