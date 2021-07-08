@@ -105,6 +105,18 @@ class ShipmentTracking
         return true;
     }
     
+    public function getTrackablePluginKeys()
+    {
+        $this->validateRequest();
+        return $this->shipmentTracking->getTrackablePluginKeys();
+    }
+    
+    public function getPluginId()
+    {
+        $this->validateRequest();
+        return $this->shipmentTracking->getKey('plugin_id');
+    }
+
     /**
      * getResponse
      *

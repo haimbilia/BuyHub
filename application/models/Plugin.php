@@ -2,6 +2,10 @@
 
 class Plugin extends PluginCommon
 {   
+    public const FLD_TYPE_TEXTBOX = 'addTextBox';
+    public const FLD_TYPE_PASSWORD = 'addPasswordField';
+    public const FLD_TYPE_DATE = 'addDateField';
+
     public function __construct(int $id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -253,7 +257,7 @@ class Plugin extends PluginCommon
      * @param  int $langId
      * @return mixed
      */
-    public function getDefaultPluginData(int $typeId, $attr = null, int $langId = 0)
+    public function getDefaultPluginData(int $typeId, $attr = '', int $langId = 0)
     {
         if (!in_array($typeId, self::getKingpinTypeArr())) {
             $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
@@ -286,7 +290,7 @@ class Plugin extends PluginCommon
 
             $rs = $srch->getResultSet();
             $result = FatApp::getDb()->fetch($rs);
-            if (is_string($attr)) {
+            if (is_string($attr) && !empty($attr)) {
                 return $result[$attr];
             }
             return $result;

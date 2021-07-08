@@ -244,23 +244,6 @@ class DigitalDownload extends MyAppModel
         FatUtility::dieJsonError($message);
     }
 
-    public function allowedWithInventory($productId)
-    {
-        $productId = FatUtility::int($productId);
-
-        $this->getProduct($productId);
-
-        if (!is_array($this->product) || 1 > count($this->product)) {
-            return false;
-        }
-
-        if (applicationConstants::YES == $this->product['product_attachements_with_inventory']) {
-            return true;
-        }
-        
-        return false;
-    }
-
     public function attachFileWithOrderedProducts($uploadedFileId, $recordId, $requestType, $langId, $option)
     {
         if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])) {

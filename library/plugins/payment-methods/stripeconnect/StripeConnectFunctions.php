@@ -454,4 +454,15 @@ trait StripeConnectFunctions
     {
         return $this->stripe->accountLinks->create($requestParam);
     }
+    
+    /**
+     * createCoupon : https://stripe.com/docs/api/coupons/create
+     *
+     * @param  mixed $requestParam
+     * @return object
+     */
+    private function createCoupon(array $requestParam): object
+    {
+        return $this->stripe->coupons->create($requestParam);
+    }
 }

@@ -6,6 +6,10 @@ $arr_flds = array(
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $adminLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $adminLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from' => Labels::getLabel('LBL_CONDITION_FROM', $adminLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $adminLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'from_date' => Labels::getLabel('LBL_VAILD_FROM', $adminLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'to_date' => Labels::getLabel('LBL_VALID_TO', $adminLangId),
     'action' => '',
 );
 
@@ -19,18 +23,20 @@ if (Badge::TYPE_RIBBON == $badgeType) {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position' ]);
 }
 
-if (BadgeLinkCondition::REC_COND_AUTO == $recordCondition) {
-    unset($arr_flds['cond_seller_name'], $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
+if (Badge::COND_AUTO == $badgeConditionType) {
+    unset($arr_flds['cond_seller_name'], 
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
 } else {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], 
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'], 
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to']);
 }
 
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($adminLangId);
 $recordTypeArr = BadgeLinkCondition::getRecordTypeArr($adminLangId);
 $recordConditionArr = BadgeLinkCondition::getRecordConditionArr($adminLangId);
 $nonPercElements =  [
-    BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE,
-    BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED
+    BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS
 ];
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
@@ -72,19 +78,16 @@ foreach ($arrListing as $sn => $row) {
                 $conditionAuto = (BadgeLinkCondition::REC_COND_AUTO == $recordCondition);
                 $conditionType = ($conditionAuto ? $conditionTypeArr[$row[$key]] : Labels::getLabel('LBL_N/A', $adminLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
-
-                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type'] && $conditionAuto) {
-                    $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'];
-                    $toValue = "";
-                    if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'])) {
-                        $toValue = ' - ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'];
-                    }
-                    
-                    $perc = in_array($row[$key], $nonPercElements) ? '' : '%';
-
-                    $htm = $fromValue . $toValue . $perc;
-                    $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-toggle='tooltip' data-placement='top' title='" . $htm . "'></i>", true);
-                }
+                break;
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from':
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to':
+                $lbl = (in_array($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $nonPercElements) ? $row[$key] : $row[$key] . '%');
+                $td->appendElement('plaintext', [], $lbl, true);
+                break;
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'from_date':
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'to_date':
+                $lbl = (1 > strtotime($row[$key]) ? Labels::getLabel('LBL_N/A', $adminLangId) : date('Y-m-d H:i', strtotime($row[$key])));
+                $td->appendElement('plaintext', [], $lbl, true);
                 break;
             case 'action':
                 if ($canEdit) {

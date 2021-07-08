@@ -17,7 +17,6 @@ class ShippingServicesController extends AdminBaseController
         $this->objPrivilege->canViewShippingManagement($this->admin_id);
         $this->canEdit = $this->objPrivilege->canEditShippingManagement($this->admin_id, true);
         $this->set("canEdit", $this->canEdit);
-        $this->langId = $this->adminLangId;
-        $this->init();
+        $this->langId = $this->adminLangId;       
     }
 }

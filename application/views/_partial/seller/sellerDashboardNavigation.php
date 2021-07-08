@@ -293,13 +293,13 @@ $plugin = new Plugin();
                             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                             $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
                         }
-                        $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($channel['plugin_id'], 'ICON'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         ?>
                         <li class="menu__item <?php echo ($controller == strtolower($channel['plugin_code'])) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo $channel['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
-                                    <i class="icn shop">
-                                        <img src="<?php echo $imageUrl; ?>" data-ratio="<?php echo $aspectRatio; ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo strtolower($channel['plugin_code']); ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo strtolower($channel['plugin_code']); ?>"></use>
+                                        </svg>
                                     </i>
                                     <span class="menu-item__title"><?php echo $channel['plugin_name'];?></span>
                                 </a>
@@ -500,19 +500,25 @@ $plugin = new Plugin();
                             </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_UPDATE_CREDENTIALS', $siteLangId); ?></span></a></div>
                 </li>
 
-                <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>
-                    <li class="divider"></li>
-                    <li class="menu__item">
-                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Plugins', $siteLangId); ?></span></div>
-                    </li>
-                    <li class="menu__item <?php echo ($controller == 'sellerplugins' && $action == 'index') ? 'is-active' : ''; ?>">
-                        <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_DATA_MIGRATION', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [Plugin::TYPE_DATA_MIGRATION]); ?>">
-                                <i class="icn shop"><svg class="svg">
+                <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>                
+                    <li class="divider"></li>                                    
+                        <li class="menu__item">
+                            <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Plugins', $siteLangId); ?></span></div>
+                        </li>
+                        <?php foreach(SellerPlugin::getAllowedTypeArr($siteLangId) as $type => $name) { ?>  
+                        <li class="menu__item <?php echo ($controller == 'sellerplugins' && $action == 'index' && is_array($params) && current($params) == $type) ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo $name; ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [$type]); ?>">
+                                    <i class="icn shop"><svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests"></use>
-                                    </svg>
-                                </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_DATA_MIGRATION', $siteLangId); ?></span></a></div>
-                    </li>
-                <?php } ?>
+                                        </svg>
+                                    </i>
+                                    <span class="menu-item__title"><?php echo $name; ?></span>
+                                </a>
+                            </div>
+                        </li>                   
+                    <?php }                    
+                    } ?>
 
                 <?php if ($userPrivilege->canViewImportExport(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <li class="divider"></li>

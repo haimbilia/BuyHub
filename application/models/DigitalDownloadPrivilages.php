@@ -148,27 +148,11 @@ class DigitalDownloadPrivilages extends FatModel
             return [];
         }
         
-        if (null != $this->product) {
+        if (!empty($this->product)) {
             return $this->product;
         }
 
-        $attrs = [
-            'product_id',
-            'product_type',
-            'product_added_by_admin_id',
-            'product_seller_id',
-            'product_attachements_with_inventory',
-            'product_active',
-            'product_approved',
-            'product_deleted',
-        ];
-
-        $this->product = Product::getAttributesById($productId);
-
-        if (false === $this->product) {
-            $this->product = null;
-            return [];
-        }
+        $this->product = (array) Product::getAttributesById($productId);
 
         return $this->product;
     }
