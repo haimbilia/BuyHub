@@ -340,7 +340,6 @@ class Badge extends MyAppModel
         $srch->joinBadgeRequest();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
-        $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
