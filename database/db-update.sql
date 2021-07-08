@@ -494,9 +494,39 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_DELIVERY_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop delivery. Can be switched off.', '1');
 
 
+-- --- Aramex Shipping API--- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Aramex', '8', 'Aramex', '0', '3');
+ALTER TABLE `tbl_shop_specifics` ADD `shop_use_manual_shipping_rates` TINYINT(2) NOT NULL AFTER `shop_pickup_interval`;
+CREATE TABLE `tbl_order_product_shipment_pickup` (
+  `opsp_op_id` int NOT NULL,
+  `opsp_api_req_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party',
+  `opsp_scheduled` tinyint NOT NULL COMMENT 'Scheduled/cancelled',
+  `opsp_requested_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For third party',
+  `opsp_response` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_order_product_shipment_pickup`
+--
+ALTER TABLE `tbl_order_product_shipment_pickup`
+  ADD UNIQUE KEY `opps_op_id` (`opsp_op_id`);
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_plugin_id` INT NOT NULL AFTER `opshipping_fulfillment_type`;
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_courier_code` VARCHAR(255) NOT NULL AFTER `opship_tracking_url`;
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_plugin_id` INT NOT NULL AFTER `opship_tracking_courier_code`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_plugin_id` `opshipping_plugin_id` INT NOT NULL COMMENT 'plugin use to fetch rates';
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_is_seller_plugin` TINYINT NOT NULL AFTER `opshipping_plugin_id`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_is_seller_plugin` `opshipping_is_seller_plugin` TINYINT NOT NULL COMMENT 'is seller plugin use to fetch rates ';
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_plugin_charges` DECIMAL(10,2) NOT NULL AFTER `opshipping_is_seller_plugin`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_plugin_charges` `opshipping_plugin_charges` DECIMAL(10,2) NOT NULL COMMENT 'shipping rate fetch from plugin';
+-- --- Aramex Shipping API--- --
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_NA', 1, 'NA', 1) ON DUPLICATE KEY UPDATE label_caption = 'NA';
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_View_Purpose";
+
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
 
 -- ----- Task 84994 : Badges & Ribbons ---- --
@@ -613,3 +643,116 @@ ALTER TABLE `tbl_badge_link_conditions` DROP INDEX `blinkcond_id`;
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('MSG_STRIPE_CONNECT_INVALID_ACCOUNT_CURRENCY', 1, 'You Cannot Create Account With Different Currency Other Than System Currency {SYSTEM-CURRECNY}', '') ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- ---- Task : 87287 Stripe Connect Subscription ---- --
+
+-- ------------Forgot Password -> Reset Password
+UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_body` = '<table width="100%" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+        <td >
+            <!--
+            page title start here
+            -->
+               
+            <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                            <h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;"></h4>
+                            <h2 style="margin:0; font-size:34px; padding:0;">Reset Password!</h2></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--
+            page title end here
+            -->
+               </td>
+    </tr>
+    <tr>
+        <td>
+            <!--
+            page body start here
+            -->
+               
+            <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {user_full_name} </strong><br />
+                                            It seems that you have used reset password option at <a href="{website_url}">{website_name}</a>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:20px 0 30px;">Please visit the link given below to reset your password. Please note that the link is valid for next 24 hours only.<br />
+                                            Password reset url: <a href="{reset_url}">{reset_url}</a>.</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--
+            page body end here
+            -->
+               </td>
+    </tr>
+</table>' WHERE `tbl_email_templates`.`etpl_code` = 'forgot_password' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+
+UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_body` = '<table width="100%" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td >
+					<!--
+					page title start here
+					-->
+					   
+					<table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<td style="background:#fff;padding:20px 0 30px; text-align:center;">
+									<h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">Request Received</h4>
+									<h2 style="margin:0; font-size:34px; padding:0;">Retrieve Password!</h2></td>
+							</tr>
+						</tbody>
+					</table>
+					<!--
+					page title end here
+					-->
+					   </td>
+			</tr>
+			<tr>
+				<td>
+					<!--
+					page body start here
+					-->
+					   
+					<table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+									<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+										<tbody>
+											<tr>
+												<td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {user_full_name} </strong><br />
+													It seems that you have used reset password option at <a href="{website_url}">{website_name}</a>.</td>
+											</tr>
+											<tr>
+												<td style="padding:20px 0 30px;">Please click here to below link to change your password.<br />
+													<a href="{reset_url}" style="font-size:15px; color:#ff3a59;">Click here</a></td>
+											</tr>
+											<tr>
+												<td style="padding:0 0 30px;">Please ignore this email if you did not use the reset password option</td>
+											</tr>
+											
+										</tbody>
+									</table></td>
+							</tr>
+						</tbody>
+					</table>
+					<!--
+					page body end here
+					-->
+					   </td>
+			</tr>
+			</table>' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+

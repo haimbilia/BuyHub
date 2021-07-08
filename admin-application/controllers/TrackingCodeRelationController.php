@@ -36,7 +36,7 @@ class TrackingCodeRelationController extends AdminBaseController
         }
         
         $plugin = new Plugin();
-        $shipApiPluginData = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
+        $shipApiPluginData = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, ['plugin_code', 'plugin_id']);
         $shipApi = PluginHelper::callPlugin($shipApiPluginData['plugin_code'], [$this->adminLangId], $error, $this->adminLangId);
         if($shipApi->init() === false){              
             Message::addErrorMessage($shipApi->getError());

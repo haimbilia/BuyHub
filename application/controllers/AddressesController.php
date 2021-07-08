@@ -310,7 +310,7 @@ class AddressesController extends LoggedUserController
                 }
                 $pickupInterval = FatApp::getConfig('CONF_TIME_SLOT_ADDITION', FatUtility::VAR_INT, 2);
                 if($addressArr['addr_type'] == Address::TYPE_SHOP_PICKUP){ 
-                    $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'],'shop_pickup_interval');                                        
+                    $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'],'shop_pickup_interval');
                 }
                 
                 $displayTime = date("H:i:s", strtotime('+' . $pickupInterval . ' hour'));

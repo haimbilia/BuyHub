@@ -1734,29 +1734,6 @@ class Cart extends FatModel
         $cartObj->updateUserCart();
     }
 
-    /* public function shippingCarrierList(int $langId = 0)
-    {
-        $langId = (0 < $langId) ? $langId : commonHelper::getLangId();
-
-        $plugin = new Plugin();
-        $shippingServiceName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-        $carriers = [];
-        if (false !== $shippingServiceName) {
-            $error = '';
-            $shippingService = PluginHelper::callPlugin($shippingServiceName, [$langId], $error, $langId);
-            if (false === $shippingService) {
-                $this->error = $error;
-                return false;
-            }
-            $carriers = $shippingService->getCarriers(true, $langId);
-            if (empty($carriers) && !empty($shippingService->getError())) {
-                $this->error = $shippingService->getError();
-                return false;
-            }
-        }
-        return $carriers;
-    } */
-
     public function getCache($key)
     {
         require_once(CONF_INSTALLATION_PATH . 'library/phpfastcache.php');
@@ -1777,29 +1754,6 @@ class Cart extends FatModel
         return $cache->set($key, $value, 60 * 60);
     }
 
-    public function getCarrierShipmentServicesList($cartKey, $carrier_id = 0, $lang_id = 0)
-    {
-        /* $servicesList = array();
-
-        $servicesList[0] = Labels::getLabel('MSG_Select_Services', $lang_id);
-
-        if (!empty($carrier_id)) {
-            foreach ($services as $key => $value) {
-                $code = $value->serviceCode;
-                $price = $value->shipmentCost + $value->otherCost;
-                $name = $value->serviceName;
-                $displayPrice = CommonHelper::displayMoneyFormat($price);
-                $label = $name . " (" . $displayPrice . " )";
-                $servicesList[$code . "-" . $price] = $label;
-            }
-        }
-
-        $products = $this->getProducts($this->cart_lang_id);
-        $prodKey = $this->getProductByKey($cartKey); */
-
-        return $this->getCarrierShipmentServices($cartKey, $carrier_id, $lang_id);
-    }
-
     public function getProductByKey($find_key)
     {
         if (!$this->hasPhysicalProduct()) {
@@ -1812,67 +1766,6 @@ class Cart extends FatModel
             }
         }
         return false;
-    }
-
-    public function getCarrierShipmentServices($product_key, $carrier_id, $lang_id)
-    {
-        $key = $this->getProductByKey($product_key);
-        if (false === $key || empty($carrier_id)) {
-            return array();
-        }
-
-        $products = $this->getProducts($this->cart_lang_id);
-        $weightUnitsArr = applicationConstants::getWeightUnitsArr($lang_id, true);
-        $lengthUnitsArr = applicationConstants::getLengthUnitsArr($lang_id, true);
-
-        $product = $products[$key];
-        $productShippingAddress = $product['shipping_address'];
-        $productShopAddress = $product['seller_address'];
-
-        $sellerPinCode = $productShopAddress['shop_postalcode'];
-        $quantity = $product['quantity'];
-        $productWeight = $product['product_weight'] / $quantity;
-        $productWeightClass = ($product['product_weight_unit']) ? $lengthUnitsArr[$product['product_weight_unit']] : '';
-
-        $productLengthUnit = ($product['product_dimension_unit']) ? $weightUnitsArr[$product['product_dimension_unit']] : '';
-        $productLength = $product['product_length'];
-        $productWidth = $product['product_width'];
-        $productHeight = $product['product_height'];
-
-        $productWeightInOunce = Shipping::convertWeightInOunce($productWeight, $productWeightClass);
-        $productLengthInCenti = Shipping::convertLengthInCenti($productLength, $productLengthUnit);
-        $productWidthInCenti = Shipping::convertLengthInCenti($productWidth, $productLengthUnit);
-        $productHeightInCenti = Shipping::convertLengthInCenti($productHeight, $productLengthUnit);
-
-        $product_rates = array();
-
-        $plugin = new Plugin();
-        $shippingServiceName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-        if (false !== $shippingServiceName) {
-            $error = '';
-            $this->shippingService = PluginHelper::callPlugin($shippingServiceName, [$lang_id], $error, $lang_id);
-            if (false === $this->shippingService) {
-                LibHelper::dieJsonError($error);
-            }
-
-            $this->shippingService->setAddress($productShippingAddress['addr_name'], $productShippingAddress['addr_address1'], $productShippingAddress['addr_address2'], $productShippingAddress['addr_city'], $productShippingAddress['state_code'], $productShippingAddress['addr_zip'], $productShippingAddress['country_code'], $productShippingAddress['addr_phone']);
-
-            $this->shippingService->setWeight($productWeightInOunce);
-
-            if ($productLengthInCenti > 0 && $productWidthInCenti > 0 && $productHeightInCenti > 0) {
-                $this->shippingService->setDimensions($productLengthInCenti, $productWidthInCenti, $productHeightInCenti);
-            }
-
-            $product_rates = $this->shippingService->getRates($carrier_id, $sellerPinCode);
-            if (empty($product_rates)) {
-                $this->error = $this->shippingService->getError();
-                return false;
-            }
-
-            $product_rates = Shipping::formatShippingRates($product_rates, $lang_id);
-        }
-
-        return $product_rates;
     }
 
     public function setselectedShipping(array $selectedShippingService)
@@ -1967,7 +1860,7 @@ class Cart extends FatModel
         $digitalSelProdIdArr = [];
         $productInfo = [];
         $cartProducts = $this->getBasketProducts($this->cart_lang_id);
-
+        
         foreach ($cartProducts as $val) {
             if (0 < $val['is_physical_product'] && isset($this->SYSTEM_ARR['shopping_cart']['checkout_type']) && $val['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $val['selprod_fulfillment_type'] != $this->SYSTEM_ARR['shopping_cart']['checkout_type']) {
                 continue;
@@ -1984,11 +1877,13 @@ class Cart extends FatModel
         if (!empty($physicalSelProdIdArr)) {
             $address = new Address($this->getCartShippingAddress(), $this->cart_lang_id);
             $shippingAddressDetail =  $address->getData(Address::TYPE_USER, $this->cart_user_id);
-
             $shipping = new Shipping($this->cart_lang_id);
+            /*
             if (is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
                 $shipping->setSelectedShipping($this->selectedShippingService);
             }
+             * 
+             */
 
             $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo);
             $shippedByArr = $response['data'];

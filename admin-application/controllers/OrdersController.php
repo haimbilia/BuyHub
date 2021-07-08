@@ -19,33 +19,6 @@ class OrdersController extends AdminBaseController
         $this->shippingService = (object) [];
     }
 
-    /**
-     * loadShippingService
-     *
-     * @return void
-     */
-    private function loadShippingService()
-    {
-        // Return if already loaded.
-        if (!empty($this->shippingService)) {
-            return;
-        }
-
-        $plugin = new Plugin();
-        $this->keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
-
-        $this->shippingService = PluginHelper::callPlugin($this->keyName, [$this->adminLangId], $error, $this->adminLangId);
-        if (false === $this->shippingService) {
-            Message::addErrorMessage($error);
-            FatApp::redirectUser(UrlHelper::generateUrl("Orders"));
-        }
-
-        if (false === $this->shippingService->init()) {
-            Message::addErrorMessage($this->shippingService->getError());
-            FatApp::redirectUser(UrlHelper::generateUrl("Orders"));
-        }
-    }
-
     public function index()
     {
         $this->objPrivilege->canViewOrders();
@@ -199,7 +172,7 @@ class OrdersController extends AdminBaseController
                 'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
-                'op_shop_owner_phone_dcode','op_selprod_price','op_special_price'
+                'op_shop_owner_phone_dcode','op_selprod_price','op_special_price','opshipping_by_seller_user_id'
             )
         );
 
@@ -209,19 +182,20 @@ class OrdersController extends AdminBaseController
         $orderObj = new Orders($order['order_id']);
 
         $charges = $orderObj->getOrderProductChargesByOrderId($order['order_id']);
-
+        $shippingObj = new Shipping($this->adminLangId);
         foreach ($order['products'] as $opId => $opVal) {
             $order['products'][$opId]['charges'] = $charges[$opId];
             $opChargesLog = new OrderProductChargeLog($opId);
             $taxOptions = $opChargesLog->getData($this->adminLangId);
             $order['products'][$opId]['taxOptions'] = $taxOptions;
             if (!empty($opVal["opship_orderid"])) {
-                $this->loadShippingService();
-                if (false === $this->shippingService->loadOrder($opVal["opship_orderid"])) {
-                    Message::addErrorMessage($this->shippingService->getError());
+                $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opVal['op_selprod_user_id'], $opVal['opshipping_by_seller_user_id']);
+                $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $opVal['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+                if (false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
+                    Message::addErrorMessage($shippingApiObj->getError());
                     FatApp::redirectUser(UrlHelper::generateUrl("Orders"));
                 }
-                $order['products'][$opId]['thirdPartyorderInfo'] = $this->shippingService->getResponse();
+                $order['products'][$opId]['thirdPartyorderInfo'] = $shippingApiObj ? $shippingApiObj->getResponse() : [];
             }
         }
 

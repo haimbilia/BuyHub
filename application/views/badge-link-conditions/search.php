@@ -4,6 +4,10 @@ $arr_flds = array(
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $siteLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from' => Labels::getLabel('LBL_CONDITION_FROM', $siteLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $siteLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'from_date' => Labels::getLabel('LBL_VAILD_FROM', $siteLangId),
+    BadgeLinkCondition::DB_TBL_PREFIX . 'to_date' => Labels::getLabel('LBL_VALID_TO', $siteLangId),
     'action' => '',
 );
 
@@ -17,18 +21,19 @@ if (Badge::TYPE_RIBBON == $badgeType) {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position' ]);
 }
 
-if (BadgeLinkCondition::REC_COND_AUTO == $recordCondition) {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
+if (Badge::COND_AUTO == $badgeConditionType) {
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'], $arr_flds['action']);
 } else {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], 
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'], 
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to']);
 }
 
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($siteLangId);
 $recordTypeArr = BadgeLinkCondition::getRecordTypeArr($siteLangId);
 $recordConditionArr = BadgeLinkCondition::getRecordConditionArr($siteLangId);
 $nonPercElements =  [
-    BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE,
-    BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED
+    BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS
 ];
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
@@ -59,22 +64,19 @@ foreach ($arrListing as $sn => $row) {
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
                 $conditionType = (empty($row['badgelink_record_ids']) ? $conditionTypeArr[$row[$key]] : Labels::getLabel('LBL_N/A', $siteLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
-
-                if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type'] && empty($row['badgelink_record_ids'])) {
-                    $fromValue = $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'];
-                    $toValue = "";
-                    if (!empty($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'])) {
-                        $toValue = ' - ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to'];
-                    }
-                    
-                    $perc = in_array($row[$key], $nonPercElements) ? '' : '%';
-
-                    $htm = $fromValue . $toValue . $perc;
-                    $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-toggle='tooltip' data-placement='top' title='" . $htm . "'></i>", true);
-                }
+                break;
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from':
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to':
+                $lbl = (in_array($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $nonPercElements) ? $row[$key] : $row[$key] . '%');
+                $td->appendElement('plaintext', [], $lbl, true);
+                break;
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'from_date':
+            case BadgeLinkCondition::DB_TBL_PREFIX . 'to_date':
+                $lbl = (1 > strtotime($row[$key]) ? Labels::getLabel('LBL_N/A', $siteLangId) : date('Y-m-d H:i', strtotime($row[$key])));
+                $td->appendElement('plaintext', [], $lbl, true);
                 break;
             case 'action':
-                if ($canEdit && empty($conditionTypeArr[$row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']])) {
+                if ($canEdit && Badge::COND_MANUAL == $badgeConditionType) {
                     $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
                     $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)), "<i class='far fa-edit icon'></i>", true);
                 } else {

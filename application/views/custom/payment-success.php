@@ -46,11 +46,13 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                     $orderDetailLinkHtml = '<a href="' . $orderDetailUrl . '" class="link">#' . $orderInfo['order_id'] . '</a>';
                                 } else {
                                     $msg = Labels::getLabel('LBL_ORDER_#{ORDER-ID}_TRANSACTION_COMPLETED!', $siteLangId);
-                                    $orderProducts = current($orderInfo['orderProducts']);
-                                    $orderDetailUrl = UrlHelper::generateUrl('Seller', 'viewSubscriptionOrder', array($orderProducts['ossubs_id']));
                                     $orderDetailLinkHtml = $orderInfo['order_id'];
-                                    if (isset($orderProducts['ossubs_id'])) {
-                                        $orderDetailLinkHtml = '<a href="' . $orderDetailUrl . '">' . $orderInfo['order_id'] . '</a>';
+                                    if (array_key_exists('orderProducts', $orderInfo) && !empty($orderInfo['orderProducts'])) {
+                                        $orderProducts = current($orderInfo['orderProducts']);
+                                        $orderDetailUrl = UrlHelper::generateUrl('Seller', 'viewSubscriptionOrder', array($orderProducts['ossubs_id']));
+                                        if (isset($orderProducts['ossubs_id'])) {
+                                            $orderDetailLinkHtml = '<a href="' . $orderDetailUrl . '">' . $orderInfo['order_id'] . '</a>';
+                                        }
                                     }
                                 }
                                 $msg = CommonHelper::replaceStringData($msg, ['{ORDER-ID}' => $orderDetailLinkHtml]);

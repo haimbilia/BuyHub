@@ -51,14 +51,18 @@
                             </tr>
                             <tr>
                                 <th><?php echo Labels::getLabel('LBL_Cart_Total', $adminLangId); ?></th>
-                                <th><?php echo Labels::getLabel('LBL_Delivery/Shipping', $adminLangId); ?></th>
+                                <?php if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) { ?>
+                                    <th><?php echo Labels::getLabel('LBL_Delivery/Shipping', $adminLangId); ?></th>
+                                <?php } ?>
                                 <th><?php echo Labels::getLabel('LBL_VAT', $adminLangId); ?></th>
                                 <th><?php echo Labels::getLabel('LBL_Total_Paid', $adminLangId); ?></th>
                             </tr>
 
                             <tr>
                                 <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'CART_TOTAL'), true, true);?></td>
-                                <td>+<?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'SHIPPING'), true, true);?></td>
+                                <?php if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) { ?>
+                                    <td>+<?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'SHIPPING'), true, true);?></td>
+                                <?php } ?>
                                 <td>+<?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'TAX'), true, true);?></td>
                                 <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order), true, true);?></td>
                             </tr>

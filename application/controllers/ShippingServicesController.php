@@ -13,7 +13,6 @@ class ShippingServicesController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->langId = $this->siteLangId;
-        $this->init();
+        $this->langId = $this->siteLangId;        
     }
 }
