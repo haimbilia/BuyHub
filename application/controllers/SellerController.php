@@ -282,7 +282,7 @@ class SellerController extends SellerBaseController
 
         $rs = $srch->getResultSet();
         $orders = FatApp::getDb()->fetchAll($rs);
-        // CommonHelper::printArray($orders);
+
         $oObj = new Orders();
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id']);
@@ -448,7 +448,6 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
         $orderDetail = FatApp::getDb()->fetch($rs);
 
-        // CommonHelper::printArray($orderDetail, true);
         if (!$orderDetail) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             CommonHelper::redirectUserReferer();
@@ -913,9 +912,6 @@ class SellerController extends SellerBaseController
             CommonHelper::redirectUserReferer();
         }
 
-        $orderObj = new Orders();
-        $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
-
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $srch->joinSellerProducts();
@@ -934,6 +930,7 @@ class SellerController extends SellerBaseController
             CommonHelper::redirectUserReferer();
         }
 
+        $orderObj = new Orders();
         $charges = $orderObj->getOrderProductChargesArr($op_id);
         $orderDetail['charges'] = $charges;
 
@@ -2181,7 +2178,6 @@ class SellerController extends SellerBaseController
                 $this->set('imageFunction', 'shopLogo');
             } elseif ($imageType == 'banner') {
                 $bannerAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, false, $slide_screen);
-                // CommonHelper::printArray($bannerAttachments); die;
                 $this->set('images', $bannerAttachments);
                 $this->set('imageFunction', 'shopBanner');
             } else {
@@ -5170,7 +5166,7 @@ class SellerController extends SellerBaseController
             'smt' => $smt,
             'vals' => $smtValues
         );
-        // CommonHelper::printArray($condition, true);
+
         if ($tblRecord->loadFromDb($condition)) {
             $specialPriceRow = $tblRecord->getFlds();
             if ($specialPriceRow['splprice_id'] != $splprice_id) {

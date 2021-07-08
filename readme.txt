@@ -97,6 +97,7 @@ Updates/Fixes :
     =====================TV-9.3.1.20210705========================
 
     => 055632 - on accessing digital preview file from front end getting error
+    => 055631 - when pickup order is canceled by seller then listing delivery charges field on screen
      
 
 New Features:  
