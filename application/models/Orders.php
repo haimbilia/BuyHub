@@ -402,17 +402,14 @@ class Orders extends MyAppModel
         $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS, array('smt' => 'op_order_id = ?', 'vals' => array($this->getOrderId())));
         $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS_LANG, array('smt' => 'oplang_order_id = ?', 'vals' => array($this->getOrderId())));
 
-        if (!empty($products)) {
-            $opRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS);
-            $opLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_LANG);
-            $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
-            $opShippingLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG);
+        if (!empty($products)) {                       
 
             $counter = 1;
             foreach ($products as $selprodId => $product) {
                 $op_invoice_number = $this->getOrderId() . '-S' . str_pad($counter, 4, '0', STR_PAD_LEFT);
                 $product['op_order_id'] = $this->getOrderId();
                 $product['op_invoice_number'] = $op_invoice_number;
+                $opRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS);
                 $opRecordObj->assignValues($product);
                 if (!$opRecordObj->addNew()) {
                     $db->rollbackTransaction();
@@ -436,6 +433,7 @@ class Orders extends MyAppModel
                     foreach ($productsLangData as $productLangData) {
                         $productLangData['oplang_op_id'] = $op_id;
                         $productLangData['oplang_order_id'] = $this->getOrderId();
+                        $opLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_LANG);
                         $opLangRecordObj->assignValues($productLangData);
                         if (!$opLangRecordObj->addNew()) {
                             $db->rollbackTransaction();
@@ -586,7 +584,7 @@ class Orders extends MyAppModel
                 $productsShippingData = $product['productShippingData'];
                 if (!empty($productsShippingData)) {
                     $productsShippingData['opshipping_op_id'] = $op_id;
-
+                    $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
                     $opShippingRecordObj->assignValues($productsShippingData);
                     if (!$opShippingRecordObj->addNew()) {
                         $db->rollbackTransaction();
@@ -601,6 +599,7 @@ class Orders extends MyAppModel
                 if (!empty($productPickUpData)) {
                     $productPickUpData['opshipping_op_id'] = $op_id;
                     $productPickUpData['opshipping_by_seller_user_id'] = !empty($productPickUpData['opshipping_by_seller_user_id']) ? $productPickUpData['opshipping_by_seller_user_id'] : 0;
+                    $opShippingRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING);
                     $opShippingRecordObj->assignValues($productPickUpData);
                     if (!$opShippingRecordObj->addNew()) {
                         $db->rollbackTransaction();
@@ -631,6 +630,7 @@ class Orders extends MyAppModel
                 if (!empty($productsShippingLangData)) {
                     foreach ($productsShippingLangData as $productShippingLangData) {
                         $productShippingLangData['opshippinglang_op_id'] = $op_id;
+                        $opShippingLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_SHIPPING_LANG);
                         $opShippingLangRecordObj->assignValues($productShippingLangData);
                         if (!$opShippingLangRecordObj->addNew()) {
                             $db->rollbackTransaction();
@@ -2786,40 +2786,60 @@ class Orders extends MyAppModel
         }
         return $records['opo_order_id'];
     }
-
+            
     public static function afterShipOrderStatusDelivered()
     {
+        /** to do order fetch sequence need to update */
         $srch = new OrderProductSearch(0, true);
-        $srch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'op_id = oshistory_op_id', 'tosh');
-        $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED, OrderStatus::ORDER_DELIVERED));
-        $srch->addDirectCondition("oshistory_tracking_number != ''");
-        $srch->addDirectCondition("oshistory_courier != ''");
-        $srch->addMultipleFields(array('order_language_id', 'op_id', 'oshistory_tracking_number', 'oshistory_courier'));
+        $srch->joinOrderProductShipment();
+        $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = plugin.plugin_id', 'plugin');
+        $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED));
+        $srch->addCondition('opship_tracking_number', '!=', '');
+        $srch->addCondition('opshipping_plugin_id', '>', 0);
+        $srch->addMultipleFields(array('order_language_id', 'op_id', 'op_invoice_number', 'opship_tracking_number', 'opship_tracking_courier_code', 'opshipping_plugin_id', 'plugin_code', 'opship_tracking_plugin_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id'));
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addOrder('op_id', 'DESC');
-        $rs = $srch->getResultSet();
-        $ordersDetail = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize(40);
+        $srch->addOrder('RAND()');
+        $ordersDetail = FatApp::getDb()->fetchAll($srch->getResultSet());
+
         if (!empty($ordersDetail)) {
-            $shipmentTracking = new ShipmentTracking();
-            if (false === $shipmentTracking->init(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
-                $message = $shipmentTracking->getError();
-                Message::addErrorMessage($message);
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
-            foreach ($ordersDetail as $data) {
-                $response = $shipmentTracking->getTrackingInfo($data["oshistory_tracking_number"], $data["oshistory_courier"], FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
-                if ($response['meta']['code'] == 200) {
-                    if (strtolower($response['data']['tracking']['tag']) == 'delivered') {
-                        $order = new Orders();
-                        $order->addChildProductOrderHistory($data['op_id'], $data["order_language_id"], OrderStatus::ORDER_COMPLETED, $comment, 1);
-                        $where = array('smt' => 'op_id = ? ', 'vals' => array($data['op_id']));
-                        FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS, array('op_confirm_date' => date('Y-m-d H:i:s')), $where);
+            $shippingObj = new Shipping(CommonHelper::getLangId());
+            $shipmentTrackingObj = new ShipmentTracking();
+            $trackingPluginLoaded = $shipmentTrackingObj->init(CommonHelper::getLangId());
+
+            foreach ($ordersDetail as $order) {
+                $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($order['op_selprod_user_id'], $order['opshipping_by_seller_user_id']);
+                $shippingApiObj = $shippingObj->getShippingApiObj($shippedBySeller ? $order['opshipping_by_seller_user_id'] : 0);
+                if (!empty($shippingApiObj) && $shippingApiObj->getkey('plugin_id') == $order['opshipping_plugin_id'] && $shippingObj->canFetchTrackingDetail()) {
+                    $trackingData = $shippingApiObj->fetchTrackingDetail($order['opship_tracking_number'], $order['op_invoice_number']);
+                    if (!empty($trackingData)) {
+                        if (in_array(ShippingServicesBase::TRACKING_STATUS_DELIVERED, array_column($trackingData['detail'], 'status'))) {
+                            (new self())->markeredDeliveredOrderProduct($order['op_id'], $order["order_language_id"]);
+                        }
+                    }
+                    continue;
+                }
+                if (true == $trackingPluginLoaded && in_array($order['plugin_code'], $shipmentTrackingObj->getTrackablePluginKeys())) {
+                    $response = $shipmentTrackingObj->getTrackingInfo($data["oshistory_tracking_number"], $data["oshistory_courier"]);
+                    if ($response['meta']['code'] == 200) {
+                        if (strtolower($response['data']['tracking']['tag']) == 'delivered') {
+                            (new self())->markeredOrderProductDelivered($data['op_id'], $data["order_language_id"]);
+                        }
                     }
                 }
             }
         }
         return true;
     }
+
+    private function markeredOrderProductDelivered($opId, $orderLangId)
+    {
+        $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", CommonHelper::getLangId());
+        $order = new Orders();
+        $order->addChildProductOrderHistory($opId, $orderLangId, OrderStatus::ORDER_DELIVERED, $comment, true);
+        $where = array('smt' => 'op_id = ? ', 'vals' => array($opId));
+        FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS, array('op_confirm_date' => date('Y-m-d H:i:s')), $where);
+    }
+
 }

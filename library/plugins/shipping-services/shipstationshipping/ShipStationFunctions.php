@@ -110,6 +110,15 @@ trait ShipStationFunctions
         $this->endpoint = 'carriers';
         return $this->get();
     }
+    /**
+     * 
+     * @return bool
+     */
+    private function wareHousesList(): bool
+    {
+        $this->endpoint = 'warehouses';
+        return $this->get();
+    }
 
     /**
      * shippingRates
@@ -214,5 +223,5 @@ trait ShipStationFunctions
             return false;
         }
         return true;
-    }
+    }    
 }

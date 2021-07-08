@@ -328,7 +328,6 @@ class FilterHelper extends FatUtility
         return $pageSizeArr;
     }
 
-
     public static function parseArrayByKeys($arr, $allowedKeys, $inAllowedKeysSequence = false)
     {
         if (true == $inAllowedKeysSequence) {

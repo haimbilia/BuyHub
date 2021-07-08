@@ -19,7 +19,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <div class="content-header row ">
             <div class="col">
@@ -57,9 +57,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div id="profilesListing">
-
-                            </div>
+                            <div id="profilesListing"></div>
                         </div>
                     </div>
                 </div>

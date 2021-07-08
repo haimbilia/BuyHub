@@ -31,14 +31,6 @@ class PluginSettingController extends AdminBaseController
         }
     }
 
-    private function setFormObj()
-    {
-        $this->frmObj = $this->getForm();
-        if (false === $this->frmObj) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_REQUIREMENT_SETTINGS_ARE_NOT_DEFINED', $this->adminLangId));
-        }
-    }
-
     public function index()
     {
         $this->setFormObj();
@@ -71,28 +63,5 @@ class PluginSettingController extends AdminBaseController
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    public function getForm()
-    {
-        $class = get_called_class();
-        try {
-            $requirements = $class::getConfigurationKeys();
-        } catch (\Error $e) {
-            if (false == method_exists($class, 'form')) {
-                FatUtility::dieJsonError($e->getMessage());
-            }
-            $frm = $class::form($this->adminLangId);
-        }
-        
-        if ((empty($requirements) || !is_array($requirements)) && !isset($frm)) {
-            return false;
-        }
-        if (isset($frm)) {
-            $frm = PluginSetting::addKeyFields($frm);
-        } else {
-            $frm = PluginSetting::getForm($requirements, $this->adminLangId);
-        }
-        $frm->fill(['keyName' => $this->keyName]);
-        return $frm;
-    }
+    
 }

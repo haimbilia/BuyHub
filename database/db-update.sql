@@ -494,9 +494,39 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_DELIVERY_RATING_TYPE_TOOLTIP_INFO', '1', 'Optional rating parameter for shop delivery. Can be switched off.', '1');
 
 
+-- --- Aramex Shipping API--- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Aramex', '8', 'Aramex', '0', '3');
+ALTER TABLE `tbl_shop_specifics` ADD `shop_use_manual_shipping_rates` TINYINT(2) NOT NULL AFTER `shop_pickup_interval`;
+CREATE TABLE `tbl_order_product_shipment_pickup` (
+  `opsp_op_id` int NOT NULL,
+  `opsp_api_req_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party',
+  `opsp_scheduled` tinyint NOT NULL COMMENT 'Scheduled/cancelled',
+  `opsp_requested_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For third party',
+  `opsp_response` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'From third party'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_order_product_shipment_pickup`
+--
+ALTER TABLE `tbl_order_product_shipment_pickup`
+  ADD UNIQUE KEY `opps_op_id` (`opsp_op_id`);
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_plugin_id` INT NOT NULL AFTER `opshipping_fulfillment_type`;
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_courier_code` VARCHAR(255) NOT NULL AFTER `opship_tracking_url`;
+ALTER TABLE `tbl_order_product_shipment` ADD `opship_tracking_plugin_id` INT NOT NULL AFTER `opship_tracking_courier_code`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_plugin_id` `opshipping_plugin_id` INT NOT NULL COMMENT 'plugin use to fetch rates';
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_is_seller_plugin` TINYINT NOT NULL AFTER `opshipping_plugin_id`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_is_seller_plugin` `opshipping_is_seller_plugin` TINYINT NOT NULL COMMENT 'is seller plugin use to fetch rates ';
+ALTER TABLE `tbl_order_product_shipping` ADD `opshipping_plugin_charges` DECIMAL(10,2) NOT NULL AFTER `opshipping_is_seller_plugin`;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_plugin_charges` `opshipping_plugin_charges` DECIMAL(10,2) NOT NULL COMMENT 'shipping rate fetch from plugin';
+-- --- Aramex Shipping API--- --
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_NA', 1, 'NA', 1) ON DUPLICATE KEY UPDATE label_caption = 'NA';
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_View_Purpose";
+
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Aftership Order Status Delivered', 'Orders/afterShipOrderStatusDelivered', '1440', '1');
 
 -- ----- Task 84994 : Badges & Ribbons ---- --
@@ -613,3 +643,4 @@ ALTER TABLE `tbl_badge_link_conditions` DROP INDEX `blinkcond_id`;
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('MSG_STRIPE_CONNECT_INVALID_ACCOUNT_CURRENCY', 1, 'You Cannot Create Account With Different Currency Other Than System Currency {SYSTEM-CURRECNY}', '') ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- ---- Task : 87287 Stripe Connect Subscription ---- --
+
