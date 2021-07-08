@@ -257,7 +257,7 @@ class Plugin extends PluginCommon
      * @param  int $langId
      * @return mixed
      */
-    public function getDefaultPluginData(int $typeId, $attr = '', int $langId = 0)
+    public function getDefaultPluginData(int $typeId, $attr = null, int $langId = 0)
     {
         if (!in_array($typeId, self::getKingpinTypeArr())) {
             $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
