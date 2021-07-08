@@ -2153,8 +2153,10 @@ class ProductsController extends MyAppController
         if (false == $selProdData) {
             FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
         }
+
+        $ddpObj = new DigitalDownloadPrivilages();
         
-        if (false == DigitalDownload::allowedWithInventory($selProdData['selprod_product_id'])) {
+        if (false == $ddpObj->allowedWithInventory($selProdData['selprod_product_id'])) {
             $recordId = $selProdData['selprod_product_id'];
             $requestType = Product::CATALOG_TYPE_PRIMARY;
         }
