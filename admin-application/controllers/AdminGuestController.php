@@ -157,6 +157,53 @@ class AdminGuestController extends FatController
         $this->set('msg', $success_message);
         $this->_template->render(false, false, 'json-success.php');
     }
+    public function sendResetPasswordLink($usernameOrEmail)
+    {
+        if (empty($usernameOrEmail)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+        }
+
+        $adminAuthObj = AdminAuthentication::getInstance();
+
+        $admin = $adminAuthObj->checkAdminEmailOrUsername($usernameOrEmail);
+
+        if (!$admin) {
+            Message::addErrorMessage($adminAuthObj->getError());
+            $this->set('msg', Message::getHtml());
+            $this->_template->render(false, false, 'json-error.php', true, false);
+        }
+
+        $token = FatUtility::getRandomString(30);
+
+        $data = array('admin_id' => $admin['admin_id'], 'token' => $token);
+        $reset_url = UrlHelper::generateFullUrl('adminGuest', 'resetPwd', array($admin['admin_id'], $token));
+        $adminAuthObj->deleteOldPasswordResetRequest($admin['admin_id']);
+        if (!$adminAuthObj->addPasswordResetRequest($data)) {
+            Message::addErrorMessage($adminAuthObj->getError());
+            $this->set('msg', Message::getHtml());
+            $this->_template->render(false, false, 'json-error.php', true, false);
+        }
+        $replacements = array(
+            '{reset_url}' => $reset_url,
+            '{site_domain}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND),
+            '{user_full_name}' => trim($admin['admin_name']),
+        );
+        if (!EmailHandler::sendMailTpl(
+            $admin['admin_email'],
+            'admin_forgot_password',
+            $this->adminLangId,
+            $replacements
+        )) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Unable_to_send_email', $this->adminLangId));
+            $this->set('msg', Message::getHtml());
+            $this->_template->render(false, false, 'json-error.php', true, false);
+        }
+        $emaiHandObj = new EmailHandler();
+        $emaiHandObj->sendSms('admin_forgot_password', FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->adminLangId);
+
+        $this->set('msg', Labels::getLabel('MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL', $this->adminLangId));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 
     public function forgotPassword()
     {

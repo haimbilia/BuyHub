@@ -671,6 +671,20 @@ function defaultSetUpLogin(frm, v) {
     });
     return false;
 }
+sendResetPasswordLink = function(user) {
+    if (user == '') {
+        return false;
+    }
+    $.systemMessage(langLbl.processing, 'alert--process', false);
+    fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'sendResetPasswordLink', [user]), '', function (ans) {
+        if (ans.status == 1) {
+            $.mbsmessage(ans.msg, autoClose, 'alert--success');
+            location.href = ans.redirectUrl;
+            return;
+        }
+        $.mbsmessage(ans.msg, autoClose, 'alert--danger');
+    });		
+};
 
 (function ($) {
     var screenHeight = $(window).height() - 100;

@@ -647,3 +647,117 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 delete FROM `tbl_cron_schedules` where cron_command='Orders/afterShipOrderStatusDelivered';
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Mark Order Status Delivered Via Shipping Api', 'Orders/markOrderStatusDeliveredViaApi', '1440', '1');
 ALTER TABLE `tbl_orders_status_history` ADD `oshistory_tracking_url` TEXT NOT NULL AFTER `oshistory_tracking_number`;
+
+-- ------------Forgot Password -> Reset Password
+UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_body` = '<table width="100%" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+        <td >
+            <!--
+            page title start here
+            -->
+               
+            <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                            <h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;"></h4>
+                            <h2 style="margin:0; font-size:34px; padding:0;">Reset Password!</h2></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--
+            page title end here
+            -->
+               </td>
+    </tr>
+    <tr>
+        <td>
+            <!--
+            page body start here
+            -->
+               
+            <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {user_full_name} </strong><br />
+                                            It seems that you have used reset password option at <a href="{website_url}">{website_name}</a>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:20px 0 30px;">Please visit the link given below to reset your password. Please note that the link is valid for next 24 hours only.<br />
+                                            Password reset url: <a href="{reset_url}">{reset_url}</a>.</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--
+            page body end here
+            -->
+               </td>
+    </tr>
+</table>' WHERE `tbl_email_templates`.`etpl_code` = 'forgot_password' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+
+UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_body` = '<table width="100%" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td >
+					<!--
+					page title start here
+					-->
+					   
+					<table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<td style="background:#fff;padding:20px 0 30px; text-align:center;">
+									<h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">Request Received</h4>
+									<h2 style="margin:0; font-size:34px; padding:0;">Retrieve Password!</h2></td>
+							</tr>
+						</tbody>
+					</table>
+					<!--
+					page title end here
+					-->
+					   </td>
+			</tr>
+			<tr>
+				<td>
+					<!--
+					page body start here
+					-->
+					   
+					<table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+									<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+										<tbody>
+											<tr>
+												<td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {user_full_name} </strong><br />
+													It seems that you have used reset password option at <a href="{website_url}">{website_name}</a>.</td>
+											</tr>
+											<tr>
+												<td style="padding:20px 0 30px;">Please click here to below link to change your password.<br />
+													<a href="{reset_url}" style="font-size:15px; color:#ff3a59;">Click here</a></td>
+											</tr>
+											<tr>
+												<td style="padding:0 0 30px;">Please ignore this email if you did not use the reset password option</td>
+											</tr>
+											
+										</tbody>
+									</table></td>
+							</tr>
+						</tbody>
+					</table>
+					<!--
+					page body end here
+					-->
+					   </td>
+			</tr>
+			</table>' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password' AND `tbl_email_templates`.`etpl_lang_id` = 1;
+
+>>>>>>> 68c5a7ec220631f44f55363fd481c2f42cc4b89f
