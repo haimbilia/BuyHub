@@ -644,3 +644,6 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('MSG_STRIPE_CONNECT_INVALID_ACCOUNT_CURRENCY', 1, 'You Cannot Create Account With Different Currency Other Than System Currency {SYSTEM-CURRECNY}', '') ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- ---- Task : 87287 Stripe Connect Subscription ---- --
 
+delete FROM `tbl_cron_schedules` where cron_command='Orders/afterShipOrderStatusDelivered';
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Mark Order Status Delivered Via Shipping Api', 'Orders/markOrderStatusDeliveredViaApi', '1440', '1');
+ALTER TABLE `tbl_orders_status_history` ADD `oshistory_tracking_url` TEXT NOT NULL AFTER `oshistory_tracking_number`;
