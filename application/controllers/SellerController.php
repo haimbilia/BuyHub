@@ -840,7 +840,7 @@ class SellerController extends SellerBaseController
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $post['tracking_number']
                     ];
-                    if (array_key_exists('opship_tracking_url', $post)) {
+                    if (array_key_exists('opship_tracking_url', $post)) {                   
                         $updateData['opship_tracking_url'] =  $opship_tracking_url;                        
                     }
                     if (array_key_exists('oshistory_courier', $post)) {

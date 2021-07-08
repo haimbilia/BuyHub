@@ -2787,9 +2787,9 @@ class Orders extends MyAppModel
         return $records['opo_order_id'];
     }
             
-    public static function afterShipOrderStatusDelivered()
+    public static function markOrderStatusDeliveredViaApi()
     {
-        /** to do order fetch sequence need to update */
+        /** to do fetch the order which not hit recently*/
         $srch = new OrderProductSearch(0, true);
         $srch->joinOrderProductShipment();
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
@@ -2797,21 +2797,19 @@ class Orders extends MyAppModel
         $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED));
         $srch->addCondition('opship_tracking_number', '!=', '');
         $srch->addCondition('opshipping_plugin_id', '>', 0);
-        $srch->addMultipleFields(array('order_language_id', 'op_id', 'op_invoice_number', 'opship_tracking_number', 'opship_tracking_courier_code', 'opshipping_plugin_id', 'plugin_code', 'opship_tracking_plugin_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id'));
+        $srch->addMultipleFields(array('order_language_id', 'op_id', 'op_invoice_number', 'opship_tracking_number', 'opship_tracking_courier_code', 'opshipping_plugin_id', 'plugin.plugin_code as opshipping_plugin_name', 'opship_tracking_plugin_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id'));
         $srch->doNotCalculateRecords();
         $srch->setPageSize(40);
         $srch->addOrder('RAND()');
         $ordersDetail = FatApp::getDb()->fetchAll($srch->getResultSet());
-
         if (!empty($ordersDetail)) {
             $shippingObj = new Shipping(CommonHelper::getLangId());
             $shipmentTrackingObj = new ShipmentTracking();
             $trackingPluginLoaded = $shipmentTrackingObj->init(CommonHelper::getLangId());
-
             foreach ($ordersDetail as $order) {
                 $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($order['op_selprod_user_id'], $order['opshipping_by_seller_user_id']);
                 $shippingApiObj = $shippingObj->getShippingApiObj($shippedBySeller ? $order['opshipping_by_seller_user_id'] : 0);
-                if (!empty($shippingApiObj) && $shippingApiObj->getkey('plugin_id') == $order['opshipping_plugin_id'] && $shippingObj->canFetchTrackingDetail()) {
+                if (!empty($shippingApiObj) && $shippingApiObj->getkey('plugin_id') == $order['opshipping_plugin_id'] && $shippingApiObj->canFetchTrackingDetail()) {
                     $trackingData = $shippingApiObj->fetchTrackingDetail($order['opship_tracking_number'], $order['op_invoice_number']);
                     if (!empty($trackingData)) {
                         if (in_array(ShippingServicesBase::TRACKING_STATUS_DELIVERED, array_column($trackingData['detail'], 'status'))) {
@@ -2820,11 +2818,11 @@ class Orders extends MyAppModel
                     }
                     continue;
                 }
-                if (true == $trackingPluginLoaded && in_array($order['plugin_code'], $shipmentTrackingObj->getTrackablePluginKeys())) {
-                    $response = $shipmentTrackingObj->getTrackingInfo($data["oshistory_tracking_number"], $data["oshistory_courier"]);
+                if (true == $trackingPluginLoaded && in_array($order['opshipping_plugin_name'], $shipmentTrackingObj->getTrackablePluginKeys())) {
+                    $response = $shipmentTrackingObj->getTrackingInfo($order["opship_tracking_number"], $order["opship_tracking_courier_code"]);
                     if ($response['meta']['code'] == 200) {
                         if (strtolower($response['data']['tracking']['tag']) == 'delivered') {
-                            (new self())->markeredOrderProductDelivered($data['op_id'], $data["order_language_id"]);
+                            (new self())->markeredOrderProductDelivered($order['op_id'], $order["order_language_id"]);
                         }
                     }
                 }
@@ -2835,7 +2833,7 @@ class Orders extends MyAppModel
 
     private function markeredOrderProductDelivered($opId, $orderLangId)
     {
-        $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", CommonHelper::getLangId());
+        $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", $orderLangId);
         $order = new Orders();
         $order->addChildProductOrderHistory($opId, $orderLangId, OrderStatus::ORDER_DELIVERED, $comment, true);
         $where = array('smt' => 'op_id = ? ', 'vals' => array($opId));

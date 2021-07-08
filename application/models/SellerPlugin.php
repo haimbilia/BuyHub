@@ -130,7 +130,7 @@ class SellerPlugin extends PluginCommon
             $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
             return false;
         }
-
+        
         $customCols = !empty($attr) ? true : false;
         $srch = static::pluginTypeSrchObj($this->userId, $typeId, $langId, $customCols, true);
 
