@@ -15,12 +15,12 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                         <?php if (!empty($easyEcomSellerToken)) { ?>
                             <?php
                             $status = User::getUserMeta($userId, 'easyEcomSyncingStatus');
-                            $active = empty($status) || Plugin::INACTIVE == $status ? '' : 'checked';
+                            $active = empty($status) || applicationConstants::INACTIVE == $status ? '' : 'checked';
                             $value = empty($status) ? 1 : 0;
                             ?>
                             <div class="d-flex justify-content-center mb-3">                                
                                 <label class="toggle-switch mb-0 mx-2">
-                                    <input <?php echo $active; ?> type="checkbox" value="<?php echo $value; ?>" onclick="syncStatusToggle(event, this)" />
+                                    <input <?php echo $active; ?> type="checkbox" onclick="syncStatusToggle(this, <?php echo $value ?>)" />
                                     <div class="slider round"></div>
                                 </label>
                                 <p>

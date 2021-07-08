@@ -26,16 +26,14 @@ $(document).ready(function () {
         });
     }
 
-    syncStatusToggle = function (e, obj) {
-        e.preventDefault();
-        fcom.ajax(fcom.makeUrl(keyName, 'syncStatus', [$(obj).val()]), '', function (res) {
+    syncStatusToggle = function (obj, status) {
+        $(obj).attr('onclick', 'syncStatusToggle(this, ' + (status ? 0 : 1) + ')');
+        fcom.ajax(fcom.makeUrl(keyName, 'syncStatus', [status]), '', function (res) {
             res = $.parseJSON(res);
             if (1 > res.status) {
+                var value = (value == 0 ? 1 : 0);
+                $(obj).prop('checked', (status == 0));
                 $.systemMessage(res.msg, 'alert--danger', true);
-            } else {
-                $.systemMessage(res.msg, 'alert--success', true);
-                var value = $(obj).is(":checked") ? 1 : 0;
-                $(obj).prop('checked', !($(obj).is(":checked"))).val(value);
             }
         });
     }
