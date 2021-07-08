@@ -762,3 +762,4 @@ UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_
 
 INSERT INTO `tbl_plugins` (`plugin_id`, `plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES (NULL, 'Yoco', '13', 'Yoco', '1', '1');
 
+-- -------------------TV-9.3.1.20210708--------------------
