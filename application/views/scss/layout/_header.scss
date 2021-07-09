@@ -78,9 +78,8 @@
                 border: none;
             }
         }
-    }
-  }
-  &-location{
+    }    
+    &-location{
       display: flex;
       align-items: center;
       input{
@@ -115,7 +114,8 @@
           width: 40px;
           cursor: pointer;
       }
-  }
+    }
+}
 
 .short-links { 
     display: flex;
