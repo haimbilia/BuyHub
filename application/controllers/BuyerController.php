@@ -1341,7 +1341,9 @@ class BuyerController extends BuyerBaseController
         if (($request['orrequest_status'] == OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING) || $request['orrequest_status'] == OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED) {
             $canWithdrawRequest = true;
         }
-        if ($attachedFile = AttachedFile::getAttachment(AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $orrequest_id)) {
+
+        $attachedFile = AttachedFile::getAttachment(AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $orrequest_id);
+        if (0 < $attachedFile['afile_id']) {
             $this->set('attachedFile', $attachedFile);
         }
         $this->set('canEscalateRequest', $canEscalateRequest);

@@ -101,6 +101,7 @@ Updates/Fixes :
     => 055604 - zip file needs to be exported on click of download button on buyer end containing (files and link) just like Tribe
     => 055720 - admin> promotions> ribbon> bind conditions> list having select option which is of no use and on selecting, nothing appears on top for operations
     => 055721 - admin> promotions> ribbon> bind conditions> filters> fields are not aligned properly
+    => 055689 - while returning if there is no file attached still then listing download button on return order detail page on buyer end
 
 New Features:  
     => Admin shipped products listing page
