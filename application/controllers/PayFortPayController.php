@@ -114,8 +114,8 @@ class PayFortPayController extends PaymentController
             FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
         } else {
             $orderPaymentObj->addOrderPaymentComments('#' . $_REQUEST['response_code'] . ': ' . $_REQUEST['response_message']);
-        }
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($_REQUEST));
+        } 
+        SystemLog::transaction(json_encode($_REQUEST), self::KEY_NAME . "-" . $orderId);
         if (substr($_REQUEST['response_code'], 2) == '072') {
             FatApp::redirectUser(CommonHelper::getPaymentCancelPageUrl());
         } else {

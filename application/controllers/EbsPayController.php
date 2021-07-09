@@ -191,8 +191,8 @@ class EbsPayController extends PaymentController
             if ($response['ResponseCode'] == '0') {
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['TransactionID'], $paymentAmount, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($response));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
-            } else {
-                TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+            } else {              
+                SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
                 $orderPaymentObj->addOrderPaymentComments(serialize($response));
                 FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
             }

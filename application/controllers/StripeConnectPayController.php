@@ -338,8 +338,8 @@ class StripeConnectPayController extends PaymentController
         if (false === $this->stripeConnect->init()) {
             $error = [
                 'msg' => $this->stripeConnect->getError()
-            ];
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), json_encode($error));
+            ];          
+            SystemLog::transaction(json_encode($error), self::KEY_NAME);
             CommonHelper::printArray($error, true);
         }
 
@@ -350,9 +350,9 @@ class StripeConnectPayController extends PaymentController
             $error = [
                 'msg' => Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId),
                 'response' => $payload,
-            ];
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, time(), json_encode($error));
-            CommonHelper::printArray($error, true);
+            ];  
+            SystemLog::transaction(json_encode($error), self::KEY_NAME);
+            return;
         }
 
         $orderId = isset($payload['data']['object']['metadata']['orderId']) ? $payload['data']['object']['metadata']['orderId'] : '';
@@ -366,9 +366,10 @@ class StripeConnectPayController extends PaymentController
             $error = [
                 'msg' => $msg,
                 'response' => $payload,
-            ];
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $recordId, json_encode($error));
-            CommonHelper::printArray($error, true);
+            ];  
+            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $recordId);
+            return;
+
         }
 
 
@@ -382,17 +383,19 @@ class StripeConnectPayController extends PaymentController
                 'msg' => Labels::getLabel('MSG_INVALID_REQUEST_ORDER/PAYMENT_INTENT_ID', $this->siteLangId),
                 'response' => $payload,
             ];
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-            CommonHelper::printArray($error, true);
+            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);        
+            return;
+
         }
 
         if ($this->orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
             $error = [
                 'msg' => Labels::getLabel('MSG_INVALID_ORDER._ALREADY_PAID_OR_CANCELLED', $this->siteLangId),
                 'response' => $payload,
-            ];
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-            CommonHelper::printArray($error, true);
+            ];     
+            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
+            return;
+
         }
 
         $chargeResponse = isset($payload['data']['object']['charges']['data']) ? current($payload['data']['object']['charges']['data']) : [];
@@ -400,9 +403,9 @@ class StripeConnectPayController extends PaymentController
             $error = [
                 'msg' => Labels::getLabel('MSG_INVALID_ORDER_CHARGE', $this->siteLangId),
                 'response' => $payload,
-            ];
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
-            CommonHelper::printArray($error, true);
+            ];    
+            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
+            return;
         }
 
         $chargeId = $chargeResponse['id'];
@@ -437,7 +440,6 @@ class StripeConnectPayController extends PaymentController
                         $firstTransferAmount = $firstTransferAmount - $pendingTransferAmount;
                     }
                 }
-
                 $accountId = User::getUserMeta($op['op_selprod_user_id'], 'stripe_account_id');
                 // Credit sold product amount to seller wallet.
                 $msg = 'MSG_PRODUCT_SOLD_#{invoice-no}.';
@@ -484,7 +486,6 @@ class StripeConnectPayController extends PaymentController
                         TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
                         continue;
                     }
-
                     // Debit sold product amount from seller wallet.
                     $comments = $comments . ' ' . Labels::getLabel('MSG_TRANSFERED_TO_ACCOUNT_{account-id}.', $this->siteLangId);
                     $comments = CommonHelper::replaceStringData($comments, ['{account-id}' => $accountId]);

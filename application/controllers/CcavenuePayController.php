@@ -128,8 +128,8 @@ class CcavenuePayController extends PaymentController
             if ($order_status == "Success" && $total_paid_match) {
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tracking_id, $paymentGatewayCharge, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($post));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
-            } else {
-                TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($post));
+            } else {              
+                SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
                 $orderPaymentObj->addOrderPaymentComments($request);
                 FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
             }

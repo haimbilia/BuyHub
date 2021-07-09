@@ -87,7 +87,8 @@ class TaxJarTax extends TaxBase
         $this->client = TaxJar\Client::withApiKey($apiToken);
         if (Plugin::ENV_SANDBOX == $env) {
             $this->client->setApiConfig('api_url', TaxJar\Client::SANDBOX_API_URL);
-        }
+        }        
+        $this->client->setApiConfig('index', ['x-api-version' => '2020-08-07']);
         return true;
     }
 
@@ -112,7 +113,9 @@ class TaxJarTax extends TaxBase
 
         try {
             $taxes = $this->client->taxForOrder($this->params);
-        } catch (exception $e) {
+            SystemLog::plugin(json_encode($this->params), json_encode($taxes), self::KEY_NAME . " - " . __FUNCTION__, SystemLog::TYPE_INFO);
+        } catch (exception $e) {                        
+            SystemLog::plugin(json_encode($this->params), $e->getMessage(), self::KEY_NAME . " - " . __FUNCTION__);            
             return [
                 'status' => false,
                 'msg' => $e->getMessage(),
@@ -208,11 +211,11 @@ class TaxJarTax extends TaxBase
     public function getCodes(int $pageSize = null, int $pageNumber = null, string $filter = null, array $orderBy = null, bool $formatted = true)
     {
         try {
-            $codesArr = $this->client->categories();
+            $codesArr = $this->client->categories();            
             if (false == $formatted) {
                 return $codesArr;
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {            
             return [
                 'status' => false,
                 'msg' => $e->getMessage()
@@ -255,7 +258,9 @@ class TaxJarTax extends TaxBase
 
         try {
             $order = $this->client->createOrder($this->params);
+            SystemLog::plugin(json_encode($this->params), json_encode($order), self::KEY_NAME . " - " . __FUNCTION__, SystemLog::TYPE_INFO);            
         } catch (exception $e) {
+            SystemLog::plugin(json_encode($this->params), $e->getMessage(), self::KEY_NAME . " - " . __FUNCTION__); 
             return [
                 'status' => false,
                 'msg' => $e->getMessage(),
