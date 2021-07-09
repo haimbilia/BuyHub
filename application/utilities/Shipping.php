@@ -294,7 +294,7 @@ class Shipping
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
-                SystemLog::set($msg);
+                SystemLog::system($msg);
                 continue;
             }
 
@@ -331,8 +331,6 @@ class Shipping
                 $shippedBy = $product['shop_id'];
                 $fromZipCode = $rates['shop_postalcode'];
             }
-
-            
             $prodWeight = $product['product_weight'] * $product['quantity'];
             $productWeightClass = isset($weightUnitsArr[$product['product_weight_unit']]) ? $weightUnitsArr[$product['product_weight_unit']] : '';
             $productWeightInOunce = static::convertWeightInOunce($prodWeight, $productWeightClass);
@@ -368,7 +366,7 @@ class Shipping
                 }
                               
                 if ((false == $shippingRates || empty($shippingRates))) {
-                    SystemLog::set($shippingApiObj->getError());     
+                    SystemLog::system($shippingApiObj->getError());     
                     continue;
                 }
                 unset($physicalSelProdIdArr[$rates['selprod_id']]);

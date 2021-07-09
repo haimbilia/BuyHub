@@ -159,8 +159,8 @@ class PaystackPayController extends PaymentController
     private function logFailure(string $orderId, string $msg = '', array $response = [])
     {
         $response = !empty($response) ? $response : $_REQUEST;
-        $orderPaymentObj = new OrderPayment($orderId);
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+        $orderPaymentObj = new OrderPayment($orderId);   
+        SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
 
         if (empty($msg)) {
             $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);

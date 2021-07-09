@@ -82,8 +82,8 @@ class YocoPayController extends PaymentController
             $orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['id'], ($paymentAmount), Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($response));
             die(json_encode(['status' => 1, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId))]));
         }
-        $msg = $response['displayMessage'] ?? Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+        $msg = $response['displayMessage'] ?? Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);     
+        SystemLog::transaction(json_encode($response),self::KEY_NAME . "-" . $orderId);
         $orderPaymentObj->addOrderPaymentComments($msg);
         die(json_encode(['status' => 0, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentFailed'), 'msg' => $msg]));
     }

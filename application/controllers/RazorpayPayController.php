@@ -112,8 +112,9 @@ class RazorpayPayController extends PaymentController
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $razorpay_payment_id, $paymentGatewayCharge, Labels::getLabel("L_Received_Payment", $this->siteLangId), $result);
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($merchant_order_id)));
             } else {
-                $orderPaymentObj->addOrderPaymentComments($error . ' Payment Failed! Check Razorpay dashboard for details of Payment Id:' . $razorpay_payment_id);
-                TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $merchant_order_id, $result);
+                $orderPaymentObj->addOrderPaymentComments($error . ' Payment Failed! Check Razorpay dashboard for details of Payment Id:' . $razorpay_payment_id);             
+                SystemLog::transaction($result, self::KEY_NAME . "-" . $merchant_order_id);
+                
                 FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
             }
         } else {

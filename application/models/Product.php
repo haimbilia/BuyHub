@@ -1432,7 +1432,7 @@ class Product extends MyAppModel
         $srch->joinProductToCategory($langId);
         $srch->joinSellerSubscription(0, false, true);
         $srch->addSubscriptionValidCondition();
-
+        
         /* to check current product is in wish list or not[ */
         if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $srch->joinFavouriteProducts($userId);
@@ -1448,7 +1448,8 @@ class Product extends MyAppModel
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
                 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
                 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-                'selprod_sold_count', 'selprod_return_policy', 'shop_id', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty'
+                'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
+                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng'
             )
         );
 
@@ -1476,6 +1477,10 @@ class Product extends MyAppModel
                 $includeRating = true;
             }
         }
+        
+        if(isset($criteria['vtype']) && $criteria['vtype'] == 'map'){            
+            $includeRating = true;
+        }
 
         if (true === $includeRating) {
             $selProdReviewObj = new SelProdReviewSearch();
@@ -1485,11 +1490,12 @@ class Product extends MyAppModel
             $selProdReviewObj->doNotLimitRecords();
             $selProdReviewObj->addGroupBy('spr.spreview_product_id');
             $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-            $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', 'spr.spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating"));
+            $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', 'spr.spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating","count(spreview_id) as totReviews"));      
             $selProdRviewSubQuery = $selProdReviewObj->getQuery();
             /*$srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');*/
             $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
-            $srch->addFld('coalesce(prod_rating,0) prod_rating');
+            //$srch->addFld('coalesce(prod_rating,0) prod_rating');
+            $srch->addMultipleFields(['COALESCE(prod_rating,0) prod_rating','COALESCE(totReviews,0) totReviews']);
         }
 
 

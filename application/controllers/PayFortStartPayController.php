@@ -135,8 +135,8 @@ class PayFortStartPayController extends PaymentController
                 if ($order_payment_status == 1 && $total_paid_match) {
                     $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['id'], $payment_gateway_charge, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($response));
                     FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($order_id)));
-                } else {
-                    TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+                } else {             
+                    SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
                     $orderPaymentObj->addOrderPaymentComments($request);
                 }
             }

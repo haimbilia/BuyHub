@@ -42,6 +42,10 @@ class CategoryController extends MyAppController
 
         $get['category'] = $categoryId;
         $get['join_price'] = 1;
+        $get['vtype']  = $get['vtype'] ?? 'grid';
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $get['vtype'] == 'map') {
+            $get['vtype'] = 'grid';
+        }
         $frm->fill($get);
 
         $productCategorySearch = new ProductCategorySearch($this->siteLangId, true, true, false, false);

@@ -32,6 +32,7 @@
         echo $frmProductSearch->getFieldHtml('currency_id');
         echo $frmProductSearch->getFieldHtml('brand_id');
         echo $frmProductSearch->getFieldHtml('top_products');
+        echo $frmProductSearch->getFieldHtml('vtype');
         echo $frmProductSearch->getExternalJS();
     ?>
     </form>

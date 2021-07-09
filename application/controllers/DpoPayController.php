@@ -101,8 +101,8 @@ class DpoPayController extends PaymentController
         $log = [
             'msg' => $msg,
             'response' => $response,
-        ];
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($log));
+        ];    
+        SystemLog::transaction(json_encode($log), self::KEY_NAME . "-" . $orderId);
         $this->orderPaymentObj->addOrderPaymentComments($msg);
         Message::addErrorMessage($msg);
         FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
