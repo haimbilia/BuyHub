@@ -7,7 +7,7 @@ $listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITIONS_LIST', $admi
 
 $data = [
     'adminLangId' => $adminLangId,
-    'deleteButton' => false,
+    'deleteButton' => true,
     'statusButtons' => false,
     'otherButtons' => [
         [
@@ -37,6 +37,11 @@ if (!empty($frmSearch)) {
     $btn = $frmSearch->getField('btn_clear');
     if (null != $btn) {
         $btn->setFieldTagAttribute('onClick', 'clearSearch()');
+    }
+
+    $fld = $frmSearch->getField('blinkcond_user_id');
+    if (null != $fld) {
+        $fld->setFieldTagAttribute('style', 'width:100%');
     }
 }
 

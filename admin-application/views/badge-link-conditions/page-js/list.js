@@ -68,7 +68,7 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
         });
     };
 
-    bulkBadgesUnlink = function (e) {
+    deleteSelected = function (e) {
         if (1 > $('.selectItem--js:checked').length) {
             fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return;
@@ -83,7 +83,7 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
     bindSellerSelect2 = function () {
         var selector = $("select[name='blinkcond_user_id']");
         selector.select2({
-            width: 'element',
+            // width: 'element',
             tags: true,
             closeOnSelect: true,
             allowClear: true,

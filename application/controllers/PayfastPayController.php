@@ -103,7 +103,7 @@ class PayfastPayController extends PaymentController
     {
         $response = !empty($response) ? $response : $_REQUEST;
         $orderPaymentObj = new OrderPayment($orderId);
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+        SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
 
         if (empty($msg)) {
             $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);

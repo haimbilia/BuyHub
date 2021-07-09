@@ -124,8 +124,8 @@ class PaypalPayController extends PaymentController
     {
         $post = FatApp::getPostedData();
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
-        if ('COMPLETED' != $post['status']) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($post));
+        if ('COMPLETED' != $post['status']) {         
+            SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
             $msg = Labels::getLabel("MSG_PAYMENT_FAILED_:_{STATUS}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $post['status']]);
             $orderPaymentObj->addOrderPaymentComments($msg);
@@ -138,7 +138,7 @@ class PaypalPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
         if (false === $this->plugin->validatePaymentRequest($paypalOrderId, $orderId, $currencyCode, $paymentAmount)) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($post));
+            SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
             FatUtility::dieJsonError($this->plugin->getError());
         }
 

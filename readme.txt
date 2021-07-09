@@ -99,6 +99,11 @@ Updates/Fixes :
     => 055632 - on accessing digital preview file from front end getting error
     => 055631 - when pickup order is canceled by seller then listing delivery charges field on screen
     ======================TV-9.3.1.20210708====================== 
+    => 055604 - zip file needs to be exported on click of download button on buyer end containing (files and link) just like Tribe
+    => 055720 - admin> promotions> ribbon> bind conditions> list having select option which is of no use and on selecting, nothing appears on top for operations
+    => 055721 - admin> promotions> ribbon> bind conditions> filters> fields are not aligned properly
+    => 055689 - while returning if there is no file attached still then listing download button on return order detail page on buyer end
+    => 055715 - when single badge is linked with item then it's listing multiple times on product detail and shop
 
 New Features:  
     => Admin shipped products listing page
@@ -113,6 +118,7 @@ Enhancements :
    => Upgrades in GEO location module to configure default location.  
    => Price surge based on special price. 
    => Admin Reports.
+   => Map listing for products & shops 
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

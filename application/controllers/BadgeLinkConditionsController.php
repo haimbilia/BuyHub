@@ -19,6 +19,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
 
+        $this->set('conditionType', $conditionType);
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set("frmSearch", $frmSearch);
         $this->set("badgeId", $badgeId);

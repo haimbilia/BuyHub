@@ -17,7 +17,7 @@ if (null != $fld) {
 }
 $badgeName = $badgeData['badge_name'];
 if (Badge::TYPE_BADGE == $badgeType) {
-	$icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, 0, false);
+	$icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $adminLangId);
 	$uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
 	$imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
 } else {

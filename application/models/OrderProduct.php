@@ -14,10 +14,13 @@ class OrderProduct extends MyAppModel
     public const DB_TBL_SETTINGS_PREFIX = 'opsetting_';
 
     public const DB_TBL_RESPONSE = 'tbl_order_product_responses';
-    public const DB_TBL_RESPONSE_PREFIX = 'opr_';
-    
+    public const DB_TBL_RESPONSE_PREFIX = 'opr_';    
+
     public const DB_TBL_SHIPMENT_PICKUP = 'tbl_order_product_shipment_pickup';
     public const DB_TBL_SHIPMENT_PICKUP_PREFIX = 'opsp_';    
+
+    public const DB_TBL_PLUGIN_SPECIFICS = 'tbl_order_product_plugin_specifics';
+    public const DB_TBL_PLUGIN_SPECIFICS_PREFIX = 'opps_';
 
     public const CHARGE_TYPE_TAX = 1;
     public const CHARGE_TYPE_DISCOUNT = 2;

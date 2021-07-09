@@ -4,6 +4,7 @@ class ImportexportCommon extends FatModel
 {
     protected $db;
     public $CSVfileName;
+    public $pluginId = 0;
 
     public const IMPORT_ERROR_LOG_PATH = CONF_UPLOADS_PATH . 'import-error-log/';
 
@@ -1535,4 +1536,10 @@ class ImportexportCommon extends FatModel
         Labels::getLabel("LBL_Stock/Quantity", $langId)
         );
     }
+    
+    public function setPluginId(int $pluginId)
+    {
+        $this->pluginId = $pluginId;
+    }
+
 }

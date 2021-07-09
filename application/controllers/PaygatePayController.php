@@ -120,15 +120,15 @@ class PaygatePayController extends PaymentController
             $log = [
                 'msg' => $msg,
                 'response' => $response,
-            ];
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($log));
+            ]; 
+            SystemLog::transaction(json_encode($log), self::KEY_NAME . "-" . $orderId);
             $orderPaymentObj->addOrderPaymentComments($msg);
             Message::addErrorMessage($msg);
             FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
         }
 
         if (false === $this->plugin->validateResponse($orderId, $response)) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+            SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
 
             $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
@@ -140,7 +140,7 @@ class PaygatePayController extends PaymentController
 
         $this->queryResponse = $this->plugin->getResponse();
         if (false === $this->plugin->validateTxnStatus($this->queryResponse['TRANSACTION_STATUS'])) {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($this->queryResponse));
+            SystemLog::transaction(json_encode($this->queryResponse), self::KEY_NAME . "-" . $orderId);
 
             $desc = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
             $desc = isset($this->queryResponse['RESULT_DESC']) ? $this->queryResponse['RESULT_DESC'] : $desc;

@@ -118,7 +118,7 @@ class TwocheckoutPayController extends PaymentController
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
             }
         }
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($request));
+        SystemLog::transaction(json_encode($request), self::KEY_NAME . "-" . $orderId);
         Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
         FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
     }

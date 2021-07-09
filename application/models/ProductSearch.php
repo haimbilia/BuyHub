@@ -1067,7 +1067,11 @@ class ProductSearch extends SearchBase
         } else if ($sellerId > 0 && true === $includeSeller) {
             $this->addCondition('selprod_user_id', '=', $sellerId);
         }
-        $this->addCondition('selprod_code', '=', $productCode);
+        if(is_array($productCode)){
+            $this->addCondition('selprod_code', 'IN', $productCode);
+        }else{
+            $this->addCondition('selprod_code', '=', $productCode);
+        }        
     }
 
     public function excludeOutOfStockProducts()

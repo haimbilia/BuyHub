@@ -354,7 +354,6 @@ if (isset($prodcat_code)) {
 
         </div>
         <!-- ] -->
-
         <script language="javascript">
         var catCodeArr = <?php echo json_encode($catCodeArr); ?>;
         $.each(catCodeArr, function(key, value) {
@@ -367,7 +366,7 @@ if (isset($prodcat_code)) {
 
         $("document").ready(function() {
 
-            <?php if (FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP) { ?>
+            <?php if (FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP ||  $headerFormParamsAssocArr['vtype'] == 'map') { ?>
             $(window).resize(function() {
                 var windowSize = $(window).width();
                 if (windowSize > 992) {
@@ -520,3 +519,4 @@ if (isset($prodcat_code)) {
             e.stopPropagation();
         });
         </script>
+        

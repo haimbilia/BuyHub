@@ -171,6 +171,7 @@ class MyAppController extends FatController
                 'deleteAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
                 'unlinkAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
                 'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
+                'searchAsIMoveTheMap' => Labels::getLabel('MSG_SEARCH_AS_I_MOVE_THE_MAP', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
@@ -552,6 +553,7 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'top_products', 0);
         $frm->addHiddenField('', 'currency_id', $this->siteCurrencyId);
         $frm->addSubmitButton('', 'btnProductSrchSubmit', '');
+        $frm->addHiddenField('', 'vtype');
         return $frm;
     }
 
@@ -864,25 +866,6 @@ class MyAppController extends FatController
             $this->_template->render();
         }
     }
-
-    public function accessLocation()
-    {
-        if (true === CommonHelper::isAppUser()) {
-            /* Restrict to open location popup in case of app webview. */
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_APP_ACCESS', $this->siteLangId));
-        }
-
-        $this->set('frm', $this->getGoogleAutocompleteAddressForm());
-        $this->_template->render(false, false, '_partial/access-location.php');
-    }
-
-    protected function getGoogleAutocompleteAddressForm()
-    {
-        $frm = new Form('googleAutocomplete');
-        $frm->addTextBox('', 'location', '', array('autocomplete' => 'off'));
-        return $frm;
-    }
-
 
     /*
      * You can override this function in child class if that class required any external js library.

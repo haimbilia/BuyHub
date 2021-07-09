@@ -544,6 +544,11 @@ class EasyPost extends ShippingServicesBase
         header('Content-disposition: attachment; filename=' . $filename);
         header('Content-type: application/zip');
         readfile($tmp_file);
+
+        /* Remove Temp File. */
+        unlink($tmp_file);
+        /* Remove Temp File. */
+
         exit;
     }
 

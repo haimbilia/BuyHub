@@ -147,14 +147,14 @@ class KhipuPayController extends PaymentController
                                 // Make payment as complete and deliver the good or service
                                 if (!$orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response->getTransactionId(), $response->getAmount(), Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($response))) {
                                 }
-                            } else {
-                                TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+                            } else {                            
+                                SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
                                 $request = $response->__toString() . "\n\n KHIPU :: TOTAL PAID MISMATCH! " . $response->getAmount() . "\n\n";
                                 $orderPaymentObj->addOrderPaymentComments($request);
                             }
                         }
-                    } else {
-                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+                    } else {                   
+                        SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
                         $request = $response->__toString() . "\n\n KHIPU :: RECEIVER MISMATCH! " . $response->getReceiverId() . "\n\n";
                         $orderPaymentObj->addOrderPaymentComments($request);
                     }

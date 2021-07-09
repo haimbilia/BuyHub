@@ -185,9 +185,9 @@ class MpesaPayController extends PaymentController
                 $msg = array_key_exists('ResultDesc', $stkCallback) ? $stkCallback['ResultDesc'] : $this->getResultCodeName($stkCallback['ResultCode']);
             }
         }
-        $msg = Labels::getLabel("MSG_PAYMENT_FAILED.", $this->siteLangId) . (!empty($msg) ? ' ' . $msg : '');
-        $resp = ['msg' => $msg, 'resp' => $post];
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($resp));
+        SystemLog::transaction($json, self::KEY_NAME . "-" . $orderId);
+        $msg = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+
         $orderPaymentObj->addOrderPaymentComments($msg);
         return;
     }

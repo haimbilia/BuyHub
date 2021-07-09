@@ -17,8 +17,7 @@ if (isset($orderDetail["thirdPartyorderInfo"]['orderStatus'])) {
     $orderStatus = $orderDetail["thirdPartyorderInfo"]['orderStatus'];
     $orderStatusLbl = strpos($orderStatus, "_") ? str_replace('_', ' ', $orderStatus) : $orderStatus;
 } 
-$pickUpDetails;
-
+$pickUpDetails = NULL;
 ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
@@ -105,7 +104,7 @@ $pickUpDetails;
                                         if ($orderDetail['orderstatus_id'] == OrderStatus::ORDER_SHIPPED && true === $shippingApiObj->canCreatePickup()) {
                                             ?>                                    
                                             <?php
-                                            $pickUpDetails = OrderProduct::getPickUpShedule($opId);
+                                            $pickUpDetails = $shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($opId) : NULL;
                                             if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
                                                 ?>
                                                 <a href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">

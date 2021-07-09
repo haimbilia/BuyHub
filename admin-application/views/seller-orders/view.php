@@ -24,8 +24,7 @@ if (!empty($order['opship_tracking_url'])) {
     $orderStatusLbl = Labels::getLabel('LBL_SHIPPED', $adminLangId);
 }
 
-$pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
-
+$pickUpDetails = $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
 ?>
 <div class="page">
     <div class="container container-fluid">
@@ -385,7 +384,7 @@ $pickUpDetails = OrderProduct::getPickUpShedule($order['op_id']);
                         </section>
                     </div>
                     <?php if(!empty($pickUpDetails) && 0 < $pickUpDetails['opsp_scheduled']){
-                          $pickUpPostedDetails = json_decode($pickUpDetails['opsp_requested_data'],true);                  
+                          $pickUpPostedDetails = json_decode($pickUpDetails['opsp_requested_data'],true); 
                           $pickUpflds = $shippingApiObj->getPickupFormElementsArr();
                            ?>
                             <div class="<?php echo $colClass?>">

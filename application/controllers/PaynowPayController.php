@@ -157,8 +157,8 @@ class PaynowPayController extends PaymentController
      */
     private function logFailure($orderId, $msg = '')
     {
-        $orderPaymentObj = new OrderPayment($orderId);
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($_REQUEST));
+        $orderPaymentObj = new OrderPayment($orderId);  
+        SystemLog::transaction(json_encode($_REQUEST), self::KEY_NAME . "-" . $orderId);
 
         if (empty($msg)) {
             $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);

@@ -154,13 +154,13 @@ class BraintreePayController extends PaymentController
                             $checkPayment = true;
 
                             FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['id'])));
-                        } else {
-                            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderInfo['id'], json_encode($charge));
+                        } else {                        
+                            SystemLog::transaction(json_encode($charge), self::KEY_NAME . "-" . $orderInfo['id']);
                             $orderPaymentObj->addOrderPaymentComments($message);
                             FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentFailed'));
                         }
-                    } else {
-                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderInfo['id'], json_encode($charge));
+                    } else {                   
+                        SystemLog::transaction(json_encode($charge), self::KEY_NAME . "-" . $orderInfo['id']);
                         $orderPaymentObj->addOrderPaymentComments($message);
                         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentFailed'));
                     }

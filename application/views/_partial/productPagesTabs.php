@@ -1,31 +1,3 @@
-<?php /* 
-    <div class="col-auto">
-        <div class="tabs">
-            <ul>
-                <li class="<?php echo ($controllerName == 'seller' && $action == 'catalog') ? 'is-active' : ''; ?>">
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog');?>">
-                        <?php echo Labels::getLabel('LBL_Marketplace_Products', $siteLangId); ?>
-                    </a>
-                    <a href="javascript:void(0)" onClick="productInstructions(<?php echo Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS; ?>)"> <i class="fa fa-question-circle"></i></a>
-                </li>
-                <li class="<?php echo ($controllerName == 'seller' && $action == 'products') ? 'is-active' : ''; ?>">
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'products');?>">
-                        <?php echo Labels::getLabel('LBL_My_Inventory', $siteLangId); ?>
-                    </a>
-                    <a href="javascript:void(0)" onClick="productInstructions(<?php echo Extrapage::SELLER_INVENTORY_INSTRUCTIONS; ?>)"> <i class="fa fa-question-circle"></i></a>
-                </li>
-                <?php if (User::canAddCustomProductAvailableToAllSellers()) {?>
-                    <li class="<?php echo ($controllerName == 'seller' && $action == 'customCatalogProducts') ? 'is-active' : '';?>">
-                        <a href="<?php echo UrlHelper::generateUrl('seller', 'customCatalogProducts'); ?>">
-                            <?php echo Labels::getLabel('LBL_Send_Products_Request', $siteLangId); ?>
-                        </a>
-                        <a href="javascript:void(0)" onClick="productInstructions(<?php echo Extrapage::PRODUCT_REQUEST_INSTRUCTIONS; ?>)"> <i class="fa fa-question-circle"></i></a>
-                    </li>
-                <?php } ?>
-            </ul>
-        </div>
-    </div>
-*/ ?>
 <?php if ($canEdit) { ?>
     <div class="col-auto">
         <div class="btn-group">
@@ -42,6 +14,7 @@
                     <?php echo Labels::getLabel('LBL_Marketplace_Products', $siteLangId); ?>
                 </a>
             <?php } ?>
+
             <?php if (User::canAddCustomProduct() && $action == 'catalog' && $type == 1) { ?>
                 <a href="<?php echo UrlHelper::generateUrl('seller', 'customProductForm'); ?>" class="btn btn-outline-brand btn-sm">
                     <?php echo Labels::getLabel('LBL_Add_New_Product', $siteLangId); ?>
@@ -57,6 +30,35 @@
                     <?php echo Labels::getLabel('LBL_Back_To_Inventory', $siteLangId); ?>
                 </a>
             <?php } ?>
+
+            <?php if (isset($otherButtons) && is_array($otherButtons) && !empty($otherButtons)) { 
+                $class = 'btn btn-outline-brand btn-sm ';
+                if (count($otherButtons) == count($otherButtons, COUNT_RECURSIVE)) {
+                    $class = isset($otherButtons['class']) ? $class . $otherButtons['class'] : $class;
+                    $title = isset($otherButtons['title']) ? $otherButtons['title'] : '';
+                    $href = isset($otherButtons['href']) ? $otherButtons['href'] : 'javascript:void(0);';
+                    $onclick = isset($otherButtons['onclick']) ? 'onclick = ' . $otherButtons['onclick'] : '';
+                    $label = isset($otherButtons['label']) ? $otherButtons['label'] : '';
+                    ?>
+                        <a href="<?php echo $href; ?>" class="<?php echo $class; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>">
+                            <?php echo $label; ?>
+                        </a>
+                    <?php
+                } else {
+                    foreach ($otherButtons as $attr) {
+                        $class = isset($attr['attr']['class']) ? $class . $attr['attr']['class'] : $class;
+                        $title = isset($attr['attr']['title']) ? $attr['attr']['title'] : '';
+                        $href = isset($attr['attr']['href']) ? $attr['attr']['href'] : 'javascript:void(0);';
+                        $onclick = isset($attr['attr']['onclick']) ? 'onclick = ' . $attr['attr']['onclick'] : '';
+                        $label = isset($attr['label']) ? $attr['label'] : '';
+                        ?>
+                            <a href="<?php echo $href; ?>" class="<?php echo $class; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>">
+                                <?php echo $label; ?>
+                            </a>
+                        <?php
+                    }
+                }
+            } ?>
         </div>
     </div>
 <?php } ?>
