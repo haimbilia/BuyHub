@@ -282,8 +282,8 @@ class StripePayController extends PaymentController
             if (false === MOBILE_APP_API_CALL) {
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($_POST['order_id'])));
             }
-        } else {
-            TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $_POST['order_id'], json_encode($charge));
+        } else {  
+            SystemLog::transaction(json_encode($charge), self::KEY_NAME . "-" . $_POST['order_id']);
             $orderPaymentObj->addOrderPaymentComments($message);
             if (false === MOBILE_APP_API_CALL) {
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentFailed'));

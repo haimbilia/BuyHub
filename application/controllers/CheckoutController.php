@@ -563,43 +563,6 @@ class CheckoutController extends MyAppController
         $this->_template->render(false, false, $template);
     }
 
-    public function getCarrierServicesList($product_key, $carrier_id = 0)
-    {
-        if (empty($product_key)) {
-            $this->errMessage = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($this->errMessage);
-            }
-            Message::addErrorMessage($this->errMessage);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            $this->errMessage = Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId);
-            FatUtility::dieJsonError($this->errMessage);
-        }
-        $this->Cart = new Cart(UserAuthentication::getLoggedUserId());
-        $carrierList = $this->Cart->getCarrierShipmentServicesList($product_key, $carrier_id, $this->siteLangId);
-        if (false == $carrierList) {
-            FatUtility::dieJsonError($this->Cart->getError());
-        }
-
-        $json = array('status' => 1, 'isCarriersFound' => 0);
-        $isCarriersFound = 0;
-        $html = $this->_template->render(false, false, 'checkout/shipping-api-carriers-services-not-found.php', true);
-        if (isset($carrierList) && count($carrierList) > 1) {
-            $json['isCarriersFound'] = 1;
-            $this->set('options', $carrierList);
-            $html = $this->_template->render(false, false, '', true);
-        }
-        if (true === MOBILE_APP_API_CALL) {
-            $this->_template->render();
-        }
-
-        $json['html'] = $html;
-        die(json_encode($json));
-    }
-
     public function setUpShippingMethod()
     {
         $this->cartObj->removeProductPickUpAddresses();
@@ -726,12 +689,13 @@ class CheckoutController extends MyAppController
                 'mshipapi_label' => $shipInfo['title'],
                 'mshipapi_carrier' => $shipInfo['carrier_code'],
                 'mshipapi_type' => $shipInfo['shipping_type'],
+                'mshipapi_is_seller_plugin' => $shipInfo['is_seller_plugin'],
                 'mshipapi_cost' => $shipProducts[$cartval['selprod_id']]['cost'],
                 'shipped_by_seller' => Product::isShippedBySeller($cartval['selprod_user_id'], $product['product_seller_id'], $product['shippedBySellerId']),
                 'mshipapi_level' => $shipInfo['shipping_level']
             );
         }
-
+        
         if (!$json) {
             $this->cartObj->setProductShippingMethod($productToShippingMethods);
             if (!$this->cartObj->isProductShippingMethodSet()) {
@@ -1207,11 +1171,15 @@ class CheckoutController extends MyAppController
                     if ($shippingDurationRow['mshipapi_type'] == Shipping::TYPE_MANUAL) {
                         $productShippingData['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
                     } else {
+                        $productShippingData['opshipping_rate_id'] = 0;
                         $productShippingData['opshipping_service_code'] = $shippingDurationRow['mshipapi_id'];
                         $productShippingData['opshipping_carrier_code'] = $shippingDurationRow['mshipapi_carrier'];
+                        $productShippingData['opshipping_plugin_id'] = $shippingDurationRow['mshipapi_type'];
+                        $productShippingData['opshipping_is_seller_plugin'] = $shippingDurationRow['mshipapi_is_seller_plugin'];
+                        $productShippingData['opshipping_plugin_charges'] = $shippingDurationRow['mshipapi_cost'];                       
                     }
                 }
-
+                
                 $productPickUpData = array();
                 $productPickupAddress = array();
                 if ($productInfo['product_type'] == Product::PRODUCT_TYPE_PHYSICAL && !empty($productSelectedPickUpAddresses) && isset($productSelectedPickUpAddresses[$productInfo['selprod_id']])) {
@@ -1366,10 +1334,10 @@ class CheckoutController extends MyAppController
                     'op_selprod_condition' => $productInfo['selprod_condition'],
                     'op_product_model' => $productInfo['product_model'],
                     'op_product_type' => $productInfo['product_type'],
-                    'op_product_length' => $productInfo['product_length'],
-                    'op_product_width' => $productInfo['product_width'],
-                    'op_product_height' => $productInfo['product_height'],
-                    'op_product_dimension_unit' => $productInfo['product_dimension_unit'],
+                    'op_product_length' => $cartProduct['shippack_length'],
+                    'op_product_width' => $cartProduct['shippack_width'],
+                    'op_product_height' => $cartProduct['shippack_height'],
+                    'op_product_dimension_unit' => $cartProduct['shippack_units'],
                     'op_product_weight' => $productInfo['product_weight'],
                     'op_product_weight_unit' => $productInfo['product_weight_unit'],
                     'op_shop_id' => $productInfo['shop_id'],
@@ -2142,7 +2110,7 @@ class CheckoutController extends MyAppController
 
     public function getFinancialSummary()
     {
-        $this->cartObj->disableCache();
+        //$this->cartObj->disableCache();
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
         $products = $this->cartObj->getProducts($this->siteLangId);
         $shippingAddress = $this->cartObj->getCartShippingAddress();

@@ -137,9 +137,9 @@ class BadgeLinkConditionsController extends AdminBaseController
             $msg = (Badge::TYPE_BADGE == $badgeType) ? Labels::getLabel('MSG_INVALID_BADGE', $this->adminLangId) : Labels::getLabel('MSG_INVALID_RIBBON', $this->adminLangId);
             FatUtility::dieJsonError($msg);
         }
-        $conditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $badgeConditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
 
-        $searchForm = $this->getSearchForm($badgeType, $conditionType);
+        $searchForm = $this->getSearchForm($badgeType, $badgeConditionType);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         $page = ($page <= 0) ? 1 : $page;
@@ -191,6 +191,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         
         $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
         $this->set('recordCondition', $recordCondition);
+        $this->set('badgeConditionType', $badgeConditionType);
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set("badgeType", $badgeType);
         $this->set("arrListing", $records);

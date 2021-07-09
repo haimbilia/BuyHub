@@ -247,7 +247,7 @@ class Badge extends MyAppModel
         $srchRecord->joinBadgeLinks();
         $srchRecord->joinBadgeRequest();
         $srchRecord->joinBadge();
-        $srchRecord->addMultipleFields(['MAX(blinkcond_id) as m_blinkcond_id']);
+        $srchRecord->addMultipleFields(['MAX(blinkcond_id) as m_blinkcond_id, badgelink_record_id as record']);
 
         $recordCondition = '(CASE 
                                 WHEN blinkcond_condition_type = 0
@@ -281,7 +281,9 @@ class Badge extends MyAppModel
                                 THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
                             ELSE FALSE
                         END)
-                    ELSE ' . $recordCondition . ' END)'
+                    WHEN blinkcond_condition_type = 0
+                    THEN ' . $recordCondition . '
+                    ELSE FALSE END)'
             );
         }
 
@@ -323,7 +325,6 @@ class Badge extends MyAppModel
         $attr = [
             'blinkcond_id',
             'blinkcond_badge_id',
-            'blinkcond_record_type',
             'badge_display_inside',
             'blinkcond_position',
             'badge_type',
@@ -331,7 +332,9 @@ class Badge extends MyAppModel
             'breq_id',
             'badge_shape_type',
             'badge_color',
-            'blnk.blinkcond_condition_type'
+            'blnk.blinkcond_condition_type',
+            'blinkcond_record_type',
+            'blc.badgelink_record_id',
         ];
 
         $srch = new BadgeLinkConditionSearch();
@@ -340,7 +343,7 @@ class Badge extends MyAppModel
         $srch->joinBadgeRequest();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
-        $srch->getResultSet();
+        $srch->addDirectCondition('blc.badgelink_record_id = m_blnk.record');
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
@@ -365,7 +368,7 @@ class Badge extends MyAppModel
         $urls = [];
 
         foreach ($badgeDetail as $row) {
-            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $langId, true);
+            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $langId);
             $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
             $urls[] = [
                 'url' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $langId, $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
@@ -385,8 +388,8 @@ class Badge extends MyAppModel
      */
     public static function canAccess(int $badgeId, int $userId): int
     {
-        $srch = new BadgeLinkConditionSearch();
-        $srch->joinBadge();
+        $srch = new BadgeSearch();
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_badge_id = badge_id');
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
         $srch->addMultipleFields([
             self::DB_TBL_PREFIX . 'id',
@@ -395,12 +398,18 @@ class Badge extends MyAppModel
                 THEN 1
                 WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_BADGE . ' AND ' . Badge::DB_TBL_PREFIX . 'condition_type = ' . Badge::COND_AUTO . '
                 THEN 0
-                WHEN (SUM(IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED  . ' AND ' . BadgeLinkCondition::DB_TBL_PREFIX . 'id > 0 AND ' . BadgeRequest::DB_TBL_PREFIX . 'id IS NULL, 1, 0))) > 0 OR (SUM(IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'status = ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . UserAuthentication::getLoggedUserId() . ', 1, 0)) > 0)
+                WHEN SUM(
+                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED  . ' AND ' . BadgeLinkCondition::DB_TBL_PREFIX . 'id > 0 AND ' . BadgeRequest::DB_TBL_PREFIX . 'id IS NULL AND ' .  BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)
+                    ) > 0
+                THEN 1
+                WHEN SUM(
+                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'status = ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)
+                    ) > 0
                 THEN 1
                 ELSE 0
-            END) as canAccess'
+            END) as canAccess', 
         ]);
-        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id', '=', $badgeId);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'id', '=', $badgeId);
         $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         return current($record);
     }

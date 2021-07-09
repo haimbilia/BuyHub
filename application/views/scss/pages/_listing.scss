@@ -13,7 +13,6 @@
             #{$start-direction}: -280px;
             bottom: 0;
             overflow-y: auto;
-            
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             width: 280px;
@@ -114,9 +113,21 @@
             }
             &.active {
                 &:before {
-                    
                     transform: rotate(0deg);
                 }
+            }
+        }
+        .page-views {
+            padding: 10px;
+            border-radius: 3px;
+            background-color: $bg-gray;
+            color: $txt-gray;
+            .active {
+                color: $brand-color;
+            }
+            .svg {
+                width: 18px;
+                height: 18px;
             }
         }
     }
@@ -293,7 +304,6 @@
 }
 
 .cat-accordion .acc-trigger.is--active:before {
-    
     transform: rotate(0deg);
 }
 
@@ -393,7 +403,6 @@
     font-size: 13px;
     #{$start-direction}: 5px;
     margin-#{$end-direction}: 3px;
-    
     padding-#{$start-direction}: 3px;
     position: absolute;
     top: 10px;

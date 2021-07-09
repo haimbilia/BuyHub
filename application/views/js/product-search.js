@@ -1,6 +1,13 @@
 var searchArr = [];
 var page = 1;
-$(document).ready(function () {
+
+$(document).ready(function() {
+    
+    /* [is use to reload page when user hit back button */
+    $(window).on('popstate', function() {
+       location.reload(true);
+    });
+    /* is use to reload page when user hit back button] */
     var frm = document.frmProductSearch;
 
     var frmSiteSearch = document.frmSiteSearch;
@@ -158,21 +165,6 @@ $(document).ready(function () {
         showSelectedFilters();
         initialize();
     })
-
-    /* for toggling of grid/list view[ */
-
-    $(document).on('click', '.list-grid-toggle', function () {
-        $('.icon').toggleClass('icon-grid');
-        if ($(".icon").hasClass('icon-grid')) {
-            $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
-        } else {
-            $('#productsList').removeClass('listing-products--list').addClass('listing-products--grid');
-        }
-        /* $(".label").text(txt); */
-    });
-
-    /* ] */
-
     /******** function for left collapseable links  ****************/
     $(".block__body-js").show();
     $(".block__head-js").click(function () {
@@ -223,7 +215,42 @@ $(document).ready(function () {
             });
         }
     }
+    
+});
 
+
+$(document).on('mouseover mouseout', '#mapProducts--js li', function (e) {
+        let shopId = $(this).data('shopid');       
+        $.each(mapMarker, function (index, marker) {
+            if(typeof marker != 'undefined'){                
+                let iconImage = fcom.makeUrl()+'images/pin.png';
+                if(marker['refId'] == shopId && e.type == 'mouseover'){
+                    iconImage = fcom.makeUrl()+'images/pin2.png';
+                }
+                marker.setIcon(iconImage);
+                //google.maps.event.trigger( marker, 'click' );
+            }
+        });
+    });
+    
+/* for toggling of grid/list view[ */
+$(document).on('click', '.listing-view-toggle--js', function () {
+    var vtype = $(this).data('vtype');
+    var currentActiveVType = $('.listing-view-toggle--js.active').data('vtype');
+    if(vtype == 'map' || currentActiveVType == 'map'){
+        $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
+        window.location.href = getSearchQueryUrl(true);
+    }else{
+        $('.listing-view-toggle--js').removeClass('active');
+        $(this).addClass('active')
+        if(vtype == 'list'){
+           $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
+        }else{    
+            $('#productsList').removeClass('listing-products--list').addClass('listing-products--grid');            
+        }        
+    }    
+    $("form[name=frmProductSearch] input[name=vtype]").val(vtype);    
+    
 });
 
 /* function updateQueryStringParameter(uri, key, value) {
@@ -439,12 +466,11 @@ function getSearchQueryUrl(includeBaseUrl) {
     if (category > 0) {
         delete searchArr['category'];
         url = url + setQueryParamSeperator(url) + 'category' + valueSeperator + category;
-    }
-
+    }   
     for (var key in searchArr) {
         url = url + setQueryParamSeperator(url) + key.replace(/_/g, '-') + valueSeperator + searchArr[key];
     }
-
+    
     /* var currency = parseInt($("input[name=currency_id]").val());
     if(currency > 0){
         delete searchArr['currency'];
@@ -465,6 +491,9 @@ function getSearchQueryUrl(includeBaseUrl) {
     if (shop_id > 0) {
         url = url + setQueryParamSeperator(url) + 'shop' + valueSeperator + shop_id;
     }
+    
+    var vtype = $("form[name=frmProductSearch] input[name=vtype]").val(); 
+    url = url + setQueryParamSeperator(url) + 'vtype' + valueSeperator + vtype; 
 
     /* var page = parseInt($("input[name=page]").val());
     if(page > 1){
@@ -563,9 +592,17 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         });
     };
 
-    reloadProductListing = function (frm) {
+    reloadProductListing = function(frm ,page) {
+        if(typeof page == 'undefined'){
+            page = 0;
+        } 
+
         $('#productsList').html(fcom.getLoader());
-        getSetSelectedOptionsUrl(frm);
+        if(0 < page){
+            addPaginationInlink(page);           
+        }else{
+            getSetSelectedOptionsUrl(frm); 
+        }      
         var data = fcom.frmData(frm);
         var currUrl = getSearchQueryUrl(true);
         fcom.ajax(currUrl, data, function (res) {
@@ -704,7 +741,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         var minPrice = parseInt($("input[name=priceFilterMinValue]").val());
         var defaultMaxPrice = parseInt($("input[name=priceFilterMaxValue]").data('defaultvalue'));
         var maxPrice = parseInt($("input[name=priceFilterMaxValue]").val());
-        if ((minPrice != defaultMinPrice) || (maxPrice != defaultMaxPrice)) {
+        if ( !isNaN(defaultMinPrice) && !isNaN(defaultMaxPrice) && ( (minPrice != defaultMinPrice) || (maxPrice != defaultMaxPrice))) {       
             addPricefilter(false);
         }
 
@@ -715,7 +752,9 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-
+        
+        reloadProductListing(document.frmProductSearch , page)
+        /*
         removePaginationFromLink(page);
         var frm = document.frmProductSearchPaging;
         $(frm.page).val(page);
@@ -723,7 +762,6 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         getSetSelectedOptionsUrl(frm);
         var url = getSearchQueryUrl(true);
         window.location.href = url + setQueryParamSeperator(url) + 'page-' + page;
-
         /* $('html, body').animate({ scrollTop: 0 }, 'slow'); */
     };
 
@@ -783,5 +821,18 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             }
         });
         return false;
+    };
+    dragCallback = function(dragendMap){
+        canSetCookie = true;
+        codeLatLng(dragendMap.getCenter().lat(),dragendMap.getCenter().lng(),function(data){ 
+            displayGeoAddress(setGeoAddress(data));
+            if(typeof dragTimeOutEvent != 'undefined'){
+                clearTimeout(dragTimeOutEvent);  
+            }                              
+            dragTimeOutEvent = setTimeout(function(){
+                reloadProductListing(document.frmProductSearch);
+                loadProductListingfilters(document.frmProductSearch);
+            }, 1200);
+        });
     };
 })();

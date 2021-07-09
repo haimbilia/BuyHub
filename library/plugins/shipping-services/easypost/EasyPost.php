@@ -27,6 +27,7 @@ class EasyPost extends ShippingServicesBase
     private $shipmentOrderId;
     private $orderQty = 1;
     private $refundStatus = [];
+    private $env = Plugin::ENV_SANDBOX;
 
     public $requiredKeys = [
         'api_key'
@@ -543,6 +544,11 @@ class EasyPost extends ShippingServicesBase
         header('Content-disposition: attachment; filename=' . $filename);
         header('Content-type: application/zip');
         readfile($tmp_file);
+
+        /* Remove Temp File. */
+        unlink($tmp_file);
+        /* Remove Temp File. */
+
         exit;
     }
 

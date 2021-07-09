@@ -108,7 +108,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     backToListing = function () {
-        window.history.back();
+        window.location.href = fcom.makeUrl(controller, 'list', [badgeId , badgeType]);
     }
 
     setup = function (frm) {

@@ -54,7 +54,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
-                    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[Badge::DB_TBL_PREFIX . 'id'], 0, 0, false);
+                    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[Badge::DB_TBL_PREFIX . 'id'], 0, $siteLangId);
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 } else {
@@ -76,8 +76,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
             case 'action':
+                $btnClass = 'btn btn-outline-brand btn-sm ';
                 if ($canEdit && (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'])) {
-                    $btnClass = 'btn btn-outline-brand btn-sm ';
                     if (0 < (int) $row['canAccess']) {
                         $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)), "<i class='fas fa-link icon'></i>", true);
                     } else if (0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
@@ -92,7 +92,7 @@ foreach ($arrListing as $sn => $row) {
                         $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $function, 'class' => $btnClass, 'title' => Labels::getLabel('LBL_REQUEST', $siteLangId)), $icon, true);
                     }
                 } else {
-                    $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
+                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)), "<i class='fas fa-eye icon'></i>", true);
                 }
                 break;
         }

@@ -374,7 +374,22 @@ class UserAuthentication extends FatModel
 
         /* [To Do - need to remove credential_password_old in next release */
         if (false === $this->loginWithOtp) {
-            if (!empty($row['credential_password'])) {
+           
+            if( $row['credential_verified'] == applicationConstants::YES ){
+                if( empty($row['credential_password']) ){ 
+                    ///Forced user to update password
+                    $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->commonLangId));
+                    $this->error = $emailErrorMsg;
+                    if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
+                        $json['status'] = 0;
+                        $json['msg'] = $this->error;
+                        $json['notVerified'] = 1;
+                        die(json_encode($json));
+                    }                
+                    return false;
+
+                }
+
                 if (true == $encryptPassword) {
                     if (false == password_verify($password, $row['credential_password'])) {
                         $this->logFailedAttempt($ip, $username);
@@ -387,33 +402,9 @@ class UserAuthentication extends FatModel
                         $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
                         return false;
                     }
-                }
-                if (true == $encryptPassword) {
-                    if (!$this->resetUserPassword($row['user_id'], $password)) {
-                        SystemLog::set('Unable to set new hash user password');
-                    } else {
-                        if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
-                            SystemLog::set('Unable to blank user old password');
-                        }
-                    }
-                }
-            } else {
-                $oldPassword = true == $encryptPassword ? UserAuthentication::encryptPassword($password, true) : $password;
-                if ($oldPassword !== $row['credential_password_old']) {
-                    $this->logFailedAttempt($ip, $username);
-                    $this->error = Labels::getLabel('ERR_INVALID_PASSWORD', $this->commonLangId);
-                    return false;
-                }
-                if (true == $encryptPassword) {
-                    if (!$this->resetUserPassword($row['user_id'], $password)) {
-                        SystemLog::set('Unable to set new hash user password');
-                    } else {
-                        if (!$db->updateFromArray(User::DB_TBL_CRED, [User::DB_TBL_CRED_PREFIX . 'password_old' => ''], ['smt' => User::DB_TBL_CRED_PREFIX . 'user_id = ?', 'vals' => [$row['user_id']]])) {
-                            SystemLog::set('Unable to blank user old password');
-                        }
-                    }
-                }
-            }
+                }        
+            } 
+
         }
         /* [To Do - need to remove credential_password_old in next release */
 
@@ -828,7 +819,6 @@ class UserAuthentication extends FatModel
         $srch = $this->validateUserObj($user, $isActive, $isVerfied, $addDeletedCheck);
         $cnd = $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'username', '=', $user);
         $cnd->attachCondition(User::DB_TBL_CRED_PREFIX . 'email', '=', $user, 'OR');
-
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs, User::tblFld('id'))) {
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME', $this->commonLangId);

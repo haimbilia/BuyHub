@@ -1,12 +1,14 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $otherTabsData = isset($otherTabsData) && is_array($otherTabsData) ? $otherTabsData : [];
+$otherButtons = isset($otherButtons) && is_array($otherButtons) ? $otherButtons : [];
 
 $pagesTabsData = ([
     'siteLangId' => $siteLangId,
     'controllerName' => $controllerName,
     'action' => $action,
-    'canEdit' => $canEdit
+    'canEdit' => $canEdit,
+    'otherButtons' => $otherButtons,
 ] + $otherTabsData);
 
 $actionButtons = isset($data) && is_array($data) ? $data : [];

@@ -19,6 +19,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
 
+        $this->set('conditionType', $conditionType);
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set("frmSearch", $frmSearch);
         $this->set("badgeId", $badgeId);
@@ -103,9 +104,9 @@ class BadgeLinkConditionsController extends SellerBaseController
             $msg = (Badge::TYPE_BADGE == $badgeType) ? Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId) : Labels::getLabel('MSG_INVALID_RIBBON', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
-        $conditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $badgeConditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
 
-        $searchForm = $this->getSearchForm($badgeType, $conditionType);
+        $searchForm = $this->getSearchForm($badgeType, $badgeConditionType);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         $page = ($page <= 0) ? 1 : $page;
@@ -128,7 +129,9 @@ class BadgeLinkConditionsController extends SellerBaseController
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
-        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
+        $cnd = $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
+        $cnd->attachCondition(Badge::DB_TBL_PREFIX . 'condition_type', '=', Badge::COND_AUTO);
+
         $recordType = FatApp::getPostedData('blinkcond_record_type'); //Link Type
         if (!empty($recordType)) {
             $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', '=',  $recordType);
@@ -162,6 +165,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
         $this->set('recordCondition', $recordCondition);
+        $this->set('badgeConditionType', $badgeConditionType);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
         $this->set("badgeType", $badgeType);
         $this->set("arrListing", $records);
@@ -375,9 +379,9 @@ class BadgeLinkConditionsController extends SellerBaseController
         $userId = UserAuthentication::getLoggedUserId();
         $badgeId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, 0);
         if (false === BadgeLinkCondition::isUnique($badgeId, $userId, $recordType, $position, $badgeLinkCondId)) {
-            $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE.', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE.', $this->siteLangId);
             if (Badge::TYPE_RIBBON == $badgeType) {
-                $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_THIS_USER_OF_SAME_LINK_TYPE_WITH_SAME_POSITION.', $this->siteLangId);
+                $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE_AND_SAME_POSITION.', $this->siteLangId);
             }
             FatUtility::dieJsonError($msg);
         }

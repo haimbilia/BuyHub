@@ -21,7 +21,11 @@
                                     <p><strong><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId);?>: </strong><?php echo $orderDetail['user_name'];?></p>
                                     <p><strong><?php echo Labels::getLabel('LBL_Status', $siteLangId);?>: </strong><?php echo $orderStatuses[$orderDetail['op_status_id']];?></p>
                                     <p><strong><?php echo Labels::getLabel('LBL_Cart_Total', $siteLangId);?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL'));?></p>
-                                    <p><strong><?php echo Labels::getLabel('LBL_Delivery', $siteLangId);?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'SHIPPING'));?></p>
+
+                                    <?php if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) { ?>
+                                        <p><strong><?php echo Labels::getLabel('LBL_Delivery', $siteLangId);?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'SHIPPING'));?></p>
+                                    <?php } ?>
+
                                     <?php if (empty($orderDetail['taxOptions'])) { ?>
                                     <p><strong><?php echo Labels::getLabel('LBL_Tax', $siteLangId);?>:</strong> <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'TAX'));?></p>
                                     <?php } else {
@@ -52,7 +56,11 @@
 										<?php } ?>
 										<th><?php echo Labels::getLabel('LBL_Qty', $siteLangId);?></th>
 										<th><?php echo Labels::getLabel('LBL_Price', $siteLangId);?></th>
-										<th><?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);?></th>
+
+                                        <?php if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) { ?>
+                                            <th><?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);?></th>
+                                        <?php } ?>
+
 										<th><?php echo Labels::getLabel('LBL_Total', $siteLangId);?></th>
 									</tr>
 									<tr>
@@ -96,7 +104,11 @@
 										<?php } ?>
 										<td><?php echo $orderDetail['op_qty'];?></td>
 										<td><?php echo CommonHelper::displayMoneyFormat($orderDetail['op_unit_price']);?></td>
+
+                                        <?php if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) { ?>
 										<td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'shipping'));?></td>
+                                        <?php } ?>
+                                        
 										<td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'netamount', false, User::USER_TYPE_SELLER));?></td>
 									</tr>
 								</tbody>

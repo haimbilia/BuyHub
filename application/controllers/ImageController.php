@@ -1302,6 +1302,11 @@ class ImageController extends FatController
                 $h = 250;
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
+            case 'LARGE':
+                $w = 350;
+                $h = 350;
+                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                break;
             default:
                 AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;

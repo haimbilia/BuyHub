@@ -10,8 +10,8 @@ $(document).ready(function(){
 			$(dv).html(fcom.getLoader());
 		}
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account','orderReturnRequestMessageSearch'), data, function(ans){
-			$.mbsmessage.close();
+		fcom.ajax(fcom.makeUrl('Account','orderReturnRequestMessageSearch'), data, function(ans){
+			ans = $.parseJSON(ans);
 			if( append == 1 ){
 				$(dv).find('.loader-yk').remove();
 				$(dv).prepend(ans.html);

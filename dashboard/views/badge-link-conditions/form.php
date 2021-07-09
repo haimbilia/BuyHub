@@ -26,7 +26,7 @@ if (null != $fld) {
 
 $badgeName = $badgeData['badge_name'];
 if (Badge::TYPE_BADGE == $badgeType) {
-	$icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, 0, false);
+	$icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $siteLangId);
 	$uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
 	$imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
 } else {
@@ -40,12 +40,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 <div class="row mb-4">
 	<div class="col-lg-12">
 		<div class="card">
-			<div class="card-header">
-				<div class="card-title"></div>
-				<div class="btn-group">
-					<a href="javascript:void(0);" onclick="backToListing();" title="Back" class="btn btn-outline-brand btn-sm"><i class="fas fa-arrow-left"></i></a>
-				</div>
-			</div>
+			<div class="card-header"></div>
 			<div class="card-body">
 				<div class="sectionbody space">
 					<div class="row justify-content-center">

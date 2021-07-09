@@ -8,8 +8,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     public const PRODUCTION_URL = 'https://app.easyecom.io/';
     public const LOGIN_URL = 'https://api.marketplace.4qcteam.com/';
     public const API_URL = 'https://api.easyecom.io/';
-    
-    private $remoteUserData = [];
 
     /**
      * __construct
@@ -46,33 +44,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     }
     
     /**
-     * getRemoteUserData
-     *
-     * @return void
-     */
-    private function getRemoteUserData()
-    {
-        $userData = $this->getLoggedUserInfo();
-        $requestData = [
-            "email" => $userData['credential_email'],
-            "password" => $this->getUserMeta('seller_auth_token'),
-        ];
-        CommonHelper::printArray($requestData);
-        $curl = new Curl();
-        $curl->post(self::API_URL . 'getApiToken', json_encode($requestData));
-        $curl->setHeader('Content-Type', 'application/json');
-        if ($curl->error) {
-            LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
-        }
-        CommonHelper::printArray($curl->response, true);
-        $resp = json_decode($curl->response, true);
-        if (200 != $resp['code']) {
-            LibHelper::exitWithError($resp['message'], true);
-        }
-    }
-
-
-    /**
      * index
      * 
      * @return void
@@ -90,7 +61,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function landingPage()
     {
-        $easyEcomSellerToken = User::getUserMeta($this->userId, 'easyEcomSellerToken');
+        $easyEcomSellerToken = (string) User::getUserMeta($this->userId, 'easyEcomSellerToken');
+
         $userTempToken = substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
         $uObj = new User($this->userId);
         if (!$uObj->createUserTempToken($userTempToken)) {
@@ -158,8 +130,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             LibHelper::exitWithError($resp['message'], true);
         }
 
-        $easyEcomSellerToken = $resp['data']['token'];
-        $this->updateUserMeta('easyEcomSellerToken', $easyEcomSellerToken);
+        $this->updateUserMeta('easyEcomSellerToken', $resp['data']['token']);
+        $this->updateUserMeta('easyEcomSellerApiToken', $resp['data']['api_token']);
         $this->updateUserMeta('seller_auth_token', $authToken);
         FatUtility::dieJsonSuccess($resp['message']);
     }
@@ -260,7 +232,28 @@ class EasyEcomController extends MarketplaceChannelsBaseController
      */
     public function syncStatus(int $status)
     {
-        // $this->getRemoteUserData();
+        $dataToUpdate = [
+            "m_id" => 219,  // This need to be placed statically. It points to YoKart at EasyEcom(ID of YoKart).
+            "syncStatus" => $status
+        ];
+
+        $apiSecurityToken = (string) User::getUserMeta($this->userId, 'easyEcomSellerApiToken');
+        if (empty($apiSecurityToken)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_SECURITY_TOKEN', $this->siteLangId), true);
+        }
+
+        $url = self::API_URL . 'Maintenance/switchSyncStatus?token=' . $apiSecurityToken;
+
+        $curl = new Curl();
+        $curl->post($url, $dataToUpdate);
+        if ($curl->error) {
+            LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
+        }
+
+        if (200 != $curl->httpStatusCode) {
+            $msg = empty($curl->httpErrorMessage) ? Labels::getLabel('MSG_SOMETHING_WENT_WRONG', $this->siteLangId) : $curl->httpErrorMessage;
+            LibHelper::exitWithError($msg, true);
+        }
 
         $msg = Labels::getLabel('MSG_AUTO_SYNC_TURNED_OFF', $this->siteLangId);
         if (0 < $status) {
@@ -271,28 +264,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (false === $this->updateUserMeta('easyEcomSyncingStatus', $status)) {
             $response = ['msg' => $this->getError(), 'status' => Plugin::RETURN_FALSE];
         }
-
-        /* if (1 == $response['status']) {
-            $userData = $this->getLoggedUserInfo();
-            $dataToUpdate = [
-                "api_token" => $this->easyEcom->getKey('easyecom_token'),
-                "m_id" => 219,  // This need to be placed statically. It points to YoKart at EasyEcom(ID of YoKart).
-                "syncStatus" => $status
-            ];
-
-            $curl = new Curl();
-            $curl->post(self::PRODUCTION_URL . '/Maintenance/switchSyncStatus', json_encode($dataToUpdate));
-            $curl->setHeader('Content-Type', 'application/json');
-            if ($curl->error) {
-                LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
-            }
-
-            // $resp = json_decode($curl->response, true);
-            CommonHelper::printArray($curl->response, true);
-            if (200 != $resp['code']) {
-                LibHelper::exitWithError($resp['message'], true);
-            }
-        } */
 
         $this->dieWithJsonResponse($response);
     }

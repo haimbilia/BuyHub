@@ -14,7 +14,13 @@ class OrderProduct extends MyAppModel
     public const DB_TBL_SETTINGS_PREFIX = 'opsetting_';
 
     public const DB_TBL_RESPONSE = 'tbl_order_product_responses';
-    public const DB_TBL_RESPONSE_PREFIX = 'opr_';
+    public const DB_TBL_RESPONSE_PREFIX = 'opr_';    
+
+    public const DB_TBL_SHIPMENT_PICKUP = 'tbl_order_product_shipment_pickup';
+    public const DB_TBL_SHIPMENT_PICKUP_PREFIX = 'opsp_';    
+
+    public const DB_TBL_PLUGIN_SPECIFICS = 'tbl_order_product_plugin_specifics';
+    public const DB_TBL_PLUGIN_SPECIFICS_PREFIX = 'opps_';
 
     public const CHARGE_TYPE_TAX = 1;
     public const CHARGE_TYPE_DISCOUNT = 2;
@@ -27,7 +33,7 @@ class OrderProduct extends MyAppModel
     public const RESPONSE_TYPE_SHIPMENT = 1;
     public const RESPONSE_TYPE_RETURN = 2;
     public const RESPONSE_TYPE_REFUND = 3;
-
+    
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -362,4 +368,12 @@ class OrderProduct extends MyAppModel
         }
         return (int) $compltedOrderRate['completedOrdersCount'];
     }    
+    
+    public static function getPickUpShedule($op_id)
+    {
+        $srch = new SearchBase(static::DB_TBL_SHIPMENT_PICKUP);
+        $srch->addCondition('opsp_op_id', '=', $op_id);
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
 }

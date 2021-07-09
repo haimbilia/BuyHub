@@ -21,6 +21,7 @@ class Importexport extends ImportexportCommon
     public const TYPE_LANGUAGE_LABELS = 13;
     public const TYPE_INVENTORY_UPDATE = 14;
     public const TYPE_SELLER_PRODUCTS = 15;
+    public const TYPE_ORDER_PRODUCTS = 16;   
 
 
     public const MAX_LIMIT = 1000;
@@ -395,6 +396,11 @@ class Importexport extends ImportexportCommon
                 $sheetName = Labels::getLabel('LBL_Tax_Category', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                 $this->exportTaxCategory($langId, $userId);
+                break;
+            case Importexport::TYPE_ORDER_PRODUCTS:
+                $sheetName = Labels::getLabel('LBL_Order_Products', $langId) . $sheetName;
+                $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
+                $this->exportOrderProducts($langId, $userId);
                 break;
             default:
                 $default = true;
@@ -5784,6 +5790,201 @@ class Importexport extends ImportexportCommon
 
                 $sheetData[] = $this->parseContentForExport($colValue);
             }
+            CommonHelper::writeExportDataToCSV($this->CSVfileObj, $sheetData);
+        }
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
+    }
+    
+    public function getOrderProductColoumArr($langId)
+    {   
+        /* column which taxjar need while import */
+        $arr = array(
+            'provider' => 'provider',
+            'op_invoice_number' => 'order_id',
+            'transaction_type' => 'transaction_type',
+            'transaction_reference_id' => 'transaction_reference_id',
+            'op_completion_date'=>'completed_at',
+            'buyer_name' => 'customer_name',
+            'shiptostreet' => 'shiptostreet',
+            'shiptocity' => 'shiptocity',
+            'shiptostate' => 'shiptostate',
+            'shiptozip' => 'shiptozip',
+            'shiptocountrycode' => 'shiptocountrycode',
+            'from_street' => 'from_street',
+            'from_city' => 'from_city',
+            'from_state' => 'from_state',
+            'from_zip' => 'from_zip',
+            'from_country' => 'from_country',
+            'shipping_amount' => 'shipping_amount',
+            'handling_amount' => 'handling_amount',
+            'discount_amount' => 'discount_amount',
+            'total_sale' => 'total_sale',
+            'sales_tax' => 'sales_tax',
+            'exemption_type' => 'exemption_type',
+        );
+        
+        return $arr;
+    }
+
+    public function exportOrderProducts($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
+    {        
+        /* for now only dealing for plugin taxjar */
+        $userId = FatUtility::int($userId);
+        $ocDiscountSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
+
+        $ocDiscountSrch->doNotCalculateRecords();
+        $ocDiscountSrch->doNotLimitRecords();
+        $ocDiscountSrch->addGroupBy('opc.opcharge_op_id');
+        $ocDiscountSrch->addMultipleFields(array('opcharge_op_id', 'ABS(sum(opcharge_amount)) as discount_amount'));
+        $ocDiscountSrch->addCondition('opcharge_type', 'IN', [OrderProduct::CHARGE_TYPE_DISCOUNT, OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]);
+        $ocDiscountQry = $ocDiscountSrch->getQuery();
+
+        $srch = new OrderProductSearch($langId, true, true);
+        $srch->joinShippingCharges();
+        $srch->joinOrderUser();
+        $srch->joinPaymentMethod();
+        $srch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_TAX, 'optax');
+        $srch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_SHIPPING, 'opship');
+        $srch->joinTable('(' . $ocDiscountQry . ')', 'LEFT OUTER JOIN', 'op.op_id = opdc.opcharge_op_id', 'opdc');
+        $srch->addOrder('op_id', 'ASC');
+        if (0 < $this->pluginId) {
+            $srch->joinTable(OrderProduct::DB_TBL_PLUGIN_SPECIFICS, 'LEFT OUTER JOIN', 'opps.opps_op_id = op.op_id and opps_plugin_id =' . $this->pluginId, 'opps');
+            $srch->addCondition('opps.opps_op_id', 'is', 'mysql_func_NULL', 'AND', true);
+            $srch->addStatusCondition(Orders::getVendorOrderPaymentCreditedStatuses());
+        }
+        if (isset($offset) && isset($noOfRows)) {
+            $srch->setPageNumber($offset);
+            $srch->setPageSize($noOfRows);
+        } else {
+            $srch->setPageSize(static::MAX_LIMIT);
+        }
+
+        if (isset($minId) && isset($maxId)) {
+            $srch->addCondition('op_id', '>=', $minId);
+            $srch->addCondition('op_id', '<=', $maxId);
+        }
+        
+        if(0 < $userId){
+            $srch->addCondition('op_selprod_user_id', '=', $userId);
+        }
+
+        $srch->addMultipleFields(array('op_id', 'order_id', 'op_shop_id', 'order_payment_status', 'op_completion_date', 'op_order_id', 'op_invoice_number', 'order_net_amount', 'order_date_added', 'ou.user_id', 'ou.user_name as buyer_name', 'op.op_qty', 'op.op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_status_id', 'op_selprod_user_id', 'opship.opcharge_amount as shipping_amount', 'opdc.discount_amount', 'optax.opcharge_amount as tax_amount', 'opshipping_by_seller_user_id', 'op_refund_shipping', 'op_refund_qty'));
+
+        $rs = $srch->getResultSet();
+
+        $sheetData = array();
+
+        /* Sheet Heading Row [ */
+        $headingsArr = $this->getOrderProductColoumArr($langId);
+        CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
+
+        /* ] */
+        //$data = $this->db->fetchAll($rs);
+
+        $toAddresses = [];
+        $fromAddresses = [];
+        $adminAddress = Admin::getAddress($langId);
+
+        $orderObj = new Orders();
+        while ($row = $this->db->fetch($rs)) {
+            if (!isset($toAddresses[$row['order_id']])) {
+                $toAddr = $orderObj->getOrderAddresses($row['order_id']);
+                $toAddr = (!empty($toAddr[Orders::SHIPPING_ADDRESS_TYPE])) ? $toAddr[Orders::SHIPPING_ADDRESS_TYPE] : $toAddr[Orders::BILLING_ADDRESS_TYPE];
+                $toAddr = Tax::formatAddress($toAddr, 'order');
+                $toAddresses[$row['order_id']] = $toAddr;
+            } else {
+                $toAddr = $toAddresses[$row['order_id']];
+            }
+            if (0 < $row['opshipping_by_seller_user_id']) {
+                if (!isset($fromAddresses[$row['op_shop_id']])) {
+                    $fields = array('shop_postalcode', 'shop_address_line_1', 'shop_address_line_2', 'shop_city', 'state_name', 'state_code', 'country_code');
+                    $fromAddr = Shop::getShopAddress($row['op_shop_id'], true, $langId, $fields);
+                    $fromAddr = Tax::formatAddress($fromAddr, 'shop');
+                    $fromAddresses[$row['op_shop_id']] = $fromAddr;
+                } else {
+                    $fromAddr = $fromAddresses[$row['op_shop_id']];
+                }
+            } else {
+                $fromAddr = $adminAddress;
+            }
+
+            $sheetData = array();
+            foreach ($headingsArr as $columnKey => $heading) {
+                $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
+                switch ($columnKey) {
+                    case 'provider':
+                        $colValue = 'web';
+                        break;
+                    case 'transaction_type':
+                        $colValue = 'Order';
+                        break;
+                    case 'transaction_reference_id':
+                    case 'exemption_type':
+                    case 'handling_amount':
+                        $colValue = '';
+                        break;
+                    case 'shiptostreet':
+                        $colValue = $toAddr['line1'];
+                        break;
+                    case 'shiptocity':
+                        $colValue = $toAddr['city'];
+                        break;
+                    case 'shiptostate':
+                        $colValue = $toAddr['stateCode'];
+                        break;
+                    case 'shiptozip':
+                        $colValue = $toAddr['postalCode'];
+                        break;
+                    case 'shiptocountrycode':
+                        $colValue = $toAddr['countryCode'];
+                        break;
+                    case 'from_street':
+                        $colValue = $fromAddr['line1'];
+                        break;
+                    case 'from_city':
+                        $colValue = $fromAddr['city'];
+                        break;
+                    case 'from_zip':
+                        $colValue = $fromAddr['postalCode'];
+                        break;
+                    case 'from_state':
+                        $colValue = $fromAddr['stateCode'];
+                        break;
+                    case 'from_country':
+                        $colValue = $fromAddr['countryCode'];
+                        break;
+                    case 'shipping_amount':
+                        $colValue = $row['shipping_amount'] - $row['op_refund_shipping'];
+                        break;
+                    case 'discount_amount':
+                        $discount = $row['discount_amount'];
+                        if (0 < $row['op_refund_qty']) {
+                            $discountPerQty = $discount / $row['op_qty'];
+                            $discount = $discountPerQty * ($row['op_qty'] - $row['op_refund_qty']);
+                        }
+                        $colValue = $discount;
+                        break;
+                    case 'total_sale':
+                        $discount = $row['discount_amount'];
+                        if (0 < $row['op_refund_qty']) {
+                            $discountPerQty = $discount / $row['op_qty'];
+                            $discount = $discountPerQty * ($row['op_qty'] - $row['op_refund_qty']);
+                        }
+                        $colValue = ($row['op_unit_price'] * ($row['op_qty'] - $row['op_refund_qty'])) + ($row['shipping_amount'] - $row['op_refund_shipping']) - $discount;
+                        break;
+                    case 'sales_tax':
+                        $salesTax = $row['tax_amount'];
+                        if (0 < $row['op_refund_qty']) {
+                            $salesTaxPerQuantity = $row['tax_amount'] / $row['op_qty'];
+                            $salesTax = $salesTaxPerQuantity * ($row['op_qty'] - $row['op_refund_qty']);
+                        }
+                        $colValue = $salesTax;
+                        break;
+                }
+
+                $sheetData[] = $this->parseContentForExport($colValue);
+            }
+
             CommonHelper::writeExportDataToCSV($this->CSVfileObj, $sheetData);
         }
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);

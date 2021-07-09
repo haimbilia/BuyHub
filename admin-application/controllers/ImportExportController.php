@@ -24,7 +24,8 @@ class ImportExportController extends AdminBaseController
         $batchCount = FatApp::getPostedData('batch_count', FatUtility::VAR_INT, 0);
         $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
         $sheetType = FatApp::getPostedData('sheet_type', FatUtility::VAR_INT, 0);
-
+        $pluginId = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
+        
         if (1 > $langId) {
             $langId = CommonHelper::getLangId();
         }
@@ -65,12 +66,18 @@ class ImportExportController extends AdminBaseController
             case Importexport::TYPE_TAX_CATEGORY:
                 $this->objPrivilege->canViewTax();
                 break;
+            case Importexport::TYPE_ORDER_PRODUCTS:
+                $this->objPrivilege->canViewOrders();
+                break;
             default:
                 Message::addErrorMessage($this->str_invalid_request);
                 break;
         }
 
         $obj = new Importexport();
+        if(0 < $pluginId){
+            $obj->setPluginId($pluginId);
+        }        
         $min = null;
         $max = null;
         switch ($exportDataRange) {

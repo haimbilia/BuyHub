@@ -27,15 +27,7 @@ class PluginSettingController extends LoggedUserController
                 LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $this->siteLangId));
             }
         }
-    }
-
-    private function setFormObj()
-    {
-        $this->frmObj = $this->getForm();
-        if (false === $this->frmObj) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_REQUIREMENT_SETTINGS_ARE_NOT_DEFINED', $this->siteLangId));
-        }
-    }
+    }    
 
     public function index()
     {
@@ -67,30 +59,6 @@ class PluginSettingController extends LoggedUserController
 
         $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function getForm()
-    {
-        $class = get_called_class();
-        try {
-            $requirements = $class::getConfigurationKeys($this->siteLangId);
-        } catch (\Error $e) {
-            if (false == method_exists($class, 'form')) {
-                FatUtility::dieJsonError($e->getMessage());
-            }
-            $frm = $class::form($this->siteLangId);
-        }
-
-        if ((empty($requirements) || !is_array($requirements)) && !isset($frm)) {
-            return false;
-        }
-        if (isset($frm)) {
-            $frm = PluginSetting::addKeyFields($frm);
-        } else {
-            $frm = PluginSetting::getForm($requirements, $this->siteLangId);
-        }
-        $frm->fill(['keyName' => $this->keyName]);
-        return $frm;
     }
 
 }

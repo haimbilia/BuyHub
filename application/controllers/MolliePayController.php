@@ -157,8 +157,8 @@ class MolliePayController extends PaymentController
      */
     private function logFailure(string $orderId, string $msg = '', array $response = [])
     {
-        $response = !empty($response) ? $response : $_REQUEST;
-        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($response));
+        $response = !empty($response) ? $response : $_REQUEST;   
+        SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
         if (empty($msg)) {
             $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
