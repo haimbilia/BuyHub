@@ -471,8 +471,8 @@ class StripeConnectPayController extends PaymentController
                         $error = [
                             'msg' => $this->stripeConnect->getError(),
                             'response' => $charge,
-                        ];
-                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        ];              
+                        SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
 
@@ -483,7 +483,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER', $this->siteLangId),
                             'response' => $resp,
                         ];
-                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        SystemLog::transaction(json_encode($error),self::KEY_NAME . "-" . $orderId);                     
                         continue;
                     }
                     // Debit sold product amount from seller wallet.
@@ -507,7 +507,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => $this->stripeConnect->getError(),
                             'response' => $this->stripeConnect->getResponse(),
                         ];
-                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        SystemLog::transaction(json_encode($error),self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
 
@@ -517,7 +517,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => Labels::getLabel('MSG_UNABLE_TO_TRANFER_PENDING_AMOUNT', $this->siteLangId),
                             'response' => $resp,
                         ];
-                        TransactionFailureLog::set(TransactionFailureLog::LOG_TYPE_CHECKOUT, $orderId, json_encode($error));
+                        SystemLog::transaction(json_encode($error),self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
 

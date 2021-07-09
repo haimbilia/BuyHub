@@ -640,12 +640,11 @@ trait ShippingServices
                 $shippingRates = $this->shippingService->getRates($carrierCode, $shopAddress['postalCode']);
                 if (!empty($shippingRates)) {
                     FatCache::set($cacheKey, serialize($shippingRates), '.txt');
+                }else{
+                    SystemLog::system($this->shippingService->getError());
+                    continue;
                 }
-            }
-            if (empty($shippingRates)) {
-                SystemLog::set($this->shippingService->getError());
-                continue;
-            }
+            }           
 
             $keyCounter = 1;
             foreach ($shippingRates as $key => $value) {
