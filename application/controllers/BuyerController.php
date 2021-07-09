@@ -171,7 +171,7 @@ class BuyerController extends BuyerBaseController
 
         $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
 
-        $srch = new OrderProductSearch($this->siteLangId, true, true);        
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinOrderProductShipment();
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
@@ -210,11 +210,11 @@ class BuyerController extends BuyerBaseController
             );
             $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request'));
         }
-        
+
         $rs = $srch->getResultSet();
 
         $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
-        
+
         foreach ($childOrderDetail as $op_id => $val) {
             $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
 
@@ -222,16 +222,16 @@ class BuyerController extends BuyerBaseController
             $taxOptions = $opChargesLog->getData($this->siteLangId);
             $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
         }
-        
-        $shippingApiObj = NULL;       
+
+        $shippingApiObj = NULL;
         if ($opId > 0) {
             $childOrderDetail = array_shift($childOrderDetail);
             $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($childOrderDetail['op_selprod_user_id'], $childOrderDetail['opshipping_by_seller_user_id']);
             if ($childOrderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
                 $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $childOrderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
             }
-        }       
-        
+        }
+
         if (empty($childOrderDetail) || 1 > count($childOrderDetail)) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -301,6 +301,71 @@ class BuyerController extends BuyerBaseController
         $this->_template->render();
     }
 
+    public function downloadDigitalFilesZip(int $opId)
+    {
+        $srch = new OrderProductSearch($this->siteLangId, true);
+        $srch->joinOrderUser();
+        $srch->joinDigitalDownloads();
+        $srch->addDigitalDownloadCondition();
+        $srch->addMultipleFields([
+            'op_invoice_number',
+            'op_selprod_max_download_times',
+            'opa.*'
+        ]);
+
+        $srch->addCondition('op_id', '=', $opId);
+        $srch->addCondition('order_user_id', '=', UserAuthentication::getLoggedUserId());
+        $srch->addDirectCondition("(
+            CASE 
+                WHEN 0 < op_selprod_max_download_times 
+                    THEN op_selprod_max_download_times > afile_downloaded_times 
+                WHEN 0 > op_selprod_max_download_times 
+                    THEN TRUE
+                ELSE FALSE 
+            END)");
+
+        $srch->addOrder('order_date_added', 'desc');
+        $srch->addOrder('afile_id', 'asc');
+
+        $downloads = (array) FatApp::getDb()->fetchAll($srch->getResultSet());
+        if (empty($downloads)) {
+            Message::addErrorMessage(Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD.', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
+        }
+
+        # create new zip opbject
+        $zip = new ZipArchive();
+
+        # create a temp file & open it
+        $tmp_file = tempnam('.', '');
+        $zip->open($tmp_file, ZipArchive::CREATE);
+
+        $fileId = [];
+        foreach ($downloads as $row) {
+            $filePath = !empty($row['afile_physical_path']) ? CONF_UPLOADS_PATH . $row['afile_physical_path'] : '';
+            if (file_exists($filePath)) {
+                $fileId[] = $row['afile_id'];
+                $zip->addFile($filePath, basename($row['afile_name']));
+            }
+        }
+        # close zip
+        $zip->close();
+
+        # send the file to the browser as a download
+        header('Content-disposition: attachment; filename=' . $downloads[0]['op_invoice_number'] . '.zip');
+        header('Content-type: application/zip');
+        readfile($tmp_file);
+        
+        /* Remove Temp File from public folder. */
+        unlink($tmp_file);
+        /* Remove Temp File from public folder. */
+        
+        /* Update downlod count */
+        FatApp::getDb()->query("UPDATE " . AttachedFile::DB_TBL . " SET afile_downloaded_times = (afile_downloaded_times+1) where afile_record_id = " . $opId . " AND afile_id IN (" . implode(',', $fileId) . ")");
+        /* Update downlod count */
+        exit;
+    }
+
     public function downloadDigitalFile($aFileId, $recordId = 0)
     {
         $aFileId = FatUtility::int($aFileId);
@@ -336,6 +401,61 @@ class BuyerController extends BuyerBaseController
         AttachedFile::updateDownloadCount($res['afile_id']);
     }
 
+    public function downloadDigitalLinksFile(int $opId)
+    {
+        $srch = new OrderProductSearch($this->siteLangId, true);
+        $srch->joinOrderUser();
+        $srch->joinDigitalDownloadLinks();
+        $srch->addDigitalDownloadCondition();
+        $srch->joinSellerProducts();
+        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
+
+        $attr = [
+            'op_invoice_number',
+            'opd.*'
+        ];
+
+        $srch->addMultipleFields($attr);
+        $srch->addCondition('op_id', '=', $opId);
+        $srch->addCondition('order_user_id', '=', UserAuthentication::getLoggedUserId());
+
+        $srch->addDirectCondition("(
+            CASE 
+                WHEN 0 < op_selprod_max_download_times 
+                    THEN op_selprod_max_download_times > opddl_downloaded_times 
+                WHEN 0 > op_selprod_max_download_times 
+                    THEN TRUE
+                ELSE FALSE 
+            END)");
+
+        $srch->addOrder('order_date_added', 'desc');
+        $srch->addOrder('opddl_link_id', 'asc');
+
+        $rs = $srch->getResultSet();
+        $downloads = FatApp::getDb()->fetchAll($rs);
+        if (empty($downloads)) {
+            Message::addErrorMessage(Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
+        }
+        
+        $handle = fopen('php://memory', 'w');
+
+        $linkId = [];
+        foreach ($downloads as $row) {
+            if (!empty($row['opddl_downloadable_link'])) {
+                $linkId[] = $row['opddl_link_id'];
+                CommonHelper::writeExportDataToCSV($handle, [$row['opddl_downloadable_link']]);
+            }
+        }
+
+        CommonHelper::writeExportDataToCSV($handle, [], true, $downloads[0]['op_invoice_number'] . '.csv');
+        
+        /* Update downlod count */
+        FatApp::getDb()->query("UPDATE " . OrderProductDigitalLinks::DB_TBL . " SET opddl_downloaded_times = (opddl_downloaded_times+1) where opddl_op_id = " . $opId . " AND opddl_link_id IN (" . implode(',', $linkId) . ")");
+        /* Update downlod count */
+        exit;
+    }
+    
     public function downloadDigitalProductFromLink($linkId, $opId)
     {
         $linkId = FatUtility::int($linkId);
@@ -612,6 +732,7 @@ class BuyerController extends BuyerBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
 
         $user_id = UserAuthentication::getLoggedUserId();
 
@@ -619,7 +740,26 @@ class BuyerController extends BuyerBaseController
         $srch->joinOrderUser();
         $srch->joinDigitalDownloads();
         $srch->addDigitalDownloadCondition();
-        $srch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_invoice_number', 'order_user_id', 'op_product_type', 'order_date_added', 'op_qty', 'op_status_id', 'op_selprod_max_download_times', 'op_selprod_download_validity_in_days', 'opa.*'));
+       
+        $attr = [
+            'op_id',
+            'op_selprod_id',
+            'op_invoice_number',
+            'order_user_id',
+            'op_product_type',
+            'order_date_added',
+            'op_qty',
+            'op_status_id',
+            'op_selprod_max_download_times',
+            'op_selprod_download_validity_in_days',
+            'opa.*'
+        ];
+        if (1 > $opId) {
+            $attr[] = 'COUNT(op_id) as filesCount';
+        }
+
+        $srch->addMultipleFields($attr);
+
         if (true === MOBILE_APP_API_CALL) {
             $srch->joinSellerProducts($this->siteLangId);
             $srch->addFld(array('selprod_product_id'));
@@ -629,6 +769,13 @@ class BuyerController extends BuyerBaseController
         $srch->addOrder('order_date_added', 'desc');
         $srch->addOrder('afile_id', 'asc');
         $srch->setPageSize($pagesize);
+        
+        if (0 < $opId) {
+            $srch->addCondition('op_id', '=', $opId);
+            $frm->fill(array('op_id' => $opId));
+        } else {
+            $srch->addGroupBy('op_invoice_number');
+        }
 
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
@@ -641,6 +788,7 @@ class BuyerController extends BuyerBaseController
 
         $digitalDownloads = Orders::digitalDownloadFormat($downloads);
 
+        $this->set('opId', $opId);
         $this->set('frmSrch', $frm);
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('page', $page);
@@ -663,6 +811,7 @@ class BuyerController extends BuyerBaseController
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $user_id = UserAuthentication::getLoggedUserId();
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
 
         $srch = new OrderProductSearch($this->siteLangId, true);
         $srch->joinOrderUser();
@@ -670,7 +819,27 @@ class BuyerController extends BuyerBaseController
         $srch->addDigitalDownloadCondition();
         $srch->joinSellerProducts();
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
-        $srch->addMultipleFields(array('op_id', 'op_invoice_number', 'order_user_id', 'op_product_type', 'order_date_added', 'op_qty', 'op_status_id', 'op_selprod_max_download_times', 'op_selprod_id', 'product_updated_on', 'selprod_product_id', 'op_selprod_download_validity_in_days', 'opd.*'));
+
+        $attr = [
+            'op_id',
+            'op_invoice_number',
+            'order_user_id',
+            'op_product_type',
+            'order_date_added',
+            'op_qty',
+            'op_status_id',
+            'op_selprod_max_download_times',
+            'op_selprod_id',
+            'product_updated_on',
+            'selprod_product_id',
+            'op_selprod_download_validity_in_days',
+            'opd.*'
+        ];
+        if (1 > $opId) {
+            $attr[] = 'COUNT(op_id) as linksCount';
+        }
+
+        $srch->addMultipleFields($attr);
         $srch->setPageNumber($page);
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addOrder('order_date_added', 'desc');
@@ -682,11 +851,19 @@ class BuyerController extends BuyerBaseController
             $frm->fill(array('keyword' => $keyword));
         }
 
+        if (0 < $opId) {
+            $srch->addCondition('op_id', '=', $opId);
+            $frm->fill(array('op_id' => $opId));
+        } else {
+            $srch->addGroupBy('op_invoice_number');
+        }
+
         $rs = $srch->getResultSet();
         $downloads = FatApp::getDb()->fetchAll($rs);
 
         $digitalDownloadLinks = Orders::digitalDownloadLinksFormat($downloads);
 
+        $this->set('opId', $opId);
         $this->set('frmSrch', $frm);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
         $this->set('page', $page);
@@ -1193,13 +1370,18 @@ class BuyerController extends BuyerBaseController
 
         if (1 > $recordId) {
             Message::addErrorMessage($this->str_invalid_request);
+            if (!FatUtility::isAjaxCall()) {
+                CommonHelper::redirectUserReferer();
+            }
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $recordId, $recordSubid);
-
-        if (false == $file_row) {
-            Message::addErrorMessage($this->str_invalid_request);
+        if (false == $file_row || 1 > $file_row['afile_id']) {
+            Message::addErrorMessage(Labels::getLabel('MSG_FILE_NOT_FOUND', $this->siteLangId));
+            if (!FatUtility::isAjaxCall()) {
+                CommonHelper::redirectUserReferer();
+            }
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1517,12 +1699,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet()); 
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         }
-        
-        if(0 < count($ratingTypes)){
+
+        if (0 < count($ratingTypes)) {
             $ratingAspects = $ratingAspects + $ratingTypes;
-        }        
+        }
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -1630,12 +1812,12 @@ class BuyerController extends BuyerBaseController
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());          
+            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         }
-        
-        if(0 < count($ratingTypes)){
+
+        if (0 < count($ratingTypes)) {
             $ratingAspects = $ratingAspects + $ratingTypes;
-        } 
+        }
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -1677,7 +1859,7 @@ class BuyerController extends BuyerBaseController
             LibHelper::dieJsonError($selProdReview->getError());
         }
         $spreviewId = $selProdReview->getMainTableRecordId();
-        
+
         $ratingsPosted = FatApp::getPostedData('review_rating');
 
         foreach ($ratingsPosted as $ratingAspect => $ratingValue) {
@@ -1697,7 +1879,7 @@ class BuyerController extends BuyerBaseController
                 if (!is_uploaded_file($tmpName)) {
                     FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->adminLangId));
                 }
-        
+
                 $fileHandlerObj = new AttachedFile();
                 if (!$fileHandlerObj->saveAttachment(
                     $tmpName,
@@ -1709,7 +1891,6 @@ class BuyerController extends BuyerBaseController
                     FatUtility::dieJsonError($fileHandlerObj->getError());
                 }
             }
-                
         }
 
         $db->commitTransaction();
@@ -2477,6 +2658,7 @@ class BuyerController extends BuyerBaseController
     private function getOrderProductDownloadSearchForm($langId)
     {
         $frm = new Form('frmSrch');
+        $frm->addHiddenField('', 'op_id');
         $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
@@ -2541,12 +2723,12 @@ class BuyerController extends BuyerBaseController
         }
 
         $frm->addRequiredField(Labels::getLabel('LBL_Title', $langId), 'spreview_title');
-        $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();        
+        $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();
 
         $frm->addFileUpload('', 'spreview_image[]', array('accept' => 'image/*', 'data-frm' => 'frmOrderFeedback'));
 
         $arr = ["{website-name}" => FatApp::getConfig("CONF_WEBSITE_NAME_" . $langId)];
-        $frm->addCheckBox(strtr(Labels::getLabel('LBL_I_agree_that_my_review,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId),$arr), 'agree', 1);
+        $frm->addCheckBox(strtr(Labels::getLabel('LBL_I_agree_that_my_review,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId), $arr), 'agree', 1);
         $frm->addHiddenField('', 'op_id', $op_id);
         $frm->addHiddenField('', 'referrer', CommonHelper::redirectUserReferer(true));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Review', $langId));

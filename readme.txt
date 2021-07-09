@@ -98,7 +98,7 @@ Updates/Fixes :
 
     => 055632 - on accessing digital preview file from front end getting error
     => 055631 - when pickup order is canceled by seller then listing delivery charges field on screen
-     
+    => 055604 - zip file needs to be exported on click of download button on buyer end containing (files and link) just like Tribe
 
 New Features:  
     => Admin shipped products listing page
