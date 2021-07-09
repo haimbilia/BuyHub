@@ -2,7 +2,6 @@
 
 class SystemLog extends MyAppModel
 {
-
     public const DB_TBL = 'tbl_system_logs';
     public const DB_TBL_PREFIX = 'slog_';
     public const MODULE_TYPE_SYSTEM = 1;
@@ -51,7 +50,7 @@ class SystemLog extends MyAppModel
 
     public static function system(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
     {
-        return static::set($msg, '', self::MODULE_TYPE_SYSTEM, $type, $title = '', $error);
+        return static::set($msg, '', self::MODULE_TYPE_SYSTEM, $type, $title, $error);
     }
 
     public static function plugin($request = '', $recieve = '', $titleOrPluginName = '', $type = self::TYPE_ERROR, &$error = '')
@@ -61,7 +60,7 @@ class SystemLog extends MyAppModel
 
     public static function transaction(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
     {
-        return static::set($msg, null, self::MODULE_TYPE_TRANSACTION, $type, $title = '', $error);
+        return static::set($msg, '', self::MODULE_TYPE_TRANSACTION, $type, $title, $error);
     }
 
     public static function set(string $content = '', string $response = '', int $module_type = self::MODULE_TYPE_SYSTEM, int $type = self::TYPE_ERROR, $title = '', string &$error = ''): bool
