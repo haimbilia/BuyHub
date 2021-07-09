@@ -38,6 +38,11 @@ if (!empty($frmSearch)) {
     if (null != $btn) {
         $btn->setFieldTagAttribute('onClick', 'clearSearch()');
     }
+
+    $fld = $frmSearch->getField('blinkcond_user_id');
+    if (null != $fld) {
+        $fld->setFieldTagAttribute('style', 'width:100%');
+    }
 }
 
 require_once (CONF_THEME_PATH . '_partial/index-page-common.php');

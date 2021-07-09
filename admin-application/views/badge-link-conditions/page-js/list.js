@@ -83,7 +83,7 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
     bindSellerSelect2 = function () {
         var selector = $("select[name='blinkcond_user_id']");
         selector.select2({
-            width: 'element',
+            // width: 'element',
             tags: true,
             closeOnSelect: true,
             allowClear: true,
