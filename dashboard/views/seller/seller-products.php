@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'select_all' => '',
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
@@ -50,12 +50,12 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                 case 'name':
                     $variantStr = '<div class="item">
                                         <figure class="item__pic">
-                                            <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '">
+                                            <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '">
                                         </figure>
                                     <div class="item__description">
 				                        <div class="item__title">' . wordwrap($row['product_name'], 150, "<br>\n") . '</div>';
                     $variantStr .= ($row['selprod_title'] != '') ? '<div class="item__sub_title">' . wordwrap($row['selprod_title'], 150, "<br>\n") . '</div>' : '';
-                    
+
                     if (is_array($row['options']) && count($row['options'])) {
                         $variantStr .= '<div class="item__specification">';
                         $count = count($row['options']);
@@ -77,15 +77,15 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP];
                     $frontReturn = true;
 
-                    include (CONF_THEME_PATH . '_partial/get-badge.php');
+                    include(CONF_THEME_PATH . '_partial/get-badge.php');
                     $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $td->appendElement('plaintext', [], $html, true);
                     break;
                 case 'ribbon':
                     $ribSelProdId = $row['selprod_id'];
                     $frontReturn = true;
-                    
-                    include (CONF_THEME_PATH . '_partial/get-ribbon.php');
+
+                    include(CONF_THEME_PATH . '_partial/get-ribbon.php');
                     $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $html = '<div class="badge-wrap">' . $html . '</div>';
                     $td->appendElement('plaintext', [], $html, true);

@@ -32,12 +32,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <div class="item__pic">
                                             <?php
                                             $prodTitle =  (!empty($opDetail['op_selprod_title']) ? $opDetail['op_selprod_title'] : $opDetail['op_product_name']);
-                                            
+
                                             $selProdCodeArr = explode('_', $opDetail['op_selprod_code']);
                                             if ($opDetail['op_is_batch']) {
-                                                $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($opDetail['op_selprod_id'], $siteLangId, "MEDIUM"), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                                $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($opDetail['op_selprod_id'], $siteLangId, "MEDIUM"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                             } else {
-                                                $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], "MEDIUM", $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                                $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], "MEDIUM", $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                             } ?>
                                             <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id'])) ?>"><img src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>"></a>
                                         </div>
@@ -47,7 +47,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             </div>
                                             <div class="item__specification"> <?php echo $opDetail['op_selprod_options']; ?> </div>
                                         </div>
-                                    </div>                                
+                                    </div>
                                     <div class="rating-listing mb-4">
                                         <?php foreach ($ratingAspects as $ratingTypeId => $ratingTypeLabel) {
                                             if (in_array($ratingTypeId, [RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
@@ -145,7 +145,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="shop-rating-wrap">
                                                 <div class="shop-card">
                                                     <div class="shop-card__img">
-                                                        <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL')); ?>" />
+                                                        <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL'), CONF_WEBROOT_FRONTEND); ?>" />
                                                     </div>
                                                     <div class="shop-card__detail">
                                                         <h6><?php echo $opDetail['op_shop_name']; ?> </h6>
@@ -157,7 +157,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 </div>
                                                 <div class="rating-listing">
                                                     <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                                        <div class="rating">                                               
+                                                        <div class="rating">
                                                             <div class="rating-action" data-rating="0">
                                                                 <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                                     <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -182,11 +182,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <div class="feedback-block mt-5">
                                         <h5 class="card-title ">
                                             <?php echo Labels::getLabel('LBL_DELIVERY_FEEDBACK', $siteLangId); ?></h5>
-                                       <div class="feedback-block_content">
+                                        <div class="feedback-block_content">
                                             <div class="shop-rating-wrap">
                                                 <div class="rating-listing">
                                                     <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                                        <div class="rating pb-0">                                                       
+                                                        <div class="rating pb-0">
                                                             <div class="rating-action" data-rating="0">
                                                                 <?php for ($i = 5; $i >= 1; $i--) { ?>
                                                                     <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
@@ -209,10 +209,10 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <?php } ?>
                             </div>
                         <?php } ?>
-                       
+
                     </div>
                     <div class="row mt-4">
-                    <div class="col-md-12 ">
+                        <div class="col-md-12 ">
                             <div class="field-set">
                                 <div class="field-wraper">
                                     <div class="field_cover">
@@ -230,7 +230,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             </div>
                         </div>
-                        </div>
+                    </div>
                     </form>
                     <?php echo $frm->getExternalJS(); ?>
                 </div>

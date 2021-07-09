@@ -6,15 +6,15 @@
             $shop_name = ' - ' . $message['shop_name'];
             $userImgUpdatedOn = Shop::getAttributesById($message['shop_id'], 'shop_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-            $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($message['shop_id'], $siteLangId, 'thumb')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($message['shop_id'], $siteLangId, 'thumb'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         } else {
             if ($message['orrmsg_from_admin_id']) {
-                $toImage = UrlHelper::generateUrl('Image', 'siteLogo', array($siteLangId, 'THUMB'));
+                $toImage = UrlHelper::generateUrl('Image', 'siteLogo', array($siteLangId, 'THUMB'), CONF_WEBROOT_FRONTEND);
             } else {
 
                 $userImgUpdatedOn = User::getAttributesById($message['orrmsg_from_user_id'], 'user_updated_on');
                 $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-                $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($message['orrmsg_from_user_id'], 'thumb', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($message['orrmsg_from_user_id'], 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             }
         }
 

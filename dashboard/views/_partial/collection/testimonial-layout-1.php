@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (isset($collection['testimonials']) && count($collection['testimonials']) > 0) { ?>
     <section class="section bg-second">
         <div class="container">
@@ -10,7 +10,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
                 </div>
             </div>
             <!-- Slider -->
-            <div class="<?php echo (3 < count($collection['testimonials'])) ? 'js-slider-testimonials' : '';?> slider-testimonials">
+            <div class="<?php echo (3 < count($collection['testimonials'])) ? 'js-slider-testimonials' : ''; ?> slider-testimonials">
                 <?php foreach ($collection['testimonials'] as $testimonial) { ?>
                     <div class="slide-item">
                         <div class="slide-item__text">
@@ -34,7 +34,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
                             </p>
                         </div>
                         <div class="slide-item__from">
-                            <img class="user-pic" alt="<?php echo $testimonial['testimonial_user_name']; ?>" src="<?php echo UrlHelper::generateUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB')) . '?t=' . time(); ?>">
+                            <img class="user-pic" alt="<?php echo $testimonial['testimonial_user_name']; ?>" src="<?php echo UrlHelper::generateUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB'), CONF_WEBROOT_FRONTEND) . '?t=' . time(); ?>">
                             <div class="user-detail">
                                 <p><span class="name"><?php echo $testimonial['testimonial_user_name']; ?></span>
                                     <!--span class="designation">Senior UI/UX Designer</span-->

@@ -4,7 +4,7 @@ use PhpParser\Node\Stmt\Label;
 
 defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
-    <?php 
+    <?php
     $arr_flds = array(
         'listserial' => Labels::getLabel('LBL_#', $siteLangId),
         'product_identifier' => Labels::getLabel('LBL_Product', $siteLangId),
@@ -41,7 +41,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'product_identifier':
-                    $html = '<div class="item"><figure class="item__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['product_id'], "SMALL", 0, 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure>
+                    $html = '<div class="item"><figure class="item__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['product_id'], "SMALL", 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure>
 					<div class="item__description">
 						<div class="item__title">' . $row['product_name'] . '</div>
 						<div class="item__brand"> (' . $row[$key] . ') </div>
@@ -54,15 +54,15 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD, BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP];
                     $frontReturn = true;
 
-                    include (CONF_THEME_PATH . '_partial/get-badge.php');
+                    include(CONF_THEME_PATH . '_partial/get-badge.php');
                     $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $td->appendElement('plaintext', [], $html, true);
                     break;
                 case 'ribbon':
                     $ribProdId = $row['product_id'];
                     $frontReturn = true;
-                    
-                    include (CONF_THEME_PATH . '_partial/get-ribbon.php');
+
+                    include(CONF_THEME_PATH . '_partial/get-ribbon.php');
                     $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $html = '<div class="badge-wrap">' . $html . '</div>';
                     $td->appendElement('plaintext', [], $html, true);

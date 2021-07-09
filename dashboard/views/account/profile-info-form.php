@@ -18,20 +18,20 @@ $phoneFld = $frm->getField('user_phone');
 if (true == SmsArchive::canSendSms()) {
     $phoneFld->setFieldTagAttribute('disabled', 'disabled');
 }
-if(!empty($data['user_phone'])){
+if (!empty($data['user_phone'])) {
     $phoneFld->setFieldTagAttribute('disabled', 'disabled');
     $phoneFld->setFieldTagAttribute('id', 'user-phone');
     $phoneFld->setFieldTagAttribute('data-value', $data['user_phone']);
     $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedFieldData($data['user_phone']));
     $handleDisabled = (false == SmsArchive::canSendSms()) ? 1 : 0;
-    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onClick ="toggleEncryptedFields(this, '.$handleDisabled.', 1)" class="fa js-toggle-data fa-eye"></span>';
+    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onClick ="toggleEncryptedFields(this, ' . $handleDisabled . ', 1)" class="fa js-toggle-data fa-eye"></span>';
 }
 
 
 $userDobFld = $frm->getField('user_dob');
 if (!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00') {
     $userDobFld->setFieldTagAttribute('disabled', 'disabled');
-    
+
     $userDobFld->setFieldTagAttribute('id', 'user-dob');
     $userDobFld->setFieldTagAttribute('data-value', $data['user_dob']);
     $userDobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
@@ -46,8 +46,8 @@ $emailFld->setFieldTagAttribute('id', 'user-email');
 $emailFld->setFieldTagAttribute('data-value', $data['credential_email']);
 $emailFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedEmail($data['credential_email']));
 $emailFld->htmlAfterField = '<span toggle="#user-email" onClick ="toggleEncryptedFields(this)" class="fa js-toggle-data fa-eye"></span>';
-   
-    
+
+
 $countryFld = $frm->getField('user_country_id');
 $countryFld->setFieldTagAttribute('id', 'user_country_id');
 $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $stateId . ',\'#user_state_id\')');
@@ -85,7 +85,7 @@ $fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
                         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $userId);
 
-                        $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($userId, 'thumb', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($userId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         ?>
                         <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
                         <!--img src="<?php /* echo UrlHelper::generateUrl('Account', 'userProfileImage', array(UserAuthentication::getLoggedUserId(), 'croped', true)).'?t='.time(); ?>"
@@ -145,31 +145,31 @@ $fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
         $('.user_dob_js').datepicker('option', {
             maxDate: new Date()
         });
-        
-        toggleEncryptedFields = function(element, handleDisabled = 0, handleValidations = 0){
+
+        toggleEncryptedFields = function(element, handleDisabled = 0, handleValidations = 0) {
             $(element).toggleClass("fa-eye fa-eye-slash");
-            var input = $($(element).attr("toggle"));            
+            var input = $($(element).attr("toggle"));
             if ($(element).hasClass('fa-eye')) {
                 input.val(input.attr('data-value'));
-                if(handleDisabled == 1){
-                    input.removeAttr('disabled');                    
+                if (handleDisabled == 1) {
+                    input.removeAttr('disabled');
                 }
-                if(handleValidations == 1){
+                if (handleValidations == 1) {
                     input.attr('data-fatreq', input.attr('data-validations'));
                 }
             } else {
                 input.val(input.attr('data-encrypted-value'));
-                if(handleDisabled == 1){
-                    input.attr('disabled', 'disabled');                    
+                if (handleDisabled == 1) {
+                    input.attr('disabled', 'disabled');
                 }
-                if(handleValidations == 1){
+                if (handleValidations == 1) {
                     var validations = input.attr('data-fatreq');
                     input.attr('data-validations', validations);
                     input.attr('data-fatreq', '');
                 }
             }
         }
-        
+
         $('.js-toggle-data').trigger('click');
     });
 </script>

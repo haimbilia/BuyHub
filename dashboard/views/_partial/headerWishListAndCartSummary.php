@@ -31,7 +31,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                             foreach ($products as $product) {
                                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                                 $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
-                                $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "EXTRA-SMALL", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                                $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "EXTRA-SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>
 
                                 <li class="<?php echo (!$product['in_stock']) ? 'disabled' : '';
                                             echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">

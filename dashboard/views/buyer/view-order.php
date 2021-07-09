@@ -19,15 +19,14 @@ if (true == $primaryOrder) {
     }
 
     $canSubmitFeedback = Orders::canSubmitFeedback($childOrderDetail['order_user_id'], $childOrderDetail['order_id'], $childOrderDetail['op_selprod_id']);
-    $selProdTotalSpecialPrice += $childOrderDetail['op_special_price'] * $childOrderDetail["op_qty"];      
-   
-}else{
+    $selProdTotalSpecialPrice += $childOrderDetail['op_special_price'] * $childOrderDetail["op_qty"];
+} else {
     $firstOrderInfo = current($childOrderDetail);
     $cartTotal = 0;
     foreach ($childOrderDetail as $childOrder) {
         $selProdTotalSpecialPrice += $childOrder['op_special_price'] * $childOrder["op_qty"];
         $cartTotal += $childOrder["op_unit_price"] * $childOrder["op_qty"];
-    }  
+    }
     $totalSaving = $selProdTotalSpecialPrice + $firstOrderInfo['order_discount_total'] + $firstOrderInfo['order_volume_discount_total'];
 }
 
@@ -35,7 +34,7 @@ $orderStatusArr = Orders::getOrderPaymentStatusArr($siteLangId);
 if (!$print) { ?>
     <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php } ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <?php if (!$print) { ?>
             <div class="content-header row">
@@ -109,12 +108,12 @@ if (!$print) { ?>
                     } ?>
                 </div>
                 <div class="card-body ">
-                    <?php if ($primaryOrder) {                        
+                    <?php if ($primaryOrder) {
                         $cartTotal = CommonHelper::orderProductAmount($childOrderDetail, 'CART_TOTAL');
                         $disc = CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT');
                         $volumeDiscount = CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT');
                         $totalSaving = $selProdTotalSpecialPrice + abs($disc) + abs($volumeDiscount);
-                        ?>
+                    ?>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 mb-4">
                                 <div class="info--order">
@@ -181,7 +180,7 @@ if (!$print) { ?>
                                             </p>
                                     <?php }
                                     } ?>
-                                    <?php                                    
+                                    <?php
                                     if (!empty($disc)) { ?>
                                         <p>
                                             <strong>
@@ -190,7 +189,7 @@ if (!$print) { ?>
                                             <?php echo CommonHelper::displayMoneyFormat($disc, true, false, true, false, true); ?>
                                         </p>
                                     <?php }
-                                    
+
                                     if (!empty($volumeDiscount) && 0 < $volumeDiscount) { ?>
                                         <p>
                                             <strong>
@@ -238,7 +237,7 @@ if (!$print) { ?>
                                         </strong>
                                         <?php echo FatDate::format($childOrderDetail['order_date_added']); ?>
                                     </p>
-                                    <?php 
+                                    <?php
                                     if ($childOrderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) { ?>
                                         <p>
                                             <strong>
@@ -251,16 +250,16 @@ if (!$print) { ?>
                                             echo  $date . ' ' . $fromTime . ' - ' . $toTime;
                                             ?>
                                         </p>
-                                    <?php } ?>    
-                                    <?php if(0 < $totalSaving ){ ?> 
-                                    <p class="text-success">                                          
-                                        <strong>
-                                            <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
-                                        </strong>
-                                        <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
-                                    </p>
                                     <?php } ?>
-                                       
+                                    <?php if (0 < $totalSaving) { ?>
+                                        <p class="text-success">
+                                            <strong>
+                                                <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
+                                            </strong>
+                                            <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
+                                        </p>
+                                    <?php } ?>
+
                                 </div>
                             </div>
                         </div>
@@ -270,21 +269,21 @@ if (!$print) { ?>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
                                 <div class="info--order">
-                                <p>
-                                    <strong>
-                                        <?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:
-                                    </strong>
-                                    <?php echo $orderDetail['order_id']; ?>
-                                </p>
-                                <?php if(0 < $totalSaving) { ?>
-                                <p class="text-success">
-                                    <strong>
-                                        <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
-                                    </strong>
-                                    <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
-                                </p>
-                                <?php } ?>
-                            </div>
+                                    <p>
+                                        <strong>
+                                            <?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:
+                                        </strong>
+                                        <?php echo $orderDetail['order_id']; ?>
+                                    </p>
+                                    <?php if (0 < $totalSaving) { ?>
+                                        <p class="text-success">
+                                            <strong>
+                                                <?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?>:
+                                            </strong>
+                                            <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
+                                        </p>
+                                    <?php } ?>
+                                </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="info--order">
@@ -296,7 +295,7 @@ if (!$print) { ?>
                                     </p>
                                 </div>
                             </div>
-                                </div>
+                        </div>
                     <?php
                     } ?>
                     <div class="js-scrollable table-wrap scroll scroll-x">
@@ -365,12 +364,12 @@ if (!$print) { ?>
                                                 $prodOrBatchUrl = 'javascript:void(0)';
                                                 if ($childOrder['op_is_batch']) {
                                                     $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($childOrder['op_selprod_id']));
-                                                    $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($childOrder['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                                    $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($childOrder['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                 } else {
                                                     if (Product::verifyProductIsValid($childOrder['op_selprod_id']) == true) {
                                                         $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($childOrder['op_selprod_id']));
                                                     }
-                                                    $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($childOrder['selprod_product_id'], "SMALL", $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                                    $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($childOrder['selprod_product_id'], "SMALL", $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                 } ?>
                                                 <figure class="item__pic">
                                                     <a href="<?php echo $prodOrBatchUrl; ?>">
@@ -455,7 +454,7 @@ if (!$print) { ?>
                                         </td>
                                         <td>
                                             <?php if ($shippingCharges > 0) { ?>
-                                                    <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?>
+                                                <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?>
                                             <?php } ?>
                                         </td>
                                         <td>
@@ -591,7 +590,7 @@ if (!$print) { ?>
                                         <td>
                                             <?php echo CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], true, false, true, false, true); ?>
                                         </td>
-                                    </tr>                                   
+                                    </tr>
 
                                 <?php } ?>
                             </tbody>
@@ -816,7 +815,7 @@ if (!$print) { ?>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php 
+                                        <?php
                                         foreach ($orderDetail['comments'] as $row) {
                                         ?>
                                             <tr>
@@ -831,12 +830,12 @@ if (!$print) { ?>
                                                     echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
                                                     if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                         if (empty($row['oshistory_courier'])) {
-                                                            $trackingNumber = $row['oshistory_tracking_number'];                                                            
+                                                            $trackingNumber = $row['oshistory_tracking_number'];
                                                             if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
-                                                                $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . $trackingNumber . '</a>';
+                                                                $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . $trackingNumber . '</a>';
                                                             }
 
-                                                            $str = !empty($trackingNumber) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . ' ( ' . $trackingNumber . ' )': '';
+                                                            $str = !empty($trackingNumber) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . ' ( ' . $trackingNumber . ' )' : '';
                                                             if (empty($childOrderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
                                                                 $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
                                                             } elseif (!empty($childOrderDetail['opship_tracking_url'])) {

@@ -7,7 +7,7 @@ if (null != $btn) {
   $btn->addFieldTagAttribute('class', 'btn btn-brand');
 }
 ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
   <div class="content-wrapper content-space">
     <div class="content-header row">
       <div class="col">
@@ -165,7 +165,7 @@ if (null != $btn) {
               <ul>
                 <li>
                   <div class="msg_db">
-                    <div class="avtar"><img src="<?php echo UrlHelper::generateUrl('Image', 'user', array($logged_user_id, 'THUMB', 1)); ?>" alt="<?php echo $logged_user_name; ?>" title="<?php echo $logged_user_name; ?>"></div>
+                    <div class="avtar"><img src="<?php echo UrlHelper::generateUrl('Image', 'user', array($logged_user_id, 'THUMB', 1), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo $logged_user_name; ?>" title="<?php echo $logged_user_name; ?>"></div>
                   </div>
                   <div class="msg__desc">
                     <span class="msg__title"><?php echo $logged_user_name; ?></span>

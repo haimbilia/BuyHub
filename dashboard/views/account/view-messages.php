@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> <main id="main-area" class="main"   >
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> <main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <div class="content-header row">
             <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?> <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?></h2>
@@ -84,12 +84,12 @@
                                             $userImgUpdatedOn = $shopDetails['shop_updated_on'];
                                             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                         ?>
-                                            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($shopDetails['shop_id'], $siteLangId, 'thumb')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shopDetails['shop_name']; ?>">
+                                            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($shopDetails['shop_id'], $siteLangId, 'thumb'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shopDetails['shop_name']; ?>">
                                         <?php } else {
                                             $userImgUpdatedOn = User::getAttributesById($loggedUserId, 'user_updated_on');
                                             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                         ?>
-                                            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($loggedUserId, 'thumb', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $loggedUserName; ?>">
+                                            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($loggedUserId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $loggedUserName; ?>">
                                         <?php } ?>
                                     </div>
                                     <div class="msg__desc">
@@ -106,7 +106,8 @@
                                         $frm->developerTags['fld_default_col'] = 12;
                                         $submitFld = $frm->getField('btn_submit');
                                         $submitFld->setFieldTagAttribute('class', "btn btn-brand");
-                                        echo $frm->getFormHtml(); ?> </div>
+                                        echo $frm->getFormHtml(); ?>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
