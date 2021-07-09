@@ -104,6 +104,7 @@ Updates/Fixes :
     => 055721 - admin> promotions> ribbon> bind conditions> filters> fields are not aligned properly
     => 055689 - while returning if there is no file attached still then listing download button on return order detail page on buyer end
     => 055715 - when single badge is linked with item then it's listing multiple times on product detail and shop
+    => 055026 - corresponding to review> images added are not listing on front end
 
 New Features:  
     => Admin shipped products listing page

@@ -112,8 +112,8 @@
                                                     <?php $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $reviewData['spreview_id']); 
 														if (!empty($images)) {
 													?>
-                                                    <div class="uploaded-media">
-                                                        <ul>
+                                                    <div class="uploaded-media all-review-media">
+                                                        <ul class="review-media-list">
                                                             <?php
 																$i = 0;
 																foreach ($images as $image) {
@@ -130,8 +130,8 @@
                                                                         </a>
                                                                     </li>
                                                                     <?php } else { ?>
-                                                                            <li class="more-media" onclick="loadMoreImages(this);">
-                                                                                <a class="uploaded-file" href="javascript:void(0)"
+                                                                            <li class="more-media " onclick="loadMoreImages(this);">
+                                                                                <a class="uploaded-file review-media" href="javascript:void(0)"
                                                                                     data-count="<?php echo count($images); ?>+">
                                                                                     <img src="<?php echo $imgUrl; ?>"
                                                                                         data-altimg="<?php echo $largeImgUrl; ?>">
