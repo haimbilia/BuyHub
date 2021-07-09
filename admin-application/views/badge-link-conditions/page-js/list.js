@@ -68,7 +68,7 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
         });
     };
 
-    bulkBadgesUnlink = function (e) {
+    deleteSelected = function (e) {
         if (1 > $('.selectItem--js:checked').length) {
             fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return;

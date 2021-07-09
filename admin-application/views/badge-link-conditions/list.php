@@ -7,7 +7,7 @@ $listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITIONS_LIST', $admi
 
 $data = [
     'adminLangId' => $adminLangId,
-    'deleteButton' => false,
+    'deleteButton' => true,
     'statusButtons' => false,
     'otherButtons' => [
         [
