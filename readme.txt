@@ -102,6 +102,7 @@ Updates/Fixes :
     => 055720 - admin> promotions> ribbon> bind conditions> list having select option which is of no use and on selecting, nothing appears on top for operations
     => 055721 - admin> promotions> ribbon> bind conditions> filters> fields are not aligned properly
     => 055689 - while returning if there is no file attached still then listing download button on return order detail page on buyer end
+    => 055715 - when single badge is linked with item then it's listing multiple times on product detail and shop
 
 New Features:  
     => Admin shipped products listing page

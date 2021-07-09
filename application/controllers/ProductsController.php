@@ -1040,25 +1040,12 @@ class ProductsController extends MyAppController
             $srch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
         }
 
-        /*$selProdReviewObj = new SelProdReviewSearch();
-        $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
-        $selProdReviewObj->doNotCalculateRecords();
-        $selProdReviewObj->doNotLimitRecords();
-        $selProdReviewObj->addGroupBy('spr.spreview_product_id');
-        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-        $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id',"ROUND(AVG(sprating_rating),2) as prod_rating"));
-        $selProdRviewSubQuery = $selProdReviewObj->getQuery();
-        $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');
-        $srch->addFld('COALESCE(prod_rating,0) prod_rating');*/
         $srch->addCondition('selprod_id', '!=', $selprod_id);
         $srch->addCondition('product_id', 'in', array_keys($recommendedProds));
         $srch->setPageSize(5);
         $srch->doNotCalculateRecords();
 
-        $recommendedProducts = FatApp::getDb()->fetchAll($srch->getResultSet());
-        //FatCache::set('recommProds'.$selprod_id.'-'.$langId.'-'.$userId, serialize($recommendedProducts), '.txt');
-        return $recommendedProducts;
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     private function getOgTags($product = array(), $afile_id = 0)
@@ -1497,7 +1484,7 @@ class ProductsController extends MyAppController
 
     public function track($productId = 0)
     {
-        $bannerId = FatUtility::int($productId);
+        $productId = FatUtility::int($productId);
         if (1 > $productId) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl(''));
@@ -1633,12 +1620,6 @@ class ProductsController extends MyAppController
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $prodSrch->doNotLimitRecords();
-
-        /* sub query to find out that logged user have marked current product as in wishlist or not[ */
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
 
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSelProdRating();

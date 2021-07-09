@@ -492,7 +492,7 @@ class BadgesController extends AdminBaseController
         $canEdit = $this->objPrivilege->canEditBadges(0, true);
         $badge_id = FatUtility::int($badge_id);
         $lang_id = FatUtility::int($lang_id);
-        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badge_id, 0, $lang_id, false);
+        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badge_id, 0, $lang_id);
         $this->set('icon', $icon);
         $this->set('imageType', $imageType);
         $this->set('languages', Language::getAllNames());

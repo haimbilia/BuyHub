@@ -39,12 +39,12 @@ require_once(CONF_THEME_PATH . '_partial/index-page-common.php'); ?>
 	var RECORD_TYPE_SHOP = <?php echo BadgeLinkCondition::RECORD_TYPE_SHOP; ?>;
 
     var COND_TYPE_DATE = <?php echo BadgeLinkCondition::COND_TYPE_DATE; ?>;
-    var COND_TYPE_AVG_RATING_SELPROD = <?php echo BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD; ?> 
-    var COND_TYPE_AVG_RATING_SHOP = <?php echo BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP; ?> 
-    var COND_TYPE_ORDER_COMPLETION_RATE = <?php echo BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE; ?> 
-    var COND_TYPE_COMPLETED_ORDERS = <?php echo BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS; ?> 
-    var COND_TYPE_RETURN_ACCEPTANCE = <?php echo BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE; ?> 
-    var COND_TYPE_ORDER_CANCELLED = <?php echo BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED; ?> 
+    var COND_TYPE_AVG_RATING_SELPROD = <?php echo BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD; ?>; 
+    var COND_TYPE_AVG_RATING_SHOP = <?php echo BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP; ?>; 
+    var COND_TYPE_ORDER_COMPLETION_RATE = <?php echo BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE; ?>; 
+    var COND_TYPE_COMPLETED_ORDERS = <?php echo BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS; ?>; 
+    var COND_TYPE_RETURN_ACCEPTANCE = <?php echo BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE; ?>; 
+    var COND_TYPE_ORDER_CANCELLED = <?php echo BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED; ?>; 
 
     var badgeType = "<?php echo $badgeType; ?>";
     var badgeId = "<?php echo $badgeId; ?>";
