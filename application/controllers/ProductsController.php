@@ -458,7 +458,7 @@ class ProductsController extends MyAppController
         return (array) FatApp::getDb()->fetch($productRs);
     }
 
-    public function view($selprod_id = 0, $moreSellerRows = 0)
+    public function view($selprod_id = 0)
     {
         $selprod_id = FatUtility::int($selprod_id);
         if (true === MOBILE_APP_API_CALL && 1 > $selprod_id) {
@@ -993,7 +993,7 @@ class ProductsController extends MyAppController
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
                 'theprice', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
-                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy'
+                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id'
             )
         );
 
