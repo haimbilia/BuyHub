@@ -110,51 +110,35 @@
 
 @keyframes bell-shake {
     1% {
-        -webkit-transform: rotateZ(15deg);
         transform: rotateZ(15deg);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
     2% {
-        -webkit-transform: rotateZ(-15deg);
         transform: rotateZ(-15deg);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
     3% {
-        -webkit-transform: rotateZ(20deg);
         transform: rotateZ(20deg);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
     4% {
-        -webkit-transform: rotateZ(-20deg);
         transform: rotateZ(-20deg);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
     5% {
-        -webkit-transform: rotateZ(15deg);
         transform: rotateZ(15deg);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
     6% {
-        -webkit-transform: rotateZ(-15deg);
         transform: rotateZ(-15deg);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
     7% {
-        -webkit-transform: rotateZ(0);
         transform: rotateZ(0);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
     100% {
-        -webkit-transform: rotateZ(0);
         transform: rotateZ(0);
-        -webkit-transform-origin: 50% 0%;
         transform-origin: 50% 0%;
     }
 }
@@ -186,7 +170,8 @@
 .my-dashboard {
     &.is-dashboard {
         // height: auto;
-        background: $gray-light;
+        //background: $bg-gray;
+        background: url(dashboard/images/retina/bg-dots.svg) no-repeat 0 0;
         padding: 50px;
         @include media-breakpoint-down(lg) {
             & {
@@ -228,7 +213,6 @@
         justify-content: space-between;
         align-items: center;
         background: #fff;
-        -webkit-transition: padding 0.5s ease-in-out;
         transition: padding 0.5s ease-in-out;
         border-bottom: $border;
         @include media-breakpoint-down(xl) {
@@ -330,20 +314,14 @@
             z-index: -1;
             border: 5px solid rgba(255, 255, 255, 0.55);
             border-radius: 50%;
-            -moz-animation: 1s ease-out infinite heartbit;
-            -o-animation: 1s ease-out infinite heartbit;
-            -webkit-animation: 1s ease-out infinite heartbit;
-            -webkit-animation-iteration-count: infinite;
             animation-iteration-count: infinite;
         }
         .bell-shake--hover:hover,
         .bell-shake--hover:focus,
         .bell-shake {
-            -webkit-animation: bell-shake 40s ease infinite;
             animation: bell-shake 40s ease infinite;
         }
         .bell-shake-delay {
-            -webkit-animation: bell-shake 40s ease 3s infinite;
             animation: bell-shake 40s ease 3s infinite;
         }
         .my-account {
@@ -368,14 +346,11 @@
             -webkit-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
             box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
             position: absolute;
-            -webkit-transform: scaleY(0);
             transform: scaleY(0);
             opacity: 0;
             visibility: hidden;
             filter: alpha(opacity=0);
-            -webkit-transition: all 300ms;
             transition: all 300ms;
-            -webkit-transform-origin: center;
             transform-origin: center;
             &:before {
                 content: "";
@@ -459,14 +434,12 @@
             opacity: 1;
         }
     }
-   
     .main {
-        background: $gray-light;
+        background: $bg-gray;
         width: 100%;
         height: 100%;
         padding-top: 72px;
         padding-#{$start-direction}: 70px;
-        -webkit-transition: padding 0.5s ease-in-out;
         transition: padding 0.5s ease-in-out;
     }
     .ui-widget.ui-widget-content {
@@ -475,7 +448,6 @@
         overflow-y: auto;
     }
 }
-
 
 .content-wrapper {
     &.content-space {
@@ -719,7 +691,6 @@
         border-radius: 50%;
         overflow: hidden;
         margin-#{$end-direction}: 1rem;
-        -ms-flex: 0 0 50px;
         flex: 0 0 50px;
         background: $bg-gray;
         display: flex;
@@ -1709,7 +1680,7 @@ input.sp-input {
         max-width: 30%;
         margin-#{$end-direction}: 20px;
         li {
-            background-color: $gray-light;
+            background-color: $bg-gray;
             border-radius: 5px;
             display: block;
             margin-bottom: 15px;

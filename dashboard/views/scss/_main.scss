@@ -1,13 +1,13 @@
-@import "application/views/scss/themes/theme";
+@import "../../../application/views/scss/themes/theme";
 //
-@import 'application/views/scss/bootstrap/bootstrap.scss';
-@import 'application/views/scss/bootstrap/variables';
+@import '../../../application/views/scss/bootstrap/bootstrap.scss';
+@import '../../../application/views/scss/bootstrap/variables';
 //
 @import 'components/misc';
 @import 'components/sidebar';
 // @import 'components/main-search';
 // @import 'components/accordion';
-// @import 'components/categories';
+// @import 'components/categories'; 
 @import 'components/tagify';
 @import 'components/auto-complete';
 // @import 'components/avtar';

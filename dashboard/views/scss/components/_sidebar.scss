@@ -8,7 +8,6 @@
     background: #fff;
     padding-top: 71px;
     height: 100%;
-     
     transition: width 0.5s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -100,7 +99,7 @@
         }
     }
     .dashboard-menu {
-        color: $body-color;
+        color: $txt-gray;
         fill: currentColor;
         .menu__item {
             overflow: hidden;
@@ -187,7 +186,7 @@
         a {
             color: inherit;
             &:hover {
-                background: $gray-light;
+                background: $bg-gray;
             }
         }
         a {
@@ -236,6 +235,7 @@
         }
     }
 }
+
 .sidebar-is-expanded {
     .sidebar {
         width: 280px;

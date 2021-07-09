@@ -1,17 +1,14 @@
 .tabs {
-    
     margin: 0 auto;
     display: block;
     text-align: center;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    
     display: flex;
     position: relative;
     width: 100%;
     color: $body-color;
     ul {
-
         display: flex;
         -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
@@ -195,14 +192,12 @@
 
 .v-tabs {
     display: flex;
-
     &-list {
         flex: 0 0 30%;
         max-width: 30%;
         margin-#{$end-direction}: 20px;
-
         li {
-            background-color: $gray-light;
+            background-color: $bg-gray;
             border-radius: 5px;
             display: block;
             margin-bottom: 15px;
@@ -216,7 +211,6 @@
                 a {
                     color: currentColor;
                 }
-
                 &:after {
                     content: "";
                     position: absolute;

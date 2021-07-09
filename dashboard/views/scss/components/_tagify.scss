@@ -24,12 +24,10 @@
         display: inline-block;
         margin-#{$end-direction}: 5px;
         span {
-            background-color: $gray-light;
+            background-color: $bg-gray;
             border: $border;
             padding: 5px;
             border-radius: $radius3;
-            
-            
             display: flex;
             align-items: center;
             font-size: 0.7rem;
@@ -55,11 +53,7 @@
             width: 16px;
             height: 16px;
             font-size: 0.6rem;
-            
-            
             display: flex;
-            
-            
             align-items: center;
             justify-content: center;
             margin-left: 8px;

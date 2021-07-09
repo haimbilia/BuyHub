@@ -58,6 +58,10 @@ a:hover {
     text-decoration: none;
 }
 
+.bg-gray {
+    background: $bg-gray;
+}
+
 .mleft-auto {
     margin-#{$start-direction}: auto !important;
 }
@@ -202,6 +206,17 @@ a:hover {
     .avtar {
         margin: 0 auto;
     }
+}
+
+.info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: $bg-gray;
+    border-radius: 4px;
+    font-size: 0.85rem;
 }
 
 .info-message {
