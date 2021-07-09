@@ -12,8 +12,8 @@ class ShopsController extends MyAppController
         $searchForm = $this->getShopSearchForm($this->siteLangId);
         $this->set('searchForm', $searchForm);
         $this->_template->addJs('js/slick.min.js');
-
-        $this->_template->render();
+        $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
+        $this->_template->render();        
     }
 
     public function featured()
@@ -83,6 +83,10 @@ class ShopsController extends MyAppController
                 'IFNULL(ufs.ufs_id, 0) as is_favorite'
             )
         );
+        
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+            $srch->addMultipleFields(['shop_lat','shop_lng']);
+        }
 
         $featured = FatApp::getPostedData('featured', FatUtility::VAR_INT, 0);
         if (0 < $featured) {
@@ -127,7 +131,7 @@ class ShopsController extends MyAppController
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
                 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock'
             )
-        );
+        );       
         foreach ($allShops as $val) {
             $productShopSrchTempObj = clone $productSrchObj;
             $productShopSrchTempObj->addCondition('selprod_user_id', '=', $val['shop_user_id']);
@@ -165,9 +169,13 @@ class ShopsController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
-        $json['html'] = $this->_template->render(false, false, 'shops/search.php', true, false);
-        $json['loadMoreBtnHtml'] = $this->_template->render(false, false, '_partial/load-more-btn.php', true, false);
+        
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+            $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
+        } else {
+            $json['html'] = $this->_template->render(false, false, 'shops/search.php', true, false);
+            $json['loadMoreBtnHtml'] = $this->_template->render(false, false, '_partial/load-more-btn.php', true, false);
+        }
         FatUtility::dieJsonSuccess($json);
     }
 

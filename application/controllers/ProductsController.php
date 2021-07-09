@@ -99,7 +99,12 @@ class ProductsController extends MyAppController
                 $get['featured'] = 1;
                 break;
         }
-
+        
+        $get['vtype']  = $get['vtype'] ?? 'grid';
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $get['vtype'] == 'map') {
+            $get['vtype'] = 'grid';
+        } 
+        
         $frm->fill($get);
         $data = $this->getListingData($get);
 
@@ -116,8 +121,8 @@ class ProductsController extends MyAppController
                 'recordId' => 0,
                 'showBreadcrumb' => false
             );
-        }
-
+        }    
+        
         $data = array_merge($data, $common, $arr);
 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
@@ -134,6 +139,7 @@ class ProductsController extends MyAppController
 
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $data['products']);
+            $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);
             $this->set('page', $data['page']);
             $this->set('pageCount', $data['pageCount']);
             $this->set('postedData', $get);
@@ -198,6 +204,10 @@ class ProductsController extends MyAppController
     {
         $db = FatApp::getDb();
         $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
+        $headerFormParamsAssocArr['vtype']  = $headerFormParamsAssocArr['vtype'] ?? 'grid';
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $headerFormParamsAssocArr['vtype'] == 'map') {
+            $headerFormParamsAssocArr['vtype'] = 'grid';
+        } 
 
         $categoryId = 0;
         if (array_key_exists('category', $headerFormParamsAssocArr)) {
@@ -277,28 +287,35 @@ class ProductsController extends MyAppController
         $priceArr = FilterHelper::getPrice($headerFormParamsAssocArr, $this->siteLangId);
 
         $priceInFilter = false;
-        $filterDefaultMinValue = $priceArr['minPrice'];
-        $filterDefaultMaxValue = $priceArr['maxPrice'];
+        $filterDefaultMinValue = 0;
+        $filterDefaultMaxValue = 0;
+        
+        if(!empty($priceArr)){            
+            $filterDefaultMinValue = $priceArr['minPrice'];
+            $filterDefaultMaxValue = $priceArr['maxPrice'];
 
-        if ($this->siteCurrencyId != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1) || (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId)) {
-            $filterDefaultMinValue = CommonHelper::displayMoneyFormat($priceArr['minPrice'], false, false, false);
-            $filterDefaultMaxValue = CommonHelper::displayMoneyFormat($priceArr['maxPrice'], false, false, false);
-            $priceArr['minPrice'] = $filterDefaultMinValue;
-            $priceArr['maxPrice'] = $filterDefaultMaxValue;
-        }
+            if ($this->siteCurrencyId != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1) || (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId)) {
+                $filterDefaultMinValue = CommonHelper::displayMoneyFormat($priceArr['minPrice'], false, false, false);
+                $filterDefaultMaxValue = CommonHelper::displayMoneyFormat($priceArr['maxPrice'], false, false, false);
+                $priceArr['minPrice'] = $filterDefaultMinValue;
+                $priceArr['maxPrice'] = $filterDefaultMaxValue;
+            }
 
-        if (array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
-            $priceArr['minPrice'] = $headerFormParamsAssocArr['price-min-range'];
-            $priceArr['maxPrice'] = $headerFormParamsAssocArr['price-max-range'];
-            $priceInFilter = true;
-        }
+            if (array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
+                $priceArr['minPrice'] = $headerFormParamsAssocArr['price-min-range'];
+                $priceArr['maxPrice'] = $headerFormParamsAssocArr['price-max-range'];
+                $priceInFilter = true;
+            }
 
-        if (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId && array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
-            $filterDefaultMinValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-min-range'], $this->siteCurrencyId, false);
-            $filterDefaultMaxValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-max-range'], $this->siteCurrencyId, false);
-            $priceArr['minPrice'] = $filterDefaultMinValue;
-            $priceArr['maxPrice'] = $filterDefaultMaxValue;
+            if (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId && array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
+                $filterDefaultMinValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-min-range'], $this->siteCurrencyId, false);
+                $filterDefaultMaxValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-max-range'], $this->siteCurrencyId, false);
+                $priceArr['minPrice'] = $filterDefaultMinValue;
+                $priceArr['maxPrice'] = $filterDefaultMaxValue;
+            }            
         }
+        
+        
 
         /* ] */
 
@@ -917,7 +934,9 @@ class ProductsController extends MyAppController
         $moreSellerSrch->validateAndJoinDeliveryLocation();
         /*$moreSellerSrch->addMultipleFields(array( 'selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name' ,'IF(selprod_stock > 0, 1, 0) AS in_stock'));*/
         $moreSellerSrch->addMultipleFields(
-            array('selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name', 'product_seller_id', 'product_id', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'selprod_cod_enabled', 'product_cod_enabled', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty', 'selprod_available_from')
+            array('selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name', 'product_seller_id', 
+                'product_id', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'selprod_cod_enabled',
+                'product_cod_enabled', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty', 'selprod_available_from', 'shop_lat', 'shop_lng', 'product_updated_on','selprod_title')
         );
         $moreSellerSrch->addHaving('in_stock', '>', 0);
         $moreSellerSrch->addOrder('theprice');
@@ -2008,10 +2027,19 @@ class ProductsController extends MyAppController
                 $category['banner'] = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $categoryId);
             }
         }
+        $moreSellersArr = [];
+        if($get['vtype'] == 'map'){            
+            if(0 < count($products)){           
+                $selprodCodes = array_column($products, 'selprod_code');               
+                $moreSellersArr = $this->getMoreSeller($selprodCodes, $this->siteLangId);
+            }
+        }
+        
         /* ] */
 
         $data = array(
             'products' => $products,
+            'moreSellersProductsArr' => $moreSellersArr, /* seller products which is related to same options*/
             'category' => $category,
             'categoryId' => $categoryId,
             'postedData' => $get,
