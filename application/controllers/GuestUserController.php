@@ -1106,8 +1106,8 @@ class GuestUserController extends MyAppController
                 LibHelper::dieJsonResponse($resp);
             }
             $userId = $row['user_id'];
+            $this->resendOtp($userId, 1);
         }
-        $this->resendOtp($userId, 1);
     }
 
     public function otpForm($userId = 0)
@@ -1483,6 +1483,14 @@ class GuestUserController extends MyAppController
             if (!$userId = $userObj->saveUserData($post, false, MOBILE_APP_API_CALL)) {
                 $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $userObj->getError());
                 LibHelper::dieJsonResponse($resp);
+            }
+            
+            if (0 < $userId) {
+                $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
+                if (true === MOBILE_APP_API_CALL) {
+                    $this->_template->render();
+                }
+                $this->_template->render(false, false, 'json-success.php');
             }
         }
         return $userId;
