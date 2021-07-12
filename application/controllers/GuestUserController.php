@@ -1486,6 +1486,7 @@ class GuestUserController extends MyAppController
             }
             
             if (0 < $userId) {
+                $this->set('data', ['userId' => $userId]);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
                 if (true === MOBILE_APP_API_CALL) {
                     $this->_template->render();
