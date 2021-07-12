@@ -1752,12 +1752,11 @@ class User extends MyAppModel
         return true;
     }
 
-
     public function userPhoneVerification($data, $langId)
     {
         $phone = !empty($data['user_phone']) ? trim($data['user_phone']) : '';
         $dialCode = !empty($data['user_phone_dcode']) ? ValidateElement::formatDialCode(trim($data['user_phone_dcode'])) : '';
-        $user_name = !empty($data['user_name']) ? $data['user_name'] : Labels::getLabel('LBL_USER', $langId);
+        $user_name = !empty($data['user_name']) && isset($data['user_name']) ? $data['user_name'] : $dialCode . '-' . $phone;
 
         $otp = $this->prepareUserPhoneOtp($dialCode, $phone);
         if (false === $otp) {
@@ -2577,7 +2576,7 @@ class User extends MyAppModel
 
     public function checkUserByPhoneOrUserName($userName, $userPhone)
     {
-        $srch = $this->getUserSearchObj(array('user_id', 'user_phone_dcode', 'user_phone', 'credential_username', 'credential_verified'));
+        $srch = $this->getUserSearchObj(['user_id', 'user_phone_dcode', 'user_phone', 'credential_username', 'credential_verified', 'user_deleted']);
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $userPhone, 'OR', true);
         $rs = $srch->getResultSet();

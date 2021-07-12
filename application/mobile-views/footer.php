@@ -3,17 +3,18 @@
 $data = empty($data) ? array() : $data;
 $data = array_merge($commonData, $data);
 
-if (applicationConstants::OFF == $status) {
-    $msg = isset($msg) ? $msg : Labels::getLabel('MSG_NO_RECORD_FOUND', $siteLangId);
+$responseCode = isset($responseCode) ? $responseCode : LibHelper::RC_OK;
+
+if (applicationConstants::FAILURE == $status && (!isset($msg) || empty($msg))) {
+    $msg = Labels::getLabel('MSG_AN_UNKNOWN_ERROR_OCCURRED', $siteLangId);
+} else if (applicationConstants::SUCCESS == $status && (!isset($msg) || empty($msg))) {
+    $msg = Labels::getLabel('MSG_SUCCESS', $siteLangId);
 }
 
-$response = array(
-    'status' => $status,
-    'msg' => !empty($msg) ? $msg : Labels::getLabel('MSG_SUCCESS', $siteLangId),
-    'data' => $data
-);
+$response = LibHelper::formatResponse($status, $msg, $data, $responseCode);
 
-// This line is added because we don't want to display web messages from APP.
+/* This line is added because we don't want to display web messages from APP. */
 $messages = Message::getHtml();
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 CommonHelper::jsonEncodeUnicode($response, true);
