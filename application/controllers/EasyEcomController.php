@@ -118,15 +118,20 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 		    ]
         ];
         
+        SystemLog::plugin(json_encode($dataToUpdate), '', self::KEY_NAME . ' : Company/Create Request');
+
         $curl = new Curl();
         $curl->post(self::PRODUCTION_URL . 'Company/Create', json_encode($dataToUpdate));
         $curl->setHeader('Content-Type', 'application/json');
         if ($curl->error) {
-            LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
+            $error = $curl->errorCode . ': ' . $curl->errorMessage;
+            SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : ' . $error);
+            LibHelper::exitWithError($error, true);
         }
 
         $resp = json_decode($curl->response, true);
         if (200 != $resp['code']) {
+            SystemLog::plugin(json_encode($dataToUpdate), json_encode($resp), self::KEY_NAME . ' : ' . $resp['message']);
             LibHelper::exitWithError($resp['message'], true);
         }
 
@@ -247,11 +252,13 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $curl = new Curl();
         $curl->post($url, $dataToUpdate);
         if ($curl->error) {
+            SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : Sync Status CURL Error : ' . $curl->errorMessage);
             LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
         }
 
         if (200 != $curl->httpStatusCode) {
             $msg = empty($curl->httpErrorMessage) ? Labels::getLabel('MSG_SOMETHING_WENT_WRONG', $this->siteLangId) : $curl->httpErrorMessage;
+            SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : Sync Status Response Error : ' . $msg);
             LibHelper::exitWithError($msg, true);
         }
 
