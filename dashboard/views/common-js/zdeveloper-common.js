@@ -1446,19 +1446,6 @@ function isUserLogged() {
     return isUserLogged;
 }
 
-/* function checkisThemePreview(){
-    var isThemePreview = 0;
-    $.ajax({
-        url: fcom.makeUrl('MyApp','checkisThemePreview'),
-        async: false,
-        dataType: 'json',
-    }).done(function(ans) {
-        isThemePreview = parseInt( ans.isThemePreview );
-    });
-    alert(isThemePreview);
-    return isThemePreview;
-} */
-
 function loginPopUpBox(includeGuestLogin) {
     /* fcom.ajax(fcom.makeUrl('GuestUser','LogInFormPopUp'), '', function(ans){
         $(".login-account a").click();

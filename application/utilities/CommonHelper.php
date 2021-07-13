@@ -933,14 +933,6 @@ class CommonHelper extends FatUtility
         return trim(self::escapeStringAndAddQuote($string), "'");
     }
 
-    public static function isThemePreview()
-    {
-        if (strpos(urldecode($_SERVER['REQUEST_URI']), '?theme-preview') > 0) {
-            return true;
-        }
-        return false;
-    }
-
     public static function getnavigationUrl($type, $nav_url = '', $nav_cpage_id = 0, $nav_category_id = 0, $getOriginalUrl = false)
     {
         if ($type == NavigationLinks::NAVLINK_TYPE_CMS) {
@@ -951,10 +943,6 @@ class CommonHelper extends FatUtility
             $url = CommonHelper::processURLString($url);
         } elseif ($type == NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE) {
             $url = UrlHelper::generateUrl('category', 'view', array($nav_category_id), '', null, false, $getOriginalUrl);
-        }
-
-        if (self::isThemePreview()) {
-            $url = $url . '?theme-preview';
         }
 
         return $url;

@@ -13,7 +13,7 @@ class ShopsController extends MyAppController
         $this->set('searchForm', $searchForm);
         $this->_template->addJs('js/slick.min.js');
         $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
-        $this->_template->render();        
+        $this->_template->render();
     }
 
     public function featured()
@@ -83,9 +83,9 @@ class ShopsController extends MyAppController
                 'IFNULL(ufs.ufs_id, 0) as is_favorite'
             )
         );
-        
+
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
-            $srch->addMultipleFields(['shop_lat','shop_lng']);
+            $srch->addMultipleFields(['shop_lat', 'shop_lng']);
         }
 
         $featured = FatApp::getPostedData('featured', FatUtility::VAR_INT, 0);
@@ -131,7 +131,7 @@ class ShopsController extends MyAppController
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
                 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock'
             )
-        );       
+        );
         foreach ($allShops as $val) {
             $productShopSrchTempObj = clone $productSrchObj;
             $productShopSrchTempObj->addCondition('selprod_user_id', '=', $val['shop_user_id']);
@@ -169,7 +169,7 @@ class ShopsController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        
+
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
         } else {
@@ -393,7 +393,6 @@ class ShopsController extends MyAppController
         $this->set('layoutTemplate', 'shop');
         // $this->set('template_id', ($shop['shop_ltemplate_id']==0)?SHOP::TEMPLATE_ONE:$shop['shop_ltemplate_id']);
         $this->set('template_id', SHOP::TEMPLATE_ONE);
-        $this->set('layoutRecordId', $shop['shop_id']);
         $showBgImage = $this->showBackgroundImage($shop_id, $this->siteLangId, SHOP::TEMPLATE_ONE);
         $this->set('showBgImage', $showBgImage);
     }

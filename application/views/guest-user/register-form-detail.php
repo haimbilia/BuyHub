@@ -1,10 +1,6 @@
 <div class="form-side-inner">
     <?php
-    if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
-        $logoUrl = UrlHelper::generateUrl('home', 'index');
-    } else {
-        $logoUrl = UrlHelper::generateUrl();
-    }
+     $logoUrl = UrlHelper::generateUrl();
     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
     $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);

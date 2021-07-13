@@ -219,7 +219,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                 <?php
                 $productsData = array(
                     'products' => $products,
-                    'moreSellersProductsArr' => isset($moreSellersProductsArr) ? $moreSellersProductsArr : [],
+                    'moreSellersProductsArr' => isset($moreSellersProductsArr) ? $moreSellersProductsArr : [],    
                     'page' => $page,
                     'pageCount' => $pageCount,
                     'postedData' => $postedData,
@@ -242,7 +242,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 </path>
                             </svg>
                         </div>
-                        <div class="canvas-map" id="productMap--js"> </div>
+                        <div class="canvas-map" id="productMap--js" style="width:500px;height:500px;"> </div>
                     </div>
                     <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                 </div>

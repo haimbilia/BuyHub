@@ -1,37 +1,19 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (isset($includeEditor) && $includeEditor == true) {
-    $extendEditorJs    = 'true';
-} else {
-    $extendEditorJs    = 'false';
-}
-if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
-    $themeActive = 'true';
-} else {
-    $themeActive = 'false';
-}
+
 $commonHeadData = array(
     'siteLangId' => $siteLangId,
     'siteLangCode' => $siteLangCode,
     'siteLangCountryCode' => $siteLangCountryCode,
     'controllerName' => $controllerName,
     'action' => $action,
-    'jsVariables' => $jsVariables,
-    'extendEditorJs' => $extendEditorJs,
-    'themeActive' => $themeActive,
+    'jsVariables' => $jsVariables,    
     'currencySymbolLeft' => $currencySymbolLeft,
-    'currencySymbolRight' => $currencySymbolRight,
-    'isUserDashboard' => $isUserDashboard,
+    'currencySymbolRight' => $currencySymbolRight,    
     'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl: '',
 );
-if (isset($layoutTemplate) && $layoutTemplate != '') {
-    $commonHeadData['layoutTemplate'] = $layoutTemplate;
-    $commonHeadData['layoutRecordId'] = $layoutRecordId;
-}
+
 if (isset($socialShareContent) && $socialShareContent != '') {
     $commonHeadData['socialShareContent'] = $socialShareContent;
-}
-if (isset($includeEditor) && $includeEditor == true) {
-    $commonHeadData['includeEditor'] = $includeEditor;
 }
 $this->includeTemplate('_partial/header/commonHeadTop.php', $commonHeadData, false);
 /* This is not included in common head, because, commonhead file not able to access the $this->Controller and $this->action[ */

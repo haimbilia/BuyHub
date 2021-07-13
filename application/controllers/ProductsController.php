@@ -679,7 +679,7 @@ class ProductsController extends MyAppController
         $shippingCost = 0;
         /*]*/
         $sellerId = (false === MOBILE_APP_API_CALL) ? $product['selprod_user_id'] : 0;
-        $product['moreSellersArr'] = $this->getMoreSeller($product['selprod_code'], $this->siteLangId, $sellerId);
+        $product['moreSellersArr'] = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $sellerId);
 
         $product['selprod_return_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_RETURN, $this->siteLangId);
         $product['selprod_warranty_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_WARRANTY, $this->siteLangId);
@@ -786,7 +786,7 @@ class ProductsController extends MyAppController
         $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
 
-        //$currSellerArr = $this->getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);      
+        //$currSellerArr = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);      
         $this->set('sellers', [$product]);        
         
         $this->set('currSelprodId', $selprod_id);
@@ -893,7 +893,7 @@ class ProductsController extends MyAppController
 
     public function moreSellersRows(string $selprodCode, int $sellerId)
     {
-        $moreSellers = $this->getMoreSeller($selprodCode, $this->siteLangId, $sellerId);
+        $moreSellers = Product::getMoreSeller($selprodCode, $this->siteLangId, $sellerId);
         $productsArr = [];
         foreach ($moreSellers as $sellerDetail) {
             $productsArr[$sellerDetail['selprod_id']] = $this->getProductDetail($sellerDetail['selprod_id']);
@@ -922,29 +922,7 @@ class ProductsController extends MyAppController
         $specSrchObjRs = $specSrchObj->getResultSet();
         return FatApp::getDb()->fetchAll($specSrchObjRs);
     }
-
-    private function getMoreSeller($selprodCode, $langId, $userId = 0, $includeSeller = false)
-    {
-        $userId = FatUtility::int($userId);
-        $langId = FatUtility::int($langId);
-
-        $moreSellerSrch = new ProductSearch($langId);
-        $moreSellerSrch->setGeoAddress();
-        $moreSellerSrch->addMoreSellerCriteria($selprodCode, $userId, $includeSeller);
-        $moreSellerSrch->validateAndJoinDeliveryLocation();
-        /*$moreSellerSrch->addMultipleFields(array( 'selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name' ,'IF(selprod_stock > 0, 1, 0) AS in_stock'));*/
-        $moreSellerSrch->addMultipleFields(
-            array('selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name', 'product_seller_id', 
-                'product_id', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'selprod_cod_enabled',
-                'product_cod_enabled', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty', 'selprod_available_from', 'shop_lat', 'shop_lng', 'product_updated_on','selprod_title')
-        );
-        $moreSellerSrch->addHaving('in_stock', '>', 0);
-        $moreSellerSrch->addOrder('theprice');
-        $moreSellerSrch->addGroupBy('selprod_id');
-        
-        return FatApp::getDb()->fetchAll($moreSellerSrch->getResultSet());
-    }
-
+    
     private function setRecentlyViewedItem($selprod_id)
     {
         $selprod_id = FatUtility::int($selprod_id);
@@ -1665,7 +1643,7 @@ class ProductsController extends MyAppController
             FatUtility::exitWithErrorCode(404);
         }
         /* more sellers[ */
-        $product['moreSellersArr'] = $this->getMoreSeller($product['selprod_code'], $this->siteLangId);
+        $product['moreSellersArr'] = Product::getMoreSeller($product['selprod_code'], $this->siteLangId);
 
         foreach ($product['moreSellersArr'] as $seller) {
             if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
@@ -1814,7 +1792,7 @@ class ProductsController extends MyAppController
         /*]*/
 
         /* more sellers[ */
-        $product['moreSellersArr'] = $this->getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id']);
+        $product['moreSellersArr'] = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id']);
         /* ] */
 
         $product['selprod_return_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_RETURN, $this->siteLangId);
@@ -2012,7 +1990,7 @@ class ProductsController extends MyAppController
         if($get['vtype'] == 'map'){            
             if(0 < count($products)){           
                 $selprodCodes = array_column($products, 'selprod_code');               
-                $moreSellersArr = $this->getMoreSeller($selprodCodes, $this->siteLangId);
+                $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
             }
         }
         

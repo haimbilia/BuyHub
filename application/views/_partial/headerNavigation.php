@@ -5,7 +5,7 @@
     if (count($headerNavigation)) {
         $noOfCharAllowedInNav = 90;
         $rightNavCharCount = 5;
-        if (!$isUserLogged) {
+        if (!UserAuthentication::isUserLogged()) {
             $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Sign_In', $siteLangId), ENT_QUOTES, 'UTF-8'));
         } else {
             $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName, ENT_QUOTES, 'UTF-8'));

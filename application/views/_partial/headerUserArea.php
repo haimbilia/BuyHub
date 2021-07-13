@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
-if (!$isUserLogged) {
+if (!UserAuthentication::isUserLogged()) {
     if (UserAuthentication::isGuestUserLogged()) { ?>
         <li>
             <div class="dropdown">
@@ -13,7 +13,7 @@ if (!$isUserLogged) {
                                 <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
                             </a>
                         </li>
-                        <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout',[],'CONF_WEBROOT_FRONTEND'); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
+                        <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], 'CONF_WEBROOT_FRONTEND'); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
                             </a></li>
                     </ul>
                 </div>
@@ -31,19 +31,19 @@ if (!$isUserLogged) {
             $userActiveTab = false;
             if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {
                 $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Seller','',[], CONF_WEBROOT_DASHBOARD);
+                $dashboardUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD);
                 $dashboardOrgUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
             } elseif (User::canViewBuyerTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'B')) {
                 $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Buyer','',[], CONF_WEBROOT_DASHBOARD);
+                $dashboardUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD);
                 $dashboardOrgUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
             } elseif (User::canViewAdvertiserTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad')) {
                 $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Advertiser','',[], CONF_WEBROOT_DASHBOARD);
+                $dashboardUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD);
                 $dashboardOrgUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
             } elseif (User::canViewAffiliateTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE')) {
                 $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Affiliate','', [], CONF_WEBROOT_DASHBOARD);
+                $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD);
                 $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
             }
             if (!$userActiveTab) {
@@ -52,13 +52,7 @@ if (!$isUserLogged) {
             } ?>
     <li class="">
         <div class="dropdown">
-            <?php if (isset($isUserDashboard) && ($isUserDashboard)) { ?>
-                <a href="javascript:void(0)" class="dropdown-toggle no-after" data-display="static" data-toggle="dropdown">
-                    <img class="my-account__avatar" src="<?php echo $profilePicUrl; ?>" alt="">
-                </a>
-            <?php } else { ?>
-                <a href="javascript:void(0)" class="dropdown-toggle no-after" data-toggle="dropdown"><span class="icn icn-txt"><?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span></a>
-            <?php } ?>
+            <a href="javascript:void(0)" class="dropdown-toggle no-after" data-toggle="dropdown"><span class="icn icn-txt"><?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span></a>
             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
                 <ul class="nav nav-block">
                     <?php
@@ -69,7 +63,7 @@ if (!$isUserLogged) {
                             <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
                         </a>
                     </li>
-                    <li class="nav__item <?php if (isset($isUserDashboard) && ($isUserDashboard)) { ?> d-block d-md-none <?php } ?>"><a class="dropdown-item nav__link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a></li>
+                    <li class="nav__item "><a class="dropdown-item nav__link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a></li>
                     <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', array(), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
                         </a></li>
                 </ul>

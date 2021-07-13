@@ -65,11 +65,6 @@ function submitBlogSearch(frm){
 		url_arr.push('category-'+$(frm).find('select[name="category"]').val());
 	}
 
-	if(themeActive == true ){
-		url = fcom.makeUrl('Blog','search', url_arr)+'?theme-preview';
-		document.location.href = url;
-		return;
-	}
 	url = fcom.makeUrl('Blog','search', url_arr);
 	document.location.href = url;
 }
