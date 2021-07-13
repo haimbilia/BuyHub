@@ -47,11 +47,11 @@
         <div class="top-bar no-print">
             <div class="container">
                 <div class="top-bar__inner">
-                    <div class="top-bar__left">                      
+                    <div class="top-bar__left">
                         <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
-                        <div class="header-location">
-                            <div class="header-location__field">
-                                <?php
+                            <div class="header-location">
+                                <div class="header-location__field">
+                                    <?php
                                     $geoAddress = '';
                                     if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                         $geoAddress = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
@@ -63,18 +63,18 @@
                                         $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
                                     }
                                     $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
-                                ?>                                
-                                <input autocomplete="no" id="ga-autoComplete-header" class="form-control pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId);?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId);?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+                                    ?>
+                                    <input autocomplete="no" id="ga-autoComplete-header" class="form-control pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+                                </div>
+                                <div class="header-location__icon" onclick="loadGeoLocation();">
+                                    <i class="icn">
+                                        <svg class="svg" width="15px" height="15px">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps">
+                                            </use>
+                                        </svg>
+                                    </i>
+                                </div>
                             </div>
-                            <div class="header-location__icon" onclick="loadGeoLocation();">
-                                <i class="icn">
-                                    <svg class="svg" width="15px" height="15px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps">
-                                        </use>
-                                    </svg>
-                                </i>
-                            </div>
-                        </div>
                         <?php } ?>
                     </div>
                     <div class="top-bar__right">
@@ -93,15 +93,8 @@
             <div class="container">
                 <div class="logo-bar">
                     <a class="navs_toggle" href="javascript:void(0)"><span></span></a>
-                    <?php
-                    if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
-                        $logoUrl = UrlHelper::generateUrl('home', 'index');
-                    } else {
-                        $logoUrl = UrlHelper::generateUrl();
-                    }
-                    ?>
                     <div class="logo">
-                        <a href="<?php echo $logoUrl; ?>">
+                        <a href="<?php echo UrlHelper::generateUrl(); ?>">
                             <?php
                             $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
                             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);

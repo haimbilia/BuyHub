@@ -186,13 +186,7 @@ class MyAppController extends FatController
         $jsVariables['controllerName'] = $controllerName;
         $jsVariables['defaultCountryCode'] = $defaultCountryCode;
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
-
-        $themeId = FatApp::getConfig('CONF_FRONT_THEME', FatUtility::VAR_INT, 1);
-
-        if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
-            $themeId = $_SESSION['preview_theme'];
-        }
-
+       
         if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), "/"); // 86400 = 1 day
             setcookie('_ykGeoLng', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96), time() + (86400 * 30), "/"); // 86400 = 1 day
@@ -209,8 +203,7 @@ class MyAppController extends FatController
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
         $this->includeDatePickerLangJs();
-
-        $this->set('isUserDashboard', false);
+        
         $this->set('currencySymbolLeft', $currencySymbolLeft);
         $this->set('currencySymbolRight', $currencySymbolRight);
         $this->set('jsVariables', $jsVariables);

@@ -1,37 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (isset($includeEditor) && $includeEditor == true) {
-  $extendEditorJs  = 'true';
-} else {
-  $extendEditorJs  = 'false';
-}
-if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
-  $themeActive = 'true';
-} else {
-  $themeActive = 'false';
-}
+
 $commonHeadData = array(
   'siteLangId' => $siteLangId,
   'siteLangCode' => $siteLangCode,
   'controllerName' => $controllerName,
   'action' => $action,
   'jsVariables' => $jsVariables,
-  'extendEditorJs' => $extendEditorJs,
-  'themeActive' => $themeActive,
   'currencySymbolLeft' => $currencySymbolLeft,
   'currencySymbolRight' => $currencySymbolRight,
-  'isUserDashboard' => $isUserDashboard,
   'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl : '',
 );
-if (isset($layoutTemplate) && $layoutTemplate != '') {
-  $commonHeadData['layoutTemplate'] = $layoutTemplate;
-  $commonHeadData['layoutRecordId'] = $layoutRecordId;
-}
+
 if (isset($socialShareContent) && $socialShareContent != '') {
   $commonHeadData['socialShareContent'] = $socialShareContent;
 }
-if (isset($includeEditor) && $includeEditor == true) {
-  $commonHeadData['includeEditor'] = $includeEditor;
-}
+
 $this->includeTemplate('_partial/header/commonHeadTop.php', $commonHeadData, false);
 /* This is not included in common head, because, commonhead file not able to access the $this->Controller and $this->action[ */
 echo $this->writeMetaTags();
@@ -52,7 +35,8 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-xs-6 d-none d-xl-block d-lg-block hide--mobile">
-            <div class="slogan"><?php // Labels::getLabel('LBL_Multi-vendor_Ecommerce_Marketplace_Solution', $siteLangId); ?></div>
+            <div class="slogan"><?php // Labels::getLabel('LBL_Multi-vendor_Ecommerce_Marketplace_Solution', $siteLangId); 
+                                ?></div>
           </div>
           <div class="col-lg-8 col-xs-12">
             <div class="short-links">
@@ -92,5 +76,5 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
           </div>
         </div>
       </div>
-    </div>  
+    </div>
   </div>

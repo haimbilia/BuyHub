@@ -4,11 +4,7 @@
 <sidebar class="sidebar no-print">
     <div class="logo-wrapper">
         <?php
-        if (CommonHelper::isThemePreview() && isset($_SESSION['preview_theme'])) {
-            $logoUrl = UrlHelper::generateUrl('home', 'index');
-        } else {
-            $logoUrl = UrlHelper::generateUrl();
-        } ?>
+        $logoUrl = UrlHelper::generateUrl(); ?>
         <?php
         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
         $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);

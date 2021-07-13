@@ -51,9 +51,4 @@ if ($currencies && count($currencies) > 1) {
         </div>
     </li>
 <?php }
-
-/*if ($showDefalultLi) {            ?>
-    <li class="dropdown dropdown--arrow">
-        <a href="javascript:void(0)" class="dropdown__trigger dropdown__trigger-js"><i class="icn-language"><img class="icon--img"> </i><span></span> </a></li>
-<?php } */
 ?>

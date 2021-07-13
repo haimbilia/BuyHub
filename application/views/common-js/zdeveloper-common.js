@@ -447,13 +447,6 @@ function submitSiteSearch(frm, page) {
         urlString = urlString + setQueryParamSeperator(urlString) + 'category-' + $(frm).find('input[name="category"]').val();
     }
 
-    /* url_arr = []; */
-
-    if (themeActive == true) {
-        url = fcom.makeUrl('Products', 'search', []) + urlString + '&theme-preview';
-        document.location.href = url;
-        return;
-    }
     url = fcom.makeUrl('Products', 'search', []) + urlString;
     document.location.href = url;
 }
