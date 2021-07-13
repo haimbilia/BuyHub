@@ -45,5 +45,4 @@ if (!empty($frmSearch)) {
         $fld->developerTags['col'] = 2;
     }
 }
-
 require_once(CONF_THEME_PATH . '_partial/index-page-common.php');

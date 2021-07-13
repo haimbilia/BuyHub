@@ -89,7 +89,7 @@ class BadgesController extends SellerBaseController
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
-
+        
         $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));

@@ -1,7 +1,4 @@
-<?php
-
-
-defined('SYSTEM_INIT') or die('Invalid Usage');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $div = new HtmlElement("div", array("class" => "section__toolbar d-flex"));
 if (isset($htmlContent) && $htmlContent != '') {

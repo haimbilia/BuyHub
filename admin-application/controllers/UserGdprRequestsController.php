@@ -118,7 +118,7 @@ class UserGdprRequestsController extends AdminBaseController
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->adminLangId)) {
-            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->adminLangId));
+            Message::addErrorMessage($emailNotificationObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
         $userRequest = new UserGdprRequest($userReqId);

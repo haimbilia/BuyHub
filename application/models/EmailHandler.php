@@ -2950,11 +2950,15 @@ class EmailHandler extends FatModel
             '{username}' => $userInfo['credential_username'],
             '{request_type}' => $reqTypeName,
         );
-        if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars)) {
-            return false;
+        
+        if (!empty($userInfo['credential_email'])) {
+            self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars);
         }
-        $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
-        $this->sendSms($tpl, $phone, $vars, $langId);
+
+        if (!empty($userInfo['user_phone'])) {
+            $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
         return true;
     }
 

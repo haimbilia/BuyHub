@@ -2,7 +2,7 @@
 
 $html = "";
 if (isset($ribbRow) && !empty($ribbRow)) {
-    echo  CONF_BACK_END_THEME_PATH . '_partial/get-ribbon.php';die;
+    include CONF_BACK_END_THEME_PATH . '_partial/get-ribbon.php';
 } else {
     $ribSelProdId = isset($ribSelProdId) ? $ribSelProdId : 0;
     $ribProdId = isset($ribProdId) ? $ribProdId : 0;

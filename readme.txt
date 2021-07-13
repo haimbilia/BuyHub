@@ -112,6 +112,9 @@ Updates/Fixes :
     => 055802 - badges created by seller are getting edited by admin and allowing him to add other seller items to that
     => 055813 - Notice: Undefined variable: Shop/view.
     => 055810 - on viewing wish list from buyer> getting error
+    => 055809 - when admin clicks on complete button for gdpr request then getting error
+    => 055808 - when user requests for the data then in popup> email is not there in field
+    => 055807 - ribbon linked by seller1 are getting edited by admin and allowing him to add other seller2 items to that
 
 New Features:  
     => Admin shipped products listing page
