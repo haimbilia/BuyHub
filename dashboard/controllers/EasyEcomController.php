@@ -117,8 +117,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
                 ]
 		    ]
         ];
-        
-        SystemLog::plugin(json_encode($dataToUpdate), '', self::KEY_NAME . ' : Company/Create Request');
 
         $curl = new Curl();
         $curl->post(self::PRODUCTION_URL . 'Company/Create', json_encode($dataToUpdate));
@@ -128,6 +126,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : ' . $error);
             LibHelper::exitWithError($error, true);
         }
+
+        SystemLog::plugin(json_encode($dataToUpdate), $curl->response, self::KEY_NAME . ' : Company/Create Request');
 
         $resp = json_decode($curl->response, true);
         if (200 != $resp['code']) {
