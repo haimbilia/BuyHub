@@ -106,6 +106,7 @@ Updates/Fixes :
     => 055715 - when single badge is linked with item then it's listing multiple times on product detail and shop
     => 055026 - corresponding to review> images added are not listing on front end
     => 055800 - when seller accesses order detail page then getting fatal
+    => 055748 - when badge/ribbon is turned off from admin still then it's listing on seller dashboard but not listing on front end 
 
 New Features:  
     => Admin shipped products listing page
