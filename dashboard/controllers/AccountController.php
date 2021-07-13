@@ -3481,7 +3481,7 @@ class AccountController extends LoggedUserController
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         $gdprPolicyLinkHref = '';
         if (!empty($cpage) && is_array($cpage)) {
-            $gdprPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+            $gdprPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']), CONF_WEBROOT_FRONTEND);
         }
 
         $frm = $this->getRequestDataForm();
