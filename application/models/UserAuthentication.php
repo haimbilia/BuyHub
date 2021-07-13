@@ -376,7 +376,7 @@ class UserAuthentication extends FatModel
         if (false === $this->loginWithOtp) {
            
             if( $row['credential_verified'] == applicationConstants::YES ){
-                if( empty($row['credential_password']) ){ 
+                if( empty($row['credential_password']) && !$isAdmin){ 
                     ///Forced user to update password
                     $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->commonLangId));
                     $this->error = $emailErrorMsg;
