@@ -92,17 +92,5 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
           </div>
         </div>
       </div>
-    </div>
-    <div class="bottom-head">
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <div class="short-nav" id="short-nav" data-close-on-click-outside="short-nav">
-              <?php $this->includeTemplate('_partial/seller/sellerNavigationLeft.php'); ?>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
+    </div>  
   </div>
