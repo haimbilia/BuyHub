@@ -11,8 +11,6 @@ var Dashboard = function () {
         $(el).addClass("is-active");
     };
     var sidebarChangeWidth = function () {
-
-        var $menuItemsTitle = $("li .menu-item__title");
         if ($("body").hasClass('sidebar-is-reduced')) {
             $("body").removeClass('sidebar-is-reduced').addClass('sidebar-is-expanded');
             $("<div class='sidebar-overlay--js'></div>").appendTo("body");

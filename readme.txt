@@ -108,6 +108,8 @@ Updates/Fixes :
     => 055800 - when seller accesses order detail page then getting fatal
     => 055748 - when badge/ribbon is turned off from admin still then its listing on seller dashboard but not listing on front end 
     => 055746 - favorite option is missing on product detail page on buyer end
+    => 055801 - admin can create multiple badges for a seller
+    => 055802 - badges created by seller are getting edited by admin and allowing him to add other seller items to that
 
 New Features:  
     => Admin shipped products listing page

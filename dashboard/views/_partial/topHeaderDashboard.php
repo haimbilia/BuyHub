@@ -68,13 +68,13 @@
                                     </use>
                                 </svg></i></a>
                     </li>
-                    <li><a title="<?php echo Labels::getLabel('LBL_Home', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Home'); ?>"><i class="icn icn--home">
+                    <li><a title="<?php echo Labels::getLabel('LBL_Home', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>"><i class="icn icn--home">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home">
                                     </use>
                                 </svg></i></a></li>
                     <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
-                        <li><a title="<?php echo Labels::getLabel('LBL_Shop', $siteLangId); ?>" data-org-url="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), '', null, false, $getOrgUrl); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id)); ?>"><i class="icn icn--home">
+                        <li><a title="<?php echo Labels::getLabel('LBL_Shop', $siteLangId); ?>" data-org-url="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>"><i class="icn icn--home">
                                     <svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
                                         </use>

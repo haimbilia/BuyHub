@@ -251,9 +251,9 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         var arr = {keyword: params.term};        
         var recordType = $(formClass + '[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            arr['selprod_user_id'] = sellerId;
-        } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             arr['product_seller_id'] = sellerId;
+        } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
+            arr['selprod_user_id'] = sellerId;
         } else if (RECORD_TYPE_SHOP == recordType) {
             arr['shop_user_id'] = sellerId;
         } else {

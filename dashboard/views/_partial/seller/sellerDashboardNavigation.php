@@ -306,15 +306,14 @@ $plugin = new Plugin();
                     <?php } ?>
                     <li class="divider"></li>
                 <?php } ?>
-                <?php
-                $marketPlaceChannels = (array) Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
-                if ($userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true) && 0 < count($marketPlaceChannels)) { ?>
+                <?php 
+                    $marketPlaceChannels = (array) Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
+                    if ($userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true) && 0 < count($marketPlaceChannels)) { ?>
                     <li class="menu__item">
-                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_OMNI_CHANNEL_MANAGEMENT', $siteLangId); ?></span>
-                        </div>
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_OMNI_CHANNEL_MANAGEMENT', $siteLangId);?></span></div>
                     </li>
                     <?php
-                    foreach ($marketPlaceChannels as $channel) {
+                    foreach ($marketPlaceChannels as $channel) { 
                         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $channel['plugin_id']);
                         $uploadedTime = '';
                         $aspectRatio = '';
@@ -322,15 +321,15 @@ $plugin = new Plugin();
                             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                             $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
                         }
-                        $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($channel['plugin_id'], 'ICON'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    ?>
+                        ?>
                         <li class="menu__item <?php echo ($controller == strtolower($channel['plugin_code'])) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
-                                <a title="<?php echo $channel['plugin_name']; ?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
-                                    <i class="icn shop">
-                                        <img src="<?php echo $imageUrl; ?>" data-ratio="<?php echo $aspectRatio; ?>">
+                                <a title="<?php echo $channel['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
+                                    <i class="icn shop"><svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#<?php echo strtolower($channel['plugin_code']); ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#<?php echo strtolower($channel['plugin_code']); ?>"></use>
+                                        </svg>
                                     </i>
-                                    <span class="menu-item__title"><?php echo $channel['plugin_name']; ?></span>
+                                    <span class="menu-item__title"><?php echo $channel['plugin_name'];?></span>
                                 </a>
                             </div>
                         </li>
