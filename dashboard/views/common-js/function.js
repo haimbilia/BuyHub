@@ -11,8 +11,6 @@ var Dashboard = function () {
         $(el).addClass("is-active");
     };
     var sidebarChangeWidth = function () {
-
-        var $menuItemsTitle = $("li .menu-item__title");
         if ($("body").hasClass('sidebar-is-reduced')) {
             $("body").removeClass('sidebar-is-reduced').addClass('sidebar-is-expanded');
             $("<div class='sidebar-overlay--js'></div>").appendTo("body");
@@ -613,7 +611,7 @@ function accessLocation(force = false) {
     var location = getLocation();
     if ("" == location.lat || "" == location.lng || "" == location.countryCode || force) {
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Home', 'accessLocation'), '', function (t) {
+            fcom.ajax(fcom.makeUrl('Home', 'accessLocation', [], siteConstants.webrootfront), '', function (t) {
                 try {
                     var json = $.parseJSON(t);
                     if (1 > json.status) {

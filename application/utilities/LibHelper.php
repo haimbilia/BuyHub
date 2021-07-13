@@ -2,6 +2,19 @@
 
 class LibHelper extends FatUtility
 {
+    /* Response Codes */
+    public const RC_OK = 200; /* The request was successfully completed. */
+    public const RC_CREATED = 201; /* A new resource was successfully created. */
+    public const RC_BAD_REQUEST = 400; /* The request was invalid. */
+    public const RC_UNAUTHORIZED = 401; /* The request did not include an authentication token or the authentication token was expired. */
+    PUBLIC CONST RC_FORBIDDEN = 403; /* The client did not have permission to access the requested resource.  */
+    PUBLIC CONST RC_NOT_FOUND = 404; /* The requested resource was not found.  */
+    PUBLIC CONST RC_METHOD_NOT_ALLOWED = 405; /* The HTTP method in the request was not supported by the resource. For example, the DELETE method cannot be used with the Agent API.  */
+    PUBLIC CONST RC_CONFLICT = 409; /* The request could not be completed due to a conflict. For example,  POST ContentStore Folder API cannot complete if the given file or folder name already exists in the parent location.  */
+    PUBLIC CONST RC_INTERNAL_SERVER_ERROR = 500; /* The request was not completed due to an internal error on the server side.  */
+    PUBLIC CONST RC_SERVICE_UNAVAILABLE = 503; /* The server was unavailable.  */
+    /* Response Codes */
+
     private const ENCRYPTION_KEY = '__^%&Q@$&*!@#$%^&*^__';
 
     public static function dieJsonError($message)
@@ -22,7 +35,7 @@ class LibHelper extends FatUtility
         if (true === MOBILE_APP_API_CALL) {
             if (is_array($message)) {
                 array_walk_recursive($message, function (&$item) {
-                    $item = trim(strip_tags($item));
+                    $item = is_string($item) ? trim(strip_tags($item)) : $item;
                 });
             } else {
                 $message = strip_tags($message);
@@ -263,5 +276,49 @@ class LibHelper extends FatUtility
     public static function phoneNumberMasking(string $phone): string
     {
         return substr($phone, 0, 4) . str_repeat('*',(strlen($phone) - 5)) . substr($phone, -1);
+    }
+
+    /**
+     * formatResponse
+     *
+     * @param  int $status
+     * @param  string $msg
+     * @param  array $data
+     * @return array
+     */
+    public static function formatResponse(int $status, string $msg, array $data = [], $responseCode = LibHelper::RC_BAD_REQUEST): array
+    {
+        return [
+            'status' => $status,
+            'responseCode' => (applicationConstants::SUCCESS == $status) ? LibHelper::RC_OK : $responseCode,
+            'msg' => $msg,
+            'data' => $data
+        ];
+    }
+
+    /**
+     * dieJsonResponse
+     *
+     * @param  array $data
+     * @return void
+     */
+    public static function dieJsonResponse(array $data = [], int $langId = 0)
+    {
+        $status = array_key_exists('status', $data) && 0 < FatUtility::int($data['status']) ? FatUtility::int($data['status']) : Plugin::RETURN_FALSE;
+        $langId = 0 < $langId ? $langId : CommonHelper::getLangId();
+
+        $msg = (0 < $status ? Labels::getLabel("MSG_SUCCESS", $langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $langId));
+        $data['msg'] = array_key_exists('msg', $data) ? $data['msg'] : $msg;
+        $data['data'] = array_key_exists('data', $data) && empty($data['data']) && MOBILE_APP_API_CALL ? (object) [] : $data['data'];
+
+        $isAjaxCall = (FatUtility::isAjaxCall() || MOBILE_APP_API_CALL);
+
+        if (Plugin::RETURN_FALSE == $status) {
+            LibHelper::exitWithError($data, $isAjaxCall, !$isAjaxCall);
+        } else {
+            LibHelper::exitWithSuccess($data, $isAjaxCall, !$isAjaxCall);
+        }
+
+        CommonHelper::redirectUserReferer();
     }
 }

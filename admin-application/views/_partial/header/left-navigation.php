@@ -45,6 +45,7 @@
                     $objPrivilege->canViewTags(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSellerCatalogRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                   <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Catalog', $adminLangId); ?></a>
@@ -118,7 +119,9 @@
                   $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
                   $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                   $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                  $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)
+                  $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true) || 
+                  $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                  $objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)
               ) { ?>
                 <li class="haschild">
                       <a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_REQUESTS', $adminLangId); ?></a>
@@ -155,6 +158,16 @@
                             </a>
                         </li>
                         <?php } ?>
+
+                        <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                              <li><a href="<?php echo UrlHelper::generateUrl('Users', 'sellerApprovalRequests'); ?>"><?php echo Labels::getLabel('LBL_Seller_Approval_Requests', $adminLangId); ?>
+                                      <?php if ($supReqCount) { ?><span class='badge'>(<?php echo $supReqCount; ?>)</span><?php } ?></a></li>
+                          <?php } ?>
+
+                          <?php if ($objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                              <li><a href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>"><?php echo Labels::getLabel('LBL_Users_GDPR_Requests', $adminLangId); ?>
+                                      <?php if ($gdprReqCount) { ?><span class='badge'>(<?php echo $gdprReqCount; ?>)</span><?php } ?></a></li>
+                          <?php } ?>
                       </ul>
                 </li>
               <?php } ?>
@@ -273,9 +286,6 @@
               <?php if (
                     $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerCatalogRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)
@@ -297,16 +307,6 @@
                           <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('Users', 'sellerForm'); ?>"><?php echo Labels::getLabel('LBL_Seller_Approval_Form', $adminLangId); ?></a>
                               </li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Users', 'sellerApprovalRequests'); ?>"><?php echo Labels::getLabel('LBL_Seller_Approval_Requests', $adminLangId); ?>
-                                      <?php if ($supReqCount) { ?><span class='badge'>(<?php echo $supReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>"><?php echo Labels::getLabel('LBL_Users_GDPR_Requests', $adminLangId); ?>
-                                      <?php if ($gdprReqCount) { ?><span class='badge'>(<?php echo $gdprReqCount; ?>)</span><?php } ?></a></li>
                           <?php } ?>
                       </ul>
                   </li>

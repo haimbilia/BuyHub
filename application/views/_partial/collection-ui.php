@@ -49,27 +49,29 @@ if ($showAddToFavorite) {
                 </ul>
             </div>
             <?php
-        } /* else {
-            if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-                $jsFunc = 0 < $product['ufp_id'] ? 'removeFromFavorite(' . $product['selprod_id'] . ')' : 'markAsFavorite(' . $product['selprod_id'] . ')';
-            ?>
-                <div class="favourite heart-wrapper <?php echo ($product['ufp_id']) ? 'is-active' : ''; ?>" onclick="<?php echo $jsFunc; ?>" data-id="<?php echo $product['selprod_id']; ?>">
-                    <a href="javascript:void(0)" title="<?php echo ($product['ufp_id']) ? Labels::getLabel('LBL_Remove_product_from_favourite_list', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_favourite_list', $siteLangId); ?>">
-                        <div class="ring"></div>
-                        <div class="circles"></div>
-                    </a>
-                </div>
-            <?php } else { ?>
-                <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" data-id="<?php echo $product['selprod_id']; ?>">
-                    <a href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
-                        <div class="ring"></div>
-                        <div class="circles"></div>
-                    </a>
-                </div>
-            <?php }
-        } */
+        }
 
-        if (isset($productView) && true == $productView) { ?>
+        if (isset($productView) && true == $productView) {
+            if (false ==  $showActionBtns) {
+                if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+                    $jsFunc = 0 < $product['ufp_id'] ? 'removeFromFavorite(' . $product['selprod_id'] . ')' : 'markAsFavorite(' . $product['selprod_id'] . ')';
+                ?>
+                    <div class="favourite heart-wrapper <?php echo ($product['ufp_id']) ? 'is-active' : ''; ?>" onclick="<?php echo $jsFunc; ?>" data-id="<?php echo $product['selprod_id']; ?>">
+                        <a href="javascript:void(0)" title="<?php echo ($product['ufp_id']) ? Labels::getLabel('LBL_Remove_product_from_favourite_list', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_favourite_list', $siteLangId); ?>">
+                            <div class="ring"></div>
+                            <div class="circles"></div>
+                        </a>
+                    </div>
+                <?php } else { ?>
+                    <div class="favourite heart-wrapper wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" data-id="<?php echo $product['selprod_id']; ?>">
+                        <a href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
+                            <div class="ring"></div>
+                            <div class="circles"></div>
+                        </a>
+                    </div>
+                <?php }
+            } ?>            
+
             <div class="dropdown">
                 <a class="no-after share-icon" data-display="static"
                     href="javascript:void(0)" data-toggle="dropdown">

@@ -43,6 +43,7 @@ class BadgesController extends SellerBaseController
         $srch->setPageSize($pagesize);
         $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_badge_id = badge_id');
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
+        $srch->addCondition('badge_active', '=', applicationConstants::YES);
 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {

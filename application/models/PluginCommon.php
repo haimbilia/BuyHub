@@ -67,14 +67,7 @@ class PluginCommon extends MyAppModel
         'COALESCE(plg_l.' . self::DB_TBL_PREFIX . 'name, plg.' . self::DB_TBL_PREFIX . 'identifier) as plugin_name',
         self::DB_TBL_PREFIX . 'active',
     ];
-
-
-    /* Response Codes */
-    public const RC_OK = 200;
-    public const RC_BAD_REQUEST = 400;
-    public const RC_UNAUTHORIZED = 401;
-    /* Response Codes */
-
+    
     /**
      * getTypeArr - Used to get plugin type
      *

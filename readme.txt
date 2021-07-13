@@ -105,6 +105,13 @@ Updates/Fixes :
     => 055689 - while returning if there is no file attached still then listing download button on return order detail page on buyer end
     => 055715 - when single badge is linked with item then it's listing multiple times on product detail and shop
     => 055026 - corresponding to review> images added are not listing on front end
+    => 055800 - when seller accesses order detail page then getting fatal
+    => 055748 - when badge/ribbon is turned off from admin still then its listing on seller dashboard but not listing on front end 
+    => 055746 - favorite option is missing on product detail page on buyer end
+    => 055801 - admin can create multiple badges for a seller
+    => 055802 - badges created by seller are getting edited by admin and allowing him to add other seller items to that
+    => 055813 - Notice: Undefined variable: Shop/view.
+    => 055810 - on viewing wish list from buyer> getting error
 
 New Features:  
     => Admin shipped products listing page

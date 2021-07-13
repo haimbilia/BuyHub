@@ -4,7 +4,6 @@ class GuestUserController extends MyAppController
     private $authToken = '';
     private $username = '';
 
-
     public function loginForm($isRegisterForm = 0)
     {
         /* if(UserAuthentication::doCookieLogin()){
@@ -89,7 +88,8 @@ class GuestUserController extends MyAppController
         $authentication = new UserAuthentication();
         $userType = FatApp::getPostedData('userType', FatUtility::VAR_INT, 0);
         if (true === MOBILE_APP_API_CALL && 1 > $userType) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_MISSING REQUEST_PARAMS', $this->siteLangId));
+            LibHelper::dieJsonResponse($resp);
         }
 
         $password = FatApp::getPostedData('password');
@@ -103,12 +103,14 @@ class GuestUserController extends MyAppController
             $authentication->setLoginWithOtp($dialCode, $userName);
             if (true === MOBILE_APP_API_CALL) {
                 if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                    $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                    LibHelper::dieJsonResponse($resp);
                 }
                 $password = $post['upv_otp'];
             } else {
                 if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                    $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                    LibHelper::dieJsonResponse($resp);
                 }
                 $password = implode("", $post['upv_otp']);
             }
@@ -120,8 +122,8 @@ class GuestUserController extends MyAppController
         }
 
         if (!$authentication->login($userName, $password, $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
-            $message = Labels::getLabel($authentication->getError(), $this->siteLangId);
-            FatUtility::dieJsonError($message);
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $authentication->getError());
+            LibHelper::dieJsonResponse($resp);
         }
 
         $this->app_user['temp_user_id'] = 0;
@@ -135,14 +137,16 @@ class GuestUserController extends MyAppController
             $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
             $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
             if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
-                FatUtility::dieJsonError($user->getError());
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $user->getError());
+                LibHelper::dieJsonResponse($resp);
             }
         }
 
         if (true === MOBILE_APP_API_CALL) {
             $uObj = new User($userId);
             if (!$token = $uObj->setMobileAppToken()) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                LibHelper::dieJsonResponse($resp);
             }
 
             $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);
@@ -711,7 +715,7 @@ class GuestUserController extends MyAppController
         $this->_template->render(false, false);
     }
 
-    public function sendResetPasswordLink( $usernameOrEmail = '')
+    public function sendResetPasswordLink($usernameOrEmail = '')
     {
         if (empty($usernameOrEmail)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
@@ -737,7 +741,7 @@ class GuestUserController extends MyAppController
             }
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
-        }        
+        }
         $row['link'] = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($row['user_id'], $token));
         $row['credential_email'] = $usernameOrEmail;
         $email = new EmailHandler();
@@ -745,7 +749,7 @@ class GuestUserController extends MyAppController
             $message = Labels::getLabel("MSG_PASSWORD_RESET_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId);
             $error = true;
         }
-        $message = Labels::getLabel("MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);       
+        $message = Labels::getLabel("MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);
 
         if (true === MOBILE_APP_API_CALL) {
             $this->set('msg', $message);
@@ -1065,7 +1069,8 @@ class GuestUserController extends MyAppController
         $userId = FatUtility::int($userId);
         $userObj = new User($userId);
         if (false == $userObj->resendOtp()) {
-            FatUtility::dieJsonError($userObj->getError());
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $userObj->getError(), [], LibHelper::RC_NOT_FOUND);
+            LibHelper::dieJsonResponse($resp);
         }
 
         $getOtpOnly = (true === MOBILE_APP_API_CALL) ? applicationConstants::YES : $getOtpOnly;
@@ -1085,17 +1090,24 @@ class GuestUserController extends MyAppController
         $phoneDialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
 
         if (1 > $phone || '' == $phoneDialCode) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::dieJsonResponse($resp);
         }
 
-        $phoneDialCode = false === strpos($phoneDialCode, '+') ? '+' . trim($phoneDialCode) : trim($phoneDialCode);
-        $userPhone = $phoneDialCode . $phone;
-        $user = new User();
-        $row = $user->checkUserByPhoneOrUserName($userPhone, $userPhone);
-        if (empty($row)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId));
+        $userId = $this->registerByPhone();
+
+        if (1 > $userId) {
+            $phoneDialCode = false === strpos($phoneDialCode, '+') ? '+' . trim($phoneDialCode) : trim($phoneDialCode);
+            $userPhone = $phoneDialCode . $phone;
+            $user = new User();
+            $row = $user->checkUserByPhoneOrUserName($userPhone, $userPhone);
+            if (empty($row)) {
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_USER', $this->siteLangId), [], LibHelper::RC_NOT_FOUND);
+                LibHelper::dieJsonResponse($resp);
+            }
+            $userId = $row['user_id'];
+            $this->resendOtp($userId, 1);
         }
-        $this->resendOtp($row['user_id'], 1);
     }
 
     public function otpForm($userId = 0)
@@ -1310,23 +1322,6 @@ class GuestUserController extends MyAppController
     }
 
     /**
-     * formatOutput
-     *
-     * @param  int $status
-     * @param  string $msg
-     * @param  array $data
-     * @return array
-     */
-    public function formatOutput(int $status, string $msg, array $data = []): array
-    {
-        return [
-            'status' => $status,
-            'msg' => $msg,
-            'data' => $data
-        ];
-    }
-
-    /**
      * validateAuthLoginRequest
      *
      * @return void
@@ -1337,7 +1332,7 @@ class GuestUserController extends MyAppController
         $uAuth = new UserAuthentication();
         if (false === $uAuth->validateMarketplaceAuthToken($maketPlaceAuthToken)) {
             $msg = Labels::getLabel("MSG_UNAUTHORIZED_ACCESS", $this->siteLangId);
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            $resp = LibHelper::formatResponse(Plugin::RETURN_FALSE, $msg);
             FatUtility::dieJsonError($resp);
         }
 
@@ -1350,7 +1345,7 @@ class GuestUserController extends MyAppController
 
         if (empty($requestParam)) {
             $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            $resp = LibHelper::formatResponse(Plugin::RETURN_FALSE, $msg);
             FatUtility::dieJsonError($resp);
         }
     }
@@ -1368,7 +1363,7 @@ class GuestUserController extends MyAppController
         $data = $uObj->checkUserByEmailOrUserName($this->username, $this->username);
         if (false === $data || empty($data)) {
             $msg = Labels::getLabel('MSG_INVALID_USER', $this->siteLangId);
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            $resp = LibHelper::formatResponse(Plugin::RETURN_FALSE, $msg);
             FatUtility::dieJsonError($resp);
         }
         $userId = array_key_exists('user_id', $data) ? $data['user_id'] : '';
@@ -1379,12 +1374,12 @@ class GuestUserController extends MyAppController
         }
 
         if (false === $uObj->updateUserMeta('seller_auth_token', $newAuthToken)) {
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $uObj->getError());
+            $resp = LibHelper::formatResponse(Plugin::RETURN_FALSE, $uObj->getError());
             FatUtility::dieJsonError($resp);
         }
 
         $msg = Labels::getLabel("MSG_SUCCESS", $this->siteLangId);
-        $resp = $this->formatOutput(Plugin::RETURN_TRUE, $msg, ['authToken' => $newAuthToken]);
+        $resp = LibHelper::formatResponse(Plugin::RETURN_TRUE, $msg, ['authToken' => $newAuthToken]);
         CommonHelper::jsonEncodeUnicode($resp, true);
     }
 
@@ -1407,19 +1402,98 @@ class GuestUserController extends MyAppController
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row)) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST_TOKEN_OR_EXPIRED", $this->siteLangId);
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
+            $resp = LibHelper::formatResponse(Plugin::RETURN_FALSE, $msg);
             FatUtility::dieJsonError($resp);
         }
 
         $user = new User($row['uttr_user_id']);
         if (false === $user->deleteUserAPITempToken()) {
-            $resp = $this->formatOutput(Plugin::RETURN_FALSE, $user->getError());
+            $resp = LibHelper::formatResponse(Plugin::RETURN_FALSE, $user->getError());
             FatUtility::dieJsonError($resp);
         }
 
         $authToken = User::getUserMeta($row['uttr_user_id'], 'seller_auth_token');
         $msg = Labels::getLabel("MSG_SUCCESS", $this->siteLangId);
-        $resp = $this->formatOutput(Plugin::RETURN_TRUE, $msg, ['authToken' => $authToken]);
+        $resp = LibHelper::formatResponse(Plugin::RETURN_TRUE, $msg, ['authToken' => $authToken]);
         CommonHelper::jsonEncodeUnicode($resp, true);
+    }
+    
+    /**
+     * registerByPhone
+     *
+     * @param  mixed $registerIfNotExists
+     * @return void
+     */
+    private function registerByPhone(int $registerIfNotExists = 1)
+    {
+        $registerByPhone = FatApp::getPostedData('registerByPhone', FatUtility::VAR_INT, 0);
+        if (1 > $registerByPhone) {
+            return 0;
+        }
+
+        $phone = FatApp::getPostedData('username', FatUtility::VAR_INT, 0);
+        $phoneDialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
+
+        $userId = 0;
+        $row = [];
+        if (0 < $registerIfNotExists) {
+            if (1 > $phone || '' == $phoneDialCode) {
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                LibHelper::dieJsonResponse($resp);
+            }
+
+            $skipRegister = false;
+
+            $phoneDialCode = false === strpos($phoneDialCode, '+') ? '+' . trim($phoneDialCode) : trim($phoneDialCode);
+            $userPhone = $phoneDialCode . $phone;
+            $user = new User();
+            $row = $user->checkUserByPhoneOrUserName($userPhone, $userPhone);
+            if (!empty($row)){
+                if (applicationConstants::NO == $row['user_deleted'] && applicationConstants::YES == $row['credential_verified']) {
+                    $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_DUPLICATE_USER', $this->siteLangId), [], LibHelper::RC_NOT_FOUND);
+                    LibHelper::dieJsonResponse($resp);
+                } else if (applicationConstants::YES == $row['user_deleted'] && applicationConstants::YES == $row['credential_verified']) {
+                    $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_YOU_CANNOT_ACCESS_YOUR_ACCOUNT._PLEASE_CONTACT_ADMIN.', $this->siteLangId), [], LibHelper::RC_NOT_FOUND);
+                    LibHelper::dieJsonResponse($resp);
+                } else {
+                    $skipRegister = true;
+                }
+            }
+        }
+
+        if (empty($row) && false === $skipRegister) {
+            $dialCode = ValidateElement::formatDialCode($phoneDialCode);
+            $userName = str_replace('+', '', $dialCode) . $phone;
+
+            $post['user_phone'] = $phone;
+            $post['user_phone_dcode'] = $phoneDialCode;
+            
+            $post['user_username'] = $userName;
+            $post['user_name'] = $userName;
+            
+            $post['user_is_buyer'] = User::USER_TYPE_BUYER;
+            $post['user_preferred_dashboard'] = User::USER_BUYER_DASHBOARD;
+            $post['user_registered_initially_for'] = User::USER_TYPE_BUYER;
+            $post['user_is_supplier'] = (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1) || FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) ? 0 : 1;
+            $post['user_is_advertiser'] = (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1) || FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) ? 0 : 1;
+            $post['user_active'] = FatApp::getConfig('CONF_ADMIN_APPROVAL_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
+            $post['user_verify'] = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
+            $post['referralToken'] = FatApp::getPostedData('referralToken', FatUtility::VAR_STRING, '');
+            $userObj = new User();
+            if (!$userId = $userObj->saveUserData($post, false, MOBILE_APP_API_CALL)) {
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $userObj->getError());
+                LibHelper::dieJsonResponse($resp);
+            }
+            
+            if (0 < $userId) {
+                $this->set('data', ['userId' => $userId]);
+                $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
+                if (true === MOBILE_APP_API_CALL) {
+                    $this->_template->render();
+                }
+                $this->_template->render(false, false, 'json-success.php');
+            }
+        }
+        return $userId;
     }
 }
