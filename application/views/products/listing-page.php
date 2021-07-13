@@ -219,7 +219,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                 <?php
                 $productsData = array(
                     'products' => $products,
-                    'moreSellersProductsArr' => $moreSellersProductsArr,
+                    'moreSellersProductsArr' => isset($moreSellersProductsArr) ? $moreSellersProductsArr : [],
                     'page' => $page,
                     'pageCount' => $pageCount,
                     'postedData' => $postedData,
