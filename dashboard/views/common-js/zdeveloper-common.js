@@ -1470,7 +1470,7 @@ function setSiteDefaultLang(langId) {
     var url = window.location.pathname;
     var srchString = window.location.search;
     var data = 'pathname=' + url;
-    fcom.ajax(fcom.makeUrl('Home', 'setLanguage', [langId]), data, function(res) {
+    fcom.ajax(fcom.makeUrl('Home', 'setLanguage', [langId], siteConstants.webrootfront), data, function(res) {
         var ans = $.parseJSON(res);
         if (ans.status == 1) {
             window.location.href = ans.redirectUrl + srchString;
@@ -1480,7 +1480,7 @@ function setSiteDefaultLang(langId) {
 
 function setSiteDefaultCurrency(currencyId) {
     var currUrl = window.location.href;
-    fcom.ajax(fcom.makeUrl('Home', 'setCurrency', [currencyId]), '', function(res) {
+    fcom.ajax(fcom.makeUrl('Home', 'setCurrency', [currencyId], siteConstants.webrootfront), '', function(res) {
         document.location.reload();
     });
 }
