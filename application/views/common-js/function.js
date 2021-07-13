@@ -98,14 +98,10 @@ $(document).ready(function () {
         setSlider();
     });
 
-    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0 && CONF_MAINTENANCE == 0 && (getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController')) {
+    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0  && className != 'CheckoutController' && className != 'CartController') {
         googleAddressAutocomplete('ga-autoComplete-header');
     }
     
-});
-
-$(document).on('afterClose.facebox', $('.location-permission').closest("#facebox"), function () {
-    setCookie('_ykGeoDisabled', 1, 0.5);
 });
 
 /* for search form */
@@ -919,11 +915,20 @@ function loadScript(src, callback = '', params = []) {
     document.head.append(script);
 }
 
-var mapMarker = [];
+function HTMLMarker(lat, lng, pointerText, content) {
+    this.lat = lat;
+    this.lng = lng;
+    this.pos = new google.maps.LatLng(lat, lng);
+    this.content = content;
+    this.pointerText = pointerText;
+}
+
 var map;
 var searchAsMapMove = false;
 var dragenMapListener;
 var infowindow;
+var mapMarker = [];
+var customMarker = [];
 
 function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, dragendCallback) {
     /*  
@@ -952,12 +957,19 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
         center: new google.maps.LatLng(centeredLat, centeredLng),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
+    
+    new google.maps.Marker({
+        position: new google.maps.LatLng(centeredLat,centeredLng),
+        map: map,
+        title: langLbl.currentSearchLocation,
+        icon: fcom.makeUrl() + 'images/pin.png',      
+    });
+    infowindow = new google.maps.InfoWindow();
     createMarkers(markers);
     /* hide loader */
     map.addListener('idle', function () {
         $('.map-loader.is-loading').hide();
     });
-
 
     if (typeof dragendCallback == 'function') {
         if (searchAsMapMove) {
@@ -1002,8 +1014,34 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
 
         centerControlDiv.style.paddingTop = "10px";
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-    }
+    } 
     
+    HTMLMarker.prototype = new google.maps.OverlayView();
+    HTMLMarker.prototype.onRemove = function () {
+        this.div.parentNode.removeChild(this.div);
+    }
+    HTMLMarker.prototype.onAdd = function () {
+        this.div = document.createElement('DIV');
+        this.div.className = "htmlMarker";
+        this.div.style.position = 'absolute';
+        this.div.style.background = '#fff';
+        this.div.innerHTML = this.pointerText;
+        var panes = this.getPanes();
+        panes.overlayImage.appendChild(this.div);
+        var me = this;
+        google.maps.event.addDomListener(this.div, 'click', function () {
+            infowindow.setContent(me.content);          
+            infowindow.setPosition(new google.maps.LatLng(me.lat, me.lng));
+            infowindow.open(map);
+        });
+    }
+    HTMLMarker.prototype.draw = function () {
+        var overlayProjection = this.getProjection();
+        var position = overlayProjection.fromLatLngToDivPixel(this.pos);
+        var panes = this.getPanes();
+        this.div.style.left = position.x + 'px';
+        this.div.style.top = position.y + 'px';
+    }
 };
 
 function addDragendListiner(map,dragendCallback){
@@ -1021,10 +1059,7 @@ function removeDragendListiner(map,dragendCallback){
     }
 }
 
-
-
-function createMarkers(markers) {
-    infowindow = new google.maps.InfoWindow();
+function createMarkers(markers) {    
     $.each(markers, function (index, marker) {
         if (!("lat" in marker) || !("lng" in marker) || !("content" in marker)) {
             console.log(marker);
@@ -1048,19 +1083,29 @@ function createMarkers(markers) {
                     infowindow.open(map, newMarker);
                 }
             })(newMarker, index));
-
             mapMarker[index] = newMarker;
         }
 
     });
 }
 
-function clearMarkers() {
-
+function clearMarkers() {    
     $.each(mapMarker, function (index, marker) {
         if (typeof marker != 'undefined') {
             marker.setMap(null);
         }
+    });   
+}
+
+function createCustomMarkers(customMarkers) {
+    $.each(customMarkers, function (index, marker) {
+        customMarker[index] = new HTMLMarker(marker.lat, marker.lng,marker.amount,marker.content);
+        customMarker[index].setMap(map);
+    }); 
+}    
+
+function clearMoreSellerMarkers() {
+    $.each(customMarker, function (index, marker) {
+        customMarker[index].setMap(null);
     });
-    mapMarker = [];
 }

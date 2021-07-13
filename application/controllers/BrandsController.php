@@ -138,10 +138,18 @@ class BrandsController extends MyAppController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
+        $moreSellersArr = [];
+        if($get['vtype'] == 'map'){            
+            if(0 < count($products)){           
+                $selprodCodes = array_column($products, 'selprod_code');               
+                $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
+            }
+        }
 
         $data = array(
             'frmProductSearch' => $frm,
             'products' => $products,
+            'moreSellersProductsArr' => $moreSellersArr,
             'page' => $page,
             'pageSize' => $pageSize,
             'pageCount' => $srch->pages(),
@@ -156,8 +164,9 @@ class BrandsController extends MyAppController
             'showBreadcrumb' => true,
         );
 
-        if (FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall()) {       
             $this->set('products', $products);
+            $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);
             $this->set('page', $page);
             $this->set('pageCount', $srch->pages());
             $this->set('postedData', $get);

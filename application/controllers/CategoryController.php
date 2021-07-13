@@ -99,11 +99,19 @@ class CategoryController extends MyAppController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-
+        $moreSellersArr = [];
+        if($get['vtype'] == 'map'){            
+            if(0 < count($products)){           
+                $selprodCodes = array_column($products, 'selprod_code');               
+                $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
+            }
+        }
+        
         $data = array(
             'frmProductSearch' => $frm,
             'category' => $category,
             'products' => $products,
+            'moreSellersProductsArr' => $moreSellersArr,
             'page' => $page,
             'pageSize' => $pageSize,
             'categoryId' => $categoryId,
@@ -122,6 +130,7 @@ class CategoryController extends MyAppController
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $products);
             $this->set('page', $page);
+            $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);
             $this->set('pageCount', $srch->pages());
             $this->set('postedData', $get);
             $this->set('recordCount', $srch->recordCount());
@@ -129,7 +138,7 @@ class CategoryController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-
+        
         $this->set('data', $data);
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
