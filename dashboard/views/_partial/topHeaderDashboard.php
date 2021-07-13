@@ -91,13 +91,7 @@
                             </i>
                             <span class="h-badge"><span class="heartbit"></span><?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
                     </div>
-                <?php } ?>
-                <div class="short-links">
-                    <ul>
-                        <?php /*$this->includeTemplate('_partial/headerLanguageArea.php');*/ ?>
-                        <?php $this->includeTemplate('_partial/headerUserArea.php', array('isUserDashboard' => $isUserDashboard)); ?>
-                    </ul>
-                </div>
+                <?php } ?>               
             </div>
         </header>
         <div class="display-in-print text-center">

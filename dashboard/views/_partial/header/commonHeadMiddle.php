@@ -66,8 +66,7 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     var CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 3) . ';
     var CONF_ENABLE_GEO_LOCATION = ' . FatApp::getConfig("CONF_ENABLE_GEO_LOCATION", FatUtility::VAR_INT, 0) . ';
     var CONF_MAINTENANCE = ' . FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) . ';
-    var extendEditorJs = ' . $extendEditorJs . ';
-    var themeActive = ' . $themeActive . ';
+    var extendEditorJs = ' . $extendEditorJs . ';   
     var currencySymbolLeft = "' . $currencySymbolLeft . '";
     var currencySymbolRight = "' . $currencySymbolRight . '";
     var isUserDashboard = "' . $isUserDashboard . '";
@@ -130,6 +129,4 @@ if (FatApp::getConfig("CONF_HOTJAR_HEAD_SCRIPT", FatUtility::VAR_STRING, '') && 
 if (FatApp::getConfig("CONF_DEFAULT_SCHEMA_CODES_SCRIPT", FatUtility::VAR_STRING, '')) {
     echo FatApp::getConfig("CONF_DEFAULT_SCHEMA_CODES_SCRIPT", FatUtility::VAR_STRING, '');
 }
-if (isset($layoutTemplate) && $layoutTemplate != '') { ?>
-    <link rel="stylesheet" href="<?php echo UrlHelper::generateUrl('ThemeColor', $layoutTemplate, array($layoutRecordId)); ?>" />
-<?php }
+
