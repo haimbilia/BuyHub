@@ -2,7 +2,7 @@
 
 $html = "";
 if (isset($ribbRow) && !empty($ribbRow)) {
-    include CONF_BACK_END_THEME_PATH . '/_partial/get-ribbon.php';
+    echo  CONF_BACK_END_THEME_PATH . '_partial/get-ribbon.php';die;
 } else {
     $ribSelProdId = isset($ribSelProdId) ? $ribSelProdId : 0;
     $ribProdId = isset($ribProdId) ? $ribProdId : 0;
@@ -16,7 +16,7 @@ if (isset($ribbRow) && !empty($ribbRow)) {
     if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
         foreach ($ribbonDetail as $ribbRow) {
             $position = $ribbRow['blinkcond_position'];
-            include CONF_BACK_END_THEME_PATH . '/_partial/get-ribbon.php';
+            include CONF_BACK_END_THEME_PATH . '_partial/get-ribbon.php';
             $html .= $ribbon;
         }
         $ribbRow = '';

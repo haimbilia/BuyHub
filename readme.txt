@@ -111,6 +111,7 @@ Updates/Fixes :
     => 055801 - admin can create multiple badges for a seller
     => 055802 - badges created by seller are getting edited by admin and allowing him to add other seller items to that
     => 055813 - Notice: Undefined variable: Shop/view.
+    => 055810 - on viewing wish list from buyer> getting error
 
 New Features:  
     => Admin shipped products listing page
