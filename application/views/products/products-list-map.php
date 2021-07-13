@@ -9,10 +9,10 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
 
 <?php
     $productsByShop = [];
+    $productsBySelProdCode = [];
     if ($products) {
         ?>
 <div class="interactive-stores__list stores">
-
     <div class="stores-body scroll scroll-y">
         <ul id="mapProducts--js">
             <?php
@@ -43,11 +43,12 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                         <div class="store__detail-foot">
                             <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
                         </div>
+                        
                     </div>
                 </a>
+                <button type="button" onclick="viewMoreSeller('<?php echo $product['selprod_code']; ?>')">More Sellers</button>
             </li>
             <?php } ?>
-
         </ul>
     </div>
 </div>
@@ -58,7 +59,6 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
         if (isset($pagingFunc)) {
             $searchFunction = $pagingFunc;
         }
-
         $postedData['page'] = (isset($page)) ? $page : 1;
         $postedData['recordDisplayCount'] = $recordCount;
         echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
@@ -75,17 +75,25 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
     ?>
 
 <?php
-
-
- foreach($moreSellersProductsArr as $product){
+foreach ($moreSellersProductsArr as $product) {
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
     $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
-    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); 
-    $productsByShop[$product['shop_id']]['lat'] = $product['shop_lat'];
-    $productsByShop[$product['shop_id']]['lng'] = $product['shop_lng'];
-    $productsByShop[$product['shop_id']]['products'][$product['selprod_id']] = ['url' => $productUrl, 'name' => ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']), 'img' => $img];
- }
-
+    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $productsBySelProdCode[$product['selprod_code']][] = [
+        'lat' => $product['shop_lat'],
+        'lng' => $product['shop_lng'],
+        'shop_id' => $product['shop_id'],
+        'content' => '<ul class="gmap-list">
+                <li>
+                    <div class="product-profile">
+                        <div class="product-profile__thumbnail"><img class="product-img" src="' . $img . '" alt=""></div>
+                        <div class="product-profile__data"><div class="title"><a href="' . $productUrl . '"><strong>' . ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']) . '</strong></a></div></div>
+                    </div>
+                </li>
+            </ul>',
+        'amount' =>  CommonHelper::displayMoneyFormat($product['selprod_price']),        
+    ];
+}
 
 foreach ($productsByShop as &$marker) {
     $contentString = '<ul class="gmap-list">';
@@ -104,6 +112,7 @@ foreach ($productsByShop as &$marker) {
 ?>
 <script>
 var markers = <?php echo json_encode($productsByShop); ?>;
+var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
 $(document).ready(function() {
     if (typeof map == 'undefined') {
         initMutipleMapMarker(markers, 'productMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
@@ -111,6 +120,18 @@ $(document).ready(function() {
     } else {
         clearMarkers();
         createMarkers(markers);
+        clearMoreSellerMarkers(); 
     }
 });
+var markersHtml = [];   
+function viewMoreSeller(selprodCode){
+    if(!realtedMarkers.hasOwnProperty(selprodCode)){
+        return;
+    }    
+    let relMarkers = realtedMarkers[selprodCode]; 
+    clearMoreSellerMarkers();
+    clearMarkers();
+    createCustomMarkers(relMarkers);   
+}
+
 </script>

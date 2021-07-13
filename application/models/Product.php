@@ -2056,4 +2056,26 @@ END,   special_price_found ) as special_price_found'
         }
         return $records['ptpp_product_id'];
     }
+    
+    public static function getMoreSeller($selprodCode, $langId, $userId = 0, $includeSeller = false)
+    {
+        $userId = FatUtility::int($userId);
+        $langId = FatUtility::int($langId);
+
+        $moreSellerSrch = new ProductSearch($langId);
+        $moreSellerSrch->setGeoAddress();
+        $moreSellerSrch->addMoreSellerCriteria($selprodCode, $userId, $includeSeller);
+        $moreSellerSrch->validateAndJoinDeliveryLocation();
+        /*$moreSellerSrch->addMultipleFields(array( 'selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name' ,'IF(selprod_stock > 0, 1, 0) AS in_stock'));*/
+        $moreSellerSrch->addMultipleFields(
+            array('selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name', 'product_seller_id', 
+                'product_id', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'selprod_cod_enabled',
+                'product_cod_enabled', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty', 'selprod_available_from', 'shop_lat', 'shop_lng', 'product_updated_on','selprod_title','selprod_code')
+        );
+        $moreSellerSrch->addHaving('in_stock', '>', 0);
+        $moreSellerSrch->addOrder('theprice');
+        $moreSellerSrch->addGroupBy('selprod_id');
+        
+        return FatApp::getDb()->fetchAll($moreSellerSrch->getResultSet());
+    }
 }
