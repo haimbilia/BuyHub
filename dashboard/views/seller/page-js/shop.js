@@ -204,14 +204,7 @@ $(document).on("change", ".state", function () {
             shopTemplates();
         });
     };
-
-    /* getCountryStates = function(countryId,stateId,dv){
-        fcom.ajax(fcom.makeUrl('Seller','getStates',[countryId,stateId]),'',function(res){
-            $(dv).empty();
-            $(dv).append(res);
-        });
-    }; */
-
+   
     removeShopImage = function(BannerId, langId, imageType, slide_screen) {
         var agree = confirm(langLbl.confirmRemove);
         if (!agree) {
