@@ -52,7 +52,7 @@ class AdminAuthentication extends FatModel
         
         /* [To Do - need to remove admin_password_old in next release */
         if (empty($row['admin_password'])) {    
-            $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->commonLangId));
+            $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->adminLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->adminLangId));
             $this->error = $emailErrorMsg;
             if (FatUtility::isAjaxCall()) {
                 $json['status'] = 0;
