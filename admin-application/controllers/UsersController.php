@@ -149,8 +149,7 @@ class UsersController extends AdminBaseController
             Message::addErrorMessage($userAuthObj->getError());
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
         }
-
-        FatApp::redirectUser(UrlHelper::generateUrl('account', '', array(), CONF_WEBROOT_FRONT_URL));
+        FatApp::redirectUser(UrlHelper::generateUrl('account', '', array(), CONF_WEBROOT_DASHBOARD));
     }
 
     public function setup()
