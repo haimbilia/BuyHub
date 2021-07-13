@@ -611,7 +611,7 @@ function accessLocation(force = false) {
     var location = getLocation();
     if ("" == location.lat || "" == location.lng || "" == location.countryCode || force) {
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Home', 'accessLocation'), '', function (t) {
+            fcom.ajax(fcom.makeUrl('Home', 'accessLocation', [], siteConstants.webrootfront), '', function (t) {
                 try {
                     var json = $.parseJSON(t);
                     if (1 > json.status) {
