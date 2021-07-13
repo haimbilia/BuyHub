@@ -1262,7 +1262,6 @@ class GuestUserController extends MyAppController
             $frm->addHiddenField('', 'user_phone_dcode');
             $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'class' => 'phone-js'));
             $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-            $phnFld->htmlAfterField = '<span class="note">' . Labels::getLabel('LBL_e.g.', $this->siteLangId) . ': ' . implode(', ', ValidateElement::PHONE_FORMATS) . '</span>';
         }
 
         CommonHelper::addCaptchaField($frm);
