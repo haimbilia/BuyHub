@@ -118,6 +118,7 @@ Updates/Fixes :
     => 055816 - remove phone number suggestion with fields throughout system
     => 055824 - seller> manage ribbons> link type is coming with n/a while values are there on editing the same
     => 055826 - when subscription is purchased through stripe connect then in admin> order detail page> payment mode is not listing
+    => 055833 - admin> requests> badge request filters> buttons are not proper
 
 New Features:  
     => Admin shipped products listing page

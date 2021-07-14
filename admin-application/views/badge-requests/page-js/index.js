@@ -80,7 +80,6 @@ $(document).ready(function () {
         $('input[name="user_id"]').val("");
         document.frmSearch.reset();
         searchRecords(document.frmSearch);
-        $('.searchHead--js').click();
     };
 
     getRecordTypeURL = function () {
