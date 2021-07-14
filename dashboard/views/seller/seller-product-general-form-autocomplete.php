@@ -26,13 +26,17 @@ $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
 $urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selprod_id)");
 $urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), '/') . '</span>';
 
-$fld = $frmSellerProduct->getField('selprod_subtract_stock');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+$subtractFld = $frmSellerProduct->getField('selprod_subtract_stock');
+if (null != $subtractFld) {
+    $subtractFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $subtractFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+}
 
-$fld = $frmSellerProduct->getField('selprod_track_inventory');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+$trackInvFld = $frmSellerProduct->getField('selprod_track_inventory');
+if (null != $trackInvFld) {
+    $trackInvFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $trackInvFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+}
 
 $fld = $frmSellerProduct->getField('use_shop_policy');
 $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
@@ -90,22 +94,26 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
-                    <div class="field-set d-flex align-items-center">
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_subtract_stock'); ?>
+                <?php if (null != $subtractFld) { ?>
+                    <div class="col-md-6">
+                        <div class="field-set d-flex align-items-center">
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_subtract_stock'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="field-set d-flex align-items-center">
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_track_inventory'); ?>
+                <?php } ?>
+                <?php if (null != $trackInvFld) { ?>
+                    <div class="col-md-6">
+                        <div class="field-set d-flex align-items-center">
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_track_inventory'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
             </div>
             <div class="row">
                 <div class="selprod_threshold_stock_level_fld col-md-6">

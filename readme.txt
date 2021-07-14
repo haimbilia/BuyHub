@@ -121,6 +121,7 @@ Updates/Fixes :
     => 055833 - admin> requests> badge request filters> buttons are not proper
     => 055832 - when admin creates badges (automatically) for completed orders then it's not listing on product detail page
     => 055840 - Google Shopping Feed Enhancement Changes
+    => 055850 - Warning : Creating default object from empty value
 
 New Features:  
     => Admin shipped products listing page
