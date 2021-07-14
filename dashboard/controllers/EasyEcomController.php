@@ -127,7 +127,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             LibHelper::exitWithError($error, true);
         }
 
-        SystemLog::plugin(json_encode($dataToUpdate), $curl->response, self::KEY_NAME . ' : Company/Create Request');
+        SystemLog::plugin(json_encode($dataToUpdate), trim($curl->response), self::KEY_NAME . ' : Company/Create Request');
 
         $resp = json_decode($curl->response, true);
         if (200 != $resp['code']) {
