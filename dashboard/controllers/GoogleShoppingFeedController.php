@@ -239,6 +239,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $frm->addHiddenField('', 'abprod_selprod_id');
         $frm->addHiddenField('', 'abprod_cat_id');
         $frm->addHiddenField('', 'abprod_adsbatch_id');
+        $frm->addHiddenField('', 'is_edit', 0);
         $fld = $frm->addTextBox(Labels::getLabel('LBL_PRODUCT', $this->siteLangId), 'product_name');
         $fld->requirement->setRequired(true);
         $fld = $frm->addTextBox(Labels::getLabel('LBL_GOOGLE_PRODUCT_CATEGORY', $this->siteLangId), 'google_product_category');
@@ -290,6 +291,21 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     }
 
     /**
+     * viewProducts
+     *
+     * @param  int $adsBatchId
+     * @return void
+     */
+    public function viewProducts(int $adsBatchId)
+    {
+        $this->userPrivilege->canEditAdvertisementFeed();
+        $adsBatchId = FatUtility::int($adsBatchId);
+        $this->set('adsBatchId', $adsBatchId);
+        $this->set('bindProductForm', false);
+        $this->_template->render(true, true, 'google-shopping-feed/bind-products.php');
+    }
+
+    /**
      * bindProductForm
      *
      * @param  int $adsBatchId
@@ -312,6 +328,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             $selProdData = SellerProduct::getSelProdDataById($selProdId, $this->siteLangId);
             $data['google_product_category'] = $categoryArr[$data['abprod_cat_id']];
             $data['product_name'] = $selProdData['selprod_title'];
+            $data['is_edit'] = 1;
         }
         $frm->fill($data);
         $this->set('frm', $frm);
@@ -365,13 +382,22 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         if (false === $post) {
             LibHelper::dieJsonError(current($frm->getValidationErrors()));
         }
+        $isEdit = FatApp::getPostedData('is_edit', FatUtility::VAR_INT, 0);
+
+        $adsBatchObj = AdsBatch::getSearchObject(true);
+        $adsBatchObj->addCondition('abprod_selprod_id', '=', $post['abprod_selprod_id']);
+        $adsBatchObj->addCondition('abprod_adsbatch_id', '=', $post['abprod_adsbatch_id']);
+        $record = (array) FatApp::getDb()->fetch($adsBatchObj->getResultSet());
+        if (!empty($record) && 1 > $isEdit) {
+            LibHelper::dieJsonError(Labels::getLabel('MSG_ALREADY_BOUND', $this->siteLangId));
+        }
 
         $productId = SellerProduct::getAttributesById($post['abprod_selprod_id'], 'selprod_product_id');
         $productIdentifier = strtoupper(Product::getAttributesById($productId, 'product_identifier'));
         $productIdentifier = explode(' ', $productIdentifier);
         $post['abprod_item_group_identifier'] = $productIdentifier[0] . $productId;
 
-        unset($post['btn_submit'], $post['product_name'], $post['btn_clear'], $post['google_product_category']);
+        unset($post['btn_submit'], $post['product_name'], $post['btn_clear'], $post['google_product_category'], $post['is_edit']);
         $db = FatApp::getDb();
         if (!$db->insertFromArray(AdsBatch::DB_TBL_BATCH_PRODS, $post, false, array(), $post)) {
             LibHelper::dieJsonError($db->getError());
@@ -496,6 +522,8 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $arrListing = $db->fetchAll($rs);
         $this->set("arrListing", $arrListing);
 
+        $status = (int) AdsBatch::getAttributesById($adsBatchId, 'adsbatch_status');
+        $this->set('isPublished', (AdsBatch::STATUS_PUBLISHED == $status));
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
         $this->set('postedData', FatApp::getPostedData());

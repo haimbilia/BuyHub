@@ -21,15 +21,17 @@ $this->includeTemplate('_partial/dashboardNavigation.php');?>
             </div>
         </div>
         <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="bindProductForm"></div>
+            <?php if(!isset($bindProductForm) || true === $bindProductForm) { ?>
+                <div class="row mb-4">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="bindProductForm"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php } ?>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">

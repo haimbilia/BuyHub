@@ -79,8 +79,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $htm, true);
                 break;
             case 'action':
+                $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
                 if (AdsBatch::STATUS_PUBLISHED != $row['adsbatch_status']) {
-                    $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
 
                     $li = $ul->appendElement('li');
                     $li->appendElement(
@@ -122,6 +122,17 @@ foreach ($arrListing as $sn => $row) {
                             'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "deleteBatch(" . $row['adsbatch_id'] . ")"
                         ],
                         '<i class="fa fa-trash"></i>',
+                        true
+                    );
+                } else if (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status']) {
+                    $li = $ul->appendElement('li');
+                    $li->appendElement(
+                        'a',
+                        [
+                            'href' => UrlHelper::generateUrl($keyName, 'viewProducts', [$row['adsbatch_id']]),
+                            'title' => Labels::getLabel('LBL_VIEW', $siteLangId)
+                        ],
+                        '<i class="fa fa-eye"></i>',
                         true
                     );
                 }

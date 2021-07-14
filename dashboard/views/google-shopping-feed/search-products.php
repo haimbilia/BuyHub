@@ -12,6 +12,11 @@
 if (1 > count($arrListing)) {
     unset($arr_flds['select_all']);
 }
+
+if (true === $isPublished) {
+    unset($arr_flds['select_all'], $arr_flds['action']);
+}
+
 $tableClass = '';
 if (0 < count($arrListing)) {
 	$tableClass = "table-justified";
@@ -34,6 +39,15 @@ foreach ($arrListing as $sn => $row) {
         switch ($key) {
             case 'select_all':
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[]" value=' . $row['abprod_selprod_id'] . '><i class="input-helper"></i></label>', true);
+                break;
+            case 'selprod_title':
+                $options = SellerProduct::getSellerProductOptions($row['abprod_selprod_id'], true, $siteLangId);
+                $variantsStr = '';
+                array_walk($options, function ($item, $key) use (&$variantsStr) {
+                    $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
+                });
+
+                $td->appendElement('plaintext', [], $row[$key] . $variantsStr, true);
                 break;
             case 'abprod_cat_id':
                 $catName = html_entity_decode($catIdArr[$row[$key]], ENT_QUOTES, 'UTF-8');

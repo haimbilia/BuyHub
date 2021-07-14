@@ -120,6 +120,7 @@ Updates/Fixes :
     => 055826 - when subscription is purchased through stripe connect then in admin> order detail page> payment mode is not listing
     => 055833 - admin> requests> badge request filters> buttons are not proper
     => 055832 - when admin creates badges (automatically) for completed orders then it's not listing on product detail page
+    => 055840 - Google Shopping Feed Enhancement Changes
 
 New Features:  
     => Admin shipped products listing page
