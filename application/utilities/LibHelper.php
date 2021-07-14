@@ -309,7 +309,12 @@ class LibHelper extends FatUtility
 
         $msg = (0 < $status ? Labels::getLabel("MSG_SUCCESS", $langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $langId));
         $data['msg'] = array_key_exists('msg', $data) ? $data['msg'] : $msg;
-        $data['data'] = array_key_exists('data', $data) && empty($data['data']) && MOBILE_APP_API_CALL ? (object) [] : $data['data'];
+        
+        $respData = [];
+        if (array_key_exists('data', $data)) {
+            $respData = empty($data['data']) && MOBILE_APP_API_CALL ? (object) [] : $data['data'];
+        }
+        $data['data'] = $respData;
 
         $isAjaxCall = (FatUtility::isAjaxCall() || MOBILE_APP_API_CALL);
 

@@ -247,22 +247,29 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_SECURITY_TOKEN', $this->siteLangId), true);
         }
 
-        $url = self::API_URL . 'Maintenance/switchSyncStatus?token=' . $apiSecurityToken;
+        $url = self::API_URL . 'Maintenance/switchSyncStatus?api_token=' . $apiSecurityToken;
 
         $curl = new Curl();
+        $curl->setHeader('Content-Type', 'application/json');
         $curl->post($url, $dataToUpdate);
         if ($curl->error) {
             SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : Sync Status CURL Error : ' . $curl->errorMessage);
             LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
         }
 
-        SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : Sync Status Request');
-
         if (200 != $curl->httpStatusCode) {
             $msg = empty($curl->httpErrorMessage) ? Labels::getLabel('MSG_SOMETHING_WENT_WRONG', $this->siteLangId) : $curl->httpErrorMessage;
             SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : Sync Status Response Error : ' . $msg);
             LibHelper::exitWithError($msg, true);
         }
+        
+        $resp = json_decode($curl->response, true);
+        if (200 != $resp['status']) {
+            SystemLog::plugin(json_encode($dataToUpdate), json_encode($resp), self::KEY_NAME . ' : Sync Status : ' . $resp['message']);
+            LibHelper::exitWithError($resp['message'], true);
+        }
+
+        SystemLog::plugin(json_encode($dataToUpdate), json_encode($resp), self::KEY_NAME . ' : Sync Status Request');
 
         $msg = Labels::getLabel('MSG_AUTO_SYNC_TURNED_OFF', $this->siteLangId);
         if (0 < $status) {
