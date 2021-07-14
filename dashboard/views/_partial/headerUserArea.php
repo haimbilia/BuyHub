@@ -52,7 +52,9 @@ if (!UserAuthentication::isUserLogged()) {
             } ?>
     <li class="">
         <div class="dropdown">
-            <a href="javascript:void(0)" class="dropdown-toggle no-after" data-toggle="dropdown"><span class="icn icn-txt"><?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span></a>
+            <a href="javascript:void(0)" class="dropdown-toggle no-after" data-display="static" data-toggle="dropdown">
+                <img class="my-account__avatar" src="<?php echo $profilePicUrl; ?>" alt="">
+            </a>
             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
                 <ul class="nav nav-block">
                     <?php
