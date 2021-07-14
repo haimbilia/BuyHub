@@ -336,14 +336,20 @@ class Badge extends MyAppModel
             'blinkcond_record_type',
             'blc.badgelink_record_id',
         ];
-
+        
         $srch = new BadgeLinkConditionSearch();
         $srch->joinTable('(' . $srchRecord->getQuery() . ') as m_blnk', 'INNER JOIN', 'blnk.blinkcond_id = m_blnk.m_blinkcond_id');
         $srch->joinBadgeLinks();
         $srch->joinBadgeRequest();
         $srch->joinBadge($langId);
         $srch->addMultipleFields($attr);
-        $srch->addDirectCondition('blc.badgelink_record_id = m_blnk.record');
+        $srch->addDirectCondition(
+            '(CASE 
+                WHEN blnk.blinkcond_condition_type > 0 AND m_blnk.record IS NULL
+                THEN TRUE
+                ELSE blc.badgelink_record_id = m_blnk.record
+            END)'
+        );
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
