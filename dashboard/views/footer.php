@@ -69,7 +69,7 @@ if (CommonHelper::demoUrl()) { ?>
             $(document).ready(function() {
                 if ('serviceWorker' in navigator) {
                     window.addEventListener('load', function() {
-                        navigator.serviceWorker.register('<?php echo CONF_WEBROOT_URL; ?>sw.js?t=<?php echo filemtime(CONF_INSTALLATION_PATH . 'public/sw.js'); ?>&f').then(function(registration) {});
+                        navigator.serviceWorker.register('<?php echo CONF_WEBROOT_FRONTEND; ?>sw.js?t=<?php echo filemtime(CONF_INSTALLATION_PATH . 'public/sw.js'); ?>&f').then(function(registration) {});
                     });
                 }
             });

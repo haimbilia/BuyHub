@@ -28,19 +28,19 @@ class AccountController extends LoggedUserController
 
         switch ($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) {
             case 'B':
-                FatApp::redirectUser(UrlHelper::generateUrl('buyer'));
+                FatApp::redirectUser(UrlHelper::generateUrl('buyer', '', [], CONF_WEBROOT_DASHBOARD));
                 break;
             case 'S':
-                FatApp::redirectUser(UrlHelper::generateUrl('seller'));
+                FatApp::redirectUser(UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD));
                 break;
             case 'Ad':
-                FatApp::redirectUser(UrlHelper::generateUrl('advertiser'));
+                FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD));
                 break;
             case 'AFFILIATE':
-                FatApp::redirectUser(UrlHelper::generateUrl('affiliate'));
+                FatApp::redirectUser(UrlHelper::generateUrl('affiliate', '', [], CONF_WEBROOT_DASHBOARD));
                 break;
             default:
-                FatApp::redirectUser(UrlHelper::generateUrl(''));
+                FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
                 break;
         }
 
@@ -91,13 +91,13 @@ class AccountController extends LoggedUserController
         if (!User::canViewSupplierTab()) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_FOR_SUPPLIER_DASHBOARD', $this->siteLangId));
             if (User::isBuyer()) {
-                FatApp::redirectUser(UrlHelper::generateUrl('buyer'));
+                FatApp::redirectUser(UrlHelper::generateUrl('buyer', '', [], CONF_WEBROOT_DASHBOARD));
             } elseif (User::isAdvertiser()) {
-                FatApp::redirectUser(UrlHelper::generateUrl('advertiser'));
+                FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD));
             } elseif (User::isAffiliate()) {
-                FatApp::redirectUser(UrlHelper::generateUrl('affiliate'));
+                FatApp::redirectUser(UrlHelper::generateUrl('affiliate', '', [], CONF_WEBROOT_DASHBOARD));
             } else {
-                FatApp::redirectUser(UrlHelper::generateUrl('Account', 'ProfileInfo'));
+                FatApp::redirectUser(UrlHelper::generateUrl('Account', 'ProfileInfo', [], CONF_WEBROOT_DASHBOARD));
             }
         }
         $userId = UserAuthentication::getLoggedUserId();
@@ -1836,7 +1836,7 @@ class AccountController extends LoggedUserController
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
             }
         }
-        
+
         $this->set('products', $products);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);

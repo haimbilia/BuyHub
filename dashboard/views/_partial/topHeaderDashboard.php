@@ -38,25 +38,25 @@
                 $userActiveTab = false;
                 if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {
                     $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Seller');
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Seller', '', array(), '', null, false, $getOrgUrl);
+                    $dashboardUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD);
+                    $dashboardOrgUrl = UrlHelper::generateUrl('Seller', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
                 } elseif (User::canViewBuyerTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'B')) {
                     $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Buyer');
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Buyer', '', array(), '', null, false, $getOrgUrl);
+                    $dashboardUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD);
+                    $dashboardOrgUrl = UrlHelper::generateUrl('Buyer', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
                 } elseif (User::canViewAdvertiserTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad')) {
                     $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Advertiser');
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Advertiser', '', array(), '', null, false, $getOrgUrl);
+                    $dashboardUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD);
+                    $dashboardOrgUrl = UrlHelper::generateUrl('Advertiser', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
                 } elseif (User::canViewAffiliateTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE')) {
                     $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Affiliate');
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', array(), '', null, false, $getOrgUrl);
+                    $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD);
+                    $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
                 }
 
                 if (!$userActiveTab) {
-                    $dashboardUrl = UrlHelper::generateUrl('Account');
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', array(), '', null, false, $getOrgUrl);
+                    $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
+                    $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
                 }
                 ?>
                 <ul class="c-header-links">
@@ -96,7 +96,7 @@
                     <ul>
                         <?php $this->includeTemplate('_partial/headerUserArea.php', array('isUserDashboard' => $isUserDashboard)); ?>
                     </ul>
-                </div>               
+                </div>
             </div>
         </header>
         <div class="display-in-print text-center">

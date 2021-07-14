@@ -47,7 +47,7 @@ class User extends MyAppModel
 
     public const DB_TBL_USR_MOBILE_TEMP_TOKEN = 'tbl_user_temp_token_requests';
     public const DB_TBL_USR_MOBILE_TEMP_TOKEN_PREFIX = 'uttr_';
-    
+
     public const DB_TBL_USR_COOKIES_PREFERENCES = 'tbl_user_cookies_preferences';
     public const DB_TBL_USR_COOKIES_PREFERENCES_PREFIX = 'ucp_';
 
@@ -453,16 +453,16 @@ class User extends MyAppModel
     {
         switch ($preferredDashboard) {
             case User::USER_BUYER_DASHBOARD:
-                return UrlHelper::generateFullUrl('buyer');
+                return UrlHelper::generateFullUrl('buyer', '', [], CONF_WEBROOT_DASHBOARD);
                 break;
             case User::USER_SELLER_DASHBOARD:
-                return UrlHelper::generateFullUrl('seller');
+                return UrlHelper::generateFullUrl('seller', '', [], CONF_WEBROOT_DASHBOARD);
                 break;
             case User::USER_ADVERTISER_DASHBOARD:
-                return UrlHelper::generateFullUrl('advertiser');
+                return UrlHelper::generateFullUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD);
                 break;
             case User::USER_AFFILIATE_DASHBOARD:
-                return UrlHelper::generateFullUrl('affiliate');
+                return UrlHelper::generateFullUrl('affiliate', '', [], CONF_WEBROOT_DASHBOARD);
                 break;
         }
         return UrlHelper::generateFullUrl('account');
@@ -1847,13 +1847,13 @@ class User extends MyAppModel
         }
         return true;
     }
-    
+
     public function sendAdminNewUserCreationEmail($userData, $langId)
     {
         $userAuthObj = new UserAuthentication();
         $token = FatUtility::getRandomString(30);
         $userAuthObj->deleteOldPasswordResetRequest($userData['user_id']);
-        
+
         $data = array(
             'user_name' => $userData['user_name'],
             'user_id' => $userData['user_id'],
@@ -2518,7 +2518,7 @@ class User extends MyAppModel
                 $rs = $userSrchObj->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
 
-                if (!empty($row)){
+                if (!empty($row)) {
                     $referral = serialize(array('data' => $referralToken, 'creation_time' => time()));
                     if (0 < $row['user_is_buyer']) {
                         $referrerCodeSignup = $referral;
@@ -2846,7 +2846,7 @@ class User extends MyAppModel
             $rs = $userSrchObj->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
 
-            if (!empty($row)){
+            if (!empty($row)) {
                 $referral = serialize(array('data' => $referralToken, 'creation_time' => time()));
                 if (0 < $row['user_is_buyer']) {
                     $referrerCodeSignup = $referral;
@@ -3033,20 +3033,20 @@ class User extends MyAppModel
         }
         return true;
     }
-    
+
     public function saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)
     {
         if (1 > $this->mainTableRecordId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
             return false;
         }
-        
-        $data = [    
+
+        $data = [
             'ucp_user_id' => $this->mainTableRecordId,
             'ucp_statistical' => $statisticalCookies,
             'ucp_personalized' => $personaliseCookies,
         ];
-            
+
         $record = new TableRecord(static::DB_TBL_USR_COOKIES_PREFERENCES);
         $record->assignValues($data);
         if (!$record->addNew(array(), $data)) {
@@ -3066,14 +3066,14 @@ class User extends MyAppModel
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }
-    
+
     public function getUserSelectedCookies()
-    {  
+    {
         if (1 > $this->mainTableRecordId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
             return false;
         }
-        
+
         $srch = new SearchBase(static::DB_TBL_USR_COOKIES_PREFERENCES, 'ucp');
         $srch->addCondition('ucp_user_id', '=', $this->mainTableRecordId);
         $srch->doNotCalculateRecords();
@@ -3081,14 +3081,14 @@ class User extends MyAppModel
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
-    
+
     public function updateCookiesPreferences($data)
     {
         if (1 > $this->mainTableRecordId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
             return false;
         }
-        
+
         $data['ucp_user_id'] = $this->mainTableRecordId;
         if (!FatApp::getDb()->insertFromArray(static::DB_TBL_USR_COOKIES_PREFERENCES, $data, false, array(), $data)) {
             $this->error = FatApp::getDb()->getError();
@@ -3096,35 +3096,34 @@ class User extends MyAppModel
         }
         return true;
     }
-    
+
     public static function checkStatisticalCookiesEnabled()
-    {   
-        if(!FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)){
+    {
+        if (!FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)) {
             return true;
-        }        
-        $userId = UserAuthentication::getLoggedUserId(true);        
-        if($userId > 0){
+        }
+        $userId = UserAuthentication::getLoggedUserId(true);
+        if ($userId > 0) {
             $user = new User($userId);
             $userSelectedCookies = $user->getUserSelectedCookies();
             return (!empty($userSelectedCookies) && $userSelectedCookies['ucp_statistical'] == 1) ? true : false;
-        }else{
-            return (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? true : false; 
+        } else {
+            return (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? true : false;
         }
     }
-    
+
     public static function checkPersonalizedCookiesEnabled()
     {
-        if(!FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)){
+        if (!FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)) {
             return true;
-        }        
-        $userId = UserAuthentication::getLoggedUserId(true);        
-        if($userId > 0){
+        }
+        $userId = UserAuthentication::getLoggedUserId(true);
+        if ($userId > 0) {
             $user = new User($userId);
             $userSelectedCookies = $user->getUserSelectedCookies();
             return (!empty($userSelectedCookies) && $userSelectedCookies['ucp_personalized'] == 1) ? true : false;
-        }else{
-            return (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? true : false; 
+        } else {
+            return (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? true : false;
         }
     }
-    
 }

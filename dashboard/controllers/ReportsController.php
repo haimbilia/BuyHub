@@ -10,11 +10,11 @@ class ReportsController extends SellerBaseController
     public function index()
     {
         if (User::isSeller()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('seller'));
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', '',[], CONF_WEBROOT_DASHBOARD));
         } elseif (User::isBuyer()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('buyer'));
+            FatApp::redirectUser(UrlHelper::generateUrl('buyer', '',[], CONF_WEBROOT_DASHBOARD));
         } else {
-            FatApp::redirectUser(UrlHelper::generateUrl(''));
+            FatApp::redirectUser(UrlHelper::generateUrl('', '',[], CONF_WEBROOT_DASHBOARD));
         }
     }
 

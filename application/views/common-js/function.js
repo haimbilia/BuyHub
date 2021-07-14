@@ -22,7 +22,7 @@ var Dashboard = function () {
             $("div.sidebar-overlay--js").remove();
             var visibility = 0;
         }
-        $.ajax({ url: fcom.makeUrl('Custom', 'setupSidebarVisibility', [visibility],siteConstants.webrootfront) });
+        $.ajax({ url: fcom.makeUrl('Custom', 'setupSidebarVisibility', [visibility], siteConstants.webrootfront) });
         /* $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded"); */
         $(".hamburger-toggle").toggleClass("is-opened");
         setTimeout(function () {
@@ -101,7 +101,7 @@ $(document).ready(function () {
     if (CONF_ENABLE_GEO_LOCATION && className != 'CheckoutController' && className != 'CartController') {
         googleAddressAutocomplete('ga-autoComplete-header');
     }
-    
+
 });
 
 /* for search form */
@@ -310,9 +310,9 @@ $(document).ready(function () {
     $('.switch-button').click(function () {
         $(this).toggleClass("is--active");
         if ($(this).hasClass("buyer") && !$(this).hasClass("is--active")) {
-            window.location.href = fcom.makeUrl('seller');
+            window.location.href = fcom.makeUrl('seller', '', [], siteConstants.webrootfront);
         } if ($(this).hasClass("seller") && $(this).hasClass("is--active")) {
-            window.location.href = fcom.makeUrl('buyer');
+            window.location.href = fcom.makeUrl('buyer', '', [], siteConstants.webrootfront);
         }
     });
 
@@ -665,9 +665,9 @@ function getGeoAddress(data) {
 }
 
 function setCookie(cname, cvalue, canSetCookie = true, exdays = 365, callback = '') {
-	if (false == canSetCookie) {
-		return false;
-	}
+    if (false == canSetCookie) {
+        return false;
+    }
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
@@ -709,7 +709,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     var options = { types: ['(regions)'] }
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        var place = autocomplete.getPlace();       
+        var place = autocomplete.getPlace();
         var lat = place['geometry']['location'].lat();
         var lng = place['geometry']['location'].lng();
         var address = '';
@@ -739,7 +739,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
                 $.systemMessage(msg, 'alert--danger');
             }
 
-            $("#" + elementId).val(address);         
+            $("#" + elementId).val(address);
         }
 
         if (0 < $("#facebox #" + elementId).length) {
@@ -748,7 +748,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
         if (eval("typeof " + callback) == 'function') {
             window[callback](data);
         }
-        location.reload();   
+        location.reload();
     });
 }
 
@@ -936,12 +936,12 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
      * markers object sample
      markers = [{ lat: 11,lng: 11,content:'<div>Bondi Beach</div>' }];
      */
-    
-    if(centeredLat == '' || centeredLng == ''){
+
+    if (centeredLat == '' || centeredLng == '') {
         centeredLat = 0;
         centeredLng = 0;
     }
-    
+
     if (!$.isNumeric(centeredLat) || !$.isNumeric(centeredLat)) {
         console.warn('user location not set');
         return;
@@ -957,12 +957,12 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
         center: new google.maps.LatLng(centeredLat, centeredLng),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
-    
+
     new google.maps.Marker({
-        position: new google.maps.LatLng(centeredLat,centeredLng),
+        position: new google.maps.LatLng(centeredLat, centeredLng),
         map: map,
         title: langLbl.currentSearchLocation,
-        icon: fcom.makeUrl() + 'images/pin.png',      
+        icon: fcom.makeUrl() + 'images/pin.png',
     });
     infowindow = new google.maps.InfoWindow();
     createMarkers(markers);
@@ -1014,8 +1014,8 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
 
         centerControlDiv.style.paddingTop = "10px";
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-    } 
-    
+    }
+
     HTMLMarker.prototype = new google.maps.OverlayView();
     HTMLMarker.prototype.onRemove = function () {
         this.div.parentNode.removeChild(this.div);
@@ -1030,7 +1030,7 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
         panes.overlayImage.appendChild(this.div);
         var me = this;
         google.maps.event.addDomListener(this.div, 'click', function () {
-            infowindow.setContent(me.content);          
+            infowindow.setContent(me.content);
             infowindow.setPosition(new google.maps.LatLng(me.lat, me.lng));
             infowindow.open(map);
         });
@@ -1044,22 +1044,22 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
     }
 };
 
-function addDragendListiner(map,dragendCallback){
+function addDragendListiner(map, dragendCallback) {
     if (typeof dragendCallback == 'function') {
         dragenMapListener = map.addListener("dragend", () => {
             dragendCallback(map);
         });
     }
-    
+
 }
 
-function removeDragendListiner(map,dragendCallback){
+function removeDragendListiner(map, dragendCallback) {
     if (typeof dragendCallback == 'function') {
         google.maps.event.removeListener(dragenMapListener);
     }
 }
 
-function createMarkers(markers) {    
+function createMarkers(markers) {
     $.each(markers, function (index, marker) {
         if (!("lat" in marker) || !("lng" in marker) || !("content" in marker)) {
             console.log(marker);
@@ -1089,20 +1089,20 @@ function createMarkers(markers) {
     });
 }
 
-function clearMarkers() {    
+function clearMarkers() {
     $.each(mapMarker, function (index, marker) {
         if (typeof marker != 'undefined') {
             marker.setMap(null);
         }
-    });   
+    });
 }
 
 function createCustomMarkers(customMarkers) {
     $.each(customMarkers, function (index, marker) {
-        customMarker[index] = new HTMLMarker(marker.lat, marker.lng,marker.amount,marker.content);
+        customMarker[index] = new HTMLMarker(marker.lat, marker.lng, marker.amount, marker.content);
         customMarker[index].setMap(map);
-    }); 
-}    
+    });
+}
 
 function clearMoreSellerMarkers() {
     $.each(customMarker, function (index, marker) {
