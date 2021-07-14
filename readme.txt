@@ -116,7 +116,8 @@ Updates/Fixes :
     => 055808 - when user requests for the data then in popup> email is not there in field
     => 055807 - ribbon linked by seller1 are getting edited by admin and allowing him to add other seller2 items to that
     => 055816 - remove phone number suggestion with fields throughout system
-    => 055824 - seller> manage ribbons> link type is coming with n/a while values are there on editing the same 
+    => 055824 - seller> manage ribbons> link type is coming with n/a while values are there on editing the same
+    => 055826 - when subscription is purchased through stripe connect then in admin> order detail page> payment mode is not listing
 
 New Features:  
     => Admin shipped products listing page

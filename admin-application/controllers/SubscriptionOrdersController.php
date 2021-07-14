@@ -138,19 +138,23 @@ class SubscriptionOrdersController extends AdminBaseController
         $order['products'] = FatApp::getDb()->fetchAll($opRs, 'ossubs_id');
     
         $orderObj = new Orders($order['order_id']);
-        
-        $charges = $orderObj->getOrderProductChargesByOrderId($order['order_id']);
-        
-    
-        
-        $addresses = $orderObj->getOrderAddresses($order['order_id']);
-        
-        
         $order['comments'] = $orderObj->getOrderComments($this->adminLangId, array("order_id" => $order['order_id']));
         $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
+
+
+        $paymentMethodName = Labels::getLabel('LBL_WALLET', $this->adminLangId);
+        if (0 < (int) $order['order_pmethod_id']) {
+            $srch = Plugin::getSearchObject($this->adminLangId, false);
+            $srch->addMultipleFields(['COALESCE(plugin_name, plugin_identifier) as plugin_name']);
+            $srch->addCondition('plugin_id', '=', $order['order_pmethod_id']);
+            $srch->setPageSize(1);
+            $srch->doNotCalculateRecords();
+            $paymentMethodName = current((array) FatApp::getDb()->fetch($srch->getResultSet()));
+        }
         
         $frm = $this->getPaymentForm($this->adminLangId, $order['order_id']);
         $this->set('frm', $frm);
+        $this->set('paymentMethodName', $paymentMethodName);
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
         $this->set('order', $order);
         $orderStatuses = Orders::getOrderSubscriptionStatusArr($this->adminLangId);

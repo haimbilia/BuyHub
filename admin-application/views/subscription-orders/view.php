@@ -1,4 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');?>
+<?php
+
+use PhpParser\Node\Stmt\Label;
+
+defined('SYSTEM_INIT') or die('Invalid Usage.');?>
 
 <div class='page'>
     <div class='container container-fluid'>
@@ -24,8 +28,7 @@
                             ]
                         ];
     
-                        $this->includeTemplate('_partial/action-buttons.php', $data, false);
-                        ?>
+                        $this->includeTemplate('_partial/action-buttons.php', $data, false); ?>
                     </div>
                     <div class="sectionbody">
                         <div class="sectionbody">
@@ -43,8 +46,8 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong><?php echo ($order['order_pmethod_id']) ? CommonHelper::displayNotApplicable($adminLangId, $order["plugin_name"]) : 'Wallet'; ?>:
-                                            </strong><?php echo ($order['order_pmethod_id']) ? CommonHelper::displayNotApplicable($adminLangId, $order["plugin_name"]) : 'Wallet'; ?>
+                                        <td><strong><?php echo Labels::getLabel('LBL_PAYMENT_MODE', $adminLangId)?> :
+                                            </strong><?php echo $paymentMethodName; ?>
                                         </td>
                                         <td><strong><?php echo Labels::getLabel('LBL_Order_Date', $adminLangId); ?>:
                                             </strong><?php echo FatDate::format($order['order_date_added'], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())); ?>
