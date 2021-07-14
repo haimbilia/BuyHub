@@ -256,6 +256,8 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
         }
 
+        SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : Sync Status Request');
+
         if (200 != $curl->httpStatusCode) {
             $msg = empty($curl->httpErrorMessage) ? Labels::getLabel('MSG_SOMETHING_WENT_WRONG', $this->siteLangId) : $curl->httpErrorMessage;
             SystemLog::plugin(json_encode($dataToUpdate), json_encode($curl), self::KEY_NAME . ' : Sync Status Response Error : ' . $msg);
