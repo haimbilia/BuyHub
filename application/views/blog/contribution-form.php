@@ -1,6 +1,5 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-/* $this->includeTemplate('_partial/blogTopFeaturedCategories.php'); */
 $frm->setFormTagAttribute('class', 'form');
 /* $frm->setFormTagAttribute('onsubmit','setupContribution(this);return false;'); */
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Blog', 'setupContribution'));

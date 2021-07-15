@@ -1,5 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php /* $this->includeTemplate('_partial/dashboardNavigation.php'); */ ?>
 <div id="body" class="body"   >
     <section class="bg-second pt-3 pb-3">
         <div class="container">

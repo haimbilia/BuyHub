@@ -1,5 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-/* $this->includeTemplate('_partial/blogTopFeaturedCategories.php'); */ ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <section class="section <?php echo (false === CommonHelper::isAppUser()) ? 'post-detail' : ''; ?>">
     <div class="container">
         <div class="row">
