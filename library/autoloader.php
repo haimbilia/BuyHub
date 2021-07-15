@@ -35,6 +35,8 @@ function fatAutoLoader($className)
                 require_once $root_application_path . 'models/' . $className . '.php';
             } elseif (file_exists($root_application_path . 'utilities/' . $className . '.php')) {
                 require_once $root_application_path . 'utilities/' . $className . '.php';
+            } elseif (file_exists($root_application_path . 'utilities/traits/' . $className . '.php')) {
+                require_once $root_application_path . 'utilities/traits/' . $className . '.php';
             }
         }
     }
