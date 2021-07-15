@@ -23,8 +23,7 @@ if (!empty($order["thirdPartyorderInfo"]) && isset($order["thirdPartyorderInfo"]
 if (!empty($order['opship_tracking_url'])) {
     $orderStatusLbl = Labels::getLabel('LBL_SHIPPED', $adminLangId);
 }
-
-$pickUpDetails = $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
+$pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
 ?>
 <div class="page">
     <div class="container container-fluid">
@@ -75,11 +74,11 @@ $pickUpDetails = $shippingApiObj->getKey('plugin_id') == $order['opshipping_plug
                                     'title' => Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $adminLangId)
                                 ],
                                 'label' => '<i class="fas fa-print"></i>'
-                            ];                                           
+                            ];
+                            
                             if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && !$shippingHanldedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
-                                $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
-                                
-                                if (1 < $order['opshipping_rate_id'] && empty($order['opshipping_plugin_id'])) {
+                                $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']); 
+                                if (1 < $order['opshipping_rate_id'] && ( empty($order['opshipping_plugin_id']) || ( $shippingApiObj->getKey('plugin_id') != $order['opshipping_plugin_id'] && empty($order['opr_response'])))) {
                                     $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -88,65 +87,68 @@ $pickUpDetails = $shippingApiObj->getKey('plugin_id') == $order['opshipping_plug
                                         ],
                                         'label' => '<i class="fas fa-file-invoice"></i>'
                                     ];
-                                } else {                                  
-                                    if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && !$allowedForPlugin) {
-                                        $data['otherButtons'][] = [
-                                            'attr' => [
-                                                'href' => 'javascript:void(0)',
-                                                'onclick' => 'generateLabel(' . $order['op_id'] . ')',
-                                                'title' => Labels::getLabel('LBL_GENERATE_LABEL', $adminLangId)
-                                            ],
-                                            'label' => '<i class="fas fa-file-download"></i>'
-                                        ];
-                                    } elseif (!empty($order['opr_response'])) {
-                                        $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
-                                        $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
-                                        $data['otherButtons'][] = [
-                                            'attr' => [
-                                                'href' => UrlHelper::generateUrl("ShippingServices", $method, [$order['op_id']]),
-                                                'target' => "_blank",
-                                                'title' => Labels::getLabel($title, $adminLangId)
-                                            ],
-                                            'label' => '<i class="fas fa-file-export"></i>'
-                                        ];
-                                    }  
-                                    
-                                    if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_order_number'])) {
-                                        if ('EasyPost' == $shippingApiObj->keyName) {
-                                            $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
-                                        } else {
-                                            $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId);
-                                        }
-                                        $data['otherButtons'][] = [
-                                            'attr' => [
-                                                'href' => 'javascript:void(0)',
-                                                'onclick' => 'proceedToShipment(' . $order['op_id'] . ')',
-                                                'title' => $label
-                                            ],
-                                            'label' => '<i class="fas fa-shipping-fast"></i>'
-                                        ];
-                                    }                                  
-                                    if ($order['orderstatus_id'] == OrderStatus::ORDER_SHIPPED &&  true === $shippingApiObj->canCreatePickup()) {
-                                        if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
+                                } else { 
+                                    if($shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id']){
+                                        if (empty($order['opr_response']) && empty($order['opship_tracking_number']) && !$allowedForPlugin) {
                                             $data['otherButtons'][] = [
                                                 'attr' => [
                                                     'href' => 'javascript:void(0)',
-                                                    'onclick' => 'getPickupForm(' . $order['op_id'] . ')',
-                                                    'title' => Labels::getLabel('LBL_CREATE_PICKUP', $adminLangId)
+                                                    'onclick' => 'generateLabel(' . $order['op_id'] . ')',
+                                                    'title' => Labels::getLabel('LBL_GENERATE_LABEL', $adminLangId)
                                                 ],
-                                                'label' => '<i class="fas fa-truck-pickup"></i>'
+                                                'label' => '<i class="fas fa-file-download"></i>'
                                             ];
-                                        } else {
+                                        } elseif (!empty($order['opr_response'])) {
+                                            $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
+                                            $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
+                                            $data['otherButtons'][] = [
+                                                'attr' => [
+                                                    'href' => UrlHelper::generateUrl("ShippingServices", $method, [$order['op_id']]),
+                                                    'target' => "_blank",
+                                                    'title' => Labels::getLabel($title, $adminLangId)
+                                                ],
+                                                'label' => '<i class="fas fa-file-export"></i>'
+                                            ];
+                                        }  
+
+                                        if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($order['opr_response']) || $allowedForPlugin) && empty($order['opship_order_number'])) {
+                                            if ('EasyPost' == $shippingApiObj->keyName) {
+                                                $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $adminLangId);
+                                            } else {
+                                                $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $adminLangId);
+                                            }
                                             $data['otherButtons'][] = [
                                                 'attr' => [
                                                     'href' => 'javascript:void(0)',
-                                                    'onclick' => 'cancelPickup(' . $order['op_id'] . ')',
-                                                    'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $adminLangId)
+                                                    'onclick' => 'proceedToShipment(' . $order['op_id'] . ')',
+                                                    'title' => $label
                                                 ],
-                                                'label' => '<i class="far fa-times-circle"></i>'
+                                                'label' => '<i class="fas fa-shipping-fast"></i>'
                                             ];
-                                        }
-                                    }                                    
+                                        }                                    
+
+                                        if ($order['orderstatus_id'] == OrderStatus::ORDER_SHIPPED &&  true === $shippingApiObj->canCreatePickup()) {
+                                            if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
+                                                $data['otherButtons'][] = [
+                                                    'attr' => [
+                                                        'href' => 'javascript:void(0)',
+                                                        'onclick' => 'getPickupForm(' . $order['op_id'] . ')',
+                                                        'title' => Labels::getLabel('LBL_CREATE_PICKUP', $adminLangId)
+                                                    ],
+                                                    'label' => '<i class="fas fa-truck-pickup"></i>'
+                                                ];
+                                            } else {
+                                                $data['otherButtons'][] = [
+                                                    'attr' => [
+                                                        'href' => 'javascript:void(0)',
+                                                        'onclick' => 'cancelPickup(' . $order['op_id'] . ')',
+                                                        'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $adminLangId)
+                                                    ],
+                                                    'label' => '<i class="far fa-times-circle"></i>'
+                                                ];
+                                            }
+                                        }                                    
+                                    }
                                 }
                             }
 
@@ -643,7 +645,7 @@ $pickUpDetails = $shippingApiObj->getKey('plugin_id') == $order['opshipping_plug
                                             if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                 if (empty($row['oshistory_courier'])) {
                                                     $trackingNumber = $row['oshistory_tracking_number'];
-                                                    if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
+                                                    if (!empty($shippingApiObj) && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] && true === $shippingApiObj->canFetchTrackingDetail()) {
                                                         $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $row['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $adminLangId) . '">' . $trackingNumber . '</a>';
                                                     }
                                                     $str = !empty($trackingNumber) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $adminLangId) . ' ' . $trackingNumber : '';

@@ -66,60 +66,61 @@ $pickUpDetails = NULL;
                             </a>
                             <?php
                             if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
-                                $opId = $orderDetail['op_id'];
-                                $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
-                                if (1 < $orderDetail['opshipping_rate_id'] && empty($orderDetail['opshipping_plugin_id']) || (($shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id']) && empty($orderDetail['opship_order_number']))) {
-                            ?>
-                                    <a href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>"><i class="fas fa-file-invoice"></i></a>
-
-                                    <?php
-                                } else {
-                                    if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && !$allowedForPlugin) {
-                                        $orderId = $orderDetail['order_id'];
-                                    ?>
-                                        <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
-                                        <?php
-                                    } elseif (!empty($orderDetail['opr_response'])) {
-                                        if (OrderStatus::ORDER_REFUNDED == $orderDetail["op_status_id"]) {
+                                    $opId = $orderDetail['op_id'];
+                                    $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
+                                    if (1 < $orderDetail['opshipping_rate_id'] && ( empty($orderDetail['opshipping_plugin_id']) || ( $shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {
                                         ?>
-                                            <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
-                                        <?php } else { ?>
-                                            <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
-                                        <?php } ?>
-                                    <?php
-                                    }
+                                        <a href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>"><i class="fas fa-file-invoice"></i></a>
 
+                                        <?php
+                                    } else {
+                                        if ($shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id']) {
+                                            if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && !$allowedForPlugin) {
+                                                $orderId = $orderDetail['order_id'];
+                                                ?>
+                                                <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
+                                                <?php
+                                            } elseif (!empty($orderDetail['opr_response'])) {
+                                                if (OrderStatus::ORDER_REFUNDED == $orderDetail["op_status_id"]) {
+                                                    ?>
+                                                    <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                                <?php } else { ?>
+                                                    <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                                <?php } ?>
+                                                <?php
+                                            }
 
-                                    if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || $allowedForPlugin) && empty($orderDetail['opship_order_number'])) {
-                                        if ('EasyPost' == $shippingApiObj->keyName) {
-                                            $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
-                                        } else {
-                                            $label = Labels::getLabel('LBL_BUY_SHIPMENT_', $siteLangId);
+                                            if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || $allowedForPlugin) && empty($orderDetail['opship_order_number'])) {
+                                                if ('EasyPost' == $shippingApiObj->keyName) {
+                                                    $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
+                                                } else {
+                                                    $label = Labels::getLabel('LBL_BUY_SHIPMENT_', $siteLangId);
+                                                }
+                                                ?>
+                                                <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo $label; ?>"><i class="fas fa-shipping-fast"></i></a>
+                                                <?php
+                                            }
+
+                                            if ($orderDetail['orderstatus_id'] == OrderStatus::ORDER_SHIPPED && true === $shippingApiObj->canCreatePickup()) {
+                                                ?>
+                                                <?php
+                                                $pickUpDetails =  OrderProduct::getPickUpShedule($opId);
+                                                if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
+                                                    ?>
+                                                    <a href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
+                                                        <i class="fas fa-truck-pickup"></i>
+                                                    </a>
+                                                <?php } else { ?>
+                                                    <a href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
+                                                        <i class="far fa-times-circle"></i>
+                                                    </a>
+                                                <?php } ?>
+                                                <?php
+                                            }
                                         }
-                                    ?>
-                                        <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo $label; ?>"><i class="fas fa-shipping-fast"></i></a>
-                                    <?php
-                                    }
-
-                                    if ($orderDetail['orderstatus_id'] == OrderStatus::ORDER_SHIPPED && true === $shippingApiObj->canCreatePickup()) {
-                                    ?>
-                                        <?php
-                                        $pickUpDetails = $shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($opId) : NULL;
-                                        if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
-                                        ?>
-                                            <a href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
-                                                <i class="fas fa-truck-pickup"></i>
-                                            </a>
-                                        <?php } else { ?>
-                                            <a href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
-                                                <i class="far fa-times-circle"></i>
-                                            </a>
-                                        <?php } ?>
-                            <?php
                                     }
                                 }
-                            }
-                            ?>
+                                ?>
                         </div>
                     <?php } ?>
                 </div>
