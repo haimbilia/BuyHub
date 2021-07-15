@@ -14,7 +14,7 @@ class GuestUserController extends MyAppController
         }
 
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '',[], CONF_WEBROOT_DASHBOARD));
         }
 
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
