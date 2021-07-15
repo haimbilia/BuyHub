@@ -3,8 +3,7 @@
 class SellerOrdersController extends AdminBaseController
 {
     use ShippingServices;
-
-    private $trackingService;
+ 
     private $paymentPlugin;
     private $method = '';
 
@@ -190,15 +189,16 @@ class SellerOrdersController extends AdminBaseController
             if($shippingApiObj){
                 $shippingApiObj->getSettings();
             }
-            if (!empty($opRow["opship_orderid"])) {
-                if (null != $shippingApiObj && false === $shippingApiObj->loadOrder($opRow["opship_orderid"])) {
+            if (!empty($opRow["opship_orderid"]) && null != $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $opRow['opshipping_plugin_id']) {
+                if (false === $shippingApiObj->loadOrder($opRow["opship_orderid"])) {
                     Message::addErrorMessage($shippingApiObj->getError());
                     FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
                 }
-                $opRow['thirdPartyorderInfo'] = !empty($shippingApiObj) ? $shippingApiObj->getResponse() : [];
+                $opRow['thirdPartyorderInfo'] = $shippingApiObj->getResponse();
             }
-
-            if (null !== $shippingApiObj && null !== $this->trackingService) {
+            
+            $shipmentTracking = new ShipmentTracking();
+            if (null !== $shippingApiObj && false !== $shipmentTracking->init($this->adminLangId)) {
                 $srch = TrackingCourierCodeRelation::getSearchObject();
                 $srch->addCondition("tccr_shipapi_courier_code", "=", $opRow['opshipping_carrier_code']);
                 $srch->doNotCalculateRecords();

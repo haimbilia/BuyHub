@@ -131,14 +131,18 @@ trait ShippingServices
     public function previewLabel(int $opId)
     {
         if (false === $this->loadLabelData($opId)) {
-            LibHelper::dieJsonError($this->error);
+            LibHelper::dieWithError($this->error);
         }
-        $data = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id']);
+        $data = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id','opshipping_plugin_id']);
         if (empty($data)) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
-            LibHelper::dieJsonError($msg);
+            LibHelper::dieWithError($msg);
         }
         $this->loadShippingService($data);
+        if($this->shippingService->getKey('plugin_id') != $data['opshipping_plugin_id']){
+            $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            LibHelper::dieWithError($msg);
+        }
         $this->shippingService->downloadLabel($this->labelData, $this->filename, true);
     }
 
@@ -366,12 +370,12 @@ trait ShippingServices
      */
     public function fetchTrackingDetail(string $trackingId, int $opId)
     {
-        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id']);
+        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id','op_invoice_number']);
         if (empty($orderData)) {
             $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             return false;
         }
-        $this->loadShippingService($orderData);
+        $this->loadShippingService($orderData);     
         $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $orderData['op_invoice_number']);
         $this->set('trackingData', $trackingData);
         $this->_template->render(false, false);

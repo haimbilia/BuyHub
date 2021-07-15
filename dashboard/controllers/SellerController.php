@@ -10,8 +10,7 @@ class SellerController extends SellerBaseController
     use CustomCatalogProducts;
     use SellerUsers;  
     use ProductDigitalDownloads;
-
-    private $trackingService;
+  
     private $paymentPlugin;
     private $method = '';
 
@@ -166,39 +165,6 @@ class SellerController extends SellerBaseController
         $this->_template->addJs(array('js/chartist.min.js'));
         $this->_template->addJs('js/slick.min.js');
         $this->_template->render(true, true);
-    }
-
-    
-    /**
-     * loadTrackingService
-     *
-     * @return void
-     */
-    private function loadTrackingService()
-    {
-        /* Return if already loaded. */
-        if (!empty($this->trackingService)) {
-            return;
-        }
-
-        $plugin = new Plugin();
-        $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPMENT_TRACKING);
-
-        /* Carry on with default functionality if plugin not active. */
-        if (false === $keyName) {
-            return;
-        }
-
-        $this->trackingService = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
-        if (false === $this->trackingService) {
-            Message::addErrorMessage($error);
-            FatApp::redirectUser(UrlHelper::generateUrl("Seller", "Sales"));
-        }
-
-        if (false === $this->trackingService->init()) {
-            Message::addErrorMessage($this->trackingService->getError());
-            FatApp::redirectUser(UrlHelper::generateUrl("Seller", "Sales"));
-        }
     }
 
     public function sales()
