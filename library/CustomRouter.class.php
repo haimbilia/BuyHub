@@ -9,8 +9,7 @@ class CustomRouter
 
         if ('app-api' == $controller) {
             define('MOBILE_APP_API_CALL', true);
-            define('MOBILE_APP_API_VERSION', str_replace('v', '', $action));
-            define('SYSTEM_LANG_ID', $langId);
+            define('MOBILE_APP_API_VERSION', str_replace('v', '', $action));           
 
             if (!array_key_exists(0, $queryString)) {
                 $arr = array('status' => -1, 'msg' => "Invalid Request");

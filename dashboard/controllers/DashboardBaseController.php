@@ -680,14 +680,6 @@ class DashboardBaseController extends FatController
         $this->_template->addJs(array('js/jquery-ui-timepicker-addon.js'), false);
     }
 
-    public function includeProductPageJsCss()
-    {
-        $this->_template->addJs('js/masonry.pkgd.js');
-        $this->_template->addJs('js/product-search.js');
-        $this->_template->addJs('js/ion.rangeSlider.js');
-        $this->_template->addJs('js/listing-functions.js');
-    }
-
     public function includeDatePickerLangJs()
     {
         $langCode = strtolower($this->siteLangCode);
